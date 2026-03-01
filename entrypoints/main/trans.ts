@@ -22,6 +22,23 @@ const TRANSLATED_ID_ATTR = 'data-fr-node-id'; // 添加节点ID属性
 
 let nodeIdCounter = 0; // 节点ID计数器
 
+// 全文翻译过滤规则：跳过 a 标签，跳过词数少于 3 的 div
+function shouldSkipNodeForFullPage(node: Element): boolean {
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'a') return true;
+
+    if (tag === 'div') {
+        const wordCount = (node.textContent || '')
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .length;
+        if (wordCount < 3) return true;
+    }
+
+    return false;
+}
+
 // 恢复原文内容
 export function restoreOriginalContent() {
     // 取消所有等待中的翻译任务
@@ -92,7 +109,7 @@ export function autoTranslateEnglishPage() {
     // console.log('当前页面非目标语言，开始翻译');
 
     // 获取所有需要翻译的节点
-    const nodes = grabAllNode(document.body);
+    const nodes = grabAllNode(document.body).filter(node => !shouldSkipNodeForFullPage(node));
     if (!nodes.length) return;
 
     isAutoTranslating = true;
@@ -146,7 +163,7 @@ export function autoTranslateEnglishPage() {
                 if (node.nodeType === 1) { // 元素节点
                     // 只处理未翻译的新节点
                     const newNodes = grabAllNode(node as Element).filter(
-                        n => !n.hasAttribute(TRANSLATED_ATTR)
+                        n => !n.hasAttribute(TRANSLATED_ATTR) && !shouldSkipNodeForFullPage(n)
                     );
                     newNodes.forEach(n => observer?.observe(n));
                 }
