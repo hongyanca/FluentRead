@@ -20,7 +20,7 @@ export default defineConfig({
         define: {
             'process.env.VUE_APP_VERSION': JSON.stringify(packageJson.version),
         }
-    }),
+    }) as any,
     manifest: {
         permissions: ['storage', 'contextMenus', 'offscreen'],
     },

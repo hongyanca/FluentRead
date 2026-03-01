@@ -540,15 +540,15 @@
         <!-- 使用代理转发 -->
         <el-row v-show="compute.showProxy" class="margin-bottom margin-left-2em">
           <el-col :span="8" class="lightblue rounded-corner">
-            <el-tooltip class="box-item" effect="dark" content="使用代理可以解决网络无法访问的问题，如不熟悉代理设置请留空！" placement="top-start"
+            <el-tooltip class="box-item" effect="dark" :content="config.service === 'localLlama' ? '填写 OpenAI 兼容服务的 Base URL，例如 https://ag.dreamnet.ca/v1。也支持直接填写完整的 /chat/completions 地址。' : '使用代理可以解决网络无法访问的问题，如不熟悉代理设置请留空！'" placement="top-start"
                         :show-after="500">
-              <span class="popup-text popup-vertical-left">代理地址<el-icon class="icon-margin">
+              <span class="popup-text popup-vertical-left">{{ config.service === 'localLlama' ? 'Base URL' : '代理地址' }}<el-icon class="icon-margin">
                   <ChatDotRound />
                 </el-icon></span>
             </el-tooltip>
           </el-col>
           <el-col :span="16">
-            <el-input v-model="config.proxy[config.service]" placeholder="默认不使用代理" />
+            <el-input v-model="config.proxy[config.service]" :placeholder="config.service === 'localLlama' ? '例如：https://ag.dreamnet.ca/v1' : '默认不使用代理'" />
           </el-col>
         </el-row>
 

@@ -21,6 +21,7 @@ import newapi from "./newapi";
 import azureOpenai from "./azure-openai";
 import chromeTranslator from "./chrome-translator";
 import hunyuanTranslation from "./hunyuan-translation";
+import localLlama from "./local-llama";
 
 type ServiceFunction = (message: any) => Promise<any>;
 type ServiceMap = {[key: string]: ServiceFunction;};
@@ -63,4 +64,5 @@ export const _service: ServiceMap = {
     [services.siliconCloud]: common,
     [services.openrouter]: common,
     [services.grok]: common,
+    [services.localLlama]: localLlama,
 }

@@ -34,6 +34,7 @@ export const services = {
     openrouter: "openrouter", // openrouter
     grok: "grok", // X.AI 的 Grok
     newapi: "newapi", // New API 接口
+    localLlama: "localLlama", // 本地 Llama / OpenAI 兼容接口
     chromeTranslator: "chromeTranslator", // Chrome 内置翻译 API
 };
 
@@ -65,6 +66,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
     ]),
     // 需要 token
     useToken: new Set([
@@ -94,6 +96,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
     ]),
     // 需要 model
     useModel: new Set([
@@ -120,6 +123,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
     ]),
     // 支持代理
     useProxy: new Set([
@@ -148,6 +152,7 @@ export const servicesType = {
         services.siliconCloud,
         services.openrouter,
         services.grok,
+        services.localLlama,
     ]),
     // 支持自定义 URL 的服务
     useCustomUrl: new Set([
@@ -193,6 +198,7 @@ export const models = new Map<string, Array<string>>([
     [services.huanYuanTranslation, ["hunyuan-translation", "hunyuan-translation-lite", customModelString]],
     [services.newapi, ["gemini-2.5-flash-lite", "gemini-2.0-flash", "gpt-5-nano", "gpt-5-mini", "gpt5", "gpt-4.1-mini", "gpt-4.1-nano", "gpt-4o-mini", customModelString]],
     [services.grok, ["grok-4-0709","grok-3-mini", customModelString]],
+    [services.localLlama, ["llama-3.2-3b-instruct", "llama-3.1-8b-instruct", "qwen2.5-7b-instruct", customModelString]],
     [services.doubao, [customModelString]],
 
     // mix model
@@ -268,6 +274,7 @@ export const options = {
         {value: services.siliconCloud, label: "硅基流动⭐️"},
         {value: services.huanYuan, label: "腾讯混元⭐"},
         {value: services.newapi, label: "New API"},
+        {value: services.localLlama, label: "Local Llama (OpenAI兼容)"},
         {value: services.deepseek, label: "DeepSeek️"},
         {value: services.openai, label: "OpenAI"},
         {value: services.azureOpenai, label: "Azure OpenAI"},
@@ -409,4 +416,3 @@ export const defaultOption = {
     inputBoxTranslationTrigger: "disabled", // 默认关闭输入框翻译
     inputBoxTranslationTarget: "en", // 默认翻译成英文
 };
-
