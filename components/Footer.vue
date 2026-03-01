@@ -13,11 +13,11 @@
         {{ buttonText }}
       </el-link>
       <div class="right-links">
-        <el-link class="action-link" href="https://fluent.thinkstu.com/" target="_blank">
+        <el-link class="action-link" href="https://github.com/hongyanca/FluentRead" target="_blank">
           <el-icon class="github-icon">
             <Star />
           </el-icon>
-          GitHub开源
+          GitHub
         </el-link>
       </div>
     </div>
