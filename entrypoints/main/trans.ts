@@ -188,6 +188,53 @@ export function handleTranslation(mouseX: number, mouseY: number, delayTime: num
     }, delayTime);
 }
 
+// 翻译当前选区中的所有可翻译节点（用于快捷键触发）
+export function handleSelectionTranslation(): boolean {
+    if (!checkConfig()) return false;
+
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+        return false;
+    }
+
+    const range = selection.getRangeAt(0);
+    const selectedNodes: Element[] = [];
+    const intersects = (node: Node) => {
+        try {
+            return range.intersectsNode(node);
+        } catch {
+            return false;
+        }
+    };
+
+    // 在整个页面范围内过滤选区覆盖的可翻译节点，避免“从下往上选中”时漏节点
+    const allNodes = grabAllNode(document.body);
+    allNodes.forEach(node => {
+        if (intersects(node) && !skipNode(node)) {
+            selectedNodes.push(node);
+        }
+    });
+
+    if (!selectedNodes.length) return false;
+
+    selectedNodes.forEach((node) => {
+        if (config.display === styles.bilingualTranslation) {
+            handleBilingualTranslation(node, false);
+        } else {
+            handleSingleTranslation(node, false);
+        }
+    });
+
+    // 触发选区翻译后清除高亮选中状态
+    try {
+        selection.removeAllRanges();
+    } catch {
+        // ignore
+    }
+
+    return true;
+}
+
 // 双语翻译
 export function handleBilingualTranslation(node: any, slide: boolean) {
     let nodeOuterHTML = node.outerHTML;

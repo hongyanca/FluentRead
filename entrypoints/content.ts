@@ -1,4 +1,4 @@
-import { handleTranslation, autoTranslateEnglishPage, restoreOriginalContent } from "./main/trans";
+import { handleTranslation, handleSelectionTranslation, autoTranslateEnglishPage, restoreOriginalContent } from "./main/trans";
 import { cache } from "./utils/cache";
 import { constants } from "@/entrypoints/utils/constant";
 import { getCenterPoint } from "@/entrypoints/utils/common";
@@ -301,7 +301,10 @@ function setupManualTranslationTriggers() {
         if (screen.hotkeyPressed && mouseHotkeysPressed.size === 0 && !screen.otherKeyPressed && !screen.hasSlideTranslation) {
             // 检查插件是否开启
             if (config.on) {
-                handleTranslation(screen.mouseX, screen.mouseY);
+                const translatedSelection = handleSelectionTranslation();
+                if (!translatedSelection) {
+                    handleTranslation(screen.mouseX, screen.mouseY);
+                }
             }
         }
         
