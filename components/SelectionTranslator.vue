@@ -122,9 +122,10 @@ const containerRef = useTemplateRef('selection-ref');
 
 // 自动更新小红点位置
 watchEffect((onClean) => {
+  const isPositioningActive = showIndicator.value || showTooltip.value;
   const range = selectRange.value;
   const container = containerRef.value;
-  if (!range || !container) return;
+  if (!isPositioningActive || !range || !container) return;
 
   const updatePosition = () => {
     computePosition(range, container, {
@@ -146,7 +147,13 @@ watchEffect((onClean) => {
   });
 
   onClean(cb);
-})
+});
+
+watch([showIndicator, showTooltip], ([isIndicatorVisible, isTooltipVisible]) => {
+  if (isIndicatorVisible || isTooltipVisible) return;
+
+  selectRange.value = null;
+});
 
 // 防抖函数
 const debounce = (fn: Function, delay: number) => {
