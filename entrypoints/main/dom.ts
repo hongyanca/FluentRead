@@ -22,9 +22,58 @@ export const inlineSet = new Set([
     'img', 'br', 'wbr', 'svg'
 ]);
 
+// 是否已对纯文本文件进行过DOM转换
+let plainTextTransformed = false;
+
+/**
+ * 检测并转换纯文本文件的DOM结构
+ * 当 .txt 文件拖入浏览器时，内容渲染为 body > pre，
+ * 此函数将 pre 内容按空行拆分为 <p> 元素，使其可被正常翻译
+ */
+function transformPlainTextFile(): void {
+    if (plainTextTransformed) return;
+    plainTextTransformed = true;
+
+    // 仅当 URL 以 .txt 结尾时才视为纯文本文件
+    const pathname = location.pathname.toLowerCase();
+    if (!pathname.endsWith('.txt')) return;
+
+    const body = document.body;
+    if (!body) return;
+
+    // 找到 body 下的 <pre> 元素
+    const pre = body.querySelector('pre');
+    if (!pre) return;
+
+    const text = pre.textContent || '';
+    if (!text.trim()) return;
+
+    // 按空行分隔为段落（连续两个换行符）
+    const paragraphs = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    if (paragraphs.length === 0) return;
+
+    // 创建一个容器替换 <pre>
+    const container = document.createElement('div');
+    container.id = 'fluent-read-plain-text';
+    container.style.cssText = 'white-space: pre-wrap; font-family: monospace; padding: 8px; line-height: 1.6;';
+
+    paragraphs.forEach(p => {
+        const pEl = document.createElement('p');
+        pEl.textContent = p;
+        pEl.style.cssText = 'margin: 0.5em 0;';
+        container.appendChild(pEl);
+    });
+
+    // 替换原始 <pre>
+    pre.replaceWith(container);
+}
+
 // 传入父节点，返回所有需要翻译的 DOM 元素数组
 export function grabAllNode(rootNode: Node): Element[] {
     if (!rootNode) return [];
+
+    // 检测并转换纯文本文件
+    transformPlainTextFile();
 
     const result: Element[] = [];
 
@@ -103,6 +152,9 @@ export function grabAllNode(rootNode: Node): Element[] {
 
 // 返回最终应该翻译的父节点或 false
 export function grabNode(node: any): any {
+    // 检测并转换纯文本文件（首次调用时执行）
+    transformPlainTextFile();
+
     // 空节点检查
     if (!node) return false;
 
