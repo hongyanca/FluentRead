@@ -385,7 +385,10 @@ function bilingualTranslate(node: any, nodeOuterHTML: any, translationContext?: 
         .then((text: string) => {
             spinner.remove();
             htmlSet.delete(nodeOuterHTML);
-            bilingualAppendChild(node, applyOutputFilter(text));
+            let filtered = applyOutputFilter(text);
+            // 如果翻译结果与原文相同（如URL、专有名词），则不注入
+            if (!filtered || filtered.trim() === origin.trim()) return;
+            bilingualAppendChild(node, filtered);
         })
         .catch((error: Error) => {
             spinner.remove();
@@ -407,7 +410,7 @@ export function singleTranslate(node: any, translationContext?: string) {
             
             text = beautyHTML(applyOutputFilter(text));
             
-            if (!text || origin === text) return;
+            if (!text || origin === text || text.trim() === node.textContent?.trim()) return;
             
             let oldOuterHtml = node.outerHTML;
             node.innerHTML = text;
