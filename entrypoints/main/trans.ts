@@ -15,6 +15,7 @@ export let originalContents = new Map(); // 保存原始内容
 let isAutoTranslating = false; // 控制是否继续翻译新内容
 let observer: IntersectionObserver | null = null; // 保存观察器实例
 let mutationObserver: MutationObserver | null = null; // 保存 DOM 变化观察器实例
+let fullPageNodes: Element[] = []; // 全文翻译时的所有节点列表，用于上下文收集
 
 // 使用自定义属性标记已翻译的节点
 const TRANSLATED_ATTR = 'data-fr-translated';
@@ -37,6 +38,40 @@ function shouldSkipNodeForFullPage(node: Element): boolean {
     }
 
     return false;
+}
+
+// 收集翻译上下文：从相邻节点中提取文本，为AI翻译提供更好的语境
+// 仅当使用AI服务且 contextParagraphs > 0 时生效
+function gatherContext(node: Element, allNodes: Element[]): string | undefined {
+    const count = config.contextParagraphs || 0;
+    // 机器翻译不需要上下文，或者用户设置为0
+    if (count <= 0 || servicesType.isMachine(config.service)) return undefined;
+
+    const idx = allNodes.indexOf(node);
+    if (idx === -1) return undefined;
+
+    const beforeNodes = allNodes.slice(Math.max(0, idx - count), idx);
+    const afterNodes = allNodes.slice(idx + 1, idx + 1 + count);
+
+    const beforeTexts = beforeNodes
+        .map(n => n.textContent?.trim())
+        .filter(Boolean);
+    const afterTexts = afterNodes
+        .map(n => n.textContent?.trim())
+        .filter(Boolean);
+
+    // 如果前后都没有上下文，则不注入
+    if (beforeTexts.length === 0 && afterTexts.length === 0) return undefined;
+
+    const parts: string[] = [];
+    if (beforeTexts.length > 0) {
+        parts.push('[Before]\n' + beforeTexts.join('\n'));
+    }
+    if (afterTexts.length > 0) {
+        parts.push('[After]\n' + afterTexts.join('\n'));
+    }
+
+    return parts.join('\n\n');
 }
 
 // 恢复原文内容
@@ -85,6 +120,7 @@ export function restoreOriginalContent() {
     isAutoTranslating = false;
     htmlSet.clear(); // 清空防抖集合
     nodeIdCounter = 0; // 重置节点ID计数器
+    fullPageNodes = []; // 清空全文翻译节点列表
     
     // 7. 消除可能存在的全局样式污染
     const tempStyleElements = document.querySelectorAll('style[data-fr-temp-style]');
@@ -112,6 +148,9 @@ export function autoTranslateEnglishPage() {
     const nodes = grabAllNode(document.body).filter(node => !shouldSkipNodeForFullPage(node));
     if (!nodes.length) return;
 
+    // 保存节点列表，用于上下文收集
+    fullPageNodes = nodes;
+
     isAutoTranslating = true;
 
     // 创建观察器
@@ -133,10 +172,13 @@ export function autoTranslateEnglishPage() {
                 // 标记为已翻译
                 node.setAttribute(TRANSLATED_ATTR, 'true');
 
+                // 收集上下文
+                const translationContext = gatherContext(node, fullPageNodes);
+
                 if (config.display === styles.bilingualTranslation) {
-                    handleBilingualTranslation(node, false);
+                    handleBilingualTranslation(node, false, translationContext);
                 } else {
-                    handleSingleTranslation(node, false);
+                    handleSingleTranslation(node, false, translationContext);
                 }
 
                 // 停止观察该节点
@@ -165,7 +207,11 @@ export function autoTranslateEnglishPage() {
                     const newNodes = grabAllNode(node as Element).filter(
                         n => !n.hasAttribute(TRANSLATED_ATTR) && !shouldSkipNodeForFullPage(n)
                     );
-                    newNodes.forEach(n => observer?.observe(n));
+                    // 将新发现的节点追加到全文列表中，以便后续上下文收集
+                    newNodes.forEach(n => {
+                        if (!fullPageNodes.includes(n)) fullPageNodes.push(n);
+                        observer?.observe(n);
+                    });
                 }
             });
         });
@@ -253,7 +299,7 @@ export function handleSelectionTranslation(): boolean {
 }
 
 // 双语翻译
-export function handleBilingualTranslation(node: any, slide: boolean) {
+export function handleBilingualTranslation(node: any, slide: boolean, translationContext?: string) {
     let nodeOuterHTML = node.outerHTML;
     // 如果已经翻译过，250ms 后删除翻译结果
     let bilingualNode = searchClassName(node, 'fluent-read-bilingual');
@@ -286,11 +332,11 @@ export function handleBilingualTranslation(node: any, slide: boolean) {
     }
 
     // 翻译
-    bilingualTranslate(node, nodeOuterHTML);
+    bilingualTranslate(node, nodeOuterHTML, translationContext);
 }
 
 // 单语翻译
-export function handleSingleTranslation(node: any, slide: boolean) {
+export function handleSingleTranslation(node: any, slide: boolean, translationContext?: string) {
     let nodeOuterHTML = node.outerHTML;
     let outerHTMLCache = cache.localGet(node.outerHTML);
 
@@ -312,7 +358,7 @@ export function handleSingleTranslation(node: any, slide: boolean) {
         return;
     }
 
-    singleTranslate(node);
+    singleTranslate(node, translationContext);
 }
 
 
@@ -328,14 +374,14 @@ function applyOutputFilter(text: string): string {
     }
 }
 
-function bilingualTranslate(node: any, nodeOuterHTML: any) {
+function bilingualTranslate(node: any, nodeOuterHTML: any, translationContext?: string) {
     if (detectlang(node.textContent.replace(/[\s\u3000]/g, '')) === config.to) return;
 
     let origin = node.textContent;
     let spinner = insertLoadingSpinner(node);
     
-    // 使用队列管理的翻译API
-    translateText(origin, document.title)
+    // 使用队列管理的翻译API（传递上下文以提高翻译质量）
+    translateText(origin, document.title, { translationContext })
         .then((text: string) => {
             spinner.remove();
             htmlSet.delete(nodeOuterHTML);
@@ -348,14 +394,14 @@ function bilingualTranslate(node: any, nodeOuterHTML: any) {
 }
 
 
-export function singleTranslate(node: any) {
+export function singleTranslate(node: any, translationContext?: string) {
     if (detectlang(node.textContent.replace(/[\s\u3000]/g, '')) === config.to) return;
 
     let origin = servicesType.isMachine(config.service) ? node.innerHTML : LLMStandardHTML(node);
     let spinner = insertLoadingSpinner(node);
     
-    // 使用队列管理的翻译API
-    translateText(origin, document.title)
+    // 使用队列管理的翻译API（传递上下文以提高翻译质量）
+    translateText(origin, document.title, { translationContext })
         .then((text: string) => {
             spinner.remove();
             

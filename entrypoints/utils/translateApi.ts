@@ -28,6 +28,7 @@ export async function translateText(origin: string, context: string = document.t
     retryDelay = 1000, 
     timeout = 45000,
     useCache = config.useCache,
+    translationContext,
   } = options;
 
   // 如果目标语言与当前文本语言相同，直接返回原文
@@ -58,7 +59,7 @@ export async function translateText(origin: string, context: string = document.t
       try {
         // 发送翻译请求给background脚本处理
         const result = await Promise.race([
-          browser.runtime.sendMessage({ context, origin }),
+          browser.runtime.sendMessage({ context, origin, translationContext }),
           new Promise<never>((_, reject) => 
             setTimeout(() => reject(new Error('翻译请求超时')), timeout)
           )
@@ -127,4 +128,6 @@ export interface TranslateOptions {
   timeout?: number;
   /** 是否使用缓存 */
   useCache?: boolean;
+  /** 翻译上下文（周围段落文本，用于提高AI翻译质量） */
+  translationContext?: string;
 } 

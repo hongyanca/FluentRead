@@ -16,7 +16,7 @@ async function tongyi(message: any) {
     const resp = await fetch(url, {
         method: method.POST,
         headers: headers,
-        body: tongyiMsgTemplate(message.origin)
+        body: tongyiMsgTemplate(message.origin, message.translationContext)
     });
 
     if (resp.ok) {

@@ -34,7 +34,7 @@ async function localLlama(message: any) {
         const resp = await fetch(url, {
             method: method.POST,
             headers,
-            body: commonMsgTemplate(message.origin)
+            body: commonMsgTemplate(message.origin, message.translationContext)
         });
 
         if (!resp.ok) {

@@ -54,6 +54,7 @@ export class Config {
     inputBoxTranslationTrigger: string; // 输入框翻译触发方式
     inputBoxTranslationTarget: string; // 输入框翻译目标语言
     outputFilter: string; // 输出过滤正则表达式
+    contextParagraphs: number; // 全文翻译时，附带上下文段落数（仅AI服务生效）
 
     constructor() {
         this.on = true;
@@ -100,6 +101,7 @@ export class Config {
         this.inputBoxTranslationTrigger = 'disabled'; // 默认关闭输入框翻译
         this.inputBoxTranslationTarget = 'en'; // 默认翻译成英文
         this.outputFilter = ''; // 默认不过滤输出
+        this.contextParagraphs = 2; // 默认附带2段上下文
     }
 }
 

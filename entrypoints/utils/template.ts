@@ -2,8 +2,26 @@
 import {customModelString, defaultOption, services} from "./option";
 import {config} from "@/entrypoints/utils/config";
 
+// 构建带上下文的用户消息
+// 当有上下文时，在用户消息前注入周围段落作为参考
+function buildUserMessage(origin: string, context?: string): string {
+    let user = (config.user_role[config.service] || defaultOption.user_role)
+        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+
+    if (context && context.trim()) {
+        // 在用户消息前插入上下文参考
+        const contextBlock = `[Surrounding paragraphs for context reference — DO NOT translate these, only use them to understand the context for a more accurate translation:]
+${context}
+
+`;
+        user = contextBlock + user;
+    }
+
+    return user;
+}
+
 // openai 格式的消息模板（通用模板）
-export function commonMsgTemplate(origin: string) {
+export function commonMsgTemplate(origin: string, context?: string) {
     // 检测是否使用自定义模型
     let model = config.model[config.service] === customModelString ? config.customModel[config.service] : config.model[config.service]
 
@@ -11,8 +29,7 @@ export function commonMsgTemplate(origin: string) {
     model = model.replace(/（.*）/g, "");
 
     let system = config.system_role[config.service] || defaultOption.system_role;
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         'model': model,
@@ -25,7 +42,7 @@ export function commonMsgTemplate(origin: string) {
 }
 
 // deepseek
-export function deepseekMsgTemplate(origin: string) {
+export function deepseekMsgTemplate(origin: string, context?: string) {
     // 检测是否使用自定义模型
     let model = config.model[config.service] === customModelString ? config.customModel[config.service] : config.model[config.service]
 
@@ -33,8 +50,7 @@ export function deepseekMsgTemplate(origin: string) {
     model = model.replace(/（.*）/g, "");
 
     let system = config.system_role[config.service] || defaultOption.system_role;
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+    let user = buildUserMessage(origin, context);
 
     const payload: any = {
         'model': model,
@@ -53,9 +69,8 @@ export function deepseekMsgTemplate(origin: string) {
 }
 
 // gemini
-export function geminiMsgTemplate(origin: string) {
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+export function geminiMsgTemplate(origin: string, context?: string) {
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         "contents": [
@@ -65,15 +80,14 @@ export function geminiMsgTemplate(origin: string) {
 }
 
 // claude
-export function claudeMsgTemplate(origin: string) {
+export function claudeMsgTemplate(origin: string, context?: string) {
     let model = config.model[services.claude];
     if (model === "claude-3-5-haiku") model = "claude-3-5-haiku-20241022";
     else if (model === "claude-3-5-sonnet") model = "claude-3-5-sonnet-20241022";
     else if (model === "claude-3-opus") model = "claude-3-opus-20240229";
 
     let system = config.system_role[config.service] || defaultOption.system_role;
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         model: model,
@@ -87,12 +101,11 @@ export function claudeMsgTemplate(origin: string) {
 }
 
 // 通义千问
-export function tongyiMsgTemplate(origin: string) {
+export function tongyiMsgTemplate(origin: string, context?: string) {
     let model = config.model[config.service] === customModelString ? config.customModel[config.service] : config.model[config.service]
     const normalTemplate = () => {
         let system = config.system_role[config.service] || defaultOption.system_role;
-        let user = (config.user_role[config.service] || defaultOption.user_role)
-            .replace('{{to}}', config.to).replace('{{origin}}', origin);
+        let user = buildUserMessage(origin, context);
 
         return JSON.stringify({
             "model": model,
@@ -131,9 +144,8 @@ export function tongyiMsgTemplate(origin: string) {
 }
 
 // 文心一言
-export function yiyanMsgTemplate(origin: string) {
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+export function yiyanMsgTemplate(origin: string, context?: string) {
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         'temperature': 0.7,
@@ -144,11 +156,10 @@ export function yiyanMsgTemplate(origin: string) {
     })
 }
 
-export function minimaxTemplate(origin: string) {
+export function minimaxTemplate(origin: string, context?: string) {
 
     let system = config.system_role[config.service] || defaultOption.system_role;
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         model: "MiniMax-Text-01",
@@ -161,11 +172,10 @@ export function minimaxTemplate(origin: string) {
     })
 }
 
-export function cozeTemplate(origin: string) {
+export function cozeTemplate(origin: string, context?: string) {
 
     let system = config.system_role[config.service] || defaultOption.system_role;
-    let user = (config.user_role[config.service] || defaultOption.user_role)
-        .replace('{{to}}', config.to).replace('{{origin}}', origin);
+    let user = buildUserMessage(origin, context);
 
     return JSON.stringify({
         bot_id: config.robot_id[config.service],

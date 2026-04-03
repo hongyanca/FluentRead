@@ -406,7 +406,7 @@
             <el-tooltip
               class="box-item"
               effect="dark"
-              content="输入正则表达式，翻译结果中所有匹配项将被自动移除，再注入页面。例如：<|channel>.*?<channel|> 将移除所有匹配的频道标签。留空表示不过滤。"
+              content="输入正则表达式，翻译结果中所有匹配项将被自动移除，再注入页面。例如：<\|channel>.*?<channel\|> 将移除所有匹配的频道标签。留空表示不过滤。"
               placement="top-start"
               :show-after="500"
             >
@@ -571,6 +571,28 @@
                 :step="1"
                 style="width: 100%"
                 @change="handleConcurrentChange"
+                controls-position="right"
+            />
+          </el-col>
+        </el-row>
+
+        <!-- AI上下文段落数（仅AI服务可见） -->
+        <el-row v-show="compute.showAI" class="margin-bottom margin-left-2em">
+          <el-col :span="12" class="lightblue rounded-corner">
+            <el-tooltip class="box-item" effect="dark" content="全文翻译时，将当前段落前后的相邻段落作为上下文一起发送给AI，以提高翻译的连贯性和准确性。设置为0则不附带上下文。仅对AI翻译服务生效。" placement="top-start"
+                        :show-after="500">
+          <span class="popup-text popup-vertical-left">AI上下文段落数<el-icon class="icon-margin">
+              <ChatDotRound />
+            </el-icon></span>
+            </el-tooltip>
+          </el-col>
+          <el-col :span="12">
+            <el-input-number
+                v-model="config.contextParagraphs"
+                :min="0"
+                :max="4"
+                :step="1"
+                style="width: 100%"
                 controls-position="right"
             />
           </el-col>

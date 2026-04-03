@@ -23,7 +23,7 @@ async function yiyan(message: any) {
     const resp = await fetch(url, {
         method: method.POST,
         headers: {'Content-Type': 'application/json'},
-        body: yiyanMsgTemplate(message.origin)
+        body: yiyanMsgTemplate(message.origin, message.translationContext)
     });
 
     if (resp.ok) {
