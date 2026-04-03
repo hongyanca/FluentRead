@@ -280,7 +280,7 @@ export function handleBilingualTranslation(node: any, slide: boolean) {
         setTimeout(() => {
             spinner.remove();
             htmlSet.delete(nodeOuterHTML);
-            bilingualAppendChild(node, cached);
+            bilingualAppendChild(node, applyOutputFilter(cached));
         }, 250);
         return;
     }
@@ -303,9 +303,10 @@ export function handleSingleTranslation(node: any, slide: boolean) {
             htmlSet.delete(nodeOuterHTML);
 
             // 兼容部分网站独特的 DOM 结构
+            let filteredCache = applyOutputFilter(outerHTMLCache);
             let fn = replaceCompatFn[getMainDomain(document.location.hostname)];
-            if (fn) fn(node, outerHTMLCache);
-            else node.outerHTML = outerHTMLCache;
+            if (fn) fn(node, filteredCache);
+            else node.outerHTML = filteredCache;
 
         }, 250);
         return;
@@ -314,6 +315,18 @@ export function handleSingleTranslation(node: any, slide: boolean) {
     singleTranslate(node);
 }
 
+
+// 应用输出过滤器：移除所有匹配 config.outputFilter 正则的内容
+function applyOutputFilter(text: string): string {
+    if (!config.outputFilter || config.outputFilter.trim() === '') return text;
+    try {
+        const regex = new RegExp(config.outputFilter, 'gs');
+        return text.replace(regex, '');
+    } catch {
+        // 正则无效时不做过滤
+        return text;
+    }
+}
 
 function bilingualTranslate(node: any, nodeOuterHTML: any) {
     if (detectlang(node.textContent.replace(/[\s\u3000]/g, '')) === config.to) return;
@@ -326,7 +339,7 @@ function bilingualTranslate(node: any, nodeOuterHTML: any) {
         .then((text: string) => {
             spinner.remove();
             htmlSet.delete(nodeOuterHTML);
-            bilingualAppendChild(node, text);
+            bilingualAppendChild(node, applyOutputFilter(text));
         })
         .catch((error: Error) => {
             spinner.remove();
@@ -346,7 +359,7 @@ export function singleTranslate(node: any) {
         .then((text: string) => {
             spinner.remove();
             
-            text = beautyHTML(text);
+            text = beautyHTML(applyOutputFilter(text));
             
             if (!text || origin === text) return;
             
@@ -369,7 +382,7 @@ export const handleBtnTranslation = throttle((node: any) => {
     let origin = node.innerText;
     let rs = cache.localGet(origin);
     if (rs) {
-        node.innerText = rs;
+        node.innerText = applyOutputFilter(rs);
         return;
     }
 
@@ -378,7 +391,7 @@ export const handleBtnTranslation = throttle((node: any) => {
     browser.runtime.sendMessage({ context: document.title, origin: origin })
         .then((text: string) => {
             cache.localSetDual(origin, text);
-            node.innerText = text;
+            node.innerText = applyOutputFilter(text);
         }).catch((error: any) => console.error('调用失败:', error))
 }, 250)
 

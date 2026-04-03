@@ -398,6 +398,45 @@
       </el-col>
     </el-row>
 
+    <!-- 输出过滤 -->
+    <el-collapse class="margin-left-2em">
+      <el-collapse-item title="输出过滤">
+        <el-row class="margin-bottom margin-left-2em margin-top-2em">
+          <el-col :span="24">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              content="输入正则表达式，翻译结果中所有匹配项将被自动移除，再注入页面。例如：<|channel>.*?<channel|> 将移除所有匹配的频道标签。留空表示不过滤。"
+              placement="top-start"
+              :show-after="500"
+            >
+              <span class="popup-text popup-vertical-left">
+                过滤规则
+                <el-icon class="icon-margin"><ChatDotRound /></el-icon>
+              </span>
+            </el-tooltip>
+          </el-col>
+        </el-row>
+        <el-row class="margin-bottom margin-left-2em">
+          <el-col :span="24">
+            <el-input
+              v-model="config.outputFilter"
+              type="textarea"
+              :rows="3"
+              placeholder="输入正则表达式，例如：<\|channel>.*?<channel\|>"
+              :class="{ 'input-error': config.outputFilter && !isValidOutputFilterRegex(config.outputFilter) }"
+            />
+            <div v-if="config.outputFilter && !isValidOutputFilterRegex(config.outputFilter)" class="error-text">
+              正则表达式格式不正确，请检查语法
+            </div>
+            <div v-else-if="config.outputFilter && isValidOutputFilterRegex(config.outputFilter)" class="success-text">
+              正则表达式有效，将使用 <code>gs</code> 标志匹配并移除所有匹配项
+            </div>
+          </el-col>
+        </el-row>
+      </el-collapse-item>
+    </el-collapse>
+
     <!-- 高级选项-->
     <el-collapse class="margin-left-2em margin-bottom">
       <el-collapse-item title="高级选项">
@@ -1065,6 +1104,17 @@ const exportData = ref('');
 const showImportBox = ref(false);
 const importData = ref('');
 
+// 输出过滤正则表达式验证函数
+const isValidOutputFilterRegex = (pattern: string): boolean => {
+  if (!pattern || pattern.trim() === '') return true; // 空字符串视为有效（不过滤）
+  try {
+    new RegExp(pattern, 'gs');
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Azure OpenAI 端点地址验证函数
 const isValidAzureEndpoint = (endpoint: string) => {
   if (!endpoint || endpoint.trim() === '') {
@@ -1598,5 +1648,19 @@ const validateConfig = (configData: any): boolean => {
   font-size: 12px;
   margin-top: 4px;
   line-height: 1.4;
+}
+
+.success-text {
+  color: var(--el-color-success);
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.success-text code {
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0 3px;
+  border-radius: 3px;
 }
 </style>
