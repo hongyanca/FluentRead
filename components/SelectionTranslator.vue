@@ -1,80 +1,80 @@
 <template>
   <teleport to="body">
-    <!-- 小红点指示器 -->
-    <div v-if="showIndicator" 
-         class="fr-selection-indicator" 
-         :style="indicatorStyle" 
-         @mouseenter="handleMouseEnter"
-         @mouseleave="handleMouseLeave">
-    </div>
-    
-    <!-- 翻译结果弹窗 -->
-    <div v-if="showTooltip" 
-         class="fr-translation-tooltip" 
-         :class="{ 'fr-dark-theme': isDarkTheme }"
-         :style="tooltipStyle"
-         @mouseenter="handleMouseEnterTooltip"
-         @mouseleave="handleMouseLeaveTooltip">
-      <div class="fr-tooltip-header">
-        <span>翻译结果<small>（via 流畅阅读）</small></span>
-        <div class="fr-tooltip-actions">
-          <button class="fr-action-btn" @click="copyTranslation" title="复制译文">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-          </button>
-          <button class="fr-close-btn" @click="closeTooltip">×</button>
-        </div>
+    <div ref="selection-ref" class="fr-selection-translator-wrapper">
+      <!-- 小红点指示器 -->
+      <div v-if="showIndicator" 
+          class="fr-selection-indicator" 
+          @mouseenter="handleMouseEnter"
+          @mouseleave="handleMouseLeave">
       </div>
-      <div class="fr-tooltip-content">
-        <div v-if="isLoading" :class="['fr-loading-spinner', { 'fr-static': !config.animations }]"></div>
-        <div v-else-if="error" class="fr-error-message">{{ error }}</div>
-        <div v-else class="fr-translation-container">
-          <!-- 原文显示（双语模式才显示） -->
-          <div v-if="config.selectionTranslatorMode === 'bilingual'" class="fr-original-text fr-no-select">
-            <pre>{{ selectedText }}</pre>
-            <button class="fr-text-audio-btn" @click="(e) => toggleAudio(selectedText, e)" title="播放/停止原文">
-              <svg v-if="isPlaying && currentPlayingText === selectedText" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-              </svg>
-            </button>
-          </div>
-          <!-- 译文显示（双语模式和只显示译文模式都显示） -->
-          <div v-if="config.selectionTranslatorMode === 'bilingual' || config.selectionTranslatorMode === 'translation-only'" class="fr-translation-result fr-no-select">
-            <pre>{{ translationResult }}</pre>
-            <button class="fr-text-audio-btn" @click="(e) => toggleAudio(translationResult, e)" title="播放/停止译文">
-              <svg v-if="isPlaying && currentPlayingText === translationResult" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    
+      <!-- 翻译结果弹窗 -->
+      <div v-if="showTooltip" 
+          class="fr-translation-tooltip" 
+          :class="{ 'fr-dark-theme': isDarkTheme }"
+          @mouseenter="handleMouseEnterTooltip"
+          @mouseleave="handleMouseLeaveTooltip">
+        <div class="fr-tooltip-header">
+          <span>翻译结果<small>（via 流畅阅读）</small></span>
+          <div class="fr-tooltip-actions">
+            <button class="fr-action-btn" @click="copyTranslation" title="复制译文">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
             </button>
+            <button class="fr-close-btn" @click="closeTooltip">×</button>
           </div>
-          
-          <!-- 播放状态提示 - 显示在弹窗内部 -->
-          <div v-if="isPlaying" class="fr-playing-status">
-            <div class="fr-playing-status-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
-              </svg>
+        </div>
+        <div class="fr-tooltip-content">
+          <div v-if="isLoading" :class="['fr-loading-spinner', { 'fr-static': !config.animations }]"></div>
+          <div v-else-if="error" class="fr-error-message">{{ error }}</div>
+          <div v-else class="fr-translation-container">
+            <!-- 原文显示（双语模式才显示） -->
+            <div v-if="config.selectionTranslatorMode === 'bilingual'" class="fr-original-text fr-no-select">
+              <pre>{{ selectedText }}</pre>
+              <button class="fr-text-audio-btn" @click="(e) => toggleAudio(selectedText, e)" title="播放/停止原文">
+                <svg v-if="isPlaying && currentPlayingText === selectedText" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+              </button>
             </div>
-            <span>正在播放: {{ currentPlayingText === selectedText ? '原文' : '译文' }}</span>
-            <button class="fr-stop-audio-btn" @click="(e) => stopAudio(e)">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
-            </button>
+            <!-- 译文显示（双语模式和只显示译文模式都显示） -->
+            <div v-if="config.selectionTranslatorMode === 'bilingual' || config.selectionTranslatorMode === 'translation-only'" class="fr-translation-result fr-no-select">
+              <pre>{{ translationResult }}</pre>
+              <button class="fr-text-audio-btn" @click="(e) => toggleAudio(translationResult, e)" title="播放/停止译文">
+                <svg v-if="isPlaying && currentPlayingText === translationResult" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+                <svg v-else xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+              </button>
+            </div>
+            
+            <!-- 播放状态提示 - 显示在弹窗内部 -->
+            <div v-if="isPlaying" class="fr-playing-status">
+              <div class="fr-playing-status-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                  <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+                </svg>
+              </div>
+              <span>正在播放: {{ currentPlayingText === selectedText ? '原文' : '译文' }}</span>
+              <button class="fr-stop-audio-btn" @click="(e) => stopAudio(e)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="4" width="4" height="16"></rect>
+                  <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -93,14 +93,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, useTemplateRef, watchEffect } from 'vue';
 import { translateText } from '@/entrypoints/utils/translateApi';
 import { config } from '@/entrypoints/utils/config';
+import { autoPlacement, autoUpdate, computePosition, flip, hide, inline, offset, shift } from '@floating-ui/dom';
 
 // 状态变量
 const selectedText = ref('');
 const translationResult = ref('');
-const selectionRect = ref<DOMRect | null>(null);
+const selectRange = ref<Range | null>(null);
 const showIndicator = ref(false);
 const showTooltip = ref(false);
 const isLoading = ref(false);
@@ -117,33 +118,41 @@ const currentPlayingText = ref(''); // 当前正在播放的文本
 const isFirefox = ref(false); // 是否为Firefox浏览器
 const isDarkTheme = ref(false); // 主题状态
 
-// 计算小红点指示器的样式
-const indicatorStyle = computed(() => {
-  if (!selectionRect.value) return {};
-  
-  return {
-    left: `${selectionRect.value.right}px`,
-    top: `${selectionRect.value.top}px`,
-    transform: 'translate(3px, -50%)'
-  };
+const containerRef = useTemplateRef('selection-ref');
+
+// 自动更新小红点位置
+watchEffect((onClean) => {
+  const isPositioningActive = showIndicator.value || showTooltip.value;
+  const range = selectRange.value;
+  const container = containerRef.value;
+  if (!isPositioningActive || !range || !container) return;
+
+  const updatePosition = () => {
+    computePosition(range, container, {
+      placement: 'right',
+      strategy: 'fixed',
+      middleware: [offset(2), flip({fallbackPlacements: ['left', 'right', 'top-start', 'top-end', 'bottom-start', 'bottom-end'], padding: {top: 100, bottom: 100} }), shift(), hide(), inline()],
+    }).then(({ x, y, placement, middlewareData }) => {
+      Object.assign(container.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+        visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible',
+      });
+      container.setAttribute('data-placement', placement);
+    })
+  }
+
+  const cb = autoUpdate(range, container, updatePosition, {
+    animationFrame: true,
+  });
+
+  onClean(cb);
 });
 
-// 计算弹窗的样式
-const tooltipStyle = computed(() => {
-  if (!selectionRect.value) return {};
-  
-  // 确保弹窗不会超出视口
-  const left = Math.min(
-    selectionRect.value.right + 15,
-    window.innerWidth - 350 // 稍微增加宽度，适应换行文本
-  );
-  
-  return {
-    left: `${left}px`,
-    top: `${selectionRect.value.top}px`,
-    maxWidth: '350px', // 增加宽度以适应更多内容
-    maxHeight: '400px' // 增加最大高度以支持更多内容
-  };
+watch([showIndicator, showTooltip], ([isIndicatorVisible, isTooltipVisible]) => {
+  if (isIndicatorVisible || isTooltipVisible) return;
+
+  selectRange.value = null;
 });
 
 // 防抖函数
@@ -180,8 +189,7 @@ const handleTextSelection = () => {
     if (selectedTextContent === lastSelectedText.value) {
       // 重新显示指示器，但不重新获取翻译
       const range = selection.getRangeAt(0);
-      const rect = range.getBoundingClientRect();
-      selectionRect.value = rect;
+      selectRange.value = range;
       showIndicator.value = true;
       return;
     }
@@ -201,12 +209,11 @@ const handleTextSelection = () => {
     
     // 获取选中文本位置信息
     const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
     
     // 保存选中文本和位置
     selectedText.value = selectedTextContent;
     lastSelectedText.value = selectedTextContent;
-    selectionRect.value = rect;
+    selectRange.value = range;
     showIndicator.value = true;
   }, 200); // 200ms防抖延迟，减少延迟提高响应性
 };
@@ -671,8 +678,16 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.fr-selection-indicator {
+.fr-selection-translator-wrapper {
   position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  width: 350px;
+}
+
+.fr-selection-indicator {
+  position: absolute;
   width: 12px;
   height: 12px;
   background-color: #ff4d4f;
@@ -683,23 +698,48 @@ onBeforeUnmount(() => {
   animation: pulse 1.5s infinite;
 }
 
+[data-placement="left"] .fr-selection-indicator {
+  bottom: 0;
+  right: 4px;
+}
+[data-placement="right"] .fr-selection-indicator {
+  bottom: 0;
+  left: 4px;
+}
+[data-placement="top-start"] .fr-selection-indicator {
+  left: 0;
+  bottom: 4px;
+}
+[data-placement="top-end"] .fr-selection-indicator {
+  right: 0;
+  bottom: 4px;
+}
+[data-placement="bottom-start"] .fr-selection-indicator {
+  left: 0;
+  top: 4px;
+}
+[data-placement="bottom-end"] .fr-selection-indicator {
+  right: 0;
+  top: 4px;
+}
+
 @keyframes pulse {
   0% {
-    transform: translate(10px, -50%) scale(1);
+    transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
   }
   70% {
-    transform: translate(10px, -50%) scale(1.1);
+    transform: scale(1.1);
     box-shadow: 0 0 0 10px rgba(255, 77, 79, 0);
   }
   100% {
-    transform: translate(10px, -50%) scale(1);
+    transform: scale(1);
     box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
   }
 }
 
 .fr-translation-tooltip {
-  position: fixed;
+  position: absolute;
   background-color: white !important;
   border-radius: 8px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
@@ -710,6 +750,31 @@ onBeforeUnmount(() => {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   width: 350px; /* 增加宽度 */
   transition: opacity 0.2s ease;
+}
+
+[data-placement="left"] .fr-translation-tooltip {
+  top: -10px;
+  right: 5px;
+}
+[data-placement="right"] .fr-translation-tooltip {
+  top: -10px;
+  left: 5px;
+}
+[data-placement="top-start"] .fr-translation-tooltip {
+  left: 1px;
+  bottom: 5px;
+}
+[data-placement="top-end"] .fr-translation-tooltip {
+  right: 1px;
+  bottom: 5px;
+}
+[data-placement="bottom-start"] .fr-translation-tooltip {
+  left: 1px;
+  top: 5px;
+}
+[data-placement="bottom-end"] .fr-translation-tooltip {
+  right: 1px;
+  top: 5px;
 }
 
 .fr-tooltip-header {

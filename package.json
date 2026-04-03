@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@floating-ui/dom": "^1.7.4",
     "@wxt-dev/storage": "^1.0.1",
     "crypto-js": "^4.2.0",
     "element-plus": "^2.9.3",
@@ -40,7 +41,7 @@
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.0",
     "vuepress": "2.0.0-rc.19",
-    "wxt": "^0.20.7"
+    "wxt": "^0.20.18"
   },
   "packageManager": "pnpm@9.12.1+sha1.7084e7df42ee1d221994c2c2599277a2a937f050"
 }

@@ -186,12 +186,6 @@
     background: rgba(64, 158, 255, 0.1);
 }
 
-/* 马克笔 */
-.fluent-display-marker {
-    background: #ffeb3b;
-    padding: 0 4px;
-}
-
 /* 引用 */
 .fluent-display-quote {
     border-left: 4px solid #409eff;
@@ -213,6 +207,15 @@
     background: transparent; /* 确保背景透明，与周围背景融合 */
     box-sizing: border-box; /* 使用 border-box 模型，确保内外边距和边框计算正确 */
     overflow-wrap: break-word; /* 处理长单词或 URL 的断行，避免溢出 */
+}
+
+/* 马克笔 */
+.fluent-display-marker {
+    background: #ffeb3b;
+    padding: 0;
+    line-height: 1.6;
+    display: inline;
+    box-decoration-break: clone;
 }
 
 .fluent-display-lightyellow {
