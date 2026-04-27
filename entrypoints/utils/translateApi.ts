@@ -7,7 +7,7 @@ import { enqueueTranslation, clearTranslationQueue, getQueueStatus } from './tra
 import browser from 'webextension-polyfill';
 import { config } from './config';
 import { cache } from './cache';
-import { detectlang } from './common';
+import { containsEnglishMonthDate, detectlang } from './common';
 import { storage } from '@wxt-dev/storage';
 
 // 调试相关
@@ -33,6 +33,11 @@ export async function translateText(origin: string, context: string = document.t
 
   // 如果目标语言与当前文本语言相同，直接返回原文
   if (detectlang(origin.replace(/[\s\u3000]/g, '')) === config.to) {
+    return origin;
+  }
+
+  // Skip date strings like "26 April 2026", "April 20, 2026", and "Apr 25, 2026".
+  if (containsEnglishMonthDate(origin)) {
     return origin;
   }
 

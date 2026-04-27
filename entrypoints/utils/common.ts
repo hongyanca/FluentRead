@@ -36,6 +36,19 @@ export function detectlang(origin: string): string {
     }
 }
 
+const ENGLISH_MONTH_PATTERN = '(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)';
+const ENGLISH_DATE_PATTERN = new RegExp(
+    `\\b(?:` +
+    `(?:[1-9]|[12]\\d|3[01])\\s+${ENGLISH_MONTH_PATTERN}\\s+\\d{4}` +
+    `|${ENGLISH_MONTH_PATTERN}\\s+(?:[1-9]|[12]\\d|3[01]),?\\s+\\d{4}` +
+    `)\\b`,
+    'i'
+);
+
+export function containsEnglishMonthDate(text: string): boolean {
+    return ENGLISH_DATE_PATTERN.test(text.replace(/<[^>]+>/g, ' '));
+}
+
 // 获取触摸点的中心位置
 export function getCenterPoint(touches: TouchList, point: number): { x: number, y: number } | undefined {
     // 检查触摸点数量是否等于指定的数量
