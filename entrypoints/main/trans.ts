@@ -51,27 +51,14 @@ function gatherContext(node: Element, allNodes: Element[]): string | undefined {
     if (idx === -1) return undefined;
 
     const beforeNodes = allNodes.slice(Math.max(0, idx - count), idx);
-    const afterNodes = allNodes.slice(idx + 1, idx + 1 + count);
-
     const beforeTexts = beforeNodes
         .map(n => n.textContent?.trim())
         .filter(Boolean);
-    const afterTexts = afterNodes
-        .map(n => n.textContent?.trim())
-        .filter(Boolean);
 
-    // 如果前后都没有上下文，则不注入
-    if (beforeTexts.length === 0 && afterTexts.length === 0) return undefined;
+    // 上文数量不足时不注入上下文，避免上下文质量不稳定
+    if (beforeTexts.length < 16) return undefined;
 
-    const parts: string[] = [];
-    if (beforeTexts.length > 0) {
-        parts.push('[Before]\n' + beforeTexts.join('\n'));
-    }
-    if (afterTexts.length > 0) {
-        parts.push('[After]\n' + afterTexts.join('\n'));
-    }
-
-    return parts.join('\n\n');
+    return '[Before]\n' + beforeTexts.join('\n');
 }
 
 // 恢复原文内容
