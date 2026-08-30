@@ -1,0 +1,205 @@
+/**
+ * @file src/providers/translation/ai-sdk/endpoints.ts
+ *
+ * 文件职责：解析使用 Vercel AI SDK 的 OpenAI 兼容服务端点，统一 common、custom、New API、Azure、MiniMax 与 MiMo 的路由差异。
+ * 主要内容：声明 transport profile、服务 ID 和 endpoint 配置类型，规范化 chat completions 地址，并由 resolveOpenAICompatibleEndpoint 返回 baseURL、route 与兼容参数。 可核对的公开符号包括 AiSdkEndpointRoute、AI_SDK_TRANSPORT_PROFILE、AiSdkEndpointConfig、OpenAICompatibleEndpointResolution、ResolvedOpenAICompatibleEndpoint、AI_SDK_COMMON_SERVICE_IDS、AI_SDK_SERVICE_IDS、parseChatCompletionsEndpoint。
+ * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
+ */
+
+import {getMimoEndpoint, MINIMAX_ENDPOINTS, urls} from '@/src/core/config/constants';
+import {config as runtimeConfig} from '@/src/services/config/store';
+import {services} from '@/src/core/config/catalog';
+
+export type AiSdkEndpointRoute = 'common' | 'custom' | 'newapi' | 'azure';
+
+export const AI_SDK_TRANSPORT_PROFILE = 'vercel-ai-sdk-openai-compatible-v1' as const;
+
+export interface AiSdkEndpointConfig {
+    proxy?: Record<string, string | undefined>;
+    custom?: string;
+    newApiUrl?: string;
+    azureOpenaiEndpoint?: string;
+    minimaxBillingPlan?: string;
+    minimaxRegion?: string;
+    mimoBillingPlan?: string;
+    mimoRegion?: string;
+}
+
+export interface OpenAICompatibleEndpointResolution {
+    /** 当前 FluentRead 适配器实际调用的规范 URL。 */
+    endpoint: string;
+    /** 传给 OpenAI 兼容 provider 的 URL 前缀，provider 会在其后追加 `/chat/completions`。 */
+    baseURL: string;
+    /** 从 endpoint 中移除、并在创建 provider 时单独传入的查询参数。 */
+    queryParams?: Record<string, string>;
+    /**
+     * 无法用 baseURL 与 provider 查询记录无损表达的 endpoint，例如非标准路径或
+     * 重复查询键。SDK 适配器会把注入的 fetch 目标改写为此 URL。
+     */
+    exactEndpoint?: string;
+}
+
+export type ResolvedOpenAICompatibleEndpoint = OpenAICompatibleEndpointResolution;
+
+export const AI_SDK_COMMON_SERVICE_IDS = Object.freeze([
+    services.yiyan,
+    services.infini,
+    services.minimax,
+    services.mimo,
+    services.openai,
+    services.moonshot,
+    services.baichuan,
+    services.lingyi,
+    services.jieyue,
+    services.groq,
+    services.huanYuan,
+    services.doubao,
+    services.siliconCloud,
+    services.openrouter,
+    services.grok,
+    services.localLlama,
+]);
+
+export const AI_SDK_SERVICE_IDS = Object.freeze([
+    ...AI_SDK_COMMON_SERVICE_IDS,
+    services.custom,
+    services.newapi,
+    services.azureOpenai,
+]);
+
+const commonServices = new Set<string>(AI_SDK_COMMON_SERVICE_IDS);
+
+function parseAbsoluteEndpoint(rawEndpoint: string | undefined, label: string): URL {
+    const endpoint = rawEndpoint?.trim();
+    if (!endpoint) throw new Error(`${label}未配置`);
+
+    let url: URL;
+    try {
+        url = new URL(endpoint);
+    } catch {
+        throw new Error(`${label}格式不正确`);
+    }
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        throw new Error(`${label}仅支持 HTTP 或 HTTPS 协议`);
+    }
+
+    url.hash = '';
+    return url;
+}
+
+function withoutTrailingSlash(value: string): string {
+    return value.endsWith('/') ? value.slice(0, -1) : value;
+}
+
+/**
+ * 将完整的 Chat Completions URL 拆分为 OpenAI 兼容 provider 所需字段。
+ * 非标准路径会保留 exactEndpoint 标记，使共享 fetch 包装器维持配置中的直接目标。
+ */
+export function parseChatCompletionsEndpoint(
+    rawEndpoint: string,
+    label = '翻译服务接口地址',
+): OpenAICompatibleEndpointResolution {
+    const url = parseAbsoluteEndpoint(rawEndpoint, label);
+    const queryEntries = [...url.searchParams.entries()];
+    const hasDuplicateQueryKeys = new Set(queryEntries.map(([key]) => key)).size !== queryEntries.length;
+    const parsedQueryParams = Object.fromEntries(queryEntries);
+    const queryParams = Object.keys(parsedQueryParams).length > 0 ? parsedQueryParams : undefined;
+    url.search = '';
+
+    const standardPath = url.pathname.match(/^(.*)\/chat\/completions\/?$/);
+    if (standardPath) {
+        const endpointUrl = new URL(rawEndpoint.trim());
+        endpointUrl.hash = '';
+        endpointUrl.pathname = endpointUrl.pathname.replace(/\/$/, '');
+
+        url.pathname = standardPath[1] || '/';
+        const resolution: OpenAICompatibleEndpointResolution = {
+            endpoint: endpointUrl.toString(),
+            baseURL: withoutTrailingSlash(url.toString()),
+        };
+        if (hasDuplicateQueryKeys) resolution.exactEndpoint = endpointUrl.toString();
+        else resolution.queryParams = queryParams;
+        return resolution;
+    }
+
+    const exactUrl = new URL(rawEndpoint.trim());
+    exactUrl.hash = '';
+    return {
+        endpoint: exactUrl.toString(),
+        baseURL: withoutTrailingSlash(url.toString()),
+        queryParams,
+        exactEndpoint: exactUrl.toString(),
+    };
+}
+
+/** 与现有 New API 适配器的 URL 补全规则保持一致。 */
+export function normalizeNewApiEndpoint(rawEndpoint: string): string {
+    const url = parseAbsoluteEndpoint(rawEndpoint, 'New API 地址');
+    const path = url.pathname.replace(/\/+$/, '');
+
+    if (/\/chat\/completions$/.test(path)) {
+        url.pathname = path;
+    } else if (/\/v1$/.test(path)) {
+        url.pathname = `${path}/chat/completions`;
+    } else {
+        url.pathname = `${path}/v1/chat/completions`;
+    }
+
+    return url.toString();
+}
+
+export function getAiSdkEndpointRoute(service: string): AiSdkEndpointRoute | null {
+    if (commonServices.has(service)) return 'common';
+    if (service === services.custom) return 'custom';
+    if (service === services.newapi) return 'newapi';
+    if (service === services.azureOpenai) return 'azure';
+    return null;
+}
+
+function resolveCommonEndpoint(service: string, config: AiSdkEndpointConfig): string {
+    const proxy = config.proxy?.[service]?.trim();
+    if (proxy) return proxy;
+
+    if (service === services.minimax) {
+        const plan = config.minimaxBillingPlan === 'token-plan' ? 'token-plan' : 'payg';
+        const region = config.minimaxRegion === 'global' ? 'global' : 'cn';
+        return MINIMAX_ENDPOINTS[plan][region];
+    }
+
+    if (service === services.mimo) {
+        return getMimoEndpoint(config.mimoBillingPlan || 'payg', config.mimoRegion || 'cn');
+    }
+
+    const endpoint = urls[service];
+    if (typeof endpoint !== 'string' || !endpoint.trim()) {
+        throw new Error(`未找到翻译服务接口: ${service}`);
+    }
+    return endpoint;
+}
+
+export function resolveOpenAICompatibleEndpoint(
+    service: string,
+    config: AiSdkEndpointConfig = runtimeConfig,
+): ResolvedOpenAICompatibleEndpoint {
+    const route = getAiSdkEndpointRoute(service);
+    if (!route) throw new Error(`翻译服务尚未纳入 AI SDK 端点解析: ${service}`);
+
+    let endpoint: string;
+    switch (route) {
+        case 'common':
+            endpoint = resolveCommonEndpoint(service, config);
+            break;
+        case 'custom':
+            endpoint = config.proxy?.[service]?.trim() || config.custom || '';
+            break;
+        case 'newapi':
+            endpoint = normalizeNewApiEndpoint(config.newApiUrl || '');
+            break;
+        case 'azure':
+            endpoint = config.azureOpenaiEndpoint || '';
+            break;
+    }
+
+    return parseChatCompletionsEndpoint(endpoint, `${service} 接口地址`);
+}

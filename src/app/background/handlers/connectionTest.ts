@@ -1,0 +1,52 @@
+/**
+ * @file src/app/background/handlers/connectionTest.ts
+ * 文件职责：为设置页的翻译服务连通性检查提供后台消息适配器，在调用 provider 前形成明确、可序列化的输入输出契约。
+ * 主要内容：定义 testTranslationService 消息与成功/失败响应，验证 service 为非空字符串，调用注入的 runTest，并通过 formatError 把异常转换成面向 UI 的错误文本。
+ * 模块边界：本文件不发起网络请求、不读取凭据，也不识别具体供应商协议；连接测试实现和错误格式化由 providers 层注入，message runtime 负责注册。
+ */
+import type {BackgroundMessageHandler} from '../messageRouter';
+
+export const CONNECTION_TEST_MESSAGE_TYPE = 'testTranslationService' as const;
+
+export interface ConnectionTestMessage {
+    type: typeof CONNECTION_TEST_MESSAGE_TYPE;
+    service?: unknown;
+}
+
+export type ConnectionTestResponse =
+    | {success: true; durationMs: number}
+    | {success: false; error: string};
+
+export interface ConnectionTestDependencies {
+    readonly ready: Promise<void>;
+    readonly runConnectionTest: (service: string) => Promise<{durationMs: number}>;
+    readonly formatError: (service: string, error: unknown) => string;
+}
+
+function parseService(value: unknown): string {
+    if (typeof value === 'string' && value.trim()) return value;
+    throw new TypeError('连接测试 service 必须是非空字符串');
+}
+
+/** 创建 provider 连接测试 handler；错误在本 handler 内格式化，保持旧后台响应协议。 */
+export function createConnectionTestHandler(
+    dependencies: ConnectionTestDependencies,
+): BackgroundMessageHandler<unknown, ConnectionTestMessage, ConnectionTestResponse> {
+    return {
+        type: CONNECTION_TEST_MESSAGE_TYPE,
+        async handle(message) {
+            let service = '';
+            try {
+                // 步骤 1：后台边界先收窄服务 ID，避免非法 payload 进入 provider registry。
+                service = parseService(message.service);
+                await dependencies.ready;
+
+                // 步骤 2：provider 测试失败时使用现有格式化器返回用户可读错误。
+                const result = await dependencies.runConnectionTest(service);
+                return {success: true, ...result};
+            } catch (error) {
+                return {success: false, error: dependencies.formatError(service, error)};
+            }
+        },
+    };
+}

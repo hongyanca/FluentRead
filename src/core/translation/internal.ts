@@ -1,0 +1,99 @@
+/**
+ * @file src/core/translation/internal.ts
+ *
+ * 文件职责：保存候选引擎内部可独立测试的缓存继承、适配裁剪祖先查找与内联分段算法。
+ * 主要内容：定义 AncestorAdapterDecision 等内部结构，提供 inheritCachedFlag、readCachedFlagOr、findAdapterPrunedAncestor 和 partitionInlineRunAtBarriers，降低 engine 与 layout 的复杂度。 可核对的公开符号包括 AncestorAdapterDecision、AdapterPrunedAncestorResult、inheritCachedFlag、readCachedFlagOr、findAdapterPrunedAncestor、partitionInlineRunAtBarriers。
+ * 模块边界：本文件属于可独立测试的 core 候选领域；可以读取传入 DOM 以计算结果，但不访问配置存储、不调用 provider、不注册页面监听器，也不负责译文渲染或 feature 生命周期。
+ */
+
+/** 站点适配器对祖先节点给出的最小决策形状。 */
+export interface AncestorAdapterDecision {
+    decision: {
+        kind: string;
+        reason?: string;
+    };
+    adapterId?: string;
+}
+
+export interface AdapterPrunedAncestorResult<T> {
+    result: {reason: string; adapterId?: string} | null;
+    inspected: T[];
+}
+
+/** 从祖先缓存继承布尔标记；null 表示已经到达当前 DOM 树边界。 */
+export function inheritCachedFlag<T extends object>(
+    current: T | null,
+    flags: WeakMap<T, boolean>,
+): boolean {
+    if (current === null) return false;
+    return flags.get(current) === true;
+}
+
+/** 优先读取本轮缓存，缺失时才执行后备计算。 */
+export function readCachedFlagOr<T extends object>(
+    flags: WeakMap<T, boolean>,
+    key: T,
+    fallback: () => boolean,
+): boolean {
+    const cached = flags.get(key);
+    if (cached !== undefined) return cached;
+    return fallback();
+}
+
+/**
+ * 在有界祖先链中查找站点适配器的 prune 决策。
+ *
+ * 该函数是 engine 的内部纯算法边界：公开解析入口通常会先被 DOM hard guard
+ * 截断，但这里仍保留独立深度上限，防止未来调用顺序调整后出现无界祖先遍历。
+ */
+export function findAdapterPrunedAncestor<T>(
+    ancestors: Iterable<T>,
+    maximumDepth: number,
+    decide: (ancestor: T) => AncestorAdapterDecision,
+): AdapterPrunedAncestorResult<T> {
+    const inspected: T[] = [];
+    let depth = 0;
+
+    for (const ancestor of ancestors) {
+        depth += 1;
+        if (depth > maximumDepth) {
+            return {result: {reason: 'ancestor-depth-limit'}, inspected};
+        }
+
+        inspected.push(ancestor);
+        const {decision, adapterId} = decide(ancestor);
+        if (decision.kind === 'prune-subtree') {
+            return {
+                result: {reason: decision.reason || 'adapter-pruned', adapterId},
+                inspected,
+            };
+        }
+    }
+
+    return {result: null, inspected};
+}
+
+/**
+ * 按不可移动的子树边界切分一个直接行内节点序列；边界节点本身由独立候选负责。
+ */
+export function partitionInlineRunAtBarriers<T>(
+    nodes: readonly T[],
+    isBarrier: (node: T) => boolean,
+): T[][] {
+    const partitions: T[][] = [];
+    let current: T[] = [];
+    const flush = () => {
+        if (current.length > 0) partitions.push(current);
+        current = [];
+    };
+
+    for (const node of nodes) {
+        if (isBarrier(node)) {
+            flush();
+            continue;
+        }
+        current.push(node);
+    }
+    flush();
+    return partitions;
+}

@@ -1,0 +1,574 @@
+import { describe, expect, it } from 'vitest';
+
+import {
+    Config,
+    DEFAULT_MOUSE_HOVER_TRANSLATION_DELAY,
+    DEFAULT_SELECTION_TRANSLATOR_DELAY,
+    MOUSE_HOVER_TRANSLATION_DELAY_MAX,
+    MOUSE_HOVER_TRANSLATION_DELAY_MIN,
+    SELECTION_TRANSLATOR_DELAY_MAX,
+    SELECTION_TRANSLATOR_DELAY_MIN,
+    normalizeConfig,
+} from '@/src/core/config/model';
+import { getMimoEndpoint, MIMO_ENDPOINTS, MINIMAX_ENDPOINTS, tongyiTokenPlanUrl, urls } from '@/src/core/config/constants';
+import { customModelString, defaultModelIds, defaultModels, defaultOption, models, options, resolveConfiguredModel, services, servicesType } from '@/src/core/config/catalog';
+
+describe('AI 模型编号列表', () => {
+    it('翻译计数只保留非负安全整数，并清理畸形旧值', () => {
+        expect(normalizeConfig({count: 12}).count).toBe(12);
+        expect(normalizeConfig({count: 0}).count).toBe(0);
+        for (const count of [-1, 1.5, '12', Number.MAX_SAFE_INTEGER + 1, Number.NaN]) {
+            expect(normalizeConfig({count}).count).toBe(0);
+        }
+        expect(normalizeConfig({__fluentCountOperations: [{id: 'private-operation'}]}))
+            .not.toHaveProperty('__fluentCountOperations');
+    });
+
+    it('移除旧版凭据持久化策略字段，统一由当前存储策略管理', () => {
+        expect(new Config()).not.toHaveProperty('persistCredentials');
+        expect(normalizeConfig({})).not.toHaveProperty('persistCredentials');
+        expect(normalizeConfig({persistCredentials: true})).not.toHaveProperty('persistCredentials');
+        expect(normalizeConfig({persistCredentials: false})).not.toHaveProperty('persistCredentials');
+        expect(normalizeConfig({persistCredentials: 'true'})).not.toHaveProperty('persistCredentials');
+    });
+
+    it('移除已退役的 X 原生翻译配置，不让旧开关进入历史或迁移导出', () => {
+        expect(new Config()).not.toHaveProperty('xGrokAutoTranslateEnabled');
+        expect(normalizeConfig({xGrokAutoTranslateEnabled: true}))
+            .not.toHaveProperty('xGrokAutoTranslateEnabled');
+        expect(normalizeConfig({xGrokAutoTranslateEnabled: false}))
+            .not.toHaveProperty('xGrokAutoTranslateEnabled');
+    });
+
+    it('AI 智能上下文默认关闭，并能从旧配置平滑补齐', () => {
+        expect(new Config().enableAIContext).toBe(false);
+        expect(normalizeConfig({}).enableAIContext).toBe(false);
+        expect(normalizeConfig({enableAIContext: true}).enableAIContext).toBe(true);
+        expect(servicesType.isUseAIContext(services.openai)).toBe(true);
+        expect(servicesType.isUseAIContext(services.microsoft)).toBe(false);
+        expect(servicesType.isUseAIContext(services.huanYuanTranslation)).toBe(false);
+        expect(servicesType.isUseAIContext(services.tongyi, 'qwen-mt-plus')).toBe(false);
+        expect(servicesType.isUseAIContext(services.tongyi, resolveConfiguredModel(customModelString, 'qwen-mt-plus'))).toBe(false);
+        expect(resolveConfiguredModel(customModelString, 'custom-model')).toBe('custom-model');
+    });
+
+    it('AI 多段翻译默认关闭，并只接受显式布尔值开启', () => {
+        expect(new Config().enableAIMultiSegment).toBe(false);
+        expect(normalizeConfig({}).enableAIMultiSegment).toBe(false);
+        expect(normalizeConfig({enableAIMultiSegment: true}).enableAIMultiSegment).toBe(true);
+        expect(normalizeConfig({enableAIMultiSegment: 'true'}).enableAIMultiSegment).toBe(false);
+    });
+
+    it('展示当前主流模型，并移除已退役或错误的预设编号', () => {
+        expect(models.get(services.openai)?.at(0)).toBe('gpt-5.6-luna');
+        expect(models.get(services.openai)).toContain('gpt-5.6-sol');
+        expect(models.get(services.openai)).not.toContain('gpt5');
+        expect(models.get(services.gemini)).toContain('gemini-3.6-flash');
+        expect(models.get(services.claude)).toContain('claude-fable-5');
+        expect(models.get(services.claude)).toContain('claude-sonnet-5');
+        expect(models.get(services.claude)?.at(-1)).toBe(customModelString);
+        expect(models.get(services.tongyi)?.at(0)).toBe('qwen3.6-flash');
+        expect(models.get(services.tongyi)).toContain('qwen3.7-max');
+        expect(models.get(services.tongyi)).not.toContain('qwen3.7-flash');
+        expect(models.get(services.zhipu)?.at(0)).toBe('glm-4.5-flash');
+        expect(models.get(services.zhipu)).toContain('glm-5.2');
+        expect(models.get(services.infini)).toContain('glm-5.2');
+        expect(models.get(services.infini)).not.toContain('glm-5.3');
+        expect(models.get(services.moonshot)).toContain('kimi-k2.7-code');
+        expect(models.get(services.yiyan)).toContain('ernie-5.1');
+        expect(models.get(services.minimax)).toContain('MiniMax-M2.7');
+        expect(models.get(services.mimo)).toContain('mimo-v2.5-pro');
+        expect(models.get(services.jieyue)).toContain('step-3.5-flash');
+        expect(models.get(services.huanYuan)).toContain('hy3');
+        expect(models.get(services.grok)).toContain('grok-4.5');
+        expect(models.get(services.groq)).not.toContain('whisper-large-v3');
+        expect(models.get(services.openrouter)?.at(-1)).toBe(customModelString);
+        expect(options.services.find(option => option.value === services.zhipu)?.label).toBe('智谱/GLM');
+        expect(options.services.find(option => option.value === services.moonshot)?.label).toBe('月之暗面/Kimi');
+        expect(options.services.find(option => option.value === services.tongyi)?.label).toBe('千问/Qwen');
+        expect(options.services.find(option => option.value === services.freeTranslation)?.label).toBe('免费翻译服务');
+        expect(options.services[1]?.value).toBe(services.freeTranslation);
+        expect(options.services.find(option => option.value === services.freeTranslation)?.description)
+            .toContain('微软翻译、DeepLX、谷歌翻译依次尝试');
+        expect(options.services.find(option => option.value === services.mimo)?.label).toBe('小米 MiMo');
+        expect(options.services.some(option => option.value === services.baichuan)).toBe(false);
+        expect(options.services.some(option => option.value === services.lingyi)).toBe(false);
+        expect(options.services.find(option => option.value === services.infini)?.label).toBe('无问芯穹');
+        expect(options.services.every(option => !/[🌟⭐★]/u.test(option.label))).toBe(true);
+        expect(servicesType.isMachine(services.freeTranslation)).toBe(true);
+        expect(defaultOption.service).toBe(services.freeTranslation);
+    });
+
+    it('退役服务回退到可用默认值并清除遗留连接配置', () => {
+        const normalized = normalizeConfig({
+            service: 'cozecom',
+            documentService: 'cozecn',
+            videoService: 'cozecom',
+            translationCenterServices: ['google', 'cozecom', 'cozecn'],
+            token: {openai: 'keep-token', cozecom: 'retired-token'},
+            model: {cozecom: 'retired-model'},
+            documentModel: {cozecn: 'retired-model'},
+            customModel: {cozecom: 'retired-custom-model'},
+            documentCustomModel: {cozecn: 'retired-custom-model'},
+            proxy: {cozecom: 'https://retired.example'},
+            customBody: {cozecn: '{"retired":true}'},
+            system_role: {cozecom: 'retired system'},
+            user_role: {cozecn: 'retired user'},
+            requireApiKey: {
+                'openai:gpt-5.6-luna': false,
+                'cozecom:retired-model': false,
+            },
+            robot_id: {cozecom: 'retired-bot'},
+        });
+
+        expect(normalized.service).toBe(services.freeTranslation);
+        expect(normalized.documentService).toBe(services.freeTranslation);
+        expect(normalized.videoService).toBe(services.microsoft);
+        expect(normalized.translationCenterServices).toEqual([services.google]);
+        expect(normalized.token).toMatchObject({openai: 'keep-token'});
+        expect(normalized.requireApiKey).toEqual({'openai:gpt-5.6-luna': false});
+        for (const mapping of [
+            normalized.token,
+            normalized.model,
+            normalized.documentModel,
+            normalized.customModel,
+            normalized.documentCustomModel,
+            normalized.proxy,
+            normalized.customBody,
+            normalized.system_role,
+            normalized.user_role,
+        ]) {
+            expect(mapping).not.toHaveProperty('cozecom');
+            expect(mapping).not.toHaveProperty('cozecn');
+        }
+        expect((normalized as unknown as Record<string, unknown>).robot_id).toBeUndefined();
+    });
+
+    it('所有需要模型的 AI 服务默认使用推荐模型档位', () => {
+        for (const [service, defaultModel] of Object.entries(defaultModelIds)) {
+            expect(defaultModels.get(service), `${service} 默认模型`).toBe(defaultModel);
+            expect(models.get(service)?.at(0), `${service} 模型列表首项`).toBe(defaultModel);
+        }
+    });
+
+    it('保留自定义接口的地址、模型和其他按服务配置', () => {
+        const normalized = normalizeConfig({
+            service: services.custom,
+            custom: 'http://127.0.0.1:11434/v1/chat/completions',
+            model: {[services.custom]: customModelString},
+            customModel: {[services.custom]: 'local/translation-model'},
+            token: {[services.custom]: 'local-token'},
+            proxy: {[services.custom]: 'http://127.0.0.1:8080'},
+            system_role: {[services.custom]: 'Translate safely.'},
+            user_role: {[services.custom]: 'Translate {{origin}} into {{to}}.'},
+            customBody: {[services.custom]: '{"stream":false}'},
+        });
+
+        expect(normalized).toMatchObject({
+            service: services.custom,
+            custom: 'http://127.0.0.1:11434/v1/chat/completions',
+            model: {[services.custom]: customModelString},
+            customModel: {[services.custom]: 'local/translation-model'},
+            token: {[services.custom]: 'local-token'},
+            proxy: {[services.custom]: 'http://127.0.0.1:8080'},
+            system_role: {[services.custom]: 'Translate safely.'},
+            user_role: {[services.custom]: 'Translate {{origin}} into {{to}}.'},
+            customBody: {[services.custom]: '{"stream":false}'},
+        });
+    });
+
+    it('不会把下拉列表中仍可选择的模型当成退役编号改写', () => {
+        for (const [service, selectableModels] of models) {
+            for (const selectedModel of selectableModels) {
+                const normalized = normalizeConfig({model: {[service]: selectedModel}});
+                expect(normalized.model[service], `${service}: ${selectedModel}`).toBe(selectedModel);
+            }
+        }
+    });
+});
+
+describe('图片翻译配置', () => {
+    it('默认关闭，并保留用户主动启用或关闭的状态', () => {
+        expect(normalizeConfig({}).disableImageTranslator).toBe(true);
+        expect(normalizeConfig({disableImageTranslator: false}).disableImageTranslator).toBe(false);
+        expect(normalizeConfig({disableImageTranslator: true}).disableImageTranslator).toBe(true);
+    });
+});
+
+describe('翻译中心配置', () => {
+    it('默认使用服务列表，保存后保留去重后的服务顺序和语言选择', () => {
+        expect(new Config().translationCenterServices).toEqual([]);
+        expect(normalizeConfig({
+            translationCenterServices: ['google', 'openai', 'google', ' ', 12],
+            translationCenterSourceLanguage: ' en ',
+            translationCenterTargetLanguage: ' ja ',
+        })).toMatchObject({
+            translationCenterServices: ['google', 'openai'],
+            translationCenterSourceLanguage: 'en',
+            translationCenterTargetLanguage: 'ja',
+        });
+    });
+
+    it('旧配置或非法值安全回退为空服务配置', () => {
+        expect(normalizeConfig({
+            translationCenterServices: 'google',
+            translationCenterSourceLanguage: 12,
+            translationCenterTargetLanguage: null,
+        })).toMatchObject({
+            translationCenterServices: [],
+            translationCenterSourceLanguage: '',
+            translationCenterTargetLanguage: '',
+        });
+    });
+});
+
+describe('圈选翻译配置', () => {
+    it('默认关闭，并保留用户主动启用的状态', () => {
+        expect(new Config().selectionAreaEnabled).toBe(false);
+        expect(normalizeConfig({}).selectionAreaEnabled).toBe(false);
+        expect(normalizeConfig({selectionAreaEnabled: true}).selectionAreaEnabled).toBe(true);
+        expect(normalizeConfig({selectionAreaEnabled: 'true'}).selectionAreaEnabled).toBe(false);
+    });
+});
+
+describe('右键全文翻译配置', () => {
+    it('默认开启，并保留用户主动关闭的状态', () => {
+        expect(new Config().contextMenuEnabled).toBe(true);
+        expect(normalizeConfig({}).contextMenuEnabled).toBe(true);
+        expect(normalizeConfig({contextMenuEnabled: false}).contextMenuEnabled).toBe(false);
+        expect(normalizeConfig({contextMenuEnabled: 'false'}).contextMenuEnabled).toBe(true);
+    });
+});
+
+describe('全文翻译范围配置', () => {
+    it('默认按阅读进度翻译，并保留立即翻译整页的选择', () => {
+        expect(new Config().fullPageTranslationMode).toBe('viewport');
+        expect(normalizeConfig({}).fullPageTranslationMode).toBe('viewport');
+        expect(normalizeConfig({fullPageTranslationMode: 'all'}).fullPageTranslationMode).toBe('all');
+        expect(normalizeConfig({fullPageTranslationMode: 'invalid'}).fullPageTranslationMode).toBe('viewport');
+    });
+});
+
+describe('翻译进度面板配置', () => {
+    it('默认关闭，并保留用户主动启用的状态', () => {
+        expect(new Config().translationProgressPanelEnabled).toBe(false);
+        expect(normalizeConfig({}).translationProgressPanelEnabled).toBe(false);
+        expect(normalizeConfig({translationProgressPanelEnabled: true}).translationProgressPanelEnabled).toBe(true);
+        expect(normalizeConfig({translationProgressPanelEnabled: false}).translationProgressPanelEnabled).toBe(false);
+        expect(normalizeConfig({translationProgressPanelEnabled: 'false'}).translationProgressPanelEnabled).toBe(false);
+    });
+
+    it('迁移旧 translationStatus 布尔值并移除旧字段', () => {
+        const enabled = normalizeConfig({translationStatus: true});
+        const disabled = normalizeConfig({translationStatus: false});
+
+        expect(enabled.translationProgressPanelEnabled).toBe(true);
+        expect(disabled.translationProgressPanelEnabled).toBe(false);
+        expect((enabled as unknown as Record<string, unknown>).translationStatus).toBeUndefined();
+        expect((disabled as unknown as Record<string, unknown>).translationStatus).toBeUndefined();
+    });
+});
+
+describe('鼠标悬浮翻译延迟配置', () => {
+    it('默认保留现有 50ms 行为，并归一化用户设置', () => {
+        expect(new Config().mouseHoverTranslationDelay).toBe(DEFAULT_MOUSE_HOVER_TRANSLATION_DELAY);
+        expect(normalizeConfig({}).mouseHoverTranslationDelay).toBe(DEFAULT_MOUSE_HOVER_TRANSLATION_DELAY);
+        expect(normalizeConfig({mouseHoverTranslationDelay: 235}).mouseHoverTranslationDelay).toBe(240);
+        expect(normalizeConfig({mouseHoverTranslationDelay: '120'}).mouseHoverTranslationDelay).toBe(120);
+    });
+
+    it('将越界或非法值限制在安全范围内', () => {
+        expect(normalizeConfig({mouseHoverTranslationDelay: -100}).mouseHoverTranslationDelay)
+            .toBe(MOUSE_HOVER_TRANSLATION_DELAY_MIN);
+        expect(normalizeConfig({mouseHoverTranslationDelay: 99999}).mouseHoverTranslationDelay)
+            .toBe(MOUSE_HOVER_TRANSLATION_DELAY_MAX);
+        expect(normalizeConfig({mouseHoverTranslationDelay: 'invalid'}).mouseHoverTranslationDelay)
+            .toBe(DEFAULT_MOUSE_HOVER_TRANSLATION_DELAY);
+    });
+});
+
+describe('划词翻译显示延迟配置', () => {
+    it('默认等待 300ms，并归一化用户设置', () => {
+        expect(new Config().selectionTranslatorDelay).toBe(DEFAULT_SELECTION_TRANSLATOR_DELAY);
+        expect(normalizeConfig({}).selectionTranslatorDelay).toBe(DEFAULT_SELECTION_TRANSLATOR_DELAY);
+        expect(normalizeConfig({selectionTranslatorDelay: 326}).selectionTranslatorDelay).toBe(350);
+        expect(normalizeConfig({selectionTranslatorDelay: '150'}).selectionTranslatorDelay).toBe(150);
+    });
+
+    it('允许显式立即显示，并限制越界或非法值', () => {
+        expect(normalizeConfig({selectionTranslatorDelay: 0}).selectionTranslatorDelay)
+            .toBe(SELECTION_TRANSLATOR_DELAY_MIN);
+        expect(normalizeConfig({selectionTranslatorDelay: -100}).selectionTranslatorDelay)
+            .toBe(SELECTION_TRANSLATOR_DELAY_MIN);
+        expect(normalizeConfig({selectionTranslatorDelay: 99999}).selectionTranslatorDelay)
+            .toBe(SELECTION_TRANSLATOR_DELAY_MAX);
+        expect(normalizeConfig({selectionTranslatorDelay: 'invalid'}).selectionTranslatorDelay)
+            .toBe(DEFAULT_SELECTION_TRANSLATOR_DELAY);
+        for (const value of [null, false, '', '   ']) {
+            expect(normalizeConfig({selectionTranslatorDelay: value}).selectionTranslatorDelay)
+                .toBe(DEFAULT_SELECTION_TRANSLATOR_DELAY);
+        }
+    });
+});
+
+describe('旧模型编号兼容迁移', () => {
+    it('迁移官方服务中已退役或错误的模型编号', () => {
+        const normalized = normalizeConfig({
+            model: {
+                [services.openai]: 'gpt5',
+                [services.zhipu]: 'GLM-4-Flash',
+                [services.moonshot]: 'kimi-k2-0711-preview',
+                [services.claude]: 'claude-sonnet-4-0',
+                [services.grok]: 'grok-4-0709',
+            },
+        });
+
+        expect(normalized.model).toMatchObject({
+            [services.openai]: 'gpt-5.6-luna',
+            [services.zhipu]: 'glm-4.5-flash',
+            [services.moonshot]: 'kimi-k3',
+            [services.claude]: 'claude-sonnet-5',
+            [services.grok]: 'grok-4.5',
+        });
+    });
+
+    it.each(['glm-4.5', 'glm-4-plus', 'glm-4', 'glm-4v'])(
+        '将智谱普通旧模型 %s 直接迁移到当前默认模型',
+        legacyModel => {
+            const normalized = normalizeConfig({model: {[services.zhipu]: legacyModel}});
+            expect(normalized.model[services.zhipu]).toBe('glm-5.3');
+        },
+    );
+
+    it.each([
+        'kimi-k2-0711-preview',
+        'kimi-k2-turbo-preview',
+        'moonshot-v1-auto',
+        'moonshot-v1-8k',
+        'moonshot-v1-32k',
+    ])('将 Kimi 通用旧模型 %s 直接迁移到当前默认模型', legacyModel => {
+        const normalized = normalizeConfig({model: {[services.moonshot]: legacyModel}});
+        expect(normalized.model[services.moonshot]).toBe('kimi-k3');
+    });
+
+    it.each([
+        ['claude-3-5-sonnet', 'claude-sonnet-5'],
+        ['claude-3-5-sonnet-20241022', 'claude-sonnet-5'],
+        ['claude-3-opus', 'claude-opus-5'],
+        ['claude-3-opus-20240229', 'claude-opus-5'],
+        ['claude-3-5-haiku', 'claude-haiku-4-5'],
+        ['claude-3-5-haiku-20241022', 'claude-haiku-4-5'],
+    ])('将 Claude 旧模型 %s 迁移到当前同系列模型', (legacyModel, currentModel) => {
+        const normalized = normalizeConfig({model: {[services.claude]: legacyModel}});
+        expect(normalized.model[services.claude]).toBe(currentModel);
+    });
+
+    it.each(['claude-sonnet-4-6', 'claude-opus-4-8'])(
+        '保留列表中仍可主动选择的 Claude 旧模型 %s',
+        supportedModel => {
+            const normalized = normalizeConfig({model: {[services.claude]: supportedModel}});
+            expect(normalized.model[services.claude]).toBe(supportedModel);
+        },
+    );
+
+    it.each([
+        ['llama-3.3-70b-versatile', 'openai/gpt-oss-120b'],
+        ['llama-3.1-8b-instant', 'openai/gpt-oss-20b'],
+        ['llama3-8b-8192', 'openai/gpt-oss-20b'],
+    ])('迁移已退役的 Groq 模型 %s', (legacyModel, currentModel) => {
+        const normalized = normalizeConfig({
+            model: {
+                [services.groq]: legacyModel,
+            },
+        });
+
+        expect(normalized.model[services.groq]).toBe(currentModel);
+    });
+
+    it('迁移已切换协议或退役的国内服务模型编号', () => {
+        const normalized = normalizeConfig({
+            model: {
+                [services.yiyan]: 'ERNIE-Bot 4.0',
+                [services.minimax]: 'chatcompletion_v2',
+                [services.jieyue]: 'step-1-8k',
+                [services.huanYuan]: 'hunyuan-turbos-latest',
+                [services.infini]: 'glm-4-9b-chat',
+            },
+        });
+
+        expect(normalized.model).toMatchObject({
+            [services.yiyan]: 'ernie-5.1',
+            [services.minimax]: 'MiniMax-M2.7',
+            [services.jieyue]: 'step-3.5-flash',
+            [services.huanYuan]: 'hy3',
+            [services.infini]: 'glm-5.2',
+        });
+    });
+
+    it('不改写 Azure、自定义接口或 New API 的部署别名', () => {
+        const normalized = normalizeConfig({
+            model: {
+                [services.azureOpenai]: 'gpt5',
+                [services.custom]: 'gpt5',
+                [services.newapi]: 'gpt5',
+            },
+        });
+
+        expect(normalized.model).toMatchObject({
+            [services.azureOpenai]: 'gpt5',
+            [services.custom]: 'gpt5',
+            [services.newapi]: 'gpt5',
+        });
+    });
+
+    it('不改写未知的 OpenAI 直连模型编号', () => {
+        const normalized = normalizeConfig({
+            model: {[services.openai]: 'gpt-private-deployment'},
+        });
+
+        expect(normalized.model[services.openai]).toBe('gpt-private-deployment');
+    });
+
+    it('保留 DeepSeek 旧编号迁移及思考模式兼容行为', () => {
+        const chat = normalizeConfig({model: {[services.deepseek]: 'deepseek-chat'}});
+        const reasoner = normalizeConfig({model: {[services.deepseek]: 'deepseek-reasoner'}});
+
+        expect(chat.model[services.deepseek]).toBe('deepseek-v4-flash');
+        expect(chat.deepseekThinkingMode).toBe('disabled');
+        expect(reasoner.model[services.deepseek]).toBe('deepseek-v4-flash');
+        expect(reasoner.deepseekThinkingMode).toBe('enabled');
+    });
+});
+
+describe('划词翻译配置兼容', () => {
+    it('为旧配置补齐可发现的触发方式，并清理非法值', () => {
+        expect(normalizeConfig({selectionTranslatorMode: 'bilingual'})).toMatchObject({
+            selectionTranslatorMode: 'bilingual',
+            selectionTranslatorTrigger: 'icon',
+            disableSelectionTranslator: false,
+        });
+
+        expect(normalizeConfig({selectionTranslatorMode: 'invalid', selectionTranslatorTrigger: 'invalid'})).toMatchObject({
+            selectionTranslatorMode: 'disabled',
+            selectionTranslatorTrigger: 'icon',
+            disableSelectionTranslator: true,
+        });
+    });
+
+    it('将划词触发方式规范化为互斥触发选项，并兼容旧快捷键配置', () => {
+        expect(new Config().selectionTranslatorTrigger).toBe('icon');
+        expect(new Config().selectionTranslatorHotkey).toBe('none');
+        expect(new Config().customSelectionTranslatorHotkey).toBe('');
+        expect(normalizeConfig({selectionTranslatorTrigger: 'Control'})).toMatchObject({
+            selectionTranslatorTrigger: 'Control',
+            selectionTranslatorHotkey: 'Control',
+        });
+        expect(normalizeConfig({selectionTranslatorTrigger: 'icon', selectionTranslatorHotkey: 'Control'})).toMatchObject({
+            selectionTranslatorTrigger: 'icon',
+            selectionTranslatorHotkey: 'none',
+        });
+        expect(normalizeConfig({selectionTranslatorHotkey: 'Control'})).toMatchObject({
+            selectionTranslatorTrigger: 'Control',
+            selectionTranslatorHotkey: 'Control',
+        });
+        expect(normalizeConfig({selectionTranslatorTrigger: 'custom', selectionTranslatorHotkey: 'custom', customSelectionTranslatorHotkey: 'Ctrl+Shift+Y'})).toMatchObject({
+            selectionTranslatorTrigger: 'custom',
+            selectionTranslatorHotkey: 'custom',
+            customSelectionTranslatorHotkey: 'Ctrl+Shift+Y',
+        });
+        expect(normalizeConfig({selectionTranslatorTrigger: 'invalid', selectionTranslatorHotkey: 'invalid', customSelectionTranslatorHotkey: 42})).toMatchObject({
+            selectionTranslatorTrigger: 'icon',
+            selectionTranslatorHotkey: 'none',
+            customSelectionTranslatorHotkey: '',
+        });
+    });
+
+    it('保留三种视觉触发方式，并为每个预设快捷键镜像字段', () => {
+        for (const trigger of ['direct', 'icon', 'dot']) {
+            expect(normalizeConfig({selectionTranslatorTrigger: trigger, selectionTranslatorHotkey: 'Control'})).toMatchObject({
+                selectionTranslatorTrigger: trigger,
+                selectionTranslatorHotkey: 'none',
+            });
+            expect(normalizeConfig({selectionTranslatorTrigger: trigger, selectionTranslatorHotkey: 'none'})).toMatchObject({
+                selectionTranslatorTrigger: trigger,
+                selectionTranslatorHotkey: 'none',
+            });
+        }
+        for (const trigger of ['Alt', 'Shift']) {
+            expect(normalizeConfig({selectionTranslatorTrigger: trigger})).toMatchObject({
+                selectionTranslatorTrigger: trigger,
+                selectionTranslatorHotkey: trigger,
+            });
+        }
+    });
+
+    it('normalizes and persists the optional TTS voice fallback order', () => {
+        expect(new Config().selectionTtsVoices).toEqual([]);
+        expect(normalizeConfig({selectionTtsVoices: [
+            'en-US-JennyNeural',
+            'invalid',
+            'en-US-JennyNeural',
+            'zh-CN-XiaoyiNeural',
+        ]}).selectionTtsVoices).toEqual([
+            'en-US-JennyNeural',
+            'zh-CN-XiaoyiNeural',
+        ]);
+    });
+
+    it('keeps the vocabulary book beta opt-in and normalizes invalid values', () => {
+        expect(new Config().vocabularyBookEnabled).toBe(false);
+        expect(normalizeConfig({vocabularyBookEnabled: true}).vocabularyBookEnabled).toBe(true);
+        expect(normalizeConfig({vocabularyBookEnabled: 'yes'}).vocabularyBookEnabled).toBe(false);
+    });
+});
+
+describe('OpenAI 兼容服务端点', () => {
+    it('使用服务商当前公开的统一 Chat Completions 端点', () => {
+        expect(urls[services.yiyan]).toBe('https://qianfan.bj.baidubce.com/v2/chat/completions');
+        expect(urls[services.minimax]).toBe('https://api.minimaxi.com/v1/chat/completions');
+        expect(MINIMAX_ENDPOINTS.payg.cn).toBe('https://api.minimaxi.com/v1/chat/completions');
+        expect(MINIMAX_ENDPOINTS['token-plan'].global).toBe('https://api.minimax.io/v1/chat/completions');
+        expect(urls[services.infini]).toBe('https://cloud.infini-ai.com/maas/v1/chat/completions');
+        expect(urls[services.huanYuan]).toBe('https://api.tokenhub.tencent.com/v1/chat/completions');
+        expect(tongyiTokenPlanUrl).toBe('https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions');
+    });
+
+    it('MiniMax 区域配置只接受全球版或中国版', () => {
+        expect(new Config().minimaxRegion).toBe('cn');
+        expect(normalizeConfig({minimaxRegion: 'cn'}).minimaxRegion).toBe('cn');
+        expect(normalizeConfig({minimaxRegion: 'unknown'}).minimaxRegion).toBe('cn');
+    });
+
+    it('MiniMax 计费方式只接受按量付费或 Token Plan', () => {
+        expect(new Config().minimaxBillingPlan).toBe('payg');
+        expect(normalizeConfig({minimaxBillingPlan: 'token-plan'}).minimaxBillingPlan).toBe('token-plan');
+        expect(normalizeConfig({minimaxBillingPlan: 'unknown'}).minimaxBillingPlan).toBe('payg');
+    });
+
+    it('MiMo 配置独立处理 Token Plan 集群并清理非法值', () => {
+        expect(new Config().mimoBillingPlan).toBe('payg');
+        expect(new Config().mimoRegion).toBe('cn');
+        expect(normalizeConfig({mimoBillingPlan: 'token-plan', mimoRegion: 'sgp'})).toMatchObject({
+            mimoBillingPlan: 'token-plan',
+            mimoRegion: 'sgp',
+        });
+        expect(normalizeConfig({mimoBillingPlan: 'unknown', mimoRegion: 'unknown'})).toMatchObject({
+            mimoBillingPlan: 'payg',
+            mimoRegion: 'cn',
+        });
+    });
+
+    it('MiMo 按量付费与三套 Token Plan 集群使用不同端点', () => {
+        expect(MIMO_ENDPOINTS.payg.cn).toBe('https://api.xiaomimimo.com/v1/chat/completions');
+        expect(getMimoEndpoint('token-plan', 'cn')).toBe('https://token-plan-cn.xiaomimimo.com/v1/chat/completions');
+        expect(getMimoEndpoint('token-plan', 'sgp')).toBe('https://token-plan-sgp.xiaomimimo.com/v1/chat/completions');
+        expect(getMimoEndpoint('token-plan', 'ams')).toBe('https://token-plan-ams.xiaomimimo.com/v1/chat/completions');
+        expect(getMimoEndpoint('payg', 'ams')).toBe('https://api.xiaomimimo.com/v1/chat/completions');
+        expect(getMimoEndpoint('token-plan', 'invalid')).toBe('https://token-plan-cn.xiaomimimo.com/v1/chat/completions');
+    });
+
+    it('文心一言使用 Bearer Token，不再要求旧 AK/SK', () => {
+        expect(servicesType.isUseToken(services.yiyan)).toBe(true);
+        expect(servicesType.isUseAkSk(services.yiyan)).toBe(false);
+    });
+});

@@ -1,0 +1,182 @@
+/**
+ * @file src/features/page-notice/content/notice.css
+ * 文件职责：定义页面级 FluentRead 通知在 Shadow Root 内的布局和视觉状态，包括普通、成功、凭据提醒、离场动画、关闭及设置操作按钮。
+ * 主要内容：样式覆盖固定顶部堆栈、品牌图标与标题、可滚动长文案、warning 配色、hover/focus 状态，并在 prefers-reduced-motion 下关闭过渡。
+ * 模块边界：该 CSS 仅注入 notice.ts 创建的隔离 Shadow Root，不控制通知时长或消息解析，也不得影响宿主页面；宿主 host 的抗覆盖关键属性由 TypeScript 以内联 important 设置。
+ */
+:host {
+    color-scheme: light;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.notice-stack {
+    position: fixed;
+    top: 18px;
+    left: 50vw;
+    z-index: 2147483647;
+    display: flex;
+    width: min(480px, calc(100vw - 32px));
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.page-notice {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 58px;
+    padding: 10px 12px 10px 10px;
+    border: 1px solid #e8dff0;
+    border-radius: 14px;
+    color: #273247;
+    background: rgba(255, 255, 255, .98);
+    box-shadow: 0 12px 30px rgba(39, 29, 55, .14), 0 0 0 4px rgba(239, 71, 118, .07);
+    opacity: 0;
+    pointer-events: auto;
+    transform: translateY(-12px);
+    transition: opacity .18s ease, transform .18s ease;
+}
+
+.page-notice.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-notice.is-leaving {
+    opacity: 0;
+    transform: translateY(-8px);
+}
+
+.page-notice-warning {
+    border-color: #f0d49f;
+    background: linear-gradient(135deg, #fffdf8, #fff9ef);
+    box-shadow: 0 12px 30px rgba(122, 86, 20, .13), 0 0 0 4px rgba(243, 209, 158, .16);
+}
+
+.notice-mark {
+    display: block;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    margin-right: 10px;
+    border-radius: 9px;
+    object-fit: cover;
+}
+
+.notice-copy {
+    display: flex;
+    width: 0;
+    min-width: 0;
+    flex: 1 1 0%;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.notice-heading {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.notice-brand {
+    color: #dc315f;
+    font-weight: 800;
+}
+
+.notice-divider {
+    color: #b0a7b8;
+}
+
+.notice-title {
+    color: #737c8f;
+    font-weight: 700;
+}
+
+.notice-body {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+}
+
+.notice-detail {
+    max-height: min(40vh, 240px);
+    overflow: auto;
+    overflow-wrap: anywhere;
+    color: #273247;
+    font-size: 13px;
+    font-weight: 550;
+    line-height: 1.4;
+    user-select: text;
+    white-space: pre-wrap;
+}
+
+.page-notice-warning .notice-title,
+.page-notice-warning .notice-detail {
+    color: #795b27;
+}
+
+.notice-action,
+.notice-close {
+    flex: 0 0 auto;
+    font: inherit;
+    cursor: pointer;
+}
+
+.notice-action {
+    padding: 3px 8px;
+    border: 1px solid rgba(180, 107, 0, .28);
+    border-radius: 7px;
+    color: #a86500;
+    background: rgba(255, 255, 255, .72);
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.notice-action:hover,
+.notice-action:focus-visible {
+    border-color: rgba(180, 107, 0, .46);
+    background: #fff;
+    outline: none;
+}
+
+.notice-close {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    margin-left: 8px;
+    padding: 0;
+    border: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    color: #9da4b2;
+    background: transparent;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.notice-close:hover,
+.notice-close:focus-visible {
+    color: #596274;
+    background: rgba(39, 50, 71, .07);
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-notice {
+        transition: none;
+    }
+}

@@ -1,0 +1,19 @@
+<!doctype html>
+<!--
+  @file entrypoints/options/index.html
+  文件职责：提供 FluentRead 设置页的最小 HTML 外壳。
+  主要内容：声明中文、独立标签页元数据、响应式视口、#app 挂载点和 main.ts。
+  模块边界：不保存配置或内联页面逻辑，设置交互由 Vue 应用和后台消息协议负责。
+-->
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="manifest.open_in_tab" content="true" />
+    <title>流畅阅读设置</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<!--
+  基于 GitHub Pull Request DOM 形态的合成离线回归夹具。正文均为原创测试文本，
+  只复现 immersive-translate/immersive-translate/pull/4038 故障涉及的稳定类名与 ARIA 结构。
+-->
+<html lang="en">
+<head><title>Pull request fixture</title></head>
+<body>
+    <header class="AppHeader">
+        <button
+            data-testid="global-search-trigger"
+            type="button"
+            aria-haspopup="dialog"
+            aria-label="Search or jump to"
+        >Search</button>
+        <nav aria-label="Repository">
+            <p data-testid="repo-nav-copy">Repository navigation</p>
+        </nav>
+    </header>
+
+    <main>
+        <header class="PullRequestHeader">
+            <h1 data-testid="pr-title">
+                <a href="/example/project/pull/4038"><span>Preserve search while translating a pull request</span></a>
+            </h1>
+        </header>
+
+        <div class="js-socket-channel js-updatable-content" data-channel="pull-request">
+            <div class="js-comment-body markdown-body">
+                <h2 data-testid="change-heading">What changed</h2>
+                <ul>
+                    <li data-testid="change-list-one">Keep the search overlay under page ownership.</li>
+                    <li data-testid="change-list-two">Translate every visible review paragraph.</li>
+                </ul>
+                <p data-testid="change-summary">
+                    The page now keeps <a data-testid="change-link" href="/example/project/issues/17">linked context</a>
+                    in the same readable sentence.
+                </p>
+
+                <h2 data-testid="why-heading">Why</h2>
+                <p data-testid="why-copy">Live conversation containers should not make their readable descendants disappear.</p>
+
+                <h2 data-testid="validation-heading">Validation</h2>
+                <ul>
+                    <li data-testid="validation-list">Open search after translating the entire document.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <div role="dialog" aria-modal="true" aria-label="Quick search">
+        <label>
+            Query
+            <input data-testid="quick-search-input" role="combobox" aria-haspopup="listbox">
+        </label>
+        <ul role="listbox" aria-label="Search suggestions">
+            <li data-testid="quick-search-suggestion">A controlled search suggestion</li>
+        </ul>
+    </div>
+</body>
+</html>

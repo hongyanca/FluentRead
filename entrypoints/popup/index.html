@@ -1,5 +1,11 @@
 <!doctype html>
-<html lang="en">
+<!--
+  @file entrypoints/popup/index.html
+  文件职责：提供浏览器工具栏 popup 的最小 HTML 外壳。
+  主要内容：声明中文与 browser_action 元数据，提供无默认边距的 #app 挂载点并加载 main.ts。
+  模块边界：不直接访问当前标签页或配置，所有交互由 popup Vue 应用完成。
+-->
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

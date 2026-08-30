@@ -1,0 +1,71 @@
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+
+const mocks = vi.hoisted(() => ({
+    config: {
+        on: true,
+        service: 'plain',
+        model: {} as Record<string, string>,
+        customModel: {} as Record<string, string>,
+        display: 1,
+    },
+    sendErrorMessage: vi.fn(),
+}));
+
+vi.mock('@/src/core/config/catalog', () => ({
+    customModelString: 'custom-model',
+    services: {google: 'google'},
+    servicesType: {isUseModel: (service: string) => service.startsWith('ai-')},
+}));
+vi.mock('@/src/services/config/store', () => ({config: mocks.config}));
+vi.mock('@/src/features/page-notice/public', () => ({sendErrorMessage: mocks.sendErrorMessage}));
+
+import {checkConfig, contentPostHandler} from '@/src/app/translation/check';
+
+describe('translation configuration guard', () => {
+    beforeEach(() => {
+        mocks.config.on = true;
+        mocks.config.service = 'plain';
+        mocks.config.model = {};
+        mocks.config.customModel = {};
+        mocks.config.display = 1;
+        mocks.sendErrorMessage.mockReset();
+    });
+
+    it('插件关闭时直接停止且不显示误导提示', () => {
+        mocks.config.on = false;
+
+        expect(checkConfig()).toBe(false);
+        expect(mocks.sendErrorMessage).not.toHaveBeenCalled();
+    });
+
+    it('AI 服务缺少模型时给出可执行提示', () => {
+        mocks.config.service = 'ai-demo';
+
+        expect(checkConfig()).toBe(false);
+        expect(mocks.sendErrorMessage).toHaveBeenCalledWith('模型尚未配置，请前往设置页配置');
+    });
+
+    it('自定义模型为空时同样拒绝请求', () => {
+        mocks.config.service = 'ai-demo';
+        mocks.config.model['ai-demo'] = 'custom-model';
+        mocks.config.customModel['ai-demo'] = '';
+
+        expect(checkConfig()).toBe(false);
+    });
+
+    it('谷歌翻译在仅译文模式下拒绝并说明原因', () => {
+        mocks.config.service = 'google';
+        mocks.config.display = 0;
+
+        expect(checkConfig()).toBe(false);
+        expect(mocks.sendErrorMessage).toHaveBeenCalledWith('「谷歌翻译」仅支持双语模式，请切换翻译服务');
+    });
+
+    it('有效配置通过，并复用纯思考标签清理器', () => {
+        mocks.config.service = 'ai-demo';
+        mocks.config.model['ai-demo'] = 'model-1';
+
+        expect(checkConfig()).toBe(true);
+        expect(contentPostHandler('<think>secret</think> translated')).toBe('translated');
+    });
+});
