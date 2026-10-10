@@ -1,0 +1,205 @@
+{
+  "success": true,
+  "providerDelayMs": 500,
+  "evidence": "Production extension; controlled YouTube/X caption tracks; real video; simulated provider",
+  "checks": [
+    {
+      "name": "A distinct upcoming sentence is prefetched beyond repeated rolling rows",
+      "pass": true,
+      "details": [
+        {
+          "source": "Repeated rolling sentence.",
+          "at": 1790966380432
+        },
+        {
+          "source": "The next distinct sentence is ready.",
+          "at": 1790966380432
+        }
+      ]
+    },
+    {
+      "name": "Cached original and translation first appear together",
+      "pass": true,
+      "details": {
+        "lagMs": 0,
+        "samples": [
+          {
+            "at": 1790.5999999046326,
+            "original": "The next distinct sentence is ready.",
+            "translation": "译文：The next distinct sentence is ready."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Cached DOM-only captions bypass the text stability wait",
+      "pass": true,
+      "details": [
+        {
+          "original": "Cached replay without a matching timeline.",
+          "translation": "译文：Cached replay without a matching timeline."
+        }
+      ]
+    },
+    {
+      "name": "Adding a native track primes upcoming captions immediately",
+      "pass": true,
+      "details": 6
+    },
+    {
+      "name": "Native cached cue renders matching original and translation",
+      "pass": true
+    },
+    {
+      "name": "Native repeated entries do not consume the upcoming distinct sentence budget",
+      "pass": true,
+      "details": [
+        {
+          "source": "Repeated rolling sentence.",
+          "at": 1790966380432
+        },
+        {
+          "source": "The next distinct sentence is ready.",
+          "at": 1790966380432
+        },
+        {
+          "source": "Cached replay without a matching timeline.",
+          "at": 1790966382202
+        },
+        {
+          "source": "Native upcoming cue should be translated early.",
+          "at": 1790966383167
+        },
+        {
+          "source": "Native repeated rolling sentence.",
+          "at": 1790966383871
+        },
+        {
+          "source": "Native distinct sentence follows repeated rows.",
+          "at": 1790966383872
+        }
+      ]
+    },
+    {
+      "name": "Native prefetched original and translation first appear together",
+      "pass": true,
+      "details": {
+        "lagMs": 0,
+        "samples": [
+          {
+            "at": 2548.0999999046326,
+            "original": "Native distinct sentence follows repeated rows.",
+            "translation": "译文：Native distinct sentence follows repeated rows."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Normal-speed prefetch respects its ten-second window",
+      "pass": true
+    },
+    {
+      "name": "Changing to double speed immediately expands the prefetch window",
+      "pass": true
+    },
+    {
+      "name": "Seeking removes queued old prefetches and primes the new window",
+      "pass": true,
+      "details": [
+        {
+          "source": "Old seek window sentence 1.",
+          "at": 1790966386622
+        },
+        {
+          "source": "Old seek window sentence 2.",
+          "at": 1790966386623
+        },
+        {
+          "source": "The sought current caption has priority.",
+          "at": 1790966386759
+        },
+        {
+          "source": "The sought upcoming caption is prefetched.",
+          "at": 1790966387131
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 81256,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 81256,
+      "name": "ChatGPT"
+    }
+  },
+  "subtitleLagMs": 0,
+  "nativeTrackDispatchMs": 6,
+  "nativeSubtitleLagMs": 0,
+  "requests": [
+    {
+      "source": "Repeated rolling sentence.",
+      "at": 1790966380432
+    },
+    {
+      "source": "The next distinct sentence is ready.",
+      "at": 1790966380432
+    },
+    {
+      "source": "Cached replay without a matching timeline.",
+      "at": 1790966382202
+    },
+    {
+      "source": "Native upcoming cue should be translated early.",
+      "at": 1790966383167
+    },
+    {
+      "source": "Native repeated rolling sentence.",
+      "at": 1790966383871
+    },
+    {
+      "source": "Native distinct sentence follows repeated rows.",
+      "at": 1790966383872
+    },
+    {
+      "source": "Fast playback should prefetch this distant cue.",
+      "at": 1790966385814
+    },
+    {
+      "source": "Old seek window sentence 1.",
+      "at": 1790966386622
+    },
+    {
+      "source": "Old seek window sentence 2.",
+      "at": 1790966386623
+    },
+    {
+      "source": "The sought current caption has priority.",
+      "at": 1790966386759
+    },
+    {
+      "source": "The sought upcoming caption is prefetched.",
+      "at": 1790966387131
+    }
+  ]
+}

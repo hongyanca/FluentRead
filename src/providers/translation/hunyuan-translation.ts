@@ -1,14 +1,15 @@
 /**
  * @file src/providers/translation/hunyuan-translation.ts
  *
- * 文件职责：适配腾讯混元翻译大模型的专用协议，处理支持语言映射、源语言检测和自定义请求体。
- * 主要内容：buildHunyuanTranslationRequestBody 生成模型 payload，provider 从快照读取 token/model，调用 endpoint、归一 Response.Usage 并校验 provider 错误码与翻译输出。 可核对的公开符号包括 buildHunyuanTranslationRequestBody、default:hunyuanTranslation。
+ * 文件职责：适配腾讯混元翻译大模型的专用协议，处理支持语言映射、同目标语言短路和自定义请求体。
+ * 主要内容：buildHunyuanTranslationRequestBody 生成模型 payload，provider 从快照读取腾讯凭据与实际模型，调用 endpoint、归一 Response.Usage 并校验 provider 错误码与翻译输出。 可核对的公开符号包括 buildHunyuanTranslationRequestBody、default:hunyuanTranslation。
  * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
  */
 
+import {normalizeChineseLanguageCode} from '@/src/core/language/chinese';
 import { method } from "@/src/core/config/constants";
 import { config } from "@/src/services/config/store";
-import { detectlang } from "@/src/core/language/detect";
+import {shouldSkipTranslationForTarget} from '@/src/core/language/detect';
 import { mergeCustomBody } from "@/src/core/config/customBody";
 import {resolveConfiguredModel, services} from "@/src/core/config/catalog";
 import {getTranslationLanguages} from '@/src/services/translation/languages';
@@ -25,7 +26,7 @@ import {normalizeHunyuanUsage} from './usage';
 // 混元翻译大模型支持的语言代码映射
 const languageMap: Record<string, string> = {
     'zh-Hans': 'zh',    // 简体中文
-    'zh-Hant': 'yue',   // 繁体中文使用粤语代码
+    'zh-Hant': 'zh-TR', // 繁体中文；yue 是粤语，不能代替繁体书写系统
     'en': 'en',         // 英语
     'ja': 'ja',         // 日语
     'ko': 'ko',         // 韩语
@@ -136,28 +137,28 @@ async function hunyuanTranslation(message: TranslationProviderRequest<string>) {
         throw new Error('SecretId或SecretKey格式不正确，请检查是否完整复制了密钥信息');
     }
 
-    // 自动检测使用 FluentRead 的本地语言识别，其余语言直接映射为混元协议代码。
+    // 显式源语言与目标相同时尊重用户设定；自动识别只在统一语言判断可信确认目标语言时短路，
+    // 不能用统计最佳猜测（或去掉空白后的文本）决定跳过，否则短句误判会静默漏译。
     const {sourceLanguage, targetLanguage} = getTranslationLanguages(message);
-    let sourceLang: string;
-    if (sourceLanguage === 'auto') {
-        const detectedLang = detectlang(message.origin.replace(/[\s\u3000]/g, ''));
-        sourceLang = languageMap[detectedLang] || detectedLang;
-    } else {
-        sourceLang = languageMap[sourceLanguage] || sourceLanguage;
-    }
-
-    const mappedTargetLang = languageMap[targetLanguage] || targetLanguage;
-    if (sourceLang === mappedTargetLang) return message.origin;
-    if (!mappedTargetLang) throw new Error('混元翻译不支持该目标语言');
+    const normalizedSource = normalizeChineseLanguageCode(sourceLanguage);
+    const normalizedTarget = normalizeChineseLanguageCode(targetLanguage);
+    const mappedTargetLang = (Object.hasOwn(languageMap, normalizedTarget) ? languageMap[normalizedTarget] : targetLanguage);
+    if (!mappedTargetLang || mappedTargetLang === 'auto') throw new Error('混元翻译不支持该目标语言');
+    const sameLanguage = sourceLanguage === 'auto'
+        ? shouldSkipTranslationForTarget(message.origin, targetLanguage)
+        : (Object.hasOwn(languageMap, normalizedSource) ? languageMap[normalizedSource] : sourceLanguage) === mappedTargetLang;
+    if (sameLanguage) return message.origin;
 
     const model = message.modelOverride || current.model[service] || 'hunyuan-translation';
     const configuredModel = resolveConfiguredModel(model, current.customModel[service]) || model;
     const requestBody = buildHunyuanTranslationRequestBody(
         message.origin,
         mappedTargetLang,
-        model,
+        configuredModel,
         current.customBody?.[service],
     );
+    const requestModel = typeof requestBody.Model === 'string' && requestBody.Model.trim()
+        ? requestBody.Model : configuredModel;
     const requestBodyStr = JSON.stringify(requestBody);
     const timestamp = Math.floor(Date.now() / 1000);
     const authorization = await createHunyuanSignature(requestBodyStr, timestamp, secretId, secretKey);
@@ -182,7 +183,7 @@ async function hunyuanTranslation(message: TranslationProviderRequest<string>) {
         });
 
         if (!response.ok) {
-            reportTranslationModelUsageFailure(message, undefined, startedAt, configuredModel, response.status);
+            reportTranslationModelUsageFailure(message, undefined, startedAt, requestModel, response.status);
             attemptReported = true;
             throw createHttpStatusError(response, '腾讯混元翻译请求失败');
         }
@@ -191,9 +192,9 @@ async function hunyuanTranslation(message: TranslationProviderRequest<string>) {
         const reportedModel = result?.Response?.Model;
         const actualModel = typeof reportedModel === 'string' && reportedModel.trim()
             ? reportedModel
-            : configuredModel;
+            : requestModel;
         const usage = normalizeHunyuanUsage(result?.Response?.Usage, actualModel);
-        if (result.Response?.Error) {
+        if (result?.Response?.Error) {
             reportTranslationModelUsage(message, {
                 ...usage,
                 startedAt,
@@ -204,9 +205,9 @@ async function hunyuanTranslation(message: TranslationProviderRequest<string>) {
             attemptReported = true;
             throw createProviderCodeError('腾讯混元翻译错误', result.Response.Error.Code);
         }
-        if (result.Response?.Choices && result.Response.Choices.length > 0) {
-            const translatedText = result.Response.Choices[0].Message?.Content;
-            if (translatedText) {
+        if (Array.isArray(result?.Response?.Choices) && result.Response.Choices.length > 0) {
+            const translatedText = result.Response.Choices[0]?.Message?.Content;
+            if (typeof translatedText === 'string' && translatedText) {
                 reportTranslationModelUsage(message, {
                     ...usage,
                     startedAt,
@@ -221,7 +222,7 @@ async function hunyuanTranslation(message: TranslationProviderRequest<string>) {
         throw new Error('腾讯混元翻译返回格式异常');
     } catch (error) {
         if (!attemptReported) {
-            reportTranslationModelUsageFailure(message, error, startedAt, configuredModel);
+            reportTranslationModelUsageFailure(message, error, startedAt, requestModel);
         }
         throw error;
     }

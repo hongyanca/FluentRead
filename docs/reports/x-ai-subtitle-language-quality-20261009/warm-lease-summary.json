@@ -1,0 +1,33 @@
+{
+  "scope": "real offscreen dispatcher and resource lifecycle, fake Worker/model responses and fake timers; no new model/audio/browser/network inference",
+  "base": "854ce15d5",
+  "beforeSourceSha256": "2388cba63e532a2e4d7bf1bb5a19a9533ba5bc57107307acc4acf0a894fba4e6",
+  "afterSourceSha256": "a995fd8e79911de71e0280f05ac342d24eb61e7cb09e0f245918b28d4f27c6dc",
+  "counterexample": {
+    "base": "854ce15d5",
+    "warmPrepareSucceeded": true,
+    "mediaWaitMs": 40000,
+    "firstWorkerTerminated": true,
+    "workersConstructed": 2,
+    "emulatedFreshModelInitializations": 2,
+    "scope": "real offscreen lifecycle; fake Worker/model responses; no new ASR/model/network/browser"
+  },
+  "after": {
+    "mediaWaitMs": 40000,
+    "workersConstructed": 1,
+    "firstWindowLeaseConsumed": true,
+    "afterFirstWindowIdleDisposeMs": 30000,
+    "noFirstWindowDisposeMsFromPrepareSuccess": 90000,
+    "repeatPrepareRenewsLease": false,
+    "foreignStreamCancelsIdleTimer": false
+  },
+  "validation": {
+    "tests": 103,
+    "files": 3,
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100
+  },
+  "producerAllocationReport": "/private/tmp/fluentread-x-ai-lazy-producer-20261009/allocation-before-after.json"
+}

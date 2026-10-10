@@ -11,8 +11,16 @@ const EXPECTED_PROVIDER_FILES = [
     'ai-sdk/endpoints.ts',
     'ai-sdk/errors.ts',
     'ai-sdk/openai-compatible.ts',
+    'aliyun-translation.ts',
     'auth.ts',
     'azure-openai.ts',
+    'azure-translator.ts',
+    'baidu-translation.ts',
+    'cloud/languages.ts',
+    'cloud/signature.ts',
+    'google-cloud-translation.ts',
+    'volc-translation.ts',
+    'mymemory.ts',
     'chrome-translator.ts',
     'chromeTranslatorRequest.ts',
     'claude.ts',
@@ -20,11 +28,23 @@ const EXPECTED_PROVIDER_FILES = [
     'deepl.ts',
     'deeplx.ts',
     'deepseek.ts',
+    'doubao.ts',
+    'doubao-seed-translation.ts',
     'free-translation.ts',
+    'free-web.ts',
+    'free-chinese-web.ts',
+    'free-extra-web.ts',
+    'free-official-web.ts',
+    'bilibili-free.ts',
     'gemini.ts',
     'google.ts',
+    'googleRequestGate.ts',
     'hunyuan-translation.ts',
+    'local-translation.ts',
     'microsoft.ts',
+    'microsoftTransport.ts',
+    'native-batch.ts',
+    'responses-api.ts',
     'tencent.ts',
     'tongyi.ts',
     'usage.ts',
@@ -76,13 +96,13 @@ function resolveProjectSpecifier(providerPath: string, specifier: string): strin
     return relative(PROJECT_ROOT, absolute).split(sep).join('/');
 }
 
-function runtimeFetchCalls(path: string): ts.CallExpression[] {
+function runtimeFetchCalls(path: string, transportName = 'runtimeFetch'): ts.CallExpression[] {
     const source = readProjectFile(`src/providers/translation/${path}`);
     const sourceFile = ts.createSourceFile(path, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
     const calls: ts.CallExpression[] = [];
     const visit = (node: ts.Node) => {
         if (ts.isCallExpression(node) && ts.isIdentifier(node.expression)
-            && node.expression.text === 'runtimeFetch') {
+            && node.expression.text === transportName) {
             calls.push(node);
         }
         ts.forEachChild(node, visit);
@@ -148,10 +168,10 @@ describe('translation provider architecture', () => {
             'deepl.ts',
             'deeplx.ts',
             'deepseek.ts',
+            'doubao-seed-translation.ts',
             'gemini.ts',
             'google.ts',
             'hunyuan-translation.ts',
-            'microsoft.ts',
             'tencent.ts',
             'tongyi.ts',
             'xiaoniu.ts',
@@ -164,6 +184,11 @@ describe('translation provider architecture', () => {
         });
 
         expect(violations).toEqual([]);
+        const microsoftAdapter = readProjectFile('src/providers/translation/microsoft.ts');
+        expect(microsoftAdapter).toContain('translateMicrosoftTextsWithTransport(runtimeFetch, texts, fromLang, toLang, abortSignal)');
+        const microsoftTransportCalls = runtimeFetchCalls('microsoftTransport.ts', 'transport');
+        expect(microsoftTransportCalls).toHaveLength(1);
+        expect(microsoftTransportCalls.every((call) => objectLiteralHasSignal(call.arguments[1]))).toBe(true);
     });
 
     it('AI SDK compatibility transport 通过 runtimeFetch，不绕过 userscript 网络端口', () => {

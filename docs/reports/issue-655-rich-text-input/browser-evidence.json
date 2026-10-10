@@ -1,0 +1,173 @@
+{
+  "build": ".output/chrome-mv3 (pnpm build, production)",
+  "browser": "Microsoft Edge, temporary profile",
+  "inputTranslationSuite": {
+    "script": "scripts/run-input-translation-test.cjs",
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "displayTarget": "secondary",
+      "windowState": "normal",
+      "browserFrontmost": false,
+      "visible": true
+    },
+    "cases": [
+      {
+        "name": "interval edit and restore default",
+        "passed": true
+      },
+      {
+        "name": "default prompts can be loaded, edited, persisted and reset; whitespace uses default semantics",
+        "passed": true
+      },
+      {
+        "name": "independent AI config, responsive layout, preserved global config",
+        "passed": true
+      },
+      {
+        "name": "triple equal uses independent model and prompts, preserves original equals",
+        "passed": true
+      },
+      {
+        "name": "restore original and translate again",
+        "passed": true
+      },
+      {
+        "name": "slow triple does not translate",
+        "passed": true
+      },
+      {
+        "name": "editing while pending preserves new content",
+        "passed": true
+      },
+      {
+        "name": "blur without another edit still allows translation",
+        "passed": true
+      },
+      {
+        "name": "Escape cancels late writeback",
+        "passed": true
+      },
+      {
+        "name": "failure retains text and next trigger succeeds",
+        "passed": true
+      },
+      {
+        "name": "native rich editor translates via undoable native editing; undo restores bold formatting",
+        "passed": true
+      },
+      {
+        "name": "model-driven editor gets whole-content paste after selection sync, restore original",
+        "passed": true
+      },
+      {
+        "name": "plaintext-only editor supports triple trigger",
+        "passed": true
+      },
+      {
+        "name": "password and code editor excluded",
+        "passed": true
+      },
+      {
+        "name": "Space, dash and Control+Enter triggers",
+        "passed": true
+      },
+      {
+        "name": "interval change applies without page reload",
+        "passed": true
+      }
+    ],
+    "consoleErrors": [],
+    "modelEditorLog": [
+      {
+        "source": "beforeinput",
+        "start": 0,
+        "end": 0,
+        "length": 8,
+        "text": "="
+      },
+      {
+        "source": "beforeinput",
+        "start": 1,
+        "end": 1,
+        "length": 9,
+        "text": "="
+      },
+      {
+        "source": "paste",
+        "start": 0,
+        "end": 10,
+        "length": 10,
+        "text": "Let us meet tomorrow afternoon."
+      },
+      {
+        "source": "paste",
+        "start": 0,
+        "end": 31,
+        "length": 31,
+        "text": "模型编辑器原文。"
+      }
+    ],
+    "note": "Run with four local adjustments to the pre-existing settings-page section that has drifted from origin/main (custom model fixture, autosave wait, 420px card budget recorded instead of asserted, input-test-model patched before page cases); the rich text cases are unchanged.",
+    "settingsCardHeight": {
+      "measured": 444.34375,
+      "budget": 420
+    }
+  },
+  "realEditors": {
+    "script": "scripts/run-rich-text-input-editors-test.cjs",
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "displayTarget": "secondary",
+      "windowState": "normal",
+      "browserFrontmost": false,
+      "visible": true
+    },
+    "editors": [
+      {
+        "name": "quill",
+        "passed": true,
+        "requestCount": 1,
+        "sourceSent": true,
+        "model": "Let us meet tomorrow afternoon.",
+        "restoredModel": "Quill 富文本原文。"
+      },
+      {
+        "name": "pm",
+        "passed": true,
+        "requestCount": 1,
+        "sourceSent": true,
+        "model": "Let us meet tomorrow afternoon.",
+        "restoredModel": "ProseMirror 富文本原文。"
+      },
+      {
+        "name": "lexical",
+        "passed": true,
+        "requestCount": 1,
+        "sourceSent": true,
+        "model": "Let us meet tomorrow afternoon.",
+        "restoredModel": "Lexical 富文本原文。"
+      },
+      {
+        "name": "slate",
+        "passed": true,
+        "requestCount": 1,
+        "sourceSent": true,
+        "model": "Let us meet tomorrow afternoon.",
+        "restoredModel": "Slate 富文本原文。"
+      },
+      {
+        "name": "draft",
+        "passed": true,
+        "requestCount": 1,
+        "sourceSent": true,
+        "model": "Let us meet tomorrow afternoon.",
+        "restoredModel": "Draft.js 富文本原文。"
+      }
+    ],
+    "consoleErrors": []
+  }
+}

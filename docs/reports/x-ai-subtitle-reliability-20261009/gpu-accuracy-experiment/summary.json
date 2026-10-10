@@ -1,0 +1,332 @@
+{
+  "date": "2026-10-09",
+  "overall": "WebGPU precision A/B incomplete; no q8 GPU accuracy, compatibility or speed conclusion",
+  "productionDefaultChanged": false,
+  "scope": "Actual Dedicated Worker fixture on isolated visible background Chrome; separate from X-player audio acquisition, subtitle interaction and translation acceptance",
+  "requested": {
+    "transcriptionCalls": 21,
+    "productionQ4": 7,
+    "controlledQ4": 7,
+    "controlledQ4EncoderQ8Decoder": 7,
+    "models": [
+      "tiny",
+      "base"
+    ],
+    "syntheticMandarinClips": 3,
+    "lowGainPcm16JfkBaseClips": 1
+  },
+  "completed": {
+    "firstAttempt": 1,
+    "correctedAttempt": 0,
+    "productionQ4": 1,
+    "controlledQ4": 0,
+    "controlledQ4EncoderQ8Decoder": 0,
+    "fullThreeArmComparison": false
+  },
+  "sourceBuild": {
+    "path": "/private/tmp/fluentread-x-ai-merge-final-build-20261009/chrome-mv3",
+    "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+    "productionWorkerSha256": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+    "manifestSha256": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+    "backgroundSha256": "f3883d787c567f937e5d350200b7a4195f1020d2c8f46042ba5a9ead5101d7e4"
+  },
+  "stageManifest": {
+    "path": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/stage-manifest.json",
+    "sha256": "f667bf0a5536df41627cfe05385c4124201d24dfaa0b80de5e3b926174825f8a"
+  },
+  "plannedArms": [
+    {
+      "name": "production-q4",
+      "file": "videoTranscriptionWorker.js",
+      "dtypes": {
+        "encoder_model": "q4",
+        "decoder_model_merged": "q4"
+      },
+      "qdqOptimizerDisabled": false,
+      "productionWorkerUnchanged": true,
+      "workerSha256": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb"
+    },
+    {
+      "name": "qdqoff-q4-control",
+      "file": "videoTranscriptionWorker-control-q4.js",
+      "dtypes": {
+        "encoder_model": "q4",
+        "decoder_model_merged": "q4"
+      },
+      "qdqOptimizerDisabled": true,
+      "productionWorkerUnchanged": false,
+      "workerSha256": "4212b2f7810d0b9bf5e9495648e5073c2bedc19669b6c9fbd809ac6910915e3a"
+    },
+    {
+      "name": "qdqoff-q4-encoder-q8-decoder",
+      "file": "videoTranscriptionWorker-control-q8.js",
+      "dtypes": {
+        "encoder_model": "q4",
+        "decoder_model_merged": "q8"
+      },
+      "qdqOptimizerDisabled": true,
+      "productionWorkerUnchanged": false,
+      "workerSha256": "2a47501a6169be262db6618b42a3b78ed5f52a614105ace11ae2691a2cfe2c0c"
+    }
+  ],
+  "comparisonControl": "Only the two controlled arms share QDQSelectorActionTransformer disabled; neither ran inference. Unmodified production q4 is distinct from those controls.",
+  "cache": {
+    "publicLocalDirectory": "/private/tmp/fluentread-x-ai-decoder-q8-model-cache-20261009",
+    "manifestSha256": "6ca310a944a2ce546abcc014bda1eedc9baac4f41e01d09e4c645f71016d42f2",
+    "verifiedFiles": 16,
+    "verifiedFileBytes": 328060860,
+    "q8DecoderAdditionalBytes": 84412556,
+    "fixedSnapshotVerification": "../accuracy-experiment/snapshot-verification.json",
+    "remoteModelDownloads": false
+  },
+  "libraries": {
+    "transformers": "3.8.1",
+    "onnxRuntimeWeb": "1.23.2",
+    "source": "locked production Worker bundle"
+  },
+  "metricNormalizer": {
+    "uconvPath": "/opt/homebrew/opt/icu4c/bin/uconv",
+    "uconvVersion": "uconv v2.1  ICU 78.3",
+    "normalization": "Traditional-Simplified applied to reference and prediction for metric only"
+  },
+  "inputContract": "Exact extracted production offscreen decodePcm16Base64, then unchanged production Worker audio preparation/language/generation/token/stopping limits; metrics-only ICU normalization does not change model output",
+  "fixedSamples": [
+    {
+      "id": "mandarin-0",
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "sourceLanguage": "zh-Hans",
+      "sampleRate": 16000,
+      "durationMs": 3476.75,
+      "bytes": 111256,
+      "pcm16Sha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "completedGpuModels": [
+        "tiny"
+      ]
+    },
+    {
+      "id": "mandarin-1",
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "sourceLanguage": "zh-Hans",
+      "sampleRate": 16000,
+      "durationMs": 5856.875,
+      "bytes": 187420,
+      "pcm16Sha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "completedGpuModels": []
+    },
+    {
+      "id": "mandarin-2",
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "sourceLanguage": "zh-Hans",
+      "sampleRate": 16000,
+      "durationMs": 9217.1875,
+      "bytes": 294950,
+      "pcm16Sha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "completedGpuModels": []
+    },
+    {
+      "id": "jfk-lowgain-pcm16",
+      "models": [
+        "base"
+      ],
+      "sourceLanguage": "auto",
+      "sampleRate": 16000,
+      "durationMs": 11000,
+      "bytes": 352000,
+      "pcm16Sha256": "dd524ded969ae2091ab163921226b98ecd1cdbd5228954d504fed0c998e7fe5b",
+      "decodedFloat32Sha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4",
+      "gain": 0.003,
+      "referenceUnits": 22,
+      "completedGpuModels": []
+    }
+  ],
+  "runs": {
+    "firstAttempt": {
+      "overallSuccess": false,
+      "harnessSha256": "5aabc5b68a3cb76b4322dcdb19b4f939d754ddf330129e826ef1a653fdd2cea1",
+      "transcriptionCallsCompleted": 1,
+      "modelPrepareCallsCompleted": 1,
+      "productionQ4Completed": 1,
+      "controlsCompleted": 0,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "browserVersion": "154.0.8037.99",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "displayTarget": "secondary",
+        "windowState": "normal",
+        "browserFrontmost": false
+      },
+      "nativeAdapter": {
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": false,
+        "info": "apple / metal-3"
+      },
+      "cacheSeed": {
+        "completed": true,
+        "entries": 16,
+        "bytes": 328060860,
+        "wallMs": null,
+        "wallMsMeasured": false
+      },
+      "modelPreparation": {
+        "model": "tiny",
+        "wallMs": 1799,
+        "freshWorkerModelSession": true,
+        "fileCache": "preseeded-verified"
+      },
+      "observedProductionResult": {
+        "arm": "production-q4",
+        "model": "tiny",
+        "sample": "mandarin-0",
+        "sourceLanguage": "zh-Hans",
+        "pcm16Sha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+        "modelInput": {
+          "samples": 55628,
+          "float32Sha256": "b54fb9646d778cd1bf5f5435686bc5f9aaf120a10dced2309a9dfc1b3bb2d669"
+        },
+        "backend": "webgpu",
+        "gpuInfo": "apple / metal-3",
+        "dtype": "q4",
+        "textSha256": "c8710855f635829f6a104051ee06aebe9bd77ca5ce16834e4d52a2b5be88a13d",
+        "textCharacters": 16,
+        "segmentCount": 1,
+        "rawCer": {
+          "errors": 3,
+          "referenceUnits": 15,
+          "predictionUnits": 15,
+          "rate": 0.2
+        },
+        "scriptNormalizedCer": {
+          "errors": 3,
+          "referenceUnits": 15,
+          "predictionUnits": 15,
+          "rate": 0.2
+        },
+        "inferenceMs": 2955.4000000953674,
+        "wallMs": 2981,
+        "inferenceRtf": 0.8500467390797058,
+        "wallRtf": 0.8574099374415762,
+        "firstInferenceAfterFreshPrepare": true,
+        "warmFollowingInferences": 0
+      },
+      "failure": {
+        "stage": "metric postprocessing",
+        "primary": {
+          "name": "Error",
+          "message": "spawnSync /usr/bin/uconv ENOENT"
+        },
+        "secondary": "Original partial compact aggregate read undefined scriptNormalizedCer.errors during final persistence"
+      },
+      "guardedCloseSucceeded": true,
+      "temporaryProfileDeleted": true,
+      "source": {
+        "path": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/first-attempt-icu-path-failure/results/report.json",
+        "sha256": "acd17443a214635085143e5799c131f6247746746d36598e4fa678174879bc27",
+        "compactPath": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/first-attempt-icu-path-failure/results/compact-report.json",
+        "compactSha256": "3536bddbadd7546b29d7dbd2bf5389ada591d1a6d5c6d032bf42d705626bed50"
+      }
+    },
+    "correctedAttempt": {
+      "overallSuccess": false,
+      "harnessSha256": "b7222c312243c2a75e34b3c18474ceb98bc21a0252a5053bc7d80ddd7900bbe6",
+      "transcriptionCallsCompleted": 0,
+      "modelPrepareCallsCompleted": 0,
+      "productionQ4Completed": 0,
+      "controlsCompleted": 0,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "browserVersion": "154.0.8037.99",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "displayTarget": "secondary",
+        "windowState": "normal",
+        "browserFrontmost": false
+      },
+      "nativeAdapterCheckCompleted": false,
+      "cacheSeed": {
+        "completed": false,
+        "wallMs": null,
+        "wallMsMeasured": false
+      },
+      "startedAt": "2026-10-09T01:25:07.349Z",
+      "finishedAt": "2026-10-09T01:29:07.404Z",
+      "totalHarnessWallMs": 240055,
+      "failure": {
+        "stage": "CacheStorage local file import",
+        "error": {
+          "name": "Error",
+          "message": "page.evaluate: Target page, context or browser has been closed"
+        },
+        "underlyingCause": "Not established by retained evidence; target-closed error cannot establish a model, GPU, OS or memory cause"
+      },
+      "guardedCloseSucceeded": true,
+      "temporaryProfileDeleted": true,
+      "source": {
+        "path": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/results-corrected/report.json",
+        "sha256": "a66fd8a1abf4001ff7084f6ea318a3f7ffc8b6be9e99d51884b3a91a76a68072",
+        "compactPath": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/results-corrected/compact-report.json",
+        "compactSha256": "4d0575cf3448fef6b127e2e24d4db56f3cbd66cf7f6eef9c0848ac10ca6db966"
+      }
+    }
+  },
+  "repair": {
+    "uconvExecutable": "/opt/homebrew/opt/icu4c/bin/uconv",
+    "uconvVersion": "uconv v2.1  ICU 78.3",
+    "preflightBeforeBrowserLaunch": true,
+    "partialCompactMissingMetricSupported": true,
+    "newOutputDirectoryRequired": true,
+    "nodeSyntaxPassed": true,
+    "verifyOnlyPassed": true,
+    "offlineRawReplayPassed": true,
+    "offlineReplayBrowserLaunched": false,
+    "offlineReplayNewInferenceCalls": 0,
+    "source": {
+      "path": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/offline-replay/report.json",
+      "sha256": "53f77cf94e444a19660030ab5297dd9a1e4d221171f649f9928ecba23e4f2187",
+      "compactPath": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/offline-replay/compact-report.json",
+      "compactSha256": "bfad9204f19071ae292185a9f0bea152d4745e38674a646bc0dfe3d9c0e26577"
+    }
+  },
+  "naturalLowGainPcm16Result": {
+    "gpuInferenceCompleted": false,
+    "referenceWords": 22,
+    "gain": 0.003,
+    "pcm16Bytes": 352000,
+    "pcm16Sha256": "dd524ded969ae2091ab163921226b98ecd1cdbd5228954d504fed0c998e7fe5b",
+    "decodedFloat32Sha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4",
+    "gpuWer": null,
+    "previousIndependentWasmEvidence": "../full-pipeline/pcm16-lowgain-summary.json"
+  },
+  "priorEvidence": {
+    "headlessBeforeRecovery": "../accuracy-experiment/launch-report.json",
+    "independentCpuWasm": "../accuracy-experiment.md",
+    "realXPlayerBaseGpuFullChain": "../post-recovery-browser-evidence.md"
+  },
+  "limitations": [
+    "No completed controlled GPU arm; do not claim q8 GPU supported, unsupported, faster or more accurate",
+    "First successful Tiny result is one synthetic clip and a first inference after explicit fresh model preparation; no warm performance series",
+    "Initial file cache was new, then seeded with verified public files; first seed wall time was not measured and corrected seed did not complete",
+    "Same-adapter and actual-backend/dtype gates were implemented; only production Tiny reached and passed them",
+    "Media, natural reference transcript, model binaries and experimental harness remain outside repository",
+    "No additional browser launch after the one authorized corrected rerun failed"
+  ],
+  "localPointers": {
+    "harness": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/run-gpu-worker-ab.cjs",
+    "preservedFirstAttempt": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/first-attempt-icu-path-failure",
+    "corrected": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/results-corrected",
+    "offlineReplay": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/offline-replay",
+    "seedHarness": "/private/tmp/fluentread-x-ai-gpu-ab-restored-20261009/seed-model-cache.cjs"
+  }
+}

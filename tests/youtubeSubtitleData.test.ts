@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildYoutubeTimedTextUrl,
   chooseYoutubeCaptionTrack,
+  chooseYoutubeCaptionTrackForLocation,
   cuesToSrt,
   extractYoutubeCaptionTracks,
   finalizeVideoSubtitleCues,
@@ -30,6 +31,75 @@ describe('YouTube 字幕轨道数据', () => {
     expect(tracks).toHaveLength(2);
     expect(chooseYoutubeCaptionTrack(tracks, 'zh-CN')).toMatchObject({ languageCode: 'zh-CN', name: '中文' });
     expect(chooseYoutubeCaptionTrack(tracks, 'auto')).toMatchObject({ languageCode: 'zh-CN' });
+  });
+
+  it('SPA 导航后跳过旧视频初始化脚本并找到当前视频轨道', () => {
+    const playerResponse = (videoId: string, languageCode: string) => ({
+      videoDetails: {videoId},
+      captions: {
+        playerCaptionsTracklistRenderer: {
+          captionTracks: [{
+            baseUrl: `https://www.youtube.com/api/timedtext?v=${videoId}&lang=${languageCode}`,
+            languageCode,
+          }],
+        },
+      },
+    });
+    const root = {
+      querySelectorAll: () => [
+        {textContent: `var ytInitialPlayerResponse = ${JSON.stringify(playerResponse('video-a', 'en'))};`},
+        {textContent: `var ytInitialPlayerResponse = ${JSON.stringify(playerResponse('video-b', 'ja'))};`},
+      ],
+    } as unknown as ParentNode;
+
+    expect(extractYoutubeCaptionTracks(root, 'video-b')).toEqual([
+      expect.objectContaining({languageCode: 'ja', baseUrl: expect.stringContaining('v=video-b')}),
+    ]);
+    expect(chooseYoutubeCaptionTrackForLocation(root, {
+      hostname: 'www.youtube.com',
+      pathname: '/watch',
+      search: '?v=video-b',
+    })).toMatchObject({
+      languageCode: 'ja',
+    });
+    expect(extractYoutubeCaptionTracks(root, 'video-c')).toEqual([]);
+  });
+
+  it('缺少 videoDetails 时只接受 timedtext URL 明确绑定的当前视频', () => {
+    const root = {
+      querySelectorAll: () => [{
+        textContent: `var ytInitialPlayerResponse = ${JSON.stringify({
+          captions: {playerCaptionsTracklistRenderer: {captionTracks: [
+            {baseUrl: 'https://www.youtube.com/api/timedtext?v=video-a&lang=en', languageCode: 'en'},
+            {baseUrl: 'https://www.youtube.com/api/timedtext?v=video-b&lang=zh', languageCode: 'zh'},
+          ]}},
+        })};`,
+      }],
+    } as unknown as ParentNode;
+
+    expect(extractYoutubeCaptionTracks(root, 'video-b')).toEqual([
+      expect.objectContaining({languageCode: 'zh', baseUrl: expect.stringContaining('v=video-b')}),
+    ]);
+  });
+
+  it('缺失或损坏 timedtext video id 时 fail closed，非播放地址不选择 fallback', () => {
+    const root = {
+      querySelectorAll: () => [{
+        textContent: `var ytInitialPlayerResponse = ${JSON.stringify({
+          captions: {playerCaptionsTracklistRenderer: {captionTracks: [
+            {baseUrl: 'https://www.youtube.com/api/timedtext?lang=en', languageCode: 'en'},
+            {baseUrl: 'http://[', languageCode: 'ja'},
+          ]}},
+        })};`,
+      }],
+    } as unknown as ParentNode;
+
+    expect(extractYoutubeCaptionTracks(root, 'video-b')).toEqual([]);
+    expect(chooseYoutubeCaptionTrackForLocation(root, {
+      hostname: 'www.youtube.com',
+      pathname: '/',
+      search: '',
+    })).toBeNull();
   });
 
   it('解析 JSON3 和 XML timedtext，并补齐缺失的结束时间', () => {

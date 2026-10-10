@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-global-toggle-edge-79JjON",
+  "artifactsDir": "/private/tmp/fr-global-toggle-final",
+  "checks": [
+    "global off rejects direct runtime translation without provider calls",
+    "global off aborts real provider transport and returns a nonretryable response",
+    "translation center disables button/shortcut, cancels active run, retains input and completed results, and does not auto restart",
+    "document and batch translation stop, buttons disable, completed text/export survive, and pending files resume explicitly",
+    "actual General switch restores page source, removes YouTube/X fixture icons across reload, then restores preferences and supports translating again"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fr-global-toggle-final/center-paused-with-result.png",
+    "/private/tmp/fr-global-toggle-final/document-paused-with-results.png",
+    "/private/tmp/fr-global-toggle-final/document-resumed.png"
+  ],
+  "metrics": {},
+  "evidenceBoundary": "Local deterministic HTML/provider in an isolated Edge profile; no Firefox runtime or external provider claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "disabledResponse": {
+    "marker": "fluentread-translation-error-v1",
+    "message": "翻译功能已暂停，请在通用设置中启用。",
+    "kind": "unknown",
+    "retryable": false,
+    "code": "TRANSLATION_DISABLED"
+  },
+  "disabledProviderCalls": 0,
+  "requests": 9
+}

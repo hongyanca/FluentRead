@@ -1,0 +1,4 @@
+
+> FluentRead-流畅阅读@0.0.35 docs:typecheck /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+> vue-tsc --noEmit -p docs/tsconfig.json
+

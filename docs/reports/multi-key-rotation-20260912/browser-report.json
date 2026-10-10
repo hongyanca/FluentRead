@@ -1,0 +1,124 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "providerEvidence": "local-http-401-fixture",
+  "cases": [
+    "empty-row-add-focuses-existing-row-without-adding",
+    "duplicate-row-skipped-without-duplicate-request",
+    "translation-broker-fails-A-then-uses-B-or-C",
+    "sequential-401-and-success-per-key-without-fallback",
+    "independent-single-key-retest",
+    "remove-first-key-keeps-other-keys",
+    "stop-prevents-later-key-checks",
+    "edit-during-check-clears-stale-row-results",
+    "ten-filled-key-list-plus-empty-row",
+    "dark-narrow-no-horizontal-overflow",
+    "reopen-persistence",
+    "paired-cloud-credentials-remain-a-single-pair",
+    "single-key-cloud-services-support-key-lists"
+  ],
+  "requests": [
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-D",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    }
+  ],
+  "screenshots": [
+    "api-keys-results.png",
+    "api-keys-light.png",
+    "api-keys-ten.png",
+    "api-keys-dark.png",
+    "api-keys-narrow.png"
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 68331,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 68331,
+      "name": "ChatGPT"
+    }
+  },
+  "status": "passed",
+  "runtimeCommit": "6499537e5138e640ecd263a778bff9574e595447",
+  "requestEvidenceNote": "All credentials and HTTP responses are synthetic local fixtures; request bodies omitted."
+}

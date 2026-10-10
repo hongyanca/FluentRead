@@ -1,0 +1,37 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "paragraphs": 500,
+  "evidence": "Production extension and real browser; local deterministic Microsoft transport, no live provider claims",
+  "consoleErrors": [],
+  "phases": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "sites": [
+    {
+      "name": "readme",
+      "url": "https://github.com/FluentRead/FluentRead/blob/main/misc/README_ZH.md",
+      "translated": 13,
+      "hostClicks": 5,
+      "sameLanguageUnchanged": true,
+      "restoreRetranslate": true
+    },
+    {
+      "name": "issues",
+      "url": "https://github.com/FluentRead/FluentRead/issues",
+      "translated": 11,
+      "hostClicks": 5,
+      "sameLanguageUnchanged": null,
+      "restoreRetranslate": true
+    }
+  ],
+  "submittedChinese": [],
+  "ok": true
+}

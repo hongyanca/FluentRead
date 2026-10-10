@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>GitHub list spacing regression</title>
+<!-- Minimal independent reproduction of the live ListView geometry inspected on 2026-09-12:
+     inline h3, padded empty trailing badge span, and two grid rows with a 4px gap. -->
+<style>
+* { box-sizing: border-box; }
+body { margin: 24px; font: 14px/21px -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2328; }
+main { max-width: 1150px; margin: auto; }
+h1 { font-size: 22px; }
+ul { padding: 0; list-style: none; }
+.row { display: grid; grid-template-columns: 24px minmax(0,1fr) 44px; grid-template-areas: "status primary metadata" "status main-content metadata"; gap: 4px; border: 1px solid #d1d9e0; padding: 0 12px; background:#f6f8fa; }
+[data-listview-item-title-container] { grid-area: primary; display: block; padding-top: 8px; }
+[data-listview-item-title-container] > h3 { display: inline; margin: 0; font-size: 16px; font-weight: 600; line-height: 24px; overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: #0969da; text-decoration: underline; }
+.Title-module__trailingBadgesSpacer__fixture { padding-right: 4px; }
+.Title-module__trailingBadgesContainer__fixture { vertical-align: top; position:relative; top:1px; overflow:hidden; }
+.badge { display: inline-block; padding: 0 7px; font: 12px/20px sans-serif; border: 1px solid #a5b0bd; border-radius: 12px; }
+.main-content { grid-area: main-content; padding-bottom: 10px; }
+.PullsListItem-module__description__fixture, .issue-metadata, .legacy-meta { font-size: 12px; line-height: 18px; color:#59636e; }
+.status { grid-area: status; padding-top: 12px; color: #1a7f37; }
+.checks { grid-area:metadata; align-self:center; color: #59636e; }
+.legacy { padding: 8px 12px; border: 1px solid #d1d9e0; }
+.markdown-title { font-size:16px;line-height:24px; }
+button { font:inherit; }
+</style></head><body><main>
+<h1>Pull requests</h1><ul>
+<li id="empty-row" class="row"><div data-listview-item-title-container="true"><h3><a id="empty-title" data-testid="listitem-title-link" href="/FluentRead/FluentRead/pull/243"><span>fix: translate hovered visual text blocks</span></a></h3><span class="Title-module__trailingBadgesSpacer__fixture"></span><span class="Title-module__trailingBadgesContainer__fixture"></span></div><span class="status" aria-hidden="true">⑂</span><div class="main-content"><div id="empty-meta" class="PullsListItem-module__description__fixture"><span>#243 </span><span data-testid="timestamp-container">· <a data-testid="author-filter-link" href="/example-author">example-author</a> opened <relative-time>last month</relative-time> · Updated last month</span> <button id="checks" data-testid="checks-status-badge-button">✓ 1/1</button></div></div><span class="checks" translate="no">5</span></li>
+<li id="badge-row" class="row"><div data-listview-item-title-container="true"><h3><a id="badge-title" data-testid="listitem-title-link" href="/FluentRead/FluentRead/pull/303">feat: add Google Drive configuration sync</a></h3><span class="Title-module__trailingBadgesSpacer__fixture"></span><span class="Title-module__trailingBadgesContainer__fixture"><span class="badge prc-Token-IssueLabel-fixture">enhancement</span></span></div><span class="status" aria-hidden="true">⑂</span><div class="main-content"><div id="badge-meta" class="PullsListItem-module__description__fixture">#303 · author opened last month · Draft</div></div></li>
+<li id="issue-row" class="row"><div data-listview-item-title-container="true"><h3><a id="issue-title" data-testid="issue-pr-title-link" href="/FluentRead/FluentRead/issues/521">Rate limits per API provider</a></h3><span class="Title-module__trailingBadgesSpacer__fixture"></span><span class="Title-module__trailingBadgesContainer__fixture"></span></div><span class="status" aria-hidden="true">○</span><div class="main-content issue-metadata"><span data-testid="list-row-repo-name-and-number">#521</span><span data-testid="created-at"> · author opened yesterday</span></div></li>
+</ul><div class="legacy"><a id="legacy-title" class="markdown-title" href="/FluentRead/FluentRead/pull/243">Fix translation on the legacy pull request list</a><div class="legacy-meta" translate="no">#243 opened last month by example-author</div></div>
+<article class="markdown-body"><p id="prose">This ordinary paragraph must retain its original layout and translate normally.</p><p id="neighbor">This adjacent paragraph must remain unchanged during hover translation.</p><pre><code id="code">const blankLine = false;</code></pre></article>
+</main></body></html>

@@ -1,0 +1,68 @@
+{
+  "directory": "/Users/thinkstu/Desktop/copy/FluentRead-performance-lightweight-20260913/.output/chrome-mv3",
+  "files": 340,
+  "totalBytes": 47955344,
+  "largestFiles": [
+    {
+      "path": "fluent-read-ai/wllama.wasm",
+      "bytes": 8457512
+    },
+    {
+      "path": "fluent-read-ai/tts-ort-wasm-simd-threaded.asyncify.wasm.gz",
+      "bytes": 5699349
+    },
+    {
+      "path": "fluent-read-ai/ort-wasm-simd-threaded.jsep.wasm.gz",
+      "bytes": 5046898
+    },
+    {
+      "path": "ecdict-core.json",
+      "bytes": 4413556
+    },
+    {
+      "path": "fluent-read-ocr/core/tesseract-core-simd-lstm.wasm.js",
+      "bytes": 3954569
+    },
+    {
+      "path": "localTtsWorker.js",
+      "bytes": 2173416
+    },
+    {
+      "path": "content-scripts/content.js",
+      "bytes": 2076455
+    },
+    {
+      "path": "background.js",
+      "bytes": 1732768
+    },
+    {
+      "path": "content-scripts/qqMailFrame.js",
+      "bytes": 1590281
+    },
+    {
+      "path": "assets/pdf.worker.min-rsCePomN.mjs",
+      "bytes": 1417586
+    },
+    {
+      "path": "localTranslationWorker.js",
+      "bytes": 1251214
+    },
+    {
+      "path": "chunks/document-BLTnmDp3.js",
+      "bytes": 1025601
+    },
+    {
+      "path": "videoTranscriptionWorker.js",
+      "bytes": 881957
+    },
+    {
+      "path": "chunks/index.full-Bi_N2Eyl.js",
+      "bytes": 728859
+    },
+    {
+      "path": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+      "bytes": 636930
+    }
+  ],
+  "duplicates": []
+}

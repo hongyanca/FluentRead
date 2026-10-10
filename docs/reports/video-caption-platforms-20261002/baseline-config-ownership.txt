@@ -1,0 +1,104 @@
+> FluentRead-流畅阅读@0.0.35 test /private/tmp/FluentRead-caption-baseline-20261002
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/configDiff.test.ts" "tests/architecture/verificationOwnership.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/configDiff.test.ts tests/architecture/verificationOwnership.test.ts
+
+ RUN  v2.1.9 /private/tmp/FluentRead-caption-baseline-20261002
+
+ ❯ tests/configDiff.test.ts (43 tests | 1 failed) 30ms
+   × 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值 8ms
+     → expected [ Array(5) ] to deeply equal ArrayContaining{…}
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 1 failed) 703ms
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 504ms
+     → expected [ Array(8) ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/configDiff.test.ts > 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值
+AssertionError: expected [ Array(5) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ Array [
+    Object {
+      "after": "简约风格",
+      "before": "默认风格",
+      "key": "interfaceSkin",
+      "label": "界面皮肤",
+    },
+    Object {
+      "after": "快捷功能栏关闭、当前网站栏目开启、底部信息栏关闭",
+      "before": "快捷功能栏开启、当前网站栏目开启、底部信息栏开启",
+      "key": "interfaceVisibility",
+      "label": "界面栏目",
+    },
+    Object {
+      "after": "快捷功能栏 → 翻译控制 → 当前网站栏目 → 底部信息栏",
+      "before": "翻译控制 → 当前网站栏目 → 快捷功能栏 → 底部信息栏",
+      "key": "popupModuleOrder",
+      "label": "菜单栏布局顺序",
+    },
+    Object {
+-     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
+-     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
++     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、文档翻译：显示",
++     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、文档翻译：显示",
+      "key": "popupQuickFeatureVisibility",
+      "label": "快捷功能卡片",
+    },
+    Object {
+-     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译",
+-     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译 → 文档翻译",
++     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video",
++     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video → 文档翻译",
+      "key": "popupQuickFeatureOrder",
+      "label": "快捷功能顺序",
+    },
+  ]
+
+ ❯ tests/configDiff.test.ts:314:51
+    312|         });
+    313|
+    314|         expect(group(result, 'general')?.changes).toEqual(expect.array…
+       |                                                   ^
+    315|             {key: 'interfaceSkin', label: '界面皮肤', before: '默认风…
+    316|             {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/core/i18n/messages/siteRules.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:318:27
+    316|             && !strictCoverage.has(path));
+    317|
+    318|         expect(uncovered).toEqual([]);
+       |                           ^
+    319|     });
+    320|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 50 passed (52)
+   Start at  16:53:36
+   Duration  1.53s (transform 181ms, setup 0ms, collect 497ms, tests 733ms, environment 0ms, prepare 73ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,189 @@
+[
+  {
+    "id": "github",
+    "url": "https://github.com/example/project/issues/1",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><article class=\"markdown-body\"><p id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.<code id=\"protected\">ORIGINAL_CODE</code></p><p id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</p></article><span data-testid=\"created-at\" id=\"metadata\">Created yesterday</span></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#metadata"
+    ]
+  },
+  {
+    "id": "x",
+    "url": "https://x.com/example/status/123",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><article><div data-testid=\"User-Name\" id=\"protected\">Original author identity</div><div data-testid=\"tweetText\" id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</div><div data-testid=\"UserDescription\" id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</div></article></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "reddit",
+    "url": "https://www.reddit.com/r/example/comments/123/topic/",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><shreddit-post><div slot=\"title\" id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</div><div slot=\"text-body\"><p id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</p></div><faceplate-timeago id=\"protected\">Three hours ago</faceplate-timeago></shreddit-post></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "hacker-news",
+    "url": "https://news.ycombinator.com/item?id=123",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><div><span class=\"commtext\" id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</span></div><div class=\"toptext\" id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</div><span class=\"score\" id=\"protected\">One hundred points</span></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "youtube",
+    "url": "https://www.youtube.com/watch?v=example123",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><ytd-watch-metadata><h1><yt-formatted-string id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</yt-formatted-string></h1></ytd-watch-metadata><ytd-comment-renderer><div id=\"content-text\">A second independent paragraph explains how this page keeps its source content stable.</div></ytd-comment-renderer><div id=\"movie_player\">Player controls remain unchanged</div></main>",
+    "required": [
+      "#body1",
+      "#content-text"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#movie_player"
+    ]
+  },
+  {
+    "id": "gnu-manual",
+    "url": "https://www.gnu.org/software/bash/manual/html_node/Introduction.html",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><div class=\"section-level-extent\"><p id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</p><p id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</p></div><div class=\"nav-panel\" id=\"protected\">Next previous contents</div></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "learnopengl",
+    "url": "https://learnopengl.com/Getting-started/OpenGL",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><div id=\"nav\">Chapter navigation stays in place</div><main id=\"content\"><p id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</p><p id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</p></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#nav"
+    ]
+  },
+  {
+    "id": "bilibili",
+    "url": "https://www.bilibili.com/video/BVtest/",
+    "html": "<nav id=\"navigation\">Navigation controls remain unchanged</nav><main><p id=\"body1\">This readable paragraph describes a useful feature with enough context for translation.</p><p id=\"body2\">A second independent paragraph explains how this page keeps its source content stable.</p><div id=\"commentapp\"><p>Comments remain owned by their host component</p></div></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#commentapp"
+    ]
+  },
+  {
+    "id": "ubuntu-manpage",
+    "url": "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
+    "html": "<main id=\"main-content\"><h1>APT command reference</h1><div id=\"manpage-content\"><h2 id=\"synopsis\" class=\"Sh\">SYNOPSIS</h2><section class=\"Sh\" id=\"syntax\"><p><b>apt</b> [<b>--help</b>]</p></section><h2 id=\"description\" class=\"Sh\">DESCRIPTION</h2><section class=\"Sh\"><p id=\"body1\" class=\"Pp\">This package manager provides a stable interface for everyday system administration.</p><p class=\"Pp\" id=\"command-label\"><b>future-upgrade</b> (see package options)</p><div id=\"mixed-command\" class=\"Bd-indent\"><b>future-upgrade</b> performs the requested upgrade while preserving installed package information.<p id=\"body2\" class=\"Pp\">When a package is supplied as an argument, it is installed before the upgrade action.</p></div><p class=\"Pp\" id=\"second-label\"><b>future-remove</b></p><div id=\"second-command\" class=\"Bd-indent\"><b>dpkg-query\n  --list</b> lists packages that are available on the installed system.</div></section></div></main>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#second-command"
+    ],
+    "forbidden": [
+      "#main-content h1",
+      "#syntax",
+      "#command-label",
+      "#second-label"
+    ],
+    "translationParts": [
+      {
+        "selector": "#mixed-command > [data-fr-translation-segment=\"true\"]",
+        "sourceIncludes": "performs the requested upgrade while preserving installed package information.",
+        "preservedText": [
+          "future-upgrade"
+        ]
+      },
+      {
+        "selector": "#body2",
+        "sourceIncludes": "When a package is supplied as an argument, it is installed before the upgrade action."
+      },
+      {
+        "selector": "#second-command",
+        "sourceIncludes": "lists packages that are available on the installed system.",
+        "preservedText": [
+          "dpkg-query\n  --list"
+        ],
+        "preservedMarkup": [
+          {
+            "selector": "b",
+            "text": "dpkg-query\n  --list"
+          }
+        ]
+      }
+    ],
+    "restoreSelectors": [
+      "#mixed-command",
+      "#second-command"
+    ]
+  },
+  {
+    "id": "x-chat",
+    "url": "https://chat.x.com/room/fixture",
+    "html": "<main><div id=\"body1\">This private message explains how the deployment should proceed.<div id=\"message-metadata\" class=\"flex items-center ml-auto shrink-0 gap-1\">Yesterday 10:30 Edited</div></div><p id=\"body2\">A second independent message provides enough context to verify neighboring content.</p></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#message-metadata"
+    ],
+    "translationParts": [
+      {
+        "selector": "#body1",
+        "sourceIncludes": "This private message explains how the deployment should proceed.",
+        "omittedText": [
+          "Yesterday 10:30 Edited"
+        ]
+      }
+    ],
+    "restoreSelectors": [
+      "#body1"
+    ]
+  },
+  {
+    "id": "github-mention",
+    "url": "https://github.com/example/project/issues/157",
+    "html": "<main><div class=\"markdown-body\" data-testid=\"markdown-body\"><p id=\"mention\" dir=\"auto\"><a class=\"user-mention notranslate\" data-hovercard-type=\"user\" href=\"https://github.com/example\">@example</a> like this comment, the line must still translate when the pointer rests on the mention.</p><p id=\"plain\" dir=\"auto\">A second comment paragraph stays independently selectable during hover translation.</p></div></main>",
+    "required": [
+      "#mention",
+      "#plain"
+    ],
+    "forbidden": [
+      "#mention > a.user-mention"
+    ]
+  }
+]

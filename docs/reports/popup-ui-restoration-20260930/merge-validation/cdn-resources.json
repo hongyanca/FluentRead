@@ -1,0 +1,13 @@
+{
+  "verifiedOn": "2026-10-01",
+  "commit": "782c629f6586fe43ed58e58add794eac630afaca",
+  "urlPrefix": "https://cdn.jsdelivr.net/gh/FluentRead/FluentRead@782c629f6586fe43ed58e58add794eac630afaca/userscript/languages/",
+  "method": "Real HTTPS downloads compared byte-for-byte with local generated files; generated files also unchanged between resource commit and product head 15ba47042a98b867ae387c8c2a8a5811774d39c6.",
+  "files": [
+    {"name": "es-ES.ebec5b64f27af315.json", "matched": true, "sha256": "134fbd7e8fb2651f67d5497e495a5d1013551bb875daa3bbae8fbf922e77bc92"},
+    {"name": "fr-FR.e503fa213a70bbe1.json", "matched": true, "sha256": "df28d0c2810bb379fc88de59d10043a66bb2979f626bc644d1b0aec798830a2d"},
+    {"name": "ja-JP.03fe9a62a58ecfc4.json", "matched": true, "sha256": "6e2fa12a7c7a00da1f253386a65f99fc2602fbe8a7ba84ac514a8452d82a313a"},
+    {"name": "ko-KR.d796944d5212e4d2.json", "matched": true, "sha256": "dd4e1eaeb328ee638d8d0a00ee9bbfffef643c7b84ca2ee5fa0d7a1d1ebf69ac"},
+    {"name": "ru-RU.51f9a78d83a5e199.json", "matched": true, "sha256": "6b048d39f39c24a524a868847597023ec4e5d7e21b089006fb1a8a84a68ff6a7"}
+  ]
+}

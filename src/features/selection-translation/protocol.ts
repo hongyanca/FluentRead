@@ -1,27 +1,34 @@
 /**
  * @file src/features/selection-translation/protocol.ts
- * 文件职责：定义划词 TTS 跨 content、background 与 Offscreen 的稳定路由协议，以 tabId 和 clientRequestId 精确标识一次播放所有权。
- * 主要内容：包含播放请求与 ended/stopped/error 状态类型、各字段严格解析、路由相等与消息匹配函数，以及基于 crypto 的客户端请求编号生成。
+ * 文件职责：定义划词 TTS 跨 content、background 与 Offscreen 的稳定路由协议，以 tabId、clientRequestId 及可选 frame/document 所有权标识一次播放；无 documentId 的回退依赖 CSPRNG 请求 UUID。
+ * 主要内容：包含播放请求与 ended/stopped/error/progress 状态及可选句段时间类型、各字段严格解析、路由相等与消息匹配函数，以及基于 crypto 的客户端请求编号生成。
  * 模块边界：协议模块不发送消息、不维护当前播放状态也不合成音频；内容控制器和后台 handler 分别消费这些纯契约，随机源可注入以保持可测试性。
  */
 /**
  * 划词 TTS 跨 content、MV3 background 和 offscreen 的稳定路由身份。
  * `clientRequestId` 由 content 在每次远程播放前生成，不依赖可随时重启的 Service Worker 内存。
  */
+import type {SpeechCue} from '@/src/core/tts/speechProgress';
 export interface SelectionTtsRoute {
     readonly tabId: number;
     readonly clientRequestId: string;
+    readonly frameId?: number;
+    readonly ownerUrl?: string;
+    /** 浏览器 sender 的 immutable document 身份；缺失时仅保证 frame + CSPRNG 请求 UUID。 */
+    readonly documentId?: string;
 }
 
 export interface SelectionTtsPlaybackRequest extends SelectionTtsRoute {
     readonly audioBase64?: string;
+    readonly text?: string;
+    readonly timings?: SpeechCue[];
     readonly contentType?: string;
     readonly sourceUrl?: string;
 }
 
-export type SelectionTtsPlaybackState = 'ended' | 'stopped' | 'error';
+export type SelectionTtsPlaybackState = 'ended' | 'stopped' | 'error' | 'progress';
 
-const PLAYBACK_STATES = new Set<SelectionTtsPlaybackState>(['ended', 'stopped', 'error']);
+const PLAYBACK_STATES = new Set<SelectionTtsPlaybackState>(['ended', 'stopped', 'error', 'progress']);
 
 export function parseSelectionTtsTabId(value: unknown): number {
     if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0) {
@@ -47,6 +54,9 @@ export function parseSelectionTtsRoute(value: unknown): SelectionTtsRoute {
     return {
         tabId: parseSelectionTtsTabId(record.tabId),
         clientRequestId: parseSelectionTtsClientRequestId(record.clientRequestId),
+        ...(record.frameId === undefined ? {} : {frameId: parseSelectionTtsTabId(record.frameId)}),
+        ...(record.ownerUrl === undefined ? {} : {ownerUrl: normalizeSelectionTtsOwnerUrl(record.ownerUrl)}),
+        ...(record.documentId === undefined ? {} : {documentId: parseSelectionTtsClientRequestId(record.documentId)}),
     };
 }
 
@@ -57,8 +67,24 @@ export function parseSelectionTtsPlaybackState(value: unknown): SelectionTtsPlay
     return value as SelectionTtsPlaybackState;
 }
 
+/** hash 导航保持同一页面归属；路径与查询参数仍区分不同页面。 */
+export function normalizeSelectionTtsOwnerUrl(value: unknown): string {
+    if (typeof value !== 'string' || !value.trim()) throw new TypeError('TTS ownerUrl 必须是有效 URL');
+    const url = new URL(value);
+    url.hash = '';
+    return url.href;
+}
+
 export function sameSelectionTtsRoute(left: SelectionTtsRoute, right: SelectionTtsRoute): boolean {
-    return left.tabId === right.tabId && left.clientRequestId === right.clientRequestId;
+    if (left.tabId !== right.tabId || left.clientRequestId !== right.clientRequestId
+        || left.frameId !== right.frameId) return false;
+    // documentId 优先于可变 URL；两边必须同时存在，不能降级匹配另一 document。
+    if (left.documentId !== undefined || right.documentId !== undefined) {
+        return left.documentId !== undefined && left.documentId === right.documentId;
+    }
+    // 兼容显式携带 URL 的旧端口。无 documentId 的生产 sender route 不携带 URL：
+    // 同 document SPA 控制可用，但跨 document 故意复用相同 UUID 不在 fallback 保证内。
+    return left.ownerUrl === right.ownerUrl;
 }
 
 export function matchesSelectionTtsClientRequest(

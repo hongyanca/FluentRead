@@ -7,6 +7,44 @@ import {
 import {createBackgroundMessageRouter} from '@/src/app/background/messageRouter';
 
 describe('background connection test handler', () => {
+    it('免费池检查显式转交单服务标识，并拒绝未知或非免费池请求', async () => {
+        const runConnectionTest = vi.fn(async () => ({durationMs: 12}));
+        const handler = createConnectionTestHandler({ready: Promise.resolve(), runConnectionTest,
+            formatError: (_service, error) => (error as Error).message});
+        await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service: 'freeTranslation', freeProviderId: 'transmart'}, undefined))
+            .resolves.toEqual({success: true, durationMs: 12});
+        expect(runConnectionTest).toHaveBeenCalledWith('freeTranslation', undefined, undefined, 'transmart');
+        for (const [service, freeProviderId] of [['google', 'transmart'], ['freeTranslation', 'unknown'], ['freeTranslation', null]]) {
+            await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service, freeProviderId}, undefined))
+                .resolves.toEqual({success: false, error: '无效的免费翻译服务'});
+        }
+        expect(runConnectionTest).toHaveBeenCalledOnce();
+    });
+    it('逐项检测只转交合法的原始 Key 行索引', async () => {
+        const runConnectionTest = vi.fn(async () => ({durationMs: 1}));
+        const handler = createConnectionTestHandler({ready: Promise.resolve(), runConnectionTest,
+            formatError: (_service, error) => (error as Error).message});
+        await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service: 'demo', keyIndex: 2}, undefined))
+            .resolves.toEqual({success: true, durationMs: 1});
+        expect(runConnectionTest).toHaveBeenCalledWith('demo', 2);
+        for (const keyIndex of [-1, 0.5, '1', null, Number.NaN, Number.MAX_SAFE_INTEGER + 1]) {
+            await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service: 'demo', keyIndex}, undefined))
+                .resolves.toEqual({success: false, error: '连接测试 Key 序号无效'});
+        }
+        expect(runConnectionTest).toHaveBeenCalledOnce();
+    });
+
+    it('转交可选的配置指纹并拒绝非法格式', async () => {
+        const runConnectionTest = vi.fn(async () => ({durationMs: 1}));
+        const handler = createConnectionTestHandler({ready: Promise.resolve(), runConnectionTest,
+            formatError: (_service, error) => (error as Error).message});
+        const revision = 'a'.repeat(64);
+        await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service: 'demo', keyIndex: 1, keyRevision: revision}, undefined))
+            .resolves.toEqual({success: true, durationMs: 1});
+        expect(runConnectionTest).toHaveBeenCalledWith('demo', 1, revision);
+        await expect(handler.handle({type: CONNECTION_TEST_MESSAGE_TYPE, service: 'demo', keyIndex: 1, keyRevision: 'bad'}, undefined))
+            .resolves.toEqual({success: false, error: '连接测试配置版本无效'});
+    });
     it('等待配置 ready 后执行 provider 连接测试', async () => {
         const runConnectionTest = vi.fn(async () => ({durationMs: 25}));
         const formatError = vi.fn((service: string, error: unknown) => `${service}:${String(error)}`);

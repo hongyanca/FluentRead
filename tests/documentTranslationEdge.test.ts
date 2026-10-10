@@ -1,4 +1,5 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
+import {parseHTML} from 'linkedom';
 
 import {
     createDocumentDownloadName,
@@ -15,6 +16,16 @@ afterEach(() => {
 });
 
 describe('document translation edge contracts', () => {
+    it.each(['', '   ', '\n\t'])('empty reviewed subtitle falls back to source for partial export (%j)', blank => {
+        const source = '1\r\n00:00:01,000 --> 00:00:02,000\r\nHello\r\n\r\n2\r\n00:00:03,000 --> 00:00:04,000\r\nPending\r\n';
+        const document = parseDocument('episode.srt', source);
+        const output = renderDocument(document, ['你好', blank], 'translated');
+        expect(output).toBe(source.replace('Hello', '你好'));
+        expect(parseDocument('episode.srt', output).segments.map(segment => segment.source)).toEqual(['你好', 'Pending']);
+        const json = parseDocument('sample.json', '{"title":"Hello"}');
+        expect(JSON.parse(renderDocument(json, [blank], 'translated'))).toEqual({title: 'Hello'});
+    });
+
     it('覆盖无扩展名、CR 换行、非常规 JSON 路径和无扩展名下载名', () => {
         expect(getDocumentFormat('README')).toBeNull();
         expect(parseDocument('notes.txt', 'One\r\nTwo\nThree\rFour').segments.map(({source}) => source))
@@ -69,7 +80,7 @@ describe('document translation edge contracts', () => {
     it('保留字幕标签、空译文以及非分组 Markdown 的双语结构', () => {
         const subtitle = parseDocument('episode.srt', '00:00:01,000 --> 00:00:02,000\n<i>Hello</i>\n');
         expect(renderDocument(subtitle, ['你好'], 'bilingual')).toContain('<i>你好</i>');
-        expect(renderDocument(subtitle, [''], 'translated')).toContain('\n\n');
+        expect(renderDocument(subtitle, [''], 'translated')).toContain('<i>Hello</i>');
 
         const markdown: ParsedDocument = {
             fileName: 'manual.md',
@@ -134,16 +145,47 @@ describe('document translation edge contracts', () => {
         expect(preview).toContain('horizontal-rule');
         expect(preview).toContain('reader-unit list-item');
         expect(preview).toContain('reader-unit quote');
-        expect(renderDocument(markdown, [], 'bilingual')).toContain('> - Item');
+        expect(renderDocument(markdown, [], 'bilingual')).toBe(renderDocument(markdown, [], 'translated'));
         expect(createDocumentPreviewHtml(markdown, [], 'source')).toContain('Item');
 
         const text = parseDocument('notes.txt', 'First\n\nSecond');
         expect(createDocumentPreviewHtml(text, ['第一'], 'translated')).toContain('Second');
         const emptyFirstTranslation = createDocumentPreviewHtml(text, ['', '第二'], 'translated');
-        expect(emptyFirstTranslation).toContain('<p class="reader-translation fluentread-translation"></p>');
+        expect(emptyFirstTranslation).toContain('<p class="reader-source">First</p>');
+        expect(emptyFirstTranslation).not.toContain('<p class="reader-translation fluentread-translation"></p>');
         expect(emptyFirstTranslation).toContain('<p class="reader-translation fluentread-translation">第二</p>');
 
         expect(() => createDocumentPreviewHtml(parseDocument('episode.srt', 'WEBVTT\n'), [], 'source'))
             .toThrow('不支持为 srt 生成富文档预览');
+    });
+
+    it.each(['txt', 'md'].flatMap(extension => [
+        {kind: 'missing', translation: undefined},
+        {kind: 'sparse', translation: undefined},
+        {kind: 'empty', translation: ''},
+        {kind: 'whitespace-only', translation: ' \n\t\u3000'},
+        {kind: 'identical', translation: 'Café  world'},
+        {kind: 'Unicode-equivalent', translation: 'Cafe\u0301  world'},
+        {kind: 'whitespace-equivalent', translation: '  Café \nworld\u3000'},
+        {kind: 'Unicode-and-whitespace-equivalent', translation: '  Cafe\u0301 \nworld\u3000'},
+    ].map(value => ({extension, ...value}))))('translated $extension preview retains source for $kind translation', ({extension, kind, translation}) => {
+        const source = extension === 'md' ? '# Café  world' : 'Café  world';
+        const document = parseDocument(`source.${extension}`, source);
+        const before = JSON.stringify(document);
+        const translations: string[] = kind === 'sparse' ? new Array(1) : translation === undefined ? [] : [translation];
+        const html = createDocumentPreviewHtml(document, translations, 'translated');
+        const dom = parseHTML(html).document;
+        expect(dom.body.textContent).toBe('Café  world');
+        expect(dom.querySelectorAll('.reader-source')).toHaveLength(1);
+        expect(dom.querySelectorAll('.fluentread-translation, [data-fluent-read-document-translation]')).toHaveLength(0);
+        expect(JSON.stringify(document)).toBe(before);
+    });
+
+    it.each(['txt', 'md'])('translated %s preview renders a distinct translation once', extension => {
+        const document = parseDocument(`source.${extension}`, extension === 'md' ? '# Café  world' : 'Café  world');
+        const dom = parseHTML(createDocumentPreviewHtml(document, ['咖啡世界'], 'translated')).document;
+        expect(dom.body.textContent).toBe('咖啡世界');
+        expect(dom.querySelectorAll('.reader-source')).toHaveLength(0);
+        expect(dom.querySelectorAll('.fluentread-translation')).toHaveLength(1);
     });
 });

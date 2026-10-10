@@ -1,0 +1,681 @@
+[
+  {
+    "id": "mdn",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><main><article><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></article></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "react-docs",
+    "url": "https://react.dev/learn/describing-the-ui",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><main><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "python-docs",
+    "url": "https://docs.python.org/3/tutorial/introduction.html",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"document\"><div role=\"main\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"sphinxsidebar\" id=\"sidebar\">Documentation navigation remains unchanged</div></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#sidebar"
+    ]
+  },
+  {
+    "id": "huggingface",
+    "url": "https://huggingface.co/example/model-card",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"markdown-body\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "reuters",
+    "url": "https://www.reuters.com/world/example/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><span itemprop=\"author\" id=\"author\">Example Author</span><time id=\"time\">2026-09-05</time><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#time"
+    ]
+  },
+  {
+    "id": "bbc-news",
+    "url": "https://www.bbc.com/news/articles/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><span itemprop=\"author\" id=\"author\">Example Author</span><time id=\"time\">2026-09-05</time><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#time"
+    ]
+  },
+  {
+    "id": "arstechnica",
+    "url": "https://arstechnica.com/science/2026/09/example/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><span itemprop=\"author\" id=\"author\">Example Author</span><time id=\"time\">2026-09-05</time><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#time"
+    ]
+  },
+  {
+    "id": "wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><main><div class=\"mw-parser-output\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p><span class=\"mw-editsection\" id=\"edit\">Edit this section</span></div></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#edit"
+    ]
+  },
+  {
+    "id": "arxiv",
+    "url": "https://arxiv.org/html/2601.00001v1",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"ltx_document\"><section class=\"ltx_para\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code> <span class=\"ltx_Math\" id=\"formula\">FORMULA_TOKEN</span></p></section><section class=\"ltx_para\"><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></section></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#formula"
+    ]
+  },
+  {
+    "id": "pubmed",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"enc-abstract\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "nature",
+    "url": "https://www.nature.com/articles/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><section role=\"doc-abstract\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></section></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "dev-community",
+    "url": "https://dev.to/example/a-readable-article",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"crayons-article__body\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "lobsters",
+    "url": "https://lobste.rs/s/example/discussion",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"comment_text\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p><span id=\"author\" class=\"byline\">Example user and time</span></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author"
+    ]
+  },
+  {
+    "id": "discourse-meta",
+    "url": "https://meta.discourse.org/t/example/123",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"cooked\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "stackoverflow",
+    "url": "https://stackoverflow.com/questions/12345/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"question\"><div class=\"s-prose\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"post-signature\" id=\"author\">User metadata remains unchanged</div></div><div class=\"answer\"><div class=\"s-prose\"><p id=\"answer-body\">The answer independently explains how the question can be resolved using a small example.</p></div><div class=\"js-voting-container\" id=\"votes\">Vote count remains unchanged</div></div><p id=\"unrelated\">Unrelated readable page paragraph must remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#answer-body"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#votes",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "stackexchange",
+    "url": "https://math.stackexchange.com/questions/12345/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"question\"><div class=\"s-prose\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"post-signature\" id=\"author\">User metadata remains unchanged</div></div><div class=\"answer\"><div class=\"s-prose\"><p id=\"answer-body\">The answer independently explains how the question can be resolved using a small example.</p></div><div class=\"js-voting-container\" id=\"votes\">Vote count remains unchanged</div></div><p id=\"unrelated\">Unrelated readable page paragraph must remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#answer-body"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#votes",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "askubuntu",
+    "url": "https://askubuntu.com/questions/12345/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"question\"><div class=\"s-prose\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"post-signature\" id=\"author\">User metadata remains unchanged</div></div><div class=\"answer\"><div class=\"s-prose\"><p id=\"answer-body\">The answer independently explains how the question can be resolved using a small example.</p></div><div class=\"js-voting-container\" id=\"votes\">Vote count remains unchanged</div></div><p id=\"unrelated\">Unrelated readable page paragraph must remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#answer-body"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#votes",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "superuser",
+    "url": "https://superuser.com/questions/12345/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"question\"><div class=\"s-prose\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"post-signature\" id=\"author\">User metadata remains unchanged</div></div><div class=\"answer\"><div class=\"s-prose\"><p id=\"answer-body\">The answer independently explains how the question can be resolved using a small example.</p></div><div class=\"js-voting-container\" id=\"votes\">Vote count remains unchanged</div></div><p id=\"unrelated\">Unrelated readable page paragraph must remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#answer-body"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#votes",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "serverfault",
+    "url": "https://serverfault.com/questions/12345/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"question\"><div class=\"s-prose\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"post-signature\" id=\"author\">User metadata remains unchanged</div></div><div class=\"answer\"><div class=\"s-prose\"><p id=\"answer-body\">The answer independently explains how the question can be resolved using a small example.</p></div><div class=\"js-voting-container\" id=\"votes\">Vote count remains unchanged</div></div><p id=\"unrelated\">Unrelated readable page paragraph must remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#answer-body"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#votes",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "perplexity",
+    "url": "https://www.perplexity.ai/search/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><main><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></main>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "claude",
+    "url": "https://claude.ai/chat/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div data-testid=\"user-message\" id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></div><div class=\"font-claude-message\"><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "gemini",
+    "url": "https://gemini.google.com/app/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><user-query><div class=\"query-text\" id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></div></user-query><message-content><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></message-content>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "etsy-shopping",
+    "url": "https://www.etsy.com/listing/123456/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><section><div itemprop=\"description\" id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code><span itemprop=\"price\" id=\"price\">99.00 USD</span></div><div itemprop=\"reviewBody\" id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</div></section>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#price"
+    ]
+  },
+  {
+    "id": "amazon-shopping",
+    "url": "https://www.amazon.com/dp/EXAMPLE123",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"productDescription\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p></div><div data-hook=\"review-body\" id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</div><div class=\"a-price\" id=\"price\">99.00 USD</div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#price"
+    ]
+  },
+  {
+    "id": "steam-store",
+    "url": "https://store.steampowered.com/app/12345/example/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"game_area_description\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"game_purchase_price\" id=\"price\">99.00 USD</div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#price"
+    ]
+  },
+  {
+    "id": "itch-games",
+    "url": "https://example.itch.io/example-game",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><section class=\"formatted_description\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></section>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "mastodon",
+    "url": "https://mastodon.social/@example/123",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"status__content\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code> <a class=\"mention\" id=\"mention\">@example</a></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><p id=\"unrelated\">Unrelated page description remains original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#mention",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "chatgpt",
+    "url": "https://chatgpt.com/c/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div data-message-author-role=\"user\"><div class=\"whitespace-pre-wrap\" id=\"user-message\">Please explain this technical concept with an accessible example.</div></div><div data-message-author-role=\"assistant\"><div class=\"markdown\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div></div><button id=\"copy\">Copy answer</button><p id=\"unrelated\">Unrelated readable page paragraph remains original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2",
+      "#user-message"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#copy",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "gmail",
+    "url": "https://mail.google.com/mail/u/0/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"a3s\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code><span class=\"gmail_signature\" id=\"signature\">Personal signature remains original</span></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div role=\"toolbar\" id=\"toolbar\">Reply Forward Archive Delete</div><p id=\"unrelated\">Sender addresses and metadata remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#signature",
+      "#toolbar",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "outlook-mail",
+    "url": "https://outlook.live.com/mail/0/inbox/id/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div role=\"document\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div role=\"toolbar\" id=\"toolbar\">Reply Forward Archive Delete</div><p id=\"unrelated\">Sender addresses and metadata remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#toolbar",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "proton-mail",
+    "url": "https://mail.proton.me/u/0/inbox/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"message-content\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div role=\"toolbar\" id=\"toolbar\">Reply Forward Archive Delete</div><p id=\"unrelated\">Sender addresses and metadata remain original in focus mode.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#toolbar",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "gitlab",
+    "url": "https://gitlab.com/example/project/-/issues/123",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"description\"><div class=\"md\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div></div><aside class=\"issuable-sidebar\" id=\"sidebar\">Labels Assignees Milestone</aside><div class=\"system-note\" id=\"system-note\">User metadata remains unchanged</div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#sidebar",
+      "#system-note"
+    ]
+  },
+  {
+    "id": "discord-messages",
+    "url": "https://discord.com/channels/123/456",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"message-content-fixture\" data-message-container=\"true\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div role=\"toolbar\" id=\"toolbar\">Reply React More</div><p id=\"unrelated\">Channel navigation and user metadata remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#toolbar",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "slack-messages",
+    "url": "https://app.slack.com/client/TEAM/CHANNEL",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"c-message_kit__text\" id=\"message-container\"><div class=\"p-rich_text_section\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div></div><div class=\"c-message__sender\" id=\"author\">User metadata remains unchanged</div><p id=\"unrelated\">Workspace navigation remains original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "telegram-messages",
+    "url": "https://web.telegram.org/a/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"message\"><div class=\"text-content\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code><span class=\"time\" id=\"timestamp\">User metadata remains unchanged</span></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div></div><p id=\"unrelated\">Chat list and navigation remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#timestamp",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "whatsapp-messages",
+    "url": "https://web.whatsapp.com/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div data-pre-plain-text=\"Message metadata\"><div class=\"selectable-text\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div></div><div role=\"toolbar\" id=\"toolbar\">Reply Forward Message options</div><p id=\"unrelated\">Contact details and chat navigation remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#toolbar",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "notion-published",
+    "url": "https://example.notion.site/reading-page",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"notion-page-content\"><div class=\"notion-text-block\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><div class=\"notion-collection_view-block\" id=\"database\">Interactive database controls remain original.</div></div><p id=\"unrelated\">Workspace controls remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#database",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "google-search",
+    "url": "https://www.google.com/search?q=example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"search\"><h3 id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></h3><div class=\"VwiC3b\" id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</div><cite id=\"source-url\">https://example.test/path</cite></div><p id=\"unrelated\">Search tools and navigation remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#source-url",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "google-scholar",
+    "url": "https://scholar.google.com/scholar?q=example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"gs_r\"><h3 class=\"gs_rt\" id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></h3><div class=\"gs_rs\" id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</div><div class=\"gs_a\" id=\"author\">User metadata remains unchanged</div><div class=\"gs_fl\" id=\"citation-tools\">Cite Save Cited by</div></div><p id=\"unrelated\">Search configuration remains original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#citation-tools",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "feedly-reader",
+    "url": "https://feedly.com/i/entry/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"entryBody\" id=\"message-container\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div><p id=\"unrelated\">Collections and article controls remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "inoreader-reader",
+    "url": "https://www.inoreader.com/all_articles",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"article_full_contents\" data-message-container=\"true\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p><span class=\"article_author\" id=\"author\">User metadata remains unchanged</span></div><p id=\"unrelated\">Folders and article controls remain original.</p>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author",
+      "#unrelated"
+    ]
+  },
+  {
+    "id": "linkedin-articles",
+    "url": "https://www.linkedin.com/pulse/example-article",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><span itemprop=\"author\" id=\"author\">User metadata remains unchanged</span><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#author"
+    ]
+  },
+  {
+    "id": "seekingalpha",
+    "url": "https://seekingalpha.com/article/123-example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div data-test-id=\"article-content\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "healthline",
+    "url": "https://www.healthline.com/nutrition/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><article><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p><time id=\"time\">2026-09-05</time></article>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#time"
+    ]
+  },
+  {
+    "id": "wiley-online",
+    "url": "https://onlinelibrary.wiley.com/doi/10.0000/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"article-section__content\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p><span class=\"ltx_Math\" id=\"formula\">FORMULA_TOKEN</span></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected",
+      "#formula"
+    ]
+  },
+  {
+    "id": "npm-packages",
+    "url": "https://www.npmjs.com/package/example",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div id=\"readme\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  },
+  {
+    "id": "pypi-packages",
+    "url": "https://pypi.org/project/example/",
+    "html": "<nav id=\"navigation\"><a href=\"/settings\">Navigation remains unchanged</a></nav><div class=\"project-description\"><p id=\"body1\">This readable paragraph describes the behavior and provides enough context for translation. <code id=\"protected\">KEEP_ORIGINAL_TOKEN</code></p><p id=\"body2\">A second independent paragraph explains the example and should remain stable during repeated translation.</p></div>",
+    "required": [
+      "#body1",
+      "#body2"
+    ],
+    "forbidden": [
+      "#navigation",
+      "#protected"
+    ]
+  }
+]

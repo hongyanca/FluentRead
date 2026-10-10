@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "scope": "Known-reference natural English precision-route evidence on one official 22-word JFK sample; not browser/WebGPU/extension acceptance or general accuracy",
+  "backend": "wasm",
+  "libraries": {
+    "transformers": "3.8.1",
+    "onnxruntimeWeb": "1.23.2",
+    "onnxruntimeCommon": "1.23.2",
+    "defaultNativeOrtNotUsed": "1.21.0"
+  },
+  "threads": 1,
+  "source": "https://huggingface.co/datasets/Xenova/transformers.js-docs/raw/542437c29cc5273cfd29e25c77696f2b349badd7/jfk.wav",
+  "sourceDatasetRevision": "542437c29cc5273cfd29e25c77696f2b349badd7",
+  "sourceWaveBytes": 1940478,
+  "sourceWaveSha256": "aa81c2552465568567e670f3823117e633900d16bd6202346a72f3c8464c74c8",
+  "referenceSource": "https://huggingface.co/docs/transformers.js/v3.8.1/en/api/pipelines#transformers.AutomaticSpeechRecognitionPipeline",
+  "referenceWords": 22,
+  "referenceSha256": "21f5f1997121e317bd7a9760206c119c353cb55b680b29993b9831d008a04df2",
+  "fullReferenceQuotedOnceIn": "../accuracy-experiment.md",
+  "sourceReportLocalPath": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/public-jfk-report.json",
+  "sourceReportSha256": "211ad18aea5074474f859da1faf78c0d04b03d6e38114c9e759daf53c078a0f2",
+  "executedHarnessSha256": "f3e4e4953ec59f380e2d04740f3a6ad97f4bf7e171f864c131cc045dd9c6bf43",
+  "controls": "Same verified model snapshot, q4 encoder, generation options/token budgets, optimizer, PCM and WASM backend; no inference network",
+  "limitations": [
+    "One 11-second 22-word official reference, not a broad English evaluation",
+    "Single ordered run; timings are descriptive only",
+    "All public source predictions/full transcriptions remain in private tmp; no audio redistributed"
+  ],
+  "runs": [
+    {
+      "model": "tiny",
+      "encoderDtype": "q4",
+      "decoderDtype": "q4",
+      "audioSeconds": 11,
+      "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9646656744869914
+      },
+      "maxNewTokens": 64,
+      "inferenceMs": 1778.5520000000001,
+      "languageDetectionMs": 1279.751875,
+      "wer": {
+        "errors": 1,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0.045454545454545456,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+      },
+      "textCharacters": 104,
+      "textSha256": "38e70746bc8988184dd5ae3bc8c69a23d284357a69e0bd8c245bb35d0d1c6928"
+    },
+    {
+      "model": "base",
+      "encoderDtype": "q4",
+      "decoderDtype": "q4",
+      "audioSeconds": 11,
+      "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9383212243588761
+      },
+      "maxNewTokens": 77,
+      "inferenceMs": 3992.807167000001,
+      "languageDetectionMs": 2711.5354580000003,
+      "wer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+      },
+      "textCharacters": 108,
+      "textSha256": "1d3e5d93b8c6643388c494ac08a26d7b4962276f10f95513f11ce2e34e0977b9"
+    },
+    {
+      "model": "tiny",
+      "encoderDtype": "q4",
+      "decoderDtype": "q8",
+      "audioSeconds": 11,
+      "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9698324916908088
+      },
+      "maxNewTokens": 64,
+      "inferenceMs": 1493.7390410000007,
+      "languageDetectionMs": 1231.5433749999993,
+      "wer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+      },
+      "textCharacters": 108,
+      "textSha256": "1d3e5d93b8c6643388c494ac08a26d7b4962276f10f95513f11ce2e34e0977b9"
+    },
+    {
+      "model": "base",
+      "encoderDtype": "q4",
+      "decoderDtype": "q8",
+      "audioSeconds": 11,
+      "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9197863132403085
+      },
+      "maxNewTokens": 77,
+      "inferenceMs": 3085.1979589999974,
+      "languageDetectionMs": 2669.7147920000007,
+      "wer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+      },
+      "textCharacters": 107,
+      "textSha256": "0d851226f095dd0328ede6664926a966047e5701925629071f53daa29eea5d91"
+    }
+  ]
+}

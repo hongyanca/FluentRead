@@ -5,6 +5,14 @@ import {createUserscriptContentContext} from './context';
 import {userscriptFetch} from './http';
 import {ensureUserscriptConfig} from './initialize';
 import {getUserscriptConfigCount} from './count';
+import {getUserscriptFunction} from './api';
+import {inflateGzipBase64} from './compression';
+import {isUserscriptSettingsUrl} from './settingsPage';
+import {waitForContentDocument} from '@/src/app/content/pageLifecycle';
+import {
+    completeUserscriptConfigPreparation,
+    failUserscriptConfigPreparation,
+} from './storage';
 
 declare global {
     // 脚本管理器可能在 SPA 状态变化时重新注入，因此在当前沙箱中保存幂等启动标记。
@@ -13,14 +21,15 @@ declare global {
 
 let disposeShadowAndRouteBridge: (() => void) | undefined;
 let disposeUserscriptRuntime: (() => void) | undefined;
+let pagehideListener: ((event: PageTransitionEvent) => void) | undefined;
 
-async function waitForDocumentEnd(): Promise<void> {
+async function waitForDocumentBody(): Promise<void> {
     if (document.readyState !== 'loading') return;
-    await new Promise<void>((resolve) => document.addEventListener('DOMContentLoaded', () => resolve(), {once: true}));
+    await waitForContentDocument(document, new AbortController().signal);
 }
 
 function registerMenu(label: string, listener: () => void): void {
-    const register = globalThis.GM_registerMenuCommand;
+    const register = getUserscriptFunction('GM_registerMenuCommand', 'registerMenuCommand');
     if (typeof register === 'function') register(label, listener);
 }
 
@@ -32,18 +41,30 @@ async function bootstrap(): Promise<void> {
     if (globalThis.__fluentReadUserscriptBootstrapped) return;
     globalThis.__fluentReadUserscriptBootstrapped = true;
 
-    disposeShadowAndRouteBridge = installShadowAndRouteBridge();
+    // 独立设置标签页只挂载设置 UI；不把主世界桥或内容翻译装进底层网页。
+    const settingsPage = __FLUENTREAD_FULL_OPTIONS__ && isUserscriptSettingsUrl(globalThis.location?.href || '');
+    if (!settingsPage) disposeShadowAndRouteBridge = installShadowAndRouteBridge();
     setRuntimeFetch(userscriptFetch);
-    await ensureUserscriptConfig();
+    try {
+        if (globalThis.__fluentReadUserscriptCssCompressed) {
+            globalThis.__fluentReadUserscriptCss = await inflateGzipBase64(globalThis.__fluentReadUserscriptCssCompressed);
+        }
+        await ensureUserscriptConfig();
+        completeUserscriptConfigPreparation();
+    } catch (error) {
+        failUserscriptConfigPreparation(error);
+        throw error;
+    }
 
     // 配置边界就绪后再加载这些模块，避免模块级初始化观察到尚未迁移的旧配置。
     const [platformModule, settingsModule, contentModule, translationModule, configModule] = await Promise.all([
-        import('./platform'),
-        import('./settings'),
+        __FLUENTREAD_FULL_OPTIONS__ ? import('./platformFull') : import('./platform'),
+        __FLUENTREAD_FULL_OPTIONS__ ? import('./settingsFull') : import('./settings'),
         import('@/entrypoints/content'),
         import('@/src/app/content/features'),
         import('@/src/services/config/store'),
     ]);
+    await configModule.configReady;
     const ctx = createUserscriptContentContext();
     const synchronizeCountProjection = async () => {
         const count = await getUserscriptConfigCount();
@@ -51,11 +72,15 @@ async function bootstrap(): Promise<void> {
         configModule.config.count = count;
         await configModule.saveConfig(configModule.config);
     };
-    const openSettings = () => {
+    const openSettings = (section?: string) => {
+        // 在同步用户手势内先打开标签页，随后再同步计数。
+        void settingsModule.openUserscriptSettings(ctx, section).catch((error) => {
+            console.error('[FluentRead userscript] 打开设置页失败', error);
+        });
         void synchronizeCountProjection()
-            .catch((error) => console.error('[FluentRead userscript] 同步翻译计数失败', error))
-            .finally(() => settingsModule.openUserscriptSettings(ctx));
+            .catch((error) => console.error('[FluentRead userscript] 同步翻译计数失败', error));
     };
+    const openSettingsEvent = () => openSettings();
     const closeSettings = () => settingsModule.closeUserscriptSettings();
     const synchronizeVisibleCount = () => {
         if (document.visibilityState === 'visible') {
@@ -76,73 +101,103 @@ async function bootstrap(): Promise<void> {
         return true;
     };
     let runtimeDisposed = false;
-    const disposeRuntime = () => {
+    const disposeRuntime = (pageLeaving = false) => {
         if (runtimeDisposed) return;
         runtimeDisposed = true;
-        window.removeEventListener('fluentread-userscript-open-settings', openSettings);
-        window.removeEventListener('fluentread-userscript-close-settings', closeSettings);
-        window.removeEventListener('focus', synchronizeVisibleCount);
-        document.removeEventListener('visibilitychange', synchronizeVisibleCount);
-        browser.runtime.onMessage.removeListener(toggleTranslationListener);
-        resetPlatformMessageHandler();
-        try {
-            closeSettings();
-        } catch (error) {
-            console.error('[FluentRead userscript] 关闭设置面板失败', error);
+        const ownedPagehideListener = pagehideListener;
+        pagehideListener = undefined;
+        const cleanup = [
+            () => window.removeEventListener('fluentread-userscript-open-settings', openSettingsEvent),
+            () => window.removeEventListener('fluentread-userscript-close-settings', closeSettings),
+            () => window.removeEventListener('focus', synchronizeVisibleCount),
+            () => document.removeEventListener('visibilitychange', synchronizeVisibleCount),
+            () => {if (ownedPagehideListener) window.removeEventListener('pagehide', ownedPagehideListener);},
+            () => browser.runtime.onMessage.removeListener(toggleTranslationListener),
+            () => {
+                try {closeSettings();}
+                catch (error) {console.error('[FluentRead userscript] 关闭设置面板失败', error);}
+            },
+            () => ctx.invalidate(),
+        ];
+        // pagehide 的计数 flush 可能还在等待 GM 存储；离页时保留同页消息处理器，
+        // 直到脚本沙箱随文档销毁，避免把最后一批增量送进空适配器。
+        if (!pageLeaving) cleanup.push(() => resetPlatformMessageHandler());
+        let failed = false;
+        let firstError: unknown;
+        for (const stop of cleanup) {
+            try {stop();} catch (error) {
+                if (!failed) {failed = true; firstError = error;}
+            }
         }
-        ctx.invalidate();
+        if (failed) throw firstError;
     };
     disposeUserscriptRuntime = disposeRuntime;
     setPlatformMessageHandler(platformModule.createPlatformMessageHandler(openSettings));
-    window.addEventListener('fluentread-userscript-open-settings', openSettings);
+    window.addEventListener('fluentread-userscript-open-settings', openSettingsEvent);
     window.addEventListener('fluentread-userscript-close-settings', closeSettings);
     window.addEventListener('focus', synchronizeVisibleCount);
     document.addEventListener('visibilitychange', synchronizeVisibleCount);
 
-    browser.runtime.onMessage.addListener(toggleTranslationListener);
+    if (!settingsPage) browser.runtime.onMessage.addListener(toggleTranslationListener);
 
     registerMenu('流畅阅读：打开设置', openSettings);
-    registerMenu('流畅阅读：翻译 / 恢复当前网页', () => {
-        if (translationModule.isFullPageTranslationActive()) translationModule.restoreOriginalContent();
-        else void translationModule.autoTranslateEnglishPage();
-    });
-    registerMenu('流畅阅读：启用 / 暂停', () => {
-        const enabled = !configModule.config.on;
-        configModule.config.on = enabled;
-        void configModule.saveConfig().then(async () => {
-            await browser.tabs.sendMessage(1, {
-                type: 'toggleFloatingBall',
-                isEnabled: enabled && !configModule.config.disableFloatingBall,
-            });
-            await browser.tabs.sendMessage(1, {
-                type: 'updateSelectionTranslatorMode',
-                mode: enabled ? configModule.config.selectionTranslatorMode : 'disabled',
-            });
-            if (!enabled) translationModule.restoreOriginalContent();
+    if (!settingsPage) {
+        registerMenu('流畅阅读：翻译 / 恢复当前网页', () => {
+            if (translationModule.isFullPageTranslationActive()) translationModule.restoreOriginalContent();
+            else void translationModule.autoTranslateEnglishPage();
         });
-    });
-    registerMenu('流畅阅读：清空翻译缓存', () => {
-        void browser.runtime.sendMessage({type: 'clearTranslationCache'});
-    });
-
-    await waitForDocumentEnd();
-    await contentModule.default.main(ctx as never);
-    void browser.runtime.sendMessage({type: 'userscriptCacheMaintenance'}).catch(() => undefined);
+        registerMenu('流畅阅读：启用 / 暂停', () => {
+            const enabled = !configModule.config.on;
+            configModule.config.on = enabled;
+            void configModule.saveConfig().then(async () => {
+                await browser.tabs.sendMessage(1, {
+                    type: 'toggleFloatingBall',
+                    isEnabled: enabled && !configModule.config.disableFloatingBall,
+                });
+                await browser.tabs.sendMessage(1, {
+                    type: 'updateSelectionTranslatorMode',
+                    mode: enabled ? configModule.config.selectionTranslatorMode : 'disabled',
+                });
+                if (!enabled) translationModule.restoreOriginalContent();
+            });
+        });
+        registerMenu('流畅阅读：清空翻译缓存', () => {
+            void browser.runtime.sendMessage({type: 'clearTranslationCache'});
+        });
+    }
 
     // 单页 userscript 没有扩展 content-script 的自动销毁钩子，离页时显式释放监听器和 Shadow UI。
-    window.addEventListener('beforeunload', () => {
-        disposeRuntime();
+    pagehideListener = (event) => {
+        // BFCache 往返由共享 pageLifecycle 暂停/恢复；只有真正离页才销毁沙箱运行时。
+        if (!event.isTrusted || event.persisted) return;
         disposeUserscriptRuntime = undefined;
-        disposeShadowAndRouteBridge?.();
+        const disposeBridge = disposeShadowAndRouteBridge;
         disposeShadowAndRouteBridge = undefined;
-    }, {once: true});
+        for (const stop of [() => disposeRuntime(true), disposeBridge]) {
+            try {stop?.();}
+            catch (error) {console.error('[FluentRead userscript] 离页清理失败', error);}
+        }
+    };
+    window.addEventListener('pagehide', pagehideListener);
+
+    await waitForDocumentBody();
+    if (settingsPage) {
+        openSettings();
+        return;
+    }
+
+    await contentModule.default.main(ctx as never);
+    void browser.runtime.sendMessage({type: 'userscriptCacheMaintenance'}).catch(() => undefined);
 }
 
 void bootstrap().catch((error) => {
-    disposeUserscriptRuntime?.();
+    const cleanup = [disposeUserscriptRuntime, disposeShadowAndRouteBridge];
     disposeUserscriptRuntime = undefined;
-    disposeShadowAndRouteBridge?.();
     disposeShadowAndRouteBridge = undefined;
+    for (const stop of cleanup) {
+        try {stop?.();}
+        catch (cleanupError) {console.error('[FluentRead userscript] 初始化清理失败', cleanupError);}
+    }
     globalThis.__fluentReadUserscriptBootstrapped = false;
     console.error('[FluentRead userscript] 初始化失败', error);
 });

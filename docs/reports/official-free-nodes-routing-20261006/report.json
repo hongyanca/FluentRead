@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-free-routing-bQ3TyJ",
+  "evidenceBoundary": "Production extension with synthetic HTTP responses. This verifies scheduling and UI, not external provider performance.",
+  "screenshots": [
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-routing-20261006/translate-restore-retranslate.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-routing-20261006/settings-desktop.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-routing-20261006/settings-narrow.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-routing-20261006/settings-narrow-dark.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-routing-20261006/failed-service-no-retries.png"
+  ],
+  "pageErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    }
+  },
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "firstTranslationMs": 1749,
+  "hedgeCalls": [
+    {
+      "route": "microsoft",
+      "at": 1791259267273,
+      "scenario": "slow",
+      "cancelled": true
+    },
+    {
+      "route": "transmart",
+      "at": 1791259268785,
+      "scenario": "slow",
+      "cancelled": false
+    }
+  ],
+  "allServicesAndAllocationVisible": true,
+  "settingsQuickClosePersistence": true,
+  "sequentialTranslationMs": 5205,
+  "latencyReductionPercent": 66,
+  "narrowOverflow": false,
+  "failureCalls": [
+    {
+      "route": "transmart",
+      "at": 1791259276537,
+      "scenario": "failure",
+      "cancelled": false
+    }
+  ],
+  "noRepeatedPool": true
+}

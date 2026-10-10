@@ -1,0 +1,2121 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004/.output/chrome-mv3",
+  "scope": "Options only: all 16 sections in seven languages at 1280px/390px, section panels and short-copy assertions. No real provider, account or Firefox runtime.",
+  "views": [
+    {
+      "label": "zh-CN-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-general-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-services-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-interface-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-selection-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-image-translation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-video-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-writing-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-center-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-vocabulary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-glossary-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-rules-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-adaptation-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-preview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-overview-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-usage-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-advanced-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-data-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-about-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-general-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-services-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-selection-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-image-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-video-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-writing-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-center-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-vocabulary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-glossary-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-rules-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-adaptation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-sites-preview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-overview-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-translation-stats-usage-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-advanced-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-data-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-settings-about-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    }
+  ],
+  "checks": [
+    "zh-CN master help",
+    "zh-CN sentence help and grouping note",
+    "en-US master help",
+    "en-US sentence help and grouping note",
+    "ja-JP master help",
+    "ja-JP sentence help and grouping note",
+    "ko-KR master help",
+    "ko-KR sentence help and grouping note",
+    "fr-FR master help",
+    "fr-FR sentence help and grouping note",
+    "ru-RU master help",
+    "ru-RU sentence help and grouping note",
+    "es-ES master help",
+    "es-ES sentence help and grouping note",
+    "switch back to Chinese"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "sections": [
+    "settings-general",
+    "settings-services",
+    "settings-translation",
+    "settings-interface",
+    "settings-selection",
+    "settings-image-translation",
+    "settings-video",
+    "settings-writing",
+    "settings-translation-center",
+    "settings-vocabulary",
+    "settings-glossary",
+    "settings-sites",
+    "settings-translation-stats",
+    "settings-advanced",
+    "settings-data",
+    "settings-about"
+  ],
+  "evidenceNote": "整合 main eac8e7de 后重新执行；只移除用户前台应用名称与进程号。"
+}

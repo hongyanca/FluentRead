@@ -1,0 +1,191 @@
+{
+  "before-normal-1": {
+    "first": {
+      "readyMs": 170.69999992847443,
+      "longTasks": [
+        {
+          "start": 82.59999990463257,
+          "duration": 110
+        }
+      ],
+      "treeWalks": 1,
+      "frameMs": 193.5,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.033622,
+        "RecalcStyleDuration": 0.005655,
+        "ScriptDuration": 0.034634,
+        "TaskDuration": 0.20808,
+        "JSHeapUsedSize": 9189468
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 66,
+      "frameMs": 76.60000002384186,
+      "scriptMs": 14.149000000000001
+    },
+    "initialScriptBytes": 952776,
+    "coldWorkerStopped": false
+  },
+  "after-normal-1": {
+    "first": {
+      "readyMs": 95.79999995231628,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 98,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.029361,
+        "RecalcStyleDuration": 0.00207,
+        "ScriptDuration": 0.025733,
+        "TaskDuration": 0.126887,
+        "JSHeapUsedSize": 7731944
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 47.700000047683716,
+      "frameMs": 48.5,
+      "scriptMs": 13.095
+    },
+    "initialScriptBytes": 928929,
+    "coldWorkerStopped": false
+  },
+  "before-normal-2": {
+    "first": {
+      "readyMs": 154.89999997615814,
+      "longTasks": [
+        {
+          "start": 77.39999997615814,
+          "duration": 88
+        }
+      ],
+      "treeWalks": 1,
+      "frameMs": 166.79999995231628,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.029917,
+        "RecalcStyleDuration": 0.002505,
+        "ScriptDuration": 0.032705,
+        "TaskDuration": 0.180798,
+        "JSHeapUsedSize": 8379700
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 67.59999990463257,
+      "frameMs": 77.80000007152557,
+      "scriptMs": 14.472999999999999
+    },
+    "initialScriptBytes": 952776,
+    "coldWorkerStopped": false
+  },
+  "after-normal-2": {
+    "first": {
+      "readyMs": 107.79999995231628,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 110.39999997615814,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.033081,
+        "RecalcStyleDuration": 0.002186,
+        "ScriptDuration": 0.028099,
+        "TaskDuration": 0.140895,
+        "JSHeapUsedSize": 7779016
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 47.89999997615814,
+      "frameMs": 49.60000002384186,
+      "scriptMs": 13.267
+    },
+    "initialScriptBytes": 928929,
+    "coldWorkerStopped": false
+  },
+  "before-cold-worker": {
+    "first": {
+      "readyMs": 251.10000002384186,
+      "longTasks": [
+        {
+          "start": 173.20000004768372,
+          "duration": 88
+        }
+      ],
+      "treeWalks": 1,
+      "frameMs": 262.39999997615814,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.029921,
+        "RecalcStyleDuration": 0.003076,
+        "ScriptDuration": 0.033829,
+        "TaskDuration": 0.190895,
+        "JSHeapUsedSize": 8475764
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 67.60000002384186,
+      "frameMs": 77.60000002384186,
+      "scriptMs": 14.106
+    },
+    "initialScriptBytes": 952776,
+    "coldWorkerStopped": true
+  },
+  "after-cold-worker": {
+    "first": {
+      "readyMs": 193,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 195.10000002384186,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.028627,
+        "RecalcStyleDuration": 0.002559,
+        "ScriptDuration": 0.027127,
+        "TaskDuration": 0.137359,
+        "JSHeapUsedSize": 7369788
+      },
+      "index": 0
+    },
+    "median": {
+      "readyMs": 46.10000002384186,
+      "frameMs": 47.700000047683716,
+      "scriptMs": 13.617
+    },
+    "initialScriptBytes": 928929,
+    "coldWorkerStopped": true
+  }
+}

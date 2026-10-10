@@ -1,0 +1,62 @@
+/**
+ * @file src/ui/styles/bilingual-sentence-highlight.css
+ * 文件职责：统一网页原生文字范围与设置示例中的双语逐句高亮外观。
+ * 主要内容：八种透光底色或细线预设仅作用于当前句子的文字片段，不绘制段落级背景，不改变原文或译文颜色与布局。
+ * 模块边界：网页使用 FluentRead 命名的 Highlight 和根属性；示例只使用自身预览容器，不匹配宿主通用元素或其他高亮。
+ */
+[data-fr-bilingual-sentence-highlight-style="rose"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="rose"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="rose"] .is-sentence-highlighted {
+  background-color: rgba(239, 71, 118, .20);
+  text-decoration: underline rgba(239, 71, 118, .72);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="mint"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="mint"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="mint"] .is-sentence-highlighted {
+  background-color: rgba(45, 182, 153, .20);
+  text-decoration: underline rgba(35, 160, 135, .80);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="sky"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="sky"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="sky"] .is-sentence-highlighted {
+  background-color: rgba(83, 151, 235, .22);
+  text-decoration: underline rgba(83, 151, 235, .85);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="underline"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="underline"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="underline"] .is-sentence-highlighted {
+  background-color: transparent;
+  text-decoration: underline rgba(130, 116, 224, .90);
+  text-decoration-thickness: 2px;
+}
+[data-fr-bilingual-sentence-highlight-style="amber"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="amber"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="amber"] .is-sentence-highlighted {
+  background-color: rgba(245, 178, 65, .23);
+  text-decoration: underline rgba(202, 133, 26, .85);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="lavender"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="lavender"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="lavender"] .is-sentence-highlighted {
+  background-color: rgba(167, 139, 250, .22);
+  text-decoration: underline rgba(139, 111, 219, .85);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="slate"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="slate"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="slate"] .is-sentence-highlighted {
+  background-color: rgba(148, 163, 184, .18);
+  text-decoration: underline rgba(120, 138, 160, .85);
+  text-decoration-thickness: 1px;
+}
+[data-fr-bilingual-sentence-highlight-style="dotted"]::highlight(fluentread-bilingual-sentence),
+[data-fr-bilingual-sentence-highlight-style="dotted"] ::highlight(fluentread-bilingual-sentence),
+.bilingual-highlight-preview[data-fr-bilingual-sentence-highlight-style="dotted"] .is-sentence-highlighted {
+  background-color: transparent;
+  text-decoration: underline dotted rgba(83, 151, 235, .90);
+  text-decoration-thickness: 2px;
+}

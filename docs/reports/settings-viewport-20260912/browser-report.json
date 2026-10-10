@@ -1,0 +1,2805 @@
+{
+  "ok": true,
+  "extensionDir": ".output/chrome-mv3",
+  "cases": [
+    {
+      "name": "initial-general",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 2,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "general-bottom",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 1300,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "language-search",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "language-menu",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "native-scroll-into-view",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 20,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-general",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-interface",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2667,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-services",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-translation",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1785,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-harness",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1963,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-image-translation",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1270,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-area-translation",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1577,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-video",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-sites",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 812,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-writing",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1793,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-translation-center",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-vocabulary",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-glossary",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1328,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-model-usage",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-advanced",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1314,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-data",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "navigation-settings-about",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 702,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "video-top",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "video-bottom",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 861,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "video-deep-link-reload",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1432,
+        "height": 816,
+        "documentHeight": 816,
+        "documentWidth": 1432,
+        "shell": {
+          "top": 0,
+          "bottom": 816,
+          "left": 0,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "brand": {
+          "top": 16.3125,
+          "bottom": 64.3125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 816,
+          "left": 232,
+          "right": 1432,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 816,
+          "clientHeight": 816
+        },
+        "content": {
+          "top": 94,
+          "bottom": 796,
+          "left": 272,
+          "right": 1392,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 702
+        },
+        "nav": {
+          "top": 64.3125,
+          "bottom": 736.0703125,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 672,
+          "clientHeight": 672
+        }
+      }
+    },
+    {
+      "name": "viewport-1024-last-menu",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1024,
+        "height": 700,
+        "documentHeight": 700,
+        "documentWidth": 1024,
+        "shell": {
+          "top": 0,
+          "bottom": 700,
+          "left": 0,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "brand": {
+          "top": 14,
+          "bottom": 62,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 700,
+          "left": 210,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "content": {
+          "top": 163,
+          "bottom": 680,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 614,
+          "clientHeight": 517
+        },
+        "nav": {
+          "top": 62,
+          "bottom": 688,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 14,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 626
+        }
+      }
+    },
+    {
+      "name": "video-bottom-1024",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1024,
+        "height": 700,
+        "documentHeight": 700,
+        "documentWidth": 1024,
+        "shell": {
+          "top": 0,
+          "bottom": 700,
+          "left": 0,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "brand": {
+          "top": 14,
+          "bottom": 62,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 700,
+          "left": 210,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "content": {
+          "top": 163,
+          "bottom": 680,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 1074,
+          "scrollLeft": 0,
+          "scrollHeight": 1591,
+          "clientHeight": 517
+        },
+        "nav": {
+          "top": 62,
+          "bottom": 688,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 14,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 626
+        }
+      }
+    },
+    {
+      "name": "general-1024",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1024,
+        "height": 700,
+        "documentHeight": 700,
+        "documentWidth": 1024,
+        "shell": {
+          "top": 0,
+          "bottom": 700,
+          "left": 0,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "brand": {
+          "top": 14,
+          "bottom": 62,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 700,
+          "left": 210,
+          "right": 1024,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 700,
+          "clientHeight": 700
+        },
+        "content": {
+          "top": 163,
+          "bottom": 680,
+          "left": 238,
+          "right": 996,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2060,
+          "clientHeight": 517
+        },
+        "nav": {
+          "top": 62,
+          "bottom": 688,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 14,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 626
+        }
+      }
+    },
+    {
+      "name": "viewport-820-last-menu",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 820,
+        "height": 600,
+        "documentHeight": 600,
+        "documentWidth": 820,
+        "shell": {
+          "top": 0,
+          "bottom": 600,
+          "left": 0,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 600,
+          "left": 210,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "content": {
+          "top": 163,
+          "bottom": 580,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 638,
+          "clientHeight": 417
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 588,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 116,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 528
+        }
+      }
+    },
+    {
+      "name": "video-bottom-820",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 820,
+        "height": 600,
+        "documentHeight": 600,
+        "documentWidth": 820,
+        "shell": {
+          "top": 0,
+          "bottom": 600,
+          "left": 0,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 600,
+          "left": 210,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "content": {
+          "top": 163,
+          "bottom": 580,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 1379,
+          "scrollLeft": 0,
+          "scrollHeight": 1796,
+          "clientHeight": 417
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 588,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 116,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 528
+        }
+      }
+    },
+    {
+      "name": "general-820",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 820,
+        "height": 600,
+        "documentHeight": 600,
+        "documentWidth": 820,
+        "shell": {
+          "top": 0,
+          "bottom": 600,
+          "left": 0,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 143,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 115,
+          "clientHeight": 115
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 600,
+          "left": 210,
+          "right": 820,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 600,
+          "clientHeight": 600
+        },
+        "content": {
+          "top": 163,
+          "bottom": 580,
+          "left": 238,
+          "right": 792,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2138,
+          "clientHeight": 417
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 588,
+          "left": 16,
+          "right": 193,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 528
+        }
+      }
+    },
+    {
+      "name": "viewport-390-last-menu",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 390,
+        "height": 720,
+        "documentHeight": 720,
+        "documentWidth": 390,
+        "shell": {
+          "top": 0,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 720,
+          "clientHeight": 720
+        },
+        "brand": {
+          "top": 16,
+          "bottom": 70,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 54,
+          "clientHeight": 54
+        },
+        "topbar": {
+          "top": 155,
+          "bottom": 254.25,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 99,
+          "clientHeight": 99
+        },
+        "workspace": {
+          "top": 131,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 589,
+          "clientHeight": 589
+        },
+        "content": {
+          "top": 274.25,
+          "bottom": 696,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 1010,
+          "clientHeight": 422
+        },
+        "nav": {
+          "top": 70,
+          "bottom": 116,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 1848,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        }
+      }
+    },
+    {
+      "name": "video-bottom-390",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 390,
+        "height": 720,
+        "documentHeight": 720,
+        "documentWidth": 390,
+        "shell": {
+          "top": 0,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 720,
+          "clientHeight": 720
+        },
+        "brand": {
+          "top": 16,
+          "bottom": 70,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 54,
+          "clientHeight": 54
+        },
+        "topbar": {
+          "top": 155,
+          "bottom": 254.25,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 99,
+          "clientHeight": 99
+        },
+        "workspace": {
+          "top": 131,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 589,
+          "clientHeight": 589
+        },
+        "content": {
+          "top": 274.25,
+          "bottom": 696,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 1785,
+          "scrollLeft": 0,
+          "scrollHeight": 2207,
+          "clientHeight": 422
+        },
+        "nav": {
+          "top": 70,
+          "bottom": 116,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 793,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        }
+      }
+    },
+    {
+      "name": "general-390",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 390,
+        "height": 720,
+        "documentHeight": 720,
+        "documentWidth": 390,
+        "shell": {
+          "top": 0,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 720,
+          "clientHeight": 720
+        },
+        "brand": {
+          "top": 16,
+          "bottom": 70,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 54,
+          "clientHeight": 54
+        },
+        "topbar": {
+          "top": 155,
+          "bottom": 254.25,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 99,
+          "clientHeight": 99
+        },
+        "workspace": {
+          "top": 131,
+          "bottom": 720,
+          "left": 0,
+          "right": 390,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 589,
+          "clientHeight": 589
+        },
+        "content": {
+          "top": 274.25,
+          "bottom": 696,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2889,
+          "clientHeight": 422
+        },
+        "nav": {
+          "top": 70,
+          "bottom": 116,
+          "left": 14,
+          "right": 376,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        }
+      }
+    },
+    {
+      "name": "viewport-1440-last-menu",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1440,
+        "height": 480,
+        "documentHeight": 480,
+        "documentWidth": 1440,
+        "shell": {
+          "top": 0,
+          "bottom": 480,
+          "left": 0,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 480,
+          "left": 232,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "content": {
+          "top": 94,
+          "bottom": 460,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 614,
+          "clientHeight": 366
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 468,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 236,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 408
+        }
+      }
+    },
+    {
+      "name": "video-bottom-1440",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1440,
+        "height": 480,
+        "documentHeight": 480,
+        "documentWidth": 1440,
+        "shell": {
+          "top": 0,
+          "bottom": 480,
+          "left": 0,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 480,
+          "left": 232,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "content": {
+          "top": 94,
+          "bottom": 460,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 1197,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 366
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 468,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 236,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 408
+        }
+      }
+    },
+    {
+      "name": "general-1440",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1440,
+        "height": 480,
+        "documentHeight": 480,
+        "documentWidth": 1440,
+        "shell": {
+          "top": 0,
+          "bottom": 480,
+          "left": 0,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "brand": {
+          "top": 12,
+          "bottom": 60,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 480,
+          "left": 232,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 480,
+          "clientHeight": 480
+        },
+        "content": {
+          "top": 94,
+          "bottom": 460,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 366
+        },
+        "nav": {
+          "top": 60,
+          "bottom": 468,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 644,
+          "clientHeight": 408
+        }
+      }
+    },
+    {
+      "name": "general-dark",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1440,
+        "height": 900,
+        "documentHeight": 900,
+        "documentWidth": 1440,
+        "shell": {
+          "top": 0,
+          "bottom": 900,
+          "left": 0,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 900,
+          "clientHeight": 900
+        },
+        "brand": {
+          "top": 18,
+          "bottom": 66,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 900,
+          "left": 232,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 900,
+          "clientHeight": 900
+        },
+        "content": {
+          "top": 94,
+          "bottom": 880,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 2002,
+          "clientHeight": 786
+        },
+        "nav": {
+          "top": 66,
+          "bottom": 795,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 729,
+          "clientHeight": 729
+        }
+      }
+    },
+    {
+      "name": "video-dark-bottom",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "width": 1440,
+        "height": 900,
+        "documentHeight": 900,
+        "documentWidth": 1440,
+        "shell": {
+          "top": 0,
+          "bottom": 900,
+          "left": 0,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 900,
+          "clientHeight": 900
+        },
+        "brand": {
+          "top": 18,
+          "bottom": 66,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 48,
+          "clientHeight": 48
+        },
+        "topbar": {
+          "top": 28,
+          "bottom": 74,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 46,
+          "clientHeight": 46
+        },
+        "workspace": {
+          "top": 0,
+          "bottom": 900,
+          "left": 232,
+          "right": 1440,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 900,
+          "clientHeight": 900
+        },
+        "content": {
+          "top": 94,
+          "bottom": 880,
+          "left": 272,
+          "right": 1400,
+          "scrollTop": 777,
+          "scrollLeft": 0,
+          "scrollHeight": 1563,
+          "clientHeight": 786
+        },
+        "nav": {
+          "top": 66,
+          "bottom": 795,
+          "left": 16,
+          "right": 215,
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "scrollHeight": 729,
+          "clientHeight": 729
+        }
+      }
+    }
+  ],
+  "screenshots": [
+    "initial-general.png",
+    "video-bottom.png",
+    "general-390.png",
+    "general-dark.png"
+  ],
+  "consoleErrors": [],
+  "manifest": {
+    "options": "options.html",
+    "popup": "popup.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -990,
+      "width": 1440,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  }
+}

@@ -1,0 +1,20 @@
+/**
+ * @file src/ui/styles/interface-font.css
+ * 文件职责：为 Popup 和 Options 提供共享的字体变量与控件继承规则。
+ * 主要内容：默认系统无衬线字体；用户选择后由字体服务按需注册 FontFace。
+ * 模块边界：只作用于扩展自有页面，无静态远程字体规则，不预加载未选方案。
+ */
+:root {
+  --interface-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --el-font-family: var(--interface-font-family);
+  font-family: var(--interface-font-family);
+}
+
+:root body,
+:root #app,
+:root button,
+:root input,
+:root select,
+:root textarea {
+  font-family: var(--interface-font-family);
+}

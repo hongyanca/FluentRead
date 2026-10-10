@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>All visible nodes translation examples</title>
+  <style>
+    body { margin: 0; font: 15px/1.55 system-ui; color: #18314c; background: #f4f7fb; }
+    nav,main,footer { padding: 18px 28px; } nav { background: #fff; }
+    a { color: #215ca5; } nav ul { display: flex; gap: 24px; padding: 0; list-style: none; }
+    main { display: grid; gap: 20px; } section { background: #fff; padding: 20px; border-radius: 12px; }
+    h1,h2,p { margin: 0 0 14px; } button { font: inherit; padding: 7px 12px; border: 1px solid #aac; border-radius: 5px; background: #f8fbff; }
+    [role="tree"] { padding: 10px 16px; background: #eef4fa; } [role="treeitem"] { padding: 5px; }
+    [role="tablist"] { display: flex; gap: 8px; margin-bottom: 12px; }
+    footer { background: #132e48; color: #fff; } footer section { background: transparent; } footer a { color: #cfe7ff; }
+    .row { display: flex; gap: 20px; flex-wrap: wrap; } [hidden] { display:none !important; }
+    #portal-menu { position: fixed; right: 24px; top: 90px; z-index: 20; padding: 20px; border: 1px solid #aac; box-shadow: 0 5px 25px #2343; background: white; }
+    #portal-menu button { display:block; margin-bottom:10px; }
+  </style>
+</head>
+<body>
+  <!-- Reimplemented from observed semantic structure; no third-party source copied. -->
+  <nav class="top-nav" aria-label="Main Navigation"><ul>
+    <li><a id="epoch-latest" data-all-node href="#research">Latest research</a></li>
+    <li><button id="epoch-work" data-all-node type="button">Our work</button></li>
+    <li><a id="epoch-contact" data-all-node href="#contact">Contact our team</a></li>
+  </ul></nav>
+  <nav class="secondary-nav"><ul>
+    <li><a id="epoch-dashboard" data-all-node href="#dashboard">Dashboard</a></li>
+    <li><a id="epoch-directory" data-all-node href="#directory">Directory</a></li>
+    <li><a id="epoch-map" data-all-node href="#map">Map</a></li>
+    <li><a id="epoch-updates" data-all-node href="#updates">Data updates</a></li>
+  </ul></nav>
+  <main>
+    <section id="epoch-example">
+      <h1 id="article-title">Public infrastructure dashboard</h1>
+      <p id="article-body">This independent dashboard tracks the development of large research facilities around the world.</p>
+      <div class="row">
+        <button id="epoch-compute" data-all-node class="button button-tab" type="button">Compute</button>
+        <button id="epoch-power" data-all-node class="button button-tab" type="button">IT Power</button>
+        <button id="epoch-graph" data-all-node class="button button-segmented-control" type="button"><svg width="14" height="14" aria-hidden="true"><path d="M0 0L14 14"/></svg><span id="epoch-graph-text">Graph</span></button>
+        <button id="epoch-more" data-all-node type="button" aria-expanded="false" aria-controls="expanded-data">Show more</button>
+      </div>
+      <div id="expanded-data" hidden><button id="expanded-owner" data-dynamic-node type="button">Filter by owner</button><a id="expanded-details" data-dynamic-node href="#details">Explore facility details</a></div>
+    </section>
+    <section id="workflow-example">
+      <h2>Workflow editor example</h2>
+      <p id="workflow-body">The workflow editor keeps its application controls separate from the documentation content.</p>
+      <aside><div role="menu" aria-label="Workflow menu">
+        <button role="menuitem" id="workflow-overview" data-all-node type="button">Overview</button>
+        <a role="menuitem" id="workflow-credentials" data-all-node href="#credentials">Credentials</a>
+        <button role="menuitem" id="workflow-executions" data-all-node type="button">Executions</button>
+      </div></aside>
+      <div class="row"><button id="workflow-save" data-all-node type="button">Save workflow</button><button id="workflow-portal" data-all-node type="button" aria-haspopup="menu">Open actions</button></div>
+    </section>
+    <section id="tree-example">
+      <h2>Project explorer example</h2>
+      <div role="tablist" aria-label="Project views"><button role="tab" id="tab-files" data-all-node aria-selected="true" type="button">Project files</button><button role="tab" id="tab-history" data-all-node aria-selected="false" type="button">Version history</button></div>
+      <div role="tree" aria-label="Project files"><div role="treeitem" id="tree-root" aria-expanded="false"><span id="tree-label" data-all-node>Research documents</span><button id="tree-expand" data-all-node type="button">Expand folder</button><div role="group" id="tree-children" hidden><div role="treeitem"><span id="tree-child" data-dynamic-node>Annual summary</span></div></div></div></div>
+      <div role="tabpanel" id="tab-panel"><p id="project-body">Select a project view to inspect the available documents and their revision history.</p></div>
+    </section>
+    <section id="protected-example">
+      <h2>Protected content</h2>
+      <label id="input-label" data-all-node for="search">Search projects</label>
+      <input id="search" data-protected value="private input unchanged" placeholder="Enter private search">
+      <textarea id="editor" data-protected>Private editor text remains untouched.</textarea>
+      <div id="editable" data-protected contenteditable="true">Editable draft remains untouched.</div>
+      <pre id="source-code" data-protected><code>const message = "Do not translate source code";</code></pre>
+      <p id="notranslate" data-protected class="notranslate">Explicit translation exclusion remains untouched.</p>
+      <p id="translate-no" data-protected translate="no">Another explicit exclusion remains untouched.</p>
+      <div id="invisible" data-protected hidden>Hidden application content remains untouched.</div>
+      <svg id="diagram" data-protected width="200" height="28"><text x="0" y="20">Vector drawing text</text></svg>
+      <div id="math" data-protected class="katex">a + b = c</div>
+    </section>
+  </main>
+  <footer class="section-full"><section class="footer-content"><h2 class="tagline" id="footer-tagline" data-all-node>Research for the benefit of society</h2><p class="newsletter-title" id="footer-newsletter" data-all-node>Get the latest research in your inbox</p><a class="button" id="footer-subscribe" data-all-node href="#subscribe">Subscribe</a><div class="row"><a id="footer-about" data-all-node href="#about">About us</a><a id="footer-policy" data-all-node href="#privacy">Privacy policy</a></div></section></footer>
+  <script>
+    window.fixtureEvents = {save: 0, contact: 0, graph: 0, history: 0, portal: 0, expansion: 0};
+    document.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {e.preventDefault();if(a.id === 'epoch-contact') window.fixtureEvents.contact++;}));
+    document.querySelector('#workflow-save').addEventListener('click', () => window.fixtureEvents.save++);
+    document.querySelector('#epoch-graph').addEventListener('click', () => window.fixtureEvents.graph++);
+    document.querySelector('#epoch-more').addEventListener('click', e => {document.querySelector('#expanded-data').hidden = false;e.currentTarget.setAttribute('aria-expanded','true');window.fixtureEvents.expansion++;});
+    document.querySelector('#tree-expand').addEventListener('click', () => {document.querySelector('#tree-root').setAttribute('aria-expanded','true');document.querySelector('#tree-children').hidden = false;});
+    document.querySelector('#tab-history').addEventListener('click', e => {e.currentTarget.setAttribute('aria-selected','true');document.querySelector('#tab-files').setAttribute('aria-selected','false');window.fixtureEvents.history++;});
+    document.querySelector('#workflow-portal').addEventListener('click', () => {if(document.querySelector('#portal-menu')) return; const menu = document.createElement('div');menu.id='portal-menu';menu.setAttribute('role','menu');menu.innerHTML='<button id="portal-duplicate" data-dynamic-node role="menuitem" type="button">Duplicate workflow</button><button id="portal-archive" data-dynamic-node role="menuitem" type="button">Archive workflow</button>';menu.querySelector('#portal-duplicate').addEventListener('click',()=>window.fixtureEvents.portal++);document.body.append(menu);});
+  </script>
+</body>
+</html>

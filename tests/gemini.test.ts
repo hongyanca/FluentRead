@@ -16,6 +16,13 @@ const {mockConfig} = vi.hoisted(() => ({
 vi.mock('@/src/services/config/store', () => ({config: mockConfig}));
 
 import gemini from '@/src/providers/translation/gemini';
+import {customModelString} from '@/src/core/config/catalog';
+import {Config, normalizeConfig} from '@/src/core/config/model';
+import {prepareConfigForImport} from '@/src/core/config/transfer';
+import {
+    attachTranslationProviderConfig,
+    createTranslationProviderConfigSnapshot,
+} from '@/src/services/translation/requestSnapshot';
 
 const fetchMock = vi.fn<typeof fetch>();
 
@@ -61,7 +68,7 @@ describe('Gemini adapter credential transport', () => {
         expect(headers.get('Content-Type')).toBe('application/json');
     });
 
-    it('does not forward the Google API key to a custom proxy', async () => {
+    it('does not add the Google API key to a custom proxy without a key placeholder', async () => {
         mockConfig.proxy.gemini = 'https://proxy.example/v1/generate';
         fetchMock.mockResolvedValue(mockResponse({
             candidates: [{content: {parts: [{text: '代理译文'}]}}],
@@ -74,6 +81,108 @@ describe('Gemini adapter credential transport', () => {
         const headers = init?.headers as Headers;
         expect(headers.has('x-goog-api-key')).toBe(false);
         expect(JSON.stringify([...headers.entries()])).not.toContain('google-secret-key');
+    });
+
+    it('PR #495: expands proxy model and key placeholders and encodes reserved characters', async () => {
+        mockConfig.model.gemini = 'custom/model +中文';
+        mockConfig.token.gemini = 'key&extra=value?# +/%';
+        mockConfig.proxy.gemini = '  https://proxy.example/v1beta/models/{model}:generateContent?key={key}&tenant=reader  ';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '代理译文'}]}}]}));
+
+        await expect(gemini({origin: 'source', serviceOverride: 'gemini'})).resolves.toBe('代理译文');
+
+        expect(fetchMock).toHaveBeenCalledOnce();
+        const [requestUrl, init] = fetchMock.mock.calls[0]!;
+        const url = new URL(String(requestUrl));
+        expect(url.pathname).toBe('/v1beta/models/custom%2Fmodel%20%2B%E4%B8%AD%E6%96%87:generateContent');
+        expect([...url.searchParams.entries()]).toEqual([
+            ['key', 'key&extra=value?# +/%'], ['tenant', 'reader'],
+        ]);
+        expect(url.hash).toBe('');
+        expect((init?.headers as Headers).has('x-goog-api-key')).toBe(false);
+        expect(init?.method).toBe('POST');
+        expect(JSON.parse(String(init?.body)).contents).toBeDefined();
+    });
+
+    it.each([
+        {override: undefined, expected: 'configured/custom-model'},
+        {override: 'request/model', expected: 'request/model'},
+    ])('uses the effective custom model in a proxy template with override=$override', async ({override, expected}) => {
+        mockConfig.model.gemini = customModelString;
+        mockConfig.customModel.gemini = 'configured/custom-model';
+        mockConfig.proxy.gemini = 'https://proxy.example/models/{model}:generateContent';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini({origin: 'source', serviceOverride: 'gemini', modelOverride: override});
+
+        expect(fetchMock.mock.calls[0]![0]).toBe(`https://proxy.example/models/${encodeURIComponent(expected)}:generateContent`);
+        expect(String(fetchMock.mock.calls[0]![0])).not.toContain('google-secret-key');
+    });
+
+    it.each(['', undefined])('replaces a key placeholder with an empty value when the key is %s', async key => {
+        if (key === undefined) delete mockConfig.token.gemini;
+        else mockConfig.token.gemini = key;
+        mockConfig.proxy.gemini = 'https://proxy.example/generate?key={key}';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini({origin: 'source', serviceOverride: 'gemini'});
+
+        const [requestUrl, init] = fetchMock.mock.calls[0]!;
+        expect(requestUrl).toBe('https://proxy.example/generate?key=');
+        expect((init?.headers as Headers).has('x-goog-api-key')).toBe(false);
+    });
+
+    it('keeps a complete proxy URL and its inline key unchanged', async () => {
+        mockConfig.proxy.gemini = 'https://proxy.example/models/fixed:generateContent?key=inline%2Bkey';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini({origin: 'source', serviceOverride: 'gemini', modelOverride: 'another-model'});
+
+        expect(fetchMock.mock.calls[0]![0]).toBe(mockConfig.proxy.gemini);
+    });
+
+    it('treats a whitespace-only proxy as the official endpoint', async () => {
+        mockConfig.proxy.gemini = ' \n\t ';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini({origin: 'source', serviceOverride: 'gemini'});
+
+        const [requestUrl, init] = fetchMock.mock.calls[0]!;
+        expect(requestUrl).toBe('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent');
+        expect((init?.headers as Headers).get('x-goog-api-key')).toBe('google-secret-key');
+    });
+
+    it('uses frozen model, proxy and key values when global configuration changes', async () => {
+        const source = normalizeConfig({...new Config(), service: 'gemini',
+            model: {gemini: 'snapshot-model'}, token: {gemini: 'snapshot-key'},
+            proxy: {gemini: 'https://snapshot.example/models/{model}?key={key}'},
+        });
+        const request = attachTranslationProviderConfig({origin: 'source', serviceOverride: 'gemini'},
+            createTranslationProviderConfigSnapshot(source));
+        source.token.gemini = 'changed-source-key';
+        mockConfig.proxy.gemini = 'https://changed.example/generate';
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini(request);
+
+        expect(fetchMock.mock.calls[0]![0]).toBe('https://snapshot.example/models/snapshot-model?key=snapshot-key');
+    });
+
+    it('uses the retained Gemini key when an imported proxy template explicitly contains {key}', async () => {
+        const current = normalizeConfig({...new Config(), service: 'gemini', token: {gemini: 'saved-test-key'}});
+        const imported = prepareConfigForImport({on: true, service: 'gemini', display: 1, from: 'auto', to: 'zh-Hans',
+            proxy: {gemini: 'https://imported.example/models/{model}?key={key}'},
+        }, current);
+        const request = attachTranslationProviderConfig({origin: 'source', serviceOverride: 'gemini'},
+            createTranslationProviderConfigSnapshot(imported));
+        fetchMock.mockResolvedValue(mockResponse({candidates: [{content: {parts: [{text: '译文'}]}}]}));
+
+        await gemini(request);
+
+        expect(imported.token.gemini).toBe('saved-test-key');
+        const url = new URL(String(fetchMock.mock.calls[0]![0]));
+        expect(url.origin).toBe('https://imported.example');
+        expect(url.searchParams.get('key')).toBe('saved-test-key');
     });
 
     it('surfaces only HTTP status metadata when a provider body contains a sentinel', async () => {

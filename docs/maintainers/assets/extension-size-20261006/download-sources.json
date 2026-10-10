@@ -1,0 +1,95 @@
+{
+  "scope": "Anonymous fixed metadata/dictionary GETs from this machine; not mainland carrier or all large-model transfers.",
+  "results": [
+    {
+      "kind": "tts",
+      "url": "https://huggingface.co/onnx-community/Kokoro-82M-v1.1-zh-ONNX/resolve/6cc0f0d2ebe369a68b0df87c2b65c1af8c0ac3e3/config.json",
+      "status": 200,
+      "bytes": 44,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "df34b4f930b23447cd4dc410fabfb42eb3f24e803e6c3f97d618fb359380a36f"
+    },
+    {
+      "kind": "tts",
+      "url": "https://hf-mirror.com/onnx-community/Kokoro-82M-v1.1-zh-ONNX/resolve/6cc0f0d2ebe369a68b0df87c2b65c1af8c0ac3e3/config.json",
+      "status": 200,
+      "bytes": 44,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "df34b4f930b23447cd4dc410fabfb42eb3f24e803e6c3f97d618fb359380a36f"
+    },
+    {
+      "kind": "tts",
+      "url": "https://hf-mirror.net/onnx-community/Kokoro-82M-v1.1-zh-ONNX/resolve/6cc0f0d2ebe369a68b0df87c2b65c1af8c0ac3e3/config.json",
+      "status": 200,
+      "bytes": 44,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "df34b4f930b23447cd4dc410fabfb42eb3f24e803e6c3f97d618fb359380a36f"
+    },
+    {
+      "kind": "whisper",
+      "url": "https://huggingface.co/onnx-community/whisper-tiny/resolve/main/config.json",
+      "status": 200,
+      "bytes": 2243,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+    },
+    {
+      "kind": "whisper",
+      "url": "https://hf-mirror.com/onnx-community/whisper-tiny/resolve/main/config.json",
+      "status": 200,
+      "bytes": 2243,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+    },
+    {
+      "kind": "whisper",
+      "url": "https://hf-mirror.net/onnx-community/whisper-tiny/resolve/main/config.json",
+      "status": 200,
+      "bytes": 2243,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+    },
+    {
+      "kind": "paddle",
+      "url": "https://huggingface.co/snowfluke/ppu-paddle-ocr-models/resolve/bf1d5edb0335d3262be7caf13f766ba274b4cadd/recognition/ppocrv6_dict.txt",
+      "status": 200,
+      "bytes": 74948,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "41557512862dfe31970cf22407742b629725461dd84c0d8771bde9c87c2202c8"
+    },
+    {
+      "kind": "paddle",
+      "url": "https://hf-mirror.com/snowfluke/ppu-paddle-ocr-models/resolve/bf1d5edb0335d3262be7caf13f766ba274b4cadd/recognition/ppocrv6_dict.txt",
+      "status": 200,
+      "bytes": 74948,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "41557512862dfe31970cf22407742b629725461dd84c0d8771bde9c87c2202c8"
+    },
+    {
+      "kind": "paddle",
+      "url": "https://hf-mirror.net/snowfluke/ppu-paddle-ocr-models/resolve/bf1d5edb0335d3262be7caf13f766ba274b4cadd/recognition/ppocrv6_dict.txt",
+      "status": 200,
+      "bytes": 74948,
+      "contentType": "text/plain; charset=utf-8",
+      "valid": true,
+      "sha256": "41557512862dfe31970cf22407742b629725461dd84c0d8771bde9c87c2202c8"
+    },
+    {
+      "kind": "whisper",
+      "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/config.json",
+      "status": 200,
+      "bytes": 2243,
+      "contentType": "application/json",
+      "valid": true,
+      "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+    }
+  ]
+}

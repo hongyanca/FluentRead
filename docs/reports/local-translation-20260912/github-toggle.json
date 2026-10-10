@@ -1,0 +1,45 @@
+{
+  "url": "https://github.com/Tencent-Hunyuan/HY-MT",
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "neighbors": [
+    0,
+    0,
+    0
+  ],
+  "restoredDomMatches": true,
+  "outputs": [
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "我们发布了Hy-MT2系列翻译模型,提高了业绩和出色的教学能力。 与新模型收藏的链接是: http://huggingface.co/columings/tencent/hy-mt2 https://huggkingface.co/minicons/tencence/hy -mt2。",
+      "links": [
+        "https://huggingface.co/collections/tencent/hy-mt2",
+        "https://huggingface.co/collections/tencent/hy-mt2"
+      ]
+    },
+    {
+      "count": 0,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "",
+      "links": [
+        "https://huggingface.co/collections/tencent/hy-mt2"
+      ]
+    },
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "我们发布了Hy-MT2系列翻译模型,提高了业绩和出色的教学能力。 与新模型收藏的链接是: http://huggingface.co/columings/tencent/hy-mt2 https://huggkingface.co/minicons/tencence/hy -mt2。",
+      "links": [
+        "https://huggingface.co/collections/tencent/hy-mt2",
+        "https://huggingface.co/collections/tencent/hy-mt2"
+      ]
+    }
+  ]
+}

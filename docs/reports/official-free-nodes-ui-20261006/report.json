@@ -1,0 +1,310 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/.output/chrome-mv3",
+  "evidenceBoundary": "Production extension UI with controlled connection-message results; provider behavior is tested separately.",
+  "caseCoverage": [
+    "fresh configuration enables 15 official providers",
+    "15 official services, states and allocation visible without expansion; email outside cards",
+    "success and failure duration; disabled-provider results; all-provider checks keep enabled list",
+    "retest immediately clears old durations",
+    "priority reorder and valid email persist after immediate close; partial email stays local",
+    "separate DeepLX nature badges in the standalone service directory and details; Chinese/English desktop, narrow and dark layouts",
+    "equal card heights in Chinese/English at desktop and narrow widths"
+  ],
+  "screenshots": [
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-desktop.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-1440.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-1024.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-820.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-390.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-390-dark.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/checks-390-dark-failures.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/reopened-settings.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/english-1440.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/english-390.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-zh-CN-desktop.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-zh-CN-390.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-zh-CN-390-dark.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-en-US-desktop.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-en-US-390.png",
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-ui-20261006/deeplx-badge-en-US-390-dark.png"
+  ],
+  "consoleErrors": [],
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    },
+    {
+      "width": 820,
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    },
+    {
+      "width": 1440,
+      "language": "en-US",
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    },
+    {
+      "width": 390,
+      "language": "en-US",
+      "overflow": false,
+      "cardOverflow": false,
+      "cardHeights": [
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88,
+        88
+      ]
+    }
+  ],
+  "browserPath": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    }
+  },
+  "results": [
+    {
+      "id": "microsoft",
+      "status": "success",
+      "duration": "35 ms"
+    },
+    {
+      "id": "transmart",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "volcengineFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "google",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "youdaoFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "icibaFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "yandexFree",
+      "status": "error",
+      "duration": "72 ms",
+      "error": "YandexYandex 网络连接失败，请检查网络后重试或停用此服务"
+    },
+    {
+      "id": "myMemory",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "sogouFree",
+      "status": "error",
+      "duration": "75 ms",
+      "error": "搜狗翻译搜狗翻译未返回译文（错误码 s10）；请稍后重试或停用此服务"
+    },
+    {
+      "id": "reversoFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "apertiumFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "alibabaFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "modernMtFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "laraFree",
+      "status": "success",
+      "duration": "1200 ms"
+    },
+    {
+      "id": "lingvanexFree",
+      "status": "error",
+      "duration": "75 ms",
+      "error": "LingvanexLingvanex 官网拒绝自动访问，请稍后重试或停用此服务: 403"
+    }
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "crossPageSync": true,
+  "persistenceCases": [
+    {
+      "setting": "priority order",
+      "reopened": [
+        "transmart",
+        "microsoft",
+        "volcengineFree",
+        "google",
+        "youdaoFree",
+        "icibaFree",
+        "yandexFree",
+        "myMemory",
+        "sogouFree",
+        "reversoFree",
+        "apertiumFree",
+        "alibabaFree",
+        "modernMtFree",
+        "laraFree",
+        "lingvanexFree"
+      ]
+    },
+    {
+      "setting": "MyMemory email",
+      "writes": [
+        "first@example.test",
+        "contact@example.test"
+      ],
+      "reopened": "contact@example.test"
+    }
+  ]
+}

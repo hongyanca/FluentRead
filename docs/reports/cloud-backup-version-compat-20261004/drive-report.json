@@ -1,0 +1,46 @@
+{
+  "sourceCommit": "e78f67d6dd12a251ae16c2324a8584f353ae549e",
+  "ok": true,
+  "evidence": "production extension with synthetic identity and Drive responses; no real account",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "cases": [
+    "production build retains the official extension ID",
+    "production configuration persistence 1",
+    "opening settings makes no authorization request",
+    "preview never writes",
+    "first save and readback work without v3 ETag headers",
+    "production configuration persistence 2",
+    "second-save review displays the changed setting",
+    "second save uses matching v2 ETag and conditional PUT",
+    "repeated sync recognizes identical settings",
+    "identical sync makes no upload",
+    "production configuration persistence 3",
+    "412 conflict preserves the existing backup",
+    "missing ETag opens an explicit restore-only preview",
+    "restore notice has a clear gap before review content",
+    "differences and restore action remain available",
+    "restore-only preview skips unavailable operation choices",
+    "cancel keeps device changes",
+    "restore without ETag applies cloud configuration",
+    "read-only cancellation and restoration never write",
+    "production configuration persistence 4",
+    "restore-only warning is English",
+    "390px restore-only preview has no horizontal overflow",
+    "completed, failed and cancelled transactions clear authorization",
+    "no unhandled production page errors"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "drive-v2-change-review.png",
+    "drive-restore-only-desktop.png",
+    "drive-restore-only-english-mobile.png"
+  ]
+}

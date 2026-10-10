@@ -1,9 +1,12 @@
 import {describe, expect, it, vi} from 'vitest';
 
 import {
+    CONFIG_PERSIST_BATCH_MESSAGE_TYPE,
     CONFIG_PERSIST_MESSAGE_TYPE,
     createConfigMutationCoordinator,
+    createConfigPersistenceBatchHandler,
     createConfigPersistenceHandler,
+    type ConfigPersistenceBatchMessage,
     type ConfigPersistenceDependencies,
 } from '@/src/app/background/handlers/configPersistence';
 import {createBackgroundMessageRouter} from '@/src/app/background/messageRouter';
@@ -470,5 +473,244 @@ describe('background config persistence handler', () => {
         await expect(request).resolves.toEqual({success: true, revision: 5});
         await followingRestore;
         expect(revision).toBe(6);
+    });
+});
+
+describe('background config persistence batch handler', () => {
+    const context = {sender: {url: 'chrome-extension://extension-id/popup.html'}};
+    const firstPatch = {sequence: 1, config: {marker: 'first'}, expected: {marker: 'current'}};
+    const secondPatch = {sequence: 2, config: {marker: 'second'}, expected: {marker: 'first'}};
+    const batchMessage = {
+        type: CONFIG_PERSIST_BATCH_MESSAGE_TYPE,
+        clientId: 'popup-batch',
+        patches: [firstPatch, secondPatch],
+    };
+
+    function createStatefulFixture(beforeSave?: () => Promise<void>) {
+        let current: TestConfig = {marker: 'current', videoTranslationEnabled: true, theme: 'dark'};
+        let revision = 4;
+        const dependencies = createDependencies({
+            getCurrentConfig: () => current,
+            getCurrentRevision: () => revision,
+            runMutation: createConfigMutationCoordinator().run,
+            prepareConfigPatchRequest: vi.fn((config, expected, currentConfig, allowCredentialUpdates) => {
+                if (Object.entries(expected).some(([key, value]) => Reflect.get(currentConfig, key) !== value)) {
+                    throw new Error('配置字段已更新，请同步后重试');
+                }
+                return {...currentConfig, ...config, allowCredentialUpdates};
+            }),
+            saveConfig: vi.fn(async (config) => {
+                await beforeSave?.();
+                current = config;
+                revision += 1;
+            }),
+        });
+        const singleHandler = createConfigPersistenceHandler(dependencies);
+        const singleHandle = vi.spyOn(singleHandler, 'handle');
+        const batchHandler = createConfigPersistenceBatchHandler(singleHandler);
+        return {dependencies, singleHandler, singleHandle, batchHandler};
+    }
+
+    it('共享单条处理器在途前驱的结果，再应用依赖该前驱的后继补丁', async () => {
+        let releaseSave!: () => void;
+        const saveGate = new Promise<void>((resolve) => { releaseSave = resolve; });
+        const {dependencies, singleHandler, singleHandle, batchHandler} = createStatefulFixture(() => saveGate);
+        const first = singleHandler.handle({
+            type: CONFIG_PERSIST_MESSAGE_TYPE,
+            mode: 'patch',
+            clientId: batchMessage.clientId,
+            ...firstPatch,
+        }, context);
+        await vi.waitFor(() => expect(dependencies.saveConfig).toHaveBeenCalledOnce());
+
+        const batch = batchHandler.handle(batchMessage, context);
+        await vi.waitFor(() => expect(singleHandle).toHaveBeenCalledTimes(2));
+        expect(dependencies.prepareConfigPatchRequest).toHaveBeenCalledOnce();
+        expect(dependencies.saveConfig).toHaveBeenCalledOnce();
+        releaseSave();
+
+        await expect(first).resolves.toEqual({success: true, revision: 5});
+        await expect(batch).resolves.toEqual({success: true, revision: 6});
+        expect(singleHandle).toHaveBeenCalledTimes(3);
+        expect(singleHandle.mock.calls.every(([, senderContext]) => senderContext === context)).toBe(true);
+        expect(dependencies.saveConfig).toHaveBeenCalledTimes(2);
+        expect(dependencies.getCurrentConfig()).toEqual({
+            marker: 'second',
+            videoTranslationEnabled: true,
+            theme: 'dark',
+            allowCredentialUpdates: true,
+        });
+        expect(dependencies.prepareConfigSaveRequest).not.toHaveBeenCalled();
+    });
+
+    it('已经提交的前驱去重，后继仍通过同一处理器保存并返回最终 revision', async () => {
+        const {dependencies, singleHandler, singleHandle, batchHandler} = createStatefulFixture();
+        await singleHandler.handle({
+            type: CONFIG_PERSIST_MESSAGE_TYPE,
+            mode: 'patch',
+            clientId: batchMessage.clientId,
+            ...firstPatch,
+        }, context);
+        const router = createBackgroundMessageRouter([singleHandler, batchHandler]);
+
+        await expect(router.dispatch(batchMessage, context)).resolves.toEqual({
+            handled: true,
+            response: {success: true, revision: 6},
+        });
+        expect(singleHandle).toHaveBeenCalledTimes(3);
+        expect(dependencies.saveConfig).toHaveBeenCalledTimes(2);
+        expect(dependencies.prepareConfigPatchRequest).toHaveBeenCalledTimes(2);
+        expect(dependencies.getCurrentConfig().marker).toBe('second');
+    });
+
+    it('批次中途 CAS 失败后停止后续补丁，保留已提交前驱且不回退为整份替换', async () => {
+        const {dependencies, singleHandle, batchHandler} = createStatefulFixture();
+
+        await expect(batchHandler.handle({
+            ...batchMessage,
+            patches: [
+                firstPatch,
+                {...secondPatch, expected: {marker: 'stale-value'}},
+                {sequence: 3, config: {marker: 'must-not-save'}, expected: {marker: 'second'}},
+            ],
+        }, context)).rejects.toThrow('配置字段已更新');
+
+        expect(singleHandle).toHaveBeenCalledTimes(2);
+        expect(dependencies.saveConfig).toHaveBeenCalledOnce();
+        expect(dependencies.getCurrentConfig().marker).toBe('first');
+        expect(dependencies.prepareConfigSaveRequest).not.toHaveBeenCalled();
+        await expect(batchHandler.handle(batchMessage, context)).resolves.toEqual({success: true, revision: 6});
+        expect(dependencies.saveConfig).toHaveBeenCalledTimes(2);
+        expect(dependencies.getCurrentConfig().marker).toBe('second');
+    });
+
+    it('前驱存储失败时共享失败并停止后续补丁', async () => {
+        let releaseSave!: () => void;
+        const saveGate = new Promise<void>((resolve) => { releaseSave = resolve; });
+        const {dependencies, singleHandler, singleHandle, batchHandler} = createStatefulFixture(async () => {
+            await saveGate;
+            throw new Error('storage unavailable');
+        });
+        const first = singleHandler.handle({
+            type: CONFIG_PERSIST_MESSAGE_TYPE,
+            mode: 'patch',
+            clientId: batchMessage.clientId,
+            ...firstPatch,
+        }, context);
+        await vi.waitFor(() => expect(dependencies.saveConfig).toHaveBeenCalledOnce());
+        const batch = batchHandler.handle(batchMessage, context);
+        const outcomes = Promise.allSettled([first, batch]);
+        releaseSave();
+
+        expect(await outcomes).toEqual([
+            {status: 'rejected', reason: new Error('storage unavailable')},
+            {status: 'rejected', reason: new Error('storage unavailable')},
+        ]);
+        expect(singleHandle).toHaveBeenCalledTimes(2);
+        expect(dependencies.saveConfig).toHaveBeenCalledOnce();
+        expect(dependencies.getCurrentConfig().marker).toBe('current');
+    });
+
+    it('content sender 原样传递且每个补丁都没有凭据更新权限', async () => {
+        const {dependencies, singleHandle, batchHandler} = createStatefulFixture();
+        const contentContext = {
+            sender: {id: 'extension-id', url: 'https://example.com/article', tab: {id: 7}, frameId: 3},
+        };
+
+        await expect(batchHandler.handle(batchMessage, contentContext)).resolves.toEqual({success: true, revision: 6});
+
+        expect(singleHandle.mock.calls.every(([, senderContext]) => senderContext === contentContext)).toBe(true);
+        expect(dependencies.isExtensionUrl).toHaveBeenCalledTimes(2);
+        expect(dependencies.isExtensionUrl).toHaveBeenCalledWith(contentContext.sender.url);
+        expect(vi.mocked(dependencies.prepareConfigPatchRequest).mock.calls.map((call) => call[3])).toEqual([false, false]);
+        expect(dependencies.getCurrentConfig().allowCredentialUpdates).toBe(false);
+        expect(dependencies.prepareConfigSaveRequest).not.toHaveBeenCalled();
+    });
+
+    it('接受普通或 null 原型对象、不同字段顺序和最多 256 条严格递增补丁', async () => {
+        const {dependencies, batchHandler} = createStatefulFixture();
+        const patches = Array.from({length: 256}, (_, index) => Object.assign(Object.create(null), {
+            sequence: index * 2 + 1,
+            config: Object.assign(Object.create(null), {marker: `value-${index}`, theme: 'dark'}),
+            expected: {theme: 'dark', marker: index === 0 ? 'current' : `value-${index - 1}`},
+        }));
+
+        await expect(batchHandler.handle(Object.assign(Object.create(null), {
+            ...batchMessage,
+            patches,
+        }), context)).resolves.toEqual({success: true, revision: 260});
+
+        expect(dependencies.saveConfig).toHaveBeenCalledTimes(256);
+        expect(dependencies.getCurrentConfig().marker).toBe('value-255');
+    });
+
+    const invalidMessages: Array<[string, unknown]> = [
+        ['null payload', null],
+        ['array payload', []],
+        ['unexpected type', {...batchMessage, type: CONFIG_PERSIST_MESSAGE_TYPE}],
+        ['inherited payload', Object.assign(Object.create({extra: true}), batchMessage)],
+        ['missing clientId', {type: CONFIG_PERSIST_BATCH_MESSAGE_TYPE, patches: [firstPatch]}],
+        ['empty clientId', {...batchMessage, clientId: '  '}],
+        ['non-string clientId', {...batchMessage, clientId: 42}],
+        ['missing patches', {type: CONFIG_PERSIST_BATCH_MESSAGE_TYPE, clientId: 'popup'}],
+        ['non-array patches', {...batchMessage, patches: {0: firstPatch}}],
+        ['empty patches', {...batchMessage, patches: []}],
+        ['oversized patches', {...batchMessage, patches: Array.from({length: 257}, (_, index) => ({...firstPatch, sequence: index + 1}))}],
+        ['extra top-level mode', {...batchMessage, mode: 'replace'}],
+        ['extra top-level config', {...batchMessage, config: {marker: 'replace'}}],
+        ['extra top-level baseRevision', {...batchMessage, baseRevision: 4}],
+        ['extra top-level symbol', {...batchMessage, [Symbol('extra')]: true}],
+        ['extra hidden top-level field', Object.defineProperty({...batchMessage}, 'extra', {value: true})],
+    ];
+    const invalidPatches: Array<[string, unknown]> = [
+        ['null patch', null],
+        ['array patch', []],
+        ['inherited patch', Object.assign(Object.create({extra: true}), secondPatch)],
+        ['missing sequence', {config: {marker: 'second'}, expected: {marker: 'first'}}],
+        ['zero sequence', {...secondPatch, sequence: 0}],
+        ['negative sequence', {...secondPatch, sequence: -1}],
+        ['fractional sequence', {...secondPatch, sequence: 1.5}],
+        ['unsafe sequence', {...secondPatch, sequence: Number.MAX_SAFE_INTEGER + 1}],
+        ['infinite sequence', {...secondPatch, sequence: Infinity}],
+        ['NaN sequence', {...secondPatch, sequence: NaN}],
+        ['non-numeric sequence', {...secondPatch, sequence: '2'}],
+        ['duplicate sequence', {...secondPatch, sequence: 1}],
+        ['missing config', {sequence: 2, expected: {marker: 'first'}}],
+        ['null config', {...secondPatch, config: null}],
+        ['array config', {...secondPatch, config: []}],
+        ['class config', {...secondPatch, config: new Date()}],
+        ['inherited config', {...secondPatch, config: Object.assign(Object.create({extra: true}), secondPatch.config)}],
+        ['empty config', {...secondPatch, config: {}, expected: {}}],
+        ['symbol config field', {...secondPatch, config: {...secondPatch.config, [Symbol('extra')]: true}}],
+        ['missing expected', {sequence: 2, config: {marker: 'second'}}],
+        ['null expected', {...secondPatch, expected: null}],
+        ['array expected', {...secondPatch, expected: []}],
+        ['class expected', {...secondPatch, expected: new Map()}],
+        ['inherited expected', {...secondPatch, expected: Object.assign(Object.create({extra: true}), secondPatch.expected)}],
+        ['empty expected', {...secondPatch, expected: {}}],
+        ['different expected fields', {...secondPatch, expected: {theme: 'dark'}}],
+        ['extra expected field', {...secondPatch, expected: {marker: 'first', theme: 'dark'}}],
+        ['extra patch mode', {...secondPatch, mode: 'replace'}],
+        ['extra patch type', {...secondPatch, type: CONFIG_PERSIST_MESSAGE_TYPE}],
+        ['extra patch clientId', {...secondPatch, clientId: 'other-client'}],
+        ['extra patch baseRevision', {...secondPatch, baseRevision: 4}],
+        ['extra patch symbol', {...secondPatch, [Symbol('extra')]: true}],
+    ];
+
+    it.each([
+        ...invalidMessages,
+        ...invalidPatches.map(([name, patch]): [string, unknown] => [name, {...batchMessage, patches: [firstPatch, patch]}]),
+        ['descending sequence', {...batchMessage, patches: [{...firstPatch, sequence: 3}, secondPatch]}],
+        ['sparse patches', {...batchMessage, patches: [firstPatch, , secondPatch]}],
+    ])('完整预校验拒绝 %s，任何单条 handler 和写入都未开始', async (_name, message) => {
+        const {dependencies, singleHandle, batchHandler} = createStatefulFixture();
+
+        await expect(batchHandler.handle(message as ConfigPersistenceBatchMessage, context)).rejects.toThrow(TypeError);
+
+        expect(singleHandle).not.toHaveBeenCalled();
+        expect(dependencies.prepareConfigPatchRequest).not.toHaveBeenCalled();
+        expect(dependencies.prepareConfigSaveRequest).not.toHaveBeenCalled();
+        expect(dependencies.saveConfig).not.toHaveBeenCalled();
+        expect(dependencies.getCurrentConfig().marker).toBe('current');
     });
 });

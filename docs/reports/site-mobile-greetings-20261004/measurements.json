@@ -1,0 +1,364 @@
+[
+  {
+    "label": "restored-zh-390",
+    "actions": {
+      "height": 48.5,
+      "width": 350,
+      "x": 20,
+      "y": 460.984375
+    },
+    "featureTop": 573.484375,
+    "heading": {
+      "height": 90.390625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 505.484375,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 350,
+      "x": 20,
+      "y": 346.390625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 390
+  },
+  {
+    "label": "restored-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "refined-zh-320",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 320,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-zh-390",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 390,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-zh-430",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 430,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-zh-640",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 640,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-zh-760",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 760,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "refined-zh-390-geometry",
+    "actions": {
+      "height": 48.5,
+      "width": 350,
+      "x": 20,
+      "y": 460.984375
+    },
+    "featureTop": 573.484375,
+    "heading": {
+      "height": 90.390625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 505.484375,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 350,
+      "x": 20,
+      "y": 346.390625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 390
+  },
+  {
+    "label": "refined-en-320",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 320,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  },
+  {
+    "label": "refined-en-390",
+    "decorative": "true",
+    "overflow": 0,
+    "ribbonCount": 0,
+    "width": 390,
+    "greetingCount": 10,
+    "allVisible": true,
+    "allWithinHero": true,
+    "noContentOverlap": true,
+    "fonts": [
+      "14px",
+      "13px",
+      "15px",
+      "11px",
+      "12px"
+    ],
+    "colors": [
+      "rgb(120, 146, 141)",
+      "rgb(137, 131, 160)",
+      "rgb(154, 126, 145)",
+      "rgb(157, 137, 111)",
+      "rgb(142, 131, 166)",
+      "rgb(129, 150, 139)",
+      "rgb(132, 145, 155)",
+      "rgb(127, 144, 158)",
+      "rgb(155, 139, 115)",
+      "rgb(161, 132, 144)"
+    ]
+  }
+]

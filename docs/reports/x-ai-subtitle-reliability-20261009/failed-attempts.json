@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9ce9d7b5b",
+  "discardedEvidence": [
+    {
+      "name": "baseline-home-recovery",
+      "processSuccess": true,
+      "reason": "Existing main output had matching timestamps but no immutable build SHA; replaced with archive-based baseline evidence"
+    }
+  ],
+  "attempts": [
+    {
+      "name": "initial-sandbox-launch",
+      "stage": "launch",
+      "productChecksStarted": false,
+      "message": "Launch Services returned kLSNoExecutableErr under the filesystem sandbox; the same focus-safe command succeeded with the task-scoped escalation"
+    },
+    {
+      "name": "mixed-baseline-tiny-base",
+      "stage": "prepare Base after six completed Tiny runs",
+      "productChecksStarted": true,
+      "processSuccess": false,
+      "completedTinyRunCount": 6,
+      "workerSha256": "792e3b0212e064cb21a235569f6811910d7c3cde91adb7844f0a604bd3617687",
+      "error": {
+        "message": "page.evaluate: Target page, context or browser has been closed",
+        "stack": "page.evaluate: Target page, context or browser has been closed\n    at main (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-video-ai-recognition-benchmark.cjs:156:38)"
+      }
+    },
+    {
+      "name": "fixed-home-recovery-launch",
+      "stage": "launch",
+      "productChecksStarted": false,
+      "processSuccess": false,
+      "error": "Error: 后台 Edge 未在 30000ms 内写入 DevToolsActivePort\n    at waitForDevToolsPort (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:300:9)\n    at async Object.launchFocusSafePersistentContext (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:471:18)\n    at async /Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-x-home-audio-recovery-test.cjs:47:13",
+      "retainedProfile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-NwZVHg",
+      "observedTaskBrowser": {
+        "pid": 72743,
+        "startedAt": "2026-10-09 02:16:11 +0800",
+        "cdpOwnershipReceipt": false
+      }
+    },
+    {
+      "name": "fixed-base-padded-launch",
+      "stage": "launch",
+      "productChecksStarted": false,
+      "processSuccess": false,
+      "error": {
+        "message": "后台 Edge 未在 30000ms 内写入 DevToolsActivePort",
+        "stack": "Error: 后台 Edge 未在 30000ms 内写入 DevToolsActivePort\n    at waitForDevToolsPort (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:300:9)\n    at async Object.launchFocusSafePersistentContext (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:471:18)\n    at async main (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-video-ai-recognition-benchmark.cjs:138:15)"
+      },
+      "cleanupLimitation": "The pre-fix benchmark cleanup removed its temporary directory after launch failed before acquiring a session. launchAttempted now prevents this. No task browser signal was sent without a CDP ownership receipt.",
+      "observedTaskBrowser": {
+        "pid": 74237,
+        "startedAt": "2026-10-09 02:19:11 +0800",
+        "profile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-asr-benchmark-jca5cE/profile",
+        "cdpOwnershipReceipt": false
+      }
+    },
+    {
+      "name": "refactored-final-metadata-only-edge-launch",
+      "stage": "launch",
+      "productChecksStarted": false,
+      "processSuccess": false,
+      "error": "Error: 后台 Edge 未在 30000ms 内写入 DevToolsActivePort\n    at waitForDevToolsPort (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:300:9)\n    at async Object.launchFocusSafePersistentContext (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:471:18)\n    at async /Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-x-home-audio-recovery-test.cjs:51:13",
+      "retainedProfile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-KdFwPB",
+      "extensionSha256": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "f3883d787c567f937e5d350200b7a4195f1020d2c8f46042ba5a9ead5101d7e4",
+        "videoTranscriptionWorker.js": "80bee67c596eb5cab68b551139ed687069a0089a1bf12d297c7229c03e5f4334",
+        "content-scripts/content.js": "89154f46e4143389fa15695937d588b96489390e8bcca3b1736fa8ad6570b465",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      },
+      "browserPath": "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      "cdpOwnershipReceipt": false
+    }
+  ]
+}

@@ -2,22 +2,38 @@ import { describe, expect, it } from 'vitest';
 import {
     canCommitInputBoxTranslation,
     getDeepActiveElement,
+    getInputBoxSelection,
     getInputBoxText,
+    getInputBoxValueAfterInsertion,
     getInputBoxValueSnapshot,
+    normalizeEditableText,
+    normalizeInputBoxTranslationInterval,
+    isEditableHost,
+    isFormControl,
     isInputElement,
     matchesInputBoxTrigger,
-    removeTriggerSymbols,
+    removeInsertedTriggerSymbols,
 } from '@/src/features/input-translation/content/inputBox';
 
 function keyEvent(key: string, code: string, shiftKey = false): KeyboardEvent {
     return { key, code, shiftKey } as KeyboardEvent;
 }
 
-function fakeElement(tagName: string, attributes: Record<string, string> = {}): HTMLElement {
+function fakeElement(
+    tagName: string,
+    attributes: Record<string, string> = {},
+    matches: {closest?: string; placeholder?: boolean} = {},
+): HTMLElement {
     return {
         tagName,
         getAttribute(name: string) {
             return attributes[name] ?? null;
+        },
+        closest(selector: string) {
+            return matches.closest && selector.includes(matches.closest) ? {} : null;
+        },
+        querySelector(selector: string) {
+            return matches.placeholder && selector.includes('data-slate-placeholder') ? {} : null;
         },
         isContentEditable: false,
         value: '',
@@ -37,35 +53,91 @@ describe('输入框快捷键', () => {
         expect(matchesInputBoxTrigger(keyEvent('_', 'Minus', true), 'triple_dash')).toBe(false);
     });
 
-    it('识别 plaintext-only 可编辑区域并跳过只读输入框', () => {
+    it('识别非敏感输入、纯文本与富文本编辑宿主，并拒绝密码、只读和代码编辑器', () => {
         expect(isInputElement(null)).toBe(false);
         expect(isInputElement({ ...fakeElement('INPUT'), disabled: true } as unknown as HTMLElement)).toBe(false);
         expect(isInputElement(fakeElement('DIV', { contenteditable: 'plaintext-only' }))).toBe(true);
         expect(isInputElement(fakeElement('INPUT'))).toBe(true);
+        expect(isInputElement({ ...fakeElement('INPUT'), type: 'password' } as unknown as HTMLElement)).toBe(false);
+        expect(isInputElement({ ...fakeElement('INPUT'), type: 'PASSWORD' } as unknown as HTMLElement)).toBe(false);
+        for (const value of ['true', 'TRUE', '']) {
+            expect(isInputElement(fakeElement('DIV', { contenteditable: value }))).toBe(true);
+        }
+        expect(isInputElement(fakeElement('DIV', { contenteditable: 'false' }))).toBe(false);
+        expect(isInputElement(fakeElement('DIV', { contenteditable: 'true', 'aria-readonly': 'true' }))).toBe(false);
+        expect(isInputElement(fakeElement('DIV', { contenteditable: 'true', 'aria-disabled': 'true' }))).toBe(false);
+        expect(isInputElement(fakeElement('DIV', { contenteditable: 'true' }, {closest: '.cm-content'}))).toBe(false);
+        expect(isInputElement(fakeElement('DIV', { contenteditable: 'true' }, {closest: '.monaco-editor'}))).toBe(false);
         expect(isInputElement({ ...fakeElement('INPUT'), type: 'button' } as unknown as HTMLElement)).toBe(false);
         expect(isInputElement({ ...fakeElement('TEXTAREA'), readOnly: true } as unknown as HTMLElement)).toBe(false);
         expect(isInputElement(fakeElement('DIV'))).toBe(false);
+        expect(isEditableHost(fakeElement('TEXTAREA'))).toBe(false);
+        expect(isFormControl(fakeElement('TEXTAREA'))).toBe(true);
+        expect(isFormControl(fakeElement('DIV', { contenteditable: 'true' }))).toBe(false);
     });
 
-    it('能穿透开放 Shadow DOM 获取真实焦点，并拒绝未知三连击类型', () => {
-        const inner = fakeElement('INPUT');
+    it('编辑宿主原文剔除零宽占位与 Slate 占位提示，并统一不换行空格', () => {
+        expect(normalizeEditableText('a\u00A0b\u200B\uFEFFc')).toBe('a bc');
+        expect(getInputBoxText({
+            ...fakeElement('DIV', { contenteditable: 'true' }),
+            innerText: 'Hello\u00A0world\uFEFF\n',
+        } as unknown as HTMLElement)).toBe('Hello world\n');
+        expect(getInputBoxText({
+            ...fakeElement('DIV', { contenteditable: 'true' }, {placeholder: true}),
+            innerText: 'Message #general',
+        } as unknown as HTMLElement)).toBe('');
+    });
+
+    it('能穿透开放 Shadow DOM 获取真实焦点，但仍拒绝其中的密码框', () => {
+        const inner = {...fakeElement('INPUT'), type: 'password'} as unknown as HTMLElement;
         const host = {
             ...fakeElement('DIV'),
             shadowRoot: { activeElement: inner },
         } as unknown as Element;
 
         expect(getDeepActiveElement({ activeElement: host } as Document)).toBe(inner);
+        expect(isInputElement(getDeepActiveElement({activeElement: host} as Document))).toBe(false);
         expect(matchesInputBoxTrigger(keyEvent('x', 'KeyX'), 'unknown' as never)).toBe(false);
     });
 
-    it('清理触发符号后保留真实输入内容', () => {
-        expect(removeTriggerSymbols('Hello   ', 'triple_space')).toBe('Hello');
-        expect(removeTriggerSymbols('Hello===', 'triple_equal')).toBe('Hello');
-        expect(removeTriggerSymbols('Hello---', 'triple_dash')).toBe('Hello');
-        expect(removeTriggerSymbols('Hello', 'ctrl_enter')).toBe('Hello');
-        expect(getInputBoxText({ ...fakeElement('DIV'), innerText: ' Hello world ' } as unknown as HTMLElement)).toBe('Hello world');
-        expect(getInputBoxText({ ...fakeElement('DIV'), textContent: ' Text fallback ' } as unknown as HTMLElement)).toBe('Text fallback');
+    it('只移除本次插入的触发符号并保留真实输入内容', () => {
+        expect(removeInsertedTriggerSymbols('Hello===', 'triple_equal', 5)).toBe('Hello=');
+        expect(removeInsertedTriggerSymbols('a==b==', 'triple_equal', 1)).toBe('ab==');
+        expect(removeInsertedTriggerSymbols('a  b', 'triple_space', 1)).toBe('ab');
+        expect(removeInsertedTriggerSymbols('a--b', 'triple_dash', 1)).toBe('ab');
+        expect(getInputBoxText({ ...fakeElement('DIV'), innerText: ' Hello world ' } as unknown as HTMLElement)).toBe(' Hello world ');
+        expect(getInputBoxText({ ...fakeElement('DIV'), textContent: ' Text fallback ' } as unknown as HTMLElement)).toBe(' Text fallback ');
         expect(getInputBoxText(fakeElement('DIV'))).toBe('');
+    });
+
+    it('根据选区计算触发键插入位置并规范化相邻间隔', () => {
+        expect(getInputBoxValueAfterInsertion('a=b', {start: 1, end: 1}, '=')).toEqual({
+            value: 'a==b',
+            selection: {start: 2, end: 2},
+        });
+        expect(normalizeInputBoxTranslationInterval(undefined)).toBe(1000);
+        expect(normalizeInputBoxTranslationInterval(199.9)).toBe(200);
+        expect(normalizeInputBoxTranslationInterval(2500)).toBe(2000);
+        expect(getInputBoxValueAfterInsertion('abc', {start: -3, end: 99}, '=')).toEqual({
+            value: '=',
+            selection: {start: 1, end: 1},
+        });
+    });
+
+    it('选区读取只服务原生输入控件，编辑宿主交给光标文本度量', () => {
+        expect(getInputBoxSelection(fakeElement('DIV', {contenteditable: 'plaintext-only'}))).toBeNull();
+        expect(getInputBoxSelection(fakeElement('DIV', {contenteditable: 'true'}))).toBeNull();
+    });
+
+    it('覆盖无效触发区间与输入框选区缺省分支', () => {
+        expect(removeInsertedTriggerSymbols('abc', 'unknown', 0)).toBe('abc');
+        expect(removeInsertedTriggerSymbols('abc', 'triple_equal', 0, 0)).toBe('abc');
+        expect(removeInsertedTriggerSymbols('abc', 'triple_equal', 1)).toBe('abc');
+        expect(getInputBoxSelection(fakeElement('INPUT'))).toEqual({start: 0, end: 0});
+        const unavailable = fakeElement('INPUT') as any;
+        unavailable.selectionStart = null;
+        unavailable.selectionEnd = null;
+        expect(getInputBoxSelection(unavailable)).toBeNull();
     });
 
     it('用原始值快照检测翻译期间的用户编辑', () => {
@@ -117,6 +189,17 @@ describe('输入框快捷键', () => {
             isEnabled: true,
             isSiteDisabled: false,
         })).toBe(true);
+        expect(canCommitInputBoxTranslation({
+            signal: controller.signal,
+            expectedValue: 'Hello',
+            currentValue: 'Hello',
+            expectedConfigGeneration: 0,
+            currentConfigGeneration: 0,
+            expectedEditGeneration: 1,
+            currentEditGeneration: 2,
+            isEnabled: true,
+            isSiteDisabled: false,
+        })).toBe(false);
     });
 
     it('输入翻译关闭后快速恢复也会永久作废旧配置 generation', () => {

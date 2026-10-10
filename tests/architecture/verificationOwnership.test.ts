@@ -1,6 +1,8 @@
 import {readdirSync, readFileSync, statSync} from 'node:fs';
 import {relative, resolve, sep} from 'node:path';
 import ts from 'typescript';
+import {Script} from 'node:vm';
+import {execFileSync} from 'node:child_process';
 import {describe, expect, it} from 'vitest';
 
 const PROJECT_ROOT = resolve(__dirname, '../..');
@@ -17,10 +19,22 @@ const PRODUCT_ROOTS = [
 const ROOT_FILES = [
     'vitest.config.ts',
     'vitest.coverage.config.ts',
+    'vitest.cloud-backup.config.ts',
     'wxt.config.ts',
 ] as const;
+const PRODUCT_TOOL_SCRIPTS = [
+    'scripts/build-product-assets.cjs', 'scripts/capture-product-assets.cjs',
+    'scripts/package-product-kit.cjs', 'scripts/verify-product-site.cjs', 'scripts/verify-support-ui.cjs',
+];
+const DOCS_TOOL_SCRIPTS = [
+    'scripts/capture-docs-ui.cjs',
+    'scripts/verify-brand-copy.mjs',
+    'scripts/verify-docs-build.mjs',
+    'scripts/verify-storybook-build.mjs',
+];
 
 type VerificationOwner =
+    | 'brand-copy-functional'
     | 'chrome-firefox-build'
     | 'config-storage-functional'
     | 'document-browser-functional'
@@ -29,6 +43,7 @@ type VerificationOwner =
     | 'isolated-browser-regression'
     | 'strict-v8-coverage'
     | 'test-infrastructure-contract'
+    | 'thunderbird-build'
     | 'userscript-build';
 
 interface OwnedFile {
@@ -64,9 +79,29 @@ function listFiles(directory: string): string[] {
 }
 
 function coverageSourcePaths(): Set<string> {
-    const source = readFileSync(projectPath('vitest.coverage.config.ts'), 'utf8');
-    const paths = source.match(/['"]src\/[^'"]+\.ts['"]/gu) ?? [];
-    return new Set(paths.map((path) => path.slice(1, -1)));
+    const file = projectPath('vitest.coverage.config.ts');
+    const sourceFile = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const declaration = sourceFile.statements.find(ts.isExportAssignment);
+    if (!declaration || !ts.isCallExpression(declaration.expression)
+        || !ts.isObjectLiteralExpression(declaration.expression.arguments[0])) {
+        throw new Error('Strict coverage configuration must export defineConfig with an object');
+    }
+    const property = (object: ts.ObjectLiteralExpression, name: string): ts.Expression => {
+        const entry = object.properties.find((node) => ts.isPropertyAssignment(node)
+            && (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) && node.name.text === name);
+        if (!entry || !ts.isPropertyAssignment(entry)) throw new Error(`Missing strict coverage property: ${name}`);
+        return entry.initializer;
+    };
+    const test = property(declaration.expression.arguments[0], 'test');
+    if (!ts.isObjectLiteralExpression(test)) throw new Error('Strict coverage test must be an object');
+    const coverage = property(test, 'coverage');
+    if (!ts.isObjectLiteralExpression(coverage)) throw new Error('Strict coverage settings must be an object');
+    const include = property(coverage, 'include');
+    if (!ts.isArrayLiteralExpression(include)) throw new Error('Strict coverage include must be a literal array');
+    return new Set(include.elements.map((element) => {
+        if (!ts.isStringLiteral(element)) throw new Error('Strict coverage source must be a literal path');
+        return element.text;
+    }).filter((path) => path.startsWith('src/') && /\.(?:ts|vue)$/u.test(path)));
 }
 
 function verificationOwners(path: string, strictCoverage: Set<string>): VerificationOwner[] {
@@ -86,16 +121,31 @@ function verificationOwners(path: string, strictCoverage: Set<string>): Verifica
 
     // 步骤 3：各自独立的发布出口和测试基础设施由对应流水线负责。
     if (path.startsWith('userscript/')) owners.add('userscript-build');
+    if (path.startsWith('scripts/thunderbird/')) owners.add('thunderbird-build');
     if (path === 'src/services/config/store.ts') owners.add('config-storage-functional');
     if (path === 'src/features/document-translation/ui/pdfPreview.ts') owners.add('document-browser-functional');
     if (path === 'src/features/full-page-translation/content/state.ts') owners.add('full-page-state-functional');
     if (path.startsWith('docs/.vitepress/')) owners.add('docs-build');
+    if (path === 'scripts/verify-docs-build.mjs' || path === 'scripts/verify-storybook-build.mjs') owners.add('docs-build');
+    if (path === 'scripts/verify-brand-copy.mjs') owners.add('brand-copy-functional');
     if (path.startsWith('examples/')) owners.add('isolated-browser-regression');
-    if (path.startsWith('scripts/run-') || path.startsWith('scripts/site-translation/')) {
+    if (path.startsWith('scripts/run-') || path.startsWith('scripts/site-translation/')
+        || path === 'scripts/capture-docs-ui.cjs') {
         owners.add('isolated-browser-regression');
     }
     if (path.startsWith('scripts/testing/')
+        || path.startsWith('scripts/agent-bridge/')
+        || path.startsWith('scripts/wasm/')
+        || PRODUCT_TOOL_SCRIPTS.includes(path)
+        || DOCS_TOOL_SCRIPTS.includes(path)
+        || path === 'scripts/generate-userscript-language-data.mjs'
+        || path === 'scripts/build-userscript-standalone.mjs'
+        || path === 'scripts/build-userscript-greasyfork.mjs'
         || path === 'scripts/verify-userscript-build.mjs'
+        || path === 'scripts/verify-userscript-greasyfork-build.mjs'
+        || path === 'scripts/verify-userscript-standalone-build.mjs'
+        || path === 'scripts/export-site-rule-pack.mjs'
+        || path === 'scripts/update-readme-contributors.mjs'
         || path.startsWith('vitest.')) {
         owners.add('test-infrastructure-contract');
     }
@@ -104,7 +154,20 @@ function verificationOwners(path: string, strictCoverage: Set<string>): Verifica
 }
 
 function isTypeOnlyModule(path: string): boolean {
-    return path.endsWith('/types.ts') || path.endsWith('.d.ts');
+    if (path.endsWith('.d.ts')) return true;
+    if (!path.endsWith('.ts')) return false;
+    // 以实际输出判断纯声明；任意文件中的常量、枚举和副作用仍须拥有行为验证。
+    const source = readFileSync(projectPath(path), 'utf8');
+    const emitted = ts.transpileModule(source, {
+        compilerOptions: {module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext},
+    }).outputText;
+    const runtime = ts.createSourceFile(path + '.js', emitted, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+    return runtime.statements.every((statement) => ts.isEmptyStatement(statement)
+        || (ts.isExportDeclaration(statement)
+            && !statement.moduleSpecifier
+            && !!statement.exportClause
+            && ts.isNamedExports(statement.exportClause)
+            && statement.exportClause.elements.length === 0));
 }
 
 function isPureBarrel(path: string): boolean {
@@ -122,12 +185,28 @@ function isCoverageExemptSrcModule(path: string): boolean {
 }
 
 const BUILD_ONLY_SRC_ALLOWLIST = new Set([
+    // 识图探测 composition 只接线共享 broker 与本地存储；策略、消息、编码严格覆盖并由隔离浏览器验证。
+    'src/app/translation/visionProbeRuntime.ts',
+    // 后台同步 composition root 仅装配已有配置端口；协议和事务经严格覆盖，真实端口由隔离浏览器专项验证。
+    'src/app/background/googleDriveSyncRuntime.ts',
+    'src/app/background/webDavBackupRuntime.ts',
+    // i18n 资源和 Vue 文案适配由纯资源测试、扩展双浏览器构建与隔离 UI 回归共同验证。
+    'src/core/i18n/index.ts',
+    'src/core/i18n/language.ts',
+    'src/core/i18n/messages/en-US.ts',
+    'src/core/i18n/messages/es-ES.ts',
+    'src/core/i18n/messages/fr-FR.ts',
+    'src/core/i18n/messages/ja-JP.ts',
+    'src/core/i18n/messages/ko-KR.ts',
+    'src/core/i18n/messages/ru-RU.ts',
+    'src/core/i18n/messages/zh-CN.ts',
+    'src/ui/i18n.ts',
     // WXT ShadowRootUi/Vue 挂载适配器绑定真实 DOM 与组件生命周期；由 shadowUi 单测和双浏览器构建验证。
     'src/platform/shadow-ui/vue.ts',
     // 配置存储运行时只识别 MV3/MV2 背景身份并装配 WXT、IndexedDB 或 runtime 端口；行为由纯端口测试和双浏览器构建验证。
     'src/platform/storage/configStorageRuntime.ts',
-    // 页内通知绑定 Shadow DOM、定时器和 runtime 消息；由 pageNotice 功能测试和双浏览器构建验证。
-    'src/features/page-notice/content/notice.ts',
+    // 内容脚本构建专用的纯远程配置端口，只调用严格覆盖的 createRemoteConfigStorage；替换规则由 manifest/构建契约测试验证。
+    'src/platform/storage/remoteConfigStorageRuntime.ts',
     // 悬浮球组装 Vue、WXT、配置持久化与全文翻译；生命周期由 contentUiRuntime 测试覆盖。
     'src/features/floating-ball/content/runtime.ts',
     // 进度面板绑定 Vue Shadow UI；纯进度状态机已另行进入 strict coverage。
@@ -136,22 +215,36 @@ const BUILD_ONLY_SRC_ALLOWLIST = new Set([
     'src/features/full-page-translation/ui/translationIndicators.ts',
     // options composition root 只注册 Element Plus 组件、图标、全局样式并挂载 Vue；由组件契约与双浏览器构建验证。
     'src/app/options/index.ts',
-    // popup composition root 只注册 Vue/Element Plus 并挂载页面；由 popup 契约测试、隔离 UI 回归和双浏览器构建验证。
+    // popup composition root 等待配置就绪再注册 Vue/Element Plus 并挂载；由 popup 契约、逐帧启动回归和双浏览器构建验证。
     'src/app/popup/index.ts',
+    // 抽屉入口只重导出 Element Plus 组件和 CSS；由 popup 启动/抽屉浏览器回归与双浏览器构建验证。
+    'src/app/popup/PopupDrawer.ts',
     // Offscreen composition root 只注入真实 Audio/Blob/Chrome runtime 与 OCR 能力；协议、翻译和播放状态机均已严格覆盖。
     'src/app/offscreen/runtime.ts',
     // background composition root 只串联菜单、静态消息 registry 和缓存维护；由 handler 单测、入口契约与双浏览器构建验证。
     'src/app/background/runtime.ts',
-    // 右键菜单绑定 browser tabs/contextMenus 生命周期；纯标题策略与 tab 状态仓库已严格覆盖，真实交互由隔离浏览器回归验证。
-    'src/app/background/contextMenuRuntime.ts',
+    // 工具栏翻译状态角标绑定 browser.action 角标 API 与 tabs 生命周期，含 action 缺失的防御分支；渲染映射由 backgroundBadgeRuntime 功能测试与双浏览器构建验证。
+    'src/app/background/badgeRuntime.ts',
+    // 视频字幕菜单文案只绑定已拥有的播放器 DOM；由视频单测与双浏览器构建验证。
+    'src/features/video-subtitle/content/ui.ts',
     // 后台消息 composition 只把 provider、feature handler 与 browser API 静态注入；各 handler/路由均已严格覆盖。
     'src/app/background/messageRuntime.ts',
+    // Thunderbird 邮件显示 API 接线由定向测试和隔离 Thunderbird 邮件实测共同验证。
+    'src/app/background/thunderbirdMessageRuntime.ts',
+    // 圈选 composition 仅从消息总入口拆出截图、裁剪和翻译依赖接线；纯路由/事务严格覆盖，并有真实浏览器专项。
+    'src/app/background/areaRuntime.ts',
     // 配置存储 runtime 只把真实 browser/configStorage API 注入严格覆盖的广播策略和 OCR 仓库。
     'src/app/background/configStorageRuntime.ts',
     // 配置消息 composition 只将保存、计数、历史和备份 handler 接入同一 mutation 队列；各 handler 与队列均有功能测试。
     'src/app/background/configMessageHandlers.ts',
     // content composition root 绑定 WXT context、页面生命周期和静态 feature registry；由内容功能测试与隔离浏览器回归验证。
     'src/app/content/runtime.ts',
+    // 邮件 frame 组合根绑定真实 WXT/DOM；纯同步器严格覆盖，注入和恢复由隔离浏览器验证。
+    'src/app/content/qqMailFrameRuntime.ts',
+    // 受限跨域正文 frame 的入口只组装可信消息、配置订阅、DOM 生命周期与翻译能力；URL/消息授权由严格覆盖的纯模块与后台 handler 验证。
+    'src/app/content/embeddedFrameRuntime.ts',
+    // 快捷翻译 composition 只把实时配置、旧手势仲裁与两类页面执行器接线；行为由 feature/runtime 单测和隔离浏览器回归验证。
+    'src/app/content/quickTranslationRuntime.ts',
     // 页面快捷键 runtime 绑定真实可信 KeyboardEvent、Selection/Range 与 AbortSignal；纯匹配策略已严格覆盖，信任边界由回归测试验证。
     'src/app/content/hotkeyRuntime.ts',
     // 内容消息 runtime 绑定 browser.runtime 与动态 UI 挂载；payload 守卫和行为由内容消息功能测试、双浏览器构建验证。
@@ -178,21 +271,30 @@ const BUILD_ONLY_SRC_ALLOWLIST = new Set([
     'src/features/full-page-translation/content/runtime.ts',
     // 视频字幕内容脚本 runtime 绑定 YouTube 播放器 DOM、浏览器消息与字幕下载流程；YouTube 数据逻辑已单独纳入 strict coverage。
     'src/features/video-subtitle/content/runtime.ts',
+    // 平台字幕适配器绑定真实 DOM、TextTrack 与 Shadow DOM；专属生命周期单测及生产扩展浏览器夹具验证。
+    'src/features/video-subtitle/content/platformRuntime.ts',
     // MAIN world adapter 只把 window Fetch/XHR 注入严格覆盖的 timedtext bridge core。
     'src/features/video-subtitle/content/youtubeTimedTextBridge.ts',
+    // X 浏览器适配器接入 Fetch/AudioContext；URL、读取预算、取消策略和字幕解析由严格覆盖模块负责。
+    'src/app/content/xVideoBridge.ts',
+    'src/features/video-subtitle/content/hlsAudioRuntime.ts',
+    // X 原生 TextTrack 与视频帧时钟的 DOM 映射由生产扩展同步夹具验证。
+    'src/features/video-subtitle/content/xCaptionSource.ts',
+    // 后台组合根只把共享 Offscreen client 和 storage 注入严格覆盖的 owner/message handlers。
+    'src/features/video-subtitle/background/runtime.ts',
     // PDF Canvas 预览绑定 PDF.js worker、真实 Canvas 像素采样与对象 URL；由隔离文档浏览器回归和双浏览器构建验证。
     'src/features/document-translation/ui/pdfPreview.ts',
-    // 图片悬停 runtime 绑定页面 Image/Canvas/Shadow DOM；协议、OCR、修复与远程图片规则由 strict coverage 验证。
+    // 图片悬停 runtime 绑定页面 Image/Canvas/Shadow DOM；协议、OCR 与修复规则由 strict coverage 验证，跨域读取边界由安全契约验证。
     'src/features/image-translation/content/runtime.ts',
-    // Tesseract worker、Canvas 测量/绘制与 Chrome runtime 消息属于 offscreen 浏览器 glue；纯 OCR、修复和颜色采样规则已纳入 strict coverage。
-    'src/features/image-translation/services/ocrRuntime.ts',
-    'src/features/image-translation/services/offscreenRuntime.ts',
     // MAIN world adapter 只把 Element/History/Navigation 注入严格覆盖的 ShadowRoute bridge core。
     'src/platform/shadow-ui/pageBridge.ts',
     // Edge TTS 运行时绑定 Web Crypto、第三方网络协议与 AbortSignal；纯音色、SSML、分段和 token 时效策略已严格覆盖。
     'src/features/selection-translation/services/edgeTts.ts',
+    // 可选 ECDICT 资产绑定 CacheStorage、Web Crypto 和固定 CDN 响应；完整性、缓存与降级由词典功能测试及双浏览器构建验证。
+    'src/features/selection-translation/services/ecdictAsset.ts',
     // Provider 注册表与 AI SDK transport 是依赖注入/网络协议组装；由注册表契约、功能测试和双浏览器构建共同验证。
     'src/providers/translation/registry.ts',
+    'src/providers/translation/local-translation.ts',
     'src/providers/translation/ai-sdk/openai-compatible.ts',
     // 以下文件逐一绑定真实网络协议或浏览器 offscreen API；纯端点、错误和鉴权逻辑已拆出并纳入 strict coverage。
     'src/providers/translation/azure-openai.ts',
@@ -201,19 +303,62 @@ const BUILD_ONLY_SRC_ALLOWLIST = new Set([
     'src/providers/translation/deepl.ts',
     'src/providers/translation/deeplx.ts',
     'src/providers/translation/deepseek.ts',
+    // 豆包按生效模型分流并直连方舟 Responses API；模型识别、语言映射与协议工具已拆出并纳入 strict coverage。
+    'src/providers/translation/doubao.ts',
+    'src/providers/translation/doubao-seed-translation.ts',
     'src/providers/translation/gemini.ts',
     'src/providers/translation/google.ts',
-    'src/providers/translation/hunyuan-translation.ts',
     'src/providers/translation/microsoft.ts',
-    'src/providers/translation/tencent.ts',
     'src/providers/translation/tongyi.ts',
-    'src/providers/translation/xiaoniu.ts',
-    'src/providers/translation/youdao.ts',
     'src/providers/translation/zhipu.ts',
+    // 本地翻译绑定浏览器 Cache Storage、Offscreen 和独立 Worker；模型目录、协议取消、缓存和构建由专项测试覆盖。
+    'src/core/config/localTranslation.ts',
+    'src/platform/offscreen/localTranslation.ts',
+    'src/features/local-translation/background/handlers.ts',
+    'src/features/local-translation/background/runtime.ts',
+    'src/features/local-translation/offscreen/modelCache.ts',
+    'src/features/local-translation/offscreen/translation.ts',
+    'src/features/local-translation/offscreen/translation.worker.ts',
+    'src/features/settings/ui/LocalTranslationModelSettings.vue',
+    // 本地 TTS 绑定 Offscreen Worker、Cache Storage 与 Kokoro/ONNX 运行时；策略、协议、后台消息与适配器已严格覆盖。
+    'src/features/local-tts/background/runtime.ts',
+    'src/features/local-tts/offscreen/modelCache.ts',
+    'src/features/local-tts/offscreen/tts.ts',
+    'src/features/local-tts/offscreen/tts.worker.ts',
 ]);
 
 describe('repository verification ownership', () => {
+    it('按实际输出识别非 types 文件的纯声明，并保留运行时常量归属', () => {
+        expect(isTypeOnlyModule('src/features/vocabulary/content/reencounterState.ts')).toBe(true);
+        expect(isTypeOnlyModule('src/services/model-usage/types.ts')).toBe(false);
+        expect(isTypeOnlyModule('src/services/translation-stats/types.ts')).toBe(false);
+        expect(isTypeOnlyModule('src/app/content/learningFeatures.ts')).toBe(false);
+    });
+
+    it.each(PRODUCT_TOOL_SCRIPTS)('产品工具 %s 保持可解析的 CommonJS 入口', path => {
+        expect(() => new Script(readFileSync(projectPath(path), 'utf8'), {filename: path})).not.toThrow();
+    });
+    it.each(DOCS_TOOL_SCRIPTS)('文档工具 %s 保持可解析的 Node 入口且不执行浏览器或校验流程', path => {
+        expect(() => execFileSync(process.execPath, ['--check', projectPath(path)], {stdio: 'pipe'})).not.toThrow();
+    });
+    it('文档与品牌校验入口连接实际 npm 命令，截图工具遵循隔离后台浏览器契约', () => {
+        const {scripts} = JSON.parse(readFileSync(projectPath('package.json'), 'utf8'));
+        expect(scripts['docs:check']).toBe('node scripts/verify-docs-build.mjs');
+        expect(scripts['verify:brand']).toBe('node scripts/verify-brand-copy.mjs');
+        const captureSource = readFileSync(projectPath('scripts/capture-docs-ui.cjs'), 'utf8');
+        expect(captureSource).toContain('helper.launchFocusSafePersistentContext');
+        expect(captureSource).toContain('helper.newPageWithoutForeground');
+        expect(captureSource).toContain('helper.activateExtensionTabWithoutForeground');
+        expect(captureSource).toContain('background: true');
+        expect(captureSource).toContain('headless: false');
+        expect(captureSource).not.toContain('.bringToFront(');
+        expect(captureSource).not.toContain('ctx.newPage(');
+    });
     const strictCoverage = coverageSourcePaths();
+    it('Vue 客户端编译白名单不冒充严格覆盖率边界', () => {
+        expect(strictCoverage.has('src/features/area-translation/ui/AreaTranslator.vue')).toBe(false);
+        expect(strictCoverage.has('src/core/harness/loop.ts')).toBe(true);
+    });
     const auditedFiles = [
         ...PRODUCT_ROOTS.flatMap(listFiles),
         ...ROOT_FILES,

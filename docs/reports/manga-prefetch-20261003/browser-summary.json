@@ -1,0 +1,167 @@
+[
+  {
+    "evidenceFolder": "mangaplus-verified",
+    "site": "live MANGA Plus",
+    "translation": "live Google",
+    "ocr": "real production PaddleOCR",
+    "status": "passed",
+    "cases": [
+      "reader detects real image pages and default upcoming-page option",
+      "current page is shown before upcoming preparation finishes",
+      "bounded upcoming pages prepared with real OCR",
+      "prepared upcoming translation follows the image into view",
+      "original pause restores all prepared host images",
+      "upcoming-page setting persists and allows current-page-only mode",
+      "no model downloads during prepared local reading"
+    ],
+    "firstPageMs": 10691,
+    "prepareWindowMs": 38434,
+    "preparedPageScrollMs": 89,
+    "windowOperations": 4,
+    "displayedIndices": [
+      0
+    ],
+    "modelRequests": [],
+    "modelsPreloaded": true,
+    "profileRemoved": true,
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 1121,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      },
+      "frontmostAfter": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      }
+    },
+    "errors": [],
+    "consoleErrors": []
+  },
+  {
+    "evidenceFolder": "pixiv-verified",
+    "site": "live Pixiv artwork 150354216",
+    "translation": "live Google",
+    "ocr": "real production PaddleOCR",
+    "status": "passed",
+    "cases": [
+      "reader detects real image pages and default upcoming-page option",
+      "current page is shown before upcoming preparation finishes",
+      "bounded upcoming pages prepared with real OCR",
+      "no-text upcoming page keeps its original artwork",
+      "original pause restores all prepared host images",
+      "upcoming-page setting persists and allows current-page-only mode",
+      "no model downloads during prepared local reading"
+    ],
+    "firstPageMs": 24011,
+    "prepareWindowMs": 43879,
+    "preparedPageScrollMs": 61,
+    "windowOperations": 3,
+    "displayedIndices": [
+      1
+    ],
+    "modelRequests": [],
+    "modelsPreloaded": true,
+    "profileRemoved": true,
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 1121,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      },
+      "frontmostAfter": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      }
+    },
+    "errors": [],
+    "consoleErrors": []
+  },
+  {
+    "evidenceFolder": "fixture-verified",
+    "site": "controlled MANGA Plus reader fixture",
+    "translation": "deterministic Google text transport",
+    "ocr": "real production PaddleOCR",
+    "status": "passed",
+    "cases": [
+      "reader detects real image pages and default upcoming-page option",
+      "current page is shown before upcoming preparation finishes",
+      "bounded upcoming pages prepared with real OCR",
+      "prepared upcoming translation follows the image into view",
+      "original pause restores all prepared host images",
+      "upcoming-page setting persists and allows current-page-only mode",
+      "no model downloads during prepared local reading"
+    ],
+    "firstPageMs": 2907,
+    "prepareWindowMs": 9797,
+    "preparedPageScrollMs": 34,
+    "windowOperations": 4,
+    "displayedIndices": [
+      0
+    ],
+    "modelRequests": [],
+    "modelsPreloaded": true,
+    "profileRemoved": true,
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 1121,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      },
+      "frontmostAfter": {
+        "pid": 65472,
+        "name": "ChatGPT"
+      }
+    },
+    "errors": [],
+    "consoleErrors": []
+  }
+]

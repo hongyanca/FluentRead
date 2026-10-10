@@ -1,38 +1,88 @@
 import { describe, expect, it } from 'vitest';
-import { imageBufferToDataUrl, MAX_REMOTE_IMAGE_BYTES, normalizeRemoteImageUrl } from '@/src/features/image-translation/services/remoteImage';
-import { getOcrLanguages, normalizeOcrLines, scaleOcrBox, selectChangedTranslations } from '@/src/features/image-translation/core';
+import { getOcrLanguages, normalizeOcrLines, selectChangedTranslations } from '@/src/features/image-translation/core';
 import { inpaintTextRegions } from '@/src/features/image-translation/services/inpainting';
-import { normalizeImageOcrLanguageCodes } from '@/src/features/image-translation/ocrLanguages';
+import { getImageOcrModelLanguages, IMAGE_OCR_LANGUAGE_PACKS, IMAGE_OCR_RECOMMENDED_LANGUAGES, normalizeImageOcrLanguageCodes } from '@/src/features/image-translation/ocrLanguages';
 import { getImageTextBackgroundColor, getImageTextColor } from '@/src/features/image-translation/services/rendering';
 
 describe('图片翻译 OCR 工具', () => {
     it('按源语言选择最小 OCR 语言集', () => {
-        expect(getOcrLanguages('en')).toEqual(['eng']);
+        for (const source of ['es', 'es-ES', 'es-MX', ' ES_ar ']) expect(getOcrLanguages(source)).toEqual(['spa', 'eng']);
+        expect(getOcrLanguages('esperanto')).toEqual(['chi_sim', 'chi_tra', 'eng', 'jpn']);
+        for (const source of ['en', 'en-US', ' EN_gb ']) expect(getOcrLanguages(source)).toEqual(['eng']);
+        for (const [language, code] of [['ko', 'kor'], ['fr', 'fra'], ['ru', 'rus'], ['ja', 'jpn']]) {
+            for (const source of [language, `${language}-XX`, ` ${language.toUpperCase()}_xx `]) expect(getOcrLanguages(source)).toEqual([code, 'eng']);
+        }
+        expect(getOcrLanguages('constructor')).toEqual(IMAGE_OCR_RECOMMENDED_LANGUAGES);
+        expect(normalizeImageOcrLanguageCodes(['kor', 'fra', 'rus', 'kor'])).toEqual(['kor', 'fra', 'rus']);
         expect(getOcrLanguages('zh-Hans')).toEqual(['chi_sim', 'eng']);
+        expect(getOcrLanguages('zh-Hant')).toEqual(['chi_tra', 'eng']);
+        expect(getOcrLanguages('zh-TW')).toEqual(['chi_tra', 'eng']);
+        expect(getOcrLanguages('zh-Hans-TW')).toEqual(['chi_sim', 'eng']);
         expect(getOcrLanguages('ja')).toEqual(['jpn', 'eng']);
-        expect(getOcrLanguages('auto')).toEqual(['chi_sim', 'eng']);
+        expect(IMAGE_OCR_RECOMMENDED_LANGUAGES).toEqual(['chi_sim', 'chi_tra', 'eng', 'jpn']);
+        expect(IMAGE_OCR_LANGUAGE_PACKS.filter(pack => pack.recommended).map(pack => pack.code)).toEqual(IMAGE_OCR_RECOMMENDED_LANGUAGES);
+        expect(getOcrLanguages('auto')).toEqual(['chi_sim', 'chi_tra', 'eng', 'jpn']);
+    });
+
+    it('日文语言包附带竖排模型，竖排模型紧跟横排模型且不改变主语言 (#654)', () => {
+        expect(getImageOcrModelLanguages(['jpn', 'eng'])).toEqual(['jpn', 'jpn_vert', 'eng']);
+        expect(getImageOcrModelLanguages(IMAGE_OCR_RECOMMENDED_LANGUAGES)).toEqual(['chi_sim', 'chi_tra', 'eng', 'jpn', 'jpn_vert']);
+        expect(getImageOcrModelLanguages(['chi_sim', 'eng'])).toEqual(['chi_sim', 'eng']);
+        expect(getImageOcrModelLanguages(['jpn', 'jpn'])).toEqual(['jpn', 'jpn_vert']);
+        expect(getImageOcrModelLanguages([])).toEqual([]);
+    });
+
+    it('按竖直基线识别竖排列：列内按 y 排序，同一气泡的列从右到左合并，不跨气泡或改动横排行 (#654)', () => {
+        const box = (x0: number, y0: number, x1: number, y1: number) => ({x0, y0, x1, y1});
+        const column = (text: string, bbox: ReturnType<typeof box>, words: Array<[string, number, ReturnType<typeof box>]>) => ({
+            text, bbox, baseline: box(bbox.x0 + 2, bbox.y0, bbox.x0 + 3, bbox.y1),
+            words: words.map(([wordText, confidence, wordBox]) => ({text: wordText, confidence, bbox: wordBox})),
+        });
+        // 精简自 jpn+jpn_vert、PSM 12 对竖排气泡的真实输出：首个 word 框常覆盖整列，后续 word 横向更宽。
+        const blocks = [{paragraphs: [
+            {lines: [column('お前はもう', box(222, 113, 254, 279), [
+                ['お', 96, box(222, 113, 254, 152)], ['前', 96, box(225, 160, 251, 204)], ['は', 96, box(215, 203, 258, 228)],
+                ['も', 86, box(227, 227, 248, 252)], ['う', 92, box(228, 256, 245, 279)],
+            ])]},
+            {lines: [column('死んでいる。', box(171, 111, 203, 291), [
+                ['死ん', 95, box(171, 111, 203, 291)], ['で', 96, box(162, 208, 207, 228)],
+                ['いる', 93, box(162, 227, 207, 271)], ['。', 90, box(162, 270, 207, 296)],
+            ])]},
+            {lines: [column("覚悟しろ'", box(119, 111, 151, 268), [
+                ['覚悟', 93, box(119, 111, 151, 268)], ['し', 92, box(104, 221, 155, 235)],
+                ['ろ', 93, box(104, 234, 155, 251)], ["'", 8, box(104, 250, 155, 270)],
+            ])]},
+            // 同一列被切成两段，仍按上下顺序并入同一气泡。
+            {lines: [column('今', box(733, 401, 762, 435), [['今', 92, box(733, 401, 762, 435)]])]},
+            {lines: [column('日は', box(734, 462, 761, 520), [['日', 96, box(736, 462, 760, 487)], ['は', 93, box(734, 491, 761, 520)]])]},
+            {lines: [column('楽しい', box(689, 401, 716, 500), [['楽しい', 95, box(689, 401, 716, 500)]])]},
+            {lines: [{text: '第三話', bbox: box(61, 58, 137, 82), baseline: box(61, 82, 137, 82), words: [
+                {text: '第', confidence: 92, bbox: box(61, 58, 85, 82)}, {text: '三話', confidence: 93, bbox: box(96, 58, 137, 82)},
+            ]}]},
+        ]}];
+        expect(normalizeOcrLines(blocks)).toEqual([
+            {text: 'お前はもう死んでいる。覚悟しろ', bbox: box(104, 111, 258, 296), vertical: true},
+            {text: '今日は楽しい', bbox: box(689, 401, 762, 520), vertical: true},
+            {text: '第三話', bbox: box(61, 58, 137, 82)},
+        ]);
+        // 单独一列同样标记为竖排，只有 word 数据缺失时回退整行文本。
+        expect(normalizeOcrLines([{paragraphs: [{lines: [{text: 'ドキドキ', bbox: box(27, 14, 74, 245), baseline: box(30, 14, 31, 245)}]}]}]))
+            .toEqual([{text: 'ドキドキ', bbox: box(27, 14, 74, 245), vertical: true}]);
+        // 两个相隔很远的竖排气泡各自保持原列，不应被合并成一条译文。
+        expect(normalizeOcrLines([{paragraphs: [{lines: [
+            column('右边', box(600, 20, 630, 130), []),
+            column('左边', box(100, 20, 130, 130), []),
+        ]}]}])).toEqual([
+            {text: '右边', bbox: box(600, 20, 630, 130), vertical: true},
+            {text: '左边', bbox: box(100, 20, 130, 130), vertical: true},
+        ]);
     });
 
     it('只接受支持的语言包并去重，保证下载状态可持久化', () => {
         expect(normalizeImageOcrLanguageCodes(['eng', 'jpn', 'eng', 'unsupported', null])).toEqual(['eng', 'jpn']);
+        expect(normalizeImageOcrLanguageCodes(['chi_tra', 'eng', 'chi_tra'])).toEqual(['chi_tra', 'eng']);
+        expect(normalizeImageOcrLanguageCodes(['spa', 'eng', 'spa'])).toEqual(['spa', 'eng']);
         expect(normalizeImageOcrLanguageCodes('eng')).toEqual([]);
-    });
-
-    it('把 OCR 坐标按图片显示尺寸缩放', () => {
-        expect(scaleOcrBox(
-            { x0: 100, y0: 50, x1: 500, y1: 150 },
-            1000,
-            500,
-            500,
-            250,
-        )).toEqual({ left: 50, top: 25, width: 200, height: 50 });
-        expect(scaleOcrBox(
-            { x0: -10, y0: -10, x1: -9, y1: -9 },
-            100,
-            100,
-            50,
-            50,
-        )).toEqual({ left: 0, top: 0, width: 1, height: 1 });
     });
 
     it('过滤空 OCR 行并保留文本框', () => {
@@ -110,55 +160,6 @@ describe('图片翻译 OCR 工具', () => {
         expect(lines).toEqual([
             {text: '你好', bbox: {x0: 0, y0: 0, x1: 21, y1: 10}},
         ]);
-    });
-
-    it('只允许通过扩展后台读取网页图片地址', () => {
-        expect(normalizeRemoteImageUrl('https://cdn.example.com/image.png')).toBe('https://cdn.example.com/image.png');
-        expect(normalizeRemoteImageUrl('http://cdn.example.com/image.png')).toBe('http://cdn.example.com/image.png');
-        expect(normalizeRemoteImageUrl('https://internal.example/image.png')).toBe('https://internal.example/image.png');
-        expect(normalizeRemoteImageUrl('https://8.8.8.8/image.png')).toBe('https://8.8.8.8/image.png');
-        expect(normalizeRemoteImageUrl('https://[2606:4700:4700::1111]/image.png'))
-            .toBe('https://[2606:4700:4700::1111]/image.png');
-        expect(normalizeRemoteImageUrl('https://[2001:4860:4860:0:0:0:0:8888]/image.png'))
-            .toBe('https://[2001:4860:4860::8888]/image.png');
-        expect(normalizeRemoteImageUrl('https://[2001:4860:1:2:3:4:5:6]/image.png'))
-            .toBe('https://[2001:4860:1:2:3:4:5:6]/image.png');
-        expect(normalizeRemoteImageUrl('https://[2001:4860::]/image.png'))
-            .toBe('https://[2001:4860::]/image.png');
-        expect(normalizeRemoteImageUrl('https://[::ffff:8.8.8.8]/image.png'))
-            .toBe('https://[::ffff:808:808]/image.png');
-        expect(() => normalizeRemoteImageUrl('not a url')).toThrow('图片地址无效');
-        expect(() => normalizeRemoteImageUrl('data:image/png;base64,AA==')).toThrow('只支持网页图片地址');
-        expect(() => normalizeRemoteImageUrl('https://user:secret@example.com/image.png')).toThrow('不能包含凭据');
-    });
-
-    it.each([
-        'http://localhost/image.png',
-        'http://assets.localhost/image.png',
-        'http://127.0.0.1/image.png',
-        'http://127.1/image.png',
-        'http://0.0.0.0/image.png',
-        'http://10.0.0.1/image.png',
-        'http://100.64.0.1/image.png',
-        'http://169.254.1.1/image.png',
-        'http://172.16.0.1/image.png',
-        'http://192.168.1.1/image.png',
-        'http://[::1]/image.png',
-        'http://[::]/image.png',
-        'http://[fe80::1]/image.png',
-        'http://[fc00::1]/image.png',
-        'http://[::ffff:127.0.0.1]/image.png',
-        'http://[::127.0.0.1]/image.png',
-    ])('拒绝本地、loopback、link-local 与私网 IP 字面量：%s', (url) => {
-        expect(() => normalizeRemoteImageUrl(url)).toThrow('本地或私有网络');
-    });
-
-    it('把远程图片字节转换成 OCR 可读取的数据地址', () => {
-        const data = imageBufferToDataUrl(new Uint8Array([1, 2, 255]).buffer, 'image/png; charset=binary');
-        expect(data).toBe('data:image/png;base64,AQL/');
-        expect(() => imageBufferToDataUrl(new ArrayBuffer(0), '')).toThrow('远程地址不是图片');
-        expect(() => imageBufferToDataUrl(new ArrayBuffer(0), 'text/plain')).toThrow('远程地址不是图片');
-        expect(() => imageBufferToDataUrl(new ArrayBuffer(MAX_REMOTE_IMAGE_BYTES + 1), 'image/png')).toThrow('图片文件过大');
     });
 
     it('对无效输入原样复制，并为无法扩散的整图遮罩保留原像素', () => {

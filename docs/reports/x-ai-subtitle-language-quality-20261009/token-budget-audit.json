@@ -1,0 +1,2409 @@
+{
+  "scope": "Read-only local fixed-tokenizer audit; no model inference, no browser, no threshold/default change",
+  "success": true,
+  "scriptSha256": "0688436d857fb41dda15193940de0acf6a013a84c792cfa06f143cee471b24cf",
+  "corpusManifestSha256": "b4054caf378a9da853a86fa3edc2a229cc082d760eaa85ab241d24724de0fa51",
+  "optionsSourceSha256": "4780866e32aff15d110678c61f05a1a3950d18d52ce899c771b00c500a896a1f",
+  "optionsBundleSha256": "1489d364cc24fa25ea9e4779eaa972234f0ed225bd1d8a969041205ad1f5dd46",
+  "transformersVersion": "3.8.1",
+  "tokenizerSha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566",
+  "tinyBaseTokenizerIdentical": true,
+  "tokenizerRegularVocabularyTokens": 50256,
+  "method": [
+    "Canonical token counts call the locked AutoTokenizer.encode with add_special_tokens:false.",
+    "MinimumRegularByteTokens is a dynamic-programming lower bound over the same regular BPE vocabulary decoded by the actual ByteLevelDecoder mapping. It allows non-canonical segmentations and includes globally suppressed lexical tokens, so it is a conservative lower bound for exact bytes.",
+    "max_new_tokens is the current production helper result for the correct detected language and original decoded clip duration. Initial decoder prompt is excluded by Transformers.js; timestamps/EOS consume additional new tokens.",
+    "Only clips fitting the 10s Tiny / 14s Base production window can attribute whole-reference budget shortage to a single production window. Longer clips require aligned per-window text; full-reference comparison does not prove per-window truncation.",
+    "Scoring-normalized variants use existing CER/WER normalization. Their token counts do not prove all score-equivalent strings impossible: punctuation, spaces, script forms, casing and number rendering can change tokenization. Raw exact minimum exceeding budget proves only the exact reference bytes cannot fit, not that every equally scoreable rendering cannot fit."
+  ],
+  "summary": {
+    "tiny": {
+      "all": {
+        "cases": 39,
+        "rawCanonicalExceeds": 11,
+        "rawExactMinimumExceeds": 11,
+        "normalizedCanonicalExceeds": 11,
+        "normalizedExactMinimumExceeds": 11
+      },
+      "withinProductionWindow": {
+        "cases": 13,
+        "rawCanonicalExceeds": 5,
+        "rawExactMinimumExceeds": 5,
+        "normalizedCanonicalExceeds": 5,
+        "normalizedExactMinimumExceeds": 5
+      },
+      "beyondProductionWindow": {
+        "cases": 26,
+        "rawCanonicalExceeds": 6,
+        "rawExactMinimumExceeds": 6,
+        "normalizedCanonicalExceeds": 6,
+        "normalizedExactMinimumExceeds": 6
+      }
+    },
+    "base": {
+      "all": {
+        "cases": 39,
+        "rawCanonicalExceeds": 6,
+        "rawExactMinimumExceeds": 6,
+        "normalizedCanonicalExceeds": 6,
+        "normalizedExactMinimumExceeds": 6
+      },
+      "withinProductionWindow": {
+        "cases": 30,
+        "rawCanonicalExceeds": 5,
+        "rawExactMinimumExceeds": 5,
+        "normalizedCanonicalExceeds": 5,
+        "normalizedExactMinimumExceeds": 5
+      },
+      "beyondProductionWindow": {
+        "cases": 9,
+        "rawCanonicalExceeds": 1,
+        "rawExactMinimumExceeds": 1,
+        "normalizedCanonicalExceeds": 1,
+        "normalizedExactMinimumExceeds": 1
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "cmn_hans_cn_0000",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 10380,
+      "referenceSha256": "0e786003da5706c45f5abc7217b34c6134714d84aed33774dd8c76e5ae1f25a2",
+      "pcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+      "rawReference": {
+        "characters": 45,
+        "lexicalTokens": 43,
+        "minimumRegularByteTokens": 43,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "a95113b21fc6c04f025808eeb63cfe495deb9429fa3de9c9969009f062ad1eaa",
+        "characters": 23,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 23
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 104,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "cmn_hans_cn_0000",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 10380,
+      "referenceSha256": "0e786003da5706c45f5abc7217b34c6134714d84aed33774dd8c76e5ae1f25a2",
+      "pcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+      "rawReference": {
+        "characters": 45,
+        "lexicalTokens": 43,
+        "minimumRegularByteTokens": 43,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "a95113b21fc6c04f025808eeb63cfe495deb9429fa3de9c9969009f062ad1eaa",
+        "characters": 23,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 23
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 125,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "cmn_hans_cn_0001",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 8280,
+      "referenceSha256": "ab4e43207a974ad02955fd6b4ec1a3627ead29ed449a017ef4c8b0a7121d0805",
+      "pcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+      "rawReference": {
+        "characters": 41,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 47,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "f4330fda70de56359ab518c016cdd9d7447222cc58a7e2de386837aa114c1004",
+        "characters": 21,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 83,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "cmn_hans_cn_0001",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 8280,
+      "referenceSha256": "ab4e43207a974ad02955fd6b4ec1a3627ead29ed449a017ef4c8b0a7121d0805",
+      "pcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+      "rawReference": {
+        "characters": 41,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 47,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "f4330fda70de56359ab518c016cdd9d7447222cc58a7e2de386837aa114c1004",
+        "characters": 21,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 100,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "cmn_hans_cn_0002",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 13860,
+      "referenceSha256": "d7fc2e33b42a8ed48c3c589adb341d5c22e6d81581249569ec38d023a9bda781",
+      "pcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+      "rawReference": {
+        "characters": 66,
+        "lexicalTokens": 59,
+        "minimumRegularByteTokens": 59,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "dec1c8bddddf2367a1244af30d0c59477f9182a5909f3141e4075a38c40e049a",
+        "characters": 37,
+        "lexicalTokens": 35,
+        "minimumRegularByteTokens": 35
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 128,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "cmn_hans_cn_0002",
+      "language": "zh",
+      "metric": "cer",
+      "durationMs": 13860,
+      "referenceSha256": "d7fc2e33b42a8ed48c3c589adb341d5c22e6d81581249569ec38d023a9bda781",
+      "pcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+      "rawReference": {
+        "characters": 66,
+        "lexicalTokens": 59,
+        "minimumRegularByteTokens": 59,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "dec1c8bddddf2367a1244af30d0c59477f9182a5909f3141e4075a38c40e049a",
+        "characters": 37,
+        "lexicalTokens": 35,
+        "minimumRegularByteTokens": 35
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 160,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0000",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 10560,
+      "referenceSha256": "94ac868ffec4f7c70ed84e34efdb3d7e5a728d7efcbe9342dda4342e32583365",
+      "pcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 20,
+        "minimumRegularByteTokens": 20,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "94ac868ffec4f7c70ed84e34efdb3d7e5a728d7efcbe9342dda4342e32583365",
+        "characters": 99,
+        "lexicalTokens": 20,
+        "minimumRegularByteTokens": 20
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0000",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 10560,
+      "referenceSha256": "94ac868ffec4f7c70ed84e34efdb3d7e5a728d7efcbe9342dda4342e32583365",
+      "pcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 20,
+        "minimumRegularByteTokens": 20,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "94ac868ffec4f7c70ed84e34efdb3d7e5a728d7efcbe9342dda4342e32583365",
+        "characters": 99,
+        "lexicalTokens": 20,
+        "minimumRegularByteTokens": 20
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 74,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0001",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 8760,
+      "referenceSha256": "78c17c59439ff7b484261f19ff7d1d49f854910035fe3b0b922297037ae285ee",
+      "pcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+      "rawReference": {
+        "characters": 108,
+        "lexicalTokens": 21,
+        "minimumRegularByteTokens": 21,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "78c17c59439ff7b484261f19ff7d1d49f854910035fe3b0b922297037ae285ee",
+        "characters": 108,
+        "lexicalTokens": 21,
+        "minimumRegularByteTokens": 21
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 53,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0001",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 8760,
+      "referenceSha256": "78c17c59439ff7b484261f19ff7d1d49f854910035fe3b0b922297037ae285ee",
+      "pcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+      "rawReference": {
+        "characters": 108,
+        "lexicalTokens": 21,
+        "minimumRegularByteTokens": 21,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "78c17c59439ff7b484261f19ff7d1d49f854910035fe3b0b922297037ae285ee",
+        "characters": 108,
+        "lexicalTokens": 21,
+        "minimumRegularByteTokens": 21
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 62,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0002",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 11460,
+      "referenceSha256": "a132e2716cc6e5a3377e67e97fef5c1a09b0bf08fa3fdb15b1ae9e9532e13bb5",
+      "pcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+      "rawReference": {
+        "characters": 186,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "a132e2716cc6e5a3377e67e97fef5c1a09b0bf08fa3fdb15b1ae9e9532e13bb5",
+        "characters": 186,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "en_us_0002",
+      "language": "en",
+      "metric": "wer",
+      "durationMs": 11460,
+      "referenceSha256": "a132e2716cc6e5a3377e67e97fef5c1a09b0bf08fa3fdb15b1ae9e9532e13bb5",
+      "pcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+      "rawReference": {
+        "characters": 186,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "a132e2716cc6e5a3377e67e97fef5c1a09b0bf08fa3fdb15b1ae9e9532e13bb5",
+        "characters": 186,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 81,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0000",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 10440,
+      "referenceSha256": "70c3a8715f553e7239c54ffdfa2b49df3621cb4c5aa0677f4e41e56c6d4e8be6",
+      "pcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+      "rawReference": {
+        "characters": 48,
+        "lexicalTokens": 44,
+        "minimumRegularByteTokens": 44,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "e597db4196fbb5f9744c54319f3d87ea1d4d177b6e86d1d9e70a7f057dd1a151",
+        "characters": 45,
+        "lexicalTokens": 43,
+        "minimumRegularByteTokens": 43
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 105,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0000",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 10440,
+      "referenceSha256": "70c3a8715f553e7239c54ffdfa2b49df3621cb4c5aa0677f4e41e56c6d4e8be6",
+      "pcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+      "rawReference": {
+        "characters": 48,
+        "lexicalTokens": 44,
+        "minimumRegularByteTokens": 44,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "e597db4196fbb5f9744c54319f3d87ea1d4d177b6e86d1d9e70a7f057dd1a151",
+        "characters": 45,
+        "lexicalTokens": 43,
+        "minimumRegularByteTokens": 43
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 126,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0001",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 14220,
+      "referenceSha256": "4173a093cc86b7c7fa669900b37caf60b9f3d4ce67d8d224bb17ab6add0f4918",
+      "pcm16Sha256": "ccd5258a1e0d8ec801e9bde70ff13fb74af51ae9dc7e63a6badaaa85ca9af0ac",
+      "rawReference": {
+        "characters": 47,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 46,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "065013650dcfc4daff225497af4f5f499f9a61998bfb728c2895153536970ab1",
+        "characters": 46,
+        "lexicalTokens": 45,
+        "minimumRegularByteTokens": 45
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 128,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0001",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 14220,
+      "referenceSha256": "4173a093cc86b7c7fa669900b37caf60b9f3d4ce67d8d224bb17ab6add0f4918",
+      "pcm16Sha256": "ccd5258a1e0d8ec801e9bde70ff13fb74af51ae9dc7e63a6badaaa85ca9af0ac",
+      "rawReference": {
+        "characters": 47,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 46,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "065013650dcfc4daff225497af4f5f499f9a61998bfb728c2895153536970ab1",
+        "characters": 46,
+        "lexicalTokens": 45,
+        "minimumRegularByteTokens": 45
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 160,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0002",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 12840,
+      "referenceSha256": "353039b58aa925c905d896924284c132dcda6f65815e6d3422fa123cd433b97b",
+      "pcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+      "rawReference": {
+        "characters": 74,
+        "lexicalTokens": 72,
+        "minimumRegularByteTokens": 72,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "10e1087fbc06c46b89b798523d1018ee861bc55b40c883dd5e8802541a9e3e66",
+        "characters": 71,
+        "lexicalTokens": 70,
+        "minimumRegularByteTokens": 70
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 128,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ja_jp_0002",
+      "language": "ja",
+      "metric": "cer",
+      "durationMs": 12840,
+      "referenceSha256": "353039b58aa925c905d896924284c132dcda6f65815e6d3422fa123cd433b97b",
+      "pcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+      "rawReference": {
+        "characters": 74,
+        "lexicalTokens": 72,
+        "minimumRegularByteTokens": 72,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "10e1087fbc06c46b89b798523d1018ee861bc55b40c883dd5e8802541a9e3e66",
+        "characters": 71,
+        "lexicalTokens": 70,
+        "minimumRegularByteTokens": 70
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 155,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0000",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 12480,
+      "referenceSha256": "163400060ed39f4b7a96d3523b7bd7326fe382d02a46d3ee5fd80580b0463638",
+      "pcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+      "rawReference": {
+        "characters": 66,
+        "lexicalTokens": 42,
+        "minimumRegularByteTokens": 42,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "eb3fce6a6a5f2c48bca9443dec74d48e6dc0941fbaf4318ec770ed23ff89abfb",
+        "characters": 53,
+        "lexicalTokens": 45,
+        "minimumRegularByteTokens": 45
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 125,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0000",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 12480,
+      "referenceSha256": "163400060ed39f4b7a96d3523b7bd7326fe382d02a46d3ee5fd80580b0463638",
+      "pcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+      "rawReference": {
+        "characters": 66,
+        "lexicalTokens": 42,
+        "minimumRegularByteTokens": 42,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "eb3fce6a6a5f2c48bca9443dec74d48e6dc0941fbaf4318ec770ed23ff89abfb",
+        "characters": 53,
+        "lexicalTokens": 45,
+        "minimumRegularByteTokens": 45
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 150,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0001",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 10800,
+      "referenceSha256": "22eb7ed0c6b053685659320f511ca0d02276cf3c121cf11e95732eb97b8f7f92",
+      "pcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+      "rawReference": {
+        "characters": 55,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "92dfa154691ca00e69283358ee7dc123de0c57d6873d3164dccbdf30587eec6a",
+        "characters": 41,
+        "lexicalTokens": 41,
+        "minimumRegularByteTokens": 41
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 108,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0001",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 10800,
+      "referenceSha256": "22eb7ed0c6b053685659320f511ca0d02276cf3c121cf11e95732eb97b8f7f92",
+      "pcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+      "rawReference": {
+        "characters": 55,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "92dfa154691ca00e69283358ee7dc123de0c57d6873d3164dccbdf30587eec6a",
+        "characters": 41,
+        "lexicalTokens": 41,
+        "minimumRegularByteTokens": 41
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 130,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0002",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 8940,
+      "referenceSha256": "732e5fbfbb0471a11d7fe9c8bbb3538e6310fc81f4d08c8392de892cdd4dbf9d",
+      "pcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+      "rawReference": {
+        "characters": 43,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 29,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "943cfc005b2302b29470972d9e4e67e30d21000bdc782f08af8fe50b4d52fab9",
+        "characters": 33,
+        "lexicalTokens": 33,
+        "minimumRegularByteTokens": 30
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 90,
+      "maximumFullProductionWindowMaxNewTokens": 100,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ko_kr_0002",
+      "language": "ko",
+      "metric": "cer",
+      "durationMs": 8940,
+      "referenceSha256": "732e5fbfbb0471a11d7fe9c8bbb3538e6310fc81f4d08c8392de892cdd4dbf9d",
+      "pcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+      "rawReference": {
+        "characters": 43,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 29,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "943cfc005b2302b29470972d9e4e67e30d21000bdc782f08af8fe50b4d52fab9",
+        "characters": 33,
+        "lexicalTokens": 33,
+        "minimumRegularByteTokens": 30
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 108,
+      "maximumFullProductionWindowMaxNewTokens": 160,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "es_419_0000",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 12840,
+      "referenceSha256": "b76d911c9d600bafe831fd283e7c55dfc36be588211521ace07970a897644bf4",
+      "pcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+      "rawReference": {
+        "characters": 169,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 39,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "b76d911c9d600bafe831fd283e7c55dfc36be588211521ace07970a897644bf4",
+        "characters": 169,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 39
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "es_419_0000",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 12840,
+      "referenceSha256": "b76d911c9d600bafe831fd283e7c55dfc36be588211521ace07970a897644bf4",
+      "pcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+      "rawReference": {
+        "characters": 169,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 39,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "b76d911c9d600bafe831fd283e7c55dfc36be588211521ace07970a897644bf4",
+        "characters": 169,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 39
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 90,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "es_419_0001",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 21360,
+      "referenceSha256": "7aeddf7e522afb5bca2e2390a5bcd542c915bad758847cd32c25e0ef1d97a369",
+      "pcm16Sha256": "ee6bc09607ac40605a5b6104ec8800234f89287398d4dc0cbb5831e961019ad6",
+      "rawReference": {
+        "characters": 303,
+        "lexicalTokens": 73,
+        "minimumRegularByteTokens": 73,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "9708139af6c35ebd381020099efc1c432306d43745b81d6ec53d906c6acfe7ce",
+        "characters": 301,
+        "lexicalTokens": 70,
+        "minimumRegularByteTokens": 70
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "es_419_0001",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 21360,
+      "referenceSha256": "7aeddf7e522afb5bca2e2390a5bcd542c915bad758847cd32c25e0ef1d97a369",
+      "pcm16Sha256": "ee6bc09607ac40605a5b6104ec8800234f89287398d4dc0cbb5831e961019ad6",
+      "rawReference": {
+        "characters": 303,
+        "lexicalTokens": 73,
+        "minimumRegularByteTokens": 73,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "9708139af6c35ebd381020099efc1c432306d43745b81d6ec53d906c6acfe7ce",
+        "characters": 301,
+        "lexicalTokens": 70,
+        "minimumRegularByteTokens": 70
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "es_419_0002",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 9720,
+      "referenceSha256": "d9f660c647f16d94db089fea4710b3a3520cf9f1401020485c213c8df37fddf2",
+      "pcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+      "rawReference": {
+        "characters": 113,
+        "lexicalTokens": 29,
+        "minimumRegularByteTokens": 28,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "d9f660c647f16d94db089fea4710b3a3520cf9f1401020485c213c8df37fddf2",
+        "characters": 113,
+        "lexicalTokens": 29,
+        "minimumRegularByteTokens": 28
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 59,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "es_419_0002",
+      "language": "es",
+      "metric": "wer",
+      "durationMs": 9720,
+      "referenceSha256": "d9f660c647f16d94db089fea4710b3a3520cf9f1401020485c213c8df37fddf2",
+      "pcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+      "rawReference": {
+        "characters": 113,
+        "lexicalTokens": 29,
+        "minimumRegularByteTokens": 28,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "d9f660c647f16d94db089fea4710b3a3520cf9f1401020485c213c8df37fddf2",
+        "characters": 113,
+        "lexicalTokens": 29,
+        "minimumRegularByteTokens": 28
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 69,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "fr_fr_0000",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 10200,
+      "referenceSha256": "bb5c63974d229c750d09f355f558952970b534b7851b5a71f598ac7a3e209700",
+      "pcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+      "rawReference": {
+        "characters": 110,
+        "lexicalTokens": 32,
+        "minimumRegularByteTokens": 31,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "0bfbbfd5c9d5a2f8fb0d4dd769c9ce80e246aa64cf62badb15875e80ec01808d",
+        "characters": 110,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 29
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 62,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "fr_fr_0000",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 10200,
+      "referenceSha256": "bb5c63974d229c750d09f355f558952970b534b7851b5a71f598ac7a3e209700",
+      "pcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+      "rawReference": {
+        "characters": 110,
+        "lexicalTokens": 32,
+        "minimumRegularByteTokens": 31,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "0bfbbfd5c9d5a2f8fb0d4dd769c9ce80e246aa64cf62badb15875e80ec01808d",
+        "characters": 110,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 29
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 72,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "fr_fr_0001",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 23400,
+      "referenceSha256": "3f6d1fdfb25ddae35bdd1e8ef09fdc940c58618064caaa6d02b68420dbc2532f",
+      "pcm16Sha256": "95770c063d420ff1ddf4dddc34b25e87e2ed5347bf4d4aa799a15ab46abea4e6",
+      "rawReference": {
+        "characters": 357,
+        "lexicalTokens": 96,
+        "minimumRegularByteTokens": 94,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "bb3389a0ef0aea8afcfee1f5eaafbdf3c4fe19a4f1df54d5c562c638ab78fbaf",
+        "characters": 356,
+        "lexicalTokens": 89,
+        "minimumRegularByteTokens": 87
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "fr_fr_0001",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 23400,
+      "referenceSha256": "3f6d1fdfb25ddae35bdd1e8ef09fdc940c58618064caaa6d02b68420dbc2532f",
+      "pcm16Sha256": "95770c063d420ff1ddf4dddc34b25e87e2ed5347bf4d4aa799a15ab46abea4e6",
+      "rawReference": {
+        "characters": 357,
+        "lexicalTokens": 96,
+        "minimumRegularByteTokens": 94,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "bb3389a0ef0aea8afcfee1f5eaafbdf3c4fe19a4f1df54d5c562c638ab78fbaf",
+        "characters": 356,
+        "lexicalTokens": 89,
+        "minimumRegularByteTokens": 87
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "fr_fr_0002",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 8280,
+      "referenceSha256": "8a361f289ecf31a8156fc4521bbdaa110cb92d0b11d867478c55c676c1479c4e",
+      "pcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+      "rawReference": {
+        "characters": 168,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 47,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "9743d68bfc21050f47108657de2482467bf674aed5a0984a7c19b50a25df90ea",
+        "characters": 163,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 50,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "fr_fr_0002",
+      "language": "fr",
+      "metric": "wer",
+      "durationMs": 8280,
+      "referenceSha256": "8a361f289ecf31a8156fc4521bbdaa110cb92d0b11d867478c55c676c1479c4e",
+      "pcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+      "rawReference": {
+        "characters": 168,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 47,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "9743d68bfc21050f47108657de2482467bf674aed5a0984a7c19b50a25df90ea",
+        "characters": 163,
+        "lexicalTokens": 36,
+        "minimumRegularByteTokens": 36
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 58,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0000",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 17940,
+      "referenceSha256": "4237bd708880e23cb963ae50f79921d14662fdbe2feb835e3de260fe599c8840",
+      "pcm16Sha256": "a75ddf6443726c7304b8f62a5dce475b43284ee03cc147921bc9c517a12a24ea",
+      "rawReference": {
+        "characters": 121,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 30,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "4237bd708880e23cb963ae50f79921d14662fdbe2feb835e3de260fe599c8840",
+        "characters": 121,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 30
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0000",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 17940,
+      "referenceSha256": "4237bd708880e23cb963ae50f79921d14662fdbe2feb835e3de260fe599c8840",
+      "pcm16Sha256": "a75ddf6443726c7304b8f62a5dce475b43284ee03cc147921bc9c517a12a24ea",
+      "rawReference": {
+        "characters": 121,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 30,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "4237bd708880e23cb963ae50f79921d14662fdbe2feb835e3de260fe599c8840",
+        "characters": 121,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 30
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0001",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 11160,
+      "referenceSha256": "ff0bf75d8a640b871a5f629ca6694f8eaea1b693d08405912955e10cddbaca54",
+      "pcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+      "rawReference": {
+        "characters": 109,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ff0bf75d8a640b871a5f629ca6694f8eaea1b693d08405912955e10cddbaca54",
+        "characters": 109,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0001",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 11160,
+      "referenceSha256": "ff0bf75d8a640b871a5f629ca6694f8eaea1b693d08405912955e10cddbaca54",
+      "pcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+      "rawReference": {
+        "characters": 109,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ff0bf75d8a640b871a5f629ca6694f8eaea1b693d08405912955e10cddbaca54",
+        "characters": 109,
+        "lexicalTokens": 26,
+        "minimumRegularByteTokens": 26
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 79,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0002",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 12420,
+      "referenceSha256": "1f7a001acfe67a17419b922f3d087ad04bf240299a1520584a210f30956d4434",
+      "pcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+      "rawReference": {
+        "characters": 172,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 44,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "1f7a001acfe67a17419b922f3d087ad04bf240299a1520584a210f30956d4434",
+        "characters": 172,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 44
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "de_de_0002",
+      "language": "de",
+      "metric": "wer",
+      "durationMs": 12420,
+      "referenceSha256": "1f7a001acfe67a17419b922f3d087ad04bf240299a1520584a210f30956d4434",
+      "pcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+      "rawReference": {
+        "characters": 172,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 44,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "1f7a001acfe67a17419b922f3d087ad04bf240299a1520584a210f30956d4434",
+        "characters": 172,
+        "lexicalTokens": 46,
+        "minimumRegularByteTokens": 44
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 87,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ar_eg_0000",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 8160,
+      "referenceSha256": "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+      "pcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 55,
+        "minimumRegularByteTokens": 55,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+        "characters": 99,
+        "lexicalTokens": 55,
+        "minimumRegularByteTokens": 55
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 49,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "ar_eg_0000",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 8160,
+      "referenceSha256": "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+      "pcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 55,
+        "minimumRegularByteTokens": 55,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+        "characters": 99,
+        "lexicalTokens": 55,
+        "minimumRegularByteTokens": 55
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 58,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ar_eg_0001",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 14160,
+      "referenceSha256": "d48ac6d5a80ae2a3a4b3213d54df2f04c26e06c526cdebc47ace44ed1e38f2af",
+      "pcm16Sha256": "0c60e50e31939598d10a9fdd6a912d8b2771b4d11e67d3eaefeb9cc19bba07f3",
+      "rawReference": {
+        "characters": 157,
+        "lexicalTokens": 81,
+        "minimumRegularByteTokens": 81,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "53d28a4bc5ac92262720ee4fb6fd9e2bdbec90a2658827061f829ba1cd791132",
+        "characters": 157,
+        "lexicalTokens": 78,
+        "minimumRegularByteTokens": 78
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "ar_eg_0001",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 14160,
+      "referenceSha256": "d48ac6d5a80ae2a3a4b3213d54df2f04c26e06c526cdebc47ace44ed1e38f2af",
+      "pcm16Sha256": "0c60e50e31939598d10a9fdd6a912d8b2771b4d11e67d3eaefeb9cc19bba07f3",
+      "rawReference": {
+        "characters": 157,
+        "lexicalTokens": 81,
+        "minimumRegularByteTokens": 81,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "53d28a4bc5ac92262720ee4fb6fd9e2bdbec90a2658827061f829ba1cd791132",
+        "characters": 157,
+        "lexicalTokens": 78,
+        "minimumRegularByteTokens": 78
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ar_eg_0002",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 16020,
+      "referenceSha256": "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3",
+      "pcm16Sha256": "38f0f6076a02fb560cc2c04ab5877574d8b47f213c4e4ab4b0baf9e7eb06fca2",
+      "rawReference": {
+        "characters": 148,
+        "lexicalTokens": 79,
+        "minimumRegularByteTokens": 79,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3",
+        "characters": 148,
+        "lexicalTokens": 79,
+        "minimumRegularByteTokens": 79
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "ar_eg_0002",
+      "language": "ar",
+      "metric": "wer",
+      "durationMs": 16020,
+      "referenceSha256": "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3",
+      "pcm16Sha256": "38f0f6076a02fb560cc2c04ab5877574d8b47f213c4e4ab4b0baf9e7eb06fca2",
+      "rawReference": {
+        "characters": 148,
+        "lexicalTokens": 79,
+        "minimumRegularByteTokens": 79,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3",
+        "characters": 148,
+        "lexicalTokens": 79,
+        "minimumRegularByteTokens": 79
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "hi_in_0000",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 9120,
+      "referenceSha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+      "pcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "rawReference": {
+        "characters": 116,
+        "lexicalTokens": 119,
+        "minimumRegularByteTokens": 119,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+        "characters": 116,
+        "lexicalTokens": 119,
+        "minimumRegularByteTokens": 119
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 55,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "hi_in_0000",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 9120,
+      "referenceSha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+      "pcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "rawReference": {
+        "characters": 116,
+        "lexicalTokens": 119,
+        "minimumRegularByteTokens": 119,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+        "characters": 116,
+        "lexicalTokens": 119,
+        "minimumRegularByteTokens": 119
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "hi_in_0001",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 13800,
+      "referenceSha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+      "pcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "rawReference": {
+        "characters": 198,
+        "lexicalTokens": 199,
+        "minimumRegularByteTokens": 199,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+        "characters": 198,
+        "lexicalTokens": 199,
+        "minimumRegularByteTokens": 199
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "hi_in_0001",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 13800,
+      "referenceSha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+      "pcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "rawReference": {
+        "characters": 198,
+        "lexicalTokens": 199,
+        "minimumRegularByteTokens": 199,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+        "characters": 198,
+        "lexicalTokens": 199,
+        "minimumRegularByteTokens": 199
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "hi_in_0002",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 15000,
+      "referenceSha256": "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac",
+      "pcm16Sha256": "59ac6ede1b7799e702c310afcbe0c3055a560282d3a04700319fba8d36c0bff1",
+      "rawReference": {
+        "characters": 148,
+        "lexicalTokens": 147,
+        "minimumRegularByteTokens": 147,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac",
+        "characters": 148,
+        "lexicalTokens": 147,
+        "minimumRegularByteTokens": 147
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "hi_in_0002",
+      "language": "hi",
+      "metric": "wer",
+      "durationMs": 15000,
+      "referenceSha256": "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac",
+      "pcm16Sha256": "59ac6ede1b7799e702c310afcbe0c3055a560282d3a04700319fba8d36c0bff1",
+      "rawReference": {
+        "characters": 148,
+        "lexicalTokens": 147,
+        "minimumRegularByteTokens": 147,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac",
+        "characters": 148,
+        "lexicalTokens": 147,
+        "minimumRegularByteTokens": 147
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "ru_ru_0000",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 16920,
+      "referenceSha256": "8ea2cc5114e213681522b3ba14d2c850381228f6abbcd749648d99f83247b6ad",
+      "pcm16Sha256": "28c597b60fff84134f7712c942331022a2b683610e3cf7088f455858ae25a534",
+      "rawReference": {
+        "characters": 154,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 46,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "8ea2cc5114e213681522b3ba14d2c850381228f6abbcd749648d99f83247b6ad",
+        "characters": 154,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 46
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ru_ru_0000",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 16920,
+      "referenceSha256": "8ea2cc5114e213681522b3ba14d2c850381228f6abbcd749648d99f83247b6ad",
+      "pcm16Sha256": "28c597b60fff84134f7712c942331022a2b683610e3cf7088f455858ae25a534",
+      "rawReference": {
+        "characters": 154,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 46,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "8ea2cc5114e213681522b3ba14d2c850381228f6abbcd749648d99f83247b6ad",
+        "characters": 154,
+        "lexicalTokens": 47,
+        "minimumRegularByteTokens": 46
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ru_ru_0001",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 11520,
+      "referenceSha256": "ac43e389ba638e44f17407ec990fdddc1ae84d1ea6898c4525b7bb37480d1a2c",
+      "pcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 28,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ac43e389ba638e44f17407ec990fdddc1ae84d1ea6898c4525b7bb37480d1a2c",
+        "characters": 99,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 28
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ru_ru_0001",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 11520,
+      "referenceSha256": "ac43e389ba638e44f17407ec990fdddc1ae84d1ea6898c4525b7bb37480d1a2c",
+      "pcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+      "rawReference": {
+        "characters": 99,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 28,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ac43e389ba638e44f17407ec990fdddc1ae84d1ea6898c4525b7bb37480d1a2c",
+        "characters": 99,
+        "lexicalTokens": 30,
+        "minimumRegularByteTokens": 28
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 81,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ru_ru_0002",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 8640,
+      "referenceSha256": "beb70f2f31a2666eee1419fcadc1a714f9231bcd9b304375ad8a607b56d2ec43",
+      "pcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+      "rawReference": {
+        "characters": 75,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 22,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "beb70f2f31a2666eee1419fcadc1a714f9231bcd9b304375ad8a607b56d2ec43",
+        "characters": 75,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 22
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 52,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "ru_ru_0002",
+      "language": "ru",
+      "metric": "wer",
+      "durationMs": 8640,
+      "referenceSha256": "beb70f2f31a2666eee1419fcadc1a714f9231bcd9b304375ad8a607b56d2ec43",
+      "pcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+      "rawReference": {
+        "characters": 75,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 22,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "beb70f2f31a2666eee1419fcadc1a714f9231bcd9b304375ad8a607b56d2ec43",
+        "characters": 75,
+        "lexicalTokens": 23,
+        "minimumRegularByteTokens": 22
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 61,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0000",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 11340,
+      "referenceSha256": "fac515f496e5dda38c63e22096707cfb52f07ebf640e01eb4fb50e5712e69f1a",
+      "pcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+      "rawReference": {
+        "characters": 86,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 40,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "cc5ded839ea14fe397795b867a816071955731d7e140529007b3dcbbffbdc80f",
+        "characters": 64,
+        "lexicalTokens": 48,
+        "minimumRegularByteTokens": 47
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0000",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 11340,
+      "referenceSha256": "fac515f496e5dda38c63e22096707cfb52f07ebf640e01eb4fb50e5712e69f1a",
+      "pcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+      "rawReference": {
+        "characters": 86,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 40,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "cc5ded839ea14fe397795b867a816071955731d7e140529007b3dcbbffbdc80f",
+        "characters": 64,
+        "lexicalTokens": 48,
+        "minimumRegularByteTokens": 47
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 80,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0001",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 7260,
+      "referenceSha256": "71e9506329c4a164dc3b701343d1d7558fdf668984054832b25625c4d54c8701",
+      "pcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+      "rawReference": {
+        "characters": 77,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 31,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "36b40b557c4b59e567f05d6041b968f4de12bc19ab2e578ccecc1be724778ee1",
+        "characters": 62,
+        "lexicalTokens": 37,
+        "minimumRegularByteTokens": 35
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 44,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0001",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 7260,
+      "referenceSha256": "71e9506329c4a164dc3b701343d1d7558fdf668984054832b25625c4d54c8701",
+      "pcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+      "rawReference": {
+        "characters": 77,
+        "lexicalTokens": 31,
+        "minimumRegularByteTokens": 31,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "36b40b557c4b59e567f05d6041b968f4de12bc19ab2e578ccecc1be724778ee1",
+        "characters": 62,
+        "lexicalTokens": 37,
+        "minimumRegularByteTokens": 35
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 51,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0002",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 10020,
+      "referenceSha256": "9ce7c76fc54fcd44cc1a3f91d160a21a8f8aa05988e3d9688e4f70efbf6cb597",
+      "pcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+      "rawReference": {
+        "characters": 107,
+        "lexicalTokens": 37,
+        "minimumRegularByteTokens": 37,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "66d7dbd9651d8c5dac7c2b180ac869e36df8e84af67e485971d8fc867be06b5f",
+        "characters": 83,
+        "lexicalTokens": 50,
+        "minimumRegularByteTokens": 49
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 61,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "vi_vn_0002",
+      "language": "vi",
+      "metric": "cer",
+      "durationMs": 10020,
+      "referenceSha256": "9ce7c76fc54fcd44cc1a3f91d160a21a8f8aa05988e3d9688e4f70efbf6cb597",
+      "pcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+      "rawReference": {
+        "characters": 107,
+        "lexicalTokens": 37,
+        "minimumRegularByteTokens": 37,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "66d7dbd9651d8c5dac7c2b180ac869e36df8e84af67e485971d8fc867be06b5f",
+        "characters": 83,
+        "lexicalTokens": 50,
+        "minimumRegularByteTokens": 49
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 71,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "th_th_0000",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 8820,
+      "referenceSha256": "1b43d7066947c9afdc46eaa7ddf21461bb0b911a3de1087db99faeff660b02c5",
+      "pcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+      "rawReference": {
+        "characters": 130,
+        "lexicalTokens": 102,
+        "minimumRegularByteTokens": 101,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "51c7d6bea85d3630aae69319ab631f0bebed22ad193c29f5c4a15bef07a1f66f",
+        "characters": 127,
+        "lexicalTokens": 100,
+        "minimumRegularByteTokens": 99
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 53,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "th_th_0000",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 8820,
+      "referenceSha256": "1b43d7066947c9afdc46eaa7ddf21461bb0b911a3de1087db99faeff660b02c5",
+      "pcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+      "rawReference": {
+        "characters": 130,
+        "lexicalTokens": 102,
+        "minimumRegularByteTokens": 101,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "51c7d6bea85d3630aae69319ab631f0bebed22ad193c29f5c4a15bef07a1f66f",
+        "characters": 127,
+        "lexicalTokens": 100,
+        "minimumRegularByteTokens": 99
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 62,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "th_th_0001",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 7200,
+      "referenceSha256": "87b1c22fc92ea93959ec317f2947393c1974040d32376ec92b79686a6ae25f9b",
+      "pcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+      "rawReference": {
+        "characters": 78,
+        "lexicalTokens": 66,
+        "minimumRegularByteTokens": 65,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "542d40fb4603453d60f3da755b8f0a8bc1dd5b4bcb32716cd6e20bfc8e15b317",
+        "characters": 75,
+        "lexicalTokens": 64,
+        "minimumRegularByteTokens": 63
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 44,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "th_th_0001",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 7200,
+      "referenceSha256": "87b1c22fc92ea93959ec317f2947393c1974040d32376ec92b79686a6ae25f9b",
+      "pcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+      "rawReference": {
+        "characters": 78,
+        "lexicalTokens": 66,
+        "minimumRegularByteTokens": 65,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "542d40fb4603453d60f3da755b8f0a8bc1dd5b4bcb32716cd6e20bfc8e15b317",
+        "characters": 75,
+        "lexicalTokens": 64,
+        "minimumRegularByteTokens": 63
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 51,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "th_th_0002",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 9540,
+      "referenceSha256": "4c2e25af290c9e6678e355173c20c0a79751a434f2de70f012b90aafa8b23420",
+      "pcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+      "rawReference": {
+        "characters": 156,
+        "lexicalTokens": 133,
+        "minimumRegularByteTokens": 133,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ea3a3beb2511f4580eb25fc30683537c78197da437c48b7d8ec4a9af517c06d8",
+        "characters": 153,
+        "lexicalTokens": 130,
+        "minimumRegularByteTokens": 130
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 58,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "th_th_0002",
+      "language": "th",
+      "metric": "cer",
+      "durationMs": 9540,
+      "referenceSha256": "4c2e25af290c9e6678e355173c20c0a79751a434f2de70f012b90aafa8b23420",
+      "pcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+      "rawReference": {
+        "characters": 156,
+        "lexicalTokens": 133,
+        "minimumRegularByteTokens": 133,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "ea3a3beb2511f4580eb25fc30683537c78197da437c48b7d8ec4a9af517c06d8",
+        "characters": 153,
+        "lexicalTokens": 130,
+        "minimumRegularByteTokens": 130
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 67,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": true,
+      "rawExactMinimumExceedsDirectBudget": true,
+      "rawCanonicalConsumesEntireDirectBudget": true,
+      "normalizedCanonicalExceedsDirectBudget": true,
+      "normalizedExactMinimumExceedsDirectBudget": true
+    },
+    {
+      "id": "pt_br_0000",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 17760,
+      "referenceSha256": "06c6457a7da5cd8b5473a60ff1dcf8f84facdff90dd4e9c98c7d681705794ef9",
+      "pcm16Sha256": "e575d5954efe5e252792238aa1120f8506fbf1b39e4fff96fa74ec96a767de7d",
+      "rawReference": {
+        "characters": 225,
+        "lexicalTokens": 52,
+        "minimumRegularByteTokens": 52,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "06c6457a7da5cd8b5473a60ff1dcf8f84facdff90dd4e9c98c7d681705794ef9",
+        "characters": 225,
+        "lexicalTokens": 52,
+        "minimumRegularByteTokens": 52
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "pt_br_0000",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 17760,
+      "referenceSha256": "06c6457a7da5cd8b5473a60ff1dcf8f84facdff90dd4e9c98c7d681705794ef9",
+      "pcm16Sha256": "e575d5954efe5e252792238aa1120f8506fbf1b39e4fff96fa74ec96a767de7d",
+      "rawReference": {
+        "characters": 225,
+        "lexicalTokens": 52,
+        "minimumRegularByteTokens": 52,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "06c6457a7da5cd8b5473a60ff1dcf8f84facdff90dd4e9c98c7d681705794ef9",
+        "characters": 225,
+        "lexicalTokens": 52,
+        "minimumRegularByteTokens": 52
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "pt_br_0001",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 13620,
+      "referenceSha256": "da1d3c5c4c882a2617ee2cd3ea4d429021225329e4c85df6e49694df7f58b4d6",
+      "pcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+      "rawReference": {
+        "characters": 146,
+        "lexicalTokens": 42,
+        "minimumRegularByteTokens": 42,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "89a3c885dd2c8b920df2079f9a86f4ed327f66cc1ebc0227138404c48634eb1b",
+        "characters": 145,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 40
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": false,
+      "directWholeClipMaxNewTokens": 64,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "pt_br_0001",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 13620,
+      "referenceSha256": "da1d3c5c4c882a2617ee2cd3ea4d429021225329e4c85df6e49694df7f58b4d6",
+      "pcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+      "rawReference": {
+        "characters": 146,
+        "lexicalTokens": 42,
+        "minimumRegularByteTokens": 42,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "89a3c885dd2c8b920df2079f9a86f4ed327f66cc1ebc0227138404c48634eb1b",
+        "characters": 145,
+        "lexicalTokens": 40,
+        "minimumRegularByteTokens": 40
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 96,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "pt_br_0002",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 8400,
+      "referenceSha256": "93e1e302d3988012b046b7963a33e0da93a51453acd41b3c1c0ad743299fb52f",
+      "pcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+      "rawReference": {
+        "characters": 86,
+        "lexicalTokens": 24,
+        "minimumRegularByteTokens": 23,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "93e1e302d3988012b046b7963a33e0da93a51453acd41b3c1c0ad743299fb52f",
+        "characters": 86,
+        "lexicalTokens": 24,
+        "minimumRegularByteTokens": 23
+      },
+      "model": "tiny",
+      "productionWindowMs": 10000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 51,
+      "maximumFullProductionWindowMaxNewTokens": 60,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    },
+    {
+      "id": "pt_br_0002",
+      "language": "pt",
+      "metric": "wer",
+      "durationMs": 8400,
+      "referenceSha256": "93e1e302d3988012b046b7963a33e0da93a51453acd41b3c1c0ad743299fb52f",
+      "pcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+      "rawReference": {
+        "characters": 86,
+        "lexicalTokens": 24,
+        "minimumRegularByteTokens": 23,
+        "exactCanonicalDecode": true
+      },
+      "scoringNormalizedReference": {
+        "sha256": "93e1e302d3988012b046b7963a33e0da93a51453acd41b3c1c0ad743299fb52f",
+        "characters": 86,
+        "lexicalTokens": 24,
+        "minimumRegularByteTokens": 23
+      },
+      "model": "base",
+      "productionWindowMs": 14000,
+      "fitsSingleProductionWindow": true,
+      "directWholeClipMaxNewTokens": 59,
+      "maximumFullProductionWindowMaxNewTokens": 96,
+      "rawCanonicalExceedsDirectBudget": false,
+      "rawExactMinimumExceedsDirectBudget": false,
+      "rawCanonicalConsumesEntireDirectBudget": false,
+      "normalizedCanonicalExceedsDirectBudget": false,
+      "normalizedExactMinimumExceedsDirectBudget": false
+    }
+  ]
+}

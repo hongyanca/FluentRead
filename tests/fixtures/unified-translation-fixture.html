@@ -17,6 +17,19 @@
       -webkit-line-clamp: 2;
     }
     .model-description-clamp p { margin: 0; }
+    #translation-error-link {
+      display: block;
+      margin: 18px 0;
+      padding: 12px 14px;
+      border: 1px solid #b8c4d6;
+      border-radius: 10px;
+      color: #8f2f5e;
+      background: #f7f9fc;
+      font: 700 20px/1.35 Georgia, serif;
+      text-decoration: underline wavy currentColor 1px;
+    }
+    #hover-remount-row { margin: 20px 0; }
+    #hover-remount-target { min-height: 72px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
@@ -27,8 +40,13 @@
     <p id="paragraph-one">
       This paragraph contains <a href="https://example.com">a preserved link</a>
       and <code>const value = 42</code> that should remain inside the translated block.
+      Open <span data-icon-ligature style="font-family: 'Material Symbols Rounded'">account_circle</span> to view your account.
     </p>
+    <span id="standalone-icon-ligature" style="font-family: 'Google Symbols'">keyboard_return</span>
     <p id="paragraph-two">The second paragraph is a neighbor and must be translated exactly once.</p>
+    <article id="hover-remount-row">
+      <p id="hover-remount-target"><span>A framework may rebuild this first source line on pointer movement.</span><br><br><span>The translated result must remain visible without another provider request.</span></p>
+    </article>
     <div id="model-description-clamp" class="model-description-clamp">
       <div class="model-description-prose">
         <p id="model-description">
@@ -40,6 +58,12 @@
       <button id="save-button"><span aria-hidden="true">★</span><span>Save changes</span></button>
       <button id="cancel-button">Cancel</button>
     </div>
+    <a
+      id="translation-error-link"
+      href="#translation-error-destination"
+      hidden
+    >This block link fails once so its translation error actions can be verified without leaving the page.</a>
+    <span id="translation-error-destination" hidden></span>
     <section id="dynamic-container"></section>
     <div id="shadow-host"></div>
   </main>
@@ -48,6 +72,64 @@
     const host = document.querySelector('#shadow-host');
     const shadow = host.attachShadow({ mode: 'open' });
     shadow.innerHTML = '<p id="shadow-paragraph">This paragraph lives inside an open shadow root.</p>';
+    window.__fluentReadFailureLinkActivations = 0;
+    document.querySelector('#translation-error-link').addEventListener('click', () => {
+      window.__fluentReadFailureLinkActivations += 1;
+    });
+    window.__fluentReadHoverRemount = {
+      armed: false,
+      commits: 0,
+      sameOwnerCommits: 0,
+      wholeOwnerCommits: 0,
+      wrapperCloneCommits: 0,
+      wrapperClassCommits: 0,
+      wrapperTamperCommits: 0,
+      wrapperTamperCommitted: false,
+    };
+    const appendHoverRemountSource = (owner) => {
+      const first = document.createElement('span');
+      first.textContent = 'A framework may rebuild this first source line on pointer movement.';
+      const second = document.createElement('span');
+      second.textContent = 'The translated result must remain visible without another provider request.';
+      owner.replaceChildren(first, document.createElement('br'), document.createElement('br'), second);
+    };
+    document.querySelector('#hover-remount-row').addEventListener('mousemove', () => {
+      const probe = window.__fluentReadHoverRemount;
+      if (!probe.armed) return;
+      const current = document.querySelector('#hover-remount-target');
+      if (!(current instanceof HTMLElement)) return;
+      probe.commits += 1;
+      const wrapper = current.querySelector(
+        ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]',
+      );
+      if (!probe.wrapperTamperCommitted && wrapper instanceof HTMLElement) {
+        wrapper.textContent = 'Host-forged translation must never reach a paint frame.';
+        probe.wrapperTamperCommitted = true;
+        probe.wrapperTamperCommits += 1;
+        return;
+      }
+      const mode = (probe.commits - 2) % 4;
+      if (mode === 0) {
+        appendHoverRemountSource(current);
+        probe.sameOwnerCommits += 1;
+        return;
+      }
+      if (mode === 1) {
+        const replacement = current.cloneNode(false);
+        appendHoverRemountSource(replacement);
+        current.replaceWith(replacement);
+        probe.wholeOwnerCommits += 1;
+        return;
+      }
+      if (!(wrapper instanceof HTMLElement)) return;
+      if (mode === 2) {
+        wrapper.replaceWith(wrapper.cloneNode(true));
+        probe.wrapperCloneCommits += 1;
+        return;
+      }
+      wrapper.classList.toggle('host-hover-decoration');
+      probe.wrapperClassCommits += 1;
+    });
   </script>
 </body>
 </html>

@@ -1,4 +1,7 @@
 import {describe, expect, it, vi} from 'vitest';
+import ts from 'typescript';
+import {resolve} from 'node:path';
+import {readFileSync} from 'node:fs';
 
 import {
     createBrowserVocabularyBookChangedBroadcaster,
@@ -14,6 +17,65 @@ import {
     VOCABULARY_BOOK_MESSAGE,
 } from '@/src/features/vocabulary/protocol';
 
+function protocolTypeDiagnostics(body: string): string[] {
+    const file = resolve(process.cwd(), '.vocabulary-protocol-contract.ts');
+    const options: ts.CompilerOptions = {target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,
+        moduleResolution:ts.ModuleResolutionKind.Bundler,strict:true,skipLibCheck:true,noEmit:true,types:[]};
+    const host = ts.createCompilerHost(options); const original = host.getSourceFile.bind(host);
+    host.getSourceFile = (name,languageVersion,onError,createNew) => name === file
+        ? ts.createSourceFile(name,body,languageVersion,true) : original(name,languageVersion,onError,createNew);
+    return ts.getPreEmitDiagnostics(ts.createProgram([file],options,host)).map(diagnostic => ts.flattenDiagnosticMessageText(diagnostic.messageText,'\n'));
+}
+
+const contractImports = `import type * as Wire from './src/features/vocabulary/protocol';
+import type * as Domain from './src/features/vocabulary/learningModel';
+type Assert<T extends true> = T;
+type Equal<A,B> = (<T>()=>T extends A?1:2) extends (<T>()=>T extends B?1:2)?true:false;`;
+
+describe('vocabulary wire and domain contracts', () => {
+    it('compiles every persisted status and shared contract while retaining the wire context boundary', () => {
+        const errors = protocolTypeDiagnostics(contractImports+`
+const states: Domain.VocabularyStatus[] = ['new','learning','familiar','mastered'];
+const list: Wire.VocabularyListOptions = {status:states};
+type Status = Assert<Equal<Wire.VocabularyStatus,Domain.VocabularyStatus>>;
+type List = Assert<Equal<Wire.VocabularyListOptions,Domain.VocabularyListOptions>>;
+type Rating = Assert<Equal<Wire.VocabularyReviewRating,Domain.VocabularyReviewRating>>;
+type Scheduled = Assert<Equal<Wire.VocabularyScheduledReviewRating,Domain.VocabularyScheduledReviewRating>>;
+type Export = Assert<Equal<Wire.VocabularyExportOptions,Domain.VocabularyExportOptions>>;
+type Error = Assert<Equal<Wire.VocabularyBookErrorCode,Domain.VocabularyBookErrorCode>>;
+type Response = Assert<Equal<Wire.VocabularyBookResponse<string>,Domain.VocabularyBookResponse<string>>>;
+type Changed = Assert<Equal<Wire.VocabularyBookChangedMessage,Domain.VocabularyBookChangedMessage>>;
+type Upsert = Assert<Equal<Omit<Wire.VocabularyUpsertInput,'context'|'contexts'>,Omit<Domain.VocabularyUpsertInput,'context'|'contexts'>>>;
+type Actions = Assert<Equal<Exclude<Wire.VocabularyBookAction,'reencounterGet'|'reencounterList'>,Domain.VocabularyBookRequest['action']>>;
+type Message = Assert<Equal<typeof import('./src/features/vocabulary/protocol').VOCABULARY_BOOK_MESSAGE,typeof import('./src/features/vocabulary/learningModel').VOCABULARY_BOOK_MESSAGE>>;
+const wireContext: Wire.VocabularyContextInput = {sourceUrl:'https://example.test/source'};
+const input: Wire.VocabularyUpsertInput = {sourceLanguage:'en',targetLanguage:'zh-CN',term:'art',translation:'艺术',context:wireContext};
+const untrusted: Wire.VocabularyBookRuntimeMessage = {type:'fluentReadVocabularyBook',action:{malformed:true},input:false};
+type RequiredDomainText = Assert<undefined extends Domain.VocabularyContextInput['text']?false:true>;
+`);
+        expect(errors).toEqual([]);
+    });
+    it('still rejects unknown statuses, unsupported ratings, missing save fields and domain contexts without text', () => {
+        const errors = protocolTypeDiagnostics(contractImports+`
+const status: Wire.VocabularyStatus = 'unsupported';
+const rating: Wire.VocabularyScheduledReviewRating = 'perfect';
+const save: Wire.VocabularyUpsertInput = {term:'art'};
+const context: Domain.VocabularyContextInput = {sourceUrl:'https://example.test/source'};
+`);
+        expect(errors).toHaveLength(4);
+        expect(errors.some(error=>error.includes('unsupported'))).toBe(true);
+        expect(errors.some(error=>error.includes('perfect'))).toBe(true);
+        expect(errors.some(error=>error.includes('sourceLanguage'))).toBe(true);
+        expect(errors.some(error=>error.includes('text'))).toBe(true);
+    });
+    it('emits a standalone wire protocol with no runtime dependency on model algorithms or storage', () => {
+        const source=readFileSync(resolve(process.cwd(),'src/features/vocabulary/protocol.ts'),'utf8');
+        const emitted=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+        const ast=ts.createSourceFile('protocol.js',emitted,ts.ScriptTarget.ES2022,true,ts.ScriptKind.JS);
+        expect(ast.statements.filter(statement=>ts.isImportDeclaration(statement)||ts.isExportDeclaration(statement)&&statement.moduleSpecifier)).toEqual([]);
+    });
+});
+
 async function flushMicrotasks(times = 4): Promise<void> {
     for (let index = 0; index < times; index += 1) await Promise.resolve();
 }
@@ -24,6 +86,7 @@ function createRepository() {
         get: vi.fn(async (entryId: string) => ({method: 'get', entryId})),
         getByTerm: vi.fn(async (sourceLanguage: string, term: string) => ({method: 'getByTerm', sourceLanguage, term})),
         upsert: vi.fn(async () => ({id: 'entry-upsert', method: 'upsert'})),
+        updateNote: vi.fn(async (entryId: string, note: string) => ({id:entryId, note})),
         review: vi.fn(async (entryId: string, rating: string) => ({method: 'review', entryId, rating})),
         setMastery: vi.fn(async (entryId: string) => ({method: 'setMastery', entryId})),
         relearn: vi.fn(async (entryId: string) => ({method: 'relearn', entryId})),
@@ -50,6 +113,46 @@ function createDependencies(overrides: Partial<VocabularyBookBackgroundDependenc
 }
 
 describe('vocabulary background message handlers', () => {
+    it('再次遇见只返回最小表达列表，并在主动打开后才返回对应收藏原句', async () => {
+        const {dependencies, repository} = createDependencies({isReencounterEnabled: () => true});
+        const entry = {id: 'art', term: 'art', sourceLanguage: 'en', contexts: [{text: 'Art matters.', capturedAt: 1}], translations: {zh: {text: '艺术', updatedAt: 1}}, reviewCount: 7};
+        repository.list.mockResolvedValue([entry] as never); repository.get.mockResolvedValue(entry as never);
+        const handler = createVocabularyBookHandler(dependencies);
+        const result = await handler.handle({type: VOCABULARY_BOOK_MESSAGE, action: 'reencounterList'}, {});
+        expect(result).toEqual({success: true, data: [{id: 'art', term: 'art', sourceLanguage: 'en', reference: '', savedSentence: '', savedTitle: ''}]});
+        expect(repository.get).not.toHaveBeenCalled();
+        expect(await handler.handle({type: VOCABULARY_BOOK_MESSAGE, action: 'reencounterGet', entryId: 'art'}, {})).toMatchObject({success: true, data: {savedSentence: 'Art matters.', reference: '艺术'}});
+        expect(repository.review).not.toHaveBeenCalled(); expect(dependencies.broadcastChanged).not.toHaveBeenCalled(); expect(entry.reviewCount).toBe(7);
+        repository.get.mockResolvedValueOnce(null as never);
+        expect(await handler.handle({type: VOCABULARY_BOOK_MESSAGE, action: 'reencounterGet', entryId: 'missing'}, {})).toMatchObject({success: false, error: {code: 'not-found'}});
+    });
+    it('再次遇见在后台强制遵守关闭与无痕边界', async () => {
+        for (const action of ['reencounterList', 'reencounterGet']) {
+            const disabled = createDependencies();
+            expect(await createVocabularyBookHandler(disabled.dependencies).handle({type: VOCABULARY_BOOK_MESSAGE, action, entryId: 'art'}, {})).toMatchObject({success: false, error: {code: 'invalid-input'}});
+            expect(disabled.repository.list).not.toHaveBeenCalled(); expect(disabled.repository.get).not.toHaveBeenCalled();
+            const enabled = createDependencies({isReencounterEnabled: () => true});
+            expect(await createVocabularyBookHandler(enabled.dependencies).handle({type: VOCABULARY_BOOK_MESSAGE, action, entryId: 'art'}, {sender: {tab: {incognito: true}}})).toMatchObject({success: false});
+            expect(enabled.repository.list).not.toHaveBeenCalled(); expect(enabled.repository.get).not.toHaveBeenCalled();
+        }
+    });
+    it('修改解释不依赖收藏入口开关，校验解释并阻止无痕修改', async () => {
+        const {dependencies, repository} = createDependencies({isVocabularyBookEnabled: () => false});
+        const handler = createVocabularyBookHandler(dependencies);
+        const request = {type:VOCABULARY_BOOK_MESSAGE, action:'updateNote', entryId:'sentence', note:'一句简单解释'};
+        expect(await handler.handle(request, {})).toEqual({success:true, data:{id:'sentence', note:'一句简单解释'}});
+        expect(repository.updateNote).toHaveBeenCalledWith('sentence', '一句简单解释');
+        expect(dependencies.broadcastChanged).toHaveBeenCalledWith('note', 'sentence');
+        expect(await handler.handle({...request, note:42}, {})).toMatchObject({success:false, error:{code:'invalid-input'}});
+        expect(await handler.handle(request, {sender:{tab:{incognito:true}}})).toMatchObject({success:false, error:{code:'invalid-input'}});
+    });
+    it('允许保存没有AI释义的多语种原文', async () => {
+        const {dependencies, repository} = createDependencies();
+        const handler = createVocabularyBookHandler(dependencies);
+        const input = {sourceLanguage: 'ja', targetLanguage: 'zh-CN', term: 'この文章を覚えたい。', translation: ''};
+        expect(await handler.handle({type: VOCABULARY_BOOK_MESSAGE, action: 'upsert', input}, {})).toMatchObject({success: true});
+        expect(repository.upsert).toHaveBeenCalledWith(input);
+    });
     it('通过静态 registry 处理变更通知 ACK 和词书请求', async () => {
         const {dependencies, repository} = createDependencies();
         const router = createBackgroundMessageRouter(createVocabularyBackgroundHandlers(dependencies));
@@ -151,7 +254,7 @@ describe('vocabulary background message handlers', () => {
         expect(dependencies.broadcastChanged).toHaveBeenCalledTimes(2);
     });
 
-    it('Beta 未启用、无痕窗口和非法 entryId 都返回词书业务错误', async () => {
+    it('功能未启用、无痕窗口和非法 entryId 都返回词书业务错误', async () => {
         const disabled = createDependencies({isVocabularyBookEnabled: () => false});
         await expect(createVocabularyBookHandler(disabled.dependencies).handle({
             type: VOCABULARY_BOOK_MESSAGE,
@@ -159,7 +262,7 @@ describe('vocabulary background message handlers', () => {
             input: {sourceLanguage: 'en', targetLanguage: 'zh-CN', term: 'common', translation: '常见'},
         }, {})).resolves.toMatchObject({
             success: false,
-            error: {code: 'invalid-input', message: '请先在单词本页面开启 Beta'},
+            error: {code: 'invalid-input', message: '请先在单词本页面开启功能'},
         });
         expect(disabled.repository.upsert).not.toHaveBeenCalled();
 

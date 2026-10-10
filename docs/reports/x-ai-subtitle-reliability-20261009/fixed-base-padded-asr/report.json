@@ -1,0 +1,123 @@
+{
+  "success": false,
+  "evidence": "Real Whisper on three synthetic Mandarin clips; raw CER excludes punctuation but counts simplified/traditional differences; no live X audio",
+  "models": [
+    "base"
+  ],
+  "languages": [
+    "zh-Hans"
+  ],
+  "audioPaddingMs": 2000,
+  "silenceProbe": false,
+  "prepareTimeoutMs": 300000,
+  "inferenceTimeoutMs": 120000,
+  "extensionInstall": "cdp",
+  "modelCache": {
+    "source": "/private/tmp/fluentread-x-ai-public-model-cache-20261009",
+    "entries": [
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/config.json",
+        "file": "tiny/config.json",
+        "contentType": "application/json",
+        "bytes": 2243,
+        "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/generation_config.json",
+        "file": "tiny/generation_config.json",
+        "contentType": "application/json",
+        "bytes": 3772,
+        "sha256": "f5c67e5a4f7102f8cb4d058bc95da276bbc19eeec997267c3bb0f25ef68facd1"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+        "file": "tiny/preprocessor_config.json",
+        "contentType": "application/json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/tokenizer.json",
+        "file": "tiny/tokenizer.json",
+        "contentType": "application/json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/tokenizer_config.json",
+        "file": "tiny/tokenizer_config.json",
+        "contentType": "application/json",
+        "bytes": 282683,
+        "sha256": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/onnx/encoder_model_q4.onnx",
+        "file": "tiny/onnx/encoder_model_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 9020667,
+        "sha256": "45a55cedf1ff46606520f5938ed40c94bd4f6b38beb2a646eed8636225342488"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "file": "tiny/onnx/decoder_model_merged_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 86713702,
+        "sha256": "a7573efde84f7d018d59e50e7f860c03e26623d68e23eb6037b76135367e72eb"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/config.json",
+        "file": "base/config.json",
+        "contentType": "application/json",
+        "bytes": 2243,
+        "sha256": "f4d0608f7d918166da7edb3e188de5ef1bfe70d9802e785d271fd88111e9cf4b"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/generation_config.json",
+        "file": "base/generation_config.json",
+        "contentType": "application/json",
+        "bytes": 3832,
+        "sha256": "61070cf8de25b1e9256e8e102ded49d8d24a8369ed36ef84fdf21549e68125a0"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/preprocessor_config.json",
+        "file": "base/preprocessor_config.json",
+        "contentType": "application/json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer.json",
+        "file": "base/tokenizer.json",
+        "contentType": "application/json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer_config.json",
+        "file": "base/tokenizer_config.json",
+        "contentType": "application/json",
+        "bytes": 282682,
+        "sha256": "2e036e4dbacfdeb7242c7d4ec4149f4a16e86026048f94d1637e3a8ee9c6a573"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/encoder_model_q4.onnx",
+        "file": "base/onnx/encoder_model_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 18772451,
+        "sha256": "9d4e9c31e8559e71de3e0e49d60b830951484699ef53747a4a06261bbbc8cb88"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "file": "base/onnx/decoder_model_merged_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 123602419,
+        "sha256": "09f83b71ceedc97dab1d90b914715dc532a646a147abda11d83c64867b7c319c"
+      }
+    ]
+  },
+  "results": [],
+  "error": {
+    "message": "后台 Edge 未在 30000ms 内写入 DevToolsActivePort",
+    "stack": "Error: 后台 Edge 未在 30000ms 内写入 DevToolsActivePort\n    at waitForDevToolsPort (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:300:9)\n    at async Object.launchFocusSafePersistentContext (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:471:18)\n    at async main (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-video-ai-recognition-benchmark.cjs:138:15)"
+  }
+}

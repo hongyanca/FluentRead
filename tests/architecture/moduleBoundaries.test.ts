@@ -122,14 +122,14 @@ const COMPLEXITY_DEBT_CEILINGS: Record<string, number> = {
     'entrypoints/offscreen/main.ts': 3,
     'entrypoints/shadowBridge.content.ts': 9,
     'entrypoints/youtubeBridge.content.ts': 9,
-    'src/app/background/contextMenuRuntime.ts': 157,
-    'src/app/background/messageRuntime.ts': 165,
-    'src/app/background/runtime.ts': 22,
+    'src/app/background/contextMenuRuntime.ts': 142,
+    'src/app/background/messageRuntime.ts': 173,
+    'src/app/background/runtime.ts': 25,
     'src/app/content/hotkeyRuntime.ts': 208,
     'src/app/content/messageRuntime.ts': 169,
-    'src/app/content/runtime.ts': 269,
-    'src/features/settings/ui/SettingsSections.vue': 1458,
-    'src/features/full-page-translation/content/runtime.ts': 2164,
+    'src/app/content/runtime.ts': 277,
+    'src/features/settings/ui/SettingsSections.vue': 1558,
+    'src/features/full-page-translation/content/runtime.ts': 2196,
     'src/features/video-subtitle/content/runtime.ts': 1887,
 };
 
@@ -396,6 +396,30 @@ describe('architecture module boundaries', () => {
         });
 
         expect(misplaced.map(relativePath)).toEqual([]);
+    });
+
+    it('按需加载的大体积资源不得被扩展运行时代码静态引入', () => {
+        // 六种非中文界面文案只能经构建期 JSON 按需加载。
+        const allowed = new Map<string, RegExp>([
+            ['src/core/i18n/bundles.ts', /^\.\/messages\/(?:en-US|es-ES|fr-FR|ja-JP|ko-KR|ru-RU)$/u],
+        ]);
+        const onDemand = /^(?:@\/src\/core\/i18n\/bundles|\.\/bundles|(?:@\/src\/core\/i18n\/|\.\/|\.\.\/)messages\/(?:en-US|es-ES|fr-FR|ja-JP|ko-KR|ru-RU))$/u;
+        const violations: string[] = [];
+        for (const file of listSourceFiles('src')) {
+            const path = relativePath(file);
+            const source = readSource(file);
+            const script = source.includes('<script')
+                ? [...source.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/giu)].map((match) => match[1]).join('\n')
+                : source;
+            const sourceFile = ts.createSourceFile(path, script, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+            for (const statement of sourceFile.statements) {
+                if (!ts.isImportDeclaration(statement) || statement.importClause?.isTypeOnly) continue;
+                const specifier = (statement.moduleSpecifier as ts.StringLiteral).text;
+                if (!onDemand.test(specifier)) continue;
+                if (!allowed.get(path)?.test(specifier)) violations.push(`${path} -> ${specifier}`);
+            }
+        }
+        expect(violations).toEqual([]);
     });
 
     it('历史巨型文件不得继续增长，后续迁移只降低债务上限', () => {

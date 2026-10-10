@@ -1,23 +1,21 @@
 /**
  * @file src/app/background/contextMenuRuntime.ts
- * 文件职责：管理后台右键菜单的安装、展示状态同步和点击路由，让页面翻译菜单随配置及标签页翻译状态保持一致。
- * 主要内容：等待配置就绪后创建或更新菜单，订阅配置变化，读取 TabTranslationStateStore 决定“翻译/恢复”文案，并把合法标签页上的菜单点击转成对应运行时消息。
- * 模块边界：这里只编排 browser.contextMenus、tabs 与 app 层状态，不执行正文翻译、不解析站点规则细节；菜单展示决策和翻译动作分别交给 feature domain 与 content runtime。
+ * 文件职责：管理后台右键菜单的安装、状态同步和点击路由，让菜单结构随设置重建，让标题随当前标签页的翻译与网站状态更新。
+ * 主要内容：等待配置就绪后按菜单结构创建条目，串行执行原生菜单写入与重建，以配置、结构及活动页查询归属屏蔽迟到回复，冷启动点击等待菜单就绪后交给动作模块执行。
+ * 模块边界：这里只编排 browser.contextMenus、tabs 与 app 层状态，不推导菜单结构、不渲染文案、不执行翻译；结构归 core/context-menu，文案归 core/context-menu/presentation，动作归 contextMenuActions。
  */
-import {CONTEXT_MENU_IDS} from '@/src/core/config/constants';
-import {getFullPageContextMenuPresentation} from '@/src/features/site-rules/domain';
-import {config, configReady, subscribeConfig} from '@/src/services/config/store';
+import {buildContextMenuPlan, resolveContextMenuPresentation, type ContextMenuPlanItem} from '@/src/core/context-menu/domain';
+import {configReady, subscribeConfig} from '@/src/services/config/store';
+import {runContextMenuAction, type ContextMenuClickInfo, type ContextMenuClickTab} from './contextMenuActions';
+import {readContextMenuSettings, type ContextMenuSettingsSnapshot} from './contextMenuPreferences';
+import {renderContextMenuTitle} from '@/src/core/context-menu/presentation';
 import {isBrowserTabId, type TabTranslationState, TabTranslationStateStore} from './tabTranslationState';
+import {createTabTranslationStateReader} from './tabTranslationQuery';
+import {ensureUiLanguageBundle} from '@/src/platform/i18n/uiLanguageBundles';
+import {browserCapabilities} from '@/src/platform/browser/capabilities';
+import {createContextMenuUpdater} from './contextMenuUpdates';
 
-interface BrowserTabSummary {
-    id?: number;
-}
-
-interface FullPageStateResponse {
-    status?: string;
-    isTranslated?: boolean;
-    isSiteDisabled?: boolean;
-}
+const NEUTRAL_STATE: TabTranslationState = {isTranslated: false, isSiteDisabled: false};
 
 export interface BackgroundContextMenuRuntime {
     readonly isSupported: boolean;
@@ -32,131 +30,118 @@ export interface BackgroundContextMenuRuntime {
 export function installBackgroundContextMenus(
     tabTranslationStates: TabTranslationStateStore,
 ): BackgroundContextMenuRuntime {
-    const isSupported = !!browser.contextMenus;
-    let contextMenusReady = false;
-    let contextMenuEnabled = true;
-    let contextMenuSyncQueue: Promise<void> = Promise.resolve();
+    // Thunderbird 使用邮件工具栏；Firefox Android 可能只暴露不完整的菜单接口。
+    const menus = browser.contextMenus;
+    const isSupported = browserCapabilities.browser !== 'thunderbird'
+        && typeof menus?.create === 'function'
+        && typeof menus.removeAll === 'function'
+        && typeof menus.update === 'function'
+        && typeof menus.onClicked?.addListener === 'function';
+    let settings: ContextMenuSettingsSnapshot = readContextMenuSettings();
+    let plan: readonly ContextMenuPlanItem[] = [];
+    let syncQueue: Promise<void> = Promise.resolve(), initialized: Promise<void> = Promise.resolve();
+    let mutationQueue: Promise<void> = Promise.resolve();
+    const readTabTranslationState = createTabTranslationStateReader(tabTranslationStates);
 
-    const readTabTranslationState = async (tabId: number, force = false): Promise<TabTranslationState> => {
-        if (!force && tabTranslationStates.hasCompleteState(tabId)) return tabTranslationStates.get(tabId);
-
-        try {
-            const response = await browser.tabs.sendMessage(tabId, {
-                type: 'getFullPageTranslationState',
-            }) as FullPageStateResponse | undefined;
-            if (response?.status === 'success') {
-                return tabTranslationStates.set(tabId, {
-                    isTranslated: response.isTranslated === true,
-                    isSiteDisabled: response.isSiteDisabled === true,
-                });
-            }
-        } catch {
-            // 浏览器内部页或尚未注入内容脚本的页面无法查询，沿用当前 worker 的安全默认值。
-        }
-
-        return tabTranslationStates.set(tabId, tabTranslationStates.get(tabId));
+    // 已发出的原生写入无法取消；让后续更新和结构重建排在它之后，保证最新结果最后落地。
+    const mutate = (work: () => Promise<void>): Promise<void> => {
+        mutationQueue = mutationQueue.catch(() => undefined).then(work);
+        return mutationQueue;
     };
+    const update = createContextMenuUpdater({
+        isSupported, getSettings: () => settings, getPlan: () => plan, mutate, readTabTranslationState,
+    });
 
-    const update = async (tabId: number): Promise<void> => {
-        if (!isSupported || !contextMenusReady) return;
-        // contextMenus.update 修改全局菜单项；后台标签页不能覆盖当前活动页的标题。
-        const activeTabs = await browser.tabs.query({active: true, lastFocusedWindow: true}) as BrowserTabSummary[];
-        if (!activeTabs.some((tab) => tab.id === tabId)) return;
-
-        const state = await readTabTranslationState(tabId, true);
-        const presentation = getFullPageContextMenuPresentation(state.isTranslated, state.isSiteDisabled);
-        try {
-            await browser.contextMenus.update(CONTEXT_MENU_IDS.TRANSLATE_FULL_PAGE, presentation);
-        } catch (error) {
-            console.error('Failed to update context menu:', error);
+    const createItems = async (snapshot: ContextMenuSettingsSnapshot): Promise<ContextMenuPlanItem[]> => {
+        const items = snapshot.enabled ? [...buildContextMenuPlan(snapshot.toggles)] : [];
+        const initial = resolveContextMenuPresentation(items, NEUTRAL_STATE, snapshot.display);
+        for (const [index, item] of items.entries()) {
+            if (snapshot !== settings) break;
+            await menus.create({
+                id: item.menuItemId,
+                title: renderContextMenuTitle(initial[index], snapshot.titleContext),
+                visible: initial[index].visible,
+                contexts: [...item.contexts],
+            });
         }
+        return items;
     };
 
     const sync = (): Promise<void> => {
-        const requestedEnabled = contextMenuEnabled;
-        contextMenuSyncQueue = contextMenuSyncQueue
-            .catch(() => undefined)
+        const requested = settings;
+        syncQueue = syncQueue
             .then(async () => {
-                if (requestedEnabled !== contextMenuEnabled) return;
-                contextMenusReady = false;
-                await browser.contextMenus.removeAll();
-                if (!requestedEnabled || requestedEnabled !== contextMenuEnabled) return;
-
-                await browser.contextMenus.create({
-                    id: CONTEXT_MENU_IDS.TRANSLATE_FULL_PAGE,
-                    title: '流畅阅读翻译',
-                    contexts: ['page', 'selection'],
+                if (requested !== settings) return;
+                // 菜单标题是一次性写入的原生文案；先取得界面语言资源，避免非中文用户看到中文回退。
+                await ensureUiLanguageBundle(requested.titleContext.language);
+                if (requested !== settings) return;
+                await mutate(async () => {
+                    if (requested !== settings) return;
+                    plan = [];
+                    await menus.removeAll();
+                    const items = await createItems(requested);
+                    // 重建期间设置又变了：撤掉本轮已创建项，让后一次同步重新生成。
+                    if (requested !== settings) {
+                        await menus.removeAll();
+                        return;
+                    }
+                    plan = items;
                 });
-                if (requestedEnabled !== contextMenuEnabled) {
-                    await browser.contextMenus.removeAll();
-                    return;
-                }
-
-                contextMenusReady = true;
-                const activeTabs = await browser.tabs.query({active: true, lastFocusedWindow: true}) as BrowserTabSummary[];
-                const activeTab = activeTabs.find((tab) => typeof tab.id === 'number');
-                if (activeTab?.id !== undefined) await update(activeTab.id);
+                if (requested !== settings) return;
+                const active = (await browser.tabs.query({active: true, lastFocusedWindow: true}) as ContextMenuClickTab[])
+                    .find((tab) => typeof tab.id === 'number');
+                if (active?.id !== undefined) await update(active.id);
             })
             .catch((error) => {
-                contextMenusReady = false;
+                // 结构写入前已清空 plan；活动页查询失败则保留已创建的有效路由。
                 console.error('Error syncing context menu:', error);
             });
-        return contextMenuSyncQueue;
+        return syncQueue;
+    };
+
+    const handleClick = async (info: ContextMenuClickInfo, tab: ContextMenuClickTab): Promise<void> => {
+        if (!isBrowserTabId(tab.id)) return;
+        const currentDocument = tabTranslationStates.captureDocument(tab.id);
+        try {
+            // 原生菜单在 MV3 worker 休眠后仍存在，唤醒它的首个点击不能被空 plan 丢弃。
+            await initialized; await syncQueue;
+            const snapshot = settings, items = plan;
+            const item = items.find((entry) => entry.menuItemId === info.menuItemId);
+            if (!item || !currentDocument()) return;
+            const state = await readTabTranslationState(tab.id, true);
+            if (!currentDocument() || snapshot !== settings || items !== plan) return;
+            const [presentation] = resolveContextMenuPresentation([item], state, snapshot.display);
+            if (!presentation.visible) return;
+            const result = await runContextMenuAction(presentation.action, tab.id, info, tab, state.isTranslated);
+            if (!currentDocument() || !result.handled) return;
+            if (typeof result.isSiteDisabled === 'boolean') tabTranslationStates.setSiteDisabled(tab.id, result.isSiteDisabled);
+            if (typeof result.isTranslated === 'boolean') tabTranslationStates.setTranslated(tab.id, result.isTranslated);
+            await update(tab.id, tabTranslationStates.get(tab.id));
+        } catch (error) {
+            console.error('Failed to send message to content script:', error);
+        }
     };
 
     if (!isSupported) {
         console.log('不支持右键菜单');
     } else {
-        void configReady.then(() => {
-            contextMenuEnabled = config.contextMenuEnabled !== false;
-            void sync();
-            subscribeConfig((nextConfig) => {
-                const nextEnabled = nextConfig.contextMenuEnabled !== false;
-                if (nextEnabled === contextMenuEnabled) return;
-                contextMenuEnabled = nextEnabled;
+        initialized = configReady.then(() => {
+            settings = readContextMenuSettings();
+            const initialSync = sync();
+            subscribeConfig(() => {
+                const next = readContextMenuSettings();
+                if (next.signature === settings.signature) return;
+                settings = next;
                 void sync();
             });
-        });
+            return initialSync;
+        }).catch(error => console.error('Error initializing context menu:', error));
 
-        browser.contextMenus.onClicked.addListener((info: any, tab: any) => {
-            if (!contextMenuEnabled
-                || info.menuItemId !== CONTEXT_MENU_IDS.TRANSLATE_FULL_PAGE
-                || !isBrowserTabId(tab?.id)) return;
-
-            void (async () => {
-                try {
-                    const state = await readTabTranslationState(tab.id, true);
-                    if (state.isSiteDisabled) {
-                        await update(tab.id);
-                        return;
-                    }
-                    const response = await browser.tabs.sendMessage(tab.id, {
-                        type: 'contextMenuTranslate',
-                        action: state.isTranslated ? 'restore' : 'fullPage',
-                    }) as FullPageStateResponse | undefined;
-                    if (response?.status !== 'success') return;
-                    tabTranslationStates.setTranslated(
-                        tab.id,
-                        typeof response.isTranslated === 'boolean'
-                            ? response.isTranslated
-                            : !state.isTranslated,
-                    );
-                    await update(tab.id);
-                } catch (error) {
-                    console.error('Failed to send message to content script:', error);
-                }
-            })();
-        });
+        browser.contextMenus.onClicked.addListener((info: any, tab: any) => void handleClick(info as ContextMenuClickInfo, (tab ?? {}) as ContextMenuClickTab));
     }
 
-    browser.tabs.onActivated.addListener((activeInfo: any) => {
-        if (isSupported) void update(activeInfo.tabId);
-    });
-    browser.tabs.onUpdated.addListener((tabId: any, changeInfo: any) => {
-        if (changeInfo.status !== 'loading') return;
-        tabTranslationStates.reset(tabId);
-        if (isSupported) void update(tabId);
-    });
+    browser.tabs.onActivated.addListener((activeInfo: any) => { if (isSupported) void update(activeInfo.tabId); });
+    browser.tabs.onUpdated.addListener((tabId: any, changeInfo: any) => { if (changeInfo.status !== 'loading') return; tabTranslationStates.reset(tabId); if (isSupported) void update(tabId); });
     browser.tabs.onRemoved.addListener((tabId: any) => tabTranslationStates.delete(tabId));
 
     return {isSupported, update};

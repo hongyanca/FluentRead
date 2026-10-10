@@ -1,0 +1,664 @@
+{
+  "ok": true,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    }
+  },
+  "consoleErrors": [],
+  "persistence": {
+    "patched": true,
+    "restored": true,
+    "original": {
+      "revision": 1,
+      "on": true,
+      "theme": "auto",
+      "interfaceSkin": "default",
+      "popupModuleOrder": [
+        "translation",
+        "siteRule",
+        "quickFeatures",
+        "footer"
+      ],
+      "popupQuickFeatureOrder": [
+        "hover",
+        "selection",
+        "appearance",
+        "image",
+        "area",
+        "video",
+        "document"
+      ],
+      "interfaceVisibility": {
+        "popupQuickFeatures": true,
+        "popupSiteRule": true,
+        "popupFooter": true
+      },
+      "uiLanguageSetupCompleted": false
+    },
+    "target": {
+      "revision": 0,
+      "on": true,
+      "theme": "dark",
+      "interfaceSkin": "emoji",
+      "popupModuleOrder": [
+        "quickFeatures",
+        "translation",
+        "siteRule",
+        "footer"
+      ],
+      "popupQuickFeatureOrder": [
+        "document",
+        "hover",
+        "selection",
+        "appearance",
+        "video",
+        "image",
+        "area"
+      ],
+      "interfaceVisibility": {
+        "popupQuickFeatures": true,
+        "popupSiteRule": false,
+        "popupFooter": true
+      },
+      "uiLanguageSetupCompleted": true
+    },
+    "quickClose": {
+      "noOpPagehide": {
+        "persistConfigRequests": 0,
+        "persistConfigModes": [],
+        "responses": 0,
+        "successes": 0,
+        "persistConfigBatchRequests": 0
+      },
+      "latestWriteWins": {
+        "initialValue": "zh-Hans",
+        "firstTarget": "en",
+        "finalTarget": "ja",
+        "persistedValue": "ja",
+        "persistConfigRequests": 1,
+        "persistConfigModes": [
+          "patch"
+        ],
+        "responses": 1,
+        "successes": 1,
+        "heldResponses": 1,
+        "persistConfigBatchRequests": 1,
+        "persistConfigBatchSizes": [
+          2
+        ],
+        "reopenedLabel": "日本語 / Japanese / 日语",
+        "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-persistence-reopened.png"
+      }
+    }
+  },
+  "deferredUi": {
+    "initialEditorResources": 0,
+    "drawerEditorResources": 0,
+    "editorMarker": "custom-hotkey-dialog",
+    "parsedScripts": [
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/popup-DEakdMWF.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/_commonjs-dynamic-modules-Dw5-P7-C.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/i18n-Cxm5Woag.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/PopupApp-wt5N8eu5.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/_plugin-vue_export-helper-C8W6xReh.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/interfaceAppearance-Bku-1b2b.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/serviceCatalog-DrYJLh0R.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/capabilities-DMYnczBv.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/PopupDrawer-CE49FnXz.js",
+      "chrome-extension://ieibpfnbaknkhalgnpljnkkflnolhjmo/chunks/el-overlay-BYfNDTBq.js"
+    ],
+    "drawers": [
+      {
+        "feature": "hover",
+        "initialFocus": true,
+        "restoredFocus": true,
+        "settingsLink": "悬停翻译设置"
+      },
+      {
+        "feature": "selection",
+        "initialFocus": true,
+        "restoredFocus": true,
+        "settingsLink": "划词翻译设置"
+      },
+      {
+        "feature": "area",
+        "initialFocus": true,
+        "restoredFocus": true,
+        "settingsLink": "圈选翻译设置"
+      }
+    ],
+    "drawerScreenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-hover-drawer-no-editor.png"
+  },
+  "startupCases": [
+    {
+      "caseName": "dark-1",
+      "failureMode": false,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 1468.8,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 1886.9,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "firstCorrectFrame": {
+        "source": "mutation",
+        "atMs": 1468.8,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "storageReadKeys": [
+        "local:config",
+        "local:credentials"
+      ],
+      "mountCount": 1,
+      "renderMutations": 67,
+      "flashObserved": false,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 1401.6000000238419,
+        "failureCount": 0
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 482,
+        "modules": [
+          "quickFeatures",
+          "translation",
+          "footer"
+        ],
+        "quickFeatures": [
+          "document",
+          "hover",
+          "selection",
+          "video",
+          "area"
+        ],
+        "ready": "true",
+        "skin": "emoji",
+        "dark": true
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-dark-1.png"
+    },
+    {
+      "caseName": "dark-2",
+      "failureMode": false,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 1457.2,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 1905.8,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "firstCorrectFrame": {
+        "source": "mutation",
+        "atMs": 1457.2,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": true,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "storageReadKeys": [
+        "local:config",
+        "local:credentials"
+      ],
+      "mountCount": 1,
+      "renderMutations": 67,
+      "flashObserved": false,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 1400.5,
+        "failureCount": 0
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 482,
+        "modules": [
+          "quickFeatures",
+          "translation",
+          "footer"
+        ],
+        "quickFeatures": [
+          "document",
+          "hover",
+          "selection",
+          "video",
+          "area"
+        ],
+        "ready": "true",
+        "skin": "emoji",
+        "dark": true
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-dark-2.png"
+    },
+    {
+      "caseName": "auto-1",
+      "failureMode": false,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 1457.6,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 1895.1,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "firstCorrectFrame": {
+        "source": "mutation",
+        "atMs": 1457.6,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "storageReadKeys": [
+        "local:config",
+        "local:credentials"
+      ],
+      "mountCount": 1,
+      "renderMutations": 66,
+      "flashObserved": false,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 1400.6000000238419,
+        "failureCount": 0
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 482,
+        "modules": [
+          "quickFeatures",
+          "translation",
+          "footer"
+        ],
+        "quickFeatures": [
+          "document",
+          "hover",
+          "selection",
+          "video",
+          "area"
+        ],
+        "ready": "true",
+        "skin": "emoji",
+        "dark": false
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-auto-1.png"
+    },
+    {
+      "caseName": "auto-2",
+      "failureMode": false,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 1454.1,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 1885.1,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "firstCorrectFrame": {
+        "source": "mutation",
+        "atMs": 1454.1,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "storageReadKeys": [
+        "local:config",
+        "local:credentials"
+      ],
+      "mountCount": 1,
+      "renderMutations": 66,
+      "flashObserved": false,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 1400.5999999046326,
+        "failureCount": 0
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 482,
+        "modules": [
+          "quickFeatures",
+          "translation",
+          "footer"
+        ],
+        "quickFeatures": [
+          "document",
+          "hover",
+          "selection",
+          "video",
+          "area"
+        ],
+        "ready": "true",
+        "skin": "emoji",
+        "dark": false
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-auto-2.png"
+    },
+    {
+      "caseName": "auto-normal-no-delay",
+      "failureMode": false,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 59.8,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 129.2,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "firstCorrectFrame": {
+        "source": "mutation",
+        "atMs": 59.8,
+        "width": 360,
+        "height": 482,
+        "skin": "emoji",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "quickFeatures,translation,siteRule,footer",
+        "quickFeatureOrder": "document,hover,selection,appearance,video,image,area",
+        "visibleQuickFeatures": "document,hover,selection,video,area",
+        "popupHeight": "content",
+        "className": "popup-shell"
+      },
+      "storageReadKeys": [
+        "local:config",
+        "local:credentials"
+      ],
+      "mountCount": 1,
+      "renderMutations": 66,
+      "flashObserved": false,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 7.800000071525574,
+        "failureCount": 0
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 482,
+        "modules": [
+          "quickFeatures",
+          "translation",
+          "footer"
+        ],
+        "quickFeatures": [
+          "document",
+          "hover",
+          "selection",
+          "video",
+          "area"
+        ],
+        "ready": "true",
+        "skin": "emoji",
+        "dark": false
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-auto-normal-no-delay.png"
+    },
+    {
+      "caseName": "auto-read-failure",
+      "failureMode": true,
+      "firstFrame": {
+        "source": "mutation",
+        "atMs": 1443.8,
+        "width": 360,
+        "height": 478,
+        "skin": "default",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "translation,siteRule,quickFeatures,footer",
+        "quickFeatureOrder": "hover,selection,appearance,image,area,video,document",
+        "visibleQuickFeatures": "hover,selection,image,area,video,document",
+        "popupHeight": "content",
+        "className": "popup-shell language-onboarding-shell"
+      },
+      "finalFrame": {
+        "source": "requestAnimationFrame",
+        "atMs": 1876.3,
+        "width": 360,
+        "height": 478,
+        "skin": "default",
+        "dark": false,
+        "ready": true,
+        "configReady": "true",
+        "ariaBusy": "false",
+        "moduleOrder": "translation,siteRule,quickFeatures,footer",
+        "quickFeatureOrder": "hover,selection,appearance,image,area,video,document",
+        "visibleQuickFeatures": "hover,selection,image,area,video,document",
+        "popupHeight": "content",
+        "className": "popup-shell language-onboarding-shell"
+      },
+      "firstCorrectFrame": null,
+      "storageReadKeys": [
+        "local:config"
+      ],
+      "mountCount": 1,
+      "renderMutations": 66,
+      "flashObserved": true,
+      "delayObserved": {
+        "hookInstalled": true,
+        "requestCount": 1,
+        "releasedCount": 1,
+        "maxDelayMs": 1401.2000000476837,
+        "failureCount": 1
+      },
+      "domMetrics": {
+        "horizontalOverflow": false,
+        "shellWidth": 360,
+        "shellHeight": 478,
+        "modules": [
+          "translation",
+          "quickFeatures",
+          "footer"
+        ],
+        "quickFeatures": [
+          "hover",
+          "selection",
+          "image",
+          "area",
+          "video",
+          "document"
+        ],
+        "ready": "true",
+        "skin": "default",
+        "dark": false
+      },
+      "screenshot": "/private/tmp/fluentread-popup-perf-startup-20260913/popup-startup-auto-read-failure.png"
+    }
+  ]
+}

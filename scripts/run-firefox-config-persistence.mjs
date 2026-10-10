@@ -46,9 +46,13 @@ async function selectedFrame(client) {
 
 async function evaluate(client, frame, source) {
     let resultPacket;
+    let resultID;
+    const pendingResults = new Map();
     const onError = error => {
         const packet = packetFromError(error);
-        if (packet?.type === 'evaluationResult') resultPacket = packet;
+        if (packet?.type !== 'evaluationResult' || packet.from !== frame.consoleActor) return;
+        if (resultID === undefined) pendingResults.set(packet.resultID, packet);
+        else if (packet.resultID === resultID) resultPacket = packet;
     };
     client.on('error', onError);
     try {
@@ -58,6 +62,10 @@ async function evaluate(client, frame, source) {
             text: source,
             frameActor: frame.actor,
         });
+        resultID = response.resultID;
+        if (resultID === undefined) throw new Error('Firefox RDP evaluation response has no resultID');
+        resultPacket = pendingResults.get(resultID);
+        pendingResults.clear();
         const deadline = Date.now() + 10000;
         while (!resultPacket && Date.now() < deadline) await sleep(25);
         if (!resultPacket) throw new Error(`Firefox RDP evaluation timeout: ${response.resultID}`);
@@ -445,7 +453,7 @@ async function main() {
         }
 
         const addons = await client.request('listAddons');
-        const addon = addons.addons.find(item => item.temporarilyInstalled && item.name === '流畅阅读');
+        const addon = addons.addons.find(item => item.temporarilyInstalled && item.id === '{3096bd53-3bda-4556-b076-ebf47442a5c1}');
         if (!addon) throw new Error('Firefox runner did not install the temporary FluentRead add-on');
         const extensionBase = addon.manifestURL.replace(/\/manifest\.json$/, '');
         const popupUrl = `${extensionBase}/popup.html`;
@@ -538,9 +546,8 @@ async function main() {
         await navigate(client, optionsUrl);
         const historyOptions = await waitForDom(client, `document.querySelector('.settings-app')`, 'history options mount');
         await evaluate(client, historyOptions.current.frame, `(() => {
-            const button = [...document.querySelectorAll('nav[aria-label="设置分类"] button')]
-                .find(item => item.textContent?.includes('配置管理'));
-            if (!(button instanceof HTMLElement)) throw new Error('配置管理导航不存在');
+            const button = document.querySelector('nav[aria-label="设置分类"] button[data-section="settings-data"]');
+            if (!(button instanceof HTMLButtonElement)) throw new Error('备份与恢复导航不存在');
             button.click();
             return true;
         })()`);
@@ -555,7 +562,7 @@ async function main() {
                 current,
             };
         })()`);
-        if (result.historyCases.count < 3 || result.historyCases.count > 5) throw new Error(`Firefox 配置历史条目数量异常: ${JSON.stringify(result.historyCases)}`);
+        if (result.historyCases.count < 3 || result.historyCases.count > 10) throw new Error(`Firefox 配置历史条目数量异常: ${JSON.stringify(result.historyCases)}`);
         if (new Set(result.historyCases.versions).size !== result.historyCases.count || result.historyCases.versions.some(value => !/^v\d+$/.test(value))) {
             throw new Error(`Firefox 配置历史版本号异常: ${JSON.stringify(result.historyCases)}`);
         }
@@ -660,8 +667,11 @@ async function main() {
         result.errors.push(String(error?.stack || error?.message || error));
         throw error;
     } finally {
-        fs.writeFileSync(path.join(artifactsDir, 'firefox-config-persistence.json'), `${JSON.stringify(result, null, 2)}\n`);
-        firefox.disconnect();
+        try {
+            fs.writeFileSync(path.join(artifactsDir, 'firefox-config-persistence.json'), `${JSON.stringify(result, null, 2)}\n`);
+        } finally {
+            firefox.disconnect();
+        }
     }
 
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);

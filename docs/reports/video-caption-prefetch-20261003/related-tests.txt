@@ -1,0 +1,27 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/videoSubtitle.test.ts" "tests/videoSubtitleLogic.test.ts" "tests/videoTranslationScheduler.test.ts" "tests/videoTranslationCache.test.ts" "tests/videoPretranslationController.test.ts" "tests/xCaptionSource.test.ts" "tests/xSubtitleLoader.test.ts" "tests/youtubeSubtitleData.test.ts" "tests/xVideoSubtitleData.test.ts" "tests/videoSubtitleLanguage.test.ts" "tests/videoPlayerBinding.test.ts" "tests/videoSubtitleDownloads.test.ts" "tests/videoSubtitleAppearance.test.ts" "tests/videoSubtitleViewport.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/videoSubtitle.test.ts tests/videoSubtitleLogic.test.ts tests/videoTranslationScheduler.test.ts tests/videoTranslationCache.test.ts tests/videoPretranslationController.test.ts tests/xCaptionSource.test.ts tests/xSubtitleLoader.test.ts tests/youtubeSubtitleData.test.ts tests/xVideoSubtitleData.test.ts tests/videoSubtitleLanguage.test.ts tests/videoPlayerBinding.test.ts tests/videoSubtitleDownloads.test.ts tests/videoSubtitleAppearance.test.ts tests/videoSubtitleViewport.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003
+
+ ✓ tests/videoPlayerBinding.test.ts (36 tests) 39ms
+ ✓ tests/videoSubtitle.test.ts (29 tests) 30ms
+ ✓ tests/videoSubtitleLogic.test.ts (21 tests) 36ms
+ ✓ tests/youtubeSubtitleData.test.ts (14 tests) 8ms
+ ✓ tests/videoSubtitleViewport.test.ts (17 tests) 20ms
+ ✓ tests/videoSubtitleDownloads.test.ts (7 tests) 43ms
+ ✓ tests/xVideoSubtitleData.test.ts (9 tests) 7ms
+ ✓ tests/videoTranslationCache.test.ts (11 tests) 18ms
+ ✓ tests/xCaptionSource.test.ts (6 tests) 13ms
+ ✓ tests/videoSubtitleAppearance.test.ts (5 tests) 15ms
+ ✓ tests/xSubtitleLoader.test.ts (5 tests) 34ms
+ ✓ tests/videoPretranslationController.test.ts (3 tests) 5ms
+ ✓ tests/videoTranslationScheduler.test.ts (4 tests) 11ms
+ ✓ tests/videoSubtitleLanguage.test.ts (3 tests) 17ms
+
+ Test Files  14 passed (14)
+      Tests  170 passed (170)
+   Start at  02:36:38
+   Duration  5.22s (transform 1.32s, setup 0ms, collect 2.83s, tests 295ms, environment 2ms, prepare 604ms)

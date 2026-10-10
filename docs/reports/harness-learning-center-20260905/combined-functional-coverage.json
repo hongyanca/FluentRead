@@ -1,0 +1,391 @@
+{
+  "singleFullRunPassed": false,
+  "uniquePassedCases": 49,
+  "fullSuite": {
+    "directory": "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3",
+    "passed": 48,
+    "stoppedReason": "Error: 测试 Edge 进程 88789 成为了前台应用；测试已停止\n    at Object.newPageWithoutForeground (/Users/thinkstu/.codex/skills/fluentread-extension-ui-test/scripts/focus-safe-browser.cjs:514:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async main (/Users/thinkstu/Desktop/copy/FluentRead-harness-actions-audio-20260905/scripts/run-harness-reading-test.cjs:947:31)"
+  },
+  "memorySubset": {
+    "directory": "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905",
+    "passed": 10,
+    "ok": true
+  },
+  "sameProductionBuild": true,
+  "sameSourceSnapshot": true,
+  "sourceDigest": "738d85772c4e74b78442c3140a64d18503fff1b43028c00d81f9b6f1e7abc1d9",
+  "extensionDigest": "a054b5da6c94eca9d872f17d85e541b8e650466d779b0296ddcf9a859db6bec2",
+  "cases": [
+    {
+      "id": "disabled-no-entry",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-disabled-by-default",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "selection-toolbar-enabled-actions",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "selection-entry-visible-no-request",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "stream-partial-visible-while-busy",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "stream-card-position-stable",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "answer-markdown-hierarchy",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "click-sends-request",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "reading-source-audio-play-stop",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "reading-record-list-return-preserves-answer",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "close-reselect-restore-followup-history",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "action-拆句",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "action-用法",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "action-练习",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "action-cache-practice-switch-return",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "action-explicit-regenerate-sends-request",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "followup-card-position-stable",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "followup-submit-history",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "cached-practice-followup-keeps-question-after-other-turns",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "cancel-delayed-result-does-not-overwrite",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "switch-selection-staleness",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "selection-only-no-paragraph",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-navigation-learning-tools-order",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-interactive-preview-four-actions",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-more-controls-always-visible",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-toolbar-actions-and-default-sync",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-page-and-persistence",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-narrow-390",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-dark",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-deep-link-back-forward",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-session-view-delete",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-session-clear-streaming-no-resurrection",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "session-expiry-over-30-days",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "settings-session-delete-then-pagination",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "expand-sentence-sends-full-sentence",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "harness-and-legacy-selection-entry",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "reading-card-narrow-viewport-bounded",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "sentence-save-without-answer-learning-center",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "learning-center-sentence-audio-play-stop",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "reading-error-opens-model-settings",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "reading-footer-opens-harness-settings",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json"
+      ]
+    },
+    {
+      "id": "memory-manage-disabled-edit-dedupe-reload",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-search-delete",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-enabled-persist-recall-new-session",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-explicit-remember-answer",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-disable-stops-recall-keeps-data",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-delete-excludes-from-recall",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "memory-clear-reload-stops-recall",
+      "evidence": [
+        "/private/tmp/fluentread-harness-learning-center-browser-20260905-final-r3/report.json",
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    },
+    {
+      "id": "settings-ui-modify-close-reopen",
+      "evidence": [
+        "/private/tmp/fluentread-harness-memory-browser-diagnostic-20260905/report.json"
+      ]
+    }
+  ],
+  "focusBoundary": "Full suite stopped on focus guard after 48 functional assertions; memory subset passed all 10. Never report single-run 49 or full-suite no-focus.",
+  "audioBoundary": {
+    "muted": true,
+    "fixture": "silent PCM WAV over mocked Microsoft TTS HTTP endpoints",
+    "listeningVerified": false,
+    "requests": [
+      {
+        "url": "https://fixture.tts.speech.microsoft.com/cognitiveservices/v1",
+        "ssml": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"en-US-AvaMultilingualNeural\"><prosody rate=\"+0%\" pitch=\"+0Hz\" volume=\"+0%\">lthough the task was difficult, she finished it on time.</prosody></voice></speak>"
+      },
+      {
+        "url": "https://fixture.tts.speech.microsoft.com/cognitiveservices/v1",
+        "ssml": "<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"en-US-AvaMultilingualNeural\"><prosody rate=\"+0%\" pitch=\"+0Hz\" volume=\"+0%\">Although the task was difficult, she finished it on time.</prosody></voice></speak>"
+      }
+    ],
+    "messages": [
+      {
+        "type": "selectionTts",
+        "text": "lthough the task was difficult, she finished it on time.",
+        "clientRequestId": "a368167b-0925-4e83-9f73-36d38ce45fcc"
+      },
+      {
+        "type": "selectionTtsStop",
+        "clientRequestId": "a368167b-0925-4e83-9f73-36d38ce45fcc"
+      },
+      {
+        "type": "selectionTtsPlaybackState",
+        "state": "stopped",
+        "clientRequestId": "a368167b-0925-4e83-9f73-36d38ce45fcc"
+      },
+      {
+        "type": "selectionTts",
+        "text": "Although the task was difficult, she finished it on time.",
+        "clientRequestId": "6695a149-80c0-40c4-a695-e48a400357b3"
+      },
+      {
+        "type": "selectionTtsStop",
+        "clientRequestId": "6695a149-80c0-40c4-a695-e48a400357b3"
+      },
+      {
+        "type": "selectionTtsPlaybackState",
+        "state": "stopped",
+        "clientRequestId": "6695a149-80c0-40c4-a695-e48a400357b3"
+      }
+    ]
+  },
+  "listeningVerified": false,
+  "optionsBoundary": {
+    "scope": "two reading-card options navigation clicks only",
+    "adapter": "CDP background precreated real tabs + native tabs.update(url, active:false)",
+    "nativeTabCreation": false,
+    "nativeTabUpdate": true,
+    "foregroundActivationVerified": false,
+    "originalCalls": [
+      {
+        "original": {
+          "url": "chrome-extension://afjephmimcfpdpllnnopcimmjimgbjfh/options.html#settings-services"
+        },
+        "realReservedTabId": 1283922144
+      },
+      {
+        "original": {
+          "url": "chrome-extension://afjephmimcfpdpllnnopcimmjimgbjfh/options.html#settings-harness"
+        },
+        "realReservedTabId": 1283922145
+      }
+    ]
+  }
+}

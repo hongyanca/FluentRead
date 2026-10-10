@@ -1,0 +1,68 @@
+/**
+ * @file tests/documentMarkdownSentences.test.ts
+ * 文件职责：验证文档翻译页面的 Markdown 整句方式：一行作为一个片段翻译，链接文字参与翻译而地址保留，行内代码、网址与标签原样保护，并在导出时还原。
+ * 主要内容：链接写成成对占位符、图片与双链等写成单个占位符；只有受保护内容的行不产生片段；占位符的各种返回写法都能还原；丢失、重复、错位或未知的占位符退回整句并把没放回句中的代码与网址补在句末；与原文相同的译文保留原行；默认方式（未启用整句）保持按受保护内容切分。
+ * 模块边界：只测试纯解析与渲染；Obsidian 等其他调用方使用默认方式，由各自的测试覆盖。
+ */
+import {describe, expect, it} from 'vitest';
+import {documentSegmentMarkupSources, parseDocument, renderDocument} from '@/src/features/document-translation/core/document';
+
+const parse = (markdown: string) => parseDocument('note.md', markdown, {markdownSentences: true});
+const sources = (markdown: string) => parse(markdown).segments.map(segment => segment.source);
+const output = (markdown: string, translations: string[], mode: 'translated' | 'bilingual' = 'translated') => renderDocument(parse(markdown), translations, mode);
+
+describe('Markdown whole-sentence translation', () => {
+    const line = 'Read the [setup guide](https://example.com/setup) before `npm install` starts, and keep **bold** words.';
+
+    it('gives the proofreading view the original markup of placeholder segments only', () => {
+        expect([...documentSegmentMarkupSources(parse(`${line}\n\nPlain sentence.`))]).toEqual([[0, line]]);
+        const html = parseDocument('page.html', '<p>Read the <a href="/g">guide</a> first.</p><p>Plain.</p>');
+        expect([...documentSegmentMarkupSources(html)]).toEqual([[0, 'Read the <a href="/g">guide</a> first.']]);
+    });
+
+    it('keeps one segment per line and protects link targets, code, URLs and tags with placeholders', () => {
+        expect(sources(line)).toEqual(['Read the <g1>setup guide</g1> before <g2/> starts, and keep **bold** words.']);
+        expect(sources('- See <https://example.com> or #tag for details')).toEqual(['- See <g1/> or<g2/> for details']);
+        // 图片、双链和文字为空的链接整体保护。
+        expect(sources('An ![alt text](a.png) image, a [[Wiki Link]] and an [](empty) here')).toEqual(['An <g1/> image, a <g2/> and an <g3/> here']);
+        // 只有受保护内容的行没有可翻译的文字；没有行内语法的行与默认方式相同。
+        expect(sources('`code only`\n\n<https://example.com>\n\nPlain sentence.')).toEqual(['Plain sentence.']);
+        // 文字本身含有占位符写法时整行按普通文字处理；链接文字含有占位符写法时该链接整体保护。
+        expect(sources('literal <g1> and `code` text')).toEqual(['literal <g1> and `code` text']);
+        expect(sources('see [a <g9/> b](x) now')).toEqual(['see [a <g9/> b](x) now']);
+        // 默认方式的双语行：同一行里有的片段被服务原样返回时，那一段保留原文，其余照常显示译文。
+        expect(renderDocument(parseDocument('note.md', 'Use `npm install` now.'), ['使用', 'now.'], 'bilingual')).toBe('Use `npm install` now.\n> 使用 `npm install` now.');
+        // 默认方式不变：按受保护内容切分。
+        expect(parseDocument('note.md', line).segments.map(segment => segment.source)).toEqual(['Read the', 'before', 'starts, and keep **bold** words.']);
+    });
+
+    it('restores links, code and URLs inside the translated sentence', () => {
+        const zh = '在 <g2/> 开始之前请阅读<g1>安装指南</g1>，并保留**粗体**。';
+        const restored = '在 `npm install` 开始之前请阅读[安装指南](https://example.com/setup)，并保留**粗体**。';
+        expect(output(line, [zh])).toBe(restored);
+        expect(output(line, [zh], 'bilingual')).toBe(`${line}\n> ${restored}`);
+        expect(output(`  ${line}  \nNext line.`, [zh, '下一行。'])).toBe(`  ${restored}  \n下一行。`);
+        // 服务把占位符写成实体、全角或括号形式，或把单个占位符写成一对空标签。
+        for (const variant of ['在 &lt;g2/&gt; 开始之前请阅读&lt;g1&gt;安装指南&lt;/g1&gt;，并保留**粗体**。', '在 （g2/） 开始之前请阅读（g1）安装指南（/g1），并保留**粗体**。', '在 <g2></g2> 开始之前请阅读< G1 >安装指南</ g1 >，并保留**粗体**。'])
+            expect(output(line, [variant]), variant).toBe(restored);
+        // 译文与原文相同（服务原样返回）时保留原行，不显示占位符。
+        expect(output(line, [parse(line).segments[0].source])).toBe(line);
+        expect(output(line, [parse(line).segments[0].source], 'bilingual')).toBe(line);
+        expect(output(line, [])).toBe(line);
+    });
+
+    it('falls back to the whole sentence and re-appends protected content the service dropped', () => {
+        const expectPlain = (translation: string, expected: string) => expect(output(line, [translation]), translation).toBe(expected);
+        // 两个占位符都丢了：代码补在句末，链接地址无法安放，保留译文文字。
+        expectPlain('开始之前请阅读安装指南。', '开始之前请阅读安装指南。 `npm install`');
+        // 链接占位符只剩一半、顺序颠倒、重复、写成自闭合，或出现未知编号。
+        expectPlain('在 <g2/> 之前阅读<g1>安装指南。', '在 之前阅读安装指南。 `npm install`');
+        expectPlain('在 <g2/> 之前阅读</g1>安装指南<g1>。', '在 之前阅读安装指南。 `npm install`');
+        expectPlain('<g1>安装</g1><g1>指南</g1> <g2/>', '安装指南 `npm install`');
+        expectPlain('<g1/>安装指南 <g2/>', '安装指南 `npm install`');
+        expectPlain('<g2/> <g2/> <g1>安装指南</g1>', '安装指南 `npm install`');
+        expectPlain('<g1>安装指南</g1> <g2/> <g7/>', '安装指南 `npm install`');
+        // 服务把代码原样写回句中而没有用占位符：不重复补写。
+        expectPlain('在 `npm install` 之前阅读安装指南。', '在 `npm install` 之前阅读安装指南。');
+    });
+});

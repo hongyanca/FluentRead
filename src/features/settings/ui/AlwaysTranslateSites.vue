@@ -1,7 +1,7 @@
 <!--
  * @file src/features/settings/ui/AlwaysTranslateSites.vue
- * 文件职责：实现“始终翻译”与“从不翻译”网站列表编辑器，接收可配置文案和域名数组，并通过 v-model 更新规范化后的规则集合。
- * 主要内容：组件解析用户输入或当前站点为 eTLD+1 基础域名，处理重复、无效域名、添加反馈、删除与输入聚焦，并展示网站数量和空状态。
+ * 文件职责：实现“始终翻译”、“禁用扩展”与“不显示悬浮球”三类网站名单编辑器，接收域名数组并通过 v-model 更新规范化后的规则集合。
+ * 主要内容：组件按 variant 选择成套文案与图标，解析用户输入或当前站点为 eTLD+1 基础域名，处理重复、无效域名、添加反馈、删除与输入聚焦，并展示网站数量和空状态。
  * 模块边界：它不直接读取当前标签页、不持久化配置也不决定规则优先级；调用方提供 currentDomain 和 labels，域名算法来自 core/site-rules，保存由 SettingsSections 统一触发。
  -->
 <template>
@@ -15,7 +15,7 @@
         <h3 :id="labels.titleId">{{ labels.title }}</h3>
         <p>{{ labels.description }}</p>
       </div>
-      <span class="site-rules-count" :aria-label="labels.countLabel">{{ domains.length }} 个网站</span>
+      <span class="site-rules-count" :aria-label="labels.countLabel">{{ t('settings.sites.count', {count: domains.length}) }}</span>
     </header>
 
     <form class="site-rules-form" @submit.prevent="addDomain">
@@ -42,7 +42,7 @@
       <template v-if="errorMessage">{{ errorMessage }}</template>
       <template v-else-if="statusMessage">{{ statusMessage }}</template>
       <template v-else-if="normalizedPreview">将保存为 <strong>{{ normalizedPreview }}</strong>，并包含所有子域。</template>
-      <template v-else>支持粘贴完整 URL；端口、路径和参数不会进入规则。</template>
+      <template v-else>支持粘贴完整 URL；端口、路径和参数不会进入规则</template>
     </p>
 
     <div v-if="domains.length" class="site-rules-list" role="list" :aria-label="labels.listLabel">
@@ -53,7 +53,7 @@
         role="listitem"
         :data-site-rule="domain"
       >
-        <span class="site-rule-icon" aria-hidden="true">{{ labels.icon }}</span>
+        <span class="site-rule-icon" aria-hidden="true"><UiIcon :name="iconName" /></span>
         <span class="site-rule-copy">
           <strong :title="domain">{{ domain }}</strong>
           <small>{{ labels.itemDescription }}</small>
@@ -65,7 +65,7 @@
     </div>
 
     <div v-else class="site-rules-empty" data-site-rules-empty>
-      <span aria-hidden="true">◇</span>
+      <span aria-hidden="true"><UiIcon name="globe" :size="24" /></span>
       <strong>{{ labels.emptyTitle }}</strong>
       <small>{{ labels.emptyDescription }}</small>
     </div>
@@ -73,12 +73,36 @@
 </template>
 
 <script lang="ts" setup>
+import UiIcon from '@/src/ui/components/UiIcon.vue'
 import { computed, nextTick, ref } from 'vue';
 import { getSiteBaseDomain } from '@/src/core/site-rules/domain';
+import {useUiI18n} from '@/src/ui/i18n';
+
+type SiteRulesVariant = 'always-translate' | 'disable-extension' | 'disable-floating-ball';
+
+interface SiteRulesLabels {
+  settingId: string;
+  titleId: string;
+  feedbackId: string;
+  title: string;
+  description: string;
+  countLabel: string;
+  inputLabel: string;
+  placeholder: string;
+  addButton: string;
+  listLabel: string;
+  iconName: string;
+  itemDescription: string;
+  emptyTitle: string;
+  emptyDescription: string;
+  duplicateMessage: (domain: string) => string;
+  addedMessage: (domain: string) => string;
+  removedMessage: (domain: string) => string;
+}
 
 const props = withDefaults(defineProps<{
   modelValue?: string[];
-  variant?: 'always-translate' | 'disable-extension';
+  variant?: SiteRulesVariant;
 }>(), {
   modelValue: () => [],
   variant: 'always-translate',
@@ -88,51 +112,75 @@ const emit = defineEmits<{
   'update:modelValue': [value: string[]];
 }>();
 
+const {t} = useUiI18n();
 const inputValue = ref('');
 const errorMessage = ref('');
 const statusMessage = ref('');
 const domainInput = ref<HTMLInputElement | null>(null);
 const domains = computed(() => props.modelValue ?? []);
 const normalizedPreview = computed(() => inputValue.value ? getSiteBaseDomain(inputValue.value) : null);
-const labels = computed(() => props.variant === 'disable-extension'
-  ? {
+const VARIANT_LABELS: Record<SiteRulesVariant, SiteRulesLabels> = {
+  'disable-extension': {
     settingId: 'disabled-extension-sites',
     titleId: 'disabled-extension-sites-title',
     feedbackId: 'disabled-extension-sites-feedback',
     title: '禁用扩展网站',
-    description: '输入任意域名或网址，保存时统一归并到主域名；该网站及其所有子域都不会运行扩展功能。',
+    description: '输入任意域名或网址，保存时统一归并到主域名；该网站及其所有子域都不会运行扩展功能',
     countLabel: '禁用扩展网站数量',
     inputLabel: '添加禁用扩展网站',
     placeholder: '例如：https://docs.example.com/article',
     addButton: '添加网站',
     listLabel: '禁用扩展网站名单',
-    icon: '禁',
+    iconName: 'shield',
     itemDescription: '该主域名及其所有子域不会运行扩展功能',
     emptyTitle: '还没有禁用扩展的网站',
-    emptyDescription: '可从上方手动添加，也可在扩展弹窗中为当前网站快速禁用。',
+    emptyDescription: '可从上方手动添加，也可在扩展弹窗中为当前网站快速禁用',
     duplicateMessage: (domain: string) => `${domain} 已在禁用扩展名单中。`,
     addedMessage: (domain: string) => `已添加 ${domain}。`,
     removedMessage: (domain: string) => `已删除 ${domain}。`,
-  }
-  : {
+  },
+  'disable-floating-ball': {
+    settingId: 'disabled-floating-ball-sites',
+    titleId: 'disabled-floating-ball-sites-title',
+    feedbackId: 'disabled-floating-ball-sites-feedback',
+    title: '不显示悬浮球的网站',
+    description: '输入任意域名或网址，保存时统一归并到主域名；该网站及其所有子域不显示悬浮球，快捷键、右键菜单和其他功能仍然可用',
+    countLabel: '不显示悬浮球的网站数量',
+    inputLabel: '添加不显示悬浮球的网站',
+    placeholder: '例如：https://mail.example.com/inbox',
+    addButton: '添加网站',
+    listLabel: '不显示悬浮球的网站名单',
+    iconName: 'close',
+    itemDescription: '该主域名及其所有子域不显示悬浮球',
+    emptyTitle: '所有网站都会显示悬浮球',
+    emptyDescription: '在阅读工具、邮箱或编辑器等界面密集的网站上，可以只隐藏悬浮球而保留其他功能',
+    duplicateMessage: (domain: string) => `${domain} 已在不显示悬浮球名单中。`,
+    addedMessage: (domain: string) => `已添加 ${domain}。`,
+    removedMessage: (domain: string) => `已删除 ${domain}。`,
+  },
+  'always-translate': {
     settingId: 'always-translate-sites',
     titleId: 'always-translate-sites-title',
     feedbackId: 'always-translate-sites-feedback',
     title: '始终翻译网站',
-    description: '输入任意域名或网址，保存时统一归并到主域名，并对它的所有子域生效。',
+    description: '输入任意域名或网址，保存时统一归并到主域名，并对它的所有子域生效',
     countLabel: '始终翻译网站数量',
     inputLabel: '添加始终翻译网站',
     placeholder: '例如：https://docs.example.com/article',
     addButton: '添加网站',
     listLabel: '始终翻译网站名单',
-    icon: '译',
+    iconName: 'globe',
     itemDescription: '该主域名及其所有子域会自动翻译',
     emptyTitle: '还没有始终翻译的网站',
-    emptyDescription: '可从上方手动添加，也可在扩展弹窗中为当前网站快速开启。',
+    emptyDescription: '可从上方手动添加，也可在扩展弹窗中为当前网站快速开启',
     duplicateMessage: (domain: string) => `${domain} 已在始终翻译名单中。`,
     addedMessage: (domain: string) => `已添加 ${domain}。`,
     removedMessage: (domain: string) => `已删除 ${domain}。`,
-  });
+  },
+};
+
+const labels = computed(() => VARIANT_LABELS[props.variant] ?? VARIANT_LABELS['always-translate']);
+const iconName = computed(() => labels.value.iconName);
 
 function clearFeedback() {
   errorMessage.value = '';
@@ -142,13 +190,13 @@ function clearFeedback() {
 function addDomain() {
   const input = inputValue.value.trim();
   if (!input) {
-    errorMessage.value = '请输入域名或网址。';
+    errorMessage.value = '请输入域名或网址';
     return;
   }
 
   const domain = getSiteBaseDomain(input);
   if (!domain) {
-    errorMessage.value = '无法识别有效的网站主域名，请检查输入内容。';
+    errorMessage.value = '无法识别有效的网站主域名，请检查输入内容';
     return;
   }
   if (domains.value.includes(domain)) {
@@ -176,8 +224,8 @@ function removeDomain(domain: string) {
   margin: 0 auto 16px;
   padding: 20px;
   border: 1px solid var(--line, #e5e8ef);
-  border-radius: 20px;
-  background: var(--surface-soft, #f7f8fb);
+  border-radius: 10px;
+  background: var(--surface, #fff);
 }
 
 .site-rules-heading {
@@ -194,7 +242,7 @@ function removeDomain(domain: string) {
 .site-rules-heading h3 {
   margin: 0 0 6px;
   color: var(--ink, #172033);
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .site-rules-heading p {
@@ -272,13 +320,12 @@ function removeDomain(domain: string) {
   padding: 0 15px;
   border: 0;
   color: #fff;
-  background: linear-gradient(135deg, #f35482, #e93267);
-  box-shadow: 0 8px 18px rgba(233, 50, 103, .18);
+  background: var(--brand, #ef4776);
+  box-shadow: none;
 }
 
 .site-rules-add:hover {
-  box-shadow: 0 10px 22px rgba(233, 50, 103, .26);
-  transform: translateY(-1px);
+  background: var(--brand-strong, #dc315f);
 }
 
 .site-rules-feedback {
@@ -369,11 +416,11 @@ function removeDomain(domain: string) {
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
   align-items: center;
-  min-height: 84px;
+  min-height: 62px;
   margin-top: 14px;
   padding: 14px 16px;
-  border: 1px dashed #d9dde6;
-  border-radius: 16px;
+  border: 0;
+  border-radius: 8px;
   color: var(--muted, #737c8f);
   background: var(--surface, #fff);
   column-gap: 11px;
@@ -394,7 +441,7 @@ function removeDomain(domain: string) {
 .site-rules-empty small {
   max-width: 390px;
   margin-top: 2px;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.55;
 }
 

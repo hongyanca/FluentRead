@@ -1,0 +1,70 @@
+{
+  "evidence": "Public X profile and status page; production extension; no audio transcription or translation provider exercised",
+  "success": true,
+  "assertions": {
+    "profileVideoHoverEntry": true,
+    "profileHostLinkObserved": false,
+    "profileHostLinkNormal": false,
+    "fallbackHiddenAfterLostHover": true,
+    "statusEntryPresent": true,
+    "nativeControlsOrFallback": true,
+    "statusHostLinkObserved": true,
+    "statusHostLinkNormal": true,
+    "menuVisible": true,
+    "menuSamePlayer": true,
+    "menuOwnsHoveredVideo": true,
+    "statusFallbackHiddenAfterLostHover": true,
+    "globalConfigOffRemovesIcon": true
+  },
+  "blocked": [],
+  "target": {
+    "videoIndex": 0
+  },
+  "selectedVideoIndex": 0,
+  "selectedVideo": {
+    "duration": 68.033,
+    "readyState": 4
+  },
+  "urls": [
+    "https://x.com/cerebras",
+    "https://x.com/cerebras/status/2089870131291943228"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Not signed in with the identity provider.",
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "fullscreen": {
+    "verified": false,
+    "reason": "locator.click: Timeout 10000ms exceeded.",
+    "observedBoundary": "X media overlay link intercepted the site fullscreen button; controlled fullscreen checks are recorded separately."
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  }
+}

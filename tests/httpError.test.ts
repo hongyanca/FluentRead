@@ -15,6 +15,7 @@ describe('safe provider error formatting', () => {
         }, '翻译失败');
 
         expect(error.message).toBe('翻译失败: 403');
+        expect(error).toMatchObject({statusCode: 403});
         expect(error.message).not.toContain('SENSITIVE_STATUS_SENTINEL');
         expect(createHttpStatusError({status: 500, statusText: ''}).message).toBe('请求失败: 500');
     });
@@ -57,4 +58,21 @@ describe('safe provider error formatting', () => {
         expect((error as Error).message).toBe('返回的不是有效 JSON');
         expect((error as Error).message).not.toContain('SENSITIVE_RESPONSE_SENTINEL');
     });
+});
+
+it('preserves bounded Retry-After durations without reflecting raw headers', () => {
+    vi.spyOn(Date, 'now').mockReturnValue(Date.UTC(2026, 8, 12));
+    try {
+        for (const [header, expected] of [
+            ['120', 120000], ['0.5', 500], [' 60 ', 60000], ['999999999999', 604800000],
+            ['Sat, 12 Sep 2026 00:02:00 GMT', 120000],
+            [null, undefined], ['', undefined], ['  ', undefined], ['0', undefined], ['-2', undefined],
+            ['private-original-secret', undefined], ['1e1000', undefined],
+            ['Thu, 01 Jan 1970 00:00:00 GMT', undefined],
+        ] as const) {
+            const error = createHttpStatusError({status: 429, statusText: 'secret', headers: {get: () => header}});
+            expect((error as Error & {retryAfterMs?: number}).retryAfterMs).toBe(expected);
+            expect(error.message).toBe('请求失败: 429');
+        }
+    } finally { vi.restoreAllMocks(); }
 });

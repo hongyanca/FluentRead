@@ -1,0 +1,3663 @@
+{
+  "success": true,
+  "completedCases": 39,
+  "successfulCases": 39,
+  "failedCases": 0,
+  "totalWindows": 48,
+  "scope": "Real final production FullCapture -> actual production Small Worker -> original alignment/stabilizer/cue timeline; native unplayed video with duration override and fixed getAudio PCM injection. No live X acquisition, AudioContext, product UI, translation, CPU or low-memory acceptance.",
+  "model": {
+    "actualModelId": "onnx-community/whisper-small",
+    "controllerModel": "small",
+    "workerReportedModel": "small",
+    "encoderDtype": "fp32",
+    "decoderDtype": "q4",
+    "legacyDtype": "q4 (decoder shorthand)",
+    "cacheAliasUsed": false
+  },
+  "build": {
+    "artifact": "/Users/thinkstu/Desktop/copy/FluentRead-builds/x-ai-subtitle-language-quality-20261009-final-small/chrome-mv3",
+    "status": "uncommitted-final-source-snapshot",
+    "baseCommit": "854ce15d5279b875c766efd15b208380c81e3371",
+    "workerSha256": "d2d83693eeb4cb8e3cefca672f10f4e1233bfcc9d6b2cba32bafdce358fc4f3c",
+    "provenanceSha256": "2d4e31dc06f88d1988fd99d3f13a3e4fdf8ec27bafcc5e58d63e3af62e8776fb",
+    "controllerSourceSha256": "b38922ac6b974ef87041a34dd70c6ebe720d77e8e5e42e1295fdb17df496c77c",
+    "workerSourceSha256": "77113e646ba12a4fa95976991c2bdea872a2616d021ce0f27d2b799d54d5d86c",
+    "encoderReuseSourceSha256": "dffe9e1c9fb3771224b3e4e22eca524acb519785de144d34337d774a76ddb1f8",
+    "helper": {
+      "manifestSha256": "6d6b2c79d7e381b17b05c5e019e6dd7ee3ac761a5d3cc569ba8d7cce01d88e7e",
+      "bundleSha256": "37a595269cef173f7505872f2cecc8854c98f9b0b6be9c610360d5527ff95716",
+      "controllerSourceSha256": "b38922ac6b974ef87041a34dd70c6ebe720d77e8e5e42e1295fdb17df496c77c"
+    },
+    "driverSha256": "3107b6786ca490a2303a507eac75fd5fbcc873a27ab4b6cbfa791521e3d873f7"
+  },
+  "cache": {
+    "manifestSha256": "baa8563ad1ef4ff999f613c16684afe2e709a9622b37baf5eb111e75e12ea471",
+    "entries": 7,
+    "bytes": 588744805,
+    "sourceRevision": "36050c46d777d46dc4b5f43f6d90574fc38f8732",
+    "transport": "loopback-http-response-to-extension-cache",
+    "seedWallMs": 1314,
+    "config": {
+      "sha256": "457854d452f17661e197d74aee12b8e74fb75ba30ebfaa7426d0d61ea1e08a18",
+      "d_model": 768,
+      "encoder_layers": 12,
+      "decoder_layers": 12
+    },
+    "files": [
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/preprocessor_config.json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d",
+        "wallMs": 4
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/config.json",
+        "bytes": 2227,
+        "sha256": "457854d452f17661e197d74aee12b8e74fb75ba30ebfaa7426d0d61ea1e08a18",
+        "wallMs": 0
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/generation_config.json",
+        "bytes": 3893,
+        "sha256": "f538b28220c6a6d6f1af1458d4141cacb4ef4963df3de98a19490440c412ddf0",
+        "wallMs": 0
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/tokenizer_config.json",
+        "bytes": 282683,
+        "sha256": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce",
+        "wallMs": 1
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/tokenizer.json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566",
+        "wallMs": 3
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "bytes": 233149327,
+        "sha256": "795c61b344576719c2b249cc9911c78b4cc552c8c6a5407be21a3380a0791b13",
+        "wallMs": 290
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/onnx/encoder_model.onnx",
+        "bytes": 352825870,
+        "sha256": "b37cd6625dc36f9178ec7539a1876b9680ea26a910097e092be39dc766320c7b",
+        "wallMs": 543
+      }
+    ]
+  },
+  "corpus": {
+    "stableOriginalManifestSha256": "b4054caf378a9da853a86fa3edc2a229cc082d760eaa85ab241d24724de0fa51",
+    "orderedSmallManifestSha256": "111773f1ec2014fdae6af2028b622d72d46927560d421e878eb098c2b7624360",
+    "same39SourceAudioAsHistoricalAlias": true,
+    "orderSameAsHistoricalAlias": true,
+    "audioSeconds": 467.64,
+    "referenceTextStoredInRepository": false
+  },
+  "pairedHistoricalAlias": {
+    "workerSha256": "695d35a3182b4b7d750d44ba1f5919dc7b33578dc672efe9b866cd571c513044",
+    "actualModelId": "onnx-community/whisper-small",
+    "oldControllerAlias": "base",
+    "scope": "Historical isolated FP32/q4 control, old unhooked stop contract; compared by identical PCM/windows rather than treating the alias as formal Small.",
+    "sameCompleteInputCount": 39,
+    "sameWindowPcmAndBoundaryCount": 48,
+    "sameFinalTextCount": 39,
+    "sameScoreCount": 39,
+    "sameCueTimelineCount": 39,
+    "sameWindowTextCount": 48,
+    "sameWindowSegmentsCount": 48
+  },
+  "metadataChecks": {
+    "actualSmallWarmResponses": 39,
+    "actualSmallWindowResponses": 48,
+    "mixedPrecisionWarmResponses": 39,
+    "mixedPrecisionWindowResponses": 48,
+    "nativeWebGpuWindows": 48,
+    "encoderReuseWindows": 48,
+    "languageLabelAgreements": 46,
+    "languageLabelUnknown": 0,
+    "completeReleaseResponses": 39,
+    "rpcFailures": 0,
+    "recordedRemoteRequests": 0
+  },
+  "languageLabelDisagreements": [
+    {
+      "sampleId": "ja_jp_0001",
+      "expectedLanguages": [
+        "ja"
+      ],
+      "sequence": 2,
+      "startMs": 12800,
+      "durationMs": 1420,
+      "detectedLanguage": "ko",
+      "languageConfidence": 0.3569480583706714
+    },
+    {
+      "sampleId": "hi_in_0002",
+      "expectedLanguages": [
+        "hi"
+      ],
+      "sequence": 1,
+      "startMs": 0,
+      "durationMs": 14000,
+      "detectedLanguage": "ur",
+      "languageConfidence": 0.5435102226824694
+    }
+  ],
+  "languageScores": {
+    "hi": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 76,
+      "referenceUnits": 93,
+      "rate": 0.8172043010752689
+    },
+    "zh": {
+      "metric": "cer",
+      "cases": 3,
+      "windows": 3,
+      "errors": 13,
+      "referenceUnits": 81,
+      "rate": 0.16049382716049382
+    },
+    "en": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 3,
+      "errors": 7,
+      "referenceUnits": 73,
+      "rate": 0.0958904109589041
+    },
+    "ja": {
+      "metric": "cer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 28,
+      "referenceUnits": 162,
+      "rate": 0.1728395061728395
+    },
+    "ko": {
+      "metric": "cer",
+      "cases": 3,
+      "windows": 3,
+      "errors": 5,
+      "referenceUnits": 127,
+      "rate": 0.03937007874015748
+    },
+    "es": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 9,
+      "referenceUnits": 102,
+      "rate": 0.08823529411764706
+    },
+    "fr": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 9,
+      "referenceUnits": 109,
+      "rate": 0.08256880733944955
+    },
+    "de": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 2,
+      "referenceUnits": 62,
+      "rate": 0.03225806451612903
+    },
+    "ar": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 5,
+      "errors": 24,
+      "referenceUnits": 69,
+      "rate": 0.34782608695652173
+    },
+    "ru": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 7,
+      "referenceUnits": 45,
+      "rate": 0.15555555555555556
+    },
+    "vi": {
+      "metric": "cer",
+      "cases": 3,
+      "windows": 3,
+      "errors": 21,
+      "referenceUnits": 209,
+      "rate": 0.10047846889952153
+    },
+    "th": {
+      "metric": "cer",
+      "cases": 3,
+      "windows": 3,
+      "errors": 96,
+      "referenceUnits": 355,
+      "rate": 0.2704225352112676
+    },
+    "pt": {
+      "metric": "wer",
+      "cases": 3,
+      "windows": 4,
+      "errors": 11,
+      "referenceUnits": 75,
+      "rate": 0.14666666666666667
+    }
+  },
+  "timing": {
+    "wallSumMs": 102560.1000008583,
+    "medianWallMs": 1869.7000002861023,
+    "windowInferenceSumMs": 97780.4000005722,
+    "windowLanguageDetectionSumMs": 42401.00000047684,
+    "maxObservedWindowInferenceMs": 5770.099999904633,
+    "firstModelSessionPrepareMs": 2639.7000002861023,
+    "processAndGpuPeakMemoryMeasured": false,
+    "generalSpeedupClaimSupported": false,
+    "hardDeadlineTriggeredInThisMatrix": false
+  },
+  "browser": {
+    "version": "154.0.8037.99",
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "screenIndex": 1,
+      "browserFrontmost": false
+    },
+    "focusChecks": 41,
+    "guardedCloseSucceeded": true,
+    "ownedTemporaryProfileRemoved": true,
+    "dom": {
+      "id": "fluentReadFinalSmallMatrixEvidence",
+      "cases": 39,
+      "windows": 48,
+      "visible": true,
+      "text": "Actual Small / FP32 encoder / q4 decoder: 39 complete samples, 48 windows"
+    },
+    "screenshot": "/private/tmp/fluentread-fleurs-fullcapture-final-small-real-browser-20261009/final-small-matrix.png",
+    "screenshotVisuallyInspected": true,
+    "screenshotScope": "Diagnostic control-page result badge only, not product caption UI"
+  },
+  "rawEvidence": {
+    "directory": "/private/tmp/fluentread-fleurs-fullcapture-final-small-real-browser-20261009",
+    "reportSha256": "2956339c8b0d34ee00ca691cdc97907c87f1bd4c01634dcf00baecb2947d1c2a",
+    "ledgerSha256": "5b0378ea84d735e8d2b43be563ba80b49b1caf6e345c600e8a122e8a04636a6b",
+    "historicalAliasReportSha256": "60dbbbbdcfc93ea264037a0690a187fe1c4ea56023b2de79643da91a2fe75c9a"
+  },
+  "cases": [
+    {
+      "model": "small",
+      "sampleId": "hi_in_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "hi"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 14,
+        "referenceUnits": 24,
+        "actualUnits": 21,
+        "rate": 0.5833333333333334
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "textSha256": "72ceffb6732845a22273459b197d84dafad3612b117ed1cc2630a60f49c194b8",
+      "cueTimelineSha256": "91bd86411cd91129d197bceab58af2bce2fa83ee399ab3df136aee945b1a51eb",
+      "cueCount": 1,
+      "audioDurationMs": 9120,
+      "wallMs": 5899.400000095367,
+      "wallRtf": 0.6468640350981762,
+      "totalWindowInferenceMs": 3208.0999999046326,
+      "totalLanguageDetectionMs": 836.5,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2639.7000002861023,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 9120,
+          "audioDurationMs": 9120,
+          "inputPcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "hi",
+          "languageConfidence": 0.9452441366647311,
+          "languageDetectionMs": 836.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 3218.199999809265,
+          "inferenceMs": 3208.0999999046326,
+          "decodeMs": 2.5999999046325684,
+          "textSha256": "72ceffb6732845a22273459b197d84dafad3612b117ed1cc2630a60f49c194b8",
+          "segmentsSha256": "c7aec4cc5efd064adac7d8202e680e0e91577d5a69c45c058c8dc80155a0999f",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "cmn_hans_cn_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "zh"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 4,
+        "referenceUnits": 23,
+        "actualUnits": 23,
+        "rate": 0.17391304347826086
+      },
+      "scriptNormalizedScore": {
+        "errors": 4,
+        "referenceUnits": 23,
+        "actualUnits": 23,
+        "rate": 0.17391304347826086
+      },
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+      "textSha256": "2b6e79cd0e65263434e302d6de9ab6e853d6d7550939bace8834dd01ecf8f15e",
+      "cueTimelineSha256": "50651e3bb9a29c794ced581f3e3a8919db99e67651eb39d327973c3da1e9c1d6",
+      "cueCount": 1,
+      "audioDurationMs": 10380,
+      "wallMs": 2158.7999997138977,
+      "wallRtf": 0.20797687858515393,
+      "totalWindowInferenceMs": 2110.2999997138977,
+      "totalLanguageDetectionMs": 1345.1999998092651,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10380,
+          "audioDurationMs": 10380,
+          "inputPcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "zh",
+          "languageConfidence": 0.9870233238795696,
+          "languageDetectionMs": 1345.1999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2117.300000190735,
+          "inferenceMs": 2110.2999997138977,
+          "decodeMs": 1,
+          "textSha256": "2b6e79cd0e65263434e302d6de9ab6e853d6d7550939bace8834dd01ecf8f15e",
+          "segmentsSha256": "6b52395251733d57ae86ba9f97129a2f11cacac11588da6cd2f9ef49a0b3def2",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "cmn_hans_cn_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "zh"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 4,
+        "referenceUnits": 21,
+        "actualUnits": 21,
+        "rate": 0.19047619047619047
+      },
+      "scriptNormalizedScore": {
+        "errors": 3,
+        "referenceUnits": 21,
+        "actualUnits": 21,
+        "rate": 0.14285714285714285
+      },
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+      "textSha256": "c59b7e026043aab96282ce600696bdd5c0d058fb2fe2c5cdedfca5add47ee50c",
+      "cueTimelineSha256": "b3660c2cc5106a0e6a4ee3cc2da78df8f62eb10f1c6497ee572ca4014a9f6cb1",
+      "cueCount": 1,
+      "audioDurationMs": 8280,
+      "wallMs": 1461.7999997138977,
+      "wallRtf": 0.17654589368525334,
+      "totalWindowInferenceMs": 1415.1999998092651,
+      "totalLanguageDetectionMs": 638,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 5.099999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8280,
+          "audioDurationMs": 8280,
+          "inputPcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "zh",
+          "languageConfidence": 0.9968599926675132,
+          "languageDetectionMs": 638,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1423.0999999046326,
+          "inferenceMs": 1415.1999998092651,
+          "decodeMs": 2.5,
+          "textSha256": "c59b7e026043aab96282ce600696bdd5c0d058fb2fe2c5cdedfca5add47ee50c",
+          "segmentsSha256": "e47a050a402791c1e09615bc99459bbed07cdeeff42e21974c96739f97807915",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "cmn_hans_cn_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "zh"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 5,
+        "referenceUnits": 37,
+        "actualUnits": 37,
+        "rate": 0.13513513513513514
+      },
+      "scriptNormalizedScore": {
+        "errors": 5,
+        "referenceUnits": 37,
+        "actualUnits": 37,
+        "rate": 0.13513513513513514
+      },
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+      "textSha256": "9827f2e5db450bffa3302b4304d2105357e486a35fab9c6727b61e444bd5605d",
+      "cueTimelineSha256": "84fcff4404ef8381ff307fc16316d5decd77483395ccb8f4f973ccf1fe208724",
+      "cueCount": 2,
+      "audioDurationMs": 13860,
+      "wallMs": 1609,
+      "wallRtf": 0.11608946608946609,
+      "totalWindowInferenceMs": 1549.2000002861023,
+      "totalLanguageDetectionMs": 627.7000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.3000001907348633,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 13860,
+          "audioDurationMs": 13860,
+          "inputPcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "zh",
+          "languageConfidence": 0.9942818859473586,
+          "languageDetectionMs": 627.7000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1556.5,
+          "inferenceMs": 1549.2000002861023,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "0f57870b67db47a093184c24de22dff0b7ebd50a4900843f58195051fe7c3ee6",
+          "segmentsSha256": "c4ec534980303f0e4a9b7955dea7c18d9a52bc297b6b9809ab9e4ae6871b0e6c",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "en_us_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "en"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 19,
+        "actualUnits": 19,
+        "rate": 0.05263157894736842
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+      "textSha256": "2226dab26de694e2bb52e0abacc19fa60d3023c75b6b6002aff32b2020615a64",
+      "cueTimelineSha256": "129b7e5437d94e2a5a71f3239370237cbdfb4b50cc72602692b61e6fdda590cd",
+      "cueCount": 1,
+      "audioDurationMs": 10560,
+      "wallMs": 1419.8000001907349,
+      "wallRtf": 0.13445075759381958,
+      "totalWindowInferenceMs": 1371.9000000953674,
+      "totalLanguageDetectionMs": 728.5,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10560,
+          "audioDurationMs": 10560,
+          "inputPcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "en",
+          "languageConfidence": 0.9871067068275424,
+          "languageDetectionMs": 728.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1378.5,
+          "inferenceMs": 1371.9000000953674,
+          "decodeMs": 0.9000000953674316,
+          "textSha256": "2226dab26de694e2bb52e0abacc19fa60d3023c75b6b6002aff32b2020615a64",
+          "segmentsSha256": "09c82609cc10f6499a71981d1507054883dc34bc0ca400db2557c098facfc3cc",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "en_us_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "en"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 21,
+        "actualUnits": 21,
+        "rate": 0.09523809523809523
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+      "textSha256": "a1b53eeb0cfd6d3f3411a21f3bee420509425a01a1df12772b0689a6b8fc4e5a",
+      "cueTimelineSha256": "c19eaf1acbef7a8db094c725f118bcce71ca0775c331a27076ae5b55ccbe3ccc",
+      "cueCount": 1,
+      "audioDurationMs": 8760,
+      "wallMs": 1315.8000001907349,
+      "wallRtf": 0.15020547947382817,
+      "totalWindowInferenceMs": 1272.0999999046326,
+      "totalLanguageDetectionMs": 630.4000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 1.8000001907348633,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8760,
+          "audioDurationMs": 8760,
+          "inputPcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "en",
+          "languageConfidence": 0.9924016302967738,
+          "languageDetectionMs": 630.4000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1281.6999998092651,
+          "inferenceMs": 1272.0999999046326,
+          "decodeMs": 2.8999996185302734,
+          "textSha256": "a1b53eeb0cfd6d3f3411a21f3bee420509425a01a1df12772b0689a6b8fc4e5a",
+          "segmentsSha256": "581596217d74b52a1c780625364365df34f2dcfc81bb2b1b61b38fe462cb2b9d",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "en_us_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "en"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 4,
+        "referenceUnits": 33,
+        "actualUnits": 34,
+        "rate": 0.12121212121212122
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+      "textSha256": "03fffc6bf530ddf8a8107d4fd3b7f362ffd9fd741f33e5eb5f7cac7c10b467cd",
+      "cueTimelineSha256": "5055c00ffd1b321e8a841bc576c504630fb076f1b1217906d2eddd244da77435",
+      "cueCount": 2,
+      "audioDurationMs": 11460,
+      "wallMs": 1663.4000000953674,
+      "wallRtf": 0.1451483420676586,
+      "totalWindowInferenceMs": 1613.5,
+      "totalLanguageDetectionMs": 640.9000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.3000001907348633,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 11460,
+          "audioDurationMs": 11460,
+          "inputPcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "en",
+          "languageConfidence": 0.9720894837714392,
+          "languageDetectionMs": 640.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1620.4000000953674,
+          "inferenceMs": 1613.5,
+          "decodeMs": 1.200000286102295,
+          "textSha256": "03fffc6bf530ddf8a8107d4fd3b7f362ffd9fd741f33e5eb5f7cac7c10b467cd",
+          "segmentsSha256": "ddcaefe0b5b8ff6883de5666360cbd456b8511851fd3a6bfb1a21c2ae79ef39a",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ja_jp_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ja"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 45,
+        "actualUnits": 45,
+        "rate": 0.044444444444444446
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+      "textSha256": "33e9b44fc536dcfbbff7ad857c9171f75af42efab543830de802bf3db99823c7",
+      "cueTimelineSha256": "e73724f9b20865a7758bf41c9e29723c974d8266b80251e1512e89b024995cf8",
+      "cueCount": 1,
+      "audioDurationMs": 10440,
+      "wallMs": 1869.7000002861023,
+      "wallRtf": 0.1790900383415807,
+      "totalWindowInferenceMs": 1825.1000003814697,
+      "totalLanguageDetectionMs": 762.2000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.200000286102295,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10440,
+          "audioDurationMs": 10440,
+          "inputPcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ja",
+          "languageConfidence": 0.9910593328924262,
+          "languageDetectionMs": 762.2000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1830.7000002861023,
+          "inferenceMs": 1825.1000003814697,
+          "decodeMs": 1,
+          "textSha256": "33e9b44fc536dcfbbff7ad857c9171f75af42efab543830de802bf3db99823c7",
+          "segmentsSha256": "f28df5b98837103bc2fcd5713b1454b99568a8fc226f0d679180d5560963e88d",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ja_jp_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ja"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 7,
+        "referenceUnits": 46,
+        "actualUnits": 52,
+        "rate": 0.15217391304347827
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "ccd5258a1e0d8ec801e9bde70ff13fb74af51ae9dc7e63a6badaaa85ca9af0ac",
+      "textSha256": "cd8d10d5346eb237e34904a9504b7e096d52ac649bc98b0f6658d8fa33c3d153",
+      "cueTimelineSha256": "453e2e3056a0dde620f5daec7f1f17c3b042440b8606b07efc4310150e42de5e",
+      "cueCount": 2,
+      "audioDurationMs": 14220,
+      "wallMs": 3293.5999999046326,
+      "wallRtf": 0.23161744021832859,
+      "totalWindowInferenceMs": 3223.9000000953674,
+      "totalLanguageDetectionMs": 1756.2000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 5.599999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "8c2564e44af2891943b22ee48b67e3ed8a35628f298a57b225129028a241cba0",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ja",
+          "languageConfidence": 0.9936412532198002,
+          "languageDetectionMs": 780.3000001907349,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1912.9000000953674,
+          "inferenceMs": 1906.4000000953674,
+          "decodeMs": 1.5,
+          "textSha256": "094b69019ee8cec5ab8d823b3a0d1cdefb7919500c17058929b046fb56850438",
+          "segmentsSha256": "5f0788a83feba60e437923c7817624852c01a9a2b7ac0f4e57a2937d22a78d60",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 1420,
+          "audioDurationMs": 1420,
+          "inputPcm16Sha256": "d7111b8ef58c23beed13431d4ada4f1a8ea9773e62d5dbf6fe00ed2db402e67c",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ko",
+          "languageConfidence": 0.3569480583706714,
+          "languageDetectionMs": 975.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": false,
+          "wallMs": 1320,
+          "inferenceMs": 1317.5,
+          "decodeMs": 0.10000038146972656,
+          "textSha256": "8294e15c3701ad08df43508f0e3980467b938bdeb91a14e1def19e20cded9ab3",
+          "segmentsSha256": "cb9fa0e77564412ec9ab5db6c8770f099e2c1a8587831cbb3b7432d032c2f144",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ja_jp_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ja"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 19,
+        "referenceUnits": 71,
+        "actualUnits": 66,
+        "rate": 0.2676056338028169
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+      "textSha256": "b4778b0b69ddc90c069fddf963a191a9a11bf7e4a9bfc537ccfb2df7fc9805ec",
+      "cueTimelineSha256": "562c1a94751a0808dd831462a8182c5582771c947a8b17adf135432004259ff0",
+      "cueCount": 2,
+      "audioDurationMs": 12840,
+      "wallMs": 2255.6000003814697,
+      "wallRtf": 0.17566978196117367,
+      "totalWindowInferenceMs": 2198.699999809265,
+      "totalLanguageDetectionMs": 627.9000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.099999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 12840,
+          "audioDurationMs": 12840,
+          "inputPcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ja",
+          "languageConfidence": 0.9806187934014162,
+          "languageDetectionMs": 627.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2205.0999999046326,
+          "inferenceMs": 2198.699999809265,
+          "decodeMs": 1.1999998092651367,
+          "textSha256": "300b4aa97628ddbbcac302a6ad6a201246132a172a0ab256dd523d971d173ada",
+          "segmentsSha256": "92b695a60a68fd61f90d6e2186529cf12c1a7ded4bdc2bb90e13918914f90ea9",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ko_kr_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ko"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 3,
+        "referenceUnits": 53,
+        "actualUnits": 52,
+        "rate": 0.05660377358490566
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+      "textSha256": "2220371d69e7f026d8a2a976c0e661ade0cfb699afd98bd34c64972fffedf13f",
+      "cueTimelineSha256": "fd246b3fbcfb0ed8cd2c7fa14e12855ea6c2e66121f29414a68db54fe07d1ec1",
+      "cueCount": 1,
+      "audioDurationMs": 12480,
+      "wallMs": 2104.9000000953674,
+      "wallRtf": 0.1686618589820006,
+      "totalWindowInferenceMs": 2050.9000000953674,
+      "totalLanguageDetectionMs": 1004.6999998092651,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.0999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 12480,
+          "audioDurationMs": 12480,
+          "inputPcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ko",
+          "languageConfidence": 0.9963189921457716,
+          "languageDetectionMs": 1004.6999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2059,
+          "inferenceMs": 2050.9000000953674,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "2220371d69e7f026d8a2a976c0e661ade0cfb699afd98bd34c64972fffedf13f",
+          "segmentsSha256": "e2ef89dc578453f5d6f820e91ab31126473fe11f55633f6d8e2193537ee3d71e",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ko_kr_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ko"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 41,
+        "actualUnits": 41,
+        "rate": 0.024390243902439025
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+      "textSha256": "6a15004e0c984fbc2e5b37bddc3463efc25830a7cf75c03791cd0600d6755d8b",
+      "cueTimelineSha256": "1605ec63d610a0008998e1f4f93636f33d766e3b6c2acabf00f7aad2c01bd8e0",
+      "cueCount": 1,
+      "audioDurationMs": 10800,
+      "wallMs": 1730.4000000953674,
+      "wallRtf": 0.16022222223105254,
+      "totalWindowInferenceMs": 1681.1999998092651,
+      "totalLanguageDetectionMs": 775.5999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.0999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10800,
+          "audioDurationMs": 10800,
+          "inputPcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ko",
+          "languageConfidence": 0.9942299568845963,
+          "languageDetectionMs": 775.5999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1690.1000003814697,
+          "inferenceMs": 1681.1999998092651,
+          "decodeMs": 1.1999998092651367,
+          "textSha256": "6a15004e0c984fbc2e5b37bddc3463efc25830a7cf75c03791cd0600d6755d8b",
+          "segmentsSha256": "c222977c5990664a24f31cee913d1dd4a135f71ea3dca929ba0a9a2c356ca3d2",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ko_kr_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ko"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 33,
+        "actualUnits": 33,
+        "rate": 0.030303030303030304
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+      "textSha256": "b7cf4b561625704d508d48dce77ebf12e0d7df34ebf1fc4cbf28b99d5cf588b3",
+      "cueTimelineSha256": "c4683fe58a7be9fc3e635e3f530306f3b375ca8d5fe5f42c323045bbdc922f01",
+      "cueCount": 1,
+      "audioDurationMs": 8940,
+      "wallMs": 1653.0999999046326,
+      "wallRtf": 0.18491051453071952,
+      "totalWindowInferenceMs": 1612.2999997138977,
+      "totalLanguageDetectionMs": 741,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 1.8999996185302734,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8940,
+          "audioDurationMs": 8940,
+          "inputPcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ko",
+          "languageConfidence": 0.9932941643033378,
+          "languageDetectionMs": 741,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1619,
+          "inferenceMs": 1612.2999997138977,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "b7cf4b561625704d508d48dce77ebf12e0d7df34ebf1fc4cbf28b99d5cf588b3",
+          "segmentsSha256": "a2010c8f827a7f42d778b679ba9a0726a4720084141cc9852a758fce313685a3",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "es_419_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "es"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 29,
+        "actualUnits": 29,
+        "rate": 0.034482758620689655
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+      "textSha256": "dbee3143262ef08ed284fb8167906b453605f09cc652b4ac4c4ecdaabf35647a",
+      "cueTimelineSha256": "6ee9b8e8c4b686dc774586984509906d0ca4aeb8bf267b80891136efda22147f",
+      "cueCount": 2,
+      "audioDurationMs": 12840,
+      "wallMs": 1834.1999998092651,
+      "wallRtf": 0.1428504672748649,
+      "totalWindowInferenceMs": 1779.9000000953674,
+      "totalLanguageDetectionMs": 705.0999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 3.8999996185302734,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 12840,
+          "audioDurationMs": 12840,
+          "inputPcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "es",
+          "languageConfidence": 0.9951431763318902,
+          "languageDetectionMs": 705.0999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1785.9000000953674,
+          "inferenceMs": 1779.9000000953674,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "dbee3143262ef08ed284fb8167906b453605f09cc652b4ac4c4ecdaabf35647a",
+          "segmentsSha256": "43c09c5c7170e9640e58626ca517f48f1ab1820a8915e656250036c52f09b022",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "es_419_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "es"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 8,
+        "referenceUnits": 51,
+        "actualUnits": 53,
+        "rate": 0.1568627450980392
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "ee6bc09607ac40605a5b6104ec8800234f89287398d4dc0cbb5831e961019ad6",
+      "textSha256": "f431ba79a27cdb59f387837911cc73941450b88215df01c42ed0a7cd71bab8c8",
+      "cueTimelineSha256": "1213eb410e7a1b0d46ca50f6d183ac39ee0a4d5213bf5a385123e99783af59b2",
+      "cueCount": 4,
+      "audioDurationMs": 21360,
+      "wallMs": 3861.7999997138977,
+      "wallRtf": 0.18079588013641842,
+      "totalWindowInferenceMs": 3768.4000000953674,
+      "totalLanguageDetectionMs": 1812.5,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.199999809265137,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "62de8c4fc3d1315f8a412c65784ac417d3da3019bd283d5ac68dcf65d35ddc79",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "es",
+          "languageConfidence": 0.9778396477953852,
+          "languageDetectionMs": 754,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2086.3999996185303,
+          "inferenceMs": 2079.9000000953674,
+          "decodeMs": 1.299999713897705,
+          "textSha256": "ef60c64803ec5ac0cdb4eee900a248b9d598fdd59197b372d1a244f9f1595d4b",
+          "segmentsSha256": "f2fb0172eb9ed6e3dbe4ca598a88dc9cc7b3d4931ef724505ad154179e78cf97",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 8560,
+          "audioDurationMs": 8560,
+          "inputPcm16Sha256": "95a0b3f13f1c35f1c6cce9e9546663172c7f1fddcda6e4c5a3c8bcaad6945303",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "es",
+          "languageConfidence": 0.9837125961777222,
+          "languageDetectionMs": 1058.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1693.1999998092651,
+          "inferenceMs": 1688.5,
+          "decodeMs": 0.8000001907348633,
+          "textSha256": "fcb6f7ce64330ab62a28744031b43345c592c7b7adc879e0cdc7b06ce6fd801a",
+          "segmentsSha256": "589e4e329be1783044b797584ad497e8a4c295bb0973f266003634f2a779bd37",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "es_419_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "es"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 0,
+        "referenceUnits": 22,
+        "actualUnits": 22,
+        "rate": 0
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+      "textSha256": "68cf301ede9aff8b01e44ef7efed44551710651c94f6a335fe0eefc5a96f8c75",
+      "cueTimelineSha256": "41f823bed9c91262d6fab26d116cff3c0d658ea40f397f152e64a4c2e3f785a9",
+      "cueCount": 1,
+      "audioDurationMs": 9720,
+      "wallMs": 1453.5,
+      "wallRtf": 0.14953703703703702,
+      "totalWindowInferenceMs": 1410.3000001907349,
+      "totalLanguageDetectionMs": 622.2000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.599999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 9720,
+          "audioDurationMs": 9720,
+          "inputPcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "es",
+          "languageConfidence": 0.9949296738804159,
+          "languageDetectionMs": 622.2000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1415.4000000953674,
+          "inferenceMs": 1410.3000001907349,
+          "decodeMs": 0.9000000953674316,
+          "textSha256": "68cf301ede9aff8b01e44ef7efed44551710651c94f6a335fe0eefc5a96f8c75",
+          "segmentsSha256": "9555b94576d2ba357f136dab7c212a770b3040c6ac902b08e409d847cc25f8be",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "fr_fr_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "fr"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 20,
+        "actualUnits": 19,
+        "rate": 0.1
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+      "textSha256": "dd26bbfd59338847f92416c856372fd307e53c558a07fa52b82681b28980a004",
+      "cueTimelineSha256": "83c4316ae08e2669bc56fe6c60d489c2be6a93257cd325e5f877a57fcfebc596",
+      "cueCount": 2,
+      "audioDurationMs": 10200,
+      "wallMs": 1592.0999999046326,
+      "wallRtf": 0.1560882352847679,
+      "totalWindowInferenceMs": 1547.2000002861023,
+      "totalLanguageDetectionMs": 687.9000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10200,
+          "audioDurationMs": 10200,
+          "inputPcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "fr",
+          "languageConfidence": 0.9853225218117976,
+          "languageDetectionMs": 687.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1552.5999999046326,
+          "inferenceMs": 1547.2000002861023,
+          "decodeMs": 1,
+          "textSha256": "dd26bbfd59338847f92416c856372fd307e53c558a07fa52b82681b28980a004",
+          "segmentsSha256": "06676424f8fc01d53693e0c4c0f56d123a32259c575e2af7c758767813cbf17b",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "fr_fr_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "fr"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 5,
+        "referenceUnits": 63,
+        "actualUnits": 65,
+        "rate": 0.07936507936507936
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "95770c063d420ff1ddf4dddc34b25e87e2ed5347bf4d4aa799a15ab46abea4e6",
+      "textSha256": "bd51d086c0aa3cd7a594ef46206bad24f68862d57440d84a8febd51c189b72eb",
+      "cueTimelineSha256": "d12fa6c4f00d79842a803976cafa2ddec07e339afe6f2f0b4cfbfc91565640aa",
+      "cueCount": 4,
+      "audioDurationMs": 23400,
+      "wallMs": 4469.699999809265,
+      "wallRtf": 0.19101282050466944,
+      "totalWindowInferenceMs": 4368.099999904633,
+      "totalLanguageDetectionMs": 1776.9000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.900000095367432,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "f4dd94af83d98d77473bff682a1393ed016856020b009f740e4b4aa72a2fb9e4",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "fr",
+          "languageConfidence": 0.9886191801099063,
+          "languageDetectionMs": 659,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2200,
+          "inferenceMs": 2193,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "f582f8e68cefbb6ac4c07136aee07d81c165d513bdfa5aeb77cc865f74c0da58",
+          "segmentsSha256": "1b0f60ba416754a557945e31a0930683fea75842c86a408e4091bbae69d52ac3",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 10600,
+          "audioDurationMs": 10600,
+          "inputPcm16Sha256": "2365b09589f38bb5dbf6ed6abef74d6cd95723193ef98877a37759e11b74c307",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "fr",
+          "languageConfidence": 0.9978761575115956,
+          "languageDetectionMs": 1117.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2180.9000000953674,
+          "inferenceMs": 2175.0999999046326,
+          "decodeMs": 1,
+          "textSha256": "c440b624c36b740b9955eb713fd1973be33f097e7de675fb98eeafac97bf6ec4",
+          "segmentsSha256": "d873257dcd0b5ecb378e88fb04125f7c533e514ebcd44143b62e2293fb4e9b95",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "fr_fr_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "fr"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 26,
+        "actualUnits": 26,
+        "rate": 0.07692307692307693
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+      "textSha256": "a86ea19c7d6c9a446ccb28ebc8d7e34477fa287d6d2ea4c2ee999d76a857a99b",
+      "cueTimelineSha256": "410d62541bb7b13d2eddaac3370d8bc16cda3d6036d23a89a4496237bb13d35f",
+      "cueCount": 2,
+      "audioDurationMs": 8280,
+      "wallMs": 1856.0999999046326,
+      "wallRtf": 0.22416666665514887,
+      "totalWindowInferenceMs": 1816.8000001907349,
+      "totalLanguageDetectionMs": 803.6999998092651,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.099999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8280,
+          "audioDurationMs": 8280,
+          "inputPcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "fr",
+          "languageConfidence": 0.995380166411355,
+          "languageDetectionMs": 803.6999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1822.1999998092651,
+          "inferenceMs": 1816.8000001907349,
+          "decodeMs": 0.7999997138977051,
+          "textSha256": "a86ea19c7d6c9a446ccb28ebc8d7e34477fa287d6d2ea4c2ee999d76a857a99b",
+          "segmentsSha256": "decfd9e2109bc81afe2d2f7e64db86feb3ad849aeac02eba9395e234ea8c191e",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "de_de_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "de"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 0,
+        "referenceUnits": 18,
+        "actualUnits": 18,
+        "rate": 0
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "a75ddf6443726c7304b8f62a5dce475b43284ee03cc147921bc9c517a12a24ea",
+      "textSha256": "fe5e5329ca191cd2c035d62c7a89e6ac678bc5c1c605b716445a72c7b1d82727",
+      "cueTimelineSha256": "eb1535a2085cc12a64f7fcde464fd7580e7e1c63709c6d1b1b15e32807f70d77",
+      "cueCount": 2,
+      "audioDurationMs": 17940,
+      "wallMs": 2830.0999999046326,
+      "wallRtf": 0.15775362318308989,
+      "totalWindowInferenceMs": 2748.9000000953674,
+      "totalLanguageDetectionMs": 1601.4999995231628,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.5,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "db475962d8854aab012151025e2317c31d9658d4dd4dd9da5f79f0348c6c0be2",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "de",
+          "languageConfidence": 0.9741734098776396,
+          "languageDetectionMs": 737.3999996185303,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1608.2999997138977,
+          "inferenceMs": 1601.0999999046326,
+          "decodeMs": 1.0999999046325684,
+          "textSha256": "fe5e5329ca191cd2c035d62c7a89e6ac678bc5c1c605b716445a72c7b1d82727",
+          "segmentsSha256": "fdcd2a01ddde4b0a082929a739fcb0f20858718203a9d7c758d302a7a288495e",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 5140,
+          "audioDurationMs": 5140,
+          "inputPcm16Sha256": "054c0cb047ab3f1e13fe7efb1b8ee054eec958100fe5818ec865d9f84a6a1e30",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "de",
+          "languageConfidence": 0.883750781189622,
+          "languageDetectionMs": 864.0999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1151.5,
+          "inferenceMs": 1147.8000001907349,
+          "decodeMs": 0.40000009536743164,
+          "textSha256": "b274f40cbc7a6a6556e8a4f643fb602624e536eb465092fbc34c321eef882f7a",
+          "segmentsSha256": "a70bb710f55fa481414f3573cdf9872505c249da0748d18b6815891219ef0739",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "de_de_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "de"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 0,
+        "referenceUnits": 21,
+        "actualUnits": 21,
+        "rate": 0
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+      "textSha256": "aa7c4c20c8d14debe0bd4b5fb6b472c11a016070ac2b8101227f2d521d209dde",
+      "cueTimelineSha256": "2fbbed6cbac61d90c2b722660b69ffbe893a45c912d63a0ee797c7b5a6b72860",
+      "cueCount": 1,
+      "audioDurationMs": 11160,
+      "wallMs": 1486.8000001907349,
+      "wallRtf": 0.13322580646870383,
+      "totalWindowInferenceMs": 1439.6999998092651,
+      "totalLanguageDetectionMs": 617.9000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.8000001907348633,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 11160,
+          "audioDurationMs": 11160,
+          "inputPcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "de",
+          "languageConfidence": 0.9967757140034988,
+          "languageDetectionMs": 617.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1445.7000002861023,
+          "inferenceMs": 1439.6999998092651,
+          "decodeMs": 1.1999998092651367,
+          "textSha256": "aa7c4c20c8d14debe0bd4b5fb6b472c11a016070ac2b8101227f2d521d209dde",
+          "segmentsSha256": "38291d4bda04c2e9e9cef8492e805e99a94b8795f38ef4cd41db5ea58150eb04",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "de_de_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "de"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 23,
+        "actualUnits": 23,
+        "rate": 0.08695652173913043
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+      "textSha256": "92438139a1c39a96ce8e78695d812d54af0b73a2a97c6e2df6f0ac5cc1c5a46b",
+      "cueTimelineSha256": "969b8c4c92cfccabc4e7845310b738acced328dccd4db9fcd906e7bee7dda15a",
+      "cueCount": 2,
+      "audioDurationMs": 12420,
+      "wallMs": 1907.7000002861023,
+      "wallRtf": 0.15359903383946072,
+      "totalWindowInferenceMs": 1852.4000000953674,
+      "totalLanguageDetectionMs": 672.5,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 12420,
+          "audioDurationMs": 12420,
+          "inputPcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "de",
+          "languageConfidence": 0.9765782550937679,
+          "languageDetectionMs": 672.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1861,
+          "inferenceMs": 1852.4000000953674,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "92438139a1c39a96ce8e78695d812d54af0b73a2a97c6e2df6f0ac5cc1c5a46b",
+          "segmentsSha256": "bd4a9f1d050ed5d731d60f328b7f576e80d0069b93b0e4d732afe72c02a104b3",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ar_eg_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ar"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 5,
+        "referenceUnits": 15,
+        "actualUnits": 16,
+        "rate": 0.3333333333333333
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+      "textSha256": "99858ae3a4c887acaba5e5b0a9cd263dc1084a7de8b5a37c50b4153dd4d8802d",
+      "cueTimelineSha256": "ee3def16c1274472b5515867306995a2938ca7f1d8141eeee93fc9afe8a85976",
+      "cueCount": 2,
+      "audioDurationMs": 8160,
+      "wallMs": 2137.5,
+      "wallRtf": 0.2619485294117647,
+      "totalWindowInferenceMs": 2100.2000002861023,
+      "totalLanguageDetectionMs": 828.7000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.1000003814697266,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8160,
+          "audioDurationMs": 8160,
+          "inputPcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ar",
+          "languageConfidence": 0.995636808312117,
+          "languageDetectionMs": 828.7000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2106.199999809265,
+          "inferenceMs": 2100.2000002861023,
+          "decodeMs": 1,
+          "textSha256": "99858ae3a4c887acaba5e5b0a9cd263dc1084a7de8b5a37c50b4153dd4d8802d",
+          "segmentsSha256": "771cb6459046c67b432c96f32b613eca5f8da2508414f735ce414a3f52a0fd33",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ar_eg_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ar"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 10,
+        "referenceUnits": 30,
+        "actualUnits": 28,
+        "rate": 0.3333333333333333
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "0c60e50e31939598d10a9fdd6a912d8b2771b4d11e67d3eaefeb9cc19bba07f3",
+      "textSha256": "9dd032d9d26e2d49407d1d9e423c7d906fbde7915f52fcadd65341362aad222f",
+      "cueTimelineSha256": "ba51c2f0e4c38a59a0fcb6ed2814dbd8badce098bfdc6d8b96b2d700f332c4a3",
+      "cueCount": 1,
+      "audioDurationMs": 14160,
+      "wallMs": 4337.900000095367,
+      "wallRtf": 0.30634887006323214,
+      "totalWindowInferenceMs": 4266.900000095367,
+      "totalLanguageDetectionMs": 2256.300000190735,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.300000190734863,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "77a8b25a47d9a54765ccb6256ce7392df438d8e21b8701c5f2a9b5889967c789",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ar",
+          "languageConfidence": 0.9941713383028172,
+          "languageDetectionMs": 858.7000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2590.199999809265,
+          "inferenceMs": 2582.4000000953674,
+          "decodeMs": 1.1999998092651367,
+          "textSha256": "9dd032d9d26e2d49407d1d9e423c7d906fbde7915f52fcadd65341362aad222f",
+          "segmentsSha256": "602979c0baa3e5af9abe357413be5d53d66df511a7c7e4c1c991a004c71e252d",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 1360,
+          "audioDurationMs": 1360,
+          "inputPcm16Sha256": "574d83384df0688520d76aa9be206b4f946dadc0b83e39ea0278ff7326d365c6",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ar",
+          "languageConfidence": 0.853606386742466,
+          "languageDetectionMs": 1397.5999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1690.1000003814697,
+          "inferenceMs": 1684.5,
+          "decodeMs": 0.09999990463256836,
+          "textSha256": "624b60c58c9d8bfb6ff1886c2fd605d2adeb6ea4da576068201b6c6958ce93f4",
+          "segmentsSha256": "a55ccbe17c9dec4205a9698ada077a92571a5f2c8208dc4524dda7b80bb0906c",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ar_eg_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ar"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 9,
+        "referenceUnits": 24,
+        "actualUnits": 27,
+        "rate": 0.375
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "38f0f6076a02fb560cc2c04ab5877574d8b47f213c4e4ab4b0baf9e7eb06fca2",
+      "textSha256": "2565d511b2992091631291a6e979a72dd7b5b2abdb96377e3ecbfdd042c01d31",
+      "cueTimelineSha256": "2f88705d21e0382d97f335bf98b88e082678198fcb8664cfdcfe75ded91f0e3a",
+      "cueCount": 2,
+      "audioDurationMs": 16020,
+      "wallMs": 4227.099999904633,
+      "wallRtf": 0.2638639200939221,
+      "totalWindowInferenceMs": 4151.39999961853,
+      "totalLanguageDetectionMs": 1905.1999998092651,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.8000001907348633,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "86b363cc14ad3c7b675dbc1ab7c9197f37070f0e8636e635e4bcc0b6987bfcee",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ar",
+          "languageConfidence": 0.9833213736007363,
+          "languageDetectionMs": 632.6999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2410.5,
+          "inferenceMs": 2402.7999997138977,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "f2159d1e541c8000deb8fa2dab65a33aff9c7670e77f9b92de075b2adbed75bb",
+          "segmentsSha256": "c1005b75c3d6716e5b39c9c0028d6c24d8f222c495f53b7cc5e11c0b05932694",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 3220,
+          "audioDurationMs": 3220,
+          "inputPcm16Sha256": "b387e5ed302980e53f6a2c6aa9adc7afe39b76aa90b17b85336f4defbf741809",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ar",
+          "languageConfidence": 0.9756993191358644,
+          "languageDetectionMs": 1272.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1751.7000002861023,
+          "inferenceMs": 1748.5999999046326,
+          "decodeMs": 0.2999997138977051,
+          "textSha256": "e7a7968f5a38155ae9d749ed9fb4bc2f4dc20cfbf7a16c1b072d3bfd540a3249",
+          "segmentsSha256": "c99a42cab5408145360b83d7cc91919e1fc5f851c9899dabf983c20468eb7131",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "hi_in_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "hi"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 29,
+        "referenceUnits": 40,
+        "actualUnits": 47,
+        "rate": 0.725
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "textSha256": "b1c06f0d7f29de873a85c14ca3d1be191350a99a8ff469f3109002887c89608b",
+      "cueTimelineSha256": "3e1a6dd6d6885a32258c490540e74de66ee1cc77088cce4b8c80472c1de12932",
+      "cueCount": 1,
+      "audioDurationMs": 13800,
+      "wallMs": 5827.900000095367,
+      "wallRtf": 0.42231159420980924,
+      "totalWindowInferenceMs": 5770.099999904633,
+      "totalLanguageDetectionMs": 634.8999996185303,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.299999713897705,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 13800,
+          "audioDurationMs": 13800,
+          "inputPcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "hi",
+          "languageConfidence": 0.696588952875456,
+          "languageDetectionMs": 634.8999996185303,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 5778.5,
+          "inferenceMs": 5770.099999904633,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "b1c06f0d7f29de873a85c14ca3d1be191350a99a8ff469f3109002887c89608b",
+          "segmentsSha256": "30a448b2583e15af8e913e00a54b03ef3e5f34d9ea74a63e79917797ce60ffea",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "hi_in_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "hi"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 33,
+        "referenceUnits": 29,
+        "actualUnits": 34,
+        "rate": 1.1379310344827587
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "59ac6ede1b7799e702c310afcbe0c3055a560282d3a04700319fba8d36c0bff1",
+      "textSha256": "7d27f6526bc277b3246837307932d220bbfb37f2c65f2bb8ec289840d31f00e4",
+      "cueTimelineSha256": "8ef0f46d44dcff098fd134fb556c55f04c50de1f4030f3a1637c83cae2002b67",
+      "cueCount": 3,
+      "audioDurationMs": 15000,
+      "wallMs": 6416.400000095367,
+      "wallRtf": 0.42776000000635783,
+      "totalWindowInferenceMs": 6341.900000572205,
+      "totalLanguageDetectionMs": 3835.4000000953674,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.200000286102295,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "ed0169db90614536d330363ea69b22de482b0c5aa55cfba85e0470972a9f53f0",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ur",
+          "languageConfidence": 0.5435102226824694,
+          "languageDetectionMs": 2530.9000000953674,
+          "encoderReuse": true,
+          "languageCorrect": false,
+          "wallMs": 4427.300000190735,
+          "inferenceMs": 4419.10000038147,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "ec8e70639321ecd72e389c5279b655a6e9447ad2af8214d6ae017ef06db18eee",
+          "segmentsSha256": "7dcdd58a23cc28e98265c64e8b7b037a4c8bc1564bbccd3d2790ed2f20733daa",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 2200,
+          "audioDurationMs": 2200,
+          "inputPcm16Sha256": "13d52ee6be415089539d9e8767203709256e3dbc607a040cf0cdb97f20451f78",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "hi",
+          "languageConfidence": 0.47862025619286547,
+          "languageDetectionMs": 1304.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1926.4000000953674,
+          "inferenceMs": 1922.8000001907349,
+          "decodeMs": 0.3000001907348633,
+          "textSha256": "0466aef1feedc65efe5c2c8410b1f767136f1b52f963efcffa641d43497211ad",
+          "segmentsSha256": "b18833c6ba6d61550d1e2cafcb41d2055ab3bb795435db8fc1868cc360c5e914",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ru_ru_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ru"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 6,
+        "referenceUnits": 21,
+        "actualUnits": 24,
+        "rate": 0.2857142857142857
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "28c597b60fff84134f7712c942331022a2b683610e3cf7088f455858ae25a534",
+      "textSha256": "c88e63f1bac2119e6ce806a06cce39e5ddcce756ebe951ec1c9a6cf61b3b62dd",
+      "cueTimelineSha256": "cc2004ae21a6ee05285fef74b265026e456436225aea14b92af4d7edf070b4eb",
+      "cueCount": 3,
+      "audioDurationMs": 16920,
+      "wallMs": 3549.800000190735,
+      "wallRtf": 0.2097990543847952,
+      "totalWindowInferenceMs": 3467.199999809265,
+      "totalLanguageDetectionMs": 1706.5999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 3.4000000953674316,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "fac14c61bb8c6a6b2f63f5d77ac7296b468f263d03530acb5cb2627c529db46c",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ru",
+          "languageConfidence": 0.9953832110714409,
+          "languageDetectionMs": 642.1999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2019.6999998092651,
+          "inferenceMs": 2008.1999998092651,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "65dbbeb931992cbf176e80190fe40d29026b7e8eb2ced1d27524977a831d71df",
+          "segmentsSha256": "70be465727d84a92eed100c84d06936645b9818357a4500cfab3a1ca535b4b51",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 4120,
+          "audioDurationMs": 4120,
+          "inputPcm16Sha256": "fbab18aaebaa99942ad81ae7b09a64d698c2d0e3f1c9089e7723a9c9b256dc46",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ru",
+          "languageConfidence": 0.9864147198864615,
+          "languageDetectionMs": 1064.4000000953674,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1463,
+          "inferenceMs": 1459,
+          "decodeMs": 0.5,
+          "textSha256": "6c183ec29394475cfa4ef4ff6d002770ca118010f10d9b943daa4a9f65f5639e",
+          "segmentsSha256": "580f7eca577b5f2d676e74143c46174ef0dcdc016fcefa9741c73c306c094543",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ru_ru_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ru"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 0,
+        "referenceUnits": 14,
+        "actualUnits": 14,
+        "rate": 0
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+      "textSha256": "ee6cceb224a5453064c7daf71fa7e23e029270a5f5ed91edcda7df9b9fc59bbf",
+      "cueTimelineSha256": "c89e34fbcf76fd4537ee6e49a528ac9c881812d8a0e2e9cc00ef0c3c5f9a20a7",
+      "cueCount": 1,
+      "audioDurationMs": 11520,
+      "wallMs": 1514.7999997138977,
+      "wallRtf": 0.1314930555307203,
+      "totalWindowInferenceMs": 1463,
+      "totalLanguageDetectionMs": 621.5999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 11520,
+          "audioDurationMs": 11520,
+          "inputPcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ru",
+          "languageConfidence": 0.9951423721508573,
+          "languageDetectionMs": 621.5999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1471.8000001907349,
+          "inferenceMs": 1463,
+          "decodeMs": 1.4000000953674316,
+          "textSha256": "ee6cceb224a5453064c7daf71fa7e23e029270a5f5ed91edcda7df9b9fc59bbf",
+          "segmentsSha256": "e301a4ba00c51fa1481b63abd087db70849709041ce323d4408ce24e73841b78",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "ru_ru_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "ru"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 10,
+        "actualUnits": 10,
+        "rate": 0.1
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+      "textSha256": "4485d6d41ddd79959fcc402904bfc63be381d4aedf5ddf4f6847125855e9f789",
+      "cueTimelineSha256": "1c9f60b5efe7144915dba646040306b4521d1a55bdd9b8a788a96a7ed00d8f9c",
+      "cueCount": 1,
+      "audioDurationMs": 8640,
+      "wallMs": 1468.0999999046326,
+      "wallRtf": 0.1699189814704436,
+      "totalWindowInferenceMs": 1429.3000001907349,
+      "totalLanguageDetectionMs": 712.6000003814697,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8640,
+          "audioDurationMs": 8640,
+          "inputPcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "ru",
+          "languageConfidence": 0.9929627045856527,
+          "languageDetectionMs": 712.6000003814697,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1434.5,
+          "inferenceMs": 1429.3000001907349,
+          "decodeMs": 0.9000000953674316,
+          "textSha256": "4485d6d41ddd79959fcc402904bfc63be381d4aedf5ddf4f6847125855e9f789",
+          "segmentsSha256": "77e89c408a530cd33bba880d215d82ffbe795246bdc7d8d7afc370369ed27496",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "vi_vn_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "vi"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 1,
+        "referenceUnits": 64,
+        "actualUnits": 64,
+        "rate": 0.015625
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+      "textSha256": "cb165d700b134ed8d2a6e0f84dc5dca2924c647621f8c93c5ef028bb8cf42cb3",
+      "cueTimelineSha256": "f5b2985eab50fc779e51ed50e543505f7d78e1d9f6f4e442ce7724c94f4cdef9",
+      "cueCount": 1,
+      "audioDurationMs": 11340,
+      "wallMs": 1842.6999998092651,
+      "wallRtf": 0.16249559081210452,
+      "totalWindowInferenceMs": 1790.1999998092651,
+      "totalLanguageDetectionMs": 639.7999997138977,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 5.099999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 11340,
+          "audioDurationMs": 11340,
+          "inputPcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "vi",
+          "languageConfidence": 0.9910231860267024,
+          "languageDetectionMs": 639.7999997138977,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1797,
+          "inferenceMs": 1790.1999998092651,
+          "decodeMs": 1.0999999046325684,
+          "textSha256": "cb165d700b134ed8d2a6e0f84dc5dca2924c647621f8c93c5ef028bb8cf42cb3",
+          "segmentsSha256": "f203e9df8647998514f10860052d70416b66f784135d4f1960eaef734d94f525",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "vi_vn_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "vi"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 13,
+        "referenceUnits": 62,
+        "actualUnits": 63,
+        "rate": 0.20967741935483872
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+      "textSha256": "f4f274a77a0e7ba843d9871d75f237714affcc5f58ce9ba42e243552c8100796",
+      "cueTimelineSha256": "54d1f66e0875162eb0be16ce39b1ee2ec20b0aaf0f9a8f2ef463acf19ec01674",
+      "cueCount": 1,
+      "audioDurationMs": 7260,
+      "wallMs": 1714.0999999046326,
+      "wallRtf": 0.23610192836151964,
+      "totalWindowInferenceMs": 1680.5999999046326,
+      "totalLanguageDetectionMs": 838.1999998092651,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.6999998092651367,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 7260,
+          "audioDurationMs": 7260,
+          "inputPcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "vi",
+          "languageConfidence": 0.9721938047100073,
+          "languageDetectionMs": 838.1999998092651,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1685.5,
+          "inferenceMs": 1680.5999999046326,
+          "decodeMs": 0.6999998092651367,
+          "textSha256": "f4f274a77a0e7ba843d9871d75f237714affcc5f58ce9ba42e243552c8100796",
+          "segmentsSha256": "dc58d6da1764fdac86a5fd1ef3fedcdd6e4c730c13789a0cdade0582de663f7b",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "vi_vn_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "vi"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 7,
+        "referenceUnits": 83,
+        "actualUnits": 83,
+        "rate": 0.08433734939759036
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+      "textSha256": "74fad6fbbdecf6537caddb8e365c077d12716944e509db4aa6a1fb93732f41f2",
+      "cueTimelineSha256": "e1d6282704fe390ed1e102ba23a056e989444294c329c355f9dbaeba1294ae82",
+      "cueCount": 1,
+      "audioDurationMs": 10020,
+      "wallMs": 1856.3000001907349,
+      "wallRtf": 0.18525948105695958,
+      "totalWindowInferenceMs": 1811.9000000953674,
+      "totalLanguageDetectionMs": 719.0999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.4000000953674316,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 10020,
+          "audioDurationMs": 10020,
+          "inputPcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "vi",
+          "languageConfidence": 0.9916512605996036,
+          "languageDetectionMs": 719.0999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1819.7000002861023,
+          "inferenceMs": 1811.9000000953674,
+          "decodeMs": 1,
+          "textSha256": "74fad6fbbdecf6537caddb8e365c077d12716944e509db4aa6a1fb93732f41f2",
+          "segmentsSha256": "ec10e6d88b838e59546a9b48cabf8433810a0aedf574ae72d1ab7aae2725eafc",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "th_th_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "th"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 44,
+        "referenceUnits": 127,
+        "actualUnits": 121,
+        "rate": 0.3464566929133858
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+      "textSha256": "8a71609a073ccbc61a755856e4b5bdf76718c6aeea843188c919bc614a92dfad",
+      "cueTimelineSha256": "05635d734d7cda6cf58593c80d9701d5b8b5a7339a992cef404b9fbbca345a71",
+      "cueCount": 2,
+      "audioDurationMs": 8820,
+      "wallMs": 3339.6000003814697,
+      "wallRtf": 0.37863945582556346,
+      "totalWindowInferenceMs": 3297.9000000953674,
+      "totalLanguageDetectionMs": 834.0999999046326,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.1999998092651367,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8820,
+          "audioDurationMs": 8820,
+          "inputPcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "th",
+          "languageConfidence": 0.9702134183333122,
+          "languageDetectionMs": 834.0999999046326,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 3305.5999999046326,
+          "inferenceMs": 3297.9000000953674,
+          "decodeMs": 1,
+          "textSha256": "cdbe65306b6b6244d91492eaf0b76d234b28e6b92a27e53c1ef7f7fcbc65a952",
+          "segmentsSha256": "61945194a9cb3da46ec0c481adafebf9836023924f50c787dacc9742ce596b8a",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "th_th_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "th"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 16,
+        "referenceUnits": 75,
+        "actualUnits": 72,
+        "rate": 0.21333333333333335
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+      "textSha256": "73dc2358e8cd6731c12bab9d53a1b034ac7b0bab66d358308dad170e97f06c80",
+      "cueTimelineSha256": "6d4251d62de944fa70bdd103f59625bcb48a8d64b4821eb59c4eb2edf984b977",
+      "cueCount": 1,
+      "audioDurationMs": 7200,
+      "wallMs": 3030,
+      "wallRtf": 0.42083333333333334,
+      "totalWindowInferenceMs": 2997,
+      "totalLanguageDetectionMs": 1443.5,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.5999999046325684,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 7200,
+          "audioDurationMs": 7200,
+          "inputPcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "th",
+          "languageConfidence": 0.9620628528307665,
+          "languageDetectionMs": 1443.5,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 3001.5999999046326,
+          "inferenceMs": 2997,
+          "decodeMs": 0.7000002861022949,
+          "textSha256": "73dc2358e8cd6731c12bab9d53a1b034ac7b0bab66d358308dad170e97f06c80",
+          "segmentsSha256": "6c6386bb9ba824cc121a9801971db765f54f81b557b47bbaf2501b673a9b5c9b",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "th_th_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "th"
+      ],
+      "metric": "cer",
+      "score": {
+        "errors": 36,
+        "referenceUnits": 153,
+        "actualUnits": 151,
+        "rate": 0.23529411764705882
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+      "textSha256": "bcb0e9deba52ece2cac3ab8cbc2423d8152fb7f8d01d07bcdba5aebd22bb5aff",
+      "cueTimelineSha256": "02ef4f911cb46c4630e3dd7765072d12ad29e360d91ad99b7c3b324da4eb7917",
+      "cueCount": 2,
+      "audioDurationMs": 9540,
+      "wallMs": 3920,
+      "wallRtf": 0.4109014675052411,
+      "totalWindowInferenceMs": 3877,
+      "totalLanguageDetectionMs": 1017.8000001907349,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.099999904632568,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 9540,
+          "audioDurationMs": 9540,
+          "inputPcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "th",
+          "languageConfidence": 0.9656345265206547,
+          "languageDetectionMs": 1017.8000001907349,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 3882.8999996185303,
+          "inferenceMs": 3877,
+          "decodeMs": 0.8999996185302734,
+          "textSha256": "118513234691000ae7271c8f058ac6f5632f4ab1651969c21be7fd67422ca927",
+          "segmentsSha256": "fa6ca2037cd8ab6348e33eebc3726b3caa4ad06b26f8bf176afd904325e73344",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "pt_br_0000",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "pt"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 2,
+        "referenceUnits": 36,
+        "actualUnits": 36,
+        "rate": 0.05555555555555555
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "e575d5954efe5e252792238aa1120f8506fbf1b39e4fff96fa74ec96a767de7d",
+      "textSha256": "e73b8d251e55579834869aeadb9d51ca060f7d736a8d48c00c8be72b27ae2299",
+      "cueTimelineSha256": "e304ed9c197da922e895d7b677238b3dabf917055bd9b04ada759a485b1e1d4f",
+      "cueCount": 3,
+      "audioDurationMs": 17760,
+      "wallMs": 4189.700000286102,
+      "wallRtf": 0.2359065315476409,
+      "totalWindowInferenceMs": 4107.39999961853,
+      "totalLanguageDetectionMs": 2482.3999996185303,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 4.700000286102295,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 14000,
+          "audioDurationMs": 14000,
+          "inputPcm16Sha256": "da9f247042e4dfa05c8556495237623cfd96fc1610be89cddd6f70adff511364",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "pt",
+          "languageConfidence": 0.9623232688760636,
+          "languageDetectionMs": 1526.3999996185303,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 2615.0999999046326,
+          "inferenceMs": 2607.8999996185303,
+          "decodeMs": 1.3000001907348633,
+          "textSha256": "e12d6e35a92a25fee19eef49dd39c2e090e00b7a132e7a1f7623560a9e88e804",
+          "segmentsSha256": "d26f61a1383de5ca0b20895e3e3b98eba0a6088b5580ba9dc46f0a95167029f3",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 12800,
+          "durationMs": 4960,
+          "audioDurationMs": 4960,
+          "inputPcm16Sha256": "09c453ff251feb941a017a46b865943b67b7d61fdf0470ec22a3245e6ddb9d06",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "pt",
+          "languageConfidence": 0.9827884271933425,
+          "languageDetectionMs": 956,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1503.5,
+          "inferenceMs": 1499.5,
+          "decodeMs": 0.5,
+          "textSha256": "2c3db03f88041048e6798f7bcf93a1bec7ed95149fbbf82c4bfd97e752d1e0ed",
+          "segmentsSha256": "6696384ce8765f01ce76648ab89c746b8f1dd995d85a1ab70dab37e87a6ac7b5",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "pt_br_0001",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "pt"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 3,
+        "referenceUnits": 24,
+        "actualUnits": 24,
+        "rate": 0.125
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+      "textSha256": "19edfbbc0119886cbeead915b723faa1ad630d6d32c584d80c0380b1be8cb505",
+      "cueTimelineSha256": "c9ef87c29f69bccd57219f38913f8dde82ecdc62d5499f19016a281896db77d9",
+      "cueCount": 2,
+      "audioDurationMs": 13620,
+      "wallMs": 1867,
+      "wallRtf": 0.1370778267254038,
+      "totalWindowInferenceMs": 1810,
+      "totalLanguageDetectionMs": 631.6000003814697,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.200000286102295,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 13620,
+          "audioDurationMs": 13620,
+          "inputPcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "pt",
+          "languageConfidence": 0.9825341934195204,
+          "languageDetectionMs": 631.6000003814697,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1816.8000001907349,
+          "inferenceMs": 1810,
+          "decodeMs": 1.3999996185302734,
+          "textSha256": "19edfbbc0119886cbeead915b723faa1ad630d6d32c584d80c0380b1be8cb505",
+          "segmentsSha256": "43fab71e0093935888f11ee8ec4dce231d3e9f1830d8b76ec40dfd7db96feed1",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    },
+    {
+      "model": "small",
+      "sampleId": "pt_br_0002",
+      "sourceLanguage": "auto",
+      "expectedLanguages": [
+        "pt"
+      ],
+      "metric": "wer",
+      "score": {
+        "errors": 6,
+        "referenceUnits": 15,
+        "actualUnits": 14,
+        "rate": 0.4
+      },
+      "scriptNormalizedScore": null,
+      "success": true,
+      "status": "ready",
+      "inputPcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+      "textSha256": "e780d2414eba106db21ce65de206415ae5dc2ee8b71f58919213db61588ec6ca",
+      "cueTimelineSha256": "84b4a128a683758dd834eb73a5cbd37676630265fa169856e54bb6da7af81e1d",
+      "cueCount": 1,
+      "audioDurationMs": 8400,
+      "wallMs": 1593.9000000953674,
+      "wallRtf": 0.18975000001135325,
+      "totalWindowInferenceMs": 1554.3000001907349,
+      "totalLanguageDetectionMs": 878.2000002861023,
+      "modelSessionPrepare": {
+        "success": true,
+        "wallMs": 2.700000286102295,
+        "model": "small",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "encoderDtype": "fp32",
+        "decoderDtype": "q4"
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "durationMs": 8400,
+          "audioDurationMs": 8400,
+          "inputPcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+          "success": true,
+          "model": "small",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4",
+          "encoderDtype": "fp32",
+          "decoderDtype": "q4",
+          "detectedLanguage": "pt",
+          "languageConfidence": 0.9732537977402065,
+          "languageDetectionMs": 878.2000002861023,
+          "encoderReuse": true,
+          "languageCorrect": true,
+          "wallMs": 1560.1999998092651,
+          "inferenceMs": 1554.3000001907349,
+          "decodeMs": 1,
+          "textSha256": "e780d2414eba106db21ce65de206415ae5dc2ee8b71f58919213db61588ec6ca",
+          "segmentsSha256": "4754f9255dff36d84226d5f560aeca16dbb6ec88defb109d66f3561ab9c561f5",
+          "pairedHistoricalAlias": {
+            "samePcmAndBoundary": true,
+            "sameText": true,
+            "sameSegments": true
+          }
+        }
+      ],
+      "release": {
+        "reason": "complete",
+        "success": true
+      },
+      "pairedHistoricalAlias": {
+        "sameInput": true,
+        "sameWindowCount": true,
+        "sameFinalText": true,
+        "sameScore": true,
+        "sameCueTimeline": true
+      }
+    }
+  ]
+}

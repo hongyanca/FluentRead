@@ -1,0 +1,24 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003
+      Coverage enabled with v8
+
+ ✓ tests/videoSubtitleLogic.test.ts (21 tests) 37ms
+ ✓ tests/videoTranslationCache.test.ts (11 tests) 17ms
+ ✓ tests/videoPretranslationController.test.ts (3 tests) 5ms
+ ✓ tests/videoTranslationScheduler.test.ts (4 tests) 11ms
+
+ Test Files  4 passed (4)
+      Tests  39 passed (39)
+   Start at  02:35:25
+   Duration  1.72s (transform 307ms, setup 0ms, collect 497ms, tests 71ms, environment 1ms, prepare 181ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |     100 |     100 |
+ ...nController.ts |     100 |      100 |     100 |     100 |
+ subtitleLogic.ts  |     100 |      100 |     100 |     100 |
+ ...lationCache.ts |     100 |      100 |     100 |     100 |
+ ...onScheduler.ts |     100 |      100 |     100 |     100 |
+-------------------|---------|----------|---------|---------|-------------------

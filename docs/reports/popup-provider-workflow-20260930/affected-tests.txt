@@ -1,0 +1,53 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/popupFeatureVisibility.test.ts" "tests/popupActions.test.ts" "tests/featureTranslationServices.test.ts" "tests/optionsNavigation.test.ts" "tests/settingsUiArchitecture.test.ts" "tests/contentFeatureLifecycle.test.ts" "tests/contentFeatureMounting.test.ts" "tests/videoPlayerBinding.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/popupFeatureVisibility.test.ts tests/popupActions.test.ts tests/featureTranslationServices.test.ts tests/optionsNavigation.test.ts tests/settingsUiArchitecture.test.ts tests/contentFeatureLifecycle.test.ts tests/contentFeatureMounting.test.ts tests/videoPlayerBinding.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 98ms
+ ✓ tests/videoPlayerBinding.test.ts (36 tests) 39ms
+ ✓ tests/popupFeatureVisibility.test.ts (18 tests) 29ms
+ ❯ tests/contentFeatureMounting.test.ts (17 tests | 2 failed) 90ms
+   × 划词翻译挂载生命周期 > Harness 独立启用时保留共享挂载，并在两个入口都停用后丢弃待挂载 UI 4ms
+     → You must provide a Promise to expect() when using .resolves, not 'object'.
+   × 划词翻译挂载生命周期 > Harness 共享实例重挂载后，旧组件 Range 回调不得移动新 modal host 1ms
+     → Cannot read properties of undefined (reading '1')
+ ✓ tests/contentFeatureLifecycle.test.ts (10 tests) 161ms
+ ✓ tests/optionsNavigation.test.ts (24 tests) 8ms
+ ✓ tests/featureTranslationServices.test.ts (5 tests) 12ms
+ ✓ tests/popupActions.test.ts (4 tests) 78ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/contentFeatureMounting.test.ts > 划词翻译挂载生命周期 > Harness 独立启用时保留共享挂载，并在两个入口都停用后丢弃待挂载 UI
+TypeError: You must provide a Promise to expect() when using .resolves, not 'object'.
+ ❯ tests/contentFeatureMounting.test.ts:112:67
+    110|         const mounted = ui();
+    111|         mocks.createVueShadowUi.mockResolvedValueOnce(mounted);
+    112|         await expect(runtime.mountSelectionTranslator({} as never)).re…
+       |                                                                   ^
+    113|         runtime.unmountSelectionTranslator();
+    114|         const pending = pendingUi();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/contentFeatureMounting.test.ts > 划词翻译挂载生命周期 > Harness 共享实例重挂载后，旧组件 Range 回调不得移动新 modal host
+TypeError: Cannot read properties of undefined (reading '1')
+ ❯ tests/contentFeatureMounting.test.ts:139:65
+    137| 
+    138|         await runtime.mountSelectionTranslator({} as never);
+    139|         const firstReport = mocks.createVueShadowUi.mock.calls[0][1].p…
+       |                                                                 ^
+    140|         const range = {startContainer: {nodeType: 3}};
+    141|         firstReport(range);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  2 failed | 145 passed (147)
+   Start at  15:15:37
+   Duration  2.81s (transform 533ms, setup 0ms, collect 1.21s, tests 516ms, environment 1ms, prepare 286ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

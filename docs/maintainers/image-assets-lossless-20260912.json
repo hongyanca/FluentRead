@@ -1,0 +1,1628 @@
+{
+  "base": "bf827287e6d8c4d205c454b066d4df55faf2748a",
+  "generatedAt": "2026-09-12T03:55:59.533Z",
+  "filesScanned": 84,
+  "filesReduced": 80,
+  "bytesBefore": 12262403,
+  "bytesAfter": 10035889,
+  "hero": {
+    "file": "docs/public/product-icon.png",
+    "bytesBefore": 526940,
+    "bytesAfter": 320066,
+    "savedBytes": 206874,
+    "originalSha256": "5a724c54bf462a38495fc176bb4e4ae2ebe734216658b8d6df798f372697942b",
+    "optimizedSha256": "fa65ad0371940c80ef18c790dec94ee1c927d8c0b6798d2f35fa926f67eac620",
+    "width": 896,
+    "height": 880,
+    "rgbaSha256": "5bb528f039ca3fa386ca5d908404d05f8c6344d5b20f96302b26f2440ab85f10",
+    "pixelEqual": true,
+    "metadataEqual": true,
+    "format": "png"
+  },
+  "entries": [
+    {
+      "file": "docs/public/logo.webp",
+      "bytesBefore": 109866,
+      "bytesAfter": 109866,
+      "savedBytes": 0,
+      "originalSha256": "862b0a9c3ac854223bd53cf508a9028230d3841628d7cdfb355181cdfc49608a",
+      "optimizedSha256": "862b0a9c3ac854223bd53cf508a9028230d3841628d7cdfb355181cdfc49608a",
+      "width": 896,
+      "height": 880,
+      "rgbaSha256": "cfc9d260f9964c21ee31d18839a1185ceb08cbb1dd03b1d443331094fdd84e90",
+      "pixelEqual": true,
+      "metadataEqual": true
+    },
+    {
+      "file": "docs/public/product-icon.png",
+      "bytesBefore": 526940,
+      "bytesAfter": 320066,
+      "savedBytes": 206874,
+      "originalSha256": "5a724c54bf462a38495fc176bb4e4ae2ebe734216658b8d6df798f372697942b",
+      "optimizedSha256": "fa65ad0371940c80ef18c790dec94ee1c927d8c0b6798d2f35fa926f67eac620",
+      "width": 896,
+      "height": 880,
+      "rgbaSha256": "5bb528f039ca3fa386ca5d908404d05f8c6344d5b20f96302b26f2440ab85f10",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/document.webp",
+      "bytesBefore": 109848,
+      "bytesAfter": 108230,
+      "savedBytes": 1618,
+      "originalSha256": "6bcfbc4708d4ed32a5effaf3760d6117bf210528e8d7ed1d1f68cc5838a56579",
+      "optimizedSha256": "c266a7ecd8faedd33c791ddb280608091044a848a0a87e402b4864d91bea5f23",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "bdc7f51714ffb1a3a5d18d351e22d07d0658292077657e8bd2494d3198757b85",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/document.webp",
+      "bytesBefore": 129264,
+      "bytesAfter": 125038,
+      "savedBytes": 4226,
+      "originalSha256": "ec744b18393556066458f07a6d9bc63f3e6acab25ba3c5aab7be6d355b6eaa23",
+      "optimizedSha256": "c6043bba1e974d3dbe61968da8fcdf10c06624812d7d79949ae197698324fa26",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "184d06b5025bd1fdbda9e5d60f9aa83cc8344bd572dc0cc062759234c55cd288",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/popup.webp",
+      "bytesBefore": 123756,
+      "bytesAfter": 85972,
+      "savedBytes": 37784,
+      "originalSha256": "9e163ca17f347726f0bccdc00bd3a5c93a7072244b997a4d0f7c5fca3d8ef261",
+      "optimizedSha256": "9737e82eb45d447cc50b3cc0f0f68aa309a6caf15df26775070cf0933bd2130f",
+      "width": 720,
+      "height": 1120,
+      "rgbaSha256": "d5a2eda04669f22abb7c473bebb6e829a091b54a507e661ce0ecf1ac0160f279",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/reading-card-detail.webp",
+      "bytesBefore": 65682,
+      "bytesAfter": 62452,
+      "savedBytes": 3230,
+      "originalSha256": "bb9ee59ec70cd8bf51a0a174874066e3662049955597fc728bcd5f31e8d362d2",
+      "optimizedSha256": "d28999fd06ae49655b70a4b2bda8c84a2f9b65658799e45960d5346fd1957851",
+      "width": 840,
+      "height": 1140,
+      "rgbaSha256": "69a0824d933031cbe91772cbce5165025143ea30223c6fc02f875ae86e4c5aa2",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/reading-card.webp",
+      "bytesBefore": 119664,
+      "bytesAfter": 117532,
+      "savedBytes": 2132,
+      "originalSha256": "22ce985b496898649303483bf8ddb257b9b3dd564e24485d5542c9ca27627de5",
+      "optimizedSha256": "0cacfbb7202c6edb1bb4a313cc9c8823a157b067a127024ed1ec654630b240d0",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "c78053af23b483442b8530334b58d9bf40d8e414e310f4ab24a53bdcb1abe4f2",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/selection-detail.webp",
+      "bytesBefore": 159210,
+      "bytesAfter": 96818,
+      "savedBytes": 62392,
+      "originalSha256": "9ea6f5d1689dd7bcac6ccf4a9c5427419723d7574ffc6689387b1d43d6169307",
+      "optimizedSha256": "bbc885837c242d89fbf0144beecf60465dc522bd92b12fab2d33519ff053ec5e",
+      "width": 1400,
+      "height": 960,
+      "rgbaSha256": "a6ca6b1d12bd72830edd03beace082376bc15f3fcb6f55e06977c9a06ab2c206",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/selection.webp",
+      "bytesBefore": 216220,
+      "bytesAfter": 135870,
+      "savedBytes": 80350,
+      "originalSha256": "44c48ec4935a379f998f79c16dcea84bba51ce98e4296c064548287253b4ee35",
+      "optimizedSha256": "1a8ae3a959e747117e2fc45388e320b2b41243409f64340b3bd3c72c8183ddee",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "701f5383af3b615621ee847322c01db03d087023fc7b88d4b2b0c789656e1a1f",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/settings-general.webp",
+      "bytesBefore": 108806,
+      "bytesAfter": 103934,
+      "savedBytes": 4872,
+      "originalSha256": "5a3a58dafb046a450d853666437046f27d7c2ed311d19e4bc271137220107d5f",
+      "optimizedSha256": "00b757cdab7bb41b7eba8f845dc328ca9c60ca1a9ab0028a76fe7a8bc073366b",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "1074cfda74ec58a0b4319872b8e42ddcfc1b6edb8d524e864449c8bceaf9c76a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/settings-services.webp",
+      "bytesBefore": 137186,
+      "bytesAfter": 132540,
+      "savedBytes": 4646,
+      "originalSha256": "cb905714db662a486da2871e4c74fd5956107df6c085c271841b433958623957",
+      "optimizedSha256": "a247ed815770a964461c56156c5bfa36114ffdac2dba795ffcf8680c080a354d",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "f6b599c5f7b32f98a80145722fa7165c218c0308fdf00cc6eba13f781253d4c8",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/translation-small.webp",
+      "bytesBefore": 139284,
+      "bytesAfter": 139176,
+      "savedBytes": 108,
+      "originalSha256": "1d9b1169232aaee9402382bba8ab2700b882a30202a90a69414ec09567926c1f",
+      "optimizedSha256": "ad484735cc5c6bfabd61bd74a5703e553456c106db8ac742d7b1d737399bcdba",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "71a1f75f38988c7b3d3af6996f5226a9ad5b14c22b6f4a1e5d7a5243da4ac2ed",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/en/translation.webp",
+      "bytesBefore": 97282,
+      "bytesAfter": 97282,
+      "savedBytes": 0,
+      "originalSha256": "3f23b540f74b4f1a2310d5ea4135e84c52768dbcf2a2b28b0325b01ad22cce71",
+      "optimizedSha256": "3f23b540f74b4f1a2310d5ea4135e84c52768dbcf2a2b28b0325b01ad22cce71",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "e092a62139179f623d831bf1619c02b02e9e1b1e771b2aa6a61f9cc79237979c",
+      "pixelEqual": true,
+      "metadataEqual": true
+    },
+    {
+      "file": "docs/public/screenshots/popup.webp",
+      "bytesBefore": 127846,
+      "bytesAfter": 94064,
+      "savedBytes": 33782,
+      "originalSha256": "f20dd1d812a652efe5c1b6f142e0c00dcb1fc6f93a856cd86610b4582491886d",
+      "optimizedSha256": "a73741e46a8749ece309719bef9b820872046d28d1bfaf08919df767618fbeda",
+      "width": 720,
+      "height": 1120,
+      "rgbaSha256": "52277585bd0063a225e8490c7a346a8caeade8b0810d22dead16d1abeb181bf4",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/reading-card-detail.webp",
+      "bytesBefore": 58428,
+      "bytesAfter": 55668,
+      "savedBytes": 2760,
+      "originalSha256": "ce955dad5758909957f56f4b776ca9f683fc747134752beb5dc9571c2c4bde2a",
+      "optimizedSha256": "f55659bacfab410963f15fd4bd094ce24dab79bc96f3f9038ca749fac33c8655",
+      "width": 840,
+      "height": 1140,
+      "rgbaSha256": "c55437ebbaac32c1eb5524a2429872363e2fd67a2789a47ee073ab96adebbb15",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/reading-card.webp",
+      "bytesBefore": 123192,
+      "bytesAfter": 121070,
+      "savedBytes": 2122,
+      "originalSha256": "b34557af995416da1551230d822f2d9b00fd75e83aab889abe9a7a5cb5fe18cb",
+      "optimizedSha256": "0fde074a967ee374a67b09dadb4909304ce8a0cf12916e5b89c4a80219f33273",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "a8ed63c6a6aae59175692367b0e8b5538cc3a6c54997486681c285208e362e41",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/selection-detail.webp",
+      "bytesBefore": 178848,
+      "bytesAfter": 107214,
+      "savedBytes": 71634,
+      "originalSha256": "52f2a937d9c0ab1ee7880a6531106093f032e127a50e3d581a38d16dfa20f1cc",
+      "optimizedSha256": "ed65fa8ed2087e364716f1ce4b10288662ab771a1f76a5ab96748be07c463b55",
+      "width": 1400,
+      "height": 960,
+      "rgbaSha256": "a1a11c7e23b260fd644df68c427740cfd01aff7681a791c7543133f39d321d41",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/selection.webp",
+      "bytesBefore": 243266,
+      "bytesAfter": 151326,
+      "savedBytes": 91940,
+      "originalSha256": "4897f9919a13f2656a34cfca3dd11114b450dd6299298d3c8f20be62ce455a4a",
+      "optimizedSha256": "6b21c6b38735eae5cb9a677e0e691492bd5d06668b726ddb3e5ffc1d4ae42f85",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "ef880aafa2d01566b443a79f2c315e12da378ebca0a6a7ddf12bcfc58d2e9638",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/settings-general.webp",
+      "bytesBefore": 109024,
+      "bytesAfter": 107242,
+      "savedBytes": 1782,
+      "originalSha256": "0327d167587e61a5913e3f92e0a40fe3828dc1dd268f9cf142d4c376d63b7809",
+      "optimizedSha256": "1acfc69578b52d366d008909484ed2055542a9b2f953c79f6c5d38f713d10447",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "f9c74b6fab65af9f0930bddc75d4d28c787092cec57dd54f4f2e501ab507a3a5",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/settings-services.webp",
+      "bytesBefore": 129182,
+      "bytesAfter": 127730,
+      "savedBytes": 1452,
+      "originalSha256": "91b7fe9759951a18609ad336fbbd8a6e403ad5ff299c3a413fb5c0bc1b0bbdcf",
+      "optimizedSha256": "f57555d1dc2f341df0edaabf1671dc19c0136b21ee27660d8131b4695b18a553",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "d2808c54404c2de699406d7b9e4e59a4ebf4f132e2d276b28ab104d908b4e0db",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/translation-small.webp",
+      "bytesBefore": 139844,
+      "bytesAfter": 139724,
+      "savedBytes": 120,
+      "originalSha256": "da87bf2b9f0280a002a6d9cf021493bb8c8ecadaa50f9857caabe9f8a1fed26e",
+      "optimizedSha256": "1172aadb45646a3caf304549c3d7ca46416df5ac8716b2f09702bd14ea662cae",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "abeb4559e02faf8f2776b849658c27cd05758d6329b3778521b32602ba9dd32a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/screenshots/translation.webp",
+      "bytesBefore": 97924,
+      "bytesAfter": 97724,
+      "savedBytes": 200,
+      "originalSha256": "03d725893c5cf721de3593b29339556645b3217c2e42eaafbde2a7e4402c4954",
+      "optimizedSha256": "382f1c9f9e05b922389652b48594b285be1ed9390bd1adcfc856165b250e11e8",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "873e88bcdde645494370b85fb08c1c33fa7aafa541c4e3ea93b3c831f14befb3",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "docs/public/support/wechat.jpg",
+      "bytesBefore": 113969,
+      "bytesAfter": 91256,
+      "savedBytes": 22713,
+      "originalSha256": "a2e7f4452a0efa645ca5e1013c6229d49e276e7e489cd95c18e195f494e2c63e",
+      "optimizedSha256": "187352356cd6498b185526dfd0b4d3519d410de9016bfa8836559a2c476df28c",
+      "width": 1152,
+      "height": 1152,
+      "rgbaSha256": "1f8ac104a73d0a890531708e38902cde95eca095b6e3c74109676b7bbb911425",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/en/screenshots/01-translation.png",
+      "bytesBefore": 228272,
+      "bytesAfter": 227948,
+      "savedBytes": 324,
+      "originalSha256": "b2aa61746bd2ff71392c870bbe05c65828ce986d8b0427bf3836a08243739a90",
+      "optimizedSha256": "606299e58118c03ca979e308e593dad6967af258399490f43deda109cf97acd9",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "71a1f75f38988c7b3d3af6996f5226a9ad5b14c22b6f4a1e5d7a5243da4ac2ed",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/en/screenshots/02-reading-card.png",
+      "bytesBefore": 191350,
+      "bytesAfter": 191074,
+      "savedBytes": 276,
+      "originalSha256": "b7820b12e2024fefe59152b23edb1776138d96d1520ec6353f5e1e80a7dd06b2",
+      "optimizedSha256": "97ff6550e169b3ce427cc0584c0084c98bb80add80fc1195e5411510287ca523",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "230c11465a4ba2658830af97d814c5c425a6c7d780724a0105d4138dcd5b6d3c",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/en/screenshots/03-selection.png",
+      "bytesBefore": 218908,
+      "bytesAfter": 218596,
+      "savedBytes": 312,
+      "originalSha256": "054c8893e28d97de8f3d232e49dde43695a214075ea3272523e0e93ba9f582e1",
+      "optimizedSha256": "d2537631feefadc77ee6cd5723a8ab57efb5a56bdb5eda0dd367e2f23542cd17",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "ec968b6b196a9af33465445d0f062c05dfbc447c19bf68a5500c8119a302d374",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/en/screenshots/04-document.png",
+      "bytesBefore": 215516,
+      "bytesAfter": 215204,
+      "savedBytes": 312,
+      "originalSha256": "6526a199497b07e8700afa58f4b1e3dd53eb954f26a2ffdf9d9fd05331b9fdbc",
+      "optimizedSha256": "8bd3208b4c2d9308aa1fc2863d6021089b8d7ea64aee2c5540c6262b0bf4064a",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "50e12a546ebc309051bf73be33edbe64be6b5b8b98cf38572e413758a6a84545",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/en/screenshots/05-settings-services.png",
+      "bytesBefore": 224106,
+      "bytesAfter": 223782,
+      "savedBytes": 324,
+      "originalSha256": "160d3499eb308d6fb5feb7d757c6b8d686079fe0853b4df506ffa66ddb33d3e8",
+      "optimizedSha256": "568f8fa77737ae0fb56906f139db0a40faad178f1a9fcc2b31c396211d915d63",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "3023c45a0ed98430a67955b88d420c7151c47feb7beb751d431ac633d932b36c",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/icon-128.png",
+      "bytesBefore": 14838,
+      "bytesAfter": 14826,
+      "savedBytes": 12,
+      "originalSha256": "74f9706de6d0cee8f074d6c31746b78866022addcd19f77c8b094127690b49a7",
+      "optimizedSha256": "2e67fd57c1731377109931005062888653acfc0e600a263b1141aa818a372331",
+      "width": 128,
+      "height": 128,
+      "rgbaSha256": "40b5994ee7d7c66decb12824883bb46d8e8e691e64436eec8c9856feea7c208e",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/promo/en-marquee-1400x560.png",
+      "bytesBefore": 74710,
+      "bytesAfter": 74602,
+      "savedBytes": 108,
+      "originalSha256": "3f0eb48d076e5f0ef2f8d65ab944a5291babf1a367bbfa9fe7f15c63a05647c2",
+      "optimizedSha256": "0ada58fd6edf8c10e0b63ab16afd3768d62cbf794c167130cc5093ccc416873c",
+      "width": 1400,
+      "height": 560,
+      "rgbaSha256": "6762bdec64195343742637d962cbf91ebbcc8c36cf9c3d252c2d0752ed5436a2",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/promo/en-small-440x280.png",
+      "bytesBefore": 11667,
+      "bytesAfter": 11655,
+      "savedBytes": 12,
+      "originalSha256": "99679dd4239d3d3f50ed4eefa67a4834f449fac20a7b8e84b9b76d9903663e8a",
+      "optimizedSha256": "abb0dfbf598164e46c72c8ad19953df4e7ac4f8ace9003fe4c4e340f1700709c",
+      "width": 440,
+      "height": 280,
+      "rgbaSha256": "7748ddfcc4ef032b89181b9ef7d1f2581b7df60d6df978fb1ac3b4348b55d578",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/promo/zh-CN-marquee-1400x560.png",
+      "bytesBefore": 75015,
+      "bytesAfter": 74907,
+      "savedBytes": 108,
+      "originalSha256": "41e495d41093422ce17528f08c926610e64ba2d1babff9a71a47578b72e3879c",
+      "optimizedSha256": "b6bf1681d720c4a63109d00ef5f35b7fb009e5f9de5f572922eb8057a0a7ee6a",
+      "width": 1400,
+      "height": 560,
+      "rgbaSha256": "1667287fb9c07a4e599ae39ac80a42fe2326c12fa3c1f2a8a54a6a608b4fbe36",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/promo/zh-CN-small-440x280.png",
+      "bytesBefore": 14319,
+      "bytesAfter": 14307,
+      "savedBytes": 12,
+      "originalSha256": "deefaf67e884664b957fdb990baf2f1d1615d8cd2cc004bca194f4309ce7c091",
+      "optimizedSha256": "2e2f568772c8e5e0a058c5e37b726e2caa44aad8adbbca22ba33f81458b23d5f",
+      "width": 440,
+      "height": 280,
+      "rgbaSha256": "d2bdfd9166c90813a65d41b244deba27f41027c0ee1129bd95423e4c44dc42e8",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/zh-CN/screenshots/01-translation.png",
+      "bytesBefore": 229489,
+      "bytesAfter": 229165,
+      "savedBytes": 324,
+      "originalSha256": "bc2f36ced88ad661686c09994fc2820549986f09a3495585197dd3a863cc82db",
+      "optimizedSha256": "77ce2bfeef69400e6e771b518e3e69c9fc964d1f576892ec90880247db3a2ae7",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "abeb4559e02faf8f2776b849658c27cd05758d6329b3778521b32602ba9dd32a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/zh-CN/screenshots/02-reading-card.png",
+      "bytesBefore": 202867,
+      "bytesAfter": 202579,
+      "savedBytes": 288,
+      "originalSha256": "859928f66452021d2bc36434b1681427d288a9a6bae80d93d02d398ba22c7de6",
+      "optimizedSha256": "ee01a4bea9fa66ea51aa6b92d3ae58e55953a289ada575f32a58545f4a56f475",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "251abd2b9909d5d17fe06dc01bbae1bea097e15913e821b95863dc0341c8e308",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/zh-CN/screenshots/03-selection.png",
+      "bytesBefore": 245610,
+      "bytesAfter": 245262,
+      "savedBytes": 348,
+      "originalSha256": "c57a8a3c20cdbc068620b45e87e8bbe88ac9024d84c7897cac4c0523ed14864e",
+      "optimizedSha256": "210407f0b3987ea858cf79a0cb700e9add5b29ed2cbb76c1639e6dbab33941e6",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "bfc50eda95dd9f6ee86b94fd130336eaba748558537603161b447e691b700c24",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/zh-CN/screenshots/04-document.png",
+      "bytesBefore": 182972,
+      "bytesAfter": 182708,
+      "savedBytes": 264,
+      "originalSha256": "127273ead0891a8bf9283bf926cff4499b8b7ac394629da4225e4e0b98aa152a",
+      "optimizedSha256": "12788b70dae2add0a5519ee360617e0241352e2aad6d6398582fcf5087e036e9",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "870def556acb1fd9fc98dfbc15b2a96b3aa10ce88488127e2e63c7ef2d6dea0c",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/chrome-web-store/zh-CN/screenshots/05-settings-services.png",
+      "bytesBefore": 195914,
+      "bytesAfter": 195638,
+      "savedBytes": 276,
+      "originalSha256": "6f946eabd1af37a6d72de1214fb017b2e329e5d79dc9bdada14d999706e550df",
+      "optimizedSha256": "a4227acba44e1cc3bed324e7d029f657359b9c55cb20ecbbd26aa121c04baa91",
+      "width": 1280,
+      "height": 800,
+      "rgbaSha256": "1505b9f35630952bcbbd5cb46b0a3dc45aa3a7df0a8ea9decf9a88240b200375",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/document.png",
+      "bytesBefore": 353008,
+      "bytesAfter": 268909,
+      "savedBytes": 84099,
+      "originalSha256": "a9a6e067e93c329b627052662870eb80d52f3c4a1dbd764c02e6a501ea64ac8a",
+      "optimizedSha256": "aad48c0fc14e9cb8f17abb81f88bef02fa61a1f9f0470e6a4222c4c10965f33f",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "184d06b5025bd1fdbda9e5d60f9aa83cc8344bd572dc0cc062759234c55cd288",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/popup.png",
+      "bytesBefore": 176574,
+      "bytesAfter": 137933,
+      "savedBytes": 38641,
+      "originalSha256": "30b850cdc5b5673f8ade7e7db8af6b9ae8af70ab6e83a1756fdd08b4dfad0aee",
+      "optimizedSha256": "d85ffd2bcbc4e576bfb1b1dd7950b7d96f850456070b68e0aa362de36fd3a938",
+      "width": 720,
+      "height": 1120,
+      "rgbaSha256": "d5a2eda04669f22abb7c473bebb6e829a091b54a507e661ce0ecf1ac0160f279",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/reading-card-detail.png",
+      "bytesBefore": 153204,
+      "bytesAfter": 105398,
+      "savedBytes": 47806,
+      "originalSha256": "faf3c22254d79e9833f7af90b50719d2733a72b074fdc549831af374d1292952",
+      "optimizedSha256": "33e873e1123a04261c05d27d72f8fb99f3460893d28c854a41fbc5a18477494a",
+      "width": 840,
+      "height": 1140,
+      "rgbaSha256": "69a0824d933031cbe91772cbce5165025143ea30223c6fc02f875ae86e4c5aa2",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/reading-card.png",
+      "bytesBefore": 318306,
+      "bytesAfter": 235009,
+      "savedBytes": 83297,
+      "originalSha256": "55284dad9164b850dad54494adb67aec2690a9bb4df8ad0b10d0b0b51da06972",
+      "optimizedSha256": "e80ae2f8dfbfdc2086f0a26ab02196ccb656afde877ae8de561a3f5f6661f240",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "c78053af23b483442b8530334b58d9bf40d8e414e310f4ab24a53bdcb1abe4f2",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/selection-detail.png",
+      "bytesBefore": 261893,
+      "bytesAfter": 170560,
+      "savedBytes": 91333,
+      "originalSha256": "54f427cf91a492473fef3977db8fec537c347344680f3a9849fc800702c4a683",
+      "optimizedSha256": "5b240decd76a1cb63277c552c589c20fcc56445a9952da2f0839fefaf35d1dd2",
+      "width": 1400,
+      "height": 960,
+      "rgbaSha256": "a6ca6b1d12bd72830edd03beace082376bc15f3fcb6f55e06977c9a06ab2c206",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/selection.png",
+      "bytesBefore": 384856,
+      "bytesAfter": 263032,
+      "savedBytes": 121824,
+      "originalSha256": "432940aa9940c6d0092ce0565c51a1a9fb0d8adad8f91e3361e0aefcdb82dd2b",
+      "optimizedSha256": "17c0ccc4ac65a4de16278a28b48ad8f21d5a69716155a30b4913b9375ea4cf99",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "701f5383af3b615621ee847322c01db03d087023fc7b88d4b2b0c789656e1a1f",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/settings-general.png",
+      "bytesBefore": 319780,
+      "bytesAfter": 247886,
+      "savedBytes": 71894,
+      "originalSha256": "deabb2866d53884aec52c222336d25e44bab608a21b360d1adc2d1d1d6dedd6a",
+      "optimizedSha256": "e3cd13cbfe9728ab3d542e856f3b34350c6ddc5eecc0f92617f0de8350138a67",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "1074cfda74ec58a0b4319872b8e42ddcfc1b6edb8d524e864449c8bceaf9c76a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/settings-services.png",
+      "bytesBefore": 397081,
+      "bytesAfter": 302734,
+      "savedBytes": 94347,
+      "originalSha256": "3379ea9c22601e30421218fb6d9e54522c4f503499e4788a368c3d1201aab4d4",
+      "optimizedSha256": "f507cda34fe9776496571e50d8993ef859203e35d665ff3e2efe49dd7fcd91d8",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "f6b599c5f7b32f98a80145722fa7165c218c0308fdf00cc6eba13f781253d4c8",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots-en/translation.png",
+      "bytesBefore": 303813,
+      "bytesAfter": 210515,
+      "savedBytes": 93298,
+      "originalSha256": "a44916779779461e5d5a2e61af5c131c2fc6eb88676f450664d54e95d6d59a61",
+      "optimizedSha256": "188429a2d0ca495c72183c16a6e0e96a8ce5377cd56158a16a1aef9b0a4ae960",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "e092a62139179f623d831bf1619c02b02e9e1b1e771b2aa6a61f9cc79237979c",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/document.png",
+      "bytesBefore": 325752,
+      "bytesAfter": 249679,
+      "savedBytes": 76073,
+      "originalSha256": "1e7067ed38de3b942d9ad59ccf1c9b32e1a867a2a66b375bc6bcba322f5d43d8",
+      "optimizedSha256": "3c81cea17829c80ef046dbf3e5681e162db17c2c478b1b972a212a797ec2ce16",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "bdc7f51714ffb1a3a5d18d351e22d07d0658292077657e8bd2494d3198757b85",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/popup.png",
+      "bytesBefore": 187233,
+      "bytesAfter": 147332,
+      "savedBytes": 39901,
+      "originalSha256": "33a29f0f0cbd57fa4a5145e078c71c559385a5fc19f2f75165b1ca78343085c2",
+      "optimizedSha256": "2c6fb81abf79cc984402789a3cf5197803844d354698d938dbaf27f0f0428916",
+      "width": 720,
+      "height": 1120,
+      "rgbaSha256": "52277585bd0063a225e8490c7a346a8caeade8b0810d22dead16d1abeb181bf4",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/reading-card-detail.png",
+      "bytesBefore": 137256,
+      "bytesAfter": 95222,
+      "savedBytes": 42034,
+      "originalSha256": "18273d734e93bcbe3cccbe9c2ceefbd83f58a4ac229c62ec0e64285f33c87c9d",
+      "optimizedSha256": "762723c38c86848c4a481236a2c31257ae04b4c4a569c8f4780a18a507a343a6",
+      "width": 840,
+      "height": 1140,
+      "rgbaSha256": "c55437ebbaac32c1eb5524a2429872363e2fd67a2789a47ee073ab96adebbb15",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/reading-card.png",
+      "bytesBefore": 336194,
+      "bytesAfter": 249023,
+      "savedBytes": 87171,
+      "originalSha256": "8a6f5b0dbef1ca926b6b4dac72e25fb992645051465195cb9e16fe5674ef0c91",
+      "optimizedSha256": "528bf89eda47c0cfbbbe6cc7fe72c6aa77e3b15309b01aca43c10716d32950cb",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "a8ed63c6a6aae59175692367b0e8b5538cc3a6c54997486681c285208e362e41",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/selection-detail.png",
+      "bytesBefore": 292754,
+      "bytesAfter": 192326,
+      "savedBytes": 100428,
+      "originalSha256": "59a7f565e267845cf34dbaa70a4b353fc8d3e40682dac09769d88022219d4cb8",
+      "optimizedSha256": "446521baf33f809b2cdb6cfbb8dcd6ff08be39918065bfa0db30aa4ec9272ec5",
+      "width": 1400,
+      "height": 960,
+      "rgbaSha256": "a1a11c7e23b260fd644df68c427740cfd01aff7681a791c7543133f39d321d41",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/selection.png",
+      "bytesBefore": 422381,
+      "bytesAfter": 294041,
+      "savedBytes": 128340,
+      "originalSha256": "aa3b68ea9c6c35597e0bdadc1499819a24a8b11c0ef9bd1594b0fcdcd97288d1",
+      "optimizedSha256": "bed4bbba69f621c38b044366f223c3638d627fdd3a4dfa1cd85ffe904d1b947a",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "ef880aafa2d01566b443a79f2c315e12da378ebca0a6a7ddf12bcfc58d2e9638",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/settings-general.png",
+      "bytesBefore": 321532,
+      "bytesAfter": 250337,
+      "savedBytes": 71195,
+      "originalSha256": "606d605a72c5c7bed8884c5260f42bc627db0f4e92b3ec4ab1910374766b9c98",
+      "optimizedSha256": "8c69a193f2f075bfd41646801ac08558674a339ddce47d7ba248c3dc1d40cac6",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "f9c74b6fab65af9f0930bddc75d4d28c787092cec57dd54f4f2e501ab507a3a5",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/settings-services.png",
+      "bytesBefore": 383777,
+      "bytesAfter": 298995,
+      "savedBytes": 84782,
+      "originalSha256": "f65a80529ebd16e9fb60e121b39a595e486b22925c1fd51eef7b22ada2a710a8",
+      "optimizedSha256": "388d02ce220f909e81223cd162826d1a4f277aa29fb7c3a31409deb5090efa6a",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "d2808c54404c2de699406d7b9e4e59a4ebf4f132e2d276b28ab104d908b4e0db",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "marketing/source/screenshots/translation.png",
+      "bytesBefore": 305731,
+      "bytesAfter": 211148,
+      "savedBytes": 94583,
+      "originalSha256": "e5fbeb93f1431bf843f49801a0a25e8117dc5de8d5f446f583043f9cac2fbea9",
+      "optimizedSha256": "b151b857c9fee449d88137f146a2be54374ab6d7063e303de05488d7266ef056",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "873e88bcdde645494370b85fb08c1c33fa7aafa541c4e3ea93b3c831f14befb3",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "misc/approve.jpg",
+      "bytesBefore": 113969,
+      "bytesAfter": 91256,
+      "savedBytes": 22713,
+      "originalSha256": "a2e7f4452a0efa645ca5e1013c6229d49e276e7e489cd95c18e195f494e2c63e",
+      "optimizedSha256": "187352356cd6498b185526dfd0b4d3519d410de9016bfa8836559a2c476df28c",
+      "width": 1152,
+      "height": 1152,
+      "rgbaSha256": "1f8ac104a73d0a890531708e38902cde95eca095b6e3c74109676b7bbb911425",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "misc/screenshots/popup.webp",
+      "bytesBefore": 127846,
+      "bytesAfter": 94064,
+      "savedBytes": 33782,
+      "originalSha256": "f20dd1d812a652efe5c1b6f142e0c00dcb1fc6f93a856cd86610b4582491886d",
+      "optimizedSha256": "a73741e46a8749ece309719bef9b820872046d28d1bfaf08919df767618fbeda",
+      "width": 720,
+      "height": 1120,
+      "rgbaSha256": "52277585bd0063a225e8490c7a346a8caeade8b0810d22dead16d1abeb181bf4",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "misc/screenshots/settings-general.webp",
+      "bytesBefore": 109024,
+      "bytesAfter": 107242,
+      "savedBytes": 1782,
+      "originalSha256": "0327d167587e61a5913e3f92e0a40fe3828dc1dd268f9cf142d4c376d63b7809",
+      "optimizedSha256": "1acfc69578b52d366d008909484ed2055542a9b2f953c79f6c5d38f713d10447",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "f9c74b6fab65af9f0930bddc75d4d28c787092cec57dd54f4f2e501ab507a3a5",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "misc/screenshots/settings-services.webp",
+      "bytesBefore": 129182,
+      "bytesAfter": 127730,
+      "savedBytes": 1452,
+      "originalSha256": "91b7fe9759951a18609ad336fbbd8a6e403ad5ff299c3a413fb5c0bc1b0bbdcf",
+      "optimizedSha256": "f57555d1dc2f341df0edaabf1671dc19c0136b21ee27660d8131b4695b18a553",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "d2808c54404c2de699406d7b9e4e59a4ebf4f132e2d276b28ab104d908b4e0db",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "misc/screenshots/translation.webp",
+      "bytesBefore": 97924,
+      "bytesAfter": 97724,
+      "savedBytes": 200,
+      "originalSha256": "03d725893c5cf721de3593b29339556645b3217c2e42eaafbde2a7e4402c4954",
+      "optimizedSha256": "382f1c9f9e05b922389652b48594b285be1ed9390bd1adcfc856165b250e11e8",
+      "width": 2560,
+      "height": 1600,
+      "rgbaSha256": "873e88bcdde645494370b85fb08c1c33fa7aafa541c4e3ea93b3c831f14befb3",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/128.png",
+      "bytesBefore": 18355,
+      "bytesAfter": 16432,
+      "savedBytes": 1923,
+      "originalSha256": "26e68574fb5ae9a6ea7f1d03b16a886499b37e7095343dff0f9207e0ce8df126",
+      "optimizedSha256": "61e692cb26510e0edff8e6367c3b3c849b9f4656c35ceb04055b074d715fac08",
+      "width": 128,
+      "height": 128,
+      "rgbaSha256": "40b5994ee7d7c66decb12824883bb46d8e8e691e64436eec8c9856feea7c208e",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/16.png",
+      "bytesBefore": 1958,
+      "bytesAfter": 1957,
+      "savedBytes": 1,
+      "originalSha256": "f2e788b6ede088cc2fe6c9d580b95fb0a96a31a6febb6bef9563dfbdd14f2082",
+      "optimizedSha256": "09ede47c9bf8dc5b3eaf0eeef33237cbb5f0ff31ab40d3accd8e3d57349c38f8",
+      "width": 16,
+      "height": 16,
+      "rgbaSha256": "052e5027fe1901327226494758642485f5d0e5488c79647e2023df18c644b852",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/256.png",
+      "bytesBefore": 66352,
+      "bytesAfter": 58453,
+      "savedBytes": 7899,
+      "originalSha256": "ef675aeb7fd5af0623394872585885de97090a65f0e14654bb9f885d30f10c70",
+      "optimizedSha256": "9490445f371f601dd19f8b3e8ba037624e9b6bdb6d7e97e70e77916a1065d590",
+      "width": 256,
+      "height": 256,
+      "rgbaSha256": "b4503e99ceca3da9043d77062a7874d750d4ee18f7518a72d1100d39c1ee423a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/32.png",
+      "bytesBefore": 3369,
+      "bytesAfter": 3341,
+      "savedBytes": 28,
+      "originalSha256": "a23199d5bdb346ffe989c01cf7326d593fd735be983fc69a0edda7ac732fc495",
+      "optimizedSha256": "66f544ae1b67e12b2fb714523a1d0f658a851d99749a5ed99c5d55f8a8047886",
+      "width": 32,
+      "height": 32,
+      "rgbaSha256": "ded816d00187f57483362bc46582db6170852ee3a7fc8d8159871cae358b2a2a",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/48.png",
+      "bytesBefore": 4895,
+      "bytesAfter": 4689,
+      "savedBytes": 206,
+      "originalSha256": "bc7c75a0037d7f4e1ce1a405eb84ebef00ec2a18459daab02f6394a3eba3b451",
+      "optimizedSha256": "dba018fcc0563c9cea1cdb6d1ba4f9ff945b2325363a956ac7bf2fabd5fbb25c",
+      "width": 48,
+      "height": 48,
+      "rgbaSha256": "b0109c73a43e1f10e6c0a62b848058462db66f766fb21a8856733c9bc2a4e709",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/512.png",
+      "bytesBefore": 313936,
+      "bytesAfter": 273406,
+      "savedBytes": 40530,
+      "originalSha256": "f74f7fd3728a654ef39b1fd72df702f83087c0a146a0b2ffc18f5367e3ba1319",
+      "optimizedSha256": "ce2511c970d05fb86fe6afe48b4b2b741351b0a23803abdb5ff9355a89202078",
+      "width": 512,
+      "height": 512,
+      "rgbaSha256": "5c1169f95d9112876941dfc044337324bc98a04aaf115289664a0f0aa43ad7ee",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/64.png",
+      "bytesBefore": 6819,
+      "bytesAfter": 6331,
+      "savedBytes": 488,
+      "originalSha256": "943260abb7952a79b2c0b1d5711540ffa657ab568d3ce801560e1bdea77dcd16",
+      "optimizedSha256": "4226fc057f80b2308a6153b3316bc02b31b74f1a7f92504e9f45f30d245b5535",
+      "width": 64,
+      "height": 64,
+      "rgbaSha256": "881851a8a87c55ca2fe31e369ec3d1ef76b498ff3438a57a306e91fd9cd0c622",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/error-128.png",
+      "bytesBefore": 15163,
+      "bytesAfter": 14858,
+      "savedBytes": 305,
+      "originalSha256": "b5f22973bd4de0b36aac9847040c64ca9372406aa71b802ae481b112cf5476a1",
+      "optimizedSha256": "51ab091df710f8f38a5a52e818842c76ea70b8f024418b701e0032a0a616aa4b",
+      "width": 128,
+      "height": 128,
+      "rgbaSha256": "4e2558a855ad160fd1b40e1878db46d20976cbcf0049a0c47f9d5a9fcbc3493b",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/error-16.png",
+      "bytesBefore": 952,
+      "bytesAfter": 952,
+      "savedBytes": 0,
+      "originalSha256": "944968433fff2c05cb320cba161ccdb76225d1a743c15c1e53c88055332d2ec9",
+      "optimizedSha256": "944968433fff2c05cb320cba161ccdb76225d1a743c15c1e53c88055332d2ec9",
+      "width": 16,
+      "height": 16,
+      "rgbaSha256": "3d467d91a8cccc0480c8a48e06a53b3c03eb2194fde0f5070e560aaedadc7687",
+      "pixelEqual": true,
+      "metadataEqual": true
+    },
+    {
+      "file": "public/icon/toolbar/error-32.png",
+      "bytesBefore": 2361,
+      "bytesAfter": 2301,
+      "savedBytes": 60,
+      "originalSha256": "2215fde0014a9129a0c117e19b070911a825101e24bf6c860b74d2a683de742e",
+      "optimizedSha256": "526342b0fcd3ed0bfd4f9d9a078508e7c7499a18589744293a765ee66a60bc7c",
+      "width": 32,
+      "height": 32,
+      "rgbaSha256": "df1e01ac54b3312bfed69b6996a50f7f0232a9b92e6b46fc556a3191a32a5fb3",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/error-48.png",
+      "bytesBefore": 3786,
+      "bytesAfter": 3680,
+      "savedBytes": 106,
+      "originalSha256": "456adc4909963b606d68359ccd58313382801f5e75e01624c0d36c0b0d7e69b0",
+      "optimizedSha256": "dbc388b73af960aa628ca2090397f0b17c57f388f8496e6f4a968483d5b16c9a",
+      "width": 48,
+      "height": 48,
+      "rgbaSha256": "cc93d3b83cc11e621bb784ccb030d1e89b77ae0a3df5d176204593cce7893981",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/error-64.png",
+      "bytesBefore": 5338,
+      "bytesAfter": 5261,
+      "savedBytes": 77,
+      "originalSha256": "3f2cecbece96942a1f875865b3e2691a4b77cf937131f5bc4541f73a36f9b33b",
+      "optimizedSha256": "88245ef46e4dfbb60c5336ddfdf2950e738a0407a2bc359ef0b5d196a0daf00b",
+      "width": 64,
+      "height": 64,
+      "rgbaSha256": "bcce79da44d6f11bb13ff39fd0c24b41564b9c1ee5d7360c4d01310a057524c1",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translated-128.png",
+      "bytesBefore": 15504,
+      "bytesAfter": 15181,
+      "savedBytes": 323,
+      "originalSha256": "6ea67b76223a1871a1e0694fa9aff9aed51206a41f70307bdc8e19c27d024f7f",
+      "optimizedSha256": "8a5e28ea1cf6699fadbf0214958fc31482a5a335214f69b583f6b303684f4c90",
+      "width": 128,
+      "height": 128,
+      "rgbaSha256": "ffa69b742b7ba9de6c7d2afba23138d83ae28d19f0379533e0087741dc044d8e",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translated-16.png",
+      "bytesBefore": 956,
+      "bytesAfter": 892,
+      "savedBytes": 64,
+      "originalSha256": "e687b0e30714e0ffe77ed380e148f4799a97db1e34b1d56d52e28b5ca577b558",
+      "optimizedSha256": "5db36514a2d0b32e0a856d30fdd5ef86d90e3fbc2fbea236e2c48557adc816b8",
+      "width": 16,
+      "height": 16,
+      "rgbaSha256": "b13bd087ac803aa79241e77d2fee6bf0b4ead2fddef3373b02b8db1663174b20",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translated-32.png",
+      "bytesBefore": 2388,
+      "bytesAfter": 2329,
+      "savedBytes": 59,
+      "originalSha256": "14454419fd49aa8e4bc8a18fe313efdca7dbf870d450e025cfe540db768a163f",
+      "optimizedSha256": "bada52133ac00e03f4432f7b0057c19e4114622df162d418d9f7abfc12030b4e",
+      "width": 32,
+      "height": 32,
+      "rgbaSha256": "14c877f654915f013e56dd472c60e0b8adf3096d29d121f260b03e8bed2430e3",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translated-48.png",
+      "bytesBefore": 3860,
+      "bytesAfter": 3759,
+      "savedBytes": 101,
+      "originalSha256": "ee5182c9b948016bc1de5995d35374acff915bb69c98e78028388dc8bb8de8ae",
+      "optimizedSha256": "87dffaff69a899384570f0729e6f40bf368e855858e7b4ae285bdab5d0491cf7",
+      "width": 48,
+      "height": 48,
+      "rgbaSha256": "70ac2937fd3d67b9b0e3e22450314dbb33862f5cd74be14b7d8bd2fcb72031ac",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translated-64.png",
+      "bytesBefore": 5456,
+      "bytesAfter": 5384,
+      "savedBytes": 72,
+      "originalSha256": "71865b5b622eef01decd644db1f91dba615e332b3ddb043f1461c54161d09a64",
+      "optimizedSha256": "daccdbc48fba06c5b4cb56f526151a6b637543f158ca1100479eb29feb4d03cc",
+      "width": 64,
+      "height": 64,
+      "rgbaSha256": "122da6ff74dfbfe11ca84cb71f5045674852833583872f5b71f5c6b96c2b0140",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translating-128.png",
+      "bytesBefore": 15386,
+      "bytesAfter": 15071,
+      "savedBytes": 315,
+      "originalSha256": "4e45598953761bd933392c9be5002ab467d0872f20c82caf09b59ff7aea8b403",
+      "optimizedSha256": "f58280ed17a651a2cca57d0d4955c2dd86999f9a22a82eb8317659079f977e7d",
+      "width": 128,
+      "height": 128,
+      "rgbaSha256": "3bbd059b71db1f138b37625c52a3f1be63a3c4ed534272ddf3fe8e354e06f942",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translating-16.png",
+      "bytesBefore": 951,
+      "bytesAfter": 951,
+      "savedBytes": 0,
+      "originalSha256": "5b5a02f88706b94be712cb451bdd8aa3e0d911cec143053b87c1ee5a197124e7",
+      "optimizedSha256": "5b5a02f88706b94be712cb451bdd8aa3e0d911cec143053b87c1ee5a197124e7",
+      "width": 16,
+      "height": 16,
+      "rgbaSha256": "0a653d06225c5bfa31babc139e982082ac1904aba6ab07b3b93d7077fdcc0367",
+      "pixelEqual": true,
+      "metadataEqual": true
+    },
+    {
+      "file": "public/icon/toolbar/translating-32.png",
+      "bytesBefore": 2363,
+      "bytesAfter": 2308,
+      "savedBytes": 55,
+      "originalSha256": "1b5edc977eac92987b48de8ac235d35e432c9d15a927f27819cd61f5f363e04a",
+      "optimizedSha256": "08522bc266f1f39e1645341b9829be3748919b95028628b2a66f09d124d9a23d",
+      "width": 32,
+      "height": 32,
+      "rgbaSha256": "c0438402d4254650969c51a61049ec4f9095feca9ca338b23a7667c3fafb044d",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translating-48.png",
+      "bytesBefore": 3789,
+      "bytesAfter": 3688,
+      "savedBytes": 101,
+      "originalSha256": "b4b8ba8c319c63deec2faa266e5c7e8ba673d543727faaf5739538f6c015bb9c",
+      "optimizedSha256": "76719a41ab96b2e973468ed3e5cb1930dab5bb78e5a38a8cfc7d306837d7fe78",
+      "width": 48,
+      "height": 48,
+      "rgbaSha256": "2f7dfc35cdad875e0e4117dbc90ee7a2ab75b1b03e085b7c5fb569f715aaa3c6",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/icon/toolbar/translating-64.png",
+      "bytesBefore": 5343,
+      "bytesAfter": 5267,
+      "savedBytes": 76,
+      "originalSha256": "3d00a301f5a73ecd1e8db64358aad771dd970f6c045bfeeefb069633e81305b0",
+      "optimizedSha256": "93942458dce9732fa98648ef6db7a86d8a3cb0ace0e5c2282a4663d50bd68906",
+      "width": 64,
+      "height": 64,
+      "rgbaSha256": "f1a622ea30b1f614838758885de375709a7490758d858826e46752dfa4968012",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    },
+    {
+      "file": "public/misc/approve.jpg",
+      "bytesBefore": 113969,
+      "bytesAfter": 91256,
+      "savedBytes": 22713,
+      "originalSha256": "a2e7f4452a0efa645ca5e1013c6229d49e276e7e489cd95c18e195f494e2c63e",
+      "optimizedSha256": "187352356cd6498b185526dfd0b4d3519d410de9016bfa8836559a2c476df28c",
+      "width": 1152,
+      "height": 1152,
+      "rgbaSha256": "1f8ac104a73d0a890531708e38902cde95eca095b6e3c74109676b7bbb911425",
+      "pixelEqual": true,
+      "metadataEqual": true,
+      "browser": {
+        "pixelEqual": true,
+        "changedChannels": 0,
+        "maxDifference": 0
+      }
+    }
+  ],
+  "verification": {
+    "source": "Immutable base commit and final files",
+    "nativePixelsAndMetadata": true,
+    "browser": {
+      "launchMode": "headless-isolated",
+      "focusPolicy": "no-visible-window",
+      "filesChecked": 80,
+      "allPixelsEqual": true
+    },
+    "homepage": {
+      "launchMode": "headless-isolated",
+      "cases": [
+        {
+          "locale": "zh-CN",
+          "width": 896,
+          "theme": "light",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 152,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "zh-CN",
+          "width": 896,
+          "theme": "dark",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 152,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "zh-CN",
+          "width": 896,
+          "theme": "light",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 112,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "zh-CN",
+          "width": 896,
+          "theme": "dark",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 112,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "en-US",
+          "width": 896,
+          "theme": "light",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 152,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "en-US",
+          "width": 896,
+          "theme": "dark",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 152,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "en-US",
+          "width": 896,
+          "theme": "light",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 112,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        },
+        {
+          "locale": "en-US",
+          "width": 896,
+          "theme": "dark",
+          "source": "/product-icon.png",
+          "height": 880,
+          "cssWidth": 112,
+          "canvasEqual": true,
+          "renderedPixelsEqual": true
+        }
+      ],
+      "allRenderedPixelsEqual": true
+    },
+    "builds": [
+      "TypeScript/Vue compile",
+      "VitePress",
+      "Chrome MV3",
+      "Firefox MV2"
+    ],
+    "packagedImages": {
+      "filesPerTarget": 23,
+      "targets": [
+        "Chrome MV3",
+        "Firefox MV2"
+      ],
+      "allCopiesExact": true
+    },
+    "manifestEntriesVerified": 35,
+    "siteVerifierBaselineFailure": "Missing internal link /en/writing-assistant; reproduced on the unchanged base commit."
+  }
+}

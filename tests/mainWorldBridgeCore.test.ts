@@ -1,4 +1,5 @@
 import {describe, expect, it, vi} from 'vitest';
+import {installShadowAndRouteBridge} from '@/src/platform/shadow-ui/pageBridge';
 import {
     ROUTE_CHANGE_EVENT,
     SHADOW_BRIDGE_DISPOSE_EVENT,
@@ -16,6 +17,7 @@ import {
 import {
     YOUTUBE_BRIDGE_DISPOSE_EVENT,
     YOUTUBE_BRIDGE_ENABLE_EVENT,
+    YOUTUBE_BRIDGE_REPLAY_EVENT,
     YOUTUBE_BRIDGE_LIFECYCLE_STATE_KEY,
     YOUTUBE_BRIDGE_STATE_KEY,
     createYoutubeTimedTextPayload,
@@ -84,14 +86,18 @@ function shadowFixture(withNavigation = true) {
     const documentEvents = new FakeEvents();
     const navigationEvents = new FakeEvents();
     const originalAttach = vi.fn(function originalAttach(this: unknown, init: unknown) {
-        return {host: this, init};
+        return {host: this, init, mode: (init as {mode: string}).mode};
     }) as unknown as AttachShadowPort;
     const originalPush = vi.fn(function originalPush(this: unknown, _data: unknown, _unused: string, url?: string | URL | null) {
+        if (withNavigation) navigationEvents.emit('navigate');
         if (url) href = new URL(String(url), href).href;
+        if (withNavigation) navigationEvents.emit('currententrychange');
         return this;
     }) as unknown as HistoryMutationPort;
     const originalReplace = vi.fn(function originalReplace(this: unknown, _data: unknown, _unused: string, url?: string | URL | null) {
+        if (withNavigation) navigationEvents.emit('navigate');
         if (url) href = new URL(String(url), href).href;
+        if (withNavigation) navigationEvents.emit('currententrychange');
         return this;
     }) as unknown as HistoryMutationPort;
     const attach = slot(originalAttach);
@@ -108,7 +114,8 @@ function shadowFixture(withNavigation = true) {
         getHref: () => href,
         createEvent: (type: string, init?: Record<string, unknown>) => ({type, ...init}),
     };
-    return {attach, documentEvents, environment, navigationEvents, originalAttach, originalPush, originalReplace, push, replace, stateHost, windowEvents};
+    return {attach, documentEvents, environment, navigationEvents, originalAttach, originalPush, originalReplace,
+        push, replace, stateHost, windowEvents, setHref: (value: string) => { href = value; }};
 }
 
 class FakeXhr implements YoutubeXhrPort {
@@ -127,11 +134,12 @@ class FakeXhr implements YoutubeXhrPort {
 }
 
 function youtubeFixture() {
-    const stateHost: Record<string, unknown> = {};
+  const stateHost: Record<string, unknown> = {};
     const pageEvents = new FakeEvents();
     const documentEvents = new FakeEvents();
     const posts: unknown[] = [];
-    let failPost = false;
+  let failPost = false;
+  let href = 'https://www.youtube.com/watch?v=fixture';
     const response: YoutubeFetchResponsePort = {
         clone: () => ({text: async () => '<timedtext />'}),
     };
@@ -148,7 +156,7 @@ function youtubeFixture() {
         xhrSend: xhrSend.port,
         pageEvents,
         documentEvents,
-        getHref: () => 'https://www.youtube.com/watch?v=fixture',
+        getHref: () => href,
         getOrigin: () => 'https://www.youtube.com',
         postMessage: (payload, targetOrigin) => {
             if (failPost) throw new Error('post failed');
@@ -169,6 +177,7 @@ function youtubeFixture() {
         stateHost,
         xhrOpen,
         xhrSend,
+        setHref: (value: string) => { href = value; },
     };
 }
 
@@ -177,7 +186,58 @@ async function flush(): Promise<void> {
     await Promise.resolve();
 }
 
+function xReplayPolicy(includePageHref = true) {
+    return {
+        matches: (url: string, href: string) => url.includes('video.twimg.com/captions/') && href.includes('/status/'),
+        payload: (url: string, text: unknown, href: string) => typeof text === 'string'
+            ? {source: 'fluent-read' as const, type: 'x-resource', url, responseText: text, ...(includePageHref ? {pageHref: href} : {})}
+            : null,
+        replayLatest: true,
+    };
+}
+
 describe('ShadowRoot 与路由 MAIN world bridge core', () => {
+    it('原始 XML 文档不安装 MAIN world 宿主方法补丁', () => {
+        vi.stubGlobal('document', {contentType: 'text/xml'});
+        try {
+            const dispose = installShadowAndRouteBridge();
+            expect(dispose).toBeTypeOf('function');
+            expect(() => dispose()).not.toThrow();
+        } finally {
+            vi.unstubAllGlobals();
+        }
+    });
+
+    it('透明转发宿主方法的真实参数数量，保留缺参异常及既有包装器语义', () => {
+        const fixture = shadowFixture();
+        const expectedError = new TypeError('2 arguments required');
+        const originalHistory = vi.fn(function (this: unknown, ...args: unknown[]) {
+            if (args.length < 2) throw expectedError;
+            return {receiver: this, args};
+        });
+        const originalAttach = vi.fn(function (this: unknown, ...args: unknown[]) {
+            return {receiver: this, args, mode: 'closed'};
+        });
+        fixture.push.value = originalHistory as HistoryMutationPort;
+        fixture.replace.value = originalHistory as HistoryMutationPort;
+        fixture.attach.value = originalAttach as AttachShadowPort;
+        installShadowRouteBridgeCore(fixture.environment);
+        const receiver = {dispatchEvent: vi.fn()};
+
+        for (const method of [fixture.push.value, fixture.replace.value]) {
+            for (const args of [[], [{}]]) {
+                expect(() => Reflect.apply(method, receiver, args)).toThrow(expectedError);
+            }
+            for (const args of [[{}, ''], [{}, '', undefined], [{}, '', '/next', 'host metadata']]) {
+                expect(Reflect.apply(method, receiver, args)).toEqual({receiver, args});
+            }
+        }
+        const shadowArgs = [{mode: 'closed'}, 'host metadata'];
+        expect(Reflect.apply(fixture.attach.value, receiver, shadowArgs)).toEqual({
+            receiver, args: shadowArgs, mode: 'closed',
+        });
+    });
+
     it('发布 open ShadowRoot 与真实路由变化，并在卸载时恢复宿主 API', () => {
         const fixture = shadowFixture();
         const dispose = installShadowRouteBridgeCore(fixture.environment);
@@ -195,9 +255,13 @@ describe('ShadowRoot 与路由 MAIN world bridge core', () => {
         expect(fixture.documentEvents.dispatched).toHaveLength(0);
         expect(fixture.push.value.call(historyHost, {}, '', '/next')).toBe(historyHost);
         fixture.replace.value.call(historyHost, {}, '', '/final');
+        fixture.setHref('https://example.test/next');
         fixture.windowEvents.emit('popstate');
+        fixture.setHref('https://example.test/next#section');
         fixture.windowEvents.emit('hashchange');
+        fixture.setHref('https://example.test/navigation-api');
         fixture.navigationEvents.emit('navigate');
+        fixture.navigationEvents.emit('currententrychange');
         expect(fixture.documentEvents.dispatched.filter((event) => (event as {type: string}).type === ROUTE_CHANGE_EVENT))
             .toHaveLength(5);
 
@@ -207,6 +271,48 @@ describe('ShadowRoot 与路由 MAIN world bridge core', () => {
         expect(fixture.replace.value).toBe(fixture.originalReplace);
         expect(fixture.stateHost[SHADOW_BRIDGE_STATE_KEY]).toBeUndefined();
         expect(fixture.windowEvents.listeners.get('popstate')?.size).toBe(0);
+        expect(fixture.navigationEvents.listeners.get('currententrychange')?.size).toBe(0);
+    });
+
+    it('同页滚动状态和被取消的 navigate 不发布路由变化，真实提交只发布一次最新 URL', () => {
+        const fixture = shadowFixture();
+        installShadowRouteBridgeCore(fixture.environment);
+        const urls: string[] = [];
+        fixture.documentEvents.addEventListener(ROUTE_CHANGE_EVENT, () => urls.push(fixture.environment.getHref()));
+        const historyHost = {};
+        const scrollState = {scroll: 250};
+        expect(fixture.replace.value.call(historyHost, scrollState, '')).toBe(historyHost);
+        fixture.replace.value.call(historyHost, scrollState, '', 'https://example.test/start');
+        fixture.push.value.call(historyHost, scrollState, '', '/start');
+        fixture.navigationEvents.emit('navigate');
+        fixture.navigationEvents.emit('currententrychange');
+        fixture.windowEvents.emit('popstate');
+        fixture.windowEvents.emit('hashchange');
+        expect(urls).toEqual([]);
+        expect(fixture.originalReplace).toHaveBeenCalledWith(scrollState, '');
+
+        fixture.push.value.call(historyHost, {}, '', '/article?lang=en#intro');
+        fixture.navigationEvents.emit('currententrychange');
+        fixture.windowEvents.emit('popstate');
+        fixture.windowEvents.emit('hashchange');
+        expect(urls).toEqual(['https://example.test/article?lang=en#intro']);
+        fixture.replace.value.call(historyHost, {}, '', '#details');
+        expect(urls).toEqual(['https://example.test/article?lang=en#intro', 'https://example.test/article?lang=en#details']);
+    });
+
+    it('缺少 Navigation API 时 history 与遍历继续生效，卸载后不再发布', () => {
+        const fixture = shadowFixture(false);
+        const dispose = installShadowRouteBridgeCore(fixture.environment);
+        fixture.push.value.call({}, {}, '', '/next');
+        fixture.replace.value.call({}, {}, '', '/final');
+        fixture.setHref('https://example.test/start');
+        fixture.windowEvents.emit('popstate');
+        expect(fixture.documentEvents.dispatched).toHaveLength(3);
+        dispose();
+        fixture.push.value.call({}, {}, '', '/disposed');
+        fixture.windowEvents.emit('popstate');
+        fixture.navigationEvents.emit('currententrychange');
+        expect(fixture.documentEvents.dispatched).toHaveLength(3);
     });
 
     it('重复安装先卸载旧 owner，旧 disposer 不会破坏新桥', () => {
@@ -256,6 +362,87 @@ describe('ShadowRoot 与路由 MAIN world bridge core', () => {
         fixture.documentEvents.emit(SHADOW_BRIDGE_ENABLE_EVENT);
         expect(fixture.attach.value).toBe(fixture.originalAttach);
     });
+
+    it('脚本管理器代理拒绝删除桥状态时仍能停用和重新启用', () => {
+        const fixture = shadowFixture();
+        const host = new Proxy(fixture.stateHost, {
+            deleteProperty: () => false,
+        });
+        fixture.environment.stateHost = host;
+        const dispose = installShadowRouteBridgeLifecycleCore(fixture.environment);
+        expect(host[SHADOW_BRIDGE_STATE_KEY]).toBeTruthy();
+        fixture.documentEvents.emit(SHADOW_BRIDGE_DISPOSE_EVENT);
+        expect(host[SHADOW_BRIDGE_STATE_KEY]).toBeUndefined();
+        fixture.documentEvents.emit(SHADOW_BRIDGE_ENABLE_EVENT);
+        expect(host[SHADOW_BRIDGE_STATE_KEY]).toBeTruthy();
+        expect(() => dispose()).not.toThrow();
+        expect(host[SHADOW_BRIDGE_STATE_KEY]).toBeUndefined();
+        expect(host[SHADOW_BRIDGE_LIFECYCLE_STATE_KEY]).toBeUndefined();
+        expect(fixture.attach.value).toBe(fixture.originalAttach);
+    });
+
+    it('宿主代理同时拒绝删除和清空状态时仍恢复原始 API', () => {
+        const fixture = shadowFixture(false);
+        const stateHost = new Proxy(fixture.stateHost, {
+            deleteProperty: () => { throw new Error('delete denied'); },
+            set(target, key, value) {
+                if (value === undefined) throw new Error('write denied');
+                return Reflect.set(target, key, value);
+            },
+        });
+        fixture.environment.stateHost = stateHost;
+        const dispose = installShadowRouteBridgeCore(fixture.environment);
+
+        expect(() => dispose()).not.toThrow();
+        expect(fixture.attach.value).toBe(fixture.originalAttach);
+        expect(fixture.push.value).toBe(fixture.originalPush);
+        expect(fixture.replace.value).toBe(fixture.originalReplace);
+        expect(fixture.windowEvents.listeners.get('popstate')?.size).toBe(0);
+    });
+
+    it('宿主后来包装我们的 API 时保留宿主包装，但禁用旧桥通知且恢复后只通知一次', () => {
+        const fixture = shadowFixture(false);
+        const dispose = installShadowRouteBridgeLifecycleCore(fixture.environment);
+        const retainedAttach = fixture.attach.value;
+        const retainedPush = fixture.push.value;
+        const retainedReplace = fixture.replace.value;
+        const pageAttach: AttachShadowPort = function (init) {
+            return retainedAttach.call(this, init);
+        };
+        const pagePush: HistoryMutationPort = function (data, unused, url) {
+            return retainedPush.call(this, data, unused, url);
+        };
+        const pageReplace: HistoryMutationPort = function (data, unused, url) {
+            return retainedReplace.call(this, data, unused, url);
+        };
+        fixture.attach.value = pageAttach;
+        fixture.push.value = pagePush;
+        fixture.replace.value = pageReplace;
+        const host = {dispatchEvent: vi.fn()};
+
+        fixture.documentEvents.emit(SHADOW_BRIDGE_DISPOSE_EVENT);
+        expect(fixture.attach.value).toBe(pageAttach);
+        expect(fixture.push.value).toBe(pagePush);
+        expect(fixture.replace.value).toBe(pageReplace);
+        expect(fixture.attach.value.call(host, {mode: 'open'})).toMatchObject({host, mode: 'open'});
+        fixture.push.value.call({}, {}, '', '/while-disabled');
+        fixture.replace.value.call({}, {}, '', '/also-disabled');
+        expect(host.dispatchEvent).not.toHaveBeenCalled();
+        expect(fixture.documentEvents.dispatched).toHaveLength(0);
+
+        fixture.documentEvents.emit(SHADOW_BRIDGE_ENABLE_EVENT);
+        fixture.attach.value.call(host, {mode: 'open'});
+        fixture.push.value.call({}, {}, '', '/enabled');
+        fixture.replace.value.call({}, {}, '', '/enabled-replace');
+        expect(host.dispatchEvent).toHaveBeenCalledOnce();
+        expect(fixture.documentEvents.dispatched).toHaveLength(2);
+
+        dispose();
+        fixture.attach.value.call(host, {mode: 'open'});
+        fixture.push.value.call({}, {}, '', '/finally-disposed');
+        expect(host.dispatchEvent).toHaveBeenCalledOnce();
+        expect(fixture.documentEvents.dispatched).toHaveLength(2);
+    });
 });
 
 describe('YouTube timedtext MAIN world bridge core', () => {
@@ -302,6 +489,8 @@ describe('YouTube timedtext MAIN world bridge core', () => {
             payload: expect.objectContaining({url: '/api/timedtext?lang=en', responseText: '<timedtext />'}),
             targetOrigin: 'https://www.youtube.com',
         }]);
+        fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(fixture.posts).toHaveLength(1);
         dispose();
         expect(fixture.fetch.value).toBe(fixture.originalFetch);
     });
@@ -426,6 +615,194 @@ describe('YouTube timedtext MAIN world bridge core', () => {
         expect(fixture.stateHost[YOUTUBE_BRIDGE_LIFECYCLE_STATE_KEY]).toBeUndefined();
     });
 
+    it('复用 resourcePolicy，并丢弃导航后的迟到 fetch/XHR 响应', async () => {
+        const fixture = youtubeFixture();
+        let resolveText: (value: string) => void = () => undefined;
+        const delayed = {clone: () => ({text: () => new Promise<string>((resolve) => { resolveText = resolve; })})};
+        (fixture.originalFetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce(delayed);
+        const policy = {
+            matches: (url: string, href: string) => url.includes('/captions/') && href.includes('/status/'),
+            payload: (url: string, text: unknown, href: string) => typeof text === 'string'
+                ? {source: 'fluent-read' as const, type: 'x-resource', url, responseText: text, pageHref: href}
+                : null,
+        };
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: policy});
+        await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+        fixture.setHref('https://www.youtube.com/watch?v=next');
+        resolveText('WEBVTT');
+        await flush();
+        expect(fixture.posts).toHaveLength(0);
+        fixture.setHref('https://x.com/status/2');
+        const xhr = new FakeXhr();
+        xhr.responseText = 'WEBVTT';
+        fixture.xhrOpen.value.call(xhr, 'GET', 'https://video.twimg.com/captions/en.vtt');
+        fixture.xhrSend.value.call(xhr);
+        fixture.setHref('https://x.com/status/3');
+        xhr.emit('load');
+        expect(fixture.posts).toHaveLength(0);
+        dispose();
+    });
+
+    it('X 资源早于消费方到达时可按当前页面回放，导航后不回放且 dispose 清空缓存', async () => {
+        const fixture = youtubeFixture();
+        fixture.setHref('https://x.com/status/1');
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: xReplayPolicy()});
+
+        await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+        await flush();
+        expect(fixture.posts).toHaveLength(1);
+
+        fixture.posts.length = 0;
+        fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(fixture.posts).toEqual([{
+            payload: expect.objectContaining({url: 'https://video.twimg.com/captions/en.vtt', pageHref: 'https://x.com/status/1'}),
+            targetOrigin: 'https://www.youtube.com',
+        }]);
+
+        fixture.posts.length = 0;
+        fixture.setHref('https://x.com/status/2');
+        fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(fixture.posts).toHaveLength(0);
+
+        fixture.setHref('https://x.com/status/1');
+        fixture.setPostFailure(true);
+        expect(() => fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT})).not.toThrow();
+        fixture.setPostFailure(false);
+
+        dispose();
+        fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(fixture.posts).toHaveLength(0);
+    });
+
+    it('显式允许的 X 清单可从 arraybuffer/blob XHR 回放；迟到 Blob、JSON 对象与超限二进制被丢弃', async () => {
+        const fixture = youtubeFixture();
+        fixture.setHref('https://x.com/status/1');
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: {...xReplayPolicy(), binaryText: true}});
+        const load = (response: unknown, responseType = 'arraybuffer') => {
+            const xhr = new FakeXhr();
+            Object.defineProperties(xhr, {
+                responseText: {get: () => { throw new DOMException('Not text', 'InvalidStateError'); }},
+                response: {value: response}, responseType: {value: responseType},
+            });
+            fixture.xhrOpen.value.call(xhr, 'GET', 'https://video.twimg.com/captions/en.vtt');
+            fixture.xhrSend.value.call(xhr); xhr.emit('load');
+            return xhr;
+        };
+        load(new TextEncoder().encode('WEBVTT').buffer);
+        load({video_info: {variants: []}}, 'json');
+        expect(fixture.posts).toHaveLength(1);
+        load(new Uint8Array(2_000_001).buffer);
+        load(new Blob(['x'.repeat(2_000_001)]), 'blob');
+        load(undefined);
+        const unreadable = new FakeXhr();
+        Object.defineProperties(unreadable, {
+            responseText: {get: () => {throw new Error('binary');}},
+            response: {get: () => {throw new Error('unreadable');}},
+        });
+        fixture.xhrOpen.value.call(unreadable, 'GET', 'https://video.twimg.com/captions/en.vtt');
+        fixture.xhrSend.value.call(unreadable); unreadable.emit('load');
+        expect(fixture.posts).toHaveLength(1);
+        load(new Blob(['WEBVTT blob']), 'blob');
+        await new Promise(resolve => setTimeout(resolve, 0));
+        expect(fixture.posts).toHaveLength(2);
+        const pending = load(new Blob(['WEBVTT late']), 'blob');
+        fixture.xhrOpen.value.call(pending, 'GET', 'https://example.com/reuse');
+        await new Promise(resolve => setTimeout(resolve, 0));
+        expect(fixture.posts).toHaveLength(2);
+        dispose();
+    });
+
+    it('X fetch limits the cloned stream without consuming or cancelling the original response', async () => {
+        const fixture = youtubeFixture();
+        fixture.setHref('https://x.com/status/1');
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: {...xReplayPolicy(), maxResponseBytes: 16}});
+        const originalFetch = fixture.originalFetch as unknown as ReturnType<typeof vi.fn>;
+        const fetchText = async (text: string, contentLength?: string) => {
+            const original = new Response(text, {headers: contentLength ? {'content-length': contentLength} : {}});
+            originalFetch.mockResolvedValueOnce(original);
+            const returned = await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+            expect(returned).toBe(original);
+            expect(await original.text()).toBe(text);
+            await new Promise(resolve => setTimeout(resolve, 0));
+        };
+        await fetchText('WEBVTT');
+        // 原响应消费完不代表异步 tee 副本也已完成；等待旁路的可观察结果。
+        await vi.waitFor(() => expect(fixture.posts).toHaveLength(1));
+        await fetchText('WEBVTT'.repeat(4));
+        await fetchText('WEBVTT', '17');
+        expect(fixture.posts).toHaveLength(1);
+        originalFetch.mockResolvedValueOnce({clone: () => ({text: async () => 'WEBVTT'})});
+        await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+        await flush();
+        expect(fixture.posts).toHaveLength(2);
+        originalFetch.mockResolvedValueOnce({clone: () => ({text: async () => '界'.repeat(6)})});
+        await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+        await flush();
+        expect(fixture.posts).toHaveLength(2);
+        dispose();
+    });
+
+    it('unloading cancels only a pending bounded clone stream', async () => {
+        const fixture = youtubeFixture();
+        fixture.setHref('https://x.com/status/1');
+        const cancelled = vi.fn();
+        const stream = new ReadableStream<Uint8Array>({cancel: cancelled});
+        (fixture.originalFetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({clone: () => ({body: stream, text: async () => ''})});
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: {...xReplayPolicy(), maxResponseBytes: 16}});
+        await fixture.fetch.value.call({}, 'https://video.twimg.com/captions/en.vtt');
+        dispose(); await flush();
+        expect(cancelled).toHaveBeenCalledTimes(1);
+        expect(fixture.posts).toHaveLength(0);
+    });
+
+    it('X 回放缓存按 URL 替换并限制 16 条资源与 2M 字符', () => {
+        const fixture = youtubeFixture();
+        fixture.setHref('https://x.com/status/3');
+        const dispose = installYoutubeTimedTextBridgeCore({...fixture.environment, resourcePolicy: xReplayPolicy()});
+
+        for (let index = 0; index < 17; index += 1) {
+            const xhr = new FakeXhr();
+            xhr.responseText = `WEBVTT-${index}`;
+            fixture.xhrOpen.value.call(xhr, 'GET', `https://video.twimg.com/captions/${index}.vtt`);
+            fixture.xhrSend.value.call(xhr);
+            xhr.emit('load');
+        }
+        const replacement = new FakeXhr();
+        replacement.responseText = 'WEBVTT-replacement';
+        fixture.xhrOpen.value.call(replacement, 'GET', 'https://video.twimg.com/captions/16.vtt');
+        fixture.xhrSend.value.call(replacement);
+        replacement.emit('load');
+        fixture.posts.length = 0;
+        fixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(fixture.posts).toHaveLength(16);
+        expect(fixture.posts.some((entry) => JSON.stringify(entry).includes('/captions/0.vtt'))).toBe(false);
+        expect(fixture.posts.some((entry) => JSON.stringify(entry).includes('/captions/16.vtt'))).toBe(true);
+
+        dispose();
+
+        const largeFixture = youtubeFixture();
+        largeFixture.setHref('https://x.com/status/4');
+        const largeDispose = installYoutubeTimedTextBridgeCore({...largeFixture.environment, resourcePolicy: xReplayPolicy(false)});
+        const largeText = 'x'.repeat(1_000_001);
+        for (const suffix of ['large-a', 'large-b']) {
+            const xhr = new FakeXhr();
+            xhr.responseText = largeText;
+            largeFixture.xhrOpen.value.call(xhr, 'GET', `https://video.twimg.com/captions/${suffix}.vtt`);
+            largeFixture.xhrSend.value.call(xhr);
+            xhr.emit('load');
+        }
+        const oversized = new FakeXhr();
+        oversized.responseText = 'x'.repeat(2_000_001);
+        largeFixture.xhrOpen.value.call(oversized, 'GET', 'https://video.twimg.com/captions/oversized.vtt');
+        largeFixture.xhrSend.value.call(oversized);
+        oversized.emit('load');
+        largeFixture.posts.length = 0;
+        largeFixture.documentEvents.dispatchEvent({type: YOUTUBE_BRIDGE_REPLAY_EVENT});
+        expect(largeFixture.posts).toHaveLength(1);
+        expect(JSON.stringify(largeFixture.posts[0])).toContain('/captions/large-b.vtt');
+        largeDispose();
+    });
+
     it('只读、后来锁定或被宿主替换的方法安全降级', () => {
         const fixture = youtubeFixture();
         fixture.fetch.lock();
@@ -435,5 +812,35 @@ describe('YouTube timedtext MAIN world bridge core', () => {
         fixture.xhrSend.value = fixture.originalSend;
         expect(() => dispose()).not.toThrow();
         expect(fixture.pageEvents.listeners.get('pagehide')?.size).toBe(0);
+    });
+});
+
+describe('宿主 API 调用语义', () => {
+    it('只让原生 attachShadow 读取一次 mode getter，桥通知失败仍返回原生 root', () => {
+        const fixture = shadowFixture();
+        installShadowRouteBridgeCore(fixture.environment);
+        let reads = 0;
+        const init = {get mode() {
+            if (++reads > 1) throw new Error('重复读取 mode');
+            return 'open';
+        }};
+        const host = {dispatchEvent: vi.fn(() => { throw new Error('宿主事件 API 故障'); })};
+        expect(fixture.attach.value.call(host, init)).toMatchObject({mode: 'open', host});
+        expect(reads).toBe(1);
+        expect(host.dispatchEvent).toHaveBeenCalledOnce();
+    });
+
+    it('原生 attachShadow 错误仍原样抛出，导航附加通知错误不影响成功返回', () => {
+        const fixture = shadowFixture(false);
+        installShadowRouteBridgeCore(fixture.environment);
+        const error = new Error('原生失败');
+        expect(() => fixture.attach.value.call({dispatchEvent() {}}, {
+            get mode(): string { throw error; },
+        })).toThrow(error);
+        fixture.documentEvents.dispatchEvent = () => { throw new Error('通知失败'); };
+        const receiver = {};
+        expect(fixture.push.value.call(receiver, {}, '', '/next')).toBe(receiver);
+        expect(fixture.replace.value.call(receiver, {}, '', '/other')).toBe(receiver);
+        expect(fixture.environment.getHref()).toBe('https://example.test/other');
     });
 });

@@ -184,8 +184,8 @@ describe('word dictionary provider adapters', () => {
     });
 });
 
-describe('word dictionary fallback chain', () => {
-    it('continues through all no-key backups to WiktApi as the last resort', async () => {
+describe('word dictionary online backups', () => {
+    it('queries no-key backups together and accepts WiktApi when the other sources fail', async () => {
         const warningSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
         const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
             const url = String(input);

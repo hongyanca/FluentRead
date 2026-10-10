@@ -16,6 +16,39 @@ function apiError(overrides: Partial<ConstructorParameters<typeof APICallError>[
 }
 
 describe('AI SDK provider error normalization', () => {
+    it.each([
+        ['<!DOCTYPE html><html lang="zh-Hans"><head><script>private-page-data</script></head></html>', undefined],
+        ['  <HTML><BODY>private-page-data</BODY></HTML>', {}],
+        ['<!-- gateway --><html><body>private-page-data</body></html>', {}],
+        ['private-page-data', {'Content-Type': 'text/html; charset=utf-8'}],
+        ['private-page-data', {'content-type': 'application/xhtml+xml'}],
+    ])('issue #626：HTML 404 提示检查接口且不展示网页源码 %#', (responseBody, responseHeaders) => {
+        const error = normalizeAiSdkError(services.custom, apiError({statusCode: 404, responseBody, responseHeaders, isRetryable: false}));
+        expect(error).toMatchObject({kind: 'bad-request', statusCode: 404, retryable: false});
+        expect(error.message).toContain('HTML 网页');
+        expect(error.message).toContain('Chat Completions');
+        expect(error.message).not.toContain('private-page-data');
+        expect(error.message).not.toContain('<');
+    });
+
+    it('issue #626：JSON 404 保留模型错误与已脱敏的请求 ID', () => {
+        const error = normalizeAiSdkError(services.custom, apiError({
+            statusCode: 404,
+            responseBody: JSON.stringify({error: {message: 'model not found', code: 'model_not_found'}}),
+            responseHeaders: {'content-type': 'application/json', 'x-request-id': 'req-fixture'},
+        }));
+        expect(error.message).toContain('model not found');
+        expect(error.code).toBe('model_not_found');
+        expect(error.requestId).toBe('req-fixture');
+    });
+
+    it.each([
+        [JSON.stringify({error: {message: 'invalid <html> input'}}), 'invalid <html> input'],
+        ['<error>invalid model</error>', '<error>invalid model</error>'],
+    ])('issue #626：HTML 识别保留 JSON 和其他非网页诊断 %#', (responseBody, message) => {
+        expect(normalizeAiSdkError(services.custom, apiError({statusCode: 400, responseBody})).message).toContain(message);
+    });
+
     it('保留结构化 transport 错误的全部诊断字段', () => {
         const error = new LlmTransportError('失败', {
             kind: 'provider',
@@ -71,6 +104,17 @@ describe('AI SDK provider error normalization', () => {
         expect(error.requestId).toBe('req [已隐藏的密钥]');
         expect(error.message).toContain('authorization: [已隐藏]');
         expect(error.message).not.toContain(apiKey);
+    });
+
+    it('清洗 provider 详情中的图片 data URL', () => {
+        const image = 'data:image/png;base64,iVBORw0KGgoAAAAAAAA=';
+        const error = normalizeAiSdkError(services.custom, apiError({
+            statusCode: 400,
+            data: {error: {message: `image payload ${image}`}},
+        }));
+
+        expect(error.message).toContain('[已隐藏的图片]');
+        expect(error.message).not.toContain(image);
     });
 
     it('保留 MiniMax 专用凭据诊断', () => {

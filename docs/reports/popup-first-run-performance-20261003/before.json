@@ -1,0 +1,1193 @@
+{
+  "date": "2026-10-03",
+  "scope": "first-use-and-normal-popup",
+  "baselineCommit": "f568dc058206dd571bd1eb0220c3912b91d8c21b",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "displayTarget": "secondary",
+    "windowState": "normal",
+    "browserFrontmost": false
+  },
+  "statistics": "Navigation to ready DOM and following rAF; cold sample once per phase; six warm samples; even median averages middle two. Recomputed from untouched raw samples.",
+  "summary": {
+    "onboarding": {
+      "first": {
+        "readyMs": 247.09999990463257,
+        "frameMs": 315.69999980926514,
+        "scriptBytes": 1034940,
+        "coldWorkerStopped": true
+      },
+      "medianReadyMs": 81.7000002861023,
+      "medianFrameMs": 88.80000019073486
+    },
+    "main": {
+      "first": {
+        "readyMs": 186.90000009536743,
+        "frameMs": 188.5,
+        "scriptBytes": 1034940,
+        "coldWorkerStopped": true
+      },
+      "medianReadyMs": 75.90000009536743,
+      "medianFrameMs": 80.14999985694885
+    }
+  },
+  "samples": [
+    {
+      "readyMs": 247.09999990463257,
+      "frameMs": 315.69999980926514,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 112.59999990463257,
+          "duration": 84
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 200.59999990463257,
+          "duration": 0.9000000953674316
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 210.09999990463257,
+          "duration": 4.200000286102295
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 218.40000009536743,
+          "duration": 95
+        }
+      ],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 0,
+      "coldWorkerStopped": true,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.062972,
+        "ScriptDuration": 0.043763,
+        "TaskDuration": 0.22287,
+        "JSHeapUsedSize": 7625872
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 117.19999980926514,
+      "frameMs": 131.5,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 54.299999713897705,
+          "duration": 9.900000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 68.5,
+          "duration": 11.199999809265137
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 83.7999997138977,
+          "duration": 2.200000286102295
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 1,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001347,
+        "ScriptDuration": 0.036745,
+        "TaskDuration": 0.124788,
+        "JSHeapUsedSize": 21128340
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 79.80000019073486,
+      "frameMs": 82.90000009536743,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35.09999990463257,
+          "duration": 10.400000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 47.5,
+          "duration": 2.8000001907348633
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 54.69999980926514,
+          "duration": 3.9000000953674316
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 2,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.000905,
+        "ScriptDuration": 0.019486,
+        "TaskDuration": 0.083142,
+        "JSHeapUsedSize": 34593532
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 77.40000009536743,
+      "frameMs": 82.2999997138977,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 33.799999713897705,
+          "duration": 10.800000190734863
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 46.5,
+          "duration": 2.9000000953674316
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 53.09999990463257,
+          "duration": 3.3000001907348633
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 3,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001012,
+        "ScriptDuration": 0.019379,
+        "TaskDuration": 0.0809,
+        "JSHeapUsedSize": 47866700
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 81.2000002861023,
+      "frameMs": 84.40000009536743,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 36.5,
+          "duration": 9.800000190734863
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.200000286102295,
+          "duration": 3.1999998092651367
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 55.90000009536743,
+          "duration": 3.4000000953674316
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 4,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.000969,
+        "ScriptDuration": 0.018902,
+        "TaskDuration": 0.080475,
+        "JSHeapUsedSize": 62225228
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 91.90000009536743,
+      "frameMs": 102.7000002861023,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 37.5,
+          "duration": 13
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 52.5,
+          "duration": 3.3000001907348633
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 60,
+          "duration": 10.800000190734863
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 5,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.000958,
+        "ScriptDuration": 0.022441,
+        "TaskDuration": 0.08524,
+        "JSHeapUsedSize": 75536052
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 82.2000002861023,
+      "frameMs": 93.2000002861023,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 38.5,
+          "duration": 8.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.90000009536743,
+          "duration": 4.5
+        }
+      ],
+      "fetches": [
+        {
+          "path": "/i18n/en-US.json",
+          "start": 57.59999990463257,
+          "duration": 2.700000286102295
+        }
+      ],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 172,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 6,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.00103,
+        "ScriptDuration": 0.018657,
+        "TaskDuration": 0.079914,
+        "JSHeapUsedSize": 89903792
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 186.90000009536743,
+      "frameMs": 188.5,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 82.90000009536743,
+          "duration": 75.69999980926514
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 160.5,
+          "duration": 0.7999997138977051
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 0,
+      "coldWorkerStopped": true,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.019538,
+        "ScriptDuration": 0.023561,
+        "TaskDuration": 0.116205,
+        "JSHeapUsedSize": 7577720
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 80.69999980926514,
+      "frameMs": 82.19999980926514,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35.19999980926514,
+          "duration": 12.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 50.09999990463257,
+          "duration": 3.0999999046325684
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 1,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.002241,
+        "ScriptDuration": 0.023354,
+        "TaskDuration": 0.086169,
+        "JSHeapUsedSize": 15679700
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 74.90000009536743,
+      "frameMs": 76.40000009536743,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 34.59999990463257,
+          "duration": 9.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 45.90000009536743,
+          "duration": 4.099999904632568
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 2,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.00156,
+        "ScriptDuration": 0.01986,
+        "TaskDuration": 0.078111,
+        "JSHeapUsedSize": 31014244
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 80.60000038146973,
+      "frameMs": 82.40000009536743,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 34.200000286102295,
+          "duration": 12.900000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 52.80000019073486,
+          "duration": 2.9000000953674316
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 3,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001659,
+        "ScriptDuration": 0.023194,
+        "TaskDuration": 0.08417,
+        "JSHeapUsedSize": 15459344
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 75,
+      "frameMs": 84.59999990463257,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 34.5,
+          "duration": 9.599999904632568
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 46.09999990463257,
+          "duration": 3.700000286102295
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 4,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001691,
+        "ScriptDuration": 0.019711,
+        "TaskDuration": 0.083906,
+        "JSHeapUsedSize": 6895104
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 76.69999980926514,
+      "frameMs": 78.09999990463257,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 33.80000019073486,
+          "duration": 11.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 47.5,
+          "duration": 3.5999999046325684
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 5,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001585,
+        "ScriptDuration": 0.022282,
+        "TaskDuration": 0.081417,
+        "JSHeapUsedSize": 14859440
+      },
+      "scriptBytes": 1034940
+    },
+    {
+      "readyMs": 75.10000038146973,
+      "frameMs": 76.5,
+      "messages": [
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35.5,
+          "duration": 9.100000381469727
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 46.40000009536743,
+          "duration": 4
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [],
+      "domNodes": 142,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 6,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/chunks/popup-Diym8y30.js",
+          "bytes": 1175
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-B-A71ZeI.js",
+          "bytes": 603605
+        },
+        {
+          "file": "/chunks/interface-skins-1WCrTBWQ.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-BunpGhY3.js",
+          "bytes": 45326
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-JVmmXPY9.js",
+          "bytes": 118011
+        },
+        {
+          "file": "/chunks/featureServices-TPhL1Zt6.js",
+          "bytes": 44824
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-hlOVTYFR.js",
+          "bytes": 4870
+        },
+        {
+          "file": "/chunks/capabilities-DAk47H_C.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001563,
+        "ScriptDuration": 0.019518,
+        "TaskDuration": 0.078135,
+        "JSHeapUsedSize": 30150900
+      },
+      "scriptBytes": 1034940
+    }
+  ],
+  "assetHashes": {
+    "chunks/128-rof0LK9z.js": "c2c1b4849a455abe1d0addec181081392aa5edda088f006af669128962b63628",
+    "chunks/InterfaceBackdrop-hlOVTYFR.js": "c52881996913cf916f50e31ef81bf119e26a200327399ec2edb1e381dd9d5e57",
+    "chunks/PopupApp-BunpGhY3.js": "c638f68e74cf1adcf5c934971dcd2aecf90b52f3728008110c0c2bc8ad80a8e8",
+    "chunks/capabilities-DAk47H_C.js": "2c0b7834140e114ce0aab7b81ea6a1d628e2849c72c391d05c6a85b1b899104f",
+    "chunks/capabilities-JVmmXPY9.js": "81ea77ad22e4e4727c08509e21397a0f931ae8da8086bf620f10c13d37499951",
+    "chunks/featureServices-TPhL1Zt6.js": "7d6a869f39d0af252ea8c838b27e54f7600f613191339ba3ee6b84531cfc4ea6",
+    "chunks/i18n-B-A71ZeI.js": "7e1bec422febbdaae11d4f1154265e55f9283e6ba0b2cc4b7820b5ca1101fe83",
+    "chunks/interface-skins-1WCrTBWQ.js": "e09e77e5c41090d210548b58e9a5762ff7045bbdbf7d24ecefabd6e8c410106d",
+    "chunks/popup-Diym8y30.js": "e4709a26becc6944c088645965699f498bfd296c4dbd7a27c8c6e70d66af19df",
+    "chunks/sha2-BsatFpqL.js": "484b8de444e33c315f400999f267743dda65fe5d55152933ea706ab02130efb2",
+    "manifest.json": "e856c27d1a2fff294c59f35d6ec80ca15b15f9d42997e01d749e960c362c1d5c",
+    "popup.html": "9a45d4f7930b03dd6a364e9e3ce6405adf9c2ce95a32aa516af4d8c8c95769dd"
+  },
+  "errors": [],
+  "passed": true
+}

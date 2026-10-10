@@ -5,7 +5,6 @@ import {
     edgeTtsLimits,
     edgeTtsTokenExpiry,
     edgeTtsVoiceCandidatesForLanguage,
-    edgeTtsVoiceForLanguage,
     normalizeEdgeTtsLanguage,
     splitEdgeTtsText,
 } from '@/src/features/selection-translation/services/edgeTtsPolicy';
@@ -24,6 +23,8 @@ describe('Edge TTS pure policy', () => {
         expect(normalizeEdgeTtsLanguage('detect')).toBe('en-US');
         expect(normalizeEdgeTtsLanguage('ZH-HANS')).toBe('zh-CN');
         expect(normalizeEdgeTtsLanguage('zh_hant')).toBe('zh-TW');
+        expect(normalizeEdgeTtsLanguage('zh-HK')).toBe('zh-TW');
+        expect(normalizeEdgeTtsLanguage('zh-Hant-CN')).toBe('zh-TW');
         expect(normalizeEdgeTtsLanguage('EN')).toBe('en-US');
         expect(normalizeEdgeTtsLanguage(' fr_CA ')).toBe('fr-CA');
         expect(normalizeEdgeTtsLanguage('xx-ZZ')).toBe('xx-ZZ');
@@ -42,8 +43,21 @@ describe('Edge TTS pure policy', () => {
         ]);
         expect(edgeTtsVoiceCandidatesForLanguage('fr-CA')).toEqual(['fr-FR-RemyMultilingualNeural']);
         expect(edgeTtsVoiceCandidatesForLanguage('xx-ZZ', 'not-an-array')).toEqual([]);
-        expect(edgeTtsVoiceForLanguage('zh-Hans')).toBe('zh-CN-XiaoxiaoMultilingualNeural');
-        expect(edgeTtsVoiceForLanguage('xx-ZZ')).toBeNull();
+        expect(edgeTtsVoiceCandidatesForLanguage('zh-Hans')[0]).toBe('zh-CN-XiaoxiaoMultilingualNeural');
+        expect(edgeTtsVoiceCandidatesForLanguage('zh-Hant')[0]).toBe('zh-TW-YunJheMultilingualNeural');
+        expect(edgeTtsVoiceCandidatesForLanguage('xx-ZZ')).toEqual([]);
+    });
+
+    it('accepts Mandarin detection aliases without losing configured Chinese voices or traditional locales', () => {
+        for (const language of ['cmn', ' ZHO ', 'CHI']) {
+            expect(normalizeEdgeTtsLanguage(language)).toBe('zh-CN');
+            const candidates = edgeTtsVoiceCandidatesForLanguage(language, ['zh-CN-XiaoyiNeural', 'zh-TW-HsiaoYuNeural']);
+            expect(candidates[0]).toBe('zh-CN-XiaoyiNeural');
+            expect(candidates).toContain('zh-CN-XiaoxiaoMultilingualNeural');
+            expect(candidates).not.toContain('zh-TW-HsiaoYuNeural');
+        }
+        expect(normalizeEdgeTtsLanguage('zh-Hant')).toBe('zh-TW');
+        expect(edgeTtsVoiceCandidatesForLanguage('zh-Hant')[0]).toBe('zh-TW-YunJheMultilingualNeural');
     });
 
     it('escapes all SSML-controlled values and applies defaults', () => {

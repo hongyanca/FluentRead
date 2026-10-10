@@ -1,0 +1,301 @@
+{
+  "scope": "Local Node-hosted WASM q4 actual model inference through production FullCapture with mocked getAudio lifecycle, followed by fixed production stabilizer replay. No browser/WebGPU/bridge/HLS/translation acceptance. Audio and full source transcripts remain private scratch files.",
+  "sourceReports": [
+    {
+      "path": "/private/tmp/fluentread-x-ai-full-window-e2e-20261009/jfk-full-window-report.json",
+      "sha256": "4df6b23fdad4f3d55a781b6a8ded4502458a4ff7249fb54e13bfdf1d3b735fbd"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-full-window-e2e-20261009/jfk-fixed-stabilizer-replay-report.json",
+      "sha256": "8959a3f15a8df5e8b5386b2a7dab47c5257747590affc6f498a6c7e61b959762"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-full-window-e2e-20261009/jfk-stabilizer-failure-trace.json",
+      "sha256": "ff1873e86d984a0e6f03b90235cd3a5e4c2ef1ca2871468e5f3a4dfed02c22d1"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/jfk-lowgain-base-q4-report.json",
+      "sha256": "f9d107015571752f612c824a87f4aeb4c617fa5168d6156a76fed2dad9e7ab5c"
+    }
+  ],
+  "jfk": {
+    "sampleRate": 16000,
+    "samples": 176000,
+    "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+    "sourceDatasetRevision": "542437c29cc5273cfd29e25c77696f2b349badd7",
+    "referenceSource": "https://huggingface.co/docs/transformers.js/v3.8.1/en/api/pipelines#transformers.AutomaticSpeechRecognitionPipeline",
+    "referenceWordCount": 22
+  },
+  "models": [
+    {
+      "model": "tiny",
+      "realAsrBackend": "wasm",
+      "encoder": "q4",
+      "decoder": "q4",
+      "productionWindowPolicy": {
+        "nominalWindowMs": 10000,
+        "overlapMs": 1200,
+        "adaptiveNaturalPause": true
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "endMs": 10000,
+          "samples": 160000,
+          "pcmSha256": "2e634f66c3e1a84f9414197d37be1a5853c381bdeb960604ab0cf13ef50b7da1",
+          "maxNewTokens": 60,
+          "rawTextWordCount": 21,
+          "rawTextSha256": "e562b14f45488b65429018f3746c492b28cd398fe99241b302740dd89f470af9",
+          "detectedLanguage": {
+            "language": "en",
+            "confidence": 0.946402496920236,
+            "cached": false
+          }
+        },
+        {
+          "sequence": 2,
+          "startMs": 8800,
+          "endMs": 11000,
+          "samples": 35200,
+          "pcmSha256": "5fdd122b0c92ffd4c6b1dce326f658c4391994f9d06fad3f33af731933299eb1",
+          "maxNewTokens": 24,
+          "rawTextWordCount": 6,
+          "rawTextSha256": "66155172056680b95edf2eefcbded48744afbe10c78cda59cac8eda40ca84bdb",
+          "detectedLanguage": {
+            "language": "en",
+            "confidence": 0.9374699003325729,
+            "cached": false
+          }
+        }
+      ],
+      "originalFullCaptureWer": {
+        "errors": 4,
+        "referenceWords": 22,
+        "predictionWords": 19,
+        "rate": 0.18181818181818182,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split",
+        "lastReferenceWordRetained": false,
+        "lastFiveReferenceWordsRetained": false,
+        "extraOccurrencesOverReference": [
+          {
+            "word": "as",
+            "extra": 1
+          }
+        ]
+      },
+      "fixedExplicitCompleteReplayWer": {
+        "errors": 1,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0.045454545454545456,
+        "lastFiveWordsMatch": true
+      },
+      "originalCueCount": 2,
+      "fixedCueCount": 3,
+      "fixedTextSha256": "54f402acb8da06f8f3501941b8a62b43ae5d17e32b2a60e9e07edf74da5fd324",
+      "fixedTimelineChecks": {
+        "allFinitePositive": true,
+        "noSpokenOverlap": true,
+        "insidePcmBounds": true
+      }
+    },
+    {
+      "model": "base",
+      "realAsrBackend": "wasm",
+      "encoder": "q4",
+      "decoder": "q4",
+      "productionWindowPolicy": {
+        "nominalWindowMs": 14000,
+        "overlapMs": 1200,
+        "adaptiveNaturalPause": true
+      },
+      "windows": [
+        {
+          "sequence": 1,
+          "startMs": 0,
+          "endMs": 11000,
+          "samples": 176000,
+          "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38",
+          "maxNewTokens": 77,
+          "rawTextWordCount": 22,
+          "rawTextSha256": "e4e644650803b9dca2d1caaf17fbfa3b5cd835a792b8d53d888c6996f7eb1c5d",
+          "detectedLanguage": {
+            "language": "en",
+            "confidence": 0.9383212243588761,
+            "cached": false
+          }
+        }
+      ],
+      "originalFullCaptureWer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split",
+        "lastReferenceWordRetained": true,
+        "lastFiveReferenceWordsRetained": true,
+        "extraOccurrencesOverReference": []
+      },
+      "fixedExplicitCompleteReplayWer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "lastFiveWordsMatch": true
+      },
+      "originalCueCount": 2,
+      "fixedCueCount": 2,
+      "fixedTextSha256": "e4e644650803b9dca2d1caaf17fbfa3b5cd835a792b8d53d888c6996f7eb1c5d",
+      "fixedTimelineChecks": {
+        "allFinitePositive": true,
+        "noSpokenOverlap": true,
+        "insidePcmBounds": true
+      }
+    }
+  ],
+  "lowVolumeDirectBaseDiagnostic": {
+    "gain": 0.003,
+    "attenuationDb": -50.4575749056,
+    "pcmSha256": "db07c91f275b46307eae44ebc5b01c04f6ad73857f9d02723dff6ec5c601d1d9",
+    "activityGate": "peer established original FullCapture inactive/0 transcribe calls",
+    "directBypassResult": {
+      "language": {
+        "language": "en",
+        "confidence": 0.9229053077451983
+      },
+      "words": 22,
+      "textSha256": "0d851226f095dd0328ede6664926a966047e5701925629071f53daa29eea5d91",
+      "wer": {
+        "errors": 0,
+        "referenceWords": 22,
+        "predictionWords": 22,
+        "rate": 0,
+        "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+      },
+      "inferenceMsSingleObservation": 3975.616209
+    },
+    "limit": "one controlled attenuated JFK clip, not general weak-speech accuracy"
+  },
+  "progress": "Fractions are monotonic within1e-12. Observed .8500000000000001→.85 difference1.11e-16 is IEEE754 rounding; explicit destroy returns idle/0 as intended.",
+  "fixContract": {
+    "stabilizerOption": "{mode:'complete'}",
+    "realtimeDefaultRetained": true,
+    "tailFix": "append already extracted novel suffix without second full-text contains dedup"
+  },
+  "verification": {
+    "tests": 118,
+    "testFiles": [
+      "tests/videoAiStreaming.test.ts",
+      "tests/videoAiAlgorithmsCoverage.test.ts",
+      "tests/implementationAudit49D.test.ts"
+    ],
+    "coverageModule": "src/features/video-subtitle/content/video-ai/streamingTranscript.ts",
+    "coverage": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "currentControllerReplay": {
+    "success": true,
+    "scope": "Current production FullCapture getAudio path, explicit complete stabilizer and current cueTimeline, using exact previously recorded q4 WASM ASR results matched to PCM SHA and bounds; no new inference or browser/Worker/HLS/translation acceptance",
+    "sourceReportSha256": "4df6b23fdad4f3d55a781b6a8ded4502458a4ff7249fb54e13bfdf1d3b735fbd",
+    "productionSources": [
+      {
+        "path": "src/features/video-subtitle/transcription.ts",
+        "sourceSha256": "813c7025cce6d42a27442d2bd281dfb9b8c49dd08fbcb60c3c035d9c35c722c2",
+        "transpiledSha256": "a6128cd0914d901600539d45e893fc36dbed5661ee49befd4386dae20c44c496"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+        "sourceSha256": "8d09848dbeb4564a7e58229a5991f7c71a085feb5c02fb3c15347df31f51b409",
+        "transpiledSha256": "b1acbfcc128db67e571392e8d277b3ffe6ed1c532d90efeab36d0d9154eae75c"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/streamingTranscript.ts",
+        "sourceSha256": "7c00e05e2d11d56639f68a54d2113cfc0d48727944e447d24088aefa6e0a3bb8",
+        "transpiledSha256": "45b64684befa04a94d6bd44bce7f83672efbe3442e40138c6045899a16c24226"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/cueTimeline.ts",
+        "sourceSha256": "c9ef561386208a9a5d1833aff25ff07c4b4132b754a4c97c27380f57321bf539",
+        "transpiledSha256": "a8771d288b02305fc3f78b839b13db08fecca418fea88761eb20da95de320eda"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/speechAlignment.ts",
+        "sourceSha256": "545d6f208fb3f4d775731406f278f5df115f86837910b324e9477267b5a0e2ee",
+        "transpiledSha256": "37f006801594762a2aff4f73177a14b141e957fd50125e75a34c5f2a5a65b39a"
+      },
+      {
+        "path": "src/features/video-subtitle/content/hlsAudio.ts",
+        "sourceSha256": "8a4239b481fd09d1d87e706ab52a9a974f471c0d63e07288b80f1090d08430d0",
+        "transpiledSha256": "f7d3fc3f43c2ce363349acbb3eecb6a88253354bb59338fa2ff56fa7ecbc11ad"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/fullCapture.ts",
+        "sourceSha256": "b50ebe9ccea57971a8aad363996f8b3d9168b1277dae8a288446c417c40963ff",
+        "transpiledSha256": "665a17e885d46b11847c69d618474588c77d670f9f2c33e357b89da73b03c23f"
+      }
+    ],
+    "models": [
+      {
+        "model": "tiny",
+        "windows": [
+          {
+            "sequence": 1,
+            "startMs": 0,
+            "durationMs": 10000,
+            "pcmSha256": "2e634f66c3e1a84f9414197d37be1a5853c381bdeb960604ab0cf13ef50b7da1"
+          },
+          {
+            "sequence": 2,
+            "startMs": 8800,
+            "durationMs": 2200,
+            "pcmSha256": "5fdd122b0c92ffd4c6b1dce326f658c4391994f9d06fad3f33af731933299eb1"
+          }
+        ],
+        "finalPhase": "ready",
+        "metrics": {
+          "errors": 1,
+          "referenceWords": 22,
+          "predictionWords": 22,
+          "rate": 0.045454545454545456,
+          "lastFiveWordsMatch": true
+        },
+        "textSha256": "54f402acb8da06f8f3501941b8a62b43ae5d17e32b2a60e9e07edf74da5fd324",
+        "timelineChecks": {
+          "allFinitePositive": true,
+          "noSpokenOverlap": true,
+          "insidePcmBounds": true
+        }
+      },
+      {
+        "model": "base",
+        "windows": [
+          {
+            "sequence": 1,
+            "startMs": 0,
+            "durationMs": 11000,
+            "pcmSha256": "f00f8677a6e16874c36dd7946d8f4c74a762eb4aafc106d41088f1005a8ffe38"
+          }
+        ],
+        "finalPhase": "ready",
+        "metrics": {
+          "errors": 0,
+          "referenceWords": 22,
+          "predictionWords": 22,
+          "rate": 0,
+          "lastFiveWordsMatch": true
+        },
+        "textSha256": "e4e644650803b9dca2d1caaf17fbfa3b5cd835a792b8d53d888c6996f7eb1c5d",
+        "timelineChecks": {
+          "allFinitePositive": true,
+          "noSpokenOverlap": true,
+          "insidePcmBounds": true
+        }
+      }
+    ]
+  }
+}

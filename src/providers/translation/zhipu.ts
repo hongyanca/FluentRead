@@ -9,15 +9,17 @@
 import {method, urls} from "@/src/core/config/constants";
 import {resolveConfiguredModel, services} from "@/src/core/config/catalog";
 import {commonMsgTemplate} from '@/src/services/translation/templates';
-import CryptoJS from 'crypto-js';
+import hmacSha256 from 'crypto-js/hmac-sha256';
+import base64 from 'crypto-js/enc-base64';
 import {config} from "@/src/services/config/store";
 import {isApiKeyRequired} from "@/src/core/config/validation";
-import {createHttpStatusError, readJsonResponse} from '@/src/platform/http/errors';
-import {runtimeFetch} from '@/src/platform/http/runtime';
+import {createHttpStatusError, createImageInputHttpError, readJsonResponse} from '@/src/platform/http/errors';
+import {abortErrorFromSignal, runtimeFetch} from '@/src/platform/http/runtime';
 import {
     getTranslationProviderConfig,
     reportTranslationModelUsage,
     reportTranslationModelUsageFailure,
+    getTranslationImageInput,
     type TranslationProviderRequest,
 } from '@/src/services/translation/requestSnapshot';
 import {normalizeOpenAICompatibleUsage} from './usage';
@@ -30,6 +32,7 @@ const jwtCache = new Map<string, {apiKey: string; secret: string; expiration: nu
 async function zhipu(message: TranslationProviderRequest<string>) {
     const current = getTranslationProviderConfig(message, config);
     const service = message.serviceOverride || services.zhipu;
+    if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
     const configuredModel = resolveConfiguredModel(
         message.modelOverride || current.model[service],
         current.customModel[service],
@@ -55,7 +58,7 @@ async function zhipu(message: TranslationProviderRequest<string>) {
     headers.append('Content-Type', 'application/json');
     if (secret) headers.append('Authorization', `Bearer ${secret}`);
 
-    const body = commonMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current);
+    const body = commonMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current, message.thinkingOverride, getTranslationImageInput(message));
     const startedAt = Date.now();
     let attemptReported = false;
     try {
@@ -69,13 +72,17 @@ async function zhipu(message: TranslationProviderRequest<string>) {
         if (!resp.ok) {
             reportTranslationModelUsageFailure(message, undefined, startedAt, configuredModel, resp.status);
             attemptReported = true;
-            throw createHttpStatusError(resp, '翻译失败');
+            throw getTranslationImageInput(message) ? await createImageInputHttpError(resp, '翻译失败') : createHttpStatusError(resp, '翻译失败');
         }
         const result = await readJsonResponse<any>(resp, '智谱返回的不是有效 JSON');
+        if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
         const actualModel = typeof result?.model === 'string' && result.model.trim()
             ? result.model
             : configuredModel;
-        const translatedText = result.choices[0].message.content;
+        const translatedText = result?.choices?.[0]?.message?.content;
+        if (typeof translatedText !== 'string' || !translatedText.trim()) {
+            throw new Error('智谱返回数据格式异常：缺少文本内容');
+        }
         reportTranslationModelUsage(message, {
             ...normalizeOpenAICompatibleUsage(result?.usage, actualModel),
             startedAt,
@@ -113,7 +120,7 @@ function generateJWT(secret: string, header: any, payload: any) {
     const encodedHeader = base64UrlSafe(btoa(JSON.stringify(header)));
     const encodedPayload = base64UrlSafe(btoa(JSON.stringify(payload)));
     // 生成 jwt 签名
-    let hmacsha256 = base64UrlSafe(CryptoJS.HmacSHA256(encodedHeader + "." + encodedPayload, secret).toString(CryptoJS.enc.Base64))
+    let hmacsha256 = base64UrlSafe(hmacSha256(encodedHeader + "." + encodedPayload, secret).toString(base64))
     return `${encodedHeader}.${encodedPayload}.${hmacsha256}`;
 }
 

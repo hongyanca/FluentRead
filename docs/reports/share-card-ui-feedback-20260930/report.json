@@ -1,0 +1,95 @@
+{
+  "checks": [
+    "paragraph entry, closed Shadow DOM, hostile CSS + image CSP, default coral preview",
+    "square export, overflow rejected, auto layout recovery",
+    "eight styles, each preference persisted, actual PNG download identical to preview, prominent save feedback",
+    "trusted clicks with isolated clipboard success/rejection stubs show semantic banners; system clipboard untouched",
+    "isolated system-share success/rejection/cancellation stubs show correct feedback; no system share invoked",
+    "brand segmented settings and keyboard-native switches update previews and persist",
+    "long text blocked without stale export, 390px responsive dialog with expanded settings",
+    "translate / restore / retranslate [1,0,1], no adjacent paragraph change",
+    "selection result entry, close preserves translation result",
+    "disable removes UI"
+  ],
+  "errors": [],
+  "service": "microsoft protocol with controlled local response",
+  "profile": "temporary",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "images": {
+    "coral": {
+      "bytes": 52051,
+      "width": 960,
+      "height": 450
+    },
+    "sky": {
+      "bytes": 214814,
+      "width": 960,
+      "height": 450
+    },
+    "prism": {
+      "bytes": 109908,
+      "width": 960,
+      "height": 450
+    },
+    "pearl": {
+      "bytes": 90383,
+      "width": 960,
+      "height": 450
+    },
+    "moss": {
+      "bytes": 51274,
+      "width": 960,
+      "height": 450
+    },
+    "linen": {
+      "bytes": 50660,
+      "width": 960,
+      "height": 450
+    },
+    "sunset": {
+      "bytes": 92989,
+      "width": 960,
+      "height": 450
+    },
+    "blueprint": {
+      "bytes": 70776,
+      "width": 960,
+      "height": 450
+    }
+  },
+  "savedPreferences": {
+    "theme": "blueprint",
+    "format": "auto",
+    "fontSize": "medium",
+    "translationFirst": false,
+    "showSource": true,
+    "showBrand": true
+  },
+  "status": "passed"
+}

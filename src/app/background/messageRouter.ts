@@ -1,8 +1,9 @@
 /**
  * @file src/app/background/messageRouter.ts
  * 文件职责：提供与业务无关的类型化后台消息路由器，确保已注册消息、fallback 消息和未知消息具有确定性的分派结果。
- * 主要内容：定义 handler/fallback/context 泛型契约，从未知输入安全读取 type，维护按 type 索引的处理器 Map，并通过 dispatch 返回 handled、unhandled 或处理结果。
- * 模块边界：路由器不认识翻译、配置或词汇业务，不访问 browser.runtime，也不序列化业务错误；监听器安装和具体 handler 集合由 messageRuntime 负责。
+ * 主要内容：定义 handler/fallback/context 泛型契约，从未知输入安全读取 type，维护按 type 索引的处理器 Map，并通过 dispatch 返回 handled、unhandled 或处理结果；
+ * createBackgroundRuntimeMessageListener 统一未知消息与异常的通用失败回复，保留稳定 errorCode。
+ * 模块边界：路由器不认识翻译、配置或词汇业务，不访问 browser.runtime，也不解释业务错误语义；监听器注册和具体 handler 集合由 messageRuntime 负责。
  */
 export interface BackgroundMessage {
     type: string;
@@ -80,4 +81,24 @@ export function createBackgroundMessageRouter<TContext>(
     fallback?: BackgroundFallbackHandler<TContext, unknown>,
 ): BackgroundMessageRouter<TContext> {
     return new BackgroundMessageRouter(handlers, fallback);
+}
+
+/** runtime.onMessage 的统一回复纪律：未处理消息和抛错都转成可跨上下文传输的失败结果。 */
+export function createBackgroundRuntimeMessageListener<TContext>(
+    router: BackgroundMessageRouter<TContext>,
+    createContext: (sender: unknown) => TContext,
+): (message: unknown, sender: unknown) => Promise<unknown> {
+    return async (message, sender) => {
+        try {
+            const dispatch = await router.dispatch(message, createContext(sender));
+            return dispatch.handled ? dispatch.response : {success: false, error: '不支持的后台消息'};
+        } catch (error) {
+            const code = error && typeof error === 'object' ? (error as {code?: unknown}).code : undefined;
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : String(error),
+                errorCode: typeof code === 'string' ? code : undefined,
+            };
+        }
+    };
 }

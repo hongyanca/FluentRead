@@ -1,0 +1,17 @@
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-cloud-backup-audit-20261004
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/settingsUiArchitecture.test.ts" "tests/i18n.test.ts" "tests/sourceFileHeaders.test.ts" "tests/providerBoundaries.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/settingsUiArchitecture.test.ts tests/i18n.test.ts tests/sourceFileHeaders.test.ts tests/providerBoundaries.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-cloud-backup-audit-20261004
+
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 103ms
+ ✓ tests/i18n.test.ts (56 tests) 2668ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 944ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 778ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 647ms
+
+ Test Files  2 passed (2)
+      Tests  89 passed (89)
+   Start at  08:26:47
+   Duration  4.61s (transform 978ms, setup 0ms, collect 1.50s, tests 2.77s, environment 0ms, prepare 76ms)

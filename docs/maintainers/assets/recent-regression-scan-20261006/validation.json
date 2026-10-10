@@ -1,0 +1,410 @@
+{
+  "date": "2026-10-06",
+  "scope": {
+    "historyBase": "2c328ef804608392073b8d17b2d448b0060dc319",
+    "productBase": "190a96e6",
+    "changedFiles": 841,
+    "changedSrcFiles": 291,
+    "changedTestFiles": 136,
+    "selectedTestFiles": 157,
+    "executedCases": 4492,
+    "passedCases": 4491,
+    "failedCases": 1,
+    "coverageOwnershipBaseline": [
+      "src/app/content/learningFeatures.ts",
+      "src/app/popup/mount.ts",
+      "src/core/config/shareCard.ts",
+      "src/core/i18n/messages/onboarding.ts",
+      "src/core/i18n/messages/siteRules.ts",
+      "src/features/full-page-translation/content/excerpt.ts",
+      "src/features/share-card/content/runtime.ts",
+      "src/features/share-card/core.ts",
+      "src/features/share-card/export.ts",
+      "src/features/share-card/render.ts",
+      "src/features/share-card/themes.ts",
+      "src/features/vocabulary/content/readingText.ts",
+      "src/features/vocabulary/content/reencounter.ts",
+      "src/features/vocabulary/content/reencounterState.ts",
+      "src/features/vocabulary/content/scanner.ts",
+      "src/features/vocabulary/domain/reencounter.ts",
+      "src/platform/webdav/properties.ts",
+      "src/providers/translation/free-official-web.ts"
+    ],
+    "baselineReproducedAt": "190a96e6",
+    "testedCodeRevision": "a8253767cae8b56296a88c8de0297f3d56b62093"
+  },
+  "strictCoverage": {
+    "modules": [
+      "src/features/image-translation/content/presentation.ts",
+      "src/features/image-translation/services/mangaOcr.ts"
+    ],
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100,
+    "cases": 227
+  },
+  "imageHover": {
+    "url": "https://x.com/a16z/status/2107176509928878490",
+    "cases": [
+      {
+        "name": "ordinary",
+        "exists": true,
+        "visible": true,
+        "label": "FluentRead · 翻译图片",
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      },
+      {
+        "name": "x-photo-background",
+        "exists": true,
+        "visible": true,
+        "label": "FluentRead · 翻译图片",
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      },
+      {
+        "name": "x-inert-photo-link",
+        "exists": true,
+        "visible": true,
+        "label": "FluentRead · 翻译图片",
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        },
+        "modal": {
+          "exists": true,
+          "visible": false,
+          "label": "FluentRead · 翻译图片"
+        },
+        "afterModal": {
+          "exists": true,
+          "visible": true,
+          "label": "FluentRead · 翻译图片"
+        }
+      },
+      {
+        "name": "native-button",
+        "exists": false,
+        "visible": false,
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      },
+      {
+        "name": "generic-button",
+        "exists": false,
+        "visible": false,
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      },
+      {
+        "name": "avatar",
+        "exists": false,
+        "visible": false,
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      },
+      {
+        "name": "video-poster",
+        "exists": false,
+        "visible": false,
+        "afterLeave": {
+          "exists": false,
+          "visible": false
+        }
+      }
+    ],
+    "liveHovers": [
+      {
+        "source": "https://pbs.twimg.com/media/HT4x3ljbIAA4RKm?format=webp&name=large",
+        "exists": true,
+        "visible": true,
+        "label": "FluentRead · 翻译图片"
+      },
+      {
+        "source": "https://pbs.twimg.com/media/HT4MGL3boAA4CIs?format=webp&name=large",
+        "exists": true,
+        "visible": true,
+        "label": "FluentRead · 翻译图片"
+      },
+      {
+        "source": "https://pbs.twimg.com/media/HT5kN81WUAASIeo?format=webp&name=large",
+        "exists": true,
+        "visible": false,
+        "label": "FluentRead · 翻译图片"
+      }
+    ],
+    "errors": [],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "placement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "windowState": "normal",
+      "displayTarget": "secondary",
+      "browserFrontmost": false
+    }
+  },
+  "popup": {
+    "ok": true,
+    "criticalLayout": {
+      "scope": "production-html-with-external-resources-removed",
+      "first": {
+        "width": 320,
+        "minHeight": "460px",
+        "startupWidth": 320,
+        "startupHeight": 460,
+        "centered": true
+      },
+      "skinOverride": {
+        "width": 360,
+        "minHeight": "460px",
+        "startupWidth": 360,
+        "startupHeight": 460,
+        "centered": true
+      },
+      "finalMinHeight": "0px"
+    },
+    "startupCases": [
+      {
+        "case": "dark-1",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": false,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 1401.1999998092651,
+          "failureCount": 0
+        }
+      },
+      {
+        "case": "dark-2",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": false,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 1400.5999999046326,
+          "failureCount": 0
+        }
+      },
+      {
+        "case": "auto-1",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": false,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 1402,
+          "failureCount": 0
+        }
+      },
+      {
+        "case": "auto-2",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": false,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 1406.8000001907349,
+          "failureCount": 0
+        }
+      },
+      {
+        "case": "auto-normal-no-delay",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": false,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 14.699999809265137,
+          "failureCount": 0
+        }
+      },
+      {
+        "case": "auto-read-failure",
+        "firstWidth": 320,
+        "finalWidth": 320,
+        "configurationMismatch": true,
+        "delay": {
+          "hookInstalled": true,
+          "requestCount": 1,
+          "releasedCount": 1,
+          "maxDelayMs": 1412.0999999046326,
+          "failureCount": 1
+        }
+      }
+    ],
+    "quickClose": {
+      "noOpPagehide": {
+        "persistConfigRequests": 0,
+        "persistConfigModes": [],
+        "responses": 0,
+        "successes": 0,
+        "persistConfigBatchRequests": 0
+      },
+      "latestWriteWins": {
+        "initialValue": "zh-Hans",
+        "firstTarget": "en",
+        "finalTarget": "ja",
+        "persistedValue": "ja",
+        "persistConfigRequests": 1,
+        "persistConfigModes": [
+          "patch"
+        ],
+        "responses": 1,
+        "successes": 1,
+        "heldResponses": 1,
+        "persistConfigBatchRequests": 1,
+        "persistConfigBatchSizes": [
+          2
+        ],
+        "reopenedLabel": "日本語",
+        "screenshot": "popup-persistence.png"
+      }
+    },
+    "errors": [],
+    "scope": "popup-startup-and-persistence",
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "placement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "windowState": "normal",
+      "displayTarget": "secondary",
+      "browserFrontmost": false
+    }
+  },
+  "models": {
+    "ok": true,
+    "cases": [
+      {
+        "backend": "webgpu",
+        "initMs": 6880.099999904633,
+        "ocrRunsMs": [
+          6465.099999904633,
+          842.4000000953674,
+          767.7999997138977,
+          229.90000009536743
+        ],
+        "text": "Hello world",
+        "inpaintMs": 53775.699999809265,
+        "outputLength": 12288,
+        "finite": true
+      },
+      {
+        "backend": "wasm",
+        "initMs": 2632.699999809265,
+        "ocrRunsMs": [
+          2823.4000000953674,
+          2449.199999809265,
+          2364.4000000953674,
+          3112.4000000953674
+        ],
+        "text": "Hello world",
+        "inpaintMs": 33975.90000009537,
+        "outputLength": 12288,
+        "finite": true
+      }
+    ],
+    "errors": [],
+    "warnings": [
+      "2026-10-06 21:16:30.152600 [W:onnxruntime:, session_state.cc:1367 VerifyEachNodeIsAssignedToAnEp] Some nodes were not assigned to the preferred execution providers which may or may not have an negative impact on performance. e.g. ORT explicitly assigns shape related ops to CPU to improve perf."
+    ],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "placement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "windowState": "normal",
+      "displayTarget": "secondary",
+      "browserFrontmost": false
+    }
+  },
+  "canvasReadback": {
+    "method": "Same-page alternating 16 full 1600x1200 reads; three repetitions per setting",
+    "samples": [
+      {
+        "willReadFrequently": false,
+        "ms": 95.5,
+        "checksum": 14976
+      },
+      {
+        "willReadFrequently": true,
+        "ms": 34.09999990463257,
+        "checksum": 14976
+      },
+      {
+        "willReadFrequently": true,
+        "ms": 33.30000019073486,
+        "checksum": 14976
+      },
+      {
+        "willReadFrequently": false,
+        "ms": 79.40000009536743,
+        "checksum": 14976
+      },
+      {
+        "willReadFrequently": false,
+        "ms": 83.40000009536743,
+        "checksum": 14976
+      },
+      {
+        "willReadFrequently": true,
+        "ms": 33.59999990463257,
+        "checksum": 14976
+      }
+    ],
+    "baselineMedianMs": 83.4,
+    "frequentMedianMs": 33.6,
+    "reductionPercent": 59.7,
+    "limitation": "Only Canvas readback cost, not end-to-end OCR or model inference speed"
+  },
+  "builds": {
+    "chrome": true,
+    "firefox": true,
+    "userscript": true,
+    "userscriptBytes": 1948914,
+    "userscriptBudgetBytes": 1950000,
+    "compile": true,
+    "docs": true,
+    "manifestsVerified": true
+  },
+  "testAudit": {
+    "files": 481,
+    "cases": 6501,
+    "passed": true
+  },
+  "limits": [
+    "Popup critical HTML and extension document checked; native toolbar anchored popup opening not automated.",
+    "Live X anonymous page checked; genuinely covered reply image excluded.",
+    "Controlled OCR and inpainting samples; no live translation-provider, store, Android or Firefox runtime validation."
+  ],
+  "languageResources": {
+    "commit": "360d6074df04be6a7c5929e0c31279a020070b2c",
+    "files": 5,
+    "endpoints": 10,
+    "allHttp200": true,
+    "allContentsMatch": true
+  }
+}

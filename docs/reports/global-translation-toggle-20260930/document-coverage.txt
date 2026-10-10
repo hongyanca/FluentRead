@@ -1,0 +1,23 @@
+
+> FluentRead-流畅阅读@0.0.35 test:coverage /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run --config vitest.coverage.config.ts "tests/documentTranslationApi.test.ts" "--coverage.include=src/features/document-translation/services/translation.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run --config vitest.coverage.config.ts tests/documentTranslationApi.test.ts --coverage.include=src/features/document-translation/services/translation.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+      Coverage enabled with v8
+
+ ✓ tests/documentTranslationApi.test.ts (28 tests) 65ms
+
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+   Start at  16:19:09
+   Duration  458ms (transform 50ms, setup 0ms, collect 40ms, tests 65ms, environment 0ms, prepare 47ms)
+
+ % Coverage report from v8
+----------------|---------|----------|---------|---------|-------------------
+File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------|---------|----------|---------|---------|-------------------
+All files       |     100 |      100 |     100 |     100 |                   
+ translation.ts |     100 |      100 |     100 |     100 |                   
+----------------|---------|----------|---------|---------|-------------------

@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "scope": "Automation cleanup error, not product regression",
+  "launchAndProductChecksPassed": true,
+  "cleanupError": "Error: Background helper requires transport-only close and guarded signal routing",
+  "replacement": "metadata-only-guarded/report.json"
+}

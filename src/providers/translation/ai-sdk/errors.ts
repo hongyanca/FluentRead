@@ -2,7 +2,7 @@
  * @file src/providers/translation/ai-sdk/errors.ts
  *
  * 文件职责：将 AI SDK 的 APICallError、RetryError 和未知异常归一为 FluentRead 可序列化的 LLM transport 错误。
- * 主要内容：定义 LlmTransportError 及状态码、错误码、retry-after、request-id 字段，限制 provider detail 长度，并由 normalizeAiSdkError 校准 kind 与 retryable。 可核对的公开符号包括 LlmTransportErrorOptions、LlmTransportError、normalizeAiSdkError。
+ * 主要内容：定义 LlmTransportError 及诊断字段，隐藏 HTML 错误页并提示检查模型接口，限制和脱敏 provider detail，并由 normalizeAiSdkError 校准 kind 与 retryable。
  * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
  */
 
@@ -70,24 +70,35 @@ function parseResponseBody(body?: string): {message?: string; code?: string} {
   }
 }
 
-function sanitizeProviderDetail(value: string, apiKey?: string): string {
+function isHtmlResponse(error: APICallError): boolean {
+  const body = error.responseBody?.trimStart() ?? '';
+  return Object.entries(error.responseHeaders ?? {}).some(([name, value]) =>
+    name.toLowerCase() === 'content-type' && /\b(?:text\/html|application\/xhtml\+xml)\b/iu.test(value))
+    || (body.startsWith('<') && /<(?:!doctype\s+html|html|head|body)(?:\s|>)/iu.test(body.slice(0, 1024)));
+}
+
+function sanitizeProviderDetail(value: string, apiKey?: string | readonly string[]): string {
   let result = value
+    .replace(/data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+/giu, '[已隐藏的图片]')
     .replace(/((?:authorization|api[-_ ]?key|access[-_ ]?token)\s*[:=]\s*)(?:bearer\s+)?[^\s,;"'}]+/giu, '$1[已隐藏]')
     .replace(/\b(?:sk|tp)-[a-z0-9_-]{8,}\b/giu, '[已隐藏的密钥]');
-  const key = apiKey?.trim();
-  if (key) result = result.split(key).join('[已隐藏的密钥]');
+  for (const value of typeof apiKey === 'string' ? [apiKey] : apiKey ?? []) {
+    const key = value.trim();
+    if (key) result = result.split(key).join('[已隐藏的密钥]');
+  }
   result = result.replace(/\s+/gu, ' ').trim();
   return result.slice(0, MAX_PROVIDER_DETAIL_LENGTH);
 }
 
 function parseRetryAfter(headers?: Record<string, string>): number | undefined {
-  const millisecondValue = headers?.['retry-after-ms'];
+  const normalizedHeaders = Object.fromEntries(Object.entries(headers ?? {}).map(([name, value]) => [name.toLowerCase(), value]));
+  const millisecondValue = normalizedHeaders['retry-after-ms'];
   if (millisecondValue !== undefined) {
     const milliseconds = Number(millisecondValue);
     if (Number.isFinite(milliseconds) && milliseconds >= 0) return milliseconds;
   }
 
-  const value = headers?.['retry-after'];
+  const value = normalizedHeaders['retry-after'];
   if (!value) return undefined;
   const numeric = Number(value);
   if (Number.isFinite(numeric) && numeric >= 0) return numeric * 1000;
@@ -96,13 +107,14 @@ function parseRetryAfter(headers?: Record<string, string>): number | undefined {
 }
 
 function requestIdFrom(headers?: Record<string, string>): string | undefined {
-  return headers?.['x-request-id']
-    || headers?.['request-id']
-    || headers?.['x-ms-request-id']
-    || headers?.['x-amzn-requestid'];
+  const normalizedHeaders = Object.fromEntries(Object.entries(headers ?? {}).map(([name, value]) => [name.toLowerCase(), value]));
+  return normalizedHeaders['x-request-id']
+    || normalizedHeaders['request-id']
+    || normalizedHeaders['x-ms-request-id']
+    || normalizedHeaders['x-amzn-requestid'];
 }
 
-function sanitizeMetadata(value: string | undefined, apiKey?: string, maxLength = 160): string | undefined {
+function sanitizeMetadata(value: string | undefined, apiKey?: string | readonly string[], maxLength = 160): string | undefined {
   if (!value) return undefined;
   const sanitized = sanitizeProviderDetail(value, apiKey).slice(0, maxLength);
   return sanitized || undefined;
@@ -153,7 +165,7 @@ function unwrapRetryError(error: unknown): unknown {
 export function normalizeAiSdkError(
   service: string,
   error: unknown,
-  apiKey?: string,
+  apiKey?: string | readonly string[],
   callerAborted = false,
 ): LlmTransportError {
   const candidate = unwrapRetryError(error);
@@ -161,7 +173,9 @@ export function normalizeAiSdkError(
     const fromData = extractProviderError(candidate.data);
     const fromBody = parseResponseBody(candidate.responseBody);
     const detail = sanitizeProviderDetail(
-      fromData.message || fromBody.message || candidate.message || '上游请求失败',
+      isHtmlResponse(candidate)
+        ? '服务返回了 HTML 网页。请检查 Base URL、接口路径，以及所选模型是否支持 Chat Completions。'
+        : fromData.message || fromBody.message || candidate.message || '上游请求失败',
       apiKey,
     );
     const requestId = sanitizeMetadata(requestIdFrom(candidate.responseHeaders), apiKey);
@@ -179,14 +193,14 @@ export function normalizeAiSdkError(
     );
   }
 
-  const message = error instanceof Error ? error.message : String(error);
+  const message = candidate instanceof Error ? candidate.message : String(candidate);
   const normalized = message.toLowerCase();
-  const errorName = error instanceof Error ? error.name : '';
+  const errorName = candidate instanceof Error ? candidate.name : '';
   const timedOut = /timeout|timed out|请求超时/u.test(normalized)
-    || (error instanceof Error && error.name === 'TimeoutError')
+    || errorName === 'TimeoutError'
     // AI SDK 也会把内部总超时控制器表现为 AbortError，例如等待 Retry-After 时。
-    || (error instanceof Error && error.name === 'AbortError' && !callerAborted);
-  const aborted = error instanceof Error && error.name === 'AbortError' && callerAborted;
+    || (errorName === 'AbortError' && !callerAborted);
+  const aborted = errorName === 'AbortError' && callerAborted;
   const network = /failed to fetch|fetch failed|networkerror|network error|load failed|网络连接失败/u.test(normalized);
   const invalidRequest = /invalidprompt|typevalidation|invalidargument/u.test(
     errorName.replace(/[^a-z]/giu, '').toLowerCase(),

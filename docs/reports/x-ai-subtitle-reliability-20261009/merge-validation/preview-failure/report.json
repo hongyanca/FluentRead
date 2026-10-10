@@ -1,0 +1,273 @@
+{
+  "success": true,
+  "url": "https://x.com/home",
+  "extensionDir": "/private/tmp/fluentread-x-ai-followup-final-build-20261009/chrome-mv3",
+  "expiredMaster": false,
+  "hungMaster": false,
+  "metadataVariantsOnly": true,
+  "previewFailure": true,
+  "videoOnlyInit": "generated H.264",
+  "evidence": "Production extension; two real MSE videos; real HLS/MP4 recovery and PCM decode; simulated Base ASR and Microsoft translation",
+  "checks": [
+    {
+      "name": "Unreadable MSE audio gives a concise optional retry hint",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Poster enrichment of the same blob video retains its own failure",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Switching to video B clears video A error and restores the generate action",
+      "pass": true,
+      "details": {
+        "label": "生成 AI 字幕",
+        "detail": "",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "A confirmed first window appears before full recognition completes",
+      "pass": true,
+      "details": {
+        "label": "停止生成",
+        "detail": "识别 73%",
+        "original": "Home audio recovered for video B.",
+        "translation": "译文：Home audio recovered for video B."
+      }
+    },
+    {
+      "name": "An in-progress preview cannot be exported as a complete subtitle file",
+      "pass": true
+    },
+    {
+      "name": "A later failure removes preview captions and keeps a retry action",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "Injected second-window ASR failure",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Failed partial recognition does not write a complete transcript cache",
+      "pass": true
+    },
+    {
+      "name": "No unhandled browser errors",
+      "pass": true,
+      "details": []
+    }
+  ],
+  "errors": [],
+  "mediaRequests": [
+    "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+  ],
+  "timedMediaRequests": [
+    {
+      "url": "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4",
+      "at": 1791506927542
+    }
+  ],
+  "downloads": [],
+  "extensionInstall": "cdp",
+  "extensionSha256": {
+    "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+    "background.js": "607478f85dd7d6870e40a3ca31579bc2262e976eaea8a4d40a4c1674acb3b03f",
+    "videoTranscriptionWorker.js": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+    "content-scripts/content.js": "5b1d4699f37722cd311ea5795345130a8c44fb73067f10f23a798c64121cfd5c",
+    "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 52700,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 52700,
+      "name": "ChatGPT"
+    }
+  },
+  "browserPath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "browserVersion": "154.0.8037.98",
+  "videoA": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoAEnriched": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoBInitial": {
+    "label": "生成 AI 字幕",
+    "detail": "",
+    "original": "",
+    "translation": ""
+  },
+  "earlyPreview": {
+    "label": "停止生成",
+    "detail": "识别 73%",
+    "original": "Home audio recovered for video B.",
+    "translation": "译文：Home audio recovered for video B."
+  },
+  "earlyPreviewAtMs": 650,
+  "earlyPreviewRpcCalls": [
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base",
+      "generation": 1
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 1
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 2
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 0
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base",
+      "generation": 4
+    },
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base",
+      "generation": 4
+    },
+    {},
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base",
+      "generation": 4
+    }
+  ],
+  "afterPreviewFailure": {
+    "label": "重试生成 AI 字幕",
+    "detail": "Injected second-window ASR failure",
+    "original": "",
+    "translation": ""
+  },
+  "rpcCalls": [
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base",
+      "generation": 1
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 1
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 2
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 0
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetVideoAiSubtitleCache",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base",
+      "generation": 4
+    },
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base",
+      "generation": 4
+    },
+    {},
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base",
+      "generation": 4
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription",
+      "generation": 4
+    }
+  ]
+}

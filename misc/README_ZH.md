@@ -1,103 +1,121 @@
 <div align="center">
 
-<img src="../public/icon/128.png" alt="流畅阅读图标" width="96" />
+<img src="../assets/brand/icon-512.png" alt="FluentRead-流畅阅读" width="96" />
 
-# 流畅阅读（FluentRead）
+# FluentRead-流畅阅读
 
-### 让每个网页都自然地读起来。
+**让语言更近，让世界更大。**
 
-一款开源浏览器翻译插件，提供网页双语阅读、即时划词翻译和灵活的翻译服务配置。
+一款开源的浏览器双语翻译插件。
 
-[![版本](https://img.shields.io/badge/version-0.0.31-6d5dfc?style=flat-square)](https://github.com/Bistutu/FluentRead/releases)
-[![许可证：GPL v3](https://img.shields.io/badge/license-GPL--3.0-22a06b?style=flat-square)](../LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/Bistutu/FluentRead?style=flat-square)](https://github.com/Bistutu/FluentRead)
-
-<br />
-
-**[安装](#安装)** · **[功能](#你可以用它做什么)** · **[官方文档](https://fluent.thinkstu.com/)** · **[English](../README.md)**
+[安装](#安装) · [官网](https://read.thinkstu.com/) · [使用指南](https://read.thinkstu.com/guide/) · [隐私政策](https://read.thinkstu.com/guide/privacy) · [English](../README.md) · [LINUX DO 社区](https://linux.do) · [GPL-3.0](../LICENSE)
 
 </div>
 
-<p align="center">
-  <img src="./screenshots/translation.png" alt="网页双语翻译效果" width="920" />
-</p>
+FluentRead 支持在原网页中对照阅读原文与译文，并提供划词翻译、AI 阅读辅助、图片翻译、文档翻译和视频双语字幕。翻译卡片接入了 **DeepSeek Harness 会话内核的浏览器适配**，支持结合上下文解释选中文字并连续追问。
 
-流畅阅读把翻译放回阅读流程：可以保留原文与译文对照，只翻译当前需要的句子，也可以不离开当前页面完成全文翻译。你可以选择传统翻译服务、AI 服务或内置的免费回退服务，并按照自己的阅读习惯调整样式与快捷键。
+<div align="center">
 
-## 你可以用它做什么
+[![流畅阅读介绍视频](../docs/public/videos/fluentread-promo-zh-poster.webp)](https://read.thinkstu.com/videos/fluentread-promo-zh.mp4)
 
-| 读得自然 | 控制得细致 |
+[▶ 观看 56 秒介绍视频](https://read.thinkstu.com/videos/fluentread-promo-zh.mp4)
+
+想进一步了解流畅阅读，可以[观看完整官方介绍片（4 分多钟 · B 站）](https://www.bilibili.com/video/BV1qhHJ6uEiF/)。
+
+</div>
+
+[![FluentRead 网页双语对照效果](../docs/public/screenshots/translation.webp)](../docs/public/screenshots/translation.webp)
+
+## 主要功能
+
+| 功能 | 说明 |
 | --- | --- |
-| **网页双语阅读**：原文与译文同时保留，适合学习、研究和技术阅读。 | **多种翻译服务**：支持微软、谷歌、DeepL、DeepLX、Chrome 内置翻译，以及 OpenAI、DeepSeek、Gemini、Claude、Kimi、Ollama 兼容接口等 AI 服务。 |
-| **全文翻译**：通过悬浮球、右键菜单或自定义快捷键翻译和恢复网页，并可选择按阅读进度或立即翻译当前已加载内容到网页底部；不会自动滚动，后续新增内容仍会继续翻译。 | **自定义模型与接口**：在设置页配置兼容 API、模型、提示词、请求体、代理和密钥。 |
-| **划词翻译**：选中文本后打开聚焦的翻译卡片，支持复制和朗读。 | **隐私控制**：设置和缓存位于扩展私有存储；API 凭据默认仅保留当前会话，云端翻译会把文本发送给所选服务。 |
-| **悬浮与手势触发**：支持鼠标悬停、双击、长按、中键和触屏手势。 | **阅读体验可调**：可以调整译文样式、主题、动画、缓存、并发，以及全文和划词翻译的独立快捷键。 |
+| 网页翻译 | 全文双语对照、悬浮翻译与划词翻译，支持恢复原文和网站自动翻译规则。 |
+| AI 翻译卡片 | 解释含义、分析句子、说明用法与生成练习，支持上下文参考和连续追问。 |
+| 学习中心 | 收藏单词、短语和句子，保留原文语境，支持学习与复习。 |
+| 图片与圈选翻译 | 识别网页图片或选定区域中的文字，并显示可复制的译文。 |
+| 文档翻译 | 支持 PDF、ePub、DOCX 等格式，提供双语阅读、译文校订与文件导出。 |
+| 视频字幕 | 支持 YouTube 和 X 双语字幕；部分 X 视频可通过本地模型生成 AI 字幕。 |
+| 翻译服务与设置 | 支持免费翻译服务、DeepL、AI 服务和本地 Ollama，可配置术语库、译文样式、快捷键及菜单栏布局。 |
 
-### 还包括
+各功能的使用方法与支持范围见[使用指南](https://read.thinkstu.com/guide/)。AI 讲解需要配置可用的 AI 服务；第三方服务的费用与可用性由服务商决定。
 
-- **免费翻译服务**：内置微软 → DeepLX → 谷歌的回退链；仅在服务报错或返回空结果时进入下一项。
-- **图片翻译（Beta）**：使用本地 OCR 识别图片文字，按需下载语言包，并用可恢复的覆盖层显示译文。
-- **翻译缓存**：按服务、模型、语言对和请求配置复用近期结果。
-- **数据说明**：查看[数据与隐私](https://fluent.thinkstu.com/guide/privacy)，了解各功能发送和保存哪些数据。
-- **跨浏览器支持**：基于 WXT 和 Manifest V3 构建 Chromium 浏览器与 Firefox 版本。
+## DeepSeek Harness
 
-## 截图
+翻译卡片采用 DeepSeek Harness 会话内核中会话事件与消息组织部分的浏览器适配，由 FluentRead 连接网页选区、允许参考的段落、模型服务和本地阅读记录。支持选择不同 AI 服务与模型，并提供可选的学习记忆。
 
-### 小巧的日常控制面板
+该适配用于选区阅读辅助。全文、悬浮和普通划词翻译使用各自的翻译流程。接入范围和上游来源见[内核集成说明](../docs/reports/harness-embedding-map-20260905.md)，MIT 许可见[第三方声明](../public/third-party-notices/deepseek-harness-MIT.txt)。
 
-弹窗集中放置常用操作：启用或暂停插件、选择语言和默认服务、打开完整设置，以及清理本地翻译缓存。
-
-<p align="center">
-  <img src="./screenshots/popup.png" alt="流畅阅读弹窗" width="400" />
-</p>
-
-### 能随阅读习惯扩展的设置页
-
-设置页按通用设置、翻译服务与模型、交互与快捷键、图片翻译、高级选项和配置管理分区，保持界面清晰。
-
-<p align="center">
-  <img src="./screenshots/settings-general.png" alt="流畅阅读通用设置页" width="920" />
-</p>
-
-<p align="center">
-  <img src="./screenshots/settings-services.png" alt="流畅阅读翻译服务目录" width="920" />
-</p>
+[翻译卡片使用指南](https://read.thinkstu.com/guide/deepseek-harness)
 
 ## 安装
 
-| 浏览器 | 商店 |
-| --- | --- |
-| Chrome | [Chrome 应用商店](https://chromewebstore.google.com/detail/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/djnlaiohfaaifbibleebjggkghlmcpcj?hl=zh-CN) · [CrxSoso 国内镜像](https://www.crxsoso.com/webstore/detail/djnlaiohfaaifbibleebjggkghlmcpcj) |
-| Edge | [Microsoft Edge 加载项](https://microsoftedge.microsoft.com/addons/detail/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/kakgmllfpjldjhcnkghpplmlbnmcoflp?hl=zh-CN) |
-| Firefox | [Firefox 附加组件](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/) |
+[Chrome](https://chromewebstore.google.com/detail/djnlaiohfaaifbibleebjggkghlmcpcj) · [Edge](https://microsoftedge.microsoft.com/addons/detail/kakgmllfpjldjhcnkghpplmlbnmcoflp) · [Firefox](https://addons.mozilla.org/zh-CN/firefox/addon/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/) · [油猴脚本](https://greasyfork.org/zh-CN/scripts/482986)
 
-如果需要本地构建，请使用 pnpm 安装依赖，然后把生成的 `./.output/chrome-mv3` 目录作为“已解压的扩展程序”加载。详细配置请查看[官方文档](https://fluent.thinkstu.com/)。
+1. 安装扩展并刷新需要翻译的网页。
+2. 打开 FluentRead，选择目标语言。源语言默认为自动检测，也可手动指定。
+3. 点击“翻译页面”。划词翻译及其他功能可在设置中开启。
 
-## 文档与社区
+各浏览器商店的版本更新可能存在时间差。油猴脚本提供核心网页翻译能力；完整支持范围见[安装指南](https://read.thinkstu.com/guide/getting-started)。
 
-- [官方文档](https://fluent.thinkstu.com/)：功能、安装、翻译服务、快捷键和常见问题。
-- [GitHub Issues](https://github.com/Bistutu/FluentRead/issues)：反馈问题或提出建议。
-- [B站视频介绍](https://www.bilibili.com/video/BV1ux4y1e73x/)
-- [DeepWiki 架构介绍](https://deepwiki.com/Bistutu/FluentRead)
+## 本地开发
 
-## 开发
+环境要求：Node.js 20 或以上、pnpm 9。
 
-```bash
-pnpm install
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
-pnpm test:audit
-pnpm test:unit
-pnpm test:functional
-pnpm test:regression
-pnpm test:coverage
-pnpm compile
-pnpm build
 ```
 
-`pnpm test:regression:all` 会执行确定性的一键回归：测试审计、全部分组测试、严格覆盖率、Chrome/Firefox/userscript 构建和文档构建。隔离真实浏览器与真实网络矩阵使用显式安全门禁；贡献功能前请阅读[架构设计](../docs/architecture.md)和[测试说明](../docs/testing.md)。
+`pnpm build` 构建 Chrome 扩展，`pnpm compile` 执行类型检查，`pnpm docs:build` 构建官网。架构与测试约定见[架构说明](../docs/architecture.md)和[测试说明](../docs/testing.md)。
 
-流畅阅读使用 Vue 3、TypeScript、Element Plus 和 WXT，面向 Chromium Manifest V3 与 Firefox Manifest V2 构建，项目遵循 [GPL-3.0](../LICENSE) 开源许可证。
+## 贡献与反馈
 
-## Star 历史
+欢迎通过 [Issue](https://github.com/FluentRead/FluentRead/issues) 报告问题或提出建议，并通过 Pull Request 改进代码、文档、界面翻译及[网站适配](../docs/contributing/site-adaptation.md)。
 
-[![Star History Chart](https://star-history.dera.page/svg?repos=Bistutu/FluentRead&type=Date)](https://star-history.dera.page/#Bistutu/FluentRead&Date)
+## 设计系统
+
+运行 `pnpm storybook` 可在本地查看真实 Vue 组件、界面皮肤与交互状态。详见[设计系统与组件预览](../docs/guide/design-system.md)。使用 `pnpm docs:build:site` 可一起构建文档与组件展示站。
+
+## 支持项目
+
+FluentRead 是一个开源项目，其持续开发离不开社区的慷慨支持。可以通过微信赞赏或 Ko-fi 自愿赞赏。
+
+<table>
+<tr><th>微信赞赏</th><th>Ko-fi · 国际支持</th></tr>
+<tr>
+<td align="center"><a href="./approve.jpg"><img src="./approve.jpg" width="220" alt="Thinkstu 的微信赞赏码" /></a><br />使用微信扫码，点击图片可查看原图。</td>
+<td align="center"><a href="https://ko-fi.com/thinkstu"><strong>通过 Ko-fi 支持 thinkstu ↗</strong></a><br /><br />ko-fi.com/thinkstu</td>
+</tr>
+</table>
+
+## 致谢
+
+FluentRead 的成长离不开开源社区。感谢以下项目及其贡献者的开放与分享：
+
+- [陪读蛙](https://github.com/mengxi-ream/read-frog)
+- [简约翻译](https://github.com/fishjar/kiss-translator)
+- [Duo Translator](https://github.com/linuxscreen/duo-translator)
+- [InfoLens](https://github.com/dqy08/InfoLens) —— 智能高亮的设计参考了它的意外度热力图思路（Apache-2.0）
+
+<!-- contributors:start -->
+<a href="https://github.com/FluentRead/FluentRead/graphs/contributors">
+  <table>
+    <tr>
+      <th>
+        <br>
+        <img src="https://avatars.githubusercontent.com/u/91378285?s=96&v=4" width="48" height="48" alt="Bistutu"><img src="https://avatars.githubusercontent.com/u/67351121?s=96&v=4" width="48" height="48" alt="WindChimeEcho"><img src="https://avatars.githubusercontent.com/u/15028142?s=96&v=4" width="48" height="48" alt="df123"><img src="https://avatars.githubusercontent.com/u/106456682?s=96&v=4" width="48" height="48" alt="RayySummers"><img src="https://avatars.githubusercontent.com/u/360470?s=96&v=4" width="48" height="48" alt="hewigovens"><img src="https://avatars.githubusercontent.com/u/10784701?s=96&v=4" width="48" height="48" alt="memwey"><img src="https://avatars.githubusercontent.com/u/6224049?s=96&v=4" width="48" height="48" alt="zhitiao"><img src="https://avatars.githubusercontent.com/u/27531296?s=96&v=4" width="48" height="48" alt="Meursau1T"><img src="https://avatars.githubusercontent.com/u/45133544?s=96&v=4" width="48" height="48" alt="520250"><img src="https://avatars.githubusercontent.com/u/104964583?s=96&v=4" width="48" height="48" alt="lemonteaau"><img src="https://avatars.githubusercontent.com/u/61247483?s=96&v=4" width="48" height="48" alt="Calcium-Ion"><img src="https://avatars.githubusercontent.com/u/555720?s=96&v=4" width="48" height="48" alt="pluwen"><img src="https://avatars.githubusercontent.com/u/30524126?s=96&v=4" width="48" height="48" alt="z0gSh1u"><img src="https://avatars.githubusercontent.com/u/78135443?s=96&v=4" width="48" height="48" alt="LIBai11"><img src="https://avatars.githubusercontent.com/u/3325888?s=96&v=4" width="48" height="48" alt="faintbear"><img src="https://avatars.githubusercontent.com/u/31530787?s=96&v=4" width="48" height="48" alt="damingsu"><img src="https://avatars.githubusercontent.com/u/86344183?s=96&v=4" width="48" height="48" alt="LinmonK"><img src="https://avatars.githubusercontent.com/u/113257654?s=96&v=4" width="48" height="48" alt="Alkacid"><img src="https://avatars.githubusercontent.com/u/10754850?s=96&v=4" width="48" height="48" alt="yolo2h"><img src="https://avatars.githubusercontent.com/u/253238660?s=96&v=4" width="48" height="48" alt="SyrupyTasty"><img src="https://avatars.githubusercontent.com/u/57394205?s=96&v=4" width="48" height="48" alt="NaCodermer"><img src="https://avatars.githubusercontent.com/u/57748455?s=96&v=4" width="48" height="48" alt="MrWangJustToDo"><img src="https://avatars.githubusercontent.com/u/19755727?s=96&v=4" width="48" height="48" alt="hu3rror"><img src="https://avatars.githubusercontent.com/u/73932916?s=96&v=4" width="48" height="48" alt="BalconyJH"><br>
+        <br>
+      </th>
+    </tr>
+  </table>
+</a>
+<!-- contributors:end -->
+
+感谢每一位为 FluentRead 做出贡献的朋友，包括许多未能在此一一列出的人；也感谢每一位用户包容这个仍不完美的产品。希望与你们一起，为这个世界带来更多美好。
+
+## 许可证与隐私
+
+FluentRead 按 [GPL-3.0](../LICENSE) 开源发布，第三方组件的来源与许可见[第三方声明](../public/third-party-notices/)。
+
+设置和学习记录默认保存在本机，云端翻译由所选服务处理。Google Drive 配置同步（Chrome 测试功能）可将完整配置（含服务凭据）备份到自己的云盘，不包含单词本、聊天记录和用量统计。权限、加密及删除方式见[隐私政策](https://read.thinkstu.com/guide/privacy)。

@@ -1,0 +1,116 @@
+{
+  "diagnosisDate": "2026-10-09",
+  "timeZone": "Asia/Shanghai",
+  "scope": "Only task-created isolated browser instances; no clipboard contents or unrelated process/log data",
+  "conclusion": "Browser startup main threads wait synchronously for macOS pasteboard initialization",
+  "productAcceptance": "not_started",
+  "canDetermineFluentReadSuccessOrFailure": false,
+  "commonStack": [
+    "NSApplication.initialize",
+    "_NS_SetBasicPasteTelemetry",
+    "NSPasteboard._pasteboardWithName",
+    "CFPasteboardCreate",
+    "_CFPBXPCSendMessageWithReplySync",
+    "xpc_connection_send_message_with_reply_sync",
+    "mach_msg2_trap"
+  ],
+  "instances": [
+    {
+      "pid": 72743,
+      "browser": "Google Chrome",
+      "version": "154.0.8037.98",
+      "launchedAt": "2026-10-09T02:16:11.915+08:00",
+      "profile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-NwZVHg",
+      "originalReport": "fixed-home-recovery/report.json",
+      "executionSandboxPermissions": "require_escalated",
+      "aliveAtDiagnosis": true,
+      "cpuPercentAtDiagnosis": 0,
+      "devToolsTcpListenerObserved": false,
+      "cdpOwnershipReceipt": false,
+      "productChecksStarted": false,
+      "sample": {
+        "path": "/private/tmp/fluentread-x-ai-browser-startup-diagnosis-20261009/chrome-72743-sample.txt",
+        "sha256": "2158f4695124501eba30a69389672c08056847404951c40479fd9ea205bf2876",
+        "startedAt": "2026-10-09T02:42:37.648+08:00",
+        "durationSeconds": 1,
+        "intervalMs": 1,
+        "mainThreadSampleCount": 772,
+        "mainThreadPasteboardWaitPercent": 100
+      }
+    },
+    {
+      "pid": 74237,
+      "browser": "Google Chrome",
+      "version": "154.0.8037.98",
+      "launchedAt": "2026-10-09T02:19:11.109+08:00",
+      "profile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-asr-benchmark-jca5cE/profile",
+      "profileRemovedByEarlierBenchmarkCleanup": true,
+      "originalReport": "fixed-base-padded-asr/report.json",
+      "executionSandboxPermissions": "require_escalated",
+      "aliveAtDiagnosis": true,
+      "cpuPercentAtDiagnosis": 0,
+      "devToolsTcpListenerObserved": false,
+      "cdpOwnershipReceipt": false,
+      "productChecksStarted": false,
+      "sample": {
+        "path": "/private/tmp/fluentread-x-ai-browser-startup-diagnosis-20261009/chrome-74237-sample.txt",
+        "sha256": "c0c41c373adc6fc49a9a7a358f9ac4026a0a36169c6a0008e0c9b2badb3f930b",
+        "startedAt": "2026-10-09T02:44:14.905+08:00",
+        "durationSeconds": 1,
+        "intervalMs": 1,
+        "mainThreadSampleCount": 766,
+        "mainThreadPasteboardWaitPercent": 100
+      }
+    },
+    {
+      "pid": 75049,
+      "browser": "Microsoft Edge",
+      "version": "131.0.2903.147",
+      "launchedAt": "2026-10-09T02:24:49.477+08:00",
+      "profile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-KdFwPB",
+      "originalReport": "refactored-final-metadata-only/report.json",
+      "executionSandboxPermissions": "require_escalated",
+      "aliveAtDiagnosis": true,
+      "cpuPercentAtDiagnosis": 0,
+      "devToolsTcpListenerObserved": false,
+      "cdpOwnershipReceipt": false,
+      "productChecksStarted": false,
+      "sample": {
+        "path": "/private/tmp/fluentread-x-ai-browser-startup-diagnosis-20261009/edge-75049-sample.txt",
+        "sha256": "6e360724c95e3ece20770bc9d4b8af2666594730e7496e243138f421462b90e5",
+        "startedAt": "2026-10-09T02:42:42.745+08:00",
+        "durationSeconds": 1,
+        "intervalMs": 1,
+        "mainThreadSampleCount": 800,
+        "mainThreadPasteboardWaitPercent": 100
+      }
+    }
+  ],
+  "pasteboardService": {
+    "domain": "gui/501",
+    "label": "com.apple.pboard",
+    "target": "gui/501/com.apple.pboard",
+    "stateAtDiagnosis": "running",
+    "pidAtDiagnosis": 28109,
+    "runsAtDiagnosis": 2,
+    "program": "/usr/libexec/pboard",
+    "matchingMachService": "com.apple.pasteboard.1",
+    "clipboardContentsRead": false
+  },
+  "proposedRecovery": {
+    "requiresExplicitUserAuthorization": true,
+    "executed": false,
+    "command": "/bin/launchctl kickstart -kp gui/501/com.apple.pboard",
+    "maximumAttempts": 1,
+    "impact": "May lose current shared clipboard contents and temporarily interrupt copy/paste and Universal Clipboard",
+    "afterRecovery": "Read only this service status, then attempt one serial isolated browser acceptance run with a fresh task profile"
+  },
+  "limitations": [
+    "One-second stack samples locate the observed wait, not the pasteboard daemon's internal cause",
+    "A running service state does not establish IPC responsiveness",
+    "Recovery has not been executed or validated",
+    "Startup failures have no CDP ownership receipt or product acceptance result"
+  ],
+  "browserSignalsSent": false,
+  "newBrowserLaunchedDuringDiagnosis": false
+}

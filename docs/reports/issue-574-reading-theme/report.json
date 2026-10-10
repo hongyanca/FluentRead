@@ -1,0 +1,3396 @@
+{
+  "ok": true,
+  "browser": "Microsoft Edge",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "consoleErrors": [],
+  "httpErrors": [],
+  "cases": [
+    {
+      "id": "disabled-no-entry",
+      "status": "passed"
+    },
+    {
+      "id": "memory-disabled-by-default",
+      "status": "passed"
+    },
+    {
+      "id": "selection-toolbar-enabled-actions",
+      "status": "passed",
+      "actions": [
+        "读懂",
+        "拆句",
+        "用法",
+        "练习",
+        "记录"
+      ]
+    },
+    {
+      "id": "selection-entry-visible-no-request",
+      "status": "passed",
+      "selectedText": "lthough the task was difficult, she finished it on time."
+    },
+    {
+      "id": "theme-streaming-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "正在读懂…",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "停止",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        }
+      ],
+      "richElements": [],
+      "failures": []
+    },
+    {
+      "id": "theme-5-dark-light",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 6.496319003800003
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-6-light-dark",
+      "status": "passed",
+      "dark": false,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(105, 97, 107)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.961105387145618
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(157, 62, 97)",
+          "background": [
+            249,
+            231,
+            238
+          ],
+          "ratio": 5.369166328598313
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            245,
+            247,
+            250
+          ],
+          "ratio": 11.577170274056034
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(96, 98, 102)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 5.854989789211597
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 5.159469316439589
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-7-auto-light",
+      "status": "passed",
+      "dark": false,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(105, 97, 107)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.961105387145618
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(157, 62, 97)",
+          "background": [
+            249,
+            231,
+            238
+          ],
+          "ratio": 5.369166328598313
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            245,
+            247,
+            250
+          ],
+          "ratio": 11.577170274056034
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(96, 98, 102)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 5.854989789211597
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 5.159469316439589
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-8-auto-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 6.496319003800003
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-9-auto-light",
+      "status": "passed",
+      "dark": false,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(105, 97, 107)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.961105387145618
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "理解整句",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(166, 75, 110)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.450317108372615
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(157, 62, 97)",
+          "background": [
+            249,
+            231,
+            238
+          ],
+          "ratio": 5.369166328598313
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            245,
+            243,
+            245
+          ],
+          "ratio": 4.6733113796980765
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            245,
+            247,
+            250
+          ],
+          "ratio": 11.577170274056034
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(96, 98, 102)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 5.854989789211597
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            250,
+            250,
+            250
+          ],
+          "ratio": 11.90390950715096
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(53, 51, 60)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 12.424886744898853
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(117, 106, 116)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.159469316439589
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(130, 101, 115)",
+          "background": [
+            255,
+            255,
+            255
+          ],
+          "ratio": 5.174710055971876
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 5.159469316439589
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-history-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "‹ 返回当前阅读",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "P",
+          "className": "fr-reading-hint",
+          "text": "选择一条，继续上次的问答。记录仅保存在本机 30 天。",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "lthough the task was difficult, she finished it on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SMALL",
+          "className": "",
+          "text": "读懂 · 9/12 22:56 · 1 轮继续阅读 ›",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "继续阅读 ›",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 6.224607429137822
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        }
+      ],
+      "richElements": [],
+      "failures": []
+    },
+    {
+      "id": "theme-reopened-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "Although the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 6.496319003800003
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-host-unchanged",
+      "status": "passed",
+      "text": "A neighboring paragraph must remain untouched.",
+      "color": "rgb(0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "id": "theme-error-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "Although the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SUMMARY",
+          "className": "",
+          "text": "前面的问答（1 轮）",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "SMALL",
+          "className": "",
+          "text": "已完成",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "这个模型服务尚未配置 API Key，请在翻译服务中完成配置。",
+          "color": "rgb(245, 172, 182)",
+          "background": [
+            72,
+            46,
+            53
+          ],
+          "ratio": 6.670927664262564
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "重试",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            72,
+            46,
+            53
+          ],
+          "ratio": 5.852590574192587
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置模型",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            72,
+            46,
+            53
+          ],
+          "ratio": 5.852590574192587
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 6.496319003800003
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    },
+    {
+      "id": "theme-retry-dark",
+      "status": "passed",
+      "dark": true,
+      "samples": [
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "理解选中的文字",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "阅读记录",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "P",
+          "className": "",
+          "text": "Although the task was difficult, she finished it on time.",
+          "color": "rgb(181, 170, 182)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.537169630306678
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "收藏",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(241, 182, 206)",
+          "background": [
+            80,
+            49,
+            63
+          ],
+          "ratio": 6.652956680590612
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "拆句",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "用法",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "练习",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "BUTTON",
+          "className": "fr-reading-regenerate",
+          "text": "重新生成",
+          "color": "rgb(189, 176, 193)",
+          "background": [
+            56,
+            49,
+            60
+          ],
+          "ratio": 6.064326604198717
+        },
+        {
+          "tag": "SUMMARY",
+          "className": "",
+          "text": "前面的问答（1 轮）",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "读懂",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "SMALL",
+          "className": "",
+          "text": "已完成",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "大意",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "这句话表示：虽然任务很难，她仍然按时完成了。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "关键点",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "STRONG",
+          "className": "",
+          "text": "Although",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示让步，",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            65,
+            56,
+            70
+          ],
+          "ratio": 8.617989228059368
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": " 表示按时。",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "The task was difficult.",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 5.777669627438719
+        },
+        {
+          "tag": "CODE",
+          "className": "",
+          "text": "She finished on time.",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "表达",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "含义",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            53,
+            47,
+            56
+          ],
+          "ratio": 10.025523989185679
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "on time",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "按时",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "learning-fixture",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "复制",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "INPUT",
+          "className": "",
+          "text": "继续问这句话…",
+          "color": "rgb(230, 224, 232)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 11.272538274721649
+        },
+        {
+          "tag": "SPAN",
+          "className": "",
+          "text": "阅读记录保存在本机 30 天",
+          "color": "rgb(182, 169, 181)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.496319003800003
+        },
+        {
+          "tag": "BUTTON",
+          "className": "",
+          "text": "设置",
+          "color": "rgb(228, 160, 188)",
+          "background": [
+            40,
+            40,
+            48
+          ],
+          "ratio": 6.99884869516652
+        },
+        {
+          "tag": "placeholder",
+          "ratio": 6.496319003800003
+        }
+      ],
+      "richElements": [
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD",
+        "CODE",
+        "BLOCKQUOTE",
+        "CODE",
+        "TH",
+        "TH",
+        "TD",
+        "TD"
+      ],
+      "failures": []
+    }
+  ],
+  "evidenceScope": "Production MV3 extension in isolated background Edge; local webpage and model-response fixtures. Chrome and Firefox builds are not runtime verification in those browsers.",
+  "baseline": {
+    "head": "1d756691",
+    "existingBodyContrast": 11.272538274721649,
+    "unfixedStatusContrast": 3.585120021762262,
+    "unfixedButtonContrast": 2.825217077597906,
+    "releasedVersion": "v0.0.32",
+    "selectorFixAlreadyInMain": "4adc485c"
+  },
+  "sourceDigest": "324ded28a408ddf8944233a714d66b98912cc29370daeebdef20ca2939d9f8c6",
+  "extensionDigest": "ba66362ea2f659906563d7ca7acc65b656b62480565ceef918ade7190040e03c"
+}

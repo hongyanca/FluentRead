@@ -1,0 +1,44 @@
+{
+  "base": "854ce15d5",
+  "afterSourceSha256": "9383174dbefabd4a452e04f8a4a27df995b75f6e49bdd73d5cd15635c0797eaa",
+  "rows": [
+    {
+      "arm": "before",
+      "model": "tiny",
+      "sourcePcmBytes": 76800000,
+      "copiedWindowsBeforeFirstInferenceSettles": 137,
+      "copiedPcmBytesBeforeFirstInferenceSettles": 87244800,
+      "nodeStartToFirstMockInferenceMs": 93.64408399999999,
+      "scope": "allocation instrumentation; synthetic 20min continuous PCM; mock inference; not browser speed acceptance"
+    },
+    {
+      "arm": "after",
+      "model": "tiny",
+      "sourcePcmBytes": 76800000,
+      "copiedWindowsBeforeFirstInferenceSettles": 2,
+      "copiedPcmBytesBeforeFirstInferenceSettles": 1280000,
+      "nodeStartToFirstMockInferenceMs": 30.115250000000003,
+      "scope": "allocation instrumentation; synthetic 20min continuous PCM; mock inference; not browser speed acceptance"
+    },
+    {
+      "arm": "before",
+      "model": "base",
+      "sourcePcmBytes": 76800000,
+      "copiedWindowsBeforeFirstInferenceSettles": 94,
+      "copiedPcmBytesBeforeFirstInferenceSettles": 83942400,
+      "nodeStartToFirstMockInferenceMs": 82.56379199999998,
+      "scope": "allocation instrumentation; synthetic 20min continuous PCM; mock inference; not browser speed acceptance"
+    },
+    {
+      "arm": "after",
+      "model": "base",
+      "sourcePcmBytes": 76800000,
+      "copiedWindowsBeforeFirstInferenceSettles": 2,
+      "copiedPcmBytesBeforeFirstInferenceSettles": 1792000,
+      "nodeStartToFirstMockInferenceMs": 34.68337500000001,
+      "scope": "allocation instrumentation; synthetic 20min continuous PCM; mock inference; not browser speed acceptance"
+    }
+  ],
+  "beforeHarnessModuleSha256": "0d52e4bea974c335565a8fd05336e7dd4913f9b86ead977089d869779ae5f5ab",
+  "beforeSourceSha256": "b50ebe9ccea57971a8aad363996f8b3d9168b1277dae8a288446c417c40963ff"
+}

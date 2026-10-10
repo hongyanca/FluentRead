@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "evidence": "Production extension; X DOM fixture; seeded AI cache; mocked translation; no live ASR",
+  "checks": [
+    "initial cached timeline restored",
+    "late poster enrichment preserves the ready timeline without another cache lookup",
+    "hover out/in and control remount with missing poster preserve subtitles",
+    "same-media video node replacement preserves subtitles",
+    "temporarily hidden connected video preserves subtitles beyond the remount grace period",
+    "a reconnected hidden video cancels a pending missing-video timeout",
+    "hover/remount causes no repeated cache work or ASR",
+    "different durable media identity clears old subtitles"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  }
+}

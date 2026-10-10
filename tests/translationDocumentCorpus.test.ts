@@ -7,8 +7,8 @@ import {
     createTranslationCore,
     extractTranslationText,
     extractTranslationTextFromNodes,
-    isClearlyTargetLanguage,
 } from '@/src/core/translation/public';
+import {shouldSkipTranslationForTarget} from '@/src/core/language/detect';
 import type {TranslationCandidate, TranslationCandidateCore} from '@/src/core/translation/public';
 
 const fixtureRoot = new URL('./fixtures/translation-pages/', import.meta.url);
@@ -69,7 +69,7 @@ function providerReadyIds(
     targetLanguage: string,
 ): string[] {
     return candidates
-        .filter((candidate) => !isClearlyTargetLanguage(candidateSource(candidate, core), targetLanguage))
+        .filter((candidate) => !shouldSkipTranslationForTarget(candidateSource(candidate, core), targetLanguage))
         .map((candidate) => fixtureId(candidate.element))
         .filter((value): value is string => Boolean(value));
 }
@@ -78,7 +78,7 @@ describe('offline whole-document translation corpus', () => {
     it('covers the GitHub PR 4038 title and every markdown H2/P/LI while pruning Quick Search', () => {
         const {document, core} = loadFixture(
             'github-pr-4038.html',
-            'https://github.com/immersive-translate/immersive-translate/pull/4038',
+            'https://github.com/FluentRead/FluentRead/pull/428',
         );
         const candidates = core.discover(document);
         const expected = [
@@ -138,6 +138,40 @@ describe('offline whole-document translation corpus', () => {
             core.shouldIgnoreMutation(document.querySelector('[data-testid="change-heading"]')!),
             'GitHub live conversation content must remain eligible for later dirty-subtree discovery',
         ).toBe(false);
+    });
+
+    it('keeps nested GitHub README list items as separate translation owners', () => {
+        const {document, core} = loadFixture(
+            'github-nested-list.html',
+            'https://github.com/linuxscreen/duo-translator',
+        );
+        const candidates = core.discover(document);
+        const expected = [
+            'features-heading',
+            'customization-label',
+            'shortcut-item',
+            'selection-popup-item',
+            'extension-popup-item',
+        ];
+
+        expectExactCandidateOwners(candidates, expected, 'GitHub nested README list');
+        expect(candidates.some((candidate) =>
+            fixtureId(candidate.element) === 'customization-item'))
+            .toBe(false);
+
+        for (const id of expected) {
+            const candidate = candidates.find((item) => fixtureId(item.element) === id);
+            expect(candidate, `GitHub nested README region ${id} must be translated`).toBeDefined();
+            expect(candidate).toMatchObject({adapterId: 'github', reason: 'github-markdown-prose'});
+            expect(candidateSource(candidate!, core)).toBe(
+                document.querySelector(`[data-testid="${id}"]`)?.textContent,
+            );
+        }
+
+        for (const id of ['shortcut-item', 'selection-popup-item', 'extension-popup-item']) {
+            const element = document.querySelector(`[data-testid="${id}"]`)!;
+            expect(core.resolve(element.firstChild)?.element, `${id} hover ownership`).toBe(element);
+        }
     });
 
     it('walks an MDN-like display:contents document incrementally without swallowing semantic regions', () => {
@@ -337,6 +371,67 @@ describe('offline whole-document translation corpus', () => {
             'Standalone OpenGL code remains a hard translation boundary',
         ).toBeNull();
     });
+
+    it('covers the QQ Mail reading surface across presentation tables and dynamic mail replacement', () => {
+        const {document, core} = loadFixture(
+            'qqmail-reading.html',
+            'https://wx.mail.qq.com/home/index#/list/6',
+        );
+        installInlineDisplayStyles(document);
+        const expected = [
+            'mail-greeting',
+            'mail-body',
+            'mail-table-cell',
+            'mail-nested-cell',
+            'mail-protected-around',
+        ];
+        const candidates = [...core.discoverSteps(document)]
+            .flatMap((step) => step.candidate ? [step.candidate] : []);
+        expectExactCandidateOwners(candidates, expected, 'QQ Mail presentation-table reading surface');
+        expect(
+            candidates.some((candidate) => fixtureId(candidate.element) === 'mail-table-cell-two'),
+            'A presentation cell containing a paragraph must defer ownership to its readable paragraph leaf',
+        ).toBe(false);
+
+        for (const id of expected) {
+            const element = document.querySelector(`[data-testid="${id}"]`)!;
+            const discovered = candidates.find((candidate) => candidate.element === element);
+            expect(discovered, `${id}: full discovery must produce a candidate`).toBeDefined();
+            expect(
+                core.resolve(element.firstChild)?.element,
+                `${id}: hover resolution must select the same readable leaf`,
+            ).toBe(element);
+        }
+
+        const protectedAround = document.querySelector('[data-testid="mail-protected-around"]')!;
+        const providerText = extractTranslationText(protectedAround, core.shouldStayOriginal);
+        expect(providerText).toContain('Readable text around');
+        expect(providerText).toContain('and');
+        expect(providerText).not.toContain('SECRET_CODE_DO_NOT_TRANSLATE');
+        expect(providerText).not.toContain('PROTECTED_TOKEN');
+        for (const id of ['mail-editable', 'mail-hidden']) {
+            expect(
+                candidates.some((candidate) => fixtureId(candidate.element) === id),
+                `${id}: page-controlled or hidden content must not become a full-page candidate`,
+            ).toBe(false);
+            expect(core.resolve(document.querySelector(`[data-testid="${id}"]`)!)).toBeNull();
+        }
+
+        const replacement = document.createElement('div');
+        replacement.className = 'mail-detail-content';
+        replacement.innerHTML = '<div class="qmbox"><table role="presentation"><tbody><tr><td><p data-testid="replacement-mail-body">The newly opened message has fresh readable content.</p></td></tr></tbody></table></div>';
+        document.querySelector('[data-testid="mail-detail-content"]')!.replaceWith(replacement);
+        const replacementCandidates = core.discover(replacement);
+        expectExactCandidateOwners(
+            replacementCandidates,
+            ['replacement-mail-body'],
+            'QQ Mail dynamic message replacement',
+        );
+        expect(
+            replacementCandidates.some((candidate) => fixtureId(candidate.element)?.startsWith('mail-')),
+            'A replaced message must not retain candidates from the previous message',
+        ).toBe(false);
+    });
 });
 
 describe('minimal candidate-boundary constructions', () => {
@@ -412,5 +507,31 @@ describe('minimal candidate-boundary constructions', () => {
             candidates.some((candidate) => fixtureId(candidate.element) === 'no-translate-child'),
             'translate=no must be a hard discovery boundary',
         ).toBe(false);
+    });
+});
+
+
+describe('GitHub release source-line ownership', () => {
+    it('places every release line under its own paragraph instead of its outer list item', () => {
+        const {document, core} = loadFixture('github-release-v1.47.0.html',
+            'https://github.com/mengxi-ream/read-frog/releases/tag/v1.47.0');
+        const before = document.body.innerHTML;
+        const candidates = core.discover(document);
+        for (const paragraph of document.querySelectorAll('.markdown-body p')) {
+            const breaks = Array.from(paragraph.children).filter(child => child.localName === 'br');
+            const owned = candidates.filter(candidate => candidate.element === paragraph);
+            expect(owned, paragraph.id).toHaveLength(breaks.length + 1);
+            for (const candidate of owned) {
+                expect(candidate.nodes?.some(node => breaks.includes(node as Element))).not.toBe(true);
+                const hit = candidate.nodes?.find(node => node.nodeType === 3 && node.textContent?.trim())
+                    ?? paragraph.firstChild;
+                const hovered = core.resolve(hit);
+                expect(hovered?.element, paragraph.id).toBe(paragraph);
+                expect(hovered?.nodes, paragraph.id).toEqual(candidate.nodes);
+                expect(candidateSource(candidate, core).length).toBeGreaterThan(0);
+            }
+        }
+        expect(candidates.some(candidate => candidate.element.matches('li:has(> p)'))).toBe(false);
+        expect(document.body.innerHTML).toBe(before);
     });
 });

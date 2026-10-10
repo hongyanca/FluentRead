@@ -6,6 +6,7 @@
  */
 import {
     installYoutubeTimedTextBridgeLifecycleCore,
+    type YoutubeTimedTextBridgeEnvironment,
     type YoutubeBridgeEventTarget,
     type YoutubeFetchPort,
     type YoutubeXhrOpenPort,
@@ -13,10 +14,11 @@ import {
 } from './youtubeTimedTextBridgeCore';
 
 /** 将真实 Fetch/XHR 注入可测试的 YouTube timedtext bridge。 */
-export function installYoutubeTimedTextBridge(): () => void {
+export function installYoutubeTimedTextBridge(resourcePolicy?: YoutubeTimedTextBridgeEnvironment['resourcePolicy']): () => void {
     const pageWindow = window as typeof window & Record<string, unknown>;
     return installYoutubeTimedTextBridgeLifecycleCore({
         stateHost: pageWindow,
+        resourcePolicy,
         fetch: {
             get: () => window.fetch as unknown as YoutubeFetchPort,
             set: (value) => { window.fetch = value as typeof window.fetch; },

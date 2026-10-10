@@ -1,0 +1,1123 @@
+{
+  "date": "2026-10-06",
+  "baseline": "a65b0447",
+  "cpuUnit": "100 percent equals one fully occupied CPU core; averages across the measured action, not instantaneous caps",
+  "modelCache": "Validated PaddleOCR and LaMa files imported before timing; local model processing plus deterministic text transport",
+  "manga": {
+    "cpu": {
+      "status": "passed",
+      "sourceEvidence": "/private/tmp/fluentread-manga-cpu-reserve70",
+      "profileRemoved": true,
+      "focusChecks": 27,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 212,
+          "top": -990,
+          "width": 1280,
+          "height": 900
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 76304,
+          "name": "微信"
+        },
+        "frontmostAfter": {
+          "pid": 76304,
+          "name": "微信"
+        }
+      },
+      "inputSha256": "67eb8f214f315ec89836e3646e6dc63f824c021a4af6bccd2d70719bcad864a0",
+      "rounds": [
+        {
+          "round": 1,
+          "cold": true,
+          "totalMs": 80967,
+          "gpuSubmissionsThisRound": 0,
+          "workerCapabilities": {
+            "gpuSubmissions": 0,
+            "pthreads": 0,
+            "crossOriginIsolated": false,
+            "cores": 10,
+            "forceCpu": true
+          },
+          "processAverages": [
+            {
+              "type": "browser",
+              "pid": 33294,
+              "averagePercent": 41.94
+            },
+            {
+              "type": "renderer",
+              "pid": 33315,
+              "averagePercent": 78.1
+            },
+            {
+              "type": "renderer",
+              "pid": 33311,
+              "averagePercent": 28.62
+            },
+            {
+              "type": "renderer",
+              "pid": 33342,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "GPU",
+              "pid": 33300,
+              "averagePercent": 10.83
+            },
+            {
+              "type": "network.mojom.NetworkService",
+              "pid": 33301,
+              "averagePercent": 0.12
+            },
+            {
+              "type": "storage.mojom.StorageService",
+              "pid": 33302,
+              "averagePercent": 0.01
+            }
+          ],
+          "peakAllOwnedBrowserRssBytes": 3002220544
+        },
+        {
+          "round": 2,
+          "cold": false,
+          "totalMs": 72920,
+          "gpuSubmissionsThisRound": 0,
+          "workerCapabilities": {
+            "gpuSubmissions": 0,
+            "pthreads": 0,
+            "crossOriginIsolated": false,
+            "cores": 10,
+            "forceCpu": true
+          },
+          "processAverages": [
+            {
+              "type": "browser",
+              "pid": 33294,
+              "averagePercent": 41.34
+            },
+            {
+              "type": "renderer",
+              "pid": 33315,
+              "averagePercent": 68.71
+            },
+            {
+              "type": "renderer",
+              "pid": 33311,
+              "averagePercent": 28.88
+            },
+            {
+              "type": "renderer",
+              "pid": 33342,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "GPU",
+              "pid": 33300,
+              "averagePercent": 10.6
+            },
+            {
+              "type": "network.mojom.NetworkService",
+              "pid": 33301,
+              "averagePercent": 0.07
+            },
+            {
+              "type": "storage.mojom.StorageService",
+              "pid": 33302,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "edge_xpay_wallet.mojom.EdgeXPayWalletService",
+              "pid": 34047,
+              "averagePercent": 0.0
+            }
+          ],
+          "peakAllOwnedBrowserRssBytes": 2526101504
+        }
+      ],
+      "loadingFrames": [
+        {
+          "frames": [
+            {
+              "at": 6106.900000095367,
+              "transform": "matrix(-0.71752, 0.696538, -0.696538, -0.71752, 0, 0)"
+            },
+            {
+              "at": 6168.199999809265,
+              "transform": "matrix(-0.978268, 0.207346, -0.207346, -0.978268, 0, 0)"
+            },
+            {
+              "at": 6230.299999713898,
+              "transform": "matrix(-0.978834, -0.204657, 0.204657, -0.978834, 0, 0)"
+            },
+            {
+              "at": 6290.900000095367,
+              "transform": "matrix(-0.719908, -0.69407, 0.69407, -0.719908, 0, 0)"
+            },
+            {
+              "at": 6351.299999713898,
+              "transform": "matrix(-0.240819, -0.97057, 0.97057, -0.240819, 0, 0)"
+            },
+            {
+              "at": 6411.699999809265,
+              "transform": "matrix(0.174223, -0.984706, 0.984706, 0.174223, 0, 0)"
+            },
+            {
+              "at": 6472.400000095367,
+              "transform": "matrix(0.66956, -0.742758, 0.742758, 0.66956, 0, 0)"
+            },
+            {
+              "at": 6533.299999713898,
+              "transform": "matrix(0.913896, -0.405948, 0.405948, 0.913896, 0, 0)"
+            },
+            {
+              "at": 6594.900000095367,
+              "transform": "matrix(0.990226, 0.139475, -0.139475, 0.990226, 0, 0)"
+            },
+            {
+              "at": 6656.199999809265,
+              "transform": "matrix(0.765313, 0.643658, -0.643658, 0.765313, 0, 0)"
+            },
+            {
+              "at": 6717.199999809265,
+              "transform": "matrix(0.308467, 0.951235, -0.951235, 0.308467, 0, 0)"
+            },
+            {
+              "at": 6779,
+              "transform": "matrix(-0.0970521, 0.995279, -0.995279, -0.0970521, 0, 0)"
+            }
+          ],
+          "width": 134.921875,
+          "height": 30.5,
+          "reducedMotion": false,
+          "animated": "true"
+        },
+        {
+          "frames": [
+            {
+              "at": 5326.900000095367,
+              "transform": "matrix(-0.939803, -0.341716, 0.341716, -0.939803, 0, 0)"
+            },
+            {
+              "at": 5387.800000190735,
+              "transform": "matrix(-0.615063, -0.788478, 0.788478, -0.615063, 0, 0)"
+            },
+            {
+              "at": 5449.599999904633,
+              "transform": "matrix(-0.241721, -0.970346, 0.970346, -0.241721, 0, 0)"
+            },
+            {
+              "at": 5511.099999904633,
+              "transform": "matrix(0.309208, -0.950994, 0.950994, 0.309208, 0, 0)"
+            },
+            {
+              "at": 5572.099999904633,
+              "transform": "matrix(0.766353, -0.64242, 0.64242, 0.766353, 0, 0)"
+            },
+            {
+              "at": 5632.699999809265,
+              "transform": "matrix(0.961472, -0.274902, 0.274902, 0.961472, 0, 0)"
+            },
+            {
+              "at": 5694,
+              "transform": "matrix(0.961052, 0.276367, -0.276367, 0.961052, 0, 0)"
+            },
+            {
+              "at": 5755.199999809265,
+              "transform": "matrix(0.668358, 0.74384, -0.74384, 0.668358, 0, 0)"
+            },
+            {
+              "at": 5816.699999809265,
+              "transform": "matrix(0.314128, 0.949381, -0.949381, 0.314128, 0, 0)"
+            },
+            {
+              "at": 5878.800000190735,
+              "transform": "matrix(-0.239135, 0.970986, -0.970986, -0.239135, 0, 0)"
+            },
+            {
+              "at": 5939.800000190735,
+              "transform": "matrix(-0.719867, 0.694112, -0.694112, -0.719867, 0, 0)"
+            },
+            {
+              "at": 6000.699999809265,
+              "transform": "matrix(-0.939763, 0.341826, -0.341826, -0.939763, 0, 0)"
+            }
+          ],
+          "width": 134.921875,
+          "height": 30.5,
+          "reducedMotion": false,
+          "animated": "true"
+        }
+      ],
+      "errors": []
+    },
+    "gpu": {
+      "status": "passed",
+      "sourceEvidence": "/private/tmp/fluentread-manga-gpu-reserve70",
+      "profileRemoved": true,
+      "focusChecks": 27,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 212,
+          "top": -990,
+          "width": 1280,
+          "height": 900
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 63844,
+          "name": "访达"
+        },
+        "frontmostAfter": {
+          "pid": 63844,
+          "name": "访达"
+        }
+      },
+      "inputSha256": "67eb8f214f315ec89836e3646e6dc63f824c021a4af6bccd2d70719bcad864a0",
+      "rounds": [
+        {
+          "round": 1,
+          "cold": true,
+          "totalMs": 25363,
+          "gpuSubmissionsThisRound": 3860,
+          "workerCapabilities": {
+            "gpuSubmissions": 3860,
+            "pthreads": 0,
+            "crossOriginIsolated": false,
+            "cores": 10,
+            "forceCpu": false
+          },
+          "processAverages": [
+            {
+              "type": "browser",
+              "pid": 37042,
+              "averagePercent": 41.39
+            },
+            {
+              "type": "renderer",
+              "pid": 37075,
+              "averagePercent": 67.15
+            },
+            {
+              "type": "renderer",
+              "pid": 37069,
+              "averagePercent": 29.21
+            },
+            {
+              "type": "renderer",
+              "pid": 37091,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "GPU",
+              "pid": 37048,
+              "averagePercent": 18.82
+            },
+            {
+              "type": "network.mojom.NetworkService",
+              "pid": 37049,
+              "averagePercent": 0.05
+            },
+            {
+              "type": "storage.mojom.StorageService",
+              "pid": 37050,
+              "averagePercent": 0.02
+            },
+            {
+              "type": "entity_extraction_service.mojom.Extractor",
+              "pid": 37074,
+              "averagePercent": 0.1
+            }
+          ],
+          "peakAllOwnedBrowserRssBytes": 3304521728
+        },
+        {
+          "round": 2,
+          "cold": false,
+          "totalMs": 15789,
+          "gpuSubmissionsThisRound": 2577,
+          "workerCapabilities": {
+            "gpuSubmissions": 6437,
+            "pthreads": 0,
+            "crossOriginIsolated": false,
+            "cores": 10,
+            "forceCpu": false
+          },
+          "processAverages": [
+            {
+              "type": "browser",
+              "pid": 37042,
+              "averagePercent": 40.57
+            },
+            {
+              "type": "renderer",
+              "pid": 37075,
+              "averagePercent": 16.67
+            },
+            {
+              "type": "renderer",
+              "pid": 37069,
+              "averagePercent": 30.38
+            },
+            {
+              "type": "renderer",
+              "pid": 37091,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "GPU",
+              "pid": 37048,
+              "averagePercent": 18.66
+            },
+            {
+              "type": "network.mojom.NetworkService",
+              "pid": 37049,
+              "averagePercent": 0.01
+            },
+            {
+              "type": "storage.mojom.StorageService",
+              "pid": 37050,
+              "averagePercent": 0.0
+            },
+            {
+              "type": "entity_extraction_service.mojom.Extractor",
+              "pid": 37074,
+              "averagePercent": 0.19
+            }
+          ],
+          "peakAllOwnedBrowserRssBytes": 2038759424
+        }
+      ],
+      "loadingFrames": [
+        {
+          "frames": [
+            {
+              "at": 6403.599999904633,
+              "transform": "matrix(-0.936544, -0.35055, 0.35055, -0.936544, 0, 0)"
+            },
+            {
+              "at": 6465,
+              "transform": "matrix(-0.608409, -0.793624, 0.793624, -0.608409, 0, 0)"
+            },
+            {
+              "at": 6526.199999809265,
+              "transform": "matrix(-0.0951258, -0.995465, 0.995465, -0.0951258, 0, 0)"
+            },
+            {
+              "at": 6586.900000095367,
+              "transform": "matrix(0.317466, -0.94827, 0.94827, 0.317466, 0, 0)"
+            },
+            {
+              "at": 6647.699999809265,
+              "transform": "matrix(0.768523, -0.639822, 0.639822, 0.768523, 0, 0)"
+            },
+            {
+              "at": 6708.5,
+              "transform": "matrix(0.990949, -0.134238, 0.134238, 0.990949, 0, 0)"
+            },
+            {
+              "at": 6770,
+              "transform": "matrix(0.959561, 0.2815, -0.2815, 0.959561, 0, 0)"
+            },
+            {
+              "at": 6831.5,
+              "transform": "matrix(0.662078, 0.749435, -0.749435, 0.662078, 0, 0)"
+            },
+            {
+              "at": 6892.900000095367,
+              "transform": "matrix(0.164885, 0.986313, -0.986313, 0.164885, 0, 0)"
+            },
+            {
+              "at": 6954.599999904633,
+              "transform": "matrix(-0.24757, 0.96887, -0.96887, -0.24757, 0, 0)"
+            },
+            {
+              "at": 7016.199999809265,
+              "transform": "matrix(-0.72568, 0.688032, -0.688032, -0.72568, 0, 0)"
+            },
+            {
+              "at": 7077.299999713898,
+              "transform": "matrix(-0.979397, 0.201942, -0.201942, -0.979397, 0, 0)"
+            }
+          ],
+          "width": 134.921875,
+          "height": 30.5,
+          "reducedMotion": false,
+          "animated": "true"
+        },
+        {
+          "frames": [
+            {
+              "at": 6036.699999809265,
+              "transform": "matrix(0.174322, 0.984689, -0.984689, 0.174322, 0, 0)"
+            },
+            {
+              "at": 6099.199999809265,
+              "transform": "matrix(-0.243241, 0.969966, -0.969966, -0.243241, 0, 0)"
+            },
+            {
+              "at": 6160.299999713898,
+              "transform": "matrix(-0.721058, 0.692874, -0.692874, -0.721058, 0, 0)"
+            },
+            {
+              "at": 6220.5,
+              "transform": "matrix(-0.976784, 0.214225, -0.214225, -0.976784, 0, 0)"
+            },
+            {
+              "at": 6281.900000095367,
+              "transform": "matrix(-0.977687, -0.210066, 0.210066, -0.977687, 0, 0)"
+            },
+            {
+              "at": 6343,
+              "transform": "matrix(-0.717811, -0.696238, 0.696238, -0.717811, 0, 0)"
+            },
+            {
+              "at": 6404.299999713898,
+              "transform": "matrix(-0.241957, -0.970287, 0.970287, -0.241957, 0, 0)"
+            },
+            {
+              "at": 6465.900000095367,
+              "transform": "matrix(0.176367, -0.984324, 0.984324, 0.176367, 0, 0)"
+            },
+            {
+              "at": 6527.400000095367,
+              "transform": "matrix(0.670555, -0.74186, 0.74186, 0.670555, 0, 0)"
+            },
+            {
+              "at": 6589,
+              "transform": "matrix(0.961865, -0.273524, 0.273524, 0.961865, 0, 0)"
+            },
+            {
+              "at": 6650.400000095367,
+              "transform": "matrix(0.991071, 0.133333, -0.133333, 0.991071, 0, 0)"
+            },
+            {
+              "at": 6711.799999713898,
+              "transform": "matrix(0.768753, 0.639545, -0.639545, 0.768753, 0, 0)"
+            }
+          ],
+          "width": 134.921875,
+          "height": 30.5,
+          "reducedMotion": false,
+          "animated": "true"
+        }
+      ],
+      "errors": []
+    }
+  },
+  "tests": {
+    "strictAffectedCoverage": {
+      "testFiles": 24,
+      "testCases": 660,
+      "modules": 19,
+      "summary": {
+        "lines": {
+          "total": 2449,
+          "covered": 2449,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 2449,
+          "covered": 2449,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 246,
+          "covered": 246,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 1442,
+          "covered": 1442,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "additionalFocusedChecks": {
+      "testFiles": 16,
+      "testCases": 1352,
+      "overlapsStrictSuite": true
+    },
+    "testAudit": {
+      "status": "ok",
+      "files": 477,
+      "cases": 6449
+    },
+    "architectureOwnership": {
+      "status": "baseline-failure",
+      "count": 18,
+      "samePathsOnCleanMain": true,
+      "baselineCommit": "a65b0447"
+    }
+  },
+  "builds": {
+    "chrome-mv3": {
+      "bytes": 60189410,
+      "wasmBytes": 34895939,
+      "imageBytes": 205888,
+      "files": 394,
+      "allPackagedJsSha256": "5219ab76c195e05d9b8e06dd5387f762cf9a169d983c147882c84059bcb72ec4"
+    },
+    "firefox-mv2": {
+      "bytes": 60188445,
+      "wasmBytes": 34895939,
+      "imageBytes": 205888,
+      "files": 394,
+      "allPackagedJsSha256": "ba786db09ef0ef3c19dd87b7f46cc8fa98a42c92de7fb1c0f3a5e61884062abd"
+    },
+    "userscript": {
+      "bytes": 1949013,
+      "verified": true
+    },
+    "compile": "passed",
+    "manifests": "passed"
+  },
+  "tts": {
+    "sourceEvidence": "/private/tmp/fluentread-tts-rebased-bounded",
+    "ok": true,
+    "focusChecks": 5,
+    "workerSha256": {
+      "localTtsWorker": "3d2df850471d2484c82526a64fd5195f1a0ec18ca80fa7960602e2ddd8c3da34",
+      "videoTranscriptionWorker": "b98b2d04802b05458ba8478756b967b9f9926a250085099ca488af040191fd6c"
+    },
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "cases": [
+      {
+        "name": "tts-gpu",
+        "elapsedMs": 17409,
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "webgpu"
+        },
+        "cpuRebuilds": 0,
+        "outputs": [
+          {
+            "backend": "webgpu",
+            "language": "en",
+            "text": "The H2D can print TPU filament",
+            "audioBytes": 163244,
+            "samples": 81600,
+            "peak": 9126,
+            "rms": 0.03795484266116118,
+            "duration": 3.4,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 30,
+                "startTime": 0,
+                "endTime": 3.4
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 35,
+              "firstProgress": {
+                "time": 0.000536,
+                "start": 0,
+                "end": 3,
+                "fraction": 0.0015764705882352944,
+                "estimated": true
+              },
+              "lastProgress": {
+                "time": 3.355854,
+                "start": 22,
+                "end": 30,
+                "fraction": 0.9513095588235294,
+                "estimated": true
+              }
+            }
+          },
+          {
+            "backend": "webgpu",
+            "language": "zh",
+            "text": "H2D可以打印TPU纤维",
+            "audioBytes": 183644,
+            "samples": 91800,
+            "peak": 13368,
+            "rms": 0.060697522287143986,
+            "duration": 3.825,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 12,
+                "startTime": 0,
+                "endTime": 3.825
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 39,
+              "firstProgress": {
+                "time": 0.000127,
+                "start": 0,
+                "end": 3,
+                "fraction": 0.00013281045751633986,
+                "estimated": true
+              },
+              "lastProgress": {
+                "time": 3.755273,
+                "start": 11,
+                "end": 12,
+                "fraction": 0.7812486274509798,
+                "estimated": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "tts-cpu",
+        "elapsedMs": 27804,
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "wasm"
+        },
+        "cpuRebuilds": 0,
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "text": "The H2D can print TPU filament",
+            "audioBytes": 163244,
+            "samples": 81600,
+            "peak": 9215,
+            "rms": 0.037892531847170875,
+            "duration": 3.4,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 30,
+                "startTime": 0,
+                "endTime": 3.4
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 35,
+              "firstProgress": {
+                "time": 8.9e-05,
+                "start": 0,
+                "end": 3,
+                "fraction": 0.0002617647058823529,
+                "estimated": true
+              },
+              "lastProgress": {
+                "time": 3.360386,
+                "start": 22,
+                "end": 30,
+                "fraction": 0.9563080882352941,
+                "estimated": true
+              }
+            }
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "text": "H2D可以打印TPU纤维",
+            "audioBytes": 183644,
+            "samples": 91800,
+            "peak": 13243,
+            "rms": 0.060645879741378,
+            "duration": 3.825,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 12,
+                "startTime": 0,
+                "endTime": 3.825
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 39,
+              "firstProgress": {
+                "time": 0.0001,
+                "start": 0,
+                "end": 3,
+                "fraction": 0.00010457516339869282,
+                "estimated": true
+              },
+              "lastProgress": {
+                "time": 3.758221,
+                "start": 11,
+                "end": 12,
+                "fraction": 0.7904972549019611,
+                "estimated": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "supersededSettingsRun": {
+      "sourceEvidence": "/private/tmp/fluentread-tts-rebased-final",
+      "ok": false,
+      "reason": "after GPU/CPU synthesis and playback passed, opening the extra settings page tripped foreground protection; owned browser stopped and cleaned; not counted as full-script success"
+    }
+  },
+  "mermaid": {
+    "version": "11.4.1",
+    "scope": "Both report diagram bodies parse and render as SVG in an independent headless static-document browser, not extension validation",
+    "results": [
+      {
+        "parsed": {
+          "diagramType": "flowchart-v2",
+          "config": {}
+        },
+        "rendered": true
+      },
+      {
+        "parsed": {
+          "diagramType": "stateDiagram",
+          "config": {}
+        },
+        "rendered": true
+      }
+    ],
+    "diagramSha256": [
+      "4e3a7fc0b162cdc77b6cf4021f43ab83f40d4757ef323df25ce91db6f477a3fa",
+      "b0e065e5d9a25dc574eb53c0f7eda523ee355957b1ee2b3c35ea7de691d3d834"
+    ]
+  },
+  "conditionalThreads": {
+    "sourceEvidence": "/private/tmp/fluentread-audio-thread-rebased",
+    "ok": true,
+    "productionManifestChanged": false,
+    "temporaryManifestIsolationOnly": true,
+    "workerSha256": {
+      "localTtsWorker": "3d2df850471d2484c82526a64fd5195f1a0ec18ca80fa7960602e2ddd8c3da34",
+      "videoTranscriptionWorker": "b98b2d04802b05458ba8478756b967b9f9926a250085099ca488af040191fd6c"
+    },
+    "focusChecks": 9,
+    "cases": [
+      {
+        "name": "tts-unavailable",
+        "elapsedMs": 20532,
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "wasm",
+          "capabilities": {
+            "crossOriginIsolated": true,
+            "cores": 10,
+            "pthreads": 1
+          }
+        },
+        "cpuRebuilds": 0,
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "text": "The H2D can print TPU filament",
+            "audioBytes": 163244,
+            "samples": 81600,
+            "peak": 9603,
+            "rms": 0.03788475865633177,
+            "duration": 3.4,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 30,
+                "startTime": 0,
+                "endTime": 3.4
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 35
+            }
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "text": "H2D可以打印TPU纤维",
+            "audioBytes": 183644,
+            "samples": 91800,
+            "peak": 13595,
+            "rms": 0.06064554722930992,
+            "duration": 3.825,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 12,
+                "startTime": 0,
+                "endTime": 3.825
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 39
+            }
+          }
+        ]
+      },
+      {
+        "name": "whisper-unavailable",
+        "elapsedMs": 2798,
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "model": "tiny",
+          "backend": "wasm",
+          "threads": 2,
+          "dtype": "q4",
+          "capabilities": {
+            "crossOriginIsolated": true,
+            "cores": 10,
+            "pthreads": 1
+          }
+        },
+        "cpuRebuilds": 0,
+        "outputs": [
+          {
+            "requestId": 2,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "inferenceMs": 1204.0650000572205,
+            "audioDurationMs": 2667,
+            "threads": 2,
+            "dtype": "q4",
+            "capabilities": {
+              "crossOriginIsolated": true,
+              "cores": 10,
+              "pthreads": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "tts-thread-failure",
+        "elapsedMs": 29548,
+        "prepared": {
+          "requestId": 2,
+          "success": true,
+          "backend": "wasm"
+        },
+        "cpuRebuilds": 1,
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "text": "The H2D can print TPU filament",
+            "audioBytes": 163244,
+            "samples": 81600,
+            "peak": 9354,
+            "rms": 0.03791033010308121,
+            "duration": 3.4,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 30,
+                "startTime": 0,
+                "endTime": 3.4
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 35
+            }
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "text": "H2D可以打印TPU纤维",
+            "audioBytes": 183644,
+            "samples": 91800,
+            "peak": 13312,
+            "rms": 0.0606742646813534,
+            "duration": 3.825,
+            "samplingRate": 24000,
+            "timings": [
+              {
+                "startChar": 0,
+                "endChar": 12,
+                "startTime": 0,
+                "endTime": 3.825
+              }
+            ],
+            "playback": {
+              "muted": true,
+              "states": [
+                "ended"
+              ],
+              "progressEvents": 39
+            }
+          }
+        ]
+      },
+      {
+        "name": "whisper-thread-failure",
+        "elapsedMs": 8237,
+        "prepared": {
+          "requestId": 2,
+          "success": true,
+          "model": "tiny",
+          "backend": "wasm",
+          "threads": 1,
+          "dtype": "q4"
+        },
+        "cpuRebuilds": 1,
+        "outputs": [
+          {
+            "requestId": 3,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "inferenceMs": 2330.670000076294,
+            "audioDurationMs": 2667,
+            "threads": 1,
+            "dtype": "q4"
+          }
+        ]
+      }
+    ]
+  },
+  "mangaLive": {
+    "url": "https://mangaplus.shueisha.co.jp/viewer/1028732",
+    "sourceEvidence": "/private/tmp/fluentread-manga-live-rebased",
+    "status": "passed",
+    "cases": [
+      "cancel first preparation restores originals and can resume",
+      "one click activates and translates only visible pages",
+      "translated reading has no automatic panel",
+      "original pauses and repeated toggles reuse visible results",
+      "scroll automatically translates a new visible page",
+      "scroll and hover never open a reading panel",
+      "manga control stays compact beneath the resident brand icon",
+      "settings switch persists across unmount and reopen",
+      "master disable removes image UI and restores all source styles",
+      "model source selection persists on reopen",
+      "cached manga model status and clear action"
+    ],
+    "modelProcessing": "real PaddleOCR and LaMa",
+    "textTransport": "deterministic Google text transport",
+    "profileRemoved": true,
+    "focusChecks": 36,
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 76304,
+        "name": "微信"
+      },
+      "frontmostAfter": {
+        "pid": 76304,
+        "name": "微信"
+      }
+    },
+    "errors": []
+  },
+  "docs": {
+    "build": "passed",
+    "check": {
+      "pages": 77,
+      "links": 3969,
+      "anchors": 755,
+      "images": 154
+    }
+  },
+  "testedSourceObjects": {
+    "src": "cb2c9a380bfb5e2d1267a08de5d9bdd85c3f282c",
+    "entrypoints": "724394648a26479e128c3f737b0b39ffb7a7e754",
+    "tests": "7bb6598e7f5f219246c61a071f02afaaac942603",
+    "scripts": "36646e4f057089892a12d73cd591159cbc54a0ec",
+    "userscript": "3adb28e6baf2fdcca0f8b338eda840e65d12046a",
+    "wxt.config.ts": "e026e81114ec5defbdf478c5c7f38919b386431d",
+    "vitest.coverage.config.ts": "43c6179e02acde2442f04f8571639d0444139945"
+  },
+  "sourceObjectScope": "Unchanged production/test trees after validation; final amendment adds report and guide changes only. CPU manga run used the same manga/resources sources before rebasing selection/vocabulary changes."
+}

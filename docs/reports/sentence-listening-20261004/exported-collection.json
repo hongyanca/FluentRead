@@ -1,0 +1,43 @@
+{
+  "format": "fluentread-vocabulary-book",
+  "version": 1,
+  "exportedAt": 1791074131641,
+  "includesPrivateContext": false,
+  "entries": [
+    {
+      "id": "f1e013ca-a982-40d1-990c-eff35dccba6f",
+      "identityKey": "en\u0000good ideas deserve attention.",
+      "sourceLanguage": "en",
+      "term": "Good ideas deserve attention.",
+      "kind": "sentence",
+      "normalizedTerm": "good ideas deserve attention.",
+      "translations": {
+        "zh-hans": {
+          "text": "好想法值得关注。",
+          "updatedAt": 1791074130297
+        }
+      },
+      "phonetic": "",
+      "partOfSpeech": "",
+      "contexts": [
+        {
+          "capturedAt": 1791074130297
+        }
+      ],
+      "createdAt": 1791074130297,
+      "updatedAt": 1791074131401,
+      "lastSeenAt": 1791074130297,
+      "encounterCount": 1,
+      "masteryLevel": 0,
+      "status": "new",
+      "nextReviewAt": 1791074130297,
+      "lastReviewedAt": null,
+      "reviewCount": 0,
+      "lapseCount": 0,
+      "schemaVersion": 1,
+      "note": "这句话强调好想法值得关注。deserve attention 表示“值得关注”。",
+      "noteUpdatedAt": 1791074131401
+    }
+  ],
+  "reviewLogs": []
+}

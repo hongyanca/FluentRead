@@ -1,0 +1,793 @@
+{
+  "baseCommit": "4b537e7e",
+  "branch": "perf/chunk-loading-20260913",
+  "build": {
+    "wxt": "0.20.18",
+    "vite": "5.4.19",
+    "browser": "chrome-mv3",
+    "mode": "production"
+  },
+  "package": {
+    "beforeBytes": 47955383,
+    "afterBytes": 47962085
+  },
+  "largeUiChunks": {
+    "before": [
+      {
+        "file": "_plugin-vue_export-helper-Imh8BlJo.js",
+        "bytes": 636930
+      },
+      {
+        "file": "document-BLTnmDp3.js",
+        "bytes": 1025601
+      },
+      {
+        "file": "index.full-Bi_N2Eyl.js",
+        "bytes": 728859
+      }
+    ],
+    "after": [
+      {
+        "file": "_plugin-vue_export-helper-CfPj3Jme.js",
+        "bytes": 636947
+      },
+      {
+        "file": "index.full-DRNrTrVO.js",
+        "bytes": 728861
+      }
+    ]
+  },
+  "browser": {
+    "method": "Fresh isolated Edge profiles; bundled JavaScript requested by document page, measured by file byte length. Excludes background/worker contexts, CSS, WASM and OS-cache effects; no startup timing claim. Translation uses a loopback deterministic fixture.",
+    "beforeScriptsByStage": {
+      "initial": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.txt": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.txt": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.docx": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.docx": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.epub": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.epub": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.pdf": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.pdf": {
+        "bytes": 1850713,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-Bh8TwyC4.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-Imh8BlJo.js",
+            "bytes": 636930
+          },
+          {
+            "file": "chunks/capabilities-DPp4EvKb.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-C9rjy0Jo.js",
+            "bytes": 14598
+          },
+          {
+            "file": "chunks/document-BLTnmDp3.js",
+            "bytes": 1025601
+          },
+          {
+            "file": "chunks/localTts-Bm5yJXg6.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      }
+    },
+    "afterScriptsByStage": {
+      "initial": {
+        "bytes": 914615,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.txt": {
+        "bytes": 914615,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.txt": {
+        "bytes": 914615,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.docx": {
+        "bytes": 1011603,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.docx": {
+        "bytes": 1011603,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.epub": {
+        "bytes": 1011603,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.epub": {
+        "bytes": 1011603,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "import:sample.pdf": {
+        "bytes": 1419784,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/pdf-DVqZvFDv.js",
+            "bytes": 408181
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "export:sample.pdf": {
+        "bytes": 1855825,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/index-BX3-dVCy.js",
+            "bytes": 436041
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/pdf-DVqZvFDv.js",
+            "bytes": 408181
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      },
+      "batch-export": {
+        "bytes": 1855825,
+        "files": [
+          {
+            "file": "chunks/GlossaryLibrarySelect-9jOtLMBY.js",
+            "bytes": 2192
+          },
+          {
+            "file": "chunks/_commonjs-dynamic-modules-Cx5w9O_y.js",
+            "bytes": 168544
+          },
+          {
+            "file": "chunks/_plugin-vue_export-helper-CfPj3Jme.js",
+            "bytes": 636947
+          },
+          {
+            "file": "chunks/capabilities-04OleqjH.js",
+            "bytes": 1831
+          },
+          {
+            "file": "chunks/client-CEVGKn5-.js",
+            "bytes": 14637
+          },
+          {
+            "file": "chunks/document-Dk0wauf5.js",
+            "bytes": 89447
+          },
+          {
+            "file": "chunks/index-BX3-dVCy.js",
+            "bytes": 436041
+          },
+          {
+            "file": "chunks/jszip.min-BNci65ev.js",
+            "bytes": 96988
+          },
+          {
+            "file": "chunks/pdf-DVqZvFDv.js",
+            "bytes": 408181
+          },
+          {
+            "file": "chunks/preload-helper-D7HrI6pR.js",
+            "bytes": 1017
+          }
+        ]
+      }
+    },
+    "cases": [
+      "unsupported import has persistent actionable error",
+      "lazy batch ZIP download contains completed document",
+      "4 formats parse, translate through provider, edit via UI and export original format"
+    ],
+    "formats": {
+      "sample.txt": {
+        "translated": true,
+        "edited": true,
+        "exported": true,
+        "bytes": 214
+      },
+      "sample.docx": {
+        "translated": true,
+        "edited": true,
+        "exported": true,
+        "bytes": 38878
+      },
+      "sample.epub": {
+        "translated": true,
+        "edited": true,
+        "exported": true,
+        "bytes": 2271
+      },
+      "sample.pdf": {
+        "translated": true,
+        "edited": true,
+        "exported": true,
+        "bytes": 271302
+      }
+    },
+    "consoleErrors": [],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "browserFrontmost": false,
+      "displayTarget": "secondary",
+      "windowState": "normal"
+    }
+  },
+  "hotkeys": {
+    "ok": true,
+    "cases": [
+      "lazy-harness-hotkey-dialog-confirms-and-persists",
+      "lazy-quick-profile-hotkey-dialog-confirms-and-persists"
+    ],
+    "consoleErrors": [],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "browserFrontmost": false
+  },
+  "verification": {
+    "compileExitCode": 0,
+    "chromeBuildExitCode": 0,
+    "firefoxBuildExitCode": 0,
+    "manifestExitCode": 0,
+    "testAuditExitCode": 0,
+    "targetedTests": {
+      "documentAndSource": 665,
+      "architectureAndBrowserHarness": 136,
+      "note": "groups overlap; counts are not additive"
+    },
+    "binaryCoveragePercent": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "documentBrowserPassed": true,
+    "hotkeysBrowserPassed": true
+  }
+}

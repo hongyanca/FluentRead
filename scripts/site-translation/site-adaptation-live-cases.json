@@ -1,0 +1,103 @@
+[
+  {
+    "id": "mdn",
+    "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+    "selector": "main p"
+  },
+  {
+    "id": "python-docs",
+    "url": "https://docs.python.org/3/tutorial/introduction.html",
+    "selector": "[role=\"main\"] p"
+  },
+  {
+    "id": "react-docs",
+    "url": "https://react.dev/learn/describing-the-ui",
+    "selector": "main p"
+  },
+  {
+    "id": "vue-docs",
+    "url": "https://vuejs.org/guide/introduction.html",
+    "selector": "main p"
+  },
+  {
+    "id": "fastapi-docs",
+    "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+    "selector": "main article p"
+  },
+  {
+    "id": "numpy-docs",
+    "url": "https://numpy.org/doc/stable/user/absolute_beginners.html",
+    "selector": "[role=\"main\"] p"
+  },
+  {
+    "id": "arxiv",
+    "url": "https://arxiv.org/abs/1706.03762",
+    "selector": "blockquote.abstract"
+  },
+  {
+    "id": "ar5iv",
+    "url": "https://ar5iv.labs.arxiv.org/html/1706.03762",
+    "selector": ".ltx_para > p"
+  },
+  {
+    "id": "wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Machine_translation",
+    "selector": ".mw-parser-output p:not(.mw-empty-elt)"
+  },
+  {
+    "id": "steam-store",
+    "url": "https://store.steampowered.com/app/570/Dota_2/?l=english",
+    "selector": ".game_description_snippet"
+  },
+  {
+    "id": "discourse-meta",
+    "url": "https://meta.discourse.org/t/discourse-new-user-guide/96331",
+    "selector": ".cooked p, .crawler-post .post p"
+  },
+  {
+    "id": "huggingface",
+    "url": "https://huggingface.co/openai-community/gpt2",
+    "selector": ".prose p"
+  },
+  {
+    "id": "rust-docs",
+    "url": "https://doc.rust-lang.org/book/ch01-01-installation.html",
+    "selector": "main p"
+  },
+  {
+    "id": "vite-docs",
+    "url": "https://vite.dev/guide/",
+    "selector": "main p"
+  },
+  {
+    "id": "vitest-docs",
+    "url": "https://vitest.dev/guide/",
+    "selector": "main p"
+  },
+  {
+    "id": "docker-docs",
+    "url": "https://docs.docker.com/get-started/docker-overview/",
+    "selector": "main p"
+  },
+  {
+    "id": "pnpm-docs",
+    "url": "https://pnpm.io/installation",
+    "guardSelectors": [".theme-doc-version-badge", ".theme-doc-toc-mobile"],
+    "selector": "main p"
+  },
+  {
+    "id": "nextjs-docs",
+    "url": "https://nextjs.org/docs/app/getting-started/installation",
+    "selector": "article .prose p"
+  },
+  {
+    "id": "postgresql-docs",
+    "url": "https://www.postgresql.org/docs/current/tutorial-createdb.html",
+    "selector": "#docContent .sect1 p"
+  },
+  {
+    "id": "go-docs",
+    "url": "https://go.dev/doc/effective_go",
+    "selector": "main p"
+  }
+]

@@ -1,0 +1,114 @@
+{
+  "ok": true,
+  "providerEvidence": "Production extension with deterministic translation and a 20 second WAV response fixture. Actual offscreen media clock, decode and seek; no live voice alignment or speaker claim.",
+  "cases": [
+    "actual decoded media seeks forward/backward 5 seconds without synthesizing again",
+    "current word stays whole and word nodes, original text and line layout remain stable",
+    "neutral full word background supports dark theme without width sweep or underline",
+    "5 second controls fit the 390px card without overlap",
+    "reduced motion disables highlight animation",
+    "stop clears highlight and clock and prevents delayed progress from returning",
+    "English seek controls use localized accessible names",
+    "repeated 5 second seeks clamp to the real end and clear playback"
+  ],
+  "consoleErrors": [],
+  "positions": [
+    {
+      "before": {
+        "time": "0:00 / 0:20",
+        "active": "For",
+        "currentCount": 1,
+        "seconds": 0
+      },
+      "forward": {
+        "time": "0:05 / 0:20",
+        "active": "publishing",
+        "currentCount": 1,
+        "seconds": 5
+      }
+    },
+    {
+      "rewind": {
+        "time": "0:00 / 0:20",
+        "active": "For",
+        "currentCount": 1,
+        "seconds": 0
+      }
+    }
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "narrowLayout": {
+    "card": {
+      "left": 12,
+      "right": 378
+    },
+    "buttons": [
+      {
+        "left": 254.3359375,
+        "right": 281.3359375,
+        "top": 364.46875,
+        "bottom": 391.46875
+      },
+      {
+        "left": 286.3359375,
+        "right": 313.3359375,
+        "top": 364.46875,
+        "bottom": 391.46875
+      },
+      {
+        "left": 318.3359375,
+        "right": 363,
+        "top": 364.71875,
+        "bottom": 391.21875
+      }
+    ],
+    "viewport": 390
+  },
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "centered": true,
+    "displayTarget": "secondary",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "screenshots": [
+    "speech-follow-light.png",
+    "speech-follow-dark.png",
+    "speech-follow-390.png"
+  ],
+  "checks": {
+    "compile": "passed",
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed; no live Firefox playback tested",
+    "userscriptBuild": "passed",
+    "userscriptVerifier": "passed",
+    "docsBuild": "passed",
+    "testAudit": "passed",
+    "coverage": {
+      "scope": [
+        "speechProgress.ts",
+        "ttsPlayback.ts",
+        "ttsHandler.ts",
+        "offscreenAdapter.ts",
+        "offscreen/messageRouter.ts"
+      ],
+      "cases": 149,
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "architectureBaselineFailures": [
+      "video-subtitle/content/runtime.ts is 1888 lines with a ceiling of 1887",
+      "sourceFileHeaders does not allow existing app/options/assets/wechat-contact.jpg",
+      "verificationOwnership lists 18 existing modules outside strict coverage; reproduced unchanged on origin/main 5420bbc81"
+    ]
+  },
+  "userscriptBytes": {
+    "baseline": 1948722,
+    "current": 1951768,
+    "budget": 1955000
+  }
+}

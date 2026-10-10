@@ -1,12 +1,17 @@
 /**
  * @file src/features/settings/model/credentialPreview.ts
  * 文件职责：为配置和备份导入预览生成不泄露明文的凭据变化清单。
- * 主要内容：比较服务 Token、旧版标量凭据和扩展凭据，只返回新增、替换或清除状态及用户可读标签。
+ * 主要内容：比较服务 Token、多 Key 列表、旧版标量凭据和扩展凭据，只返回新增、替换或清除状态，并用内置目录或导入配置中的动态 profile 名称生成用户可读标签。
  * 模块边界：该模块只做纯比较，不返回凭据内容、不读写配置，也不决定导入是否执行。
  */
 
-import {options} from '@/src/core/config/catalog';
+import {getCloudCredentialLabels, options} from '@/src/core/config/catalog';
+import {
+    getCustomOpenAIProviderLabel,
+    normalizeCustomOpenAIProviders,
+} from '@/src/core/config/customOpenAI';
 import {extractConfigCredentials} from '@/src/core/config/credentials';
+import {getServiceApiKeys} from '@/src/core/config/apiKeys';
 
 export interface CredentialPreviewChange {
     key: string;
@@ -56,15 +61,48 @@ function credentialChange(
 export function buildCredentialPreviewChanges(beforeValue: unknown, afterValue: unknown): CredentialPreviewChange[] {
     const before = extractConfigCredentials(beforeValue);
     const after = extractConfigCredentials(afterValue);
+    const recordProviders = (value: unknown) => normalizeCustomOpenAIProviders(
+        value && typeof value === 'object'
+            ? (value as Record<string, unknown>).customOpenAIProviders
+            : undefined,
+    );
+    const customProviders = normalizeCustomOpenAIProviders([
+        ...recordProviders(afterValue),
+        ...recordProviders(beforeValue),
+    ]);
     const changes: CredentialPreviewChange[] = [];
 
-    for (const service of new Set([...Object.keys(before.token), ...Object.keys(after.token)])) {
+    for (const service of new Set([...Object.keys(before.token), ...Object.keys(after.token), ...Object.keys(before.apiKeys), ...Object.keys(after.apiKeys)])) {
+        const serviceLabel = options.services.find((item: any) => item.value === service)?.label
+            || getCustomOpenAIProviderLabel(customProviders, service);
+        const previousKeys = getServiceApiKeys(before, service);
+        const nextKeys = getServiceApiKeys(after, service);
+        const multipleKeys = previousKeys.length > 1 || nextKeys.length > 1;
+        const change = credentialChange(
+            `${multipleKeys ? 'apiKeys' : 'token'}.${service}`,
+            `${serviceLabel} ${getCloudCredentialLabels(service).token}${multipleKeys ? ' 列表' : ''}`,
+            previousKeys,
+            nextKeys,
+        );
+        if (change) changes.push(change);
+    }
+    // 云服务厂商的第二段密钥与主密钥同属一个服务，预览里必须分别列出，
+    // 否则用户无法判断导入会替换哪一半。
+    for (const service of new Set([...Object.keys(before.secret), ...Object.keys(after.secret)])) {
         const serviceLabel = options.services.find((item: any) => item.value === service)?.label || service;
         const change = credentialChange(
-            `token.${service}`,
-            `${serviceLabel} API Key`,
-            before.token[service],
-            after.token[service],
+            `secret.${service}`,
+            `${serviceLabel} ${getCloudCredentialLabels(service).secret || 'Secret'}`,
+            before.secret[service],
+            after.secret[service],
+        );
+        if (change) changes.push(change);
+    }
+    for (const service of new Set([...Object.keys(before.customHeaders), ...Object.keys(after.customHeaders)])) {
+        const change = credentialChange(
+            `customHeaders.${service}`,
+            `${getCustomOpenAIProviderLabel(customProviders, service)} 自定义请求头`,
+            before.customHeaders[service], after.customHeaders[service],
         );
         if (change) changes.push(change);
     }

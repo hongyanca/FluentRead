@@ -1,15 +1,21 @@
 import {EventEmitter} from 'node:events';
+import {mkdtempSync, mkdirSync, writeFileSync, utimesSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 import {createRequire} from 'node:module';
 import {parseHTML} from 'linkedom';
 import {describe, expect, it, vi} from 'vitest';
 import cases from './browser-translation-cases.json';
+import establishedFixtures from '../scripts/site-translation/site-adaptation-established-fixtures.json';
 
 const require = createRequire(import.meta.url);
+const {inspectFixtureTranslationParts} = require('../scripts/site-translation/fixture-translation-parts.cjs');
 const {
   COVERAGE_EXCLUDED_ANCESTORS,
   COVERAGE_PROTECTED_DESCENDANTS,
   COVERAGE_TRACKER_KEY,
   assertPageContract,
+  assertFreshProductionExtension,
   assertCoverageReport,
   assertCoverageRestoration,
   capturePageContract,
@@ -20,6 +26,8 @@ const {
   normalizeHoverTargets,
   normalizeInteractionScenarios,
   reconcileForbiddenContractState,
+  findHoverTextPointInPage,
+  toggleHover,
   resolveHoverTarget,
   resolveForbiddenMustExistSelectors,
   closeInteractionDialog,
@@ -28,6 +36,8 @@ const {
   validateCoverageRules,
   validateMutableForbiddenSelectors,
   waitForCoverageReady,
+  waitForHostMathRendering,
+  waitForStableTarget,
   withMandatoryHeadingCoverage,
 } = {
   ...require('../scripts/run-site-translation-test.cjs'),
@@ -36,6 +46,12 @@ const {
   COVERAGE_EXCLUDED_ANCESTORS: string;
   COVERAGE_PROTECTED_DESCENDANTS: string;
   COVERAGE_TRACKER_KEY: string;
+  assertFreshProductionExtension: (extensionDir: string, projectRoot: string) => unknown;
+  waitForHostMathRendering: (page: unknown, timeout: number) => Promise<unknown>;
+  waitForStableTarget: (page: unknown, selector: string, timeout: number) => Promise<void>;
+  findHoverTextPointInPage: (target: {selector: string; index: number}) => {x: number; y: number; text: string} | null;
+  toggleHover: (page: unknown, target: unknown, config: {selector: string; index: number}, count: number, timeout: number,
+    attempt?: number, prepareClickText?: string) => Promise<void>;
   assertPageContract: (
     page: {
       evaluate: (fn: (argument: unknown) => unknown, argument: unknown) => Promise<unknown>;
@@ -78,6 +94,7 @@ const {
     minSeen: number;
     trackDynamic: boolean;
     requiresPhrase?: boolean;
+    minTextLength?: number;
     sourceIncludes: string[];
   }>;
   normalizeHoverTargets: (targets: unknown[], options?: string | {
@@ -125,9 +142,9 @@ const {
   closeInteractionDialog: (
     page: {
       keyboard: {press: (key: string) => Promise<void>};
-      waitForSelector: (selector: string, options: {state: string; timeout: number}) => Promise<unknown>;
+      waitForFunction: (fn: (argument: unknown) => unknown, argument: unknown, options: {timeout: number; polling: number}) => Promise<unknown>;
     },
-    scenario: {name: string; dialogSelector: string; closeKey: string; closeAttempts: number},
+    scenario: {name: string; triggerSelector: string; dialogSelector: string; closeKey: string; closeAttempts: number},
     timeout: number,
     phase: string,
   ) => Promise<number>;
@@ -135,6 +152,8 @@ const {
     page: {evaluate: (fn: (argument: unknown) => unknown, argument: unknown) => Promise<unknown>},
     timeout: number,
     phase: string,
+    round?: number,
+    verifyUnchanged?: (remainingMs?: number) => Promise<void>,
   ) => Promise<unknown[]>;
   validateCoverageRevealStatuses: (statuses: Array<{
     token: string;
@@ -170,7 +189,7 @@ const {
     rules: unknown[],
     timeout: number,
   ) => Promise<void>;
-  withMandatoryHeadingCoverage: (rules: unknown[]) => Array<{
+  withMandatoryHeadingCoverage: (rules: unknown[], protectPageHeading?: boolean) => Array<{
     name: string;
     selector: string;
     kind: string;
@@ -184,6 +203,7 @@ const {
   MATRIX_REQUIREMENTS,
   computeJobTimeoutMs,
   runChildWithWatchdog,
+  runJobAttempts,
   validateMatrix,
 } = require('../scripts/run-site-translation-matrix.cjs') as {
   MATRIX_REQUIREMENTS: {
@@ -204,6 +224,10 @@ const {
       killProcessGroupImpl?: (child: EventEmitter & {pid?: number}, signal: string) => boolean;
     },
   ) => Promise<{ok: boolean; timedOut: boolean; signal: string | null}>;
+  runJobAttempts: (
+    runAttempt: (attempt: number) => Promise<{ok: boolean; timedOut: boolean}>,
+    maxAttempts: number,
+  ) => Promise<{ok: boolean; timedOut: boolean; attempts: Array<{ok: boolean; timedOut: boolean}>}>;
   validateMatrix: (caseConfigs?: Record<string, unknown>) => {
     entries: Array<[string, unknown]>;
     required: Array<[string, unknown]>;
@@ -284,6 +308,22 @@ describe('site translation coverage contract', () => {
         missedSamples: ['Forgotten title'],
       },
     ], 'global heading')).toThrow('mandatory-visible-latin-h1 仅翻译 0/1 个节点');
+  });
+
+  it('protects a list page H1 only when its forbidden contract explicitly owns that heading', () => {
+    const rules = normalizeCoverageRules(cases['github-project-pulls'].coverageRules);
+    expect(cases['github-project-pulls'].forbiddenSelectors).toContain('main h1');
+    expect(withMandatoryHeadingCoverage(rules).some(({name}) => name === 'mandatory-visible-latin-h1')).toBe(true);
+    expect(withMandatoryHeadingCoverage(rules, true)).toEqual(rules);
+  });
+
+  it('uses an explicit minimum length for live-site coverage of short product names', () => {
+    expect(normalizeCoverageRules(cases['hacker-news-8863'].coverageRules)
+      .find(({name}) => name === 'discussion-comments')?.minTextLength).toBe(10);
+    const invalidCases = structuredClone(cases) as unknown as Record<string, Record<string, unknown>>;
+    const rules = invalidCases['hacker-news-8863'].coverageRules as Array<Record<string, unknown>>;
+    rules[1].minTextLength = -1;
+    expect(() => validateMatrix(invalidCases)).toThrow('minTextLength 必须是非负整数');
   });
 
   it('does not count screen-reader-only headings as visible page headings', () => {
@@ -384,6 +424,65 @@ describe('site translation coverage contract', () => {
     }
   });
 
+  it.each([
+    ['github-eugeny-issue-list', 'issue-listitem-title-link'],
+    ['github-eugeny-issue-list', 'issue-pr-title-link'],
+    ['example-com', 'multilingual-paragraphs'],
+  ] as const)('uses current %s DOM while retaining legacy resolution and complete coverage (%s)', async (caseId, variant) => {
+    const config = cases[caseId];
+    const html = caseId === 'example-com'
+      ? '<html><head><title>Example Domain</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><svg aria-hidden="true"><path d="M0 0"></path></svg><p lang="zh">该域名仅用于文档示例，无需获得许可。</p><p lang="en">This domain is for use in documentation examples without needing permission.</p><p lang="ar" dir="rtl">هذا النطاق مُخصص للاستخدام في أمثلة التوثيق.</p><p lang="fr">L’usage de ce domaine est réservé à des exemples de documentation.</p><p lang="ru">Данный домен предназначен для использования в примерах документации.</p><p lang="es">Este dominio está destinado al uso en ejemplos de documentación.</p><a href="https://iana.org/help/example-domains">Learn more</a></body></html>'
+      : '<html><body><main><section data-testid="issues-list-surface"><a data-testid="' + variant + '" href="/Eugeny/tabby/issues/10084">right click not working</a><span class="IssueLabel">bug</span><div class="Description-module__container"><span>Eugeny/tabby#10084</span><span> · <button data-testid="author-filter-link">kikyoulg</button> opened <relative-time data-testid="issue-activity-timestamp">on Dec 6, 2024</relative-time></span></div></section></main></body></html>';
+    const {document, window} = parseHTML(html);
+    Object.defineProperty(window.HTMLElement.prototype, 'getBoundingClientRect', {configurable: true,
+      value: () => ({width: 400, height: 40, top: 0, left: 0, right: 400, bottom: 40})});
+    const globals = {window, document, Node: window.Node, HTMLElement: window.HTMLElement,
+      HTMLAnchorElement: window.HTMLAnchorElement, MutationObserver: window.MutationObserver,
+      getComputedStyle: () => ({display: 'block', visibility: 'visible'})};
+    const previous = new Map<string, PropertyDescriptor | undefined>();
+    for (const [name, value] of Object.entries(globals)) {
+      previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+      Object.defineProperty(globalThis, name, {configurable: true, writable: true, value});
+    }
+    const page = {evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => fn(argument),
+      waitForFunction: async (fn: (argument: unknown) => unknown, argument: unknown) => {
+        if (!fn(argument)) throw new Error('coverage was not ready');
+      }};
+    let tracker: {report: () => Array<{name: string; seenCount: number; sourceSamples: string[]}>; stop: () => void} | undefined;
+    try {
+      const rules = normalizeCoverageRules(config.coverageRules);
+      await expect(waitForCoverageReady(page, rules, 100)).resolves.toBeUndefined();
+      await installCoverageTracker(page, rules);
+      tracker = (window as unknown as Record<string, typeof tracker>)[COVERAGE_TRACKER_KEY];
+      const report = tracker!.report();
+      const completed = report.map(state => ({...state, translatedCount: state.seenCount, completedCount: state.seenCount}));
+      expect(() => assertCoverageReport(rules, completed, 'all owners')).not.toThrow();
+      for (const state of completed) {
+        expect(state.seenCount).toBeGreaterThanOrEqual(1);
+        expect(() => assertCoverageReport(rules, completed.map(item => item === state
+          ? {...item, translatedCount: 0} : item), 'missing owner')).toThrow(state.name);
+      }
+      const baseline = await capturePageContract(page, config.requiredSelectors, config.forbiddenSelectors,
+        config.interactionSelectors, [], []);
+      expect(baseline.forbiddenState.every(state => state.signatures.length > 0)).toBe(true);
+      const fallbackSelector = 'hoverSelector' in config ? config.hoverSelector : config.selector;
+      const [target] = normalizeHoverTargets([], {fallbackSelector, coverageRules: rules});
+      const resolved = await resolveHoverTarget(page, target, 100);
+      expect(resolved.sourceText).toContain(caseId === 'example-com' ? 'documentation examples' : 'right click not working');
+      if (caseId === 'example-com') {
+        expect(report).toHaveLength(3);
+        expect(document.querySelector('h1')).toBeNull();
+        expect(withMandatoryHeadingCoverage(rules).some(rule => rule.name === 'mandatory-visible-latin-h1')).toBe(true);
+      }
+    } finally {
+      tracker?.stop();
+      for (const [name, descriptor] of previous) {
+        if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+        else Reflect.deleteProperty(globalThis, name);
+      }
+    }
+  });
+
   it('reveals each connected missing coverage leaf once and skips a disconnected dynamic record', async () => {
     const {document, window} = parseHTML(`
       <html><body><main>
@@ -438,6 +537,7 @@ describe('site translation coverage contract', () => {
       const tracker = (window as unknown as Record<string, {
         snapshotMissing: () => Array<{token: string; source: string}>;
         activateMissing: (token: string) => {found: boolean; reason?: string};
+        beginRevealRound: () => void;
         missingStatuses: (tokens: string[]) => Array<{translated: boolean}>;
         stop: () => void;
       }>)[COVERAGE_TRACKER_KEY];
@@ -452,6 +552,9 @@ describe('site translation coverage contract', () => {
       expect(tracker.activateMissing(token)).toMatchObject({found: true});
       expect(revealed).toEqual(['missing']);
       expect(tracker.activateMissing(token)).toMatchObject({found: false, reason: 'already-activated'});
+      tracker.beginRevealRound();
+      expect(tracker.activateMissing(token)).toMatchObject({found: true});
+      expect(revealed).toEqual(['missing', 'missing']);
 
       const missing = document.querySelector('#missing')!;
       const wrapper = document.createElement('span');
@@ -476,6 +579,102 @@ describe('site translation coverage contract', () => {
         else Reflect.deleteProperty(globalThis, name);
       }
     }
+  });
+
+  it.each([
+    ['Division', '/', '（', '除法（'],
+    ['Logical NOT', '!a', 'LOGICAL NOT (', '逻辑非（'],
+  ] as const)('keeps Swift %s paragraph and list coverage strict until the actual owner has Chinese prose', async (label, code, invalid, translated) => {
+    const {document, window} = parseHTML(`<html><body><main><ul><li id="owner"><p id="target">${label} (<code>${code}</code>)</p></li><li><p id="neighbor">Unary operators operate on a single target.</p></li><li><p id="other-a">Another independent operator explanation.</p></li><li><p id="other-b">Assignment stores a value in the target variable.</p></li><li><p id="other-c">Comparison produces a Boolean result for two values.</p></li></ul></main></body></html>`);
+    Object.defineProperty(window.HTMLElement.prototype, 'getBoundingClientRect', {configurable: true,
+      value: () => ({width: 400, height: 40, top: 0, left: 0, right: 400, bottom: 40})});
+    const globals = {window, document, Node: window.Node, HTMLElement: window.HTMLElement,
+      HTMLAnchorElement: window.HTMLAnchorElement, MutationObserver: window.MutationObserver,
+      getComputedStyle: () => ({display: 'block', visibility: 'visible'})};
+    const previous = new Map<string, PropertyDescriptor | undefined>();
+    for (const [name, value] of Object.entries(globals)) {
+      previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+      Object.defineProperty(globalThis, name, {configurable: true, writable: true, value});
+    }
+    type Tracker = {report: () => Array<{name: string; seenCount: number; translatedCount: number}>;
+      snapshotMissing: () => Array<{token: string; source: string}>;
+      missingStatuses: (tokens: string[]) => Parameters<typeof validateCoverageRevealStatuses>[0];
+      reset: () => void; restorationReport: () => unknown[]; stop: () => void};
+    let tracker: Tracker | undefined;
+    try {
+      const rules = normalizeCoverageRules(cases['swift-basic-operators'].coverageRules)
+        .filter(rule => ['chapter-paragraphs', 'chapter-list-items'].includes(rule.name));
+      const page = {evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => fn(argument)};
+      const target = document.querySelector('#target')!;
+      const original = target.innerHTML;
+      const originalCode = target.querySelector('code');
+      const append = (owner: Element, text: string) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'fluent-read-bilingual-content';
+        wrapper.setAttribute('data-fr-translation-owned', 'true');
+        wrapper.textContent = text;
+        owner.append(wrapper);
+        return wrapper;
+      };
+      // A sibling's Chinese wrapper certifies only that sibling and its own li.
+      const neighbors = ['neighbor', 'other-a', 'other-b', 'other-c'].map(id => document.getElementById(id)!);
+      const neighborWrappers = neighbors.map(owner => append(owner, '另一段说明'));
+      await installCoverageTracker(page, rules);
+      tracker = (window as unknown as Record<string, Tracker>)[COVERAGE_TRACKER_KEY];
+      const tokens = tracker.snapshotMissing().map(status => status.token);
+      expect(tokens).toHaveLength(2);
+      expect(tracker.snapshotMissing().map(status => status.source)).toEqual([`${label} ()`, `${label} ()`]);
+      const checkCounts = (count: number) => {
+        expect(tracker!.report().map(state => ({name: state.name, seen: state.seenCount, translated: state.translatedCount})))
+          .toEqual([{name: 'chapter-paragraphs', seen: 5, translated: count},
+            {name: 'chapter-list-items', seen: 5, translated: count}]);
+      };
+      checkCounts(4);
+      const bad = append(target, `${invalid}${code})`);
+      checkCounts(4);
+      expect(() => validateCoverageRevealStatuses(tracker!.missingStatuses(tokens), 'swift invalid output')).toThrow(/missing-wrapper/u);
+      const retry = document.createElement('span');
+      retry.className = 'fluent-read-retry-wrapper';
+      retry.setAttribute('data-fr-translation-owned', 'true');
+      target.append(retry);
+      expect(() => validateCoverageRevealStatuses(tracker!.missingStatuses(tokens), 'swift retry')).toThrow(/terminal-retry/u);
+      retry.remove();
+      bad.remove();
+      const good = append(target, `${translated}${code})`);
+      checkCounts(5);
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'swift all owners')).not.toThrow();
+      expect(() => validateCoverageRevealStatuses(tracker!.missingStatuses(tokens), 'swift translated')).not.toThrow();
+      good.remove();
+      neighborWrappers.forEach(wrapper => wrapper.remove());
+      expect(target.innerHTML).toBe(original);
+      expect(target.querySelector('code')).toBe(originalCode);
+      expect(() => assertCoverageRestoration(tracker!.restorationReport(), 'swift restored')).not.toThrow();
+      tracker.reset();
+      checkCounts(0);
+      // The second pass still requires new owned wrappers; no stale translatedEver credit.
+      expect(() => validateCoverageRevealStatuses(tracker!.missingStatuses(tracker!.snapshotMissing().map(status => status.token)), 'swift second pass')).toThrow(/missing-wrapper/u);
+      append(target, `${translated}${code})`);
+      neighbors.forEach(owner => append(owner, '第二次另一段说明'));
+      checkCounts(5);
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'swift second pass all owners')).not.toThrow();
+    } finally {
+      tracker?.stop();
+      for (const [name, descriptor] of previous) {
+        if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+        else Reflect.deleteProperty(globalThis, name);
+      }
+    }
+  });
+
+  it('accepted unchanged evidence does not certify Chinese wrapper coverage in the original contract', () => {
+    const evidence = {status: 'available', reason: 'accepted-result-identical', sources: ['Spec'], outputs: ['Spec']};
+    const status = {token: '1:6:0', rule: 'headings', source: 'Spec',
+      connected: true, eligible: true, translated: false, loading: false, retry: false, completion: evidence};
+    expect(() => validateCoverageRevealStatuses([status], 'original68'))
+      .toThrow(/missing-wrapper/u);
+    expect(() => assertCoverageReport([{name: 'headings', minSeen: 1, sourceIncludes: []}], [{name: 'headings',
+      seenCount: 1, translatedCount: 0, completedCount: 1, verifiedUnchangedCount: 1}], 'original68'))
+      .toThrow(/仅翻译/u);
   });
 
   it('keeps terminal retry, disconnect and untranslated outcomes strict after a reveal pass', () => {
@@ -604,7 +803,7 @@ describe('site translation coverage contract', () => {
   });
 
   it('fails before an unbounded reveal loop when a page has too many missing leaves', async () => {
-    const batch = Array.from({length: 129}, (_, index) => ({
+    const batch = Array.from({length: 257}, (_, index) => ({
       token: `0:${index}:0`,
       rule: 'paragraphs',
       source: `Natural paragraph ${index}`,
@@ -620,6 +819,69 @@ describe('site translation coverage contract', () => {
     await expect(settleCoverageByReveal(page, 60_000, 'coverage'))
       .rejects.toThrow(/有界唤醒上限/u);
     expect(page.evaluate).toHaveBeenCalledTimes(1);
+  });
+
+  it('budgets one bounded translation poll per missing leaf before the shared idle wait', async () => {
+    const batch = Array.from({length: 100}, (_, index) => ({
+      token: `0:${index}:0`,
+      rule: 'paragraphs',
+      source: `Natural paragraph ${index}`,
+      connected: true,
+      eligible: true,
+      translated: false,
+      loading: false,
+      retry: false,
+    }));
+    let now = Date.parse('2026-09-16T00:00:00Z');
+    const dateNow = vi.spyOn(Date, 'now').mockImplementation(() => now);
+    let snapshots = 0;
+    const page = {
+      evaluate: vi.fn(async (_fn: unknown, argument: unknown) => {
+        if (argument === COVERAGE_TRACKER_KEY) return snapshots++ === 0 ? batch : undefined;
+        if (typeof argument === 'string') return [];
+        const request = argument as {token?: string; requestedTokens?: string[]};
+        if (request.token) return {found: true, token: request.token, alreadyTranslated: false};
+        return request.requestedTokens!.map((token) => ({...batch[Number(token.split(':')[1])], translated: true}));
+      }),
+      // 模拟每个叶节点耗尽可见窗口；批次预算必须覆盖全部 100 个节点。
+      waitForFunction: vi.fn(async (_fn: unknown, _argument: unknown, options?: {timeout?: number}) => {
+        if (options?.timeout === 2000) now += 2000;
+      }),
+    };
+    try {
+      const statuses = await settleCoverageByReveal(page, 60_000, 'coverage');
+      expect(statuses).toHaveLength(100);
+      expect(page.waitForFunction).toHaveBeenCalledTimes(101);
+      expect(page.waitForFunction.mock.calls.filter(([, , options]) => options?.timeout === 2000)).toHaveLength(100);
+    } finally {
+      dateNow.mockRestore();
+    }
+  });
+
+  it('revisits only remaining leaves after slow requests release the translation queue', async () => {
+    const batch = ['0:0:0', '0:1:0'].map(token => ({
+      token, rule: 'paragraphs', source: `Natural paragraph ${token}`, connected: true,
+      eligible: true, translated: false, loading: false, retry: false,
+    }));
+    let round = 0;
+    const page = {
+      evaluate: vi.fn(async (fn: Function, argument: unknown) => {
+        if (argument === COVERAGE_TRACKER_KEY) {
+          if (fn.toString().includes('snapshotMissing')) return round++ === 0 ? batch : [batch[1]];
+          return undefined;
+        }
+        if (typeof argument === 'string') return [];
+        const request = argument as {token?: string; requestedTokens?: string[]};
+        if (request.token) return {found: true, token: request.token, alreadyTranslated: false};
+        return request.requestedTokens!.map(token => ({...batch[Number(token.split(':')[1])],
+          translated: round > 1 || token === batch[0].token}));
+      }),
+      waitForFunction: vi.fn(async () => undefined),
+    };
+    const statuses = await settleCoverageByReveal(page, 60_000, 'coverage');
+    expect(statuses).toHaveLength(1);
+    expect(statuses[0]).toMatchObject({token: batch[1].token, translated: true});
+    expect(round).toBe(2);
   });
 
   it('normalizes only adjacent Text runs around protected MathJax roots', async () => {
@@ -981,6 +1243,399 @@ describe('site translation coverage contract', () => {
     })).toMatchObject({ok: true, production: false});
   });
 
+  it('includes migrated src files in the actual production freshness scan', () => {
+    const projectRoot = mkdtempSync(join(tmpdir(), 'fluentread-freshness-test-'));
+    const extensionDir = join(projectRoot, '.output', 'chrome-mv3');
+    const sourceDir = join(projectRoot, 'src', 'features');
+    try {
+      mkdirSync(extensionDir, {recursive: true});
+      mkdirSync(sourceDir, {recursive: true});
+      const manifest = join(extensionDir, 'manifest.json');
+      const source = join(sourceDir, 'runtime.ts');
+      writeFileSync(manifest, '{}');
+      writeFileSync(source, '// changed runtime');
+      utimesSync(manifest, 100, 100);
+      utimesSync(source, 200, 200);
+      expect(() => assertFreshProductionExtension(extensionDir, projectRoot)).toThrow('拒绝测试旧 production extension');
+      utimesSync(manifest, 300, 300);
+      expect(() => assertFreshProductionExtension(extensionDir, projectRoot)).not.toThrow();
+    } finally {
+      rmSync(projectRoot, {recursive: true, force: true});
+    }
+  });
+
+  it('reveals layout-preserving hidden entrance content before waiting for visibility', async () => {
+    const {document} = parseHTML('<html><body><li hidden><p>Entrance content remains translatable.</p></li></body></html>');
+    const paragraph = document.querySelector('p')!;
+    Object.defineProperty(paragraph, 'getBoundingClientRect', {value: () => ({width: 400, height: 40})});
+    vi.stubGlobal('document', document);
+    vi.stubGlobal('getComputedStyle', () => ({display: 'block', visibility: 'visible'}));
+    let revealed = false;
+    const scroll = vi.fn(async () => {
+      revealed = true;
+      paragraph.parentElement!.removeAttribute('hidden');
+    });
+    const page = {
+      waitForSelector: vi.fn(async () => undefined),
+      evaluate: async (fn: (arg: string) => unknown, arg: string) => fn(arg),
+      waitForFunction: async (fn: (arg: string) => boolean, arg: string) => {
+        expect(revealed).toBe(true);
+        expect(fn(arg)).toBe(true);
+      },
+      locator: () => ({nth: () => ({scrollIntoViewIfNeeded: scroll})}),
+      waitForTimeout: vi.fn(async () => undefined),
+    };
+    try {
+      await waitForStableTarget(page, 'p', 100);
+      expect(scroll).toHaveBeenCalled();
+      expect(document.querySelector('[hidden]')).toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('aims at original text instead of heading padding, permalink text, or appended translations', () => {
+    const {document} = parseHTML('<html><body><h1><a href="#heading">¶</a><span>Everything you would expect</span><span data-fr-translation-owned="true">所有译文</span></h1></body></html>');
+    const original = document.querySelector('h1 > span')!;
+    const permalink = document.querySelector('a')!;
+    let covered = false;
+    Object.defineProperty(document, 'createRange', {value: () => {
+      let parent: Node | null;
+      return {
+        selectNodeContents(node: Node) { parent = node.parentNode; },
+        getClientRects: () => [{left: parent === permalink ? 500 : 20, right: parent === permalink ? 700 : 220,
+          top: 140, bottom: 160, width: 200, height: 20}],
+      };
+    }});
+    Object.defineProperty(document, 'elementFromPoint', {
+      value: (x: number) => covered ? document.body : x > 400 ? permalink : original,
+    });
+    vi.stubGlobal('document', document);
+    vi.stubGlobal('window', {innerWidth: 1280, innerHeight: 900});
+    vi.stubGlobal('getComputedStyle', () => ({display: 'inline', visibility: 'visible'}));
+    try {
+      expect(findHoverTextPointInPage({selector: 'h1', index: 0})).toMatchObject({
+        x: 90, y: 150, text: 'Everything you would expect',
+      });
+      covered = true;
+      expect(findHoverTextPointInPage({selector: 'h1', index: 0})).toBeNull();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it.each([
+    'What is a Frontend Developer?',
+    '<strong>What is a Frontend Developer?</strong>',
+  ])('requires the original text Range of a decorated collapsible h2 even when its outer-box hit is valid: %s', async (label) => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const {document} = parseHTML(`<html><body><main><h2 aria-expanded="false" class="flex select-none"><span class="flex grow"><svg aria-hidden="true"><title>Information</title></svg>${label}</span><span><svg aria-hidden="true"></svg></span></h2></main><aside>Cookie panel</aside></body></html>`);
+    const heading = document.querySelector('h2')!;
+    const source = document.querySelector('h2 > span')!;
+    const cookie = document.querySelector('aside')!;
+    const originalHtml = heading.outerHTML;
+    let covered = true;
+    Object.defineProperty(document, 'createRange', {value: () => ({
+      selectNodeContents: vi.fn(),
+      getClientRects: () => [{left: 199, right: 400, top: 558, bottom: 575, width: 201, height: 17}],
+    })});
+    Object.defineProperty(document, 'elementFromPoint', {
+      value: (x: number) => covered && x < 480 ? cookie : source,
+    });
+    Object.defineProperty(document, 'elementsFromPoint', {value: (x: number) =>
+      covered && x < 480 ? [cookie, document.body] : [source, heading, heading.parentElement]});
+    Object.defineProperty(heading, 'getBoundingClientRect', {value: () => ({
+      x: 169, y: 548, left: 169, right: 1103, top: 548, bottom: 585.2890625, width: 934, height: 37.2890625,
+    })});
+    vi.stubGlobal('document', document);
+    vi.stubGlobal('window', {innerWidth: 1272, innerHeight: 816});
+    vi.stubGlobal('innerWidth', 1272);
+    vi.stubGlobal('innerHeight', 816);
+    vi.stubGlobal('getComputedStyle', () => ({display: 'flex', visibility: 'visible'}));
+    const page = {
+      evaluate: async (fn: (arg: unknown) => unknown, arg: unknown) => fn(arg),
+      mouse: {move: vi.fn()}, keyboard: {down: vi.fn(), up: vi.fn()},
+      waitForTimeout: async (ms: number) => { vi.advanceTimersByTime(ms); },
+    };
+    try {
+      // 实际诊断只检测 H2 宽外框的 35% 点；该点在遮挡文字的面板右侧。
+      expect(document.elementFromPoint(169 + 934 * 0.35, 548 + 37.2890625 / 2)).toBe(source);
+      expect(findHoverTextPointInPage({selector: 'main h2', index: 0})).toBeNull();
+      const error = await toggleHover(page, {scrollIntoViewIfNeeded: async () => undefined},
+        {selector: 'main h2', index: 0}, 1, 200, 1).catch((failure: Error) => failure);
+      expect(error).toBeInstanceOf(Error);
+      const diagnostics = JSON.parse((error as Error).message.split('：')[1]);
+      expect(diagnostics.lastPoint).toBeNull();
+      expect(diagnostics.targetState.hitStack[0].tag).toBe('SPAN');
+      expect(diagnostics.targetState.textRangeSamples.find((sample: {text: string}) =>
+        sample.text === 'What is a Frontend Developer?')).toMatchObject({
+        excluded: false, display: 'flex', visibility: 'visible',
+        rects: [{x: 269.35, y: 566.5, hit: {tag: 'ASIDE', insideTarget: false, containsTextParent: false}}],
+      });
+      expect(page.mouse.move).not.toHaveBeenCalled();
+      expect(page.keyboard.down).not.toHaveBeenCalled();
+      expect(page.keyboard.up).not.toHaveBeenCalled();
+      covered = false;
+      expect(findHoverTextPointInPage({selector: 'main h2', index: 0})).toMatchObject({
+        x: 269.35, y: 566.5, text: 'What is a Frontend Developer?',
+      });
+      expect(heading.outerHTML).toBe(originalHtml);
+      expect(heading.getAttribute('aria-expanded')).toBe('false');
+    } finally {
+      vi.unstubAllGlobals();
+      vi.useRealTimers();
+    }
+  });
+
+  it('rechecks a declared late cookie button using one native click before the unchanged h2 hotkey', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const point = {x: 269.35, y: 566.5, textIndex: 1, text: 'What is a Frontend Developer?',
+      rect: {left: 199, top: 558, width: 201, height: 17}};
+    let dismissed = false;
+    const button = {
+      isVisible: vi.fn(async () => Date.now() >= 100 && !dismissed),
+      click: vi.fn(async ({timeout}: {timeout: number}) => {
+        expect(timeout).toBe(900);
+        vi.advanceTimersByTime(60);
+        dismissed = true;
+      }),
+      waitFor: vi.fn(async (options: unknown) => {
+        expect(options).toEqual({state: 'hidden', timeout: 840});
+        vi.advanceTimersByTime(10);
+      }),
+    };
+    const target = {scrollIntoViewIfNeeded: vi.fn(async () => undefined)};
+    const down = vi.fn(async () => { expect(Date.now()).toBeGreaterThanOrEqual(370); });
+    const page = {
+      evaluate: vi.fn(async () => Date.now() >= 100 && !dismissed ? null : point),
+      getByText: vi.fn(() => ({filter: (options: unknown) => {
+        expect(options).toEqual({visible: true});return {last: () => button};
+      }})),
+      mouse: {move: vi.fn(async () => undefined)},
+      keyboard: {down, up: vi.fn(async () => undefined)},
+      waitForTimeout: async (ms: number) => { vi.advanceTimersByTime(ms); },
+      waitForFunction: vi.fn(async () => undefined),
+    };
+    try {
+      await toggleHover(page, target, {selector: 'main h2', index: 0}, 1, 1000, 1, 'Reject All');
+      expect(page.getByText.mock.calls).toEqual([['Reject All', {exact: true}]]);
+      expect(button.click).toHaveBeenCalledOnce();
+      expect(button.waitFor).toHaveBeenCalledOnce();
+      expect(page.mouse.move.mock.calls).toEqual([[point.x, point.y], [point.x, point.y]]);
+      expect(down.mock.calls).toEqual([['Control']]);
+      expect(page.keyboard.up.mock.calls).toEqual([['Control']]);
+      expect(page.waitForFunction.mock.calls[0]?.slice(1)).toEqual([
+        {targetSelector: 'main h2', targetIndex: 0, count: 1}, {timeout: 1000},
+      ]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it.each([false, true])('chooses the visible declared cookie button when a duplicate is hidden (hidden first: %s)', async hiddenFirst => {
+    vi.useFakeTimers();vi.setSystemTime(0);
+    const {document} = parseHTML('<html><body><button>Reject All</button><button hidden>Reject All</button></body></html>');
+    const visible = document.querySelector('button:not([hidden])')!;
+    const hidden = document.querySelector('button[hidden]')!;
+    if (hiddenFirst) document.body.prepend(hidden);
+    const clicked: Element[] = [];
+    const point = {x: 100, y: 120, textIndex: 0, text: 'What is a Frontend Developer?',
+      rect: {left: 20, top: 110, width: 220, height: 20}};
+    const locator = (nodes: Element[]): any => ({
+      filter: ({visible: onlyVisible}: {visible: boolean}) => locator(nodes.filter(node => !onlyVisible || !node.hasAttribute('hidden'))),
+      last: () => {
+        const node = nodes.at(-1);
+        return {isVisible: async () => Boolean(node && !node.hasAttribute('hidden')),
+          click: async () => {if (!node || node.hasAttribute('hidden')) throw Error('hidden action');clicked.push(node);node.setAttribute('hidden', '');},
+          waitFor: async () => {expect(node?.hasAttribute('hidden')).toBe(true);}};
+      },
+    });
+    const page = {evaluate: async () => visible.hasAttribute('hidden') ? point : null,
+      getByText: (text: string) => locator([...document.querySelectorAll('button')].filter(node => node.textContent === text)),
+      mouse: {move: vi.fn()}, keyboard: {down: vi.fn(), up: vi.fn()},
+      waitForFunction: vi.fn(), waitForTimeout: async (ms: number) => {vi.advanceTimersByTime(ms);}};
+    try {
+      await toggleHover(page, {scrollIntoViewIfNeeded: async () => undefined}, {selector: 'main h2', index: 0}, 1, 1000, 1, 'Reject All');
+      expect(clicked).toEqual([visible]);expect(hidden.hasAttribute('hidden')).toBe(true);
+      expect(page.keyboard.down.mock.calls).toEqual([['Control']]);
+      expect(page.keyboard.up.mock.calls).toEqual([['Control']]);
+    } finally {vi.useRealTimers();}
+  });
+
+  it('charges late cookie preparation to the existing pointer deadline and sends no hotkey without 200ms stability', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const point = {x: 269.35, y: 566.5, textIndex: 1, text: 'What is a Frontend Developer?',
+      rect: {left: 199, top: 558, width: 201, height: 17}};
+    let dismissed = false;
+    const button = {
+      isVisible: vi.fn(async () => Date.now() >= 800 && !dismissed),
+      click: vi.fn(async ({timeout}: {timeout: number}) => {
+        expect(timeout).toBe(200);
+        vi.advanceTimersByTime(150);
+        dismissed = true;
+      }),
+      waitFor: vi.fn(async (options: unknown) => {
+        expect(options).toEqual({state: 'hidden', timeout: 50});
+        vi.advanceTimersByTime(25);
+      }),
+    };
+    const page = {
+      evaluate: vi.fn(async (fn: unknown) => fn === findHoverTextPointInPage ? dismissed ? point : null : {}),
+      getByText: vi.fn(() => ({filter: (options: unknown) => {
+        expect(options).toEqual({visible: true});return {last: () => button};
+      }})),
+      mouse: {move: vi.fn(async () => undefined)},
+      keyboard: {down: vi.fn(), up: vi.fn()},
+      waitForTimeout: async (ms: number) => { vi.advanceTimersByTime(ms); },
+      waitForFunction: vi.fn(),
+    };
+    try {
+      await expect(toggleHover(page, {scrollIntoViewIfNeeded: async () => undefined},
+        {selector: 'main h2', index: 0}, 1, 1000, 1, 'Reject All'))
+        .rejects.toThrow('悬浮原文没有稳定且可命中的位置');
+      expect(button.click).toHaveBeenCalledOnce();
+      expect(Date.now()).toBe(1025); // 原有 50ms 轮询最多跨过预算一次；未重启截止时间。
+      expect(page.keyboard.down).not.toHaveBeenCalled();
+      expect(page.keyboard.up).not.toHaveBeenCalled();
+      expect(page.waitForFunction).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('waits through post-restore movement and temporary occlusion before sending one trusted hotkey', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const point = (y: number) => ({
+      x: 90, y, textIndex: 0, text: 'Everything you would expect',
+      rect: {left: 20, top: y - 10, width: 200, height: 20},
+    });
+    const down = vi.fn(async () => { expect(Date.now()).toBeGreaterThanOrEqual(350); });
+    const up = vi.fn(async () => undefined);
+    const move = vi.fn(async () => undefined);
+    const page = {
+      evaluate: async () => Date.now() < 50 ? point(100) : Date.now() < 100 ? point(130) : Date.now() < 150 ? null : point(180),
+      mouse: {move},
+      keyboard: {down, up},
+      waitForTimeout: async (ms: number) => { vi.advanceTimersByTime(ms); },
+      waitForFunction: vi.fn(async () => undefined),
+    };
+    try {
+      await toggleHover(page, {scrollIntoViewIfNeeded: async () => undefined}, {selector: 'h1', index: 0}, 1, 1000);
+      expect(move.mock.calls).toEqual([[90, 100], [90, 130], [90, 180]]);
+      expect(down.mock.calls).toEqual([['Control']]);
+      expect(up.mock.calls).toEqual([['Control']]);
+      expect(page.waitForFunction).toHaveBeenCalledOnce();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('fails without issuing a translation hotkey when original text never becomes hittable', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const down = vi.fn();
+    const page = {
+      evaluate: async () => null,
+      mouse: {move: vi.fn()},
+      keyboard: {down, up: vi.fn()},
+      waitForTimeout: async (ms: number) => { vi.advanceTimersByTime(ms); },
+    };
+    try {
+      await expect(toggleHover(page, {scrollIntoViewIfNeeded: async () => undefined}, {selector: 'h1', index: 0}, 1, 200))
+        .rejects.toThrow('悬浮原文没有稳定且可命中的位置');
+      expect(down).not.toHaveBeenCalled();
+      expect(page.mouse.move).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('tracks newly revealed descendants when their ancestor loses its hidden attribute', async () => {
+    const {document, window} = parseHTML('<html><body><section hidden><p>Newly revealed prose must be translated during the first pass.</p></section></body></html>');
+    Object.defineProperty(window.HTMLElement.prototype, 'getBoundingClientRect', {
+      configurable: true,
+      value: () => ({width: 400, height: 40, top: 0, left: 0, right: 400, bottom: 40}),
+    });
+    for (const [key, value] of Object.entries({
+      window, document, Node: window.Node, HTMLElement: window.HTMLElement,
+      HTMLAnchorElement: window.HTMLAnchorElement, MutationObserver: window.MutationObserver,
+      getComputedStyle: () => ({display: 'block', visibility: 'visible'}),
+    })) vi.stubGlobal(key, value);
+    let tracker: {report: () => unknown[]; stop: () => void} | undefined;
+    try {
+      const rules = normalizeCoverageRules([{name: 'prose', selector: 'section p', minInitial: 1, trackDynamic: true}]);
+      await installCoverageTracker({evaluate: async (fn, argument) => fn(argument)}, rules);
+      tracker = (window as unknown as Record<string, typeof tracker>)[COVERAGE_TRACKER_KEY]!;
+      expect(tracker.report()).toContainEqual(expect.objectContaining({seenCount: 0}));
+      document.querySelector('section')!.removeAttribute('hidden');
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(tracker.report()).toContainEqual(expect.objectContaining({seenCount: 1, translatedCount: 0}));
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'revealed')).toThrow('仅翻译 0/1');
+      const wrapper = document.createElement('span');
+      wrapper.className = 'fluent-read-bilingual-content';
+      wrapper.textContent = '新揭示正文的译文';
+      document.querySelector('p')!.append(wrapper);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'revealed')).not.toThrow();
+    } finally {
+      tracker?.stop();
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('keeps SQLite prose selection stable when bilingual wrappers move syntax labels', () => {
+    const {document} = parseHTML(`<html><body><div class="fancy">
+      <p id="syntax"><b><a href="syntax/select-stmt.html">select-stmt</a>:</b></p>
+      <p id="prose">The SELECT statement is used to query the database.</p>
+      <p id="reference">The <a href="syntax/select-stmt.html">select-stmt</a> diagram explains the grammar.</p>
+    </div></body></html>`);
+    const selector = cases['sqlite-select-language'].hoverSelector;
+    expect([...document.querySelectorAll(selector)].map((node) => node.id)).toEqual(['prose', 'reference']);
+    document.querySelector('#syntax')!.innerHTML = '<span class="fluent-read-original-text"><b><span><a href="syntax/select-stmt.html">select-stmt</a>:</span></b></span><span class="fluent-read-bilingual-content">select-stmt：</span>';
+    expect([...document.querySelectorAll(selector)].map((node) => node.id)).toEqual(['prose', 'reference']);
+  });
+
+  it('captures host MathJax errors only after its existing startup queue completes', async () => {
+    const {document} = parseHTML('<html><body><p id="formula">Raw formula source</p></body></html>');
+    let complete: (() => void) | undefined;
+    const Queue = vi.fn((callback: () => void) => { complete = callback; });
+    vi.stubGlobal('window', {MathJax: {version: '2.7', Hub: {Queue}}});
+    vi.stubGlobal('document', document);
+    const page = {evaluate: (fn: (timeout: number) => unknown, timeout: number) => fn(timeout)};
+    try {
+      const pending = waitForHostMathRendering(page, 1000);
+      expect(Queue).toHaveBeenCalledTimes(1);
+      document.querySelector('#formula')!.innerHTML = '<span class="MathJax_Error" id="math-error">[Math Processing Error]</span>';
+      complete!();
+      await expect(pending).resolves.toEqual({detected: true, version: '2.7', errors: [{id: 'math-error', text: '[Math Processing Error]'}]});
+      expect(Queue.mock.calls[0]).toHaveLength(1);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('fails boundedly when host MathJax never finishes and skips pages without its queue', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('window', {MathJax: {Hub: {Queue: () => undefined}}});
+    const page = {evaluate: (fn: (timeout: number) => unknown, timeout: number) => fn(timeout)};
+    try {
+      const pending = waitForHostMathRendering(page, 50);
+      const failure = expect(pending).rejects.toThrow('宿主 MathJax 初始排版等待超时');
+      await vi.advanceTimersByTimeAsync(50);
+      await failure;
+      vi.stubGlobal('window', {});
+      await expect(waitForHostMathRendering(page, 50)).resolves.toEqual({detected: false, errors: []});
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('requires every non-optional forbidden selector to exist for required cases', () => {
     const forbidden = ['pre, code', 'svg'];
     expect(resolveForbiddenMustExistSelectors('required', forbidden, ['svg'])).toEqual(forbidden);
@@ -1152,9 +1807,9 @@ describe('site translation coverage contract', () => {
           if (pressed.length === 2) visible = false;
         },
       },
-      waitForSelector: async (_selector: string, options: {state: string; timeout: number}) => {
+      waitForFunction: async (_fn: unknown, _argument: unknown, options: {timeout: number; polling: number}) => {
         waitTimeouts.push(options.timeout);
-        expect(options.state).toBe('hidden');
+        expect(options.polling).toBe(50);
         if (visible) throw new Error('dialog remains visible');
       },
     };
@@ -1176,15 +1831,295 @@ describe('site translation coverage contract', () => {
     }]);
     const page = {
       keyboard: {press: async (key: string) => void pressed.push(key)},
-      waitForSelector: async () => {
+      waitForFunction: async () => {
         throw new Error('dialog remains visible');
       },
+      evaluate: async () => ({dialogVisible: true}),
     };
 
     await expect(closeInteractionDialog(page, scenario!, 60_000, 'first-translation'))
       .rejects.toThrow('first-translation/never-closes 对话框在 2 次 Escape 后仍未隐藏');
     expect(pressed).toEqual(['Escape', 'Escape']);
   });
+
+  it.each(['open-second-dialog', 'expanded-trigger', 'missing-trigger', 'closed'] as const)(
+    'checks every real matching dialog and the original trigger (%s)', async state => {
+      const {document} = parseHTML('<html><body><button id="trigger" aria-expanded="false"></button><div class="dialog" hidden></div><div class="dialog" hidden></div></body></html>');
+      if (state === 'open-second-dialog') document.querySelectorAll('.dialog')[1].removeAttribute('hidden');
+      if (state === 'expanded-trigger') document.querySelector('#trigger')!.setAttribute('aria-expanded', 'true');
+      if (state === 'missing-trigger') document.querySelector('#trigger')!.remove();
+      for (const dialog of document.querySelectorAll('.dialog')) {
+        Object.defineProperty(dialog, 'getBoundingClientRect', {value: () => ({width: dialog.hasAttribute('hidden') ? 0 : 100, height: dialog.hasAttribute('hidden') ? 0 : 50})});
+      }
+      const {runInNewContext} = require('node:vm');
+      const run = (fn: (argument: unknown) => unknown, argument: unknown) => runInNewContext(`(${fn.toString()})(argument)`, {
+        document, argument, getComputedStyle: (node: Element) => ({display: node.hasAttribute('hidden') ? 'none' : 'block', visibility: 'visible'}),
+      }, {timeout: 1000});
+      const pressed: string[] = [];
+      const timeouts: number[] = [];
+      const page = {
+        keyboard: {press: async (key: string) => void pressed.push(key)},
+        waitForFunction: async (fn: (argument: unknown) => unknown, argument: unknown, options: {timeout: number; polling: number}) => {
+          timeouts.push(options.timeout); expect(options.polling).toBe(50);
+          if (!run(fn, argument)) throw new Error('actual DOM did not close');
+        },
+        evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => run(fn, argument),
+      };
+      const scenario = {name: state, triggerSelector: '#trigger', dialogSelector: '.dialog', closeKey: 'Escape', closeAttempts: 3};
+      if (state === 'closed') await expect(closeInteractionDialog(page, scenario, 30_000, 'baseline')).resolves.toBe(1);
+      else await expect(closeInteractionDialog(page, scenario, 30_000, 'baseline')).rejects.toThrow('3 次 Escape 后仍未隐藏');
+      expect(pressed).toEqual(Array(state === 'closed' ? 1 : 3).fill('Escape'));
+      expect(timeouts).toEqual(Array(pressed.length).fill(1500));
+    },
+  );
+
+  it.each(['visible-dialog-after-sample-cap', 'expanded-trigger', 'missing-trigger', 'rect-error', 'style-error', 'query-error', 'closed'] as const)(
+    'retains serialized close-predicate evidence without relaxing the assertion (%s)', async state => {
+      const {document} = parseHTML('<html><body><button id="trigger" aria-expanded="false"></button>' +
+        Array.from({length: 12}, (_, index) => `<div class="dialog" id="dialog-${index}" hidden></div>`).join('') + '</body></html>');
+      const triggerSelector = '#trigger';
+      const dialogSelector = '.dialog';
+      const dialogs = [...document.querySelectorAll(dialogSelector)];
+      if (state === 'visible-dialog-after-sample-cap') dialogs[11].removeAttribute('hidden');
+      if (state === 'expanded-trigger') document.querySelector(triggerSelector)!.setAttribute('aria-expanded', 'true');
+      if (state === 'missing-trigger') document.querySelector(triggerSelector)!.remove();
+      let predicateActive = false;
+      for (const dialog of dialogs) Object.defineProperty(dialog, 'getBoundingClientRect', {value: () => {
+        if (predicateActive && state === 'rect-error' && dialog.id === 'dialog-11') throw new Error('PRIVATE_CALLBACK_ERROR');
+        return {width: dialog.hasAttribute('hidden') ? 0 : 100, height: dialog.hasAttribute('hidden') ? 0 : 50};
+      }});
+      const {runInNewContext} = require('node:vm');
+      const run = (fn: (argument: unknown) => unknown, argument: unknown) => runInNewContext(`(${fn.toString()})(argument)`, {
+        argument,
+        document: {
+          querySelector: (selector: string) => document.querySelector(selector),
+          querySelectorAll: (selector: string) => {
+            if (predicateActive && state === 'query-error' && selector === dialogSelector) throw new Error('PRIVATE_CALLBACK_ERROR');
+            return document.querySelectorAll(selector);
+          },
+          activeElement: null,
+        },
+        getComputedStyle: (node: Element) => {
+          if (predicateActive && state === 'style-error' && node.id === 'dialog-11') throw new Error('PRIVATE_CALLBACK_ERROR');
+          return {display: node.hasAttribute('hidden') ? 'none' : 'block', visibility: 'visible'};
+        },
+      }, {timeout: 1000});
+      let handleState: unknown;
+      const dispose = vi.fn(async () => undefined);
+      const handle = {evaluate: async (fn: (argument: unknown) => unknown) => run(fn, handleState), dispose};
+      const pressed: string[] = [];
+      const waits: unknown[] = [];
+      const page = {
+        keyboard: {press: async (key: string) => void pressed.push(key)},
+        evaluateHandle: async (fn: () => unknown) => {handleState = run(fn, undefined); return handle;},
+        waitForFunction: async (fn: (argument: unknown) => unknown, argument: unknown, options: {timeout: number; polling: number}) => {
+          const args = argument as {diagnosticState: unknown; attempt: number; dialogSelector: string; triggerSelector: string};
+          expect(args).toEqual({dialogSelector, triggerSelector, diagnosticState: handle, attempt: pressed.length});
+          waits.push(options);
+          let closed;
+          predicateActive = true;
+          try {
+            closed = run(fn, {...args, diagnosticState: handleState});
+            expect(typeof closed).toBe('boolean');
+            if (!closed) expect(run(fn, {...args, diagnosticState: handleState})).toBe(false);
+          } finally {
+            predicateActive = false;
+          }
+          if (!closed) {
+            // 和真实日志相同：超时后的页面可已关闭，但最后一次 false 必须保留下来。
+            if (pressed.length === 3) {
+              dialogs.forEach(dialog => dialog.setAttribute('hidden', ''));
+              document.querySelector(triggerSelector)?.setAttribute('aria-expanded', 'false');
+            }
+            const error = new Error('PRIVATE_WAIT_ERROR');
+            error.name = 'TimeoutError';
+            throw error;
+          }
+        },
+        evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => run(fn, argument),
+      };
+      const scenario = {name: state, triggerSelector, dialogSelector, closeKey: 'Escape', closeAttempts: 3};
+      if (state === 'closed') await expect(closeInteractionDialog(page, scenario, 30_000, 'baseline')).resolves.toBe(1);
+      else {
+        let message = '';
+        try {await closeInteractionDialog(page, scenario, 30_000, 'first-translation');}
+        catch (error) {message = (error as Error).message;}
+        expect(message).toContain(`first-translation/${state} 对话框在 3 次 Escape 后仍未隐藏`);
+        expect(message).not.toContain('PRIVATE_');
+        const diagnostic = JSON.parse(message.split('；诊断：')[1]);
+        expect(diagnostic.closeWait.waitFailures).toEqual([1, 2, 3].map(attempt => ({attempt,
+          category: state.endsWith('error') ? 'wait-error' : 'wait-timeout'})));
+        expect(diagnostic.closeWait.predicateState.status).toBe('available');
+        expect(diagnostic.closeWait.predicateState.attempts).toHaveLength(3);
+        for (const [index, attempt] of diagnostic.closeWait.predicateState.attempts.entries()) {
+          expect(attempt.pollCount).toBe(state.endsWith('error') ? 1 : 2);
+          expect(attempt.lastPoll.attempt).toBe(index + 1);
+          expect(attempt.lastPoll.capturedAt).toEqual(expect.any(Number));
+          if (state.endsWith('error')) {
+            expect(attempt.lastFalse).toBeNull();
+            expect(attempt.lastPredicateError.category).toBe('predicate-error');
+            expect(attempt.lastPredicateError.stage).toBe(
+              state === 'query-error' ? 'dialog-query' : state === 'rect-error' ? 'dialog-rect' : 'dialog-style');
+          } else {
+            expect(attempt.lastPredicateError).toBeNull();
+            expect(attempt.lastFalse.category).toBe(state === 'expanded-trigger' ? 'trigger-expanded' :
+              state === 'missing-trigger' ? 'trigger-missing' : 'matching-dialog-visible');
+          }
+        }
+        if (state === 'visible-dialog-after-sample-cap') {
+          const lastFalse = diagnostic.closeWait.predicateState.attempts[2].lastFalse;
+          expect(lastFalse.matchingDialogCount).toBe(12);
+          expect(lastFalse.inspectedDialogs).toBe(12);
+          expect(lastFalse.dialogs).toHaveLength(9);
+          expect(lastFalse.dialogs[8]).toEqual(expect.objectContaining({index: 11, visible: true, width: 100, height: 50}));
+          expect(diagnostic.matchingDialogs).toHaveLength(12);
+          expect(diagnostic.matchingDialogs.every((dialog: {width: number; display: string}) => dialog.width === 0 && dialog.display === 'none')).toBe(true);
+          expect(diagnostic.triggerState).toEqual({connected: true, ariaExpanded: 'false'});
+        }
+      }
+      expect(pressed).toEqual(Array(state === 'closed' ? 1 : 3).fill('Escape'));
+      expect(waits).toEqual(Array(pressed.length).fill({timeout: 1500, polling: 50}));
+      expect(dispose).toHaveBeenCalledOnce();
+    },
+  );
+
+  it('reports no-predicate-sample literally when the wait rejects before polling', async () => {
+    const state = {attempts: []};
+    const dispose = vi.fn(async () => undefined);
+    const handle = {evaluate: async (fn: (argument: unknown) => unknown) => fn(state), dispose};
+    const page = {
+      keyboard: {press: vi.fn(async () => undefined)},
+      evaluateHandle: async () => handle,
+      waitForFunction: vi.fn(async () => {const error = new Error('PRIVATE_WAIT_ERROR'); error.name = 'TimeoutError'; throw error;}),
+      evaluate: async () => ({dialogVisible: false}),
+    };
+    let message = '';
+    try {await closeInteractionDialog(page, {name: 'not-polled', triggerSelector: '#trigger', dialogSelector: '.dialog',
+      closeKey: 'Escape', closeAttempts: 3}, 30_000, 'baseline');}
+    catch (error) {message = (error as Error).message;}
+    expect(message).toContain('3 次 Escape 后仍未隐藏');
+    expect(message).not.toContain('PRIVATE_');
+    expect(JSON.parse(message.split('；诊断：')[1]).closeWait.predicateState).toEqual({status: 'available',
+      attempts: Array.from({length: 3}, () => ({pollCount: 0, category: 'no-predicate-sample'}))});
+    expect(page.keyboard.press).toHaveBeenCalledTimes(3);
+    expect(page.waitForFunction).toHaveBeenCalledTimes(3);
+    expect(dispose).toHaveBeenCalledOnce();
+  });
+
+  it.each(['create', 'read', 'snapshot'] as const)(
+    'keeps all close retries and strict failure when diagnostic %s is unavailable', async unavailable => {
+      const pressed: string[] = [];
+      const dispose = vi.fn(async () => {throw new Error('PRIVATE_DISPOSE_ERROR');});
+      const handle = {evaluate: async () => {throw new Error('PRIVATE_READ_ERROR');}, dispose};
+      const page = {
+        keyboard: {press: async (key: string) => void pressed.push(key)},
+        evaluateHandle: async () => {
+          if (unavailable === 'create') throw new Error('PRIVATE_CREATE_ERROR');
+          return handle;
+        },
+        waitForFunction: vi.fn(async (_fn: unknown, _arg: unknown, options: {timeout: number; polling: number}) => {
+          expect(options).toEqual({timeout: 1500, polling: 50});
+          throw new Error('PRIVATE_WAIT_ERROR');
+        }),
+        evaluate: async () => {
+          if (unavailable === 'snapshot') throw new Error('PRIVATE_SNAPSHOT_ERROR');
+          return {dialogVisible: false};
+        },
+      };
+      let message = '';
+      try {await closeInteractionDialog(page, {name: unavailable, triggerSelector: '#trigger', dialogSelector: '.dialog',
+        closeKey: 'Escape', closeAttempts: 3}, 30_000, 'baseline');}
+      catch (error) {message = (error as Error).message;}
+      expect(message).toContain('3 次 Escape 后仍未隐藏');
+      expect(message).not.toContain('PRIVATE_');
+      const diagnostic = JSON.parse(message.split('；诊断：')[1]);
+      expect(diagnostic.closeWait.predicateState).toEqual({status: 'unavailable',
+        category: unavailable === 'create' ? 'state-create-unavailable' : 'state-read-unavailable'});
+      if (unavailable === 'snapshot') expect(diagnostic.category).toBe('final-snapshot-unavailable');
+      expect(page.waitForFunction).toHaveBeenCalledTimes(3);
+      expect(pressed).toEqual(['Escape', 'Escape', 'Escape']);
+      expect(dispose).toHaveBeenCalledTimes(unavailable === 'create' ? 0 : 1);
+    },
+  );
+
+  it('keeps a late true close sample as evidence while preserving every timeout failure', async () => {
+    const {document} = parseHTML('<html><body><button id="trigger" aria-expanded="true"></button><div class="dialog" hidden></div></body></html>');
+    const dialog = document.querySelector('.dialog')!;
+    Object.defineProperty(dialog, 'getBoundingClientRect', {value: () => ({width: 0, height: 0})});
+    let wallClock = 1791385900000;
+    let browserMono = 1000;
+    const now = vi.spyOn(Date, 'now').mockImplementation(() => ++wallClock);
+    const {runInNewContext} = require('node:vm');
+    const run = (fn: (argument: unknown) => unknown, argument: unknown) => runInNewContext(`(${fn.toString()})(argument)`, {
+      document, argument, Date: {now: () => ++wallClock}, performance: {now: () => ++browserMono},
+      getComputedStyle: () => ({display: 'none', visibility: 'visible'}),
+    }, {timeout: 1000});
+    let state: unknown;
+    const pending: Array<() => unknown> = [];
+    const dispose = vi.fn(async () => undefined);
+    const handle = {evaluate: async (fn: (argument: unknown) => unknown) => {
+      // 模拟不可取消的 CDP 操作：第三次等待已经被拒绝后，回调才运行并返回 true。
+      expect(pending.shift()!()).toBe(true);
+      return run(fn, state);
+    }, dispose};
+    const pressed: string[] = [];
+    const page = {
+      keyboard: {press: async (key: string) => void pressed.push(key)},
+      evaluateHandle: async (fn: () => unknown) => {state = run(fn, undefined); return handle;},
+      waitForFunction: vi.fn(async (fn: (argument: unknown) => unknown, argument: unknown, options: {timeout: number; polling: number}) => {
+        expect(options).toEqual({timeout: 1500, polling: 50});
+        const args = argument as {attempt: number; diagnosticState: unknown};
+        const evaluatePredicate = () => run(fn, {...args, diagnosticState: state});
+        if (args.attempt === 1) {
+          expect(evaluatePredicate()).toBe(false);
+          document.querySelector('#trigger')!.setAttribute('aria-expanded', 'false');
+        } else {
+          if (args.attempt === 3) expect(pending.shift()!()).toBe(true);
+          pending.push(evaluatePredicate);
+        }
+        const error = new Error('PRIVATE_DEADLINE_ERROR');
+        error.name = 'TimeoutError';
+        throw error;
+      }),
+      evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => run(fn, argument),
+    };
+    try {
+      let message = '';
+      try {await closeInteractionDialog(page, {name: 'late-cdp-result', triggerSelector: '#trigger', dialogSelector: '.dialog',
+        closeKey: 'Escape', closeAttempts: 3}, 30_000, 'retranslation');}
+      catch (error) {message = (error as Error).message;}
+      expect(message).toContain('retranslation/late-cdp-result 对话框在 3 次 Escape 后仍未隐藏');
+      expect(message).not.toContain('PRIVATE_');
+      const diagnostic = JSON.parse(message.split('；诊断：')[1]);
+      const {attemptTimings, predicateState, waitFailures} = diagnostic.closeWait;
+      expect(waitFailures).toEqual([1, 2, 3].map(attempt => ({attempt, category: 'wait-timeout'})));
+      expect(attemptTimings).toHaveLength(3);
+      for (const [index, timing] of attemptTimings.entries()) {
+        expect(timing.attempt).toBe(index + 1);
+        expect(timing.outcome).toBe('wait-timeout');
+        expect(timing.start.wallMs).toBeLessThan(timing.keyDone.wallMs);
+        expect(timing.keyDone.wallMs).toBeLessThan(timing.beforeWait.wallMs);
+        expect(timing.beforeWait.wallMs).toBeLessThan(timing.afterWait.wallMs);
+        expect(timing.afterWait.monotonicMs).toBeGreaterThanOrEqual(timing.beforeWait.monotonicMs);
+      }
+      expect(predicateState.attempts[0].lastFalse.category).toBe('trigger-expanded');
+      for (const index of [1, 2]) {
+        const sample = predicateState.attempts[index];
+        expect(sample.pollCount).toBe(1);
+        expect(sample.lastPoll.category).toBe('closed');
+        expect(sample.lastFalse).toBeNull();
+        expect(sample.firstPollAt).toBeGreaterThan(attemptTimings[index].afterWait.wallMs);
+        expect(sample.lastPoll.recordedAt).toBeGreaterThan(sample.lastPoll.capturedAt);
+        expect(sample.lastPoll.recordedMonoMs).toBeGreaterThan(sample.lastPoll.capturedMonoMs);
+      }
+      expect(page.waitForFunction).toHaveBeenCalledTimes(3);
+      expect(pressed).toEqual(['Escape', 'Escape', 'Escape']);
+      expect(dispose).toHaveBeenCalledOnce();
+    } finally {
+      now.mockRestore();
+    }
+  });
+
 
   it('defaults dialog close attempts to one and rejects values outside the bounded range', () => {
     expect(normalizeInteractionScenarios([{
@@ -1256,7 +2191,7 @@ describe('site translation coverage contract', () => {
   });
 
   it('fails the old seven-wrapper PR 4038 baseline', () => {
-    const pr = cases['github-immersive-pr-4038'];
+    const pr = cases['github-project-pr'];
     const rules = normalizeCoverageRules(pr.coverageRules);
     const oldSevenWrapperBaseline = [
       {
@@ -1388,9 +2323,9 @@ describe('real-site translation matrix gates', () => {
 
   it('gives each browser child a bounded multi-stage budget and terminates a hung process', async () => {
     expect(computeJobTimeoutMs(60_000, 'hover')).toBe(5 * 60_000);
-    expect(computeJobTimeoutMs(60_000, 'full')).toBe(12 * 60_000);
+    expect(computeJobTimeoutMs(60_000, 'full')).toBe(30 * 60_000);
     expect(computeJobTimeoutMs(240_000, 'hover')).toBe(8 * 60_000);
-    expect(computeJobTimeoutMs(240_000, 'full')).toBe(17 * 60_000);
+    expect(computeJobTimeoutMs(240_000, 'full')).toBe(37 * 60_000);
     expect(computeJobTimeoutMs(60_000, 'full', 1234)).toBe(1234);
 
     const result = await runChildWithWatchdog(process.execPath, [
@@ -1398,6 +2333,17 @@ describe('real-site translation matrix gates', () => {
       'setInterval(() => {}, 1000)',
     ], {timeoutMs: 80, killGraceMs: 30, stdio: 'ignore'});
     expect(result).toMatchObject({ok: false, timedOut: true});
+  });
+
+  it('retries a failed required site in a fresh complete run while keeping both outcomes visible', async () => {
+    const flaky = vi.fn(async (attempt: number) => ({ok: attempt === 2, timedOut: false}));
+    const recovered = await runJobAttempts(flaky, 2);
+    expect(flaky.mock.calls.map(([attempt]) => attempt)).toEqual([1, 2]);
+    expect(recovered).toMatchObject({ok: true, attempts: [{ok: false}, {ok: true}]});
+
+    const timedOut = vi.fn(async () => ({ok: false, timedOut: true}));
+    expect(await runJobAttempts(timedOut, 2)).toMatchObject({ok: false, attempts: [{timedOut: true}]});
+    expect(timedOut).toHaveBeenCalledTimes(1);
   });
 
   it('still SIGKILLs the process group when the direct child closes after SIGTERM', async () => {
@@ -1485,25 +2431,40 @@ describe('real-site translation matrix gates', () => {
     }
   });
 
-  it('keeps deleted or challenged pages quarantined and replaces them with stable docs', () => {
-    expect(cases['hacker-news-8863'].tier).toBe('quarantine');
-    expect(cases['reddit-chatgpt-thread'].tier).toBe('quarantine');
-    expect(cases['steam-workshop-discussion-3246316298'].tier).toBe('quarantine');
+  it('keeps the live front page and help article in both translation modes', () => {
+    expect(cases['hacker-news-home'].url).toBe('https://news.ycombinator.com/');
+    expect(cases['hacker-news-home'].hoverSelector).toBe('.titleline > a');
+    expect(cases['producthunt-posting-access'].url).toBe(
+      'https://help.producthunt.com/en/articles/481909-how-can-i-get-access-to-post',
+    );
+    for (const name of ['hacker-news-home', 'producthunt-posting-access'] as const) {
+      expect(cases[name].tier).toBe('required');
+      expect(cases[name].modes).toEqual(['hover', 'full']);
+    }
+    expect(cases['producthunt-posting-access'].forbiddenSelectors).toContain('.intercom-reaction');
+  });
+
+  it('restores recovered pages to required while keeping challenged pages quarantined', () => {
+    expect(cases['hacker-news-8863'].tier).toBe('required');
+    expect(cases['ubuntu-apt-manpage'].tier).toBe('required');
+    expect(cases['pubdev-provider'].tier).toBe('required');
+    expect(cases['reddit-minimax-thread'].tier).toBe('quarantine');
     expect(cases['w3c-accessibility-introduction'].tier).toBe('quarantine');
     expect(cases['nginx-beginners-guide'].tier).toBe('required');
     expect(cases['curl-http-scripting'].tier).toBe('required');
     expect(cases['sqlite-select-language'].tier).toBe('required');
     expect(cases['git-book-version-control'].tier).toBe('required');
-    expect(cases['github-immersive-pulls'].forbiddenSelectors).toEqual([
+    expect(cases['github-project-pulls'].forbiddenSelectors).toEqual([
+      'main h1',
       "button[aria-haspopup='dialog'][aria-label*='search' i]",
     ]);
     expect(cases['brown-pl-introduction'].forbiddenSelectors).toEqual(['table.RktBlk']);
     expect(cases['sqlite-select-language'].hoverSelector).toBe(
-      ".fancy > p:not(:has(> b:first-child > a[href^='syntax/']))",
+      ".fancy > p:not(:has(b a[href^='syntax/']))",
     );
     expect(cases['sqlite-select-language'].coverageRules).toContainEqual(expect.objectContaining({
       name: 'reference-paragraphs',
-      selector: ".fancy > p:not(:has(> b:first-child > a[href^='syntax/']))",
+      selector: ".fancy > p:not(:has(b a[href^='syntax/']))",
       sourceIncludes: ['The SELECT statement is used to query the database.'],
     }));
     expect(cases['learnopengl-coordinate-systems'].forbiddenSelectors).toEqual([
@@ -1532,38 +2493,127 @@ describe('real-site translation matrix gates', () => {
     ]);
   });
 
-  it('keeps PR 4038 title, body headings, paragraphs and lists as separate requirements', () => {
-    const rules = normalizeCoverageRules(cases['github-immersive-pr-4038'].coverageRules);
+  it('keeps modern manpage prose separate from mandatory command syntax and command labels', () => {
+    const {document} = parseHTML('<main><div id="manpage-content"><h2 id="synopsis" class="Sh">SYNOPSIS</h2><section><p class="Pp HP"><b>apt</b> [<b>--help</b>]</p></section><h2 id="description" class="Sh">DESCRIPTION</h2><section><p class="Pp">The command provides a package management interface.</p><p class="Pp">Its manual explains the most common options.</p><p class="Pp"><b>update</b></p><div class="Bd-indent">Download package information from configured sources.</div></section></div></main>');
+    const config = cases['ubuntu-apt-manpage'];
+    expect([...document.querySelectorAll(config.hoverSelector)].map((node) => node.textContent)).toEqual([
+      'The command provides a package management interface.',
+      'Its manual explains the most common options.',
+    ]);
+    const protectedNodes = config.forbiddenMustExistSelectors.flatMap((selector) => [...document.querySelectorAll(selector)]);
+    expect(protectedNodes.map((node) => node.textContent)).toEqual(['apt [--help]', 'update']);
+    expect(config.forbiddenMustExistSelectors.every((selector) => config.forbiddenSelectors.includes(selector))).toBe(true);
+  });
+
+  it('covers MDN body headings while preserving the sidebar table of contents', () => {
+    const {document} = parseHTML('<main id="content" class="layout__content"><h1>Grammar and types</h1><aside class="layout__right-sidebar reference-layout__toc"><nav class="reference-toc"><h2>In this article</h2><a href="#basics">Basics</a></nav></aside><div class="layout__body reference-layout__body"><section class="content-section"><h2 id="basics">Basics</h2><p>The language distinguishes upper and lower case.</p><p>Statements have a defined structure.</p><p>Use <code>let</code> for a local binding.</p></section><section class="content-section"><h2>Comments</h2><p>Comments explain the surrounding source.</p><p>They are ignored during execution.</p><pre>let value = 1;</pre></section></div></main>');
+    const config = cases['mdn-javascript-guide'];
+    const rules = normalizeCoverageRules(config.coverageRules);
+    const headings = rules.find(({name}) => name === 'guide-sections')!;
+    expect([...document.querySelectorAll(headings.selector)].map((node) => node.textContent)).toEqual(['Basics', 'Comments']);
+    expect(headings.minInitial).toBe(2);
+    expect(rules.find(({name}) => name === 'guide-title')?.minInitial).toBe(1);
+    const paragraphs = rules.find(({name}) => name === 'guide-paragraphs')!;
+    expect(paragraphs.minInitial).toBe(5);
+    expect(document.querySelectorAll(paragraphs.selector)).toHaveLength(5);
+    const protectedNodes = resolveForbiddenMustExistSelectors('required', config.forbiddenSelectors, [])
+      .flatMap((selector) => [...document.querySelectorAll(selector)]);
+    expect(protectedNodes.some((node) => node.matches('nav.reference-toc'))).toBe(true);
+    expect(protectedNodes.some((node) => node.matches('pre'))).toBe(true);
+    expect(protectedNodes.some((node) => node.matches('code'))).toBe(true);
+  });
+
+  it('requires each mixed-manpage source part and does not accept only its nested paragraph translation', () => {
+    const fixture = establishedFixtures.find(({id}) => id === 'ubuntu-manpage')!;
+    const {document} = parseHTML(fixture.html);
+    const parts = fixture.translationParts!;
+    const child = document.querySelector('#body2')!;
+    child.insertAdjacentHTML('beforeend', `<span class="fluent-read-bilingual-content">测试译文：${child.textContent}</span>`);
+    const onlyChild = inspectFixtureTranslationParts({parts}, document);
+    expect(onlyChild.map(({translated}: {translated: boolean}) => translated)).toEqual([false, true, false]);
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+    const mixed = document.querySelector('#mixed-command')!;
+    const segment = document.createElement('span');
+    segment.setAttribute('data-fr-translation-segment', 'true');
+    while (mixed.firstChild !== child) segment.append(mixed.firstChild!);
+    mixed.insertBefore(segment, child);
+    segment.insertAdjacentHTML('beforeend', `<span class="fluent-read-bilingual-content">测试译文：${segment.textContent}</span>`);
+    const second = document.querySelector('#second-command')!;
+    second.insertAdjacentHTML('beforeend', `<span class="fluent-read-bilingual-content">测试译文：${second.innerHTML}</span>`);
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(true);
+    const translatedCommand = second.querySelector('.fluent-read-bilingual-content b')!;
+    const exactCommand = translatedCommand.textContent;
+    translatedCommand.textContent = exactCommand!.replace(/\s+/gu, ' ');
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+    translatedCommand.textContent = exactCommand;
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(true);
+    segment.querySelector('.fluent-read-bilingual-content')!.textContent = `测试译文：${parts[0].sourceIncludes}`;
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+    expect(fixture.restoreSelectors).toEqual(['#mixed-command', '#second-command']);
+  });
+
+  it('rejects X Chat metadata copied into the translated message or duplicate translated parts', () => {
+    const fixture = establishedFixtures.find(({id}) => id === 'x-chat')!;
+    const {document} = parseHTML(fixture.html);
+    const parts = fixture.translationParts!;
+    const owner = document.querySelector('#body1')!;
+    const source = parts[0].sourceIncludes;
+    owner.insertAdjacentHTML('beforeend', `<span class="fluent-read-bilingual-content">测试译文：${source}</span>`);
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(true);
+    const translation = owner.querySelector('.fluent-read-bilingual-content')!;
+    translation.textContent += ' Yesterday 10:30 Edited';
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+    translation.textContent = source;
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+    translation.textContent = `测试译文：${source}`;
+    owner.appendChild(translation.cloneNode(true));
+    expect(inspectFixtureTranslationParts({parts, requireAll: true}, document)).toBe(false);
+  });
+
+  it('targets visible package readme content while requiring both fenced and inline code protection', () => {
+    const {document} = parseHTML('<main><div hidden><p class="detail-lead-text">A hidden responsive summary.</p></div><section class="detail-tab-readme-content"><p>Language navigation</p><p>A wrapper around <a href="https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html">InheritedWidget</a> for reuse.</p><h2>Usage</h2><p>Read the <code>provider</code> state.</p><pre><code>final value = context.watch&lt;int&gt;();</code></pre></section></main>');
+    const config = cases['pubdev-provider'];
+    const targets = [...document.querySelectorAll(config.hoverSelector)];
+    expect(targets).toHaveLength(1);
+    expect(targets[0].textContent).toBe('A wrapper around InheritedWidget for reuse.');
+    expect(targets[0].closest('[hidden]')).toBeNull();
+    const protectedNodes = config.forbiddenMustExistSelectors.flatMap((selector) => [...document.querySelectorAll(selector)]);
+    expect(protectedNodes.some((node) => node.tagName === 'PRE')).toBe(true);
+    expect(protectedNodes.some((node) => node.tagName === 'CODE' && node.parentElement?.tagName === 'P')).toBe(true);
+  });
+
+  it('keeps the English PR title, body headings, paragraphs and lists as separate requirements', () => {
+    const rules = normalizeCoverageRules(cases['github-project-pr'].coverageRules);
     expect(rules.map(({selector}) => selector)).toEqual([
       'main h1',
-      '.markdown-body h2',
-      '.markdown-body p',
-      '.markdown-body li',
+      "[id^='pullrequest-'] .markdown-body > h2",
+      "[id^='pullrequest-'] .markdown-body > p:first-of-type",
+      "[id^='pullrequest-'] .markdown-body > ul:first-of-type > li:nth-child(-n+3)",
     ]);
     expect(rules.every(({selector}) => !selector.includes(','))).toBe(true);
     expect(rules.every(({trackDynamic}) => trackDynamic)).toBe(true);
-    const prHoverTargets = normalizeHoverTargets(cases['github-immersive-pr-4038'].hoverTargets, {
+    const prHoverTargets = normalizeHoverTargets(cases['github-project-pr'].hoverTargets, {
       coverageRules: rules,
     });
     expect(prHoverTargets.map(({selector}) => selector)).toEqual([
       'main h1',
-      '.markdown-body h2',
-      '.markdown-body p',
-      '.markdown-body li',
+      "[id^='pullrequest-'] .markdown-body > h2",
+      "[id^='pullrequest-'] .markdown-body > p:first-of-type",
+      "[id^='pullrequest-'] .markdown-body > ul:first-of-type > li:nth-child(-n+3)",
     ]);
-    expect(prHoverTargets.find(({selector}) => selector === '.markdown-body h2')?.sourceIncludes).toEqual([
-      'What changed',
+    expect(prHoverTargets.find(({selector}) => selector.endsWith('> h2'))?.sourceIncludes).toEqual([
+      'Problem',
     ]);
-    expect(prHoverTargets.find(({selector}) => selector === '.markdown-body li')?.sourceIncludes).toEqual([
-      "Exclude GitHub's global search trigger",
+    expect(prHoverTargets.find(({selector}) => selector.includes('> li:nth-child'))?.sourceIncludes).toEqual([
+      'Resolve explicit selections',
     ]);
     expect(rules.find(({name}) => name === 'body-list-items')?.sourceIncludes).toEqual([
-      "Exclude GitHub's global search trigger",
+      'Resolve explicit selections',
     ]);
-    expect(cases['github-immersive-pr-4038'].forbiddenMustExistSelectors).toEqual([
+    expect(cases['github-project-pr'].forbiddenMustExistSelectors).toEqual([
       "button[aria-haspopup='dialog'][aria-label*='search' i]",
     ]);
-    expect(cases['github-immersive-pr-4038'].interactionScenarios).toEqual([
+    expect(cases['github-project-pr'].interactionScenarios).toEqual([
       expect.objectContaining({
         triggerSelector: "button[aria-haspopup='dialog'][aria-label*='search' i]",
         openKey: 'click',
@@ -1571,8 +2621,937 @@ describe('real-site translation matrix gates', () => {
         comboboxSelector: "[role='combobox']",
         listboxSelector: "[role='listbox']",
         inputText: 'issues',
-        closeAttempts: 2,
+        closeAttempts: 3,
       }),
     ]);
+  });
+});
+
+// 在既有 suite 内运行实际 tracker 与既有消息 reader；不加载生产 runtime、不启动浏览器。
+const {beginCoverageCompletionPass, verifyCoverageUnchanged, createUnchangedCompletionReader, readCoverageReport, readCoverageStatuses} =
+  require('../scripts/run-site-translation-test.cjs');
+type CompletionQuery = {selector: string; index: number; source: string; sessionId: number};
+type CompletionReply = (queries: CompletionQuery[]) => unknown | Promise<unknown>;
+type CompletionStatus = {token: string; rule: string; source: string; connected: boolean; eligible: boolean;
+  translated: boolean; loading: boolean; retry: boolean; verifiedUnchanged?: boolean; reason?: string};
+type CompletionBatch = Array<{bindingId: number; query: {selector: string; index: number; source: string; sessionId: number}}>;
+type CompletionTracker = {
+  beginCompletionPass: (sessionId: number | null) => number;
+  metrics: () => Record<string, number>;
+  discardUnchangedQueries: (batch: CompletionBatch) => void;
+  snapshotMissing: () => Array<{token: string}>;
+  prepareUnchangedQueries: (tokens: string[], sessionId: number, pass: number, deadline?: number) => CompletionBatch;
+  acceptUnchangedQueries: (batch: CompletionBatch, response: unknown, sessionId: number, pass: number) => void;
+  report: () => Array<{name: string; seenCount: number; translatedCount: number; verifiedUnchangedCount: number; completedCount: number}>;
+  missingStatuses: (tokens: string[]) => CompletionStatus[];
+  restorationReport: () => unknown[];
+  reset: () => void;
+  stop: () => void;
+};
+async function withCompletionFixture(
+  run: (fixture: {document: Document; tracker: CompletionTracker;
+    page: {evaluate: (fn: (argument: unknown) => unknown, argument: unknown) => Promise<unknown>;
+      url: () => string; waitForFunction?: (fn: unknown, argument: unknown, options?: {timeout: number; polling?: number}) => Promise<void>}; rules: unknown[];
+    trustedReader: (reply: CompletionReply) => Promise<(queries: CompletionQuery[], remainingMs?: number) => Promise<unknown>>;
+    mutate: (records: unknown[]) => void; observerOptions: () => MutationObserverInit}) => Promise<void>,
+  html = '<main><h2>Cookies</h2><h2>Cookies</h2><p>A full paragraph stays eligible.</p></main>',
+) {
+  const {document, window} = parseHTML(`<html><body>${html}</body></html>`);
+  Object.defineProperty(window.HTMLElement.prototype, 'getBoundingClientRect', {configurable: true,
+    value: () => ({width: 400, height: 40, top: 0, left: 0, right: 400, bottom: 40})});
+  let deliver: (records: unknown[]) => void = () => {};
+  let observed: MutationObserverInit = {};
+  class Observer {
+    constructor(callback: typeof deliver) { deliver = callback; }
+    observe(_target: unknown, options: MutationObserverInit) { observed = options; }
+    disconnect() {}
+  }
+  const ownedUrl = 'https://example.test/owned-completion';
+  let replySource: CompletionReply = () => null;
+  const chrome = {runtime: {lastError: null as {message: string} | null}, tabs: {
+    query: vi.fn(async () => [{id: 7, url: ownedUrl}]),
+    get: vi.fn((id: number, reply: (tab: {id: number; url: string}) => void) => reply({id, url: ownedUrl})),
+    sendMessage: vi.fn((id: number, message: {type: string; unchangedQueries: CompletionQuery[]},
+      options: {frameId: number}, reply: (response: unknown) => void) => {
+      expect(id).toBe(7);
+      expect(options).toEqual({frameId: 0});
+      expect(message.type).toBe('getFullPageTranslationState');
+      expect(message.unchangedQueries.length).toBeLessThanOrEqual(16);
+      const currentReplySource = replySource;
+      void Promise.resolve().then(() => currentReplySource(message.unchangedQueries)).then(reply, (error: Error) => {
+        chrome.runtime.lastError = {message: error.message};
+        try { reply(undefined); } finally { chrome.runtime.lastError = null; }
+      });
+    }),
+  }};
+  const globals = {window, document, Node: window.Node, HTMLElement: window.HTMLElement,
+    HTMLAnchorElement: window.HTMLAnchorElement, MutationObserver: Observer, chrome,
+    getComputedStyle: () => ({display: 'block', visibility: 'visible'})};
+  const previous = new Map<string, PropertyDescriptor | undefined>();
+  for (const [name, value] of Object.entries(globals)) {
+    previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+    Object.defineProperty(globalThis, name, {configurable: true, writable: true, value});
+  }
+  const page: {evaluate: (fn: (argument: unknown) => unknown, argument: unknown) => Promise<unknown>;
+    url: () => string; waitForFunction?: (fn: unknown, argument: unknown, options?: {timeout: number; polling?: number}) => Promise<void>} = {
+    evaluate: async (fn, argument) => fn(argument), url: () => ownedUrl,
+  };
+  const worker = {url: () => 'chrome-extension://owned/background.js',
+    evaluate: async (fn: (arg: unknown) => unknown, arg: unknown) => fn(arg)};
+  const trustedReader = async (reply: CompletionReply) => {
+    replySource = reply;
+    return createUnchangedCompletionReader({serviceWorkers: () => [worker]}, page, 2000);
+  };
+  const rules = normalizeCoverageRules([
+    {name: 'headings', selector: 'main h2', kind: 'heading', minInitial: 2, trackDynamic: true, sourceIncludes: ['Cookies']},
+    {name: 'paragraphs', selector: 'main p', kind: 'content', minInitial: 1, trackDynamic: true,
+      sourceIncludes: ['A full paragraph']},
+  ]);
+  let tracker: CompletionTracker | undefined;
+  try {
+    await installCoverageTracker(page, rules);
+    tracker = (window as unknown as Record<string, CompletionTracker>)[COVERAGE_TRACKER_KEY];
+    await run({document: document as unknown as Document, tracker, page, rules, trustedReader,
+      observerOptions: () => observed,
+      mutate: records => deliver(records.filter(record => {
+        const mutation = record as {type: string; attributeName?: string};
+        return mutation.type !== 'attributes' || !observed.attributeFilter ||
+          observed.attributeFilter.includes(mutation.attributeName || '');
+      })),
+    });
+  } finally {
+    tracker?.stop();
+    for (const [name, descriptor] of previous) {
+      if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+      else Reflect.deleteProperty(globalThis, name);
+    }
+  }
+}
+function acceptedCompletion(query: CompletionBatch[number]['query'], generation = 1) {
+  return {status: 'available', reason: 'accepted-result-identical', sessionId: query.sessionId,
+    source: query.source, sources: [query.source], outputs: [query.source], sourceCurrent: true,
+    generation, renderCommitGeneration: 1, configuredService: 'freeTranslation', targetLanguage: 'zh-CN',
+    completedAtUnixMs: 1791410000000, requestBoundary: 'accepted-same-session-result-reuse', upstreamDispatchAndRoute: 'unavailable'};
+}
+function prepareCompletion(tracker: CompletionTracker, sessionId = 10) {
+  const pass = tracker.beginCompletionPass(sessionId);
+  const tokens = tracker.snapshotMissing().map(item => item.token);
+  const batch = tracker.prepareUnchangedQueries(tokens, sessionId, pass, Date.now() + 2000);
+  return {pass, tokens, batch, sessionId};
+}
+function acceptCompletion(tracker: CompletionTracker, prepared: ReturnType<typeof prepareCompletion>,
+  outcomes: unknown[] = prepared.batch.map((item, index) => acceptedCompletion(item.query, index + 1))) {
+  tracker.acceptUnchangedQueries(prepared.batch, {status: 'success', sessionId: prepared.sessionId, outcomes},
+    prepared.sessionId, prepared.pass);
+}
+
+function currentCompletionResponse(queries: CompletionQuery[], sessionId = 10) {
+  return {status: 'success', sessionId, outcomes: queries.map(query => acceptedCompletion(query))};
+}
+
+describe('site coverage exact owner completion v2', () => {
+  it('counts Chinese wrappers separately and requires an exact completion for every other owner', async () => {
+    await withCompletionFixture(async ({document, tracker, rules, page, trustedReader}) => {
+      const paragraph = document.querySelector('p')!;
+      const wrapper = document.createElement('span');
+      wrapper.className = 'fluent-read-bilingual-content';
+      wrapper.setAttribute('data-fr-translation-owned', 'true');
+      wrapper.textContent = '完整段落译文';
+      paragraph.append(wrapper);
+      const prepared = prepareCompletion(tracker);
+      expect(prepared.batch.map(item => item.query)).toEqual([
+        {selector: 'main h2', index: 0, source: 'Cookies', sessionId: 10},
+        {selector: 'main h2', index: 1, source: 'Cookies', sessionId: 10},
+      ]);
+      tracker.acceptUnchangedQueries(prepared.batch.slice(0, 1), {status: 'success', sessionId: 10,
+        outcomes: [acceptedCompletion(prepared.batch[0].query)]}, 10, prepared.pass);
+      expect(() => assertCoverageReport(rules, tracker.report(), 'one sibling missing')).toThrow('headings');
+      tracker.acceptUnchangedQueries(prepared.batch.slice(1), {status: 'success', sessionId: 10,
+        outcomes: [acceptedCompletion(prepared.batch[1].query)]}, 10, prepared.pass);
+      expect(() => assertCoverageReport(rules, tracker.report(), 'untrusted aggregate')).toThrow();
+      const forgedReport = await readCoverageReport(page);
+      expect(forgedReport).toMatchObject([
+        {seenCount: 2, translatedCount: 0, verifiedUnchangedCount: 0, completedCount: 0},
+        {seenCount: 1, translatedCount: 1, verifiedUnchangedCount: 0, completedCount: 1},
+      ]);
+      expect(() => assertCoverageReport(rules, forgedReport, 'public full fake receipt')).toThrow();
+      let includeSecond = false;
+      const read = await trustedReader(queries => ({...currentCompletionResponse(queries),
+        outcomes: queries.map(query => query.index === 0 || includeSecond
+          ? acceptedCompletion(query) : {status: 'unavailable'})}));
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      const oneOwner = await readCoverageReport(page);
+      expect(oneOwner[0].verifiedUnchangedCount).toBe(1);
+      expect(() => assertCoverageReport(rules, oneOwner, 'one trusted sibling missing')).toThrow('headings');
+      includeSecond = true;
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      const trusted = await readCoverageReport(page);
+      expect(trusted).toMatchObject([
+        {seenCount: 2, translatedCount: 0, verifiedUnchangedCount: 2, completedCount: 2},
+        {seenCount: 1, translatedCount: 1, verifiedUnchangedCount: 0, completedCount: 1},
+      ]);
+      expect(() => assertCoverageReport(rules, trusted, 'completed v2')).not.toThrow();
+      expect(() => assertCoverageReport(rules, JSON.parse(JSON.stringify(trusted)), 'history')).toThrow();
+      const statuses = await readCoverageStatuses(page, prepared.tokens);
+      expect(statuses).toEqual(Array.from({length: 2}, () =>
+        expect.objectContaining({translated: false, verifiedUnchanged: true})));
+      expect(() => validateCoverageRevealStatuses(statuses, 'trusted statuses')).not.toThrow();
+      expect(document.querySelectorAll('.fluent-read-bilingual-content')).toHaveLength(1);
+      expect(document.querySelector('h2')!.textContent).toBe('Cookies');
+      wrapper.remove();
+      expect(() => assertCoverageRestoration(tracker.restorationReport(), 'restore source')).not.toThrow();
+      tracker.reset();
+      expect((await readCoverageReport(page)).every((state: {completedCount: number}) => state.completedCount === 0)).toBe(true);
+      const nextPass = tracker.beginCompletionPass(11);
+      tracker.acceptUnchangedQueries(prepared.batch, {status: 'success', sessionId: 10,
+        outcomes: prepared.batch.map(item => acceptedCompletion(item.query))}, 10, prepared.pass);
+      expect((await readCoverageReport(page)).every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+      expect(nextPass).not.toBe(prepared.pass);
+    });
+  });
+
+  it.each([
+    ['unavailable', {status: 'unavailable'}], ['failed', {status: 'failed'}],
+    ['cancelled', {status: 'cancelled'}], ['skipped', {status: 'skipped'}], ['unknown', {status: 'unknown'}],
+    ['stale session', {sessionId: 9}], ['stale source', {source: 'Other'}],
+    ['source not current', {sourceCurrent: false}], ['wrong reason', {reason: 'unchanged'}],
+    ['empty output', {outputs: ['']}], ['whitespace output', {outputs: ['  \n']}],
+    ['different output', {outputs: ['饼干']}], ['missing output', {outputs: []}],
+    ['extra output', {outputs: ['Cookies', 'Cookies']}], ['wrong source slot', {sources: ['Other']}],
+    ['missing source slots', {sources: []}], ['invalid generation', {generation: -1}],
+    ['missing service', {configuredService: ''}], ['missing target', {targetLanguage: ''}],
+    ['missing completion time', {completedAtUnixMs: undefined}],
+    ['missing render generation', {renderCommitGeneration: undefined}],
+    ['wire inference', {requestBoundary: 'wire-response'}], ['provider claim', {upstreamDispatchAndRoute: 'live'}],
+  ])('gives no completion credit for %s', async (_label, override) => {
+    await withCompletionFixture(async ({tracker, page, rules, trustedReader}) => {
+      const tokens = tracker.snapshotMissing().map(item => item.token);
+      const read = await trustedReader(queries => ({...currentCompletionResponse(queries),
+        outcomes: queries.map(query => ({...acceptedCompletion(query), ...override}))}));
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      const report = await readCoverageReport(page);
+      expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+      expect(() => assertCoverageReport(rules, report, 'rejected')).toThrow();
+      const statuses = await readCoverageStatuses(page, tokens);
+      expect(() => validateCoverageRevealStatuses(statuses, 'rejected')).toThrow();
+    });
+  });
+
+  it.each(['loading', 'retry', 'wrapper', 'hidden', 'disconnect', 'source', 'source-back', 'remount', 'sibling-index', 'generation'])
+    ('revalidates original Node and generation before and after the query: %s', async (change) => {
+      await withCompletionFixture(async ({document, tracker, mutate}) => {
+        const prepared = prepareCompletion(tracker);
+        const node = document.querySelector('h2')!;
+        const emit = (target: Node, type = 'childList', addedNodes: Node[] = [], removedNodes: Node[] = []) =>
+          mutate([{type, target, addedNodes, removedNodes}]);
+        if (['loading', 'retry', 'wrapper'].includes(change)) {
+          const artifact = document.createElement('span');
+          artifact.className = change === 'loading' ? 'fluent-read-loading'
+            : change === 'retry' ? 'fluent-read-retry-wrapper' : 'fluent-read-bilingual-content';
+          artifact.setAttribute('data-fr-translation-owned', 'true');
+          node.append(artifact);
+        } else if (change === 'hidden') node.setAttribute('hidden', '');
+        else if (change === 'disconnect') node.remove();
+        else if (change === 'remount') node.replaceWith(node.cloneNode(true));
+        else if (change === 'sibling-index') node.before(node.nextElementSibling!);
+        else {
+          node.firstChild!.nodeValue = 'Different source';
+          if (change !== 'source') emit(node.firstChild!, 'characterData');
+          if (change === 'source-back') {node.firstChild!.nodeValue = 'Cookies'; emit(node.firstChild!, 'characterData');}
+        }
+        tracker.acceptUnchangedQueries(prepared.batch.slice(0, 1), {status: 'success', sessionId: 10,
+          outcomes: [acceptedCompletion(prepared.batch[0].query)]}, 10, prepared.pass);
+        expect(tracker.report().every(state => state.verifiedUnchangedCount === 0)).toBe(true);
+        expect(tracker.prepareUnchangedQueries([prepared.tokens[0]], 10, prepared.pass))
+          .toHaveLength(change === 'sibling-index' ? 1 : 0);
+      });
+    });
+
+  it('revokes pending qualification when same-text siblings swap and return with unchanged selector/index/source/generation', async () => {
+    await withCompletionFixture(async ({document, tracker, mutate}) => {
+      const prepared = prepareCompletion(tracker);
+      const [first, second] = [...document.querySelectorAll('h2')];
+      const parent = first.parentElement!;
+      expect(tracker.metrics().pendingCompletionBindings).toBe(3);
+      first.before(second);
+      mutate([{type: 'childList', target: parent, addedNodes: [second], removedNodes: [second]}]);
+      expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+      second.before(first);
+      mutate([{type: 'childList', target: parent, addedNodes: [first], removedNodes: [first]}]);
+      expect(document.querySelectorAll('h2')[0]).toBe(first);
+      expect(document.querySelectorAll('h2')[1]).toBe(second);
+      expect(first.textContent).toBe(second.textContent);
+      expect(tracker.snapshotMissing().map(item => item.token)).toEqual(prepared.tokens);
+      expect(tracker.metrics().hostMutationCount).toBe(2);
+      acceptCompletion(tracker, prepared);
+      expect(tracker.report().every(state => state.verifiedUnchangedCount === 0)).toBe(true);
+    });
+  });
+
+  it('does not grant credit from spoofed DOM receipts or an available response without a pending query', async () => {
+    await withCompletionFixture(async ({document, tracker}) => {
+      const pass = tracker.beginCompletionPass(10);
+      const owner = document.querySelector('h2')!;
+      const query = {selector: 'main h2', index: 0, source: 'Cookies', sessionId: 10};
+      owner.setAttribute('data-fr-unchanged-completion', JSON.stringify(acceptedCompletion(query)));
+      owner.setAttribute('data-fr-owner-completed', 'true');
+      tracker.acceptUnchangedQueries([{bindingId: 1, query}], {status: 'success', sessionId: 10,
+        outcomes: [acceptedCompletion(query)]}, 10, pass);
+      expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+      expect(tracker.report().every(state => state.verifiedUnchangedCount === 0)).toBe(true);
+      const prepared = prepareCompletion(tracker);
+      tracker.discardUnchangedQueries(prepared.batch);
+      acceptCompletion(tracker, prepared);
+      expect(tracker.report().every(state => state.verifiedUnchangedCount === 0)).toBe(true);
+    });
+  });
+
+  it.each(['success', 'unavailable', 'exception', 'deadline'])
+    ('cleans all batch Node tokens after collection %s', async (outcome) => {
+      await withCompletionFixture(async ({page, tracker, trustedReader}) => {
+        const read = await trustedReader(queries => {
+          if (queries.length) {
+            expect(tracker.metrics().pendingCompletionBindings).toBe(3);
+            if (outcome === 'unavailable') return null;
+            if (outcome === 'exception') throw new Error('message read rejected');
+          }
+          return currentCompletionResponse(queries);
+        });
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, outcome === 'deadline' ? 0 : 1000);
+        expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+        const report = await readCoverageReport(page);
+        if (outcome !== 'success') expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+        else expect(report.map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([2, 1]);
+      });
+    });
+
+  it('invalidates accepted completion after observed source change-back and pass reset', async () => {
+    await withCompletionFixture(async ({document, tracker, page, trustedReader, mutate}) => {
+      const read = await trustedReader(currentCompletionResponse);
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      expect((await readCoverageReport(page))[0].verifiedUnchangedCount).toBe(2);
+      const tokens = tracker.snapshotMissing().map(item => item.token);
+      const node = document.querySelector('h2')!;
+      const text = node.firstChild!;
+      text.nodeValue = 'New prose';
+      mutate([{type: 'characterData', target: text, addedNodes: [], removedNodes: []}]);
+      text.nodeValue = 'Cookies';
+      mutate([{type: 'characterData', target: text, addedNodes: [], removedNodes: []}]);
+      expect((await readCoverageReport(page)).every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+      tracker.beginCompletionPass(null);
+      expect(tracker.prepareUnchangedQueries(tokens, 10, identity.pass, Date.now() + 2000)).toHaveLength(0);
+    });
+  });
+
+  it.each(['detach', 'remount', 'loading', 'retry', 'wrapper', 'session'])
+    ('rechecks already accepted credit when the owner later changes: %s', async (change) => {
+      await withCompletionFixture(async ({document, tracker, page, trustedReader}) => {
+        const tokens = tracker.snapshotMissing().map(item => item.token);
+        const read = await trustedReader(currentCompletionResponse);
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, 1000);
+        expect((await readCoverageReport(page))[0].verifiedUnchangedCount).toBe(2);
+        const owner = document.querySelector('h2')!;
+        if (change === 'detach') owner.remove();
+        else if (change === 'remount') owner.replaceWith(owner.cloneNode(true));
+        else if (change === 'session') tracker.beginCompletionPass(11);
+        else {
+          const artifact = document.createElement('span');
+          artifact.className = change === 'wrapper' ? 'fluent-read-bilingual-content'
+            : change === 'loading' ? 'fluent-read-loading' : 'fluent-read-retry-wrapper';
+          artifact.setAttribute('data-fr-translation-owned', 'true');
+          owner.append(artifact);
+        }
+        expect((await readCoverageStatuses(page, [tokens[0]]))[0].verifiedUnchanged).toBe(false);
+        expect((await readCoverageReport(page))[0].verifiedUnchangedCount).toBeLessThan(2);
+      });
+    });
+
+  it('accepts nonempty normalized-equal output without inserting translated DOM', async () => {
+    await withCompletionFixture(async ({document, page, trustedReader}) => {
+      const read = await trustedReader(queries => ({...currentCompletionResponse(queries), outcomes: queries.map(query => ({
+        ...acceptedCompletion(query), outputs: [' \n' + query.source.replaceAll(' ', '  ') + '  '],
+      }))}));
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      expect((await readCoverageReport(page)).map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([2, 1]);
+      expect(document.querySelectorAll('[data-fr-translation-owned="true"]')).toHaveLength(0);
+    });
+  });
+
+  it('keeps terminal and stale statuses strict even when a caller supplies an unchanged flag', () => {
+    const status = {token: '0:0:0', rule: 'owner', source: 'Cookies', connected: true, eligible: true,
+      translated: false, loading: false, retry: false, verifiedUnchanged: true};
+    expect(() => validateCoverageRevealStatuses([status], 'bare verified flag')).toThrow();
+    for (const override of [{loading: true}, {retry: true}, {connected: false}, {eligible: false},
+      {reason: 'stale-generation'}, {verifiedUnchanged: 'unknown'}]) {
+      const untrustedStatuses = [{...status, ...override}];
+      expect(() => validateCoverageRevealStatuses(untrustedStatuses, 'rejected')).toThrow();
+    }
+  });
+
+  it('uses exact owner receipts in the existing bounded reveal settlement without extra reveal rounds', async () => {
+    await withCompletionFixture(async ({page, rules, trustedReader}) => {
+      const requests: number[] = [];
+      const read = await trustedReader(queries => {requests.push(queries.length); return currentCompletionResponse(queries);});
+      const identity = await beginCoverageCompletionPass(page, read);
+      const waits = vi.fn(async (_fn: unknown, argument: unknown) => {
+        if (argument && typeof argument === 'object' && 'token' in argument) throw new Error('Timeout waiting for Chinese wrapper');
+      });
+      page.waitForFunction = waits;
+      const verified = vi.fn((remainingMs = 1000) => verifyCoverageUnchanged(page, read, identity, remainingMs));
+      const statuses = await settleCoverageByReveal(page, 1000, 'receipt settlement', 0, verified);
+      expect(statuses).toHaveLength(3);
+      expect(statuses).toEqual(Array.from({length: 3}, () =>
+        expect.objectContaining({translated: false, verifiedUnchanged: true})));
+      expect(verified).toHaveBeenCalledTimes(1);
+      expect(verified.mock.calls[0][0]).toBeGreaterThan(0);
+      expect(verified.mock.calls[0][0]).toBeLessThanOrEqual(7000);
+      expect(waits).toHaveBeenCalledTimes(4); // 原每节点 poll + 一次共享 idle；没有新 retry。
+      expect(requests.filter(length => length > 0)).toEqual([3]);
+      const report = await readCoverageReport(page);
+      expect(() => assertCoverageReport(rules, report, 'settled v2')).not.toThrow();
+    });
+  });
+
+  it('accepts the same owner-local generation for independent exact sibling owners', async () => {
+    await withCompletionFixture(async ({page, trustedReader}) => {
+      const read = await trustedReader(currentCompletionResponse);
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      expect((await readCoverageReport(page)).map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([2, 1]);
+    });
+  });
+
+  it('rejects aggregate count inconsistencies and retains minimum and source anchor requirements', () => {
+    const rules = normalizeCoverageRules([{name: 'owners', selector: 'p', kind: 'content', minInitial: 2,
+      sourceIncludes: ['Expected source']}]);
+    const state = {name: 'owners', seenCount: 2, translatedCount: 1, verifiedUnchangedCount: 1, completedCount: 2,
+      sourceSamples: ['Expected source']};
+    expect(() => assertCoverageReport(rules, [state], 'bare completion counts')).toThrow();
+    for (const override of [{completedCount: 1}, {verifiedUnchangedCount: -1}, {completedCount: 3},
+      {seenCount: 1, translatedCount: 0, completedCount: 1}, {sourceSamples: ['Wrong']}]) {
+      expect(() => assertCoverageReport(rules, [{...state, ...override}], 'invalid')).toThrow();
+    }
+  });
+
+  it('reads session first, batches only missing exact owners in groups of at most 16 and rereads session', async () => {
+    const html = '<main>' + '<h2>Cookies</h2>'.repeat(18) + '<p>A full paragraph stays eligible.</p></main>';
+    await withCompletionFixture(async ({page, rules, trustedReader}) => {
+      const requests: CompletionQuery[][] = [];
+      const read = await trustedReader(queries => {requests.push(queries); return currentCompletionResponse(queries);});
+      const identity = await beginCoverageCompletionPass(page, read);
+      expect(requests).toEqual([[]]);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      expect(requests.filter(items => items.length).map(items => items.length)).toEqual([16, 3]);
+      expect(requests[0]).toEqual([]);
+      expect(requests.at(-1)).toEqual([]);
+      expect(requests.flat().every(query => query.sessionId === 10)).toBe(true);
+      const report = await readCoverageReport(page);
+      expect(report).toMatchObject([{translatedCount: 0, verifiedUnchangedCount: 18, completedCount: 18},
+        {translatedCount: 0, verifiedUnchangedCount: 1, completedCount: 1}]);
+      expect(() => assertCoverageReport(rules, report, 'receipt')).not.toThrow();
+    }, html);
+  });
+
+  it.each(['old-api', 'unavailable', 'session-rollover', 'malformed', 'read-error', 'node-replaced'])
+    ('fails closed at the actual collection path for %s', async (failure) => {
+      await withCompletionFixture(async ({document, page, rules, trustedReader}) => {
+        let reads = 0;
+        const read = await trustedReader(queries => {
+          reads += 1;
+          if (failure === 'old-api') return {isTranslated: true};
+          if (failure === 'unavailable') return null;
+          if (queries.length && failure === 'read-error') throw new Error('unavailable channel');
+          if (queries.length && failure === 'node-replaced') {
+            for (const node of document.querySelectorAll('h2, p')) node.replaceWith(node.cloneNode(true));
+          }
+          return {status: 'success', sessionId: failure === 'session-rollover' && reads >= 4 ? 11 : 10,
+            outcomes: failure === 'malformed' && queries.length ? [] : queries.map(query => acceptedCompletion(query))};
+        });
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, 1000);
+        const report = await readCoverageReport(page);
+        expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+        expect(() => assertCoverageReport(rules, report, 'failed collection')).toThrow();
+      });
+    });
+
+  it('refuses the prior session on retranslation and never carries receipts across pass reset', async () => {
+    await withCompletionFixture(async ({page, trustedReader}) => {
+      const read = await trustedReader(currentCompletionResponse);
+      const first = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, first, 1000);
+      expect((await readCoverageReport(page))[0].verifiedUnchangedCount).toBe(2);
+      const second = await beginCoverageCompletionPass(page, read, first.sessionId);
+      expect(second.sessionId).toBeNull();
+      await verifyCoverageUnchanged(page, read, second, 1000);
+      expect((await readCoverageReport(page)).every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+    });
+  });
+
+  it('bounds service worker discovery and message reads, and rejects late completion credit', async () => {
+    vi.useFakeTimers();
+    try {
+      const url = 'https://example.test/owned';
+      const hungWorker = {url: () => 'chrome-extension://owned/background.js',
+        evaluate: () => new Promise(() => {})};
+      const discovering = createUnchangedCompletionReader({serviceWorkers: () => [hungWorker]}, {url: () => url}, 1000);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(await (await discovering)([])).toBeNull();
+      let calls = 0;
+      const worker = {url: hungWorker.url, evaluate: async () => ++calls === 1 ? 7 : new Promise(() => {})};
+      const read = await createUnchangedCompletionReader({serviceWorkers: () => [worker]}, {url: () => url}, 1000);
+      const reading = read([]);
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(await reading).toBeNull();
+    } finally { vi.useRealTimers(); }
+    await withCompletionFixture(async ({page, trustedReader}) => {
+      let now = Date.now();
+      const clock = vi.spyOn(Date, 'now').mockImplementation(() => now);
+      try {
+        const read = await trustedReader(queries => {
+          if (queries.length) now += 2001;
+          return {status: 'success', sessionId: 10,
+            outcomes: queries.map((query, index) => acceptedCompletion(query, index + 1))};
+        });
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, 2000);
+        expect((await readCoverageReport(page)).every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+      } finally { clock.mockRestore(); }
+    });
+  });
+
+  it('uses the owned service worker and exact tab/frame without creating or activating an options page', async () => {
+    const url = 'https://example.test/owned';
+    const sendMessage = vi.fn((_id, _message, _options, reply) => reply({status: 'success', sessionId: 10, outcomes: []}));
+    const chrome = {runtime: {lastError: null as {message: string} | null}, tabs: {
+      query: vi.fn(async () => [{id: 7, url}, {id: 8, url: 'https://other.test/'}]),
+      get: vi.fn((id, reply) => reply({id, url})), sendMessage,
+    }};
+    const oldChrome = Object.getOwnPropertyDescriptor(globalThis, 'chrome');
+    Object.defineProperty(globalThis, 'chrome', {configurable: true, value: chrome});
+    try {
+      const worker = {url: () => 'chrome-extension://owned/background.js',
+        evaluate: async (fn: (arg: unknown) => unknown, arg: unknown) => fn(arg)};
+      const context = {serviceWorkers: () => [worker]};
+      const page = {url: () => url};
+      const read = await createUnchangedCompletionReader(context, page, 1000);
+      expect(await read([])).toMatchObject({sessionId: 10});
+      expect(sendMessage).toHaveBeenCalledWith(7, {type: 'getFullPageTranslationState', unchangedQueries: []},
+        {frameId: 0}, expect.any(Function));
+      chrome.tabs.query.mockResolvedValueOnce([{id: 7, url}, {id: 9, url}]);
+      const ambiguous = await createUnchangedCompletionReader(context, page, 1000);
+      expect(await ambiguous([])).toBeNull();
+      chrome.runtime.lastError = {message: 'unavailable'};
+      expect(await read([])).toBeNull();
+      expect(sendMessage).toHaveBeenCalledTimes(1);
+    } finally {
+      if (oldChrome) Object.defineProperty(globalThis, 'chrome', oldChrome);
+      else Reflect.deleteProperty(globalThis, 'chrome');
+    }
+  });
+
+  it('rejects a complete public-tracker receipt even after report and status readers run', async () => {
+    await withCompletionFixture(async ({tracker, page, rules}) => {
+      const prepared = prepareCompletion(tracker);
+      acceptCompletion(tracker, prepared);
+      expect(tracker.report().map(state => state.verifiedUnchangedCount)).toEqual([2, 1]);
+      const report = await readCoverageReport(page);
+      expect(report.map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([0, 0]);
+      expect(report.map((state: {translatedCount: number}) => state.translatedCount)).toEqual([0, 0]);
+      expect(() => assertCoverageReport(rules, report, 'fabricated full receipt')).toThrow();
+      const statuses = await readCoverageStatuses(page, prepared.tokens);
+      expect(statuses.every((status: {verifiedUnchanged: boolean}) => !status.verifiedUnchanged)).toBe(true);
+      expect(() => validateCoverageRevealStatuses(statuses, 'fabricated full receipt')).toThrow();
+    });
+  });
+
+  it('revokes previously trusted report and statuses when verifying again within the same pass and session', async () => {
+    await withCompletionFixture(async ({tracker, page, rules, trustedReader}) => {
+      const tokens = tracker.snapshotMissing().map(item => item.token);
+      const read = await trustedReader(currentCompletionResponse);
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      const oldTrustedReport = await readCoverageReport(page);
+      const oldStatuses = await readCoverageStatuses(page, tokens);
+      expect(() => assertCoverageReport(rules, oldTrustedReport, 'first verification')).not.toThrow();
+      expect(oldStatuses).toHaveLength(3);
+      expect(oldStatuses.every((status: CompletionStatus) => status.verifiedUnchanged && !status.translated)).toBe(true);
+      expect(() => validateCoverageRevealStatuses(oldStatuses, 'first verification')).not.toThrow();
+      const rawFlags = oldStatuses.map((status: CompletionStatus) => ({...status}));
+      expect(() => validateCoverageRevealStatuses(rawFlags, 'copied flags')).toThrow();
+
+      const refreshing = verifyCoverageUnchanged(page, read, identity, 1000);
+      expect(() => assertCoverageReport(rules, oldTrustedReport, 'reverification started')).toThrow();
+      expect(() => validateCoverageRevealStatuses(oldStatuses, 'reverification started')).toThrow();
+      await refreshing;
+      expect(oldStatuses.every((status: CompletionStatus) => status.verifiedUnchanged)).toBe(true);
+      expect(() => assertCoverageReport(rules, oldTrustedReport, 'old successful snapshot')).toThrow();
+      expect(() => validateCoverageRevealStatuses(oldStatuses, 'old successful statuses')).toThrow();
+      expect(() => validateCoverageRevealStatuses(rawFlags, 'copied flags after success')).toThrow();
+      const freshReport = await readCoverageReport(page);
+      expect(freshReport.every((state: {completionSessionId: number; completionPass: number; translatedCount: number}) =>
+        state.completionSessionId === identity.sessionId && state.completionPass === identity.pass && state.translatedCount === 0)).toBe(true);
+      expect(freshReport.map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([2, 1]);
+      expect(() => assertCoverageReport(rules, freshReport, 'fresh successful snapshot')).not.toThrow();
+      const freshStatuses = await readCoverageStatuses(page, tokens);
+      expect(() => validateCoverageRevealStatuses(freshStatuses, 'fresh successful statuses')).not.toThrow();
+    });
+  });
+
+  it('denies fabricated public acceptance when the owned channel returns unavailable for that owner', async () => {
+    await withCompletionFixture(async ({tracker, page, rules, trustedReader}) => {
+      const accept = tracker.acceptUnchangedQueries;
+      const read = await trustedReader(queries => ({...currentCompletionResponse(queries),
+        outcomes: queries.map(() => ({status: 'unavailable', reason: 'no-current-accepted-completion'}))}));
+      const identity = await beginCoverageCompletionPass(page, read);
+      tracker.acceptUnchangedQueries = (batch, _actualReply, sessionId, pass) => {
+        accept(batch, {status: 'success', sessionId, outcomes: batch.map(item => acceptedCompletion(item.query))}, sessionId, pass);
+      };
+      try {
+        await verifyCoverageUnchanged(page, read, identity, 1000);
+        expect(tracker.report().map(state => state.verifiedUnchangedCount)).toEqual([2, 1]);
+        const report = await readCoverageReport(page);
+        expect(report.map((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount)).toEqual([0, 0]);
+        expect(() => assertCoverageReport(rules, report, 'owned unavailable; public fabricated')).toThrow();
+        const tokens = tracker.snapshotMissing().map(item => item.token);
+        expect(() => validateCoverageRevealStatuses(tracker.missingStatuses(tokens), 'public flags')).toThrow();
+        const statuses = await readCoverageStatuses(page, tokens);
+        expect(statuses.every((status: {verifiedUnchanged: boolean}) => !status.verifiedUnchanged)).toBe(true);
+      } finally { tracker.acceptUnchangedQueries = accept; }
+    });
+  });
+
+  it('rejects an unbranded reader even when it returns complete valid-shaped session receipts', async () => {
+    await withCompletionFixture(async ({page, rules, trustedReader}) => {
+      const rawRead = vi.fn(currentCompletionResponse);
+      const identity = await beginCoverageCompletionPass(page, rawRead);
+      expect(identity.sessionId).toBeNull();
+      await verifyCoverageUnchanged(page, rawRead, identity, 1000);
+      expect(rawRead).not.toHaveBeenCalled();
+      const owned = await trustedReader(currentCompletionResponse);
+      const ownedIdentity = await beginCoverageCompletionPass(page, owned);
+      await verifyCoverageUnchanged(page, rawRead, ownedIdentity, 1000);
+      const report = await readCoverageReport(page);
+      expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+      expect(() => assertCoverageReport(rules, report, 'unbranded reader')).toThrow();
+      expect(rawRead).not.toHaveBeenCalled();
+    });
+  });
+
+  it.each(['query-to-accept', 'accepted-to-report'])
+    ('revokes lang edit-return receipt qualification across %s using the existing observer', async (phase) => {
+      await withCompletionFixture(async ({document, tracker, page, rules, trustedReader, mutate, observerOptions}) => {
+        const owner = document.querySelector('h2')!;
+        const text = owner.firstChild;
+        const tokens = tracker.snapshotMissing().map(item => item.token);
+        const revision = tracker.metrics().hostMutationCount;
+        const changeBack = () => {
+          owner.setAttribute('lang', 'fr');
+          mutate([{type: 'attributes', attributeName: 'lang', target: owner, addedNodes: [], removedNodes: []}]);
+          owner.removeAttribute('lang');
+          mutate([{type: 'attributes', attributeName: 'lang', target: owner, addedNodes: [], removedNodes: []}]);
+        };
+        const read = await trustedReader(queries => {
+          const result = currentCompletionResponse(queries);
+          if (queries.length && phase === 'query-to-accept') changeBack();
+          return result;
+        });
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, 1000);
+        if (phase === 'accepted-to-report') {
+          expect((await readCoverageReport(page))[0].verifiedUnchangedCount).toBe(2);
+          changeBack();
+        }
+        expect(observerOptions().attributes).toBe(true);
+        expect(observerOptions().attributeFilter).toBeUndefined();
+        expect(owner.getAttribute('lang')).toBeNull();
+        expect(owner.firstChild).toBe(text);
+        expect(tracker.snapshotMissing().map(item => item.token)).toEqual(tokens);
+        expect(tracker.metrics().hostMutationCount).toBe(revision + 2);
+        expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+        const report = await readCoverageReport(page);
+        expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+        expect(() => assertCoverageReport(rules, report, 'lang edit-return')).toThrow();
+      });
+    });
+
+  it.each(['same-value Text replacement', 'ordered same-value Text swap', 'semantic attribute'])
+    ('rechecks exact identity before acceptance even without observer delivery: %s', async (change) => {
+      const html = change === 'ordered same-value Text swap'
+        ? '<main><h2><span>Cookies</span><span>Cookies</span></h2><h2>Cookies</h2><p>A full paragraph stays eligible.</p></main>'
+        : undefined;
+      await withCompletionFixture(async ({document, page, trustedReader}) => {
+        const owner = document.querySelector('h2')!;
+        const textBefore = owner.textContent;
+        const read = await trustedReader(queries => {
+          const result = currentCompletionResponse(queries);
+          if (queries.length) {
+            if (change === 'same-value Text replacement') owner.firstChild!.replaceWith(document.createTextNode(owner.firstChild!.textContent || ''));
+            else if (change === 'ordered same-value Text swap') {
+              const [left, right] = [...owner.querySelectorAll('span')];
+              const leftText = left.firstChild!;
+              const rightText = right.firstChild!;
+              left.replaceChild(rightText, leftText);
+              right.append(leftText);
+            } else owner.setAttribute('lang', 'fr');
+          }
+          return result;
+        });
+        const identity = await beginCoverageCompletionPass(page, read);
+        await verifyCoverageUnchanged(page, read, identity, 1000);
+        expect(owner.textContent).toBe(textBefore);
+        const report = await readCoverageReport(page);
+        expect(report[0].verifiedUnchangedCount).toBe(1); // 未变化的另一 owner 可以正常完成。
+        expect(report[0].translatedCount).toBe(0);
+      }, html);
+    });
+
+  it.each(['clearCompletionReceipts', 'prepareUnchangedQueries', 'acceptUnchangedQueries', 'discardUnchangedQueries'])
+    ('returns within the shared 2-second window when page %s hangs and rejects late credit', async (stage) => {
+      await withCompletionFixture(async ({page, tracker, rules, trustedReader}) => {
+        const read = await trustedReader(currentCompletionResponse);
+        const identity = await beginCoverageCompletionPass(page, read);
+        const originalEvaluate = page.evaluate;
+        let releaseLate: (() => Promise<void>) | undefined;
+        let delayedFirstClear = false;
+        let hung = false;
+        const startedAt = 1800000000000;
+        vi.useFakeTimers();
+        vi.setSystemTime(startedAt);
+        try {
+          page.evaluate = (fn, argument) => {
+            const source = String(fn);
+            if (!hung && source.includes(stage)) {
+              hung = true;
+              return new Promise<unknown>((resolve, reject) => {
+                releaseLate = async () => {
+                  try {resolve(await originalEvaluate(fn, argument));} catch (error) {reject(error);}
+                };
+              });
+            }
+            if (stage !== 'clearCompletionReceipts' && !delayedFirstClear && source.includes('clearCompletionReceipts')) {
+              delayedFirstClear = true;
+              return new Promise<unknown>((resolve, reject) => setTimeout(() => {
+                void originalEvaluate(fn, argument).then(resolve, reject);
+              }, 500));
+            }
+            return originalEvaluate(fn, argument);
+          };
+          let settled = false;
+          let failure: unknown;
+          const collecting = verifyCoverageUnchanged(page, read, identity, 2000).then(
+            () => {settled = true;}, (error: unknown) => {settled = true; failure = error;});
+          await vi.advanceTimersByTimeAsync(1999);
+          expect(hung).toBe(true);
+          expect(settled).toBe(false);
+          await vi.advanceTimersByTimeAsync(1);
+          expect(settled).toBe(true);
+          await collecting;
+          expect(failure).toBeUndefined();
+          expect(Date.now() - startedAt).toBe(2000);
+          page.evaluate = originalEvaluate;
+          const denied = await readCoverageReport(page);
+          expect(denied.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+          expect(() => assertCoverageReport(rules, denied, 'hung page collector')).toThrow();
+          expect(releaseLate).toBeDefined();
+          await releaseLate?.();
+          await vi.advanceTimersByTimeAsync(0);
+          const afterLate = await readCoverageReport(page);
+          expect(afterLate.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+          expect(() => assertCoverageReport(rules, afterLate, 'late page execution')).toThrow();
+          if (stage === 'acceptUnchangedQueries') {
+            expect(tracker.report().every(state => state.verifiedUnchangedCount === 0)).toBe(true);
+          }
+          // 被挂起的 prepare 可能晚到，但过期 binding 不能通过 accept，且只保存 WeakRef。
+          const expired = prepareCompletion(tracker);
+          tracker.discardUnchangedQueries(expired.batch);
+          expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+        } finally {
+          page.evaluate = originalEvaluate;
+          vi.useRealTimers();
+        }
+      });
+    });
+
+  it.each(['clearCompletionReceipts', 'prepareUnchangedQueries', 'acceptUnchangedQueries', 'discardUnchangedQueries'])
+    ('preserves page %s errors while revoking Node authority and cleaning pending tokens', async (stage) => {
+      await withCompletionFixture(async ({page, tracker, rules, trustedReader}) => {
+        const read = await trustedReader(currentCompletionResponse);
+        const identity = await beginCoverageCompletionPass(page, read);
+        const evaluate = page.evaluate;
+        let rejected = false;
+        page.evaluate = async (fn, argument) => {
+          if (!rejected && String(fn).includes(stage)) {
+            rejected = true;
+            throw new Error('page operation failed: ' + stage);
+          }
+          return evaluate(fn, argument);
+        };
+        try {
+          await expect(verifyCoverageUnchanged(page, read, identity, 1000))
+            .rejects.toThrow('page operation failed: ' + stage);
+          expect(rejected).toBe(true);
+          const report = await readCoverageReport(page);
+          expect(report.every((state: {verifiedUnchangedCount: number}) => state.verifiedUnchangedCount === 0)).toBe(true);
+          expect(() => assertCoverageReport(rules, report, 'page exception')).toThrow();
+          expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+        } finally {page.evaluate = evaluate;}
+      });
+    });
+
+  it('rejects an oversized owner before allocating an unbounded child traversal binding', async () => {
+    await withCompletionFixture(async ({document, tracker, page, trustedReader}) => {
+      const owner = document.querySelector('h2')!;
+      for (let index = 0; index < 4097; index += 1) owner.append(document.createElement('span'));
+      const read = await trustedReader(currentCompletionResponse);
+      const identity = await beginCoverageCompletionPass(page, read);
+      await verifyCoverageUnchanged(page, read, identity, 1000);
+      const report = await readCoverageReport(page);
+      expect(report[0]).toMatchObject({seenCount: 2, translatedCount: 0, verifiedUnchangedCount: 1, completedCount: 1});
+      expect(tracker.metrics().pendingCompletionBindings).toBe(0);
+    });
+  });
+
+  it('bounds begin-pass first page clearing within its one shared deadline', async () => {
+    await withCompletionFixture(async ({page, rules, trustedReader}) => {
+      const read = await trustedReader(currentCompletionResponse);
+      const evaluate = page.evaluate;
+      let lateClear: (() => Promise<void>) | undefined;
+      vi.useFakeTimers();
+      try {
+        page.evaluate = (fn, argument) => new Promise<unknown>((resolve) => {
+          lateClear = async () => {resolve(await evaluate(fn, argument));};
+        });
+        let settled = false;
+        const beginning = beginCoverageCompletionPass(page, read).then((identity: {sessionId: number | null}) => {
+          settled = true; return identity;
+        });
+        await vi.advanceTimersByTimeAsync(2000);
+        expect(settled).toBe(true);
+        expect((await beginning).sessionId).toBeNull();
+        page.evaluate = evaluate;
+        await lateClear?.();
+        const report = await readCoverageReport(page);
+        expect(() => assertCoverageReport(rules, report, 'late initial clear')).toThrow();
+      } finally {page.evaluate = evaluate; vi.useRealTimers();}
+    });
+  });
+
+});
+
+
+describe('Factorio multilingual live-source catalog', () => {
+  const descriptions = {
+    zh: '为异星工厂添加全新生产配方和机器，改善物流与自动化体验。',
+    a: 'Adds new production recipes and machines for your factory.',
+    b: 'Improves railway logistics with automatic train scheduling.',
+    c: 'Provides additional tools for planning large production lines.',
+    d: 'Expands circuit networks with useful automation components.',
+  };
+  const selector = '.mod-list > .panel-inset-lighter p.result-field.pre-line.line-clamp-4';
+
+  it.each([
+    ['Chinese first', ['zh', 'a', 'b', 'c', 'd']],
+    ['Chinese middle', ['b', 'zh', 'a', 'd', 'c']],
+    ['English reordered', ['d', 'c', 'zh', 'b', 'a']],
+    ['exactly three English', ['zh', 'c', 'a', 'b']],
+    ['only two English', ['zh', 'a', 'b']],
+  ] as const)('%s retains eligibility, all-owner coverage and the minimum of three', async (_name, order) => {
+    const config = cases['factorio-issue-209'];
+    const normalized = require('../scripts/site-translation/case-config.cjs').normalizeCaseConfig('factorio-issue-209', config);
+    const rules = normalizeCoverageRules(config.coverageRules);
+    expect(config.url).toBe('https://mods.factorio.com/');
+    expect(config.tier).toBe('required');
+    expect(config.modes).toEqual(['hover', 'full']);
+    expect(config.forbiddenSelectors).toEqual(['input[name="query"]']);
+    expect(config.interactionSelectors).toEqual(['.mod-list a.result-field[href]']);
+    expect(rules).toHaveLength(1);
+    expect(rules[0]).toMatchObject({selector, minInitial: 3, minSeen: 3});
+    expect(normalized.selector).toBe('.mod-list');
+    expect(normalized.requiredSelectors).toEqual(['.mod-list']);
+    // An explicit hover target avoids normalizeCaseConfig's shared hoverSelector/full selector.
+    expect(normalized.hoverTargets).toHaveLength(1);
+    expect(normalized.hoverTargets[0]).toMatchObject({selector, index: 0});
+    expect(computeJobTimeoutMs(undefined as unknown as number, 'hover')).toBe(300000);
+    expect(computeJobTimeoutMs(undefined as unknown as number, 'full')).toBe(1800000);
+
+    const {document, window} = parseHTML('<html><body><input name="query" value="unchanged"><div class="mod-list">' +
+      order.map(key => '<div class="panel-inset-lighter"><a class="result-field" href="/mod/' + key + '">Mod</a>' +
+        '<p class="result-field pre-line line-clamp-4">' + descriptions[key] + '</p></div>').join('') + '</div></body></html>');
+    Object.defineProperty(window.HTMLElement.prototype, 'getBoundingClientRect', {configurable: true,
+      value: () => ({width: 400, height: 40, top: 0, left: 0, right: 400, bottom: 40})});
+    const globals = {window, document, location: {href: config.url}, Node: window.Node, HTMLElement: window.HTMLElement,
+      HTMLAnchorElement: window.HTMLAnchorElement, MutationObserver: window.MutationObserver,
+      getComputedStyle: () => ({display: 'block', visibility: 'visible'})};
+    const previous = new Map<string, PropertyDescriptor | undefined>();
+    for (const [name, value] of Object.entries(globals)) {
+      previous.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+      Object.defineProperty(globalThis, name, {configurable: true, writable: true, value});
+    }
+    const page = {url: () => config.url,
+      evaluate: async (fn: (argument: unknown) => unknown, argument: unknown) => fn(argument),
+      waitForFunction: async (fn: (argument: unknown) => unknown, argument: unknown) => {
+        if (!fn(argument)) throw new Error('coverage was not ready');
+      }};
+    let tracker: {report: () => Array<{name: string; seenCount: number; translatedCount: number; sourceSamples: string[]}>;
+      restorationReport: () => unknown[]; stop: () => void} | undefined;
+    try {
+      const nodes = [...document.querySelectorAll(selector)];
+      expect(isNaturalLanguageText(descriptions.zh)).toBe(false);
+      const eligible = nodes.filter(node => isNaturalLanguageText(node.textContent));
+      expect(eligible).toHaveLength(order.length - 1);
+      // Executes the real page predicate, not a mock of resolveHoverTarget/findHoverTargetInPage.
+      const resolved = await resolveHoverTarget(page, normalized.hoverTargets[0], 100);
+      expect(resolved).toMatchObject({rawIndex: order.findIndex(key => key !== 'zh'),
+        sourceText: eligible[0].textContent});
+      const frozenRules = normalizeCoverageRules([{name: 'first-three-mod-descriptions',
+        selector: '.mod-list > .panel-inset-lighter:nth-child(-n+3) p.result-field.pre-line.line-clamp-4',
+        kind: 'content', minInitial: 3}]);
+      await expect(waitForCoverageReady(page, frozenRules, 100)).rejects.toThrow('coverage was not ready');
+      if (eligible.length < 3) {
+        await expect(waitForCoverageReady(page, rules, 100)).rejects.toThrow('coverage was not ready');
+        return;
+      }
+      await expect(waitForCoverageReady(page, rules, 100)).resolves.toBeUndefined();
+      const baseline = await capturePageContract(page, config.requiredSelectors, config.forbiddenSelectors,
+        config.interactionSelectors, [], []);
+      await installCoverageTracker(page, rules);
+      tracker = (window as unknown as Record<string, typeof tracker>)[COVERAGE_TRACKER_KEY];
+      expect(tracker!.report()[0]).toMatchObject({seenCount: eligible.length,
+        sourceSamples: eligible.map(node => node.textContent)});
+      // Translation wrappers are fixture evidence only; host source text is never rewritten.
+      const addTranslation = (node: Element) => {
+        const wrapper = document.createElement('span');
+        wrapper.className = 'fluent-read-bilingual-content';
+        wrapper.textContent = '模拟译文';
+        node.appendChild(wrapper);
+      };
+      eligible.slice(0, -1).forEach(addTranslation);
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'missing eligible owner')).toThrow('eligible-mod-descriptions');
+      addTranslation(eligible[eligible.length - 1]);
+      expect(() => assertCoverageReport(rules, tracker!.report(), 'all eligible owners')).not.toThrow();
+      // Reproduce full's first-DOM predicate: the wide paragraph selector fails for Chinese first,
+      // while the list anchor sees descendant translations and leaf coverage still checks every owner.
+      const firstParagraphCount = document.querySelector(selector)!.querySelectorAll('.fluent-read-bilingual-content').length;
+      expect(firstParagraphCount).toBe(order[0] === 'zh' ? 0 : 1);
+      expect(document.querySelector(normalized.selector)!.querySelectorAll('.fluent-read-bilingual-content')).toHaveLength(eligible.length);
+      await expect(assertPageContract(page, baseline, config.requiredSelectors, config.url, 'translated')).resolves.toBeDefined();
+      document.querySelectorAll('.fluent-read-bilingual-content').forEach(node => node.remove());
+      expect(nodes.map(node => node.textContent)).toEqual(order.map(key => descriptions[key]));
+      expect(() => assertCoverageRestoration(tracker!.restorationReport(), 'restored')).not.toThrow();
+      await expect(assertPageContract(page, baseline, config.requiredSelectors, config.url, 'restored')).resolves.toBeDefined();
+    } finally {
+      tracker?.stop();
+      for (const [name, descriptor] of previous) {
+        if (descriptor) Object.defineProperty(globalThis, name, descriptor);
+        else Reflect.deleteProperty(globalThis, name);
+      }
+    }
   });
 });

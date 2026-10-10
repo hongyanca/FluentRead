@@ -1,0 +1,688 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-settings-feedback-audit-edge-28IX9y",
+  "artifactsDir": "/private/tmp/fr-settings-feedback-final",
+  "checks": [
+    "all sidebar groups expanded; every settings page opens without ordinary page tabs, horizontal overflow or duplicate switch-state labels",
+    "numeric values have separate space from full-height minus/plus controls; click, ArrowUp, min/max, six-digit edit and reload persistence pass",
+    "learning saving uses stable named whole-row switch with keyboard and persistence; enable-entry link opens selection settings directly",
+    "glossary has right-aligned keyboard-operable switch, direct builtin cards after editor, and saved entries survive reload",
+    "model usage and region translation legacy links resolve to merged sections; only statistics has view navigation",
+    "every settings page fits 390px without horizontal overflow"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fr-settings-feedback-final/settings-general-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-general-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-services-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-interface-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-interface-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-selection-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-selection-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-image-translation-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-image-translation-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-video-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-video-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-sites-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-writing-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-center-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-vocabulary-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-glossary-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-glossary-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-stats-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-advanced-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-advanced-bottom.png",
+    "/private/tmp/fr-settings-feedback-final/settings-data-top.png",
+    "/private/tmp/fr-settings-feedback-final/settings-about-top.png",
+    "/private/tmp/fr-settings-feedback-final/number-input-timing.png",
+    "/private/tmp/fr-settings-feedback-final/number-controls-desktop.png",
+    "/private/tmp/fr-settings-feedback-final/number-controls-detail.png",
+    "/private/tmp/fr-settings-feedback-final/number-controls-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/vocabulary-saving-enabled.png",
+    "/private/tmp/fr-settings-feedback-final/glossary-with-entry.png",
+    "/private/tmp/fr-settings-feedback-final/glossary-builtins-visible.png",
+    "/private/tmp/fr-settings-feedback-final/stats-overview.png",
+    "/private/tmp/fr-settings-feedback-final/stats-usage.png",
+    "/private/tmp/fr-settings-feedback-final/image-area-alias.png",
+    "/private/tmp/fr-settings-feedback-final/settings-general-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-services-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-interface-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-selection-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-image-translation-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-video-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-sites-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-writing-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-center-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-vocabulary-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-glossary-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-translation-stats-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-advanced-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-data-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-about-mobile.png",
+    "/private/tmp/fr-settings-feedback-final/settings-selection-dark.png",
+    "/private/tmp/fr-settings-feedback-final/settings-image-translation-dark.png",
+    "/private/tmp/fr-settings-feedback-final/settings-glossary-dark.png",
+    "/private/tmp/fr-settings-feedback-final/settings-advanced-dark.png",
+    "/private/tmp/fr-settings-feedback-final/settings-vocabulary-dark.png"
+  ],
+  "metrics": {
+    "numericFields": [
+      {
+        "id": "settings-general",
+        "numbers": []
+      },
+      {
+        "id": "settings-services",
+        "numbers": [
+          {
+            "label": "每个服务最多等待（秒）",
+            "value": "5",
+            "max": "15",
+            "textWidth": 118,
+            "requiredWidth": 13.9140625,
+            "leftGap": 6,
+            "rightGap": 6
+          }
+        ]
+      },
+      {
+        "id": "settings-translation",
+        "numbers": [
+          {
+            "label": "悬浮翻译延迟",
+            "value": "50",
+            "max": "2000",
+            "textWidth": 236.5390625,
+            "requiredWidth": 34.302734375,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "悬浮球展开延迟",
+            "value": "0",
+            "max": "2000",
+            "textWidth": 82,
+            "requiredWidth": 34.302734375,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "悬浮球收起时不透明度",
+            "value": "52",
+            "max": "100",
+            "textWidth": 82,
+            "requiredWidth": 23.6796875,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "相邻两次按键最大间隔",
+            "value": "1000",
+            "max": "2000",
+            "textWidth": 82,
+            "requiredWidth": 34.302734375,
+            "leftGap": 6,
+            "rightGap": 6
+          }
+        ]
+      },
+      {
+        "id": "settings-interface",
+        "numbers": []
+      },
+      {
+        "id": "settings-selection",
+        "numbers": [
+          {
+            "label": "划词翻译显示延迟",
+            "value": "300",
+            "max": "2000",
+            "textWidth": 236.5390625,
+            "requiredWidth": 34.302734375,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "悬停等待时间",
+            "value": "600",
+            "max": "3000",
+            "textWidth": 218,
+            "requiredWidth": 34.630859375,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "上下文上限",
+            "value": "1500",
+            "max": "4000",
+            "textWidth": 187,
+            "requiredWidth": 34.86328125,
+            "leftGap": 6,
+            "rightGap": 6
+          }
+        ]
+      },
+      {
+        "id": "settings-advanced",
+        "numbers": [
+          {
+            "label": "翻译段落最少字符数",
+            "value": "2",
+            "max": "100",
+            "textWidth": 82,
+            "requiredWidth": 23.6796875,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "免滚动预翻译字符数",
+            "value": "0",
+            "max": "100000",
+            "textWidth": 82,
+            "requiredWidth": 49.68359375,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "容量上限（MiB）",
+            "value": "10",
+            "max": "10",
+            "textWidth": 68,
+            "requiredWidth": 15.01171875,
+            "leftGap": 6,
+            "rightGap": 6
+          },
+          {
+            "label": "条数上限",
+            "value": "10000",
+            "max": "10000",
+            "textWidth": 68,
+            "requiredWidth": 41.015625,
+            "leftGap": 6,
+            "rightGap": 6
+          }
+        ]
+      }
+    ],
+    "numbers": [
+      {
+        "leftGap": 6,
+        "rightGap": 6,
+        "textWidth": 82,
+        "minusWidth": 44,
+        "minusHeight": 42,
+        "plusWidth": 44,
+        "plusHeight": 42
+      },
+      {
+        "leftGap": 6,
+        "rightGap": 6,
+        "textWidth": 82,
+        "minusWidth": 44,
+        "minusHeight": 42,
+        "plusWidth": 44,
+        "plusHeight": 42
+      }
+    ],
+    "numbersMobile": {
+      "leftGap": 6,
+      "rightGap": 6,
+      "textWidth": 82,
+      "minusWidth": 44,
+      "minusHeight": 42,
+      "plusWidth": 44,
+      "plusHeight": 42
+    }
+  },
+  "evidenceBoundary": "Settings-only navigation, presentation and local persistence in a clean Edge profile; no live translation provider claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 76304,
+      "name": "微信"
+    },
+    "frontmostAfter": {
+      "pid": 76304,
+      "name": "微信"
+    }
+  },
+  "pages": [
+    {
+      "id": "settings-general",
+      "label": "通用设置",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 2043,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "启用翻译功能\n关闭后停止所有翻译，并隐藏网页和视频中的翻译入口。再次开启会恢复原有偏好。",
+          "width": 1054,
+          "height": 87,
+          "state": "true"
+        }
+      ],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-services",
+      "label": "翻译服务",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1212,
+      "cardScrollWidth": 1212,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [
+        {
+          "text": "连接设置",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "更多服务\n默认关闭",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "运行情况",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "请求限制\n并发数与请求频率",
+          "height": 64,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-translation",
+      "label": "翻译设置",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 3537,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-interface",
+      "label": "界面风格",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 3375,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-selection",
+      "label": "划词翻译",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 1379,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "启用划词翻译\n选中文字，在原文旁查看译文。需要深入理解时，再切换到卡片。",
+          "width": 1054,
+          "height": 87,
+          "state": "false"
+        },
+        {
+          "text": "启用 AI 讲解\n使用你配置的 AI 服务，围绕选中的原文继续学习。关闭后仍可翻译和查词。",
+          "width": 1054,
+          "height": 87,
+          "state": "false"
+        }
+      ],
+      "disclosures": [
+        {
+          "text": "上下文、学习记忆与自定义指令",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "朗读与更多偏好",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-image-translation",
+      "label": "图片翻译",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 1642,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "网页图片翻译\n悬停网页图片时显示翻译入口。",
+          "width": 1054,
+          "height": 87,
+          "state": "false"
+        },
+        {
+          "text": "启用圈选翻译\n按 Shift+Z 后拖拽区域，释放鼠标开始识别；Esc 取消或关闭。",
+          "width": 1054,
+          "height": 87,
+          "state": "true"
+        }
+      ],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-video",
+      "label": "视频字幕翻译",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 1651,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "视频字幕翻译\n翻译 YouTube 或 X 播放器中的字幕，不上传音频或视频内容。",
+          "width": 1054,
+          "height": 87,
+          "state": "true"
+        }
+      ],
+      "disclosures": [
+        {
+          "text": "微调字幕外观",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "使用说明",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-sites",
+      "label": "网站规则",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [
+        {
+          "text": "网站适配\n自动识别正文，保留按钮、代码与页面控件。\n内置规则 191",
+          "height": 72,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-writing",
+      "label": "写作助手",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 860,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "启用写作助手\n在 GitHub 和 Gmail 编辑区起草回复、完善草稿，检查后由你发送。",
+          "width": 1002,
+          "height": 87,
+          "state": "true"
+        }
+      ],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-translation-center",
+      "label": "翻译中心",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1212,
+      "cardScrollWidth": 1212,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-vocabulary",
+      "label": "学习中心",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "学习收藏\n主动收藏单词、表达或句子；关闭入口不会删除已有收藏和复习记录。",
+          "width": 1078,
+          "height": 87,
+          "state": "false"
+        }
+      ],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-glossary",
+      "label": "术语库",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 1266,
+      "tabs": [],
+      "featureCards": [
+        {
+          "text": "启用术语库\n指定词语的固定译法，译词留空可保留原文。",
+          "width": 1078,
+          "height": 87,
+          "state": "false"
+        }
+      ],
+      "disclosures": [
+        {
+          "text": "更多",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-translation-stats",
+      "label": "翻译统计",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 767,
+      "cardScrollHeight": 767,
+      "tabs": [
+        "翻译概览",
+        "模型用量"
+      ],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-advanced",
+      "label": "高级选项",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 1471,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [
+        {
+          "text": "调整缓存上限",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "重试间隔",
+          "height": 42,
+          "background": "rgb(255, 255, 255)"
+        }
+      ],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-data",
+      "label": "备份与恢复",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    },
+    {
+      "id": "settings-about",
+      "label": "关于流畅阅读",
+      "pageWidth": 1432,
+      "outerWidth": 1432,
+      "cardWidth": 1148,
+      "cardScrollWidth": 1148,
+      "cardHeight": 828,
+      "cardScrollHeight": 828,
+      "tabs": [],
+      "featureCards": [],
+      "disclosures": [],
+      "mobile": {
+        "body": 0,
+        "card": 0
+      }
+    }
+  ]
+}

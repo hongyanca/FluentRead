@@ -1,0 +1,9 @@
+
+> FluentRead-流畅阅读@0.0.35 generate:userscript-languages /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+> node scripts/generate-userscript-language-data.mjs
+
+userscript/languages/ja-JP.f0d2359530cc9d22.json
+userscript/languages/ko-KR.630d2dbee5d36c34.json
+userscript/languages/fr-FR.5d20a9c924e4cd94.json
+userscript/languages/ru-RU.68ee08d4f8eac4c4.json
+userscript/languages/es-ES.0ebf729bab3767e6.json

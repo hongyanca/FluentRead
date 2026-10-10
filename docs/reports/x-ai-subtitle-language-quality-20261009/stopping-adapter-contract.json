@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "scope": "Actual installed Whisper3.8.1 generate -> actual base.generate -> actual MaxLength/EOS list plus production model-instance wrapper. Fake input preparation stops at actual tolist boundary before decoder. No ONNX/session/browser/network.",
+  "libraryVersion": "3.8.1",
+  "scriptSha256": "c0780b91066d30fc217ea0030aa1c0e23b9c06041609116c2abc0352c294705d",
+  "adapterSourceSha256": "dffe9e1c9fb3771224b3e4e22eca524acb519785de144d34337d774a76ddb1f8",
+  "adapterBundleSha256": "0a2ffbfa5b4b6876fecc070fff1dab7505cf2f228dc746d5d484fdf845ba9aa6",
+  "actualGenerateSha256": "904970304636a4011abcbb1b7ddf2361e102341a7c89b1bb07182698c9f16f5a",
+  "actualOriginalHookSha256": "dec79823b91d5c98a0545dd31e36ba79d163676f83d44da8b6c8ecfc4f09d4d2",
+  "calls": [
+    {
+      "upstreamDroppedSuppliedCriteria": true,
+      "originalTypes": [
+        "MaxLengthCriteria",
+        "EosTokenCriteria"
+      ],
+      "ownedCriteriaAppendedExactlyOnce": true,
+      "beforeInterrupt": false,
+      "afterInterrupt": false,
+      "maxLength": 443
+    },
+    {
+      "upstreamDroppedSuppliedCriteria": true,
+      "originalTypes": [
+        "MaxLengthCriteria",
+        "EosTokenCriteria"
+      ],
+      "ownedCriteriaAppendedExactlyOnce": true,
+      "beforeInterrupt": false,
+      "afterInterrupt": true,
+      "maxLength": 443
+    }
+  ],
+  "freshCriteriaListEachCall": true,
+  "originalOwnDescriptorRestored": true,
+  "globalPrototypePatched": false,
+  "encoderCalls": 0,
+  "decoderCalls": 0,
+  "networkAttempts": 0,
+  "boundary": "Proves exact production instance hook appends the actual owned interrupt criterion to the real stopping list, preserves EOS/length, and restores its own descriptor. Does not establish a 15-second ONNX interruption latency or browser acceptance."
+}

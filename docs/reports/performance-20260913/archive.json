@@ -1,0 +1,6 @@
+{
+  "target": ".output/fluent-read-performance-chrome.zip",
+  "bytes": 23901906,
+  "baselineBytes": 24256989,
+  "sha256": "a5e298ec00c5a74b1ea1dd9c7d1b1097c21e3611e2710d16370796d45d6dd868"
+}

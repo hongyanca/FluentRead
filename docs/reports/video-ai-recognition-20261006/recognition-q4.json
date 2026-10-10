@@ -1,0 +1,524 @@
+{
+  "success": true,
+  "evidence": "Real Whisper on three synthetic Mandarin clips; raw CER excludes punctuation but counts simplified/traditional differences; no live X audio",
+  "results": [
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "prepareMs": 6008,
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 3815,
+          "inferenceMs": 2459.9000000953674,
+          "decodeMs": 1.5999999046325684,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 1056,
+          "inferenceMs": 1031.5,
+          "decodeMs": 2.3999996185302734,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1484,
+          "inferenceMs": 1444.3000001907349,
+          "decodeMs": 3.5,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 23,
+            "characters": 52,
+            "rate": 0.4423076923076923
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 1359,
+          "inferenceMs": 842,
+          "decodeMs": 1.5,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 1044,
+          "inferenceMs": 1022.0999999046326,
+          "decodeMs": 2.1999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1500,
+          "inferenceMs": 1467.0999999046326,
+          "decodeMs": 3.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 23,
+            "characters": 52,
+            "rate": 0.4423076923076923
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 1709.5,
+          "peakBrowserRssMb": 2749.078125,
+          "cpuSeconds": 8.824072
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 2643.5,
+          "peakBrowserRssMb": 2668.796875,
+          "cpuSeconds": 3.486680999999998
+        }
+      ]
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "prepareMs": 8011,
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "wallMs": 2606,
+          "inferenceMs": 1328.0999999046326,
+          "decodeMs": 1.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "wallMs": 1547,
+          "inferenceMs": 1523.2999997138977,
+          "decodeMs": 2.0999999046325684,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "wallMs": 2210,
+          "inferenceMs": 2174.9000000953674,
+          "decodeMs": 3.5,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "wallMs": 2088,
+          "inferenceMs": 1273.2000002861023,
+          "decodeMs": 1.5,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "wallMs": 1536,
+          "inferenceMs": 1513,
+          "decodeMs": 2.1999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "wallMs": 2180,
+          "inferenceMs": 2144.7000002861023,
+          "decodeMs": 3.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 2047.453125,
+          "peakBrowserRssMb": 2831.796875,
+          "cpuSeconds": 9.288255000000001
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 2736.53125,
+          "peakBrowserRssMb": 2743.296875,
+          "cpuSeconds": 4.772731999999999
+        }
+      ]
+    },
+    {
+      "version": "fixed",
+      "model": "tiny",
+      "prepareMs": 113,
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 2072,
+          "inferenceMs": 924.8000001907349,
+          "decodeMs": 1.6999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 1048,
+          "inferenceMs": 1027.7000002861023,
+          "decodeMs": 2.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1651,
+          "inferenceMs": 1617.3000001907349,
+          "decodeMs": 3.8000001907348633,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 19,
+            "characters": 52,
+            "rate": 0.36538461538461536
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 1323,
+          "inferenceMs": 828.4000000953674,
+          "decodeMs": 1.3000001907348633,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 1577,
+          "inferenceMs": 1072.5999999046326,
+          "decodeMs": 2.1999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1667,
+          "inferenceMs": 1629.9000000953674,
+          "decodeMs": 3.3000001907348633,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 19,
+            "characters": 52,
+            "rate": 0.36538461538461536
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 1177.046875,
+          "peakBrowserRssMb": 2607.03125,
+          "cpuSeconds": 8.947522
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 2510.734375,
+          "peakBrowserRssMb": 2510.734375,
+          "cpuSeconds": 4.444495999999999
+        }
+      ]
+    },
+    {
+      "version": "fixed",
+      "model": "base",
+      "prepareMs": 6,
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "wallMs": 2898,
+          "inferenceMs": 1470.3000001907349,
+          "decodeMs": 1.3000001907348633,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "wallMs": 1568,
+          "inferenceMs": 1545.2000002861023,
+          "decodeMs": 2.1999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "wallMs": 2234,
+          "inferenceMs": 2193,
+          "decodeMs": 3.5,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "wallMs": 2094,
+          "inferenceMs": 1289,
+          "decodeMs": 1.299999713897705,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "wallMs": 2452,
+          "inferenceMs": 1604.4000000953674,
+          "decodeMs": 2.1999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "wallMs": 2247,
+          "inferenceMs": 2212.0999999046326,
+          "decodeMs": 3.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 1659.71875,
+          "peakBrowserRssMb": 2655.890625,
+          "cpuSeconds": 10.125705
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 2066.0625,
+          "peakBrowserRssMb": 2075.109375,
+          "cpuSeconds": 5.909421999999997
+        }
+      ]
+    }
+  ],
+  "baseline": {
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false
+    }
+  },
+  "fixed": {
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false
+    }
+  },
+  "machine": {
+    "model": "MacBookPro18,1",
+    "logicalCpus": 10,
+    "ramGiB": 32,
+    "os": "macOS",
+    "voice": "Tingting zh_CN"
+  },
+  "comparison": "baseline q4 vs modified q4 (recognition source unchanged by rebase)"
+}

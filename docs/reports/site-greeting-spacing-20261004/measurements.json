@@ -1,0 +1,189 @@
+{
+  "baseline": {
+    "label": "baseline-zh-1280",
+    "collisions": [
+      {
+        "card": "bv-orbit-card bv-orbit-grammar",
+        "gap": 0,
+        "greeting": "bv-orbit-greeting bv-greeting-ja"
+      },
+      {
+        "card": "bv-orbit-card bv-orbit-page",
+        "gap": 0,
+        "greeting": "bv-orbit-greeting bv-greeting-de"
+      },
+      {
+        "card": "bv-orbit-card bv-orbit-grammar",
+        "gap": 0,
+        "greeting": "bv-orbit-greeting bv-greeting-ru"
+      }
+    ],
+    "minGap": 0
+  },
+  "centralGeometryUnchanged": true,
+  "animationEnvelope": "Bounds cover translateY(-6px) through translateY(0) independently for each element.",
+  "checks": [
+    {
+      "label": "zh-320",
+      "width": 320,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-390",
+      "width": 390,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-760",
+      "width": 760,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1100",
+      "width": 1100,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1101",
+      "width": 1101,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 33.8345947265625,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1279",
+      "width": 1279,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05872132324219,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1280",
+      "width": 1280,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.0509199658203,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1440",
+      "width": 1440,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05090607128906,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "zh-1920",
+      "width": 1920,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05093577343749,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-320",
+      "width": 320,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-390",
+      "width": 390,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-760",
+      "width": 760,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1100",
+      "width": 1100,
+      "cardCount": 0,
+      "greetingCount": 10,
+      "minMotionGap": null,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1101",
+      "width": 1101,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 33.8345947265625,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1279",
+      "width": 1279,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05873818945312,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1280",
+      "width": 1280,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05092078613282,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1440",
+      "width": 1440,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.050928188476576,
+      "nearPairs": [],
+      "overflow": 0
+    },
+    {
+      "label": "en-1920",
+      "width": 1920,
+      "cardCount": 3,
+      "greetingCount": 10,
+      "minMotionGap": 39.05092286132813,
+      "nearPairs": [],
+      "overflow": 0
+    }
+  ]
+}

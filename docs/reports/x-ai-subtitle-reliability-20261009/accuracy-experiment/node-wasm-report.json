@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "scope": "Precision-route evidence on fixed synthetic Mandarin only; not WebGPU, browser, service-worker, extension UI, or live X acceptance",
+  "launchMode": "node-hosted-wasm-local-model-benchmark",
+  "backend": "wasm",
+  "libraries": {
+    "transformers": "3.8.1",
+    "onnxruntimeWeb": "1.23.2",
+    "onnxruntimeCommon": "1.23.2",
+    "defaultNativeOrtNotUsed": "1.21.0"
+  },
+  "threads": 1,
+  "forbidNetwork": true,
+  "sourceReportSha256": "4ff66ce9a6cb1db3285f77e72ce33699afe94ad95c508eabf2ad08b96bdb4f47",
+  "executedHarnessSha256": "4e065d6e0a892a0a538968e593abe85280eb83c47d0f16de8d4823fafd473938",
+  "sourceReportLocalPath": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/full-report.json",
+  "runtimeInjection": "globalThis[Symbol.for(onnxruntime)] = local onnxruntime-web 1.23.2; device auto plus explicit WASM provider; default native ORT 1.21.0 not used",
+  "generationControls": {
+    "sourceLanguage": "zh-Hans normalized to zh",
+    "return_timestamps": true,
+    "force_full_sequences": false,
+    "do_sample": false,
+    "num_beams": 1,
+    "no_repeat_ngram_size": 8,
+    "inferenceLimitMs": 15000,
+    "tokenBudget": "Unchanged production buildWhisperTranscriptionGenerationOptions; per-row maxNewTokens"
+  },
+  "sessionOptions": {
+    "executionProviders": [
+      "wasm"
+    ],
+    "extra": {
+      "optimization": {
+        "disable_specified_optimizers": "QDQSelectorActionTransformer"
+      },
+      "session": {
+        "use_ort_model_bytes_directly": "1"
+      }
+    },
+    "enableCpuMemArena": false,
+    "enableMemPattern": false,
+    "executionMode": "sequential"
+  },
+  "modelSourceVerification": "./snapshot-verification.json",
+  "allSixQ4TextsMatchProductionWebGpuQ4": true,
+  "scriptNormalization": {
+    "normalizer": "ICU Traditional-Simplified plus whitespace/punctuation exclusion on both reference and prediction",
+    "version": "uconv v2.1  ICU 78.3",
+    "scope": "metric-only script normalization; no production output conversion or recognition change",
+    "sourceSha256": "4ff66ce9a6cb1db3285f77e72ce33699afe94ad95c508eabf2ad08b96bdb4f47"
+  },
+  "limitations": [
+    "Only three synthetic Mandarin clips; no general quality conclusion",
+    "Raw CER counts simplified/traditional differences; normalized CER changes metrics only",
+    "One ordered full A/B run; inference time is descriptive, not repeated performance acceptance",
+    "No WebGPU/browser/extension UI acceptance or production default change"
+  ],
+  "runs": [
+    {
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "sampleIndex": 0,
+      "text": "我协天子以令珠侯,天下都给我让到",
+      "pcmSha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "rawCer": {
+        "errors": 3,
+        "characters": 15,
+        "rate": 0.2,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 3,
+        "characters": 15,
+        "rate": 0.2
+      },
+      "maxNewTokens": 35,
+      "inferenceMs": 1660.648333
+    },
+    {
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "sampleIndex": 1,
+      "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+      "pcmSha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "rawCer": {
+        "errors": 12,
+        "characters": 26,
+        "rate": 0.46153846153846156,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 2,
+        "characters": 26,
+        "rate": 0.07692307692307693
+      },
+      "maxNewTokens": 59,
+      "inferenceMs": 1829.5554999999995
+    },
+    {
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "sampleIndex": 2,
+      "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+      "pcmSha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "rawCer": {
+        "errors": 19,
+        "characters": 52,
+        "rate": 0.36538461538461536,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 7,
+        "characters": 52,
+        "rate": 0.1346153846153846
+      },
+      "maxNewTokens": 93,
+      "inferenceMs": 2470.598666000001
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q4",
+      "sampleIndex": 0,
+      "text": "我寫天子已令豬猴,天下都给我让到。",
+      "pcmSha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "rawCer": {
+        "errors": 5,
+        "characters": 15,
+        "rate": 0.3333333333333333,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 5,
+        "characters": 15,
+        "rate": 0.3333333333333333
+      },
+      "maxNewTokens": 42,
+      "inferenceMs": 3692.145291
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q4",
+      "sampleIndex": 1,
+      "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+      "pcmSha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "rawCer": {
+        "errors": 1,
+        "characters": 26,
+        "rate": 0.038461538461538464,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 1,
+        "characters": 26,
+        "rate": 0.038461538461538464
+      },
+      "maxNewTokens": 71,
+      "inferenceMs": 4115.576959
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q4",
+      "sampleIndex": 2,
+      "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+      "pcmSha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "rawCer": {
+        "errors": 15,
+        "characters": 52,
+        "rate": 0.28846153846153844,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 1,
+        "characters": 52,
+        "rate": 0.019230769230769232
+      },
+      "maxNewTokens": 111,
+      "inferenceMs": 5341.326334000001
+    },
+    {
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "sampleIndex": 0,
+      "text": "我协天子以令珠侯,天下都給我讓到。",
+      "pcmSha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "rawCer": {
+        "errors": 5,
+        "characters": 15,
+        "rate": 0.3333333333333333,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 3,
+        "characters": 15,
+        "rate": 0.2
+      },
+      "maxNewTokens": 35,
+      "inferenceMs": 1441.9389159999992
+    },
+    {
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "sampleIndex": 1,
+      "text": "我們正在测试中文視頻字幕食別結果應該保持完整不要重複",
+      "pcmSha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "rawCer": {
+        "errors": 9,
+        "characters": 26,
+        "rate": 0.34615384615384615,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 1,
+        "characters": 26,
+        "rate": 0.038461538461538464
+      },
+      "maxNewTokens": 59,
+      "inferenceMs": 1508.8643340000017
+    },
+    {
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "sampleIndex": 2,
+      "text": "今天我們測試自動聲誠是評刺目中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+      "pcmSha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "rawCer": {
+        "errors": 19,
+        "characters": 52,
+        "rate": 0.36538461538461536,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 7,
+        "characters": 52,
+        "rate": 0.1346153846153846
+      },
+      "maxNewTokens": 93,
+      "inferenceMs": 1828.562082999997
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q8",
+      "sampleIndex": 0,
+      "text": "我寫天子以令朱侯,天下都给我让到。",
+      "pcmSha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "rawCer": {
+        "errors": 3,
+        "characters": 15,
+        "rate": 0.2,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 3,
+        "characters": 15,
+        "rate": 0.2
+      },
+      "maxNewTokens": 42,
+      "inferenceMs": 3020.2671249999985
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q8",
+      "sampleIndex": 1,
+      "text": "我們正在測試中文視頻字幕,識別結果應該保持完整,不要重複。",
+      "pcmSha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "rawCer": {
+        "errors": 11,
+        "characters": 26,
+        "rate": 0.4230769230769231,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 0,
+        "characters": 26,
+        "rate": 0.0
+      },
+      "maxNewTokens": 71,
+      "inferenceMs": 3145.300875000001
+    },
+    {
+      "model": "base",
+      "decoderDtype": "q8",
+      "sampleIndex": 2,
+      "text": "今天我們測試自動生成視頻字幕,中文時別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重複文字。",
+      "pcmSha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "rawCer": {
+        "errors": 15,
+        "characters": 52,
+        "rate": 0.28846153846153844,
+        "simplifiedTraditionalDifferencesCounted": true
+      },
+      "scriptNormalizedCer": {
+        "errors": 1,
+        "characters": 52,
+        "rate": 0.019230769230769232
+      },
+      "maxNewTokens": 111,
+      "inferenceMs": 3650.8814159999965
+    }
+  ]
+}

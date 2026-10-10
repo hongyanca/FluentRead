@@ -1,0 +1,5 @@
+
+> FluentRead-流畅阅读@0.0.35 docs:check /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+> node scripts/verify-docs-build.mjs
+
+{"ok":true,"pages":75,"links":3759,"anchors":723,"images":112}

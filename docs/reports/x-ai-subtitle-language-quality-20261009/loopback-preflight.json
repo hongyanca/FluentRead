@@ -1,0 +1,102 @@
+{
+  "scope": "harness transfer validation only; no ASR",
+  "nodeSmoke": {
+    "success": true,
+    "checks": [
+      "preverify-length-sha",
+      "loopback-real-http-extension-origin-cors",
+      "wrong-origin-denied",
+      "wrong-token-denied",
+      "unregistered-route-denied",
+      "large-response-stream-abort",
+      "seed-8MiB-no-CDP-base64-small-metadata",
+      "HTTP-export-roundtrip-sha",
+      "abort-closes-owned-sockets-cleans-partial-upload",
+      "tampered-model-rejected",
+      "corpus-explicit-auto-independent-modes-and-en-en-ja-session",
+      "CER-and-WER-independent-metrics"
+    ],
+    "maxEvaluateArgumentBytes": 502,
+    "transferredBytes": 8388632
+  },
+  "extensionPreflight": {
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 44386,
+        "name": "Google Chrome"
+      },
+      "frontmostAfter": {
+        "pid": 44386,
+        "name": "Google Chrome"
+      }
+    },
+    "extensionWorkerSha256": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+    "browserVersion": "131.0.2903.147",
+    "cacheSeed": {
+      "entries": 1,
+      "bytes": 339,
+      "cache": "transformers-cache",
+      "origin": "chrome-extension://djnlaiohfaaifbibleebjggkghlmcpcj",
+      "directory": "/private/tmp/fluentread-x-ai-public-model-cache-20261009",
+      "manifestSha256": "81a3ccda4c3020698e76b4f9a104b15ceee7497b06e602597a946ee304bb6d86",
+      "wallMs": 13,
+      "preflightOnly": true,
+      "preflight": {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+        "bytes": 339,
+        "passed": true
+      },
+      "transport": "loopback-http-response-to-extension-cache",
+      "files": [
+        {
+          "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+          "bytes": 339,
+          "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d",
+          "wallMs": 2
+        }
+      ]
+    },
+    "cacheDom": {
+      "url": "chrome-extension://djnlaiohfaaifbibleebjggkghlmcpcj/popup.html",
+      "secureContext": true,
+      "documentReadyState": "complete",
+      "popupMounted": true
+    },
+    "guardedCloseSucceeded": true
+  },
+  "incompleteAttempt": {
+    "success": false,
+    "completedCases": 0,
+    "stage": "extension-install",
+    "reason": "browserContext.waitForEvent: Timeout 30000ms exceeded while waiting for event \"serviceworker\"",
+    "browserVersion": "154.0.8037.99",
+    "extensionInstall": "flags",
+    "laterCorrection": "Explicit Extensions.loadUnpacked / --extension-install cdp; subsequent owned baseline completed.",
+    "cleanupError": null,
+    "retainedTemporaryDirectory": null
+  },
+  "permissionChanges": false,
+  "notes": [
+    "Node CacheStorage is a small hermetic simulation; real extension-origin permission was verified separately.",
+    "Chrome154 and Edge131 extension-origin CacheStorage succeeded with existing host permissions/CSP.",
+    "CacheStorage model bytes do not set the model download registry; real production prepare registered both models.",
+    "No clipboard service operation or daily profile was used."
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "ok": true,
+  "scope": "Same-target languages: zh-Hans; PR #779 technical Chinese paragraphs, hover/full-page zero requests, titles, links, dynamic redetection, target switch and excluded-language parity",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "screenIndex": 1,
+    "windowState": "normal",
+    "browserFrontmost": false
+  },
+  "multilingual": {
+    "cases": [
+      {
+        "target": "zh-Hans",
+        "sameTargetElements": 6,
+        "status": "passed",
+        "hoverSameTargetRequests": 0,
+        "foreignHoverCounts": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "foreignFullPageCounts": [
+          1,
+          0,
+          1
+        ],
+        "titleRequests": 0,
+        "dynamicRedetection": true,
+        "restored": true,
+        "requestSources": [
+          "This English paragraph still needs a translation for the reader of this page.",
+          "This English paragraph still needs a translation for the reader of this page.",
+          "This English paragraph still needs a translation for the reader of this page.",
+          "The dynamic paragraph was rewritten in English and it must be translated again."
+        ]
+      }
+    ],
+    "evidenceBoundary": "Pages and chat-completion responses come from the local loopback fixture; request counts prove the extension decision chain, not external provider quality.",
+    "targetSwitch": {
+      "status": "passed",
+      "from": "zh-Hans",
+      "to": "en"
+    },
+    "excludedLanguage": {
+      "status": "passed",
+      "target": "ja",
+      "excludedLanguages": [
+        "zh-Hans"
+      ]
+    }
+  },
+  "consoleErrors": [],
+  "evidenceBoundary": "The local HTML and loopback OpenAI-compatible server are deterministic fixtures. Their success does not prove any external service translation quality or availability."
+}

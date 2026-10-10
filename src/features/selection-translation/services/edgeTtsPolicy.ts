@@ -1,13 +1,14 @@
 /**
  * @file src/features/selection-translation/services/edgeTtsPolicy.ts
  * 文件职责：提供 Edge TTS 不依赖网络的语言、声音、SSML、文本分段、音频拼接和 token 过期计算策略。
- * 主要内容：定义字符与分段上限、语言到候选 voice 的映射，导出语言规范化、声音选择、XML 转义 SSML 构建、智能断句、ArrayBuffer 拼接及 JWT expiry 解析。
+ * 主要内容：定义字符与分段上限、语言到候选 voice 的映射，兼容普通话统计语言码，导出声音选择、XML 转义 SSML 构建、智能断句、ArrayBuffer 拼接及 JWT expiry 解析。
  * 模块边界：该模块保持纯策略，不请求 endpoint、不缓存 token 也不播放音频；edgeTts.ts 消费这些规则完成网络合成，调用方决定超时、路由和用户反馈。
  */
 import {
     normalizeSelectionTtsVoiceOrder,
     selectionTtsVoiceLocale,
-} from '@/src/features/selection-translation/ttsConfig';
+} from '@/src/core/config/selectionTts';
+import {getChineseScript} from '@/src/core/language/chinese';
 
 export const edgeTtsLimits = Object.freeze({
     chunkBytes: 1_800,
@@ -32,8 +33,10 @@ const VOICE_CANDIDATES_BY_LANGUAGE: Readonly<Record<string, readonly string[]>> 
 export function normalizeEdgeTtsLanguage(language: string): string {
     const normalized = String(language || '').replace(/_/gu, '-').trim();
     if (!normalized || normalized === 'auto' || normalized === 'detect') return 'en-US';
-    if (normalized.toLowerCase() === 'zh-hans') return 'zh-CN';
-    if (normalized.toLowerCase() === 'zh-hant') return 'zh-TW';
+    const script = getChineseScript(normalized);
+    if (script) return script === 'Hans' ? 'zh-CN' : 'zh-TW';
+    // 未确定字形的普通话仍能朗读；这一别名不参与翻译语言检测。
+    if (['cmn', 'zho', 'chi'].includes(normalized.toLowerCase())) return 'zh-CN';
     if (normalized.toLowerCase() === 'en') return 'en-US';
     return normalized;
 }
@@ -45,17 +48,13 @@ export function edgeTtsVoiceCandidatesForLanguage(
 ): string[] {
     const normalized = normalizeEdgeTtsLanguage(language);
     const base = normalized.split('-')[0];
-    const automatic = VOICE_CANDIDATES_BY_LANGUAGE[normalized]
+    const automatic = (Object.hasOwn(VOICE_CANDIDATES_BY_LANGUAGE, normalized) ? VOICE_CANDIDATES_BY_LANGUAGE[normalized] : undefined)
         || Object.entries(VOICE_CANDIDATES_BY_LANGUAGE)
             .find(([locale]) => locale.startsWith(`${base}-`))?.[1]
         || [];
     const preferred = normalizeSelectionTtsVoiceOrder(preferredVoices)
         .filter((voice) => selectionTtsVoiceLocale(voice) === normalized);
     return [...new Set([...preferred, ...automatic])];
-}
-
-export function edgeTtsVoiceForLanguage(language: string): string | null {
-    return edgeTtsVoiceCandidatesForLanguage(language)[0] ?? null;
 }
 
 function escapeXml(text: string): string {
@@ -83,25 +82,28 @@ export function splitEdgeTtsText(text: string): string[] {
     const chunks: string[] = [];
     let remaining = text.trim();
     while (remaining) {
-        const bytes = new TextEncoder().encode(remaining);
-        if (bytes.byteLength <= edgeTtsLimits.chunkBytes) {
-            chunks.push(remaining);
-            break;
+        if (chunks.length >= edgeTtsLimits.chunks) throw new Error('Edge TTS text is too long');
+        // 只扫描本段预算内的码点，避免反复编码整段余文和逐字符缩短前缀；
+        // 码点长度也保证不会把代理对拆到两个 SSML 请求里。
+        let end = 0;
+        let bytes = 0;
+        for (const point of remaining) {
+            const code = point.codePointAt(0)!;
+            const size = code <= 0x7f ? 1 : code <= 0x7ff ? 2 : code <= 0xffff ? 3 : 4;
+            if (bytes + size > edgeTtsLimits.chunkBytes) break;
+            bytes += size;
+            end += point.length;
         }
-        let end = Math.min(remaining.length, edgeTtsLimits.chunkBytes);
-        while (
-            end > 1
-            && new TextEncoder().encode(remaining.slice(0, end)).byteLength > edgeTtsLimits.chunkBytes
-        ) end -= 1;
-        const boundary = Math.max(
-            remaining.lastIndexOf(' ', end),
-            remaining.lastIndexOf('。', end),
-            remaining.lastIndexOf('.', end),
-        );
-        if (boundary > Math.floor(end * 0.6)) end = boundary + 1;
+        if (end < remaining.length) {
+            const boundary = Math.max(
+                remaining.lastIndexOf(' ', end - 1),
+                remaining.lastIndexOf('。', end - 1),
+                remaining.lastIndexOf('.', end - 1),
+            );
+            if (boundary > Math.floor(end * 0.6)) end = boundary + 1;
+        }
         chunks.push(remaining.slice(0, end).trim());
         remaining = remaining.slice(end).trim();
-        if (chunks.length > edgeTtsLimits.chunks) throw new Error('Edge TTS text is too long');
     }
     return chunks;
 }
@@ -128,7 +130,8 @@ export function edgeTtsTokenExpiry(token: string, now = Date.now()): number {
             .replace(/_/gu, '/')
             .padEnd(Math.ceil(payload.length / 4) * 4, '=');
         const decoded = JSON.parse(atob(padded)) as {exp?: unknown};
-        return typeof decoded.exp === 'number' ? decoded.exp * 1_000 : fallback;
+        const expiresAt = typeof decoded.exp === 'number' ? decoded.exp * 1_000 : NaN;
+        return Number.isFinite(expiresAt) ? expiresAt : fallback;
     } catch {
         return fallback;
     }

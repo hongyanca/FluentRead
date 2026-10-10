@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "evidence": "Production extension; X DOM fixture; seeded AI cache; mocked translation; no live ASR",
+  "checks": [
+    "关闭 AI 后字幕消失，按钮和已就绪状态立即更新",
+    "隐藏与显示字幕可连续切换",
+    "三种显示模式同步且保持单选",
+    "翻译开关与 AI 关闭及缓存恢复联动",
+    "其他扩展页面保存的设置同步到仍打开的菜单",
+    "AI 说明可展开，重新识别遇到模型查询失败会更新反馈并允许重试",
+    "原文和译文下载及结果反馈正常",
+    "控制栏重挂载保留菜单节点与状态，Esc 正常关闭",
+    "设置入口打开视频设置"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    }
+  }
+}

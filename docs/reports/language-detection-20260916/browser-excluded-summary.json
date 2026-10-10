@@ -1,0 +1,70 @@
+{
+  "ok": true,
+  "scope": "Issue #627: language multiselect, quick close, cross-page persistence, responsive themes, hover/full/automatic skipping, title and dynamic redetection",
+  "evidenceBoundary": "The local HTML and loopback OpenAI-compatible server are deterministic fixtures. Their success does not prove any external service translation quality or availability.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 58606,
+      "name": "UserNotificationCenter"
+    },
+    "frontmostAfter": {
+      "pid": 58606,
+      "name": "UserNotificationCenter"
+    }
+  },
+  "consoleErrors": 0,
+  "cases": [
+    {
+      "name": "hover-exclusion-and-neighbor",
+      "status": "passed",
+      "excludedRequests": 0,
+      "neighborCounts": [
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "full-page-restore-repeat-and-title",
+      "status": "passed",
+      "excludedRequests": 0,
+      "neighborCounts": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "dynamic-excluded-text-becomes-english",
+      "status": "passed"
+    },
+    {
+      "name": "automatic-full-page",
+      "status": "passed",
+      "excludedRequests": 0
+    },
+    {
+      "name": "clear-restores-traditional-to-simplified",
+      "status": "passed"
+    }
+  ],
+  "requestCount": 6
+}

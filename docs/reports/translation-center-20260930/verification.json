@@ -1,0 +1,327 @@
+{
+  "date": "2026-09-30",
+  "project": "FluentRead",
+  "feature": "翻译中心",
+  "baseCommit": "ed67b2a90c97309fa1cc7e001795f694ef22364a",
+  "branch": "codex/translation-center-20260930",
+  "userscriptLanguageResourceCommit": "96b9572363b7dfa59e4be0922f9ab10b76c8613d",
+  "outcome": "将翻译中心整理为输入、对比、调整的轻量工作台，服务状态与请求相互独立。",
+  "designDecisions": [
+    {
+      "principle": "先完成翻译，再展开更多选择",
+      "implementation": "首次只选择少量免密钥服务和已配置的默认服务；管理弹层按配置状态分组，并支持服务与模型搜索。保留原有服务顺序，添加服务不自动请求。"
+    },
+    {
+      "principle": "用户应能解释当前译文从哪里来",
+      "implementation": "完成卡片展示语言、模型和耗时；输入、语言或模型改变后标记旧结果。复制本次结果只包含与当前输入一致的成功项，单项仍可复制旧结果作为参考。"
+    },
+    {
+      "principle": "错误不应该破坏已经完成的工作",
+      "implementation": "每个服务独立取消、重试、配置；仅重试未完成项。任务身份阻止停止或删除后的迟到结果覆盖新请求。调整顺序、外部配置同步和配置跳转保留原文及完成结果。"
+    },
+    {
+      "principle": "偏好记住，内容不额外保存",
+      "implementation": "只保存语言、顺序和结果布局。按字段提交配置补丁，失败保留用户意图并可重试，连续修改按最新意图保存。原文和译文不写入翻译中心设置；已有请求日志和统计策略仍有效。"
+    },
+    {
+      "principle": "界面符合现有产品，而不引入新体系",
+      "implementation": "继续使用 WXT、Vue、TypeScript、现有选择器、图标和主题变量。列表与并排布局可切换，窄屏自动单列；兼容键盘排序、输入法快捷键与减少动画设置。"
+    }
+  ],
+  "postDesignReview": {
+    "productPosition": "适合一段文本、多服务译法对照；不是另一个服务设置页，也不扩展成内容管理系统。",
+    "scopeKeptSmall": [
+      "未新增历史记录或后台自动翻译。",
+      "未修改网页默认服务。",
+      "未改变各服务协议、全局配置保存架构或日志策略。",
+      "未借用或修改 read-frog、kiss-translator。"
+    ],
+    "importantBoundaries": [
+      "免密钥或凭据已配置不代表实时连接可用，服务失败仍需用户按项处理。",
+      "服务连接配置与其他翻译功能共享。",
+      "配置失败、取消、旧结果均有明确状态；没有以自动重试掩盖费用和请求。"
+    ]
+  },
+  "checks": {
+    "focusedTests": {
+      "total": 1028,
+      "passed": 1024,
+      "failed": 4,
+      "startedAt": "2026-09-30T07:08:21.614Z",
+      "files": [
+        "tests/configDiff.test.ts",
+        "tests/configTransfer.test.ts",
+        "tests/i18n.test.ts",
+        "tests/model.test.ts",
+        "tests/optionsAppNavigationLifecycle.test.ts",
+        "tests/optionsNavigation.test.ts",
+        "tests/popupFeatureVisibility.test.ts",
+        "tests/settingsUiArchitecture.test.ts",
+        "tests/translationCenterComponent.test.ts",
+        "tests/translationCenterSession.test.ts",
+        "tests/architecture/sourceFileHeaders.test.ts"
+      ],
+      "status": "completed-with-identical-baseline-failures",
+      "command": "pnpm test -- tests/translationCenterSession.test.ts tests/translationCenterComponent.test.ts tests/settingsUiArchitecture.test.ts tests/i18n.test.ts tests/model.test.ts tests/configDiff.test.ts tests/configTransfer.test.ts tests/architecture/sourceFileHeaders.test.ts tests/optionsAppNavigationLifecycle.test.ts tests/optionsNavigation.test.ts tests/popupFeatureVisibility.test.ts --reporter=json"
+    },
+    "newSessionCoverage": {
+      "file": "src/features/translation-center/model/comparison.ts",
+      "lines": {
+        "total": 71,
+        "covered": 71,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 71,
+        "covered": 71,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "command": "pnpm test:coverage -- tests/translationCenterSession.test.ts --coverage.include=src/features/translation-center/model/comparison.ts"
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "pnpm compile"
+    },
+    "productionChromeBuild": {
+      "status": "passed",
+      "command": "pnpm build"
+    },
+    "productionFirefoxBuild": {
+      "status": "passed",
+      "command": "pnpm build:firefox"
+    },
+    "userscriptBuild": {
+      "status": "passed",
+      "command": "pnpm build:userscript"
+    },
+    "userscriptArtifactVerification": {
+      "status": "passed",
+      "command": "node scripts/verify-userscript-build.mjs",
+      "artifactBytes": 1888103,
+      "note": "固定资源提交为本任务整合提交，Git 树包含全部五个新语言资源；不声称商店发布。"
+    },
+    "docsBuild": {
+      "status": "passed",
+      "command": "pnpm docs:build"
+    },
+    "testMatrixAudit": {
+      "status": "passed",
+      "command": "pnpm test:audit",
+      "files": 410,
+      "cases": 5284
+    },
+    "diffWhitespace": {
+      "status": "passed",
+      "command": "git diff --check"
+    },
+    "browser": {
+      "status": "passed",
+      "report": "browser-report.json",
+      "browser": "Microsoft Edge",
+      "artifact": ".output/chrome-mv3",
+      "cases": 13,
+      "screenshots": 21,
+      "consoleErrors": 0,
+      "providerEvidence": "local HTTP OpenAI-compatible fixtures through the actual extension client and background",
+      "clipboardEvidence": "page mock; user system clipboard unchanged",
+      "responsiveWidths": [
+        1440,
+        1024,
+        820,
+        390
+      ],
+      "languages": [
+        "zh-CN",
+        "en-US",
+        "ja-JP",
+        "ko-KR",
+        "fr-FR",
+        "ru-RU",
+        "es-ES"
+      ],
+      "caseCoverage": [
+        {
+          "name": "first-use-small-no-key-selection",
+          "status": "passed"
+        },
+        {
+          "name": "real-background-client-requests-only-configured-items",
+          "status": "passed"
+        },
+        {
+          "name": "retry-one-preserves-completed-neighbor",
+          "status": "passed"
+        },
+        {
+          "name": "copy-current-results",
+          "status": "passed"
+        },
+        {
+          "name": "stale-results-excluded-from-copy",
+          "status": "passed"
+        },
+        {
+          "name": "keyboard-reorder-retains-results",
+          "status": "passed"
+        },
+        {
+          "name": "model-search-escape-focus-return",
+          "status": "passed"
+        },
+        {
+          "name": "configure-service-and-return-retains-work",
+          "status": "passed"
+        },
+        {
+          "name": "cross-page-layout-sync-retains-work",
+          "status": "passed"
+        },
+        {
+          "name": "stop-retains-success-and-rejects-late-response",
+          "status": "passed"
+        },
+        {
+          "name": "add-does-not-spend-provider-requests",
+          "status": "passed"
+        },
+        {
+          "name": "quick-close-persistence-no-text-storage",
+          "status": "passed"
+        },
+        {
+          "name": "six-translated-locales-and-dark-mode",
+          "status": "passed"
+        }
+      ],
+      "command": "node scripts/testing/run-translation-center-ui-test.cjs --extension-dir .output/chrome-mv3 --playwright-root <bundled-node-modules> --focus-safe-helper <fluentread-extension-ui-test>/scripts/focus-safe-browser.cjs --artifacts-dir <evidence-directory>",
+      "configurationEvidence": "in-place compact service dialog with unchanged hash/default service",
+      "crossPageEvidence": "two independent settings pages; a layout change propagates while the other page retains source text and completed results"
+    },
+    "architectureBaselineComparison": {
+      "total": 22,
+      "passed": 20,
+      "failed": 2,
+      "startedAt": "2026-09-30T07:12:32.825Z",
+      "files": [
+        "tests/architecture/moduleBoundaries.test.ts",
+        "tests/architecture/verificationOwnership.test.ts"
+      ],
+      "command": "pnpm test -- tests/architecture/moduleBoundaries.test.ts tests/architecture/verificationOwnership.test.ts --reporter=json"
+    },
+    "testSummary": {
+      "total": 1050,
+      "passed": 1044,
+      "failed": 6,
+      "note": "六项失败全部在同日最新 main 的独立 worktree 上复现；标准化路径与堆栈行号后，完整失败文本一致，无新增失败。"
+    }
+  },
+  "baselineFailures": {
+    "baseCommit": "ed67b2a90c97309fa1cc7e001795f694ef22364a",
+    "baseline": {
+      "total": 116,
+      "passed": 110,
+      "failed": 6,
+      "startedAt": "2026-09-30T07:15:04.396Z",
+      "files": [
+        "tests/configDiff.test.ts",
+        "tests/i18n.test.ts",
+        "tests/architecture/moduleBoundaries.test.ts",
+        "tests/architecture/verificationOwnership.test.ts"
+      ]
+    },
+    "currentSummary": {
+      "total": 1050,
+      "passed": 1044,
+      "failed": 6,
+      "note": "六项失败全部在同日最新 main 的独立 worktree 上复现；标准化路径与堆栈行号后，完整失败文本一致，无新增失败。"
+    },
+    "matching": [
+      {
+        "file": "tests/configDiff.test.ts",
+        "name": "配置差异预览 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ Array(5) ] to deeply equal ArrayContaining{…}"
+      },
+      {
+        "file": "tests/i18n.test.ts",
+        "name": "i18n 全量界面扫描 Vue 文案和展示注册表在非中文界面有本地化结果",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ …(15) ] to deeply equal []"
+      },
+      {
+        "file": "tests/i18n.test.ts",
+        "name": "运行期反馈文案资源 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ Array(5) ] to deeply equal []"
+      },
+      {
+        "file": "tests/i18n.test.ts",
+        "name": "旧界面译文人工校正 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ '暂停插件', '打开视频字幕设置，当前已开启', …(8) ] to deeply equal []"
+      },
+      {
+        "file": "tests/architecture/moduleBoundaries.test.ts",
+        "name": "architecture module boundaries 历史巨型文件不得继续增长，后续迁移只降低债务上限",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ { …(3) } ] to deeply equal []"
+      },
+      {
+        "file": "tests/architecture/verificationOwnership.test.ts",
+        "name": "repository verification ownership src 中每个可执行非组装模块都进入四维 100% 覆盖率边界",
+        "currentMatch": true,
+        "messageMatch": true,
+        "firstLine": "AssertionError: expected [ Array(7) ] to deeply equal []"
+      }
+    ],
+    "extraFailures": [],
+    "method": "比较最新 main 与本任务工作树的同名失败，完整错误文本只标准化本机路径及堆栈行号。",
+    "scope": "不扩大本次翻译中心任务修复已有的 Popup 栏目差异断言、界面本地化扫描、反馈/校正文案过期、历史文件上限与七个 share-card 模块覆盖归属问题。",
+    "baselinePreparation": "独立 worktree 执行 wxt prepare 生成缺失的 .wxt/tsconfig.json 后重跑；首次无有效测试用例的引导失败不计作基线结果。"
+  },
+  "evidenceLimits": [
+    "未运行全量回归。",
+    "真实翻译供应商、账户凭据及计费未验证；请求行为通过本机服务夹具验证。",
+    "Firefox 仅构建验证，未做 Firefox 运行时验证。",
+    "390px 为桌面浏览器视口，非真实手机。",
+    "开发服务器启动尝试未形成有效浏览器证据，浏览器结论仅基于最终生产产物。",
+    "临时复用了主工作树的 node_modules，不构成干净安装验证。",
+    "不属于商店发版；构建和本机服务夹具不证明商店验收或真实供应商连接。"
+  ],
+  "sourceSha256": {
+    "src/features/translation-center/ui/TranslationCenter.vue": "bcb7df34a47f59843574fc9e7a7ced15e47c8e242069401ae2460ded0aa32373",
+    "src/features/translation-center/model/comparison.ts": "2e4bf449b38b0da6b102875cd79e29586cc9b9fcf48bfb34743bfea6076fd5de",
+    "src/features/settings/ui/SettingsSections.vue": "391b8448828d1598901f03196c149e886ebf53727e19a223a4d34adc3621ce54",
+    "src/core/config/model.ts": "5d0ea3e9ddbcb2bbf89b83a00c7d9db241ac0f78c6c8b23dd964402d3254db8f",
+    "tests/translationCenterComponent.test.ts": "0510cc2e0f31f575cc9766e5750c7b59d6be120a90ac46ab43c139a6978d17ee",
+    "tests/translationCenterSession.test.ts": "e3377ea3fe2c79caf6460eb0936c0a8f522c9c3afd3f5310a5eaf5460f36f7c3",
+    "scripts/testing/run-translation-center-ui-test.cjs": "884e00982a32d9b3daa11f7f4018be85db7d5abc13ef35da5586e295883b964a",
+    "userscript/vite.config.ts": "29d3ecef6025c5dc838f8285d7041b1f3ec512d59c9bd38a5baa8da46aa12ac0"
+  },
+  "originalImplementationBase": "e9ba03c76318dbe283e9dbf569b119a681a1ee8a",
+  "integrationCommit": "96b9572363b7dfa59e4be0922f9ab10b76c8613d",
+  "integrationNotes": [
+    "保留最新 main 的设置页就地配置弹窗与精简导航；翻译中心关闭配置弹窗后保留原文和完成结果。",
+    "重新生成包含翻译中心及最新 main 界面文案的语言资源，资源指针固定到包含全部文件的提交。",
+    "新增真实双设置页的布局同步断言；仍不操作用户日常浏览器或系统剪贴板。"
+  ]
+}

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Translation stability during host focus management</title>
+  <style>
+    body { margin: 40px; color: #1f2328; background: white; font: 18px/1.6 system-ui; }
+    article { max-width: 950px; padding: 24px; border: 1px solid #d1d9e0; }
+    h4 { font-size: 22px; }
+  </style>
+</head>
+<body>
+  <article class="markdown-body" id="reading-content">
+    <h1>Translation should stay visible</h1>
+    <h4 id="commit-title"><span><a href="#commit-diff" title="Fix shared translation lifecycle">Fix shared translation lifecycle</a></span></h4>
+    <p id="prose">Readable content should keep one translation when host scripts decorate interactive links.</p>
+    <p id="single-prose">A stable source <strong>keeps its original nodes</strong> during harmless host updates.</p>
+  </article>
+  <script>
+    // 模拟通用组件库的键盘焦点管理：只修饰新出现的可聚焦链接，不修改内容或目的地址。
+    window.hostFocusDecorations = 0;
+    new MutationObserver(() => {
+      for (const anchor of document.querySelectorAll('a')) {
+        if (anchor.getAttribute('tabindex') === '-1') continue;
+        anchor.setAttribute('tabindex', '-1');
+        window.hostFocusDecorations++;
+      }
+    }).observe(document.body, {childList: true, subtree: true});
+  </script>
+</body>
+</html>

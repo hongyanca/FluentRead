@@ -1,0 +1,458 @@
+{
+  "verifiedSourceCommit": "cfb95879",
+  "baseCommit": "8ac04042",
+  "chromeContentSha256": "b31a0a4e0c8a1d8e7b5ef346b576e01e3f21ccdc4c91a43986e854ae54b65537",
+  "completeSites": 20,
+  "passedModeChecks": 40,
+  "sites": [
+    {
+      "case": "example-com",
+      "url": "https://example.com",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "python-tutorial-introduction",
+      "url": "https://docs.python.org/3/tutorial/introduction.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "go-tutorial-getting-started",
+      "url": "https://go.dev/doc/tutorial/getting-started",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "rust-book-getting-started",
+      "url": "https://doc.rust-lang.org/book/ch01-00-getting-started.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "swift-basic-operators",
+      "url": "https://docs.swift.org/swift-book/documentation/the-swift-programming-language/basicoperators/",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "nginx-beginners-guide",
+      "url": "https://nginx.org/en/docs/beginners_guide.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "curl-http-scripting",
+      "url": "https://curl.se/docs/httpscripting.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "steam-changelog",
+      "url": "https://steamcommunity.com/sharedfiles/filedetails/changelog/3241130652",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-steam-full-retry.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "git-book-version-control",
+      "url": "https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "hacker-news-8863",
+      "url": "https://news.ycombinator.com/item?id=8863",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "learnopengl-coordinate-systems",
+      "url": "https://learnopengl.com/Getting-started/Coordinate-Systems",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "qt-qobject-threads",
+      "url": "https://doc.qt.io/qt-5/threads-qobject.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-qt-full-retry.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "mkdocs-material-home",
+      "url": "https://squidfunk.github.io/mkdocs-material/",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "brown-pl-introduction",
+      "url": "https://cs.brown.edu/courses/cs173/2012/book/Introduction.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "cachyos-features",
+      "url": "https://cachyos.org/",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "ubuntu-apt-manpage",
+      "url": "https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "dart-language",
+      "url": "https://dart.dev/language",
+      "modes": {
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-dart-hover-retry.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "pubdev-provider",
+      "url": "https://pub.dev/packages/provider",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-matrix-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "postgresql-tutorial",
+      "url": "https://www.postgresql.org/docs/current/tutorial-sql-intro.html",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-postgresql-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-postgresql-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    },
+    {
+      "case": "bambu-dual-nozzles",
+      "url": "https://wiki.bambulab.com/en/software/bambu-studio/manual/dual-nozzles-slicing-filament-grouping",
+      "modes": {
+        "hover": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-bambu-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        },
+        "full": {
+          "ok": true,
+          "evidenceLog": "/private/tmp/fr-release-bambu-final.log",
+          "launchMode": "macos-background-cdp",
+          "focusPolicy": "launchservices-no-foreground"
+        }
+      }
+    }
+  ],
+  "initialMatrixSummary": {
+    "ok": false,
+    "jobs": 40,
+    "passed": 35,
+    "requiredFailures": [
+      {
+        "name": "mdn-javascript-guide",
+        "mode": "hover",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "timeoutMs": 600000,
+        "durationMs": 12002,
+        "error": null
+      },
+      {
+        "name": "steam-changelog",
+        "mode": "full",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "timeoutMs": 600000,
+        "durationMs": 48496,
+        "error": null
+      },
+      {
+        "name": "wikipedia-united-states",
+        "mode": "full",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 143,
+        "signal": null,
+        "timedOut": true,
+        "timeoutMs": 600000,
+        "durationMs": 604992,
+        "error": null
+      },
+      {
+        "name": "qt-qobject-threads",
+        "mode": "full",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "timeoutMs": 600000,
+        "durationMs": 48667,
+        "error": null
+      },
+      {
+        "name": "dart-language",
+        "mode": "hover",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "timeoutMs": 600000,
+        "durationMs": 48697,
+        "error": null
+      }
+    ],
+    "quarantineFailures": [],
+    "timeoutFailures": [
+      {
+        "name": "wikipedia-united-states",
+        "mode": "full",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 143,
+        "signal": null,
+        "timedOut": true,
+        "timeoutMs": 600000,
+        "durationMs": 604992,
+        "error": null
+      }
+    ]
+  },
+  "limitations": [
+    "The initial matrix passed 35 of 40 jobs; this aggregate is not an all-pass claim for that initial run.",
+    "Steam full, Qt full and Dart hover passed after navigation timeout retries. PostgreSQL and Bambu are additional completed site pairs.",
+    "MDN hover failed the static DOM contract on this branch and unmodified base 8ac04042. MDN full passed; MDN is not counted as a complete site.",
+    "Wikipedia full stalled after scrolling and hit its 600-second watchdog. Wikipedia is not counted as a complete site.",
+    "Log files are local diagnostics; only this summary is included in the repository."
+  ]
+}

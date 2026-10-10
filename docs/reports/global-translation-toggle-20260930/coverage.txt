@@ -1,0 +1,23 @@
+
+> FluentRead-流畅阅读@0.0.35 test:coverage /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run --config vitest.coverage.config.ts "tests/translationAvailability.test.ts" "--coverage.include=src/services/translation/availability.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run --config vitest.coverage.config.ts tests/translationAvailability.test.ts --coverage.include=src/services/translation/availability.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+      Coverage enabled with v8
+
+ ✓ tests/translationAvailability.test.ts (8 tests) 115ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  16:10:34
+   Duration  710ms (transform 194ms, setup 0ms, collect 270ms, tests 115ms, environment 0ms, prepare 45ms)
+
+ % Coverage report from v8
+-----------------|---------|----------|---------|---------|-------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------|---------|----------|---------|---------|-------------------
+All files        |     100 |      100 |     100 |     100 |                   
+ availability.ts |     100 |      100 |     100 |     100 |                   
+-----------------|---------|----------|---------|---------|-------------------

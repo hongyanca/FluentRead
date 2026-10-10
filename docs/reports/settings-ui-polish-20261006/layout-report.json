@@ -1,0 +1,669 @@
+{
+  "ok": true,
+  "artifact": "production",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1050,
+      "width": 1440,
+      "height": 1050
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "caseCoverage": [
+    {
+      "id": "reading preview left, toggle, keyboard, webpage theme and style navigation",
+      "status": "passed"
+    },
+    {
+      "id": "learning level aligned and saved",
+      "status": "passed"
+    },
+    {
+      "id": "speech one group, relevant fields, retained preferences and no migration note",
+      "status": "passed"
+    },
+    {
+      "id": "uniform key menu and limits alignment, custom values and inherited disable state",
+      "status": "passed"
+    },
+    {
+      "id": "vision success shown once, failure and cancel retained",
+      "status": "passed"
+    },
+    {
+      "id": "tooltip delayed close, pointer entry, native text selection and keyboard focus/Escape",
+      "status": "passed"
+    },
+    {
+      "id": "complete image/manga controls, compact current resources, folded alternatives, unified source selector; fixture task/error/retry/remove",
+      "status": "passed"
+    },
+    {
+      "id": "site preference uses shared keyboard-enabled menu",
+      "status": "passed"
+    }
+  ],
+  "layouts": [
+    {
+      "label": "zh-CN light 1440 settings-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN light 1440 settings-selection",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN light 1440 settings-image-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN light 1440 settings-services",
+      "width": 1220,
+      "scroll": 1220,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN light 1440 settings-sites",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN light 1024 settings-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN light 1024 settings-selection",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN light 1024 settings-image-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN light 1024 settings-services",
+      "width": 828,
+      "scroll": 828,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN light 1024 settings-sites",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN light 820 settings-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN light 820 settings-selection",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN light 820 settings-image-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN light 820 settings-services",
+      "width": 624,
+      "scroll": 624,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN light 820 settings-sites",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN light 390 settings-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN light 390 settings-selection",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN light 390 settings-image-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN light 390 settings-services",
+      "width": 360,
+      "scroll": 360,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN light 390 settings-sites",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN dark 1440 settings-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN dark 1440 settings-selection",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN dark 1440 settings-image-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN dark 1440 settings-services",
+      "width": 1220,
+      "scroll": 1220,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN dark 1440 settings-sites",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "zh-CN dark 1024 settings-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN dark 1024 settings-selection",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN dark 1024 settings-image-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN dark 1024 settings-services",
+      "width": 828,
+      "scroll": 828,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN dark 1024 settings-sites",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "zh-CN dark 820 settings-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN dark 820 settings-selection",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN dark 820 settings-image-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN dark 820 settings-services",
+      "width": 624,
+      "scroll": 624,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN dark 820 settings-sites",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "zh-CN dark 390 settings-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN dark 390 settings-selection",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN dark 390 settings-image-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN dark 390 settings-services",
+      "width": 360,
+      "scroll": 360,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "zh-CN dark 390 settings-sites",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US light 1440 settings-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US light 1440 settings-selection",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US light 1440 settings-image-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US light 1440 settings-services",
+      "width": 1220,
+      "scroll": 1220,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US light 1440 settings-sites",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US light 1024 settings-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US light 1024 settings-selection",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US light 1024 settings-image-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US light 1024 settings-services",
+      "width": 828,
+      "scroll": 828,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US light 1024 settings-sites",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US light 820 settings-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US light 820 settings-selection",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US light 820 settings-image-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US light 820 settings-services",
+      "width": 624,
+      "scroll": 624,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US light 820 settings-sites",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US light 390 settings-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US light 390 settings-selection",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US light 390 settings-image-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US light 390 settings-services",
+      "width": 360,
+      "scroll": 360,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US light 390 settings-sites",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US dark 1440 settings-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US dark 1440 settings-selection",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US dark 1440 settings-image-translation",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US dark 1440 settings-services",
+      "width": 1220,
+      "scroll": 1220,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US dark 1440 settings-sites",
+      "width": 1156,
+      "scroll": 1156,
+      "document": 1440,
+      "viewport": 1440
+    },
+    {
+      "label": "en-US dark 1024 settings-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US dark 1024 settings-selection",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US dark 1024 settings-image-translation",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US dark 1024 settings-services",
+      "width": 828,
+      "scroll": 828,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US dark 1024 settings-sites",
+      "width": 780,
+      "scroll": 780,
+      "document": 1024,
+      "viewport": 1024
+    },
+    {
+      "label": "en-US dark 820 settings-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US dark 820 settings-selection",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US dark 820 settings-image-translation",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US dark 820 settings-services",
+      "width": 624,
+      "scroll": 624,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US dark 820 settings-sites",
+      "width": 576,
+      "scroll": 576,
+      "document": 820,
+      "viewport": 820
+    },
+    {
+      "label": "en-US dark 390 settings-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US dark 390 settings-selection",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US dark 390 settings-image-translation",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US dark 390 settings-services",
+      "width": 360,
+      "scroll": 360,
+      "document": 390,
+      "viewport": 390
+    },
+    {
+      "label": "en-US dark 390 settings-sites",
+      "width": 362,
+      "scroll": 362,
+      "document": 390,
+      "viewport": 390
+    }
+  ],
+  "consoleErrors": [],
+  "modelRequests": [
+    {
+      "mode": "success",
+      "model": "gpt-4.1-mini",
+      "image": true
+    },
+    {
+      "mode": "failure",
+      "model": "gpt-4.1-mini",
+      "image": true
+    },
+    {
+      "mode": "success",
+      "model": "gpt-4.1-mini",
+      "image": true
+    }
+  ],
+  "persistenceCases": [
+    {
+      "id": "speech-source",
+      "mode": "online-first",
+      "localVoice": "zf_001",
+      "onlineVoices": [
+        "en-US-JennyNeural",
+        "zh-CN-XiaoxiaoMultilingualNeural"
+      ],
+      "onlineVoicesPreserved": true
+    }
+  ],
+  "resourceFixtureRequests": [
+    {
+      "type": "fluentReadImageOcrDownload",
+      "languages": [
+        "eng"
+      ]
+    },
+    {
+      "type": "fluentReadImageOcrDownload",
+      "languages": [
+        "eng"
+      ]
+    },
+    {
+      "type": "fluentReadImageOcrRemove",
+      "languages": [
+        "eng"
+      ]
+    }
+  ]
+}

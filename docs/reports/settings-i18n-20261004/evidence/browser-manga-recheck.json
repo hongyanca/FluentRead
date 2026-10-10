@@ -1,0 +1,356 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004/.output/chrome-mv3",
+  "scope": "Image and manga settings in seven languages at 1280px/390px: collapsed, resources expanded, and site rules/download controls expanded. No downloads, real provider, account or Firefox runtime.",
+  "views": [
+    {
+      "label": "zh-CN-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "zh-CN-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "en-US-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ja-JP-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ko-KR-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "fr-FR-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-collapsed-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-resources-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-all-controls-1280",
+      "width": 1280,
+      "documentWidth": 1280,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-collapsed-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-resources-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "es-ES-manga-all-controls-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    }
+  ],
+  "checks": [
+    "zh-CN master help",
+    "zh-CN manga description",
+    "zh-CN resource description 1280",
+    "zh-CN resource description 390",
+    "en-US master help",
+    "en-US manga description",
+    "en-US resource description 1280",
+    "en-US resource description 390",
+    "ja-JP master help",
+    "ja-JP manga description",
+    "ja-JP resource description 1280",
+    "ja-JP resource description 390",
+    "ko-KR master help",
+    "ko-KR manga description",
+    "ko-KR resource description 1280",
+    "ko-KR resource description 390",
+    "fr-FR master help",
+    "fr-FR manga description",
+    "fr-FR resource description 1280",
+    "fr-FR resource description 390",
+    "ru-RU master help",
+    "ru-RU manga description",
+    "ru-RU resource description 1280",
+    "ru-RU resource description 390",
+    "es-ES master help",
+    "es-ES manga description",
+    "es-ES resource description 1280",
+    "es-ES resource description 390",
+    "switch back to Chinese"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "sections": [
+    "settings-image-translation"
+  ],
+  "evidenceNote": "仅移除了用户前台应用名称与进程号；视图、断言、问题和焦点策略保持原始结果。"
+}

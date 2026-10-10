@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const {guardBrowserClose} = require('./testing/owned-browser-close.cjs');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -23,7 +24,7 @@ function parseArgs(argv, env = process.env) {
     playwrightRoot: readArg(argv, 'playwright-root', env.PLAYWRIGHT_ROOT),
     url: readArg(argv, 'url', 'https://www.youtube.com/watch?v=dqONk48l5vY'),
     browserPath: readArg(argv, 'browser-path', '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge'),
-    focusSafeHelper: readArg(argv, 'focus-safe-helper', env.FLUENTREAD_FOCUS_SAFE_HELPER || ''),
+    focusSafeHelper: readArg(argv, 'focus-safe-helper', env.FLUENTREAD_FOCUS_SAFE_HELPER || path.join(__dirname, 'testing/focus-safe-browser.cjs')),
     background: !argv.includes('--headed'),
   };
   if (!args.playwrightRoot) throw new Error('必须传入 --playwright-root 或设置 PLAYWRIGHT_ROOT');
@@ -63,7 +64,6 @@ function metricsMap(payload) {
 
 async function measurePage(chromium, { label, extensionDir, url, browserPath, background, focusSafe }) {
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), `fluentread-video-performance-${label}-`));
-  assertDedicatedTemporaryProfile(profileDir);
   const args = [
     '--no-first-run',
     '--no-default-browser-check',
@@ -73,15 +73,21 @@ async function measurePage(chromium, { label, extensionDir, url, browserPath, ba
   }
 
   let context;
-  let closeBrowser = async () => { if (context) await context.close().catch(() => undefined); };
+  let browserSession;
+  let closeBrowser;
+  let client;
+  let primaryError;
   let createIsolatedPage;
   let activateTestPage = async () => undefined;
   let launchMode;
   let focusPolicy;
   let windowPlacement;
+  let launchAttempted = false;
   try {
+    assertDedicatedTemporaryProfile(profileDir);
     if (background) {
-      const browserSession = await focusSafe.launchFocusSafePersistentContext({
+      launchAttempted = true;
+      browserSession = await focusSafe.launchFocusSafePersistentContext({
         chromium,
         profileDir,
         browserPath,
@@ -90,8 +96,9 @@ async function measurePage(chromium, { label, extensionDir, url, browserPath, ba
         browserArgs: args,
         viewport: { width: 1280, height: 900 },
       });
+      guardBrowserClose(browserSession, profileDir);
       context = browserSession.context;
-      closeBrowser = browserSession.close;
+      closeBrowser = () => browserSession.close();
       createIsolatedPage = () => focusSafe.newPageWithoutForeground(context);
       launchMode = browserSession.launchMode;
       focusPolicy = browserSession.focusPolicy;
@@ -100,6 +107,7 @@ async function measurePage(chromium, { label, extensionDir, url, browserPath, ba
         activateTestPage = page => focusSafe.activateExtensionTabWithoutForeground(context, page);
       }
     } else {
+      launchAttempted = true;
       context = await chromium.launchPersistentContext(profileDir, {
         executablePath: browserPath,
         headless: false,
@@ -116,7 +124,7 @@ async function measurePage(chromium, { label, extensionDir, url, browserPath, ba
     const page = await createIsolatedPage();
     const pageErrors = [];
     page.on('pageerror', (error) => pageErrors.push(error.message || String(error)));
-    const client = await context.newCDPSession(page);
+    client = await context.newCDPSession(page);
     await client.send('Performance.enable');
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 }).catch(() => undefined);
     await activateTestPage(page);
@@ -143,9 +151,22 @@ async function measurePage(chromium, { label, extensionDir, url, browserPath, ba
       focusPolicy,
       windowPlacement,
     };
-  } finally {
-    await closeBrowser();
-    fs.rmSync(profileDir, { recursive: true, force: true });
+  } catch (error) {primaryError = error; throw error;}
+  finally {
+    const cleanupErrors = [];
+    let browserClosed = false;
+    try {if (client) await client.detach();} catch (error) {cleanupErrors.push(error);}
+    try {if (closeBrowser) {await closeBrowser(); browserClosed = true;}} catch (error) {cleanupErrors.push(error);}
+    try {
+      if (browserClosed) fs.rmSync(profileDir, { recursive: true, force: true });
+      else if (!launchAttempted) {
+        try {fs.rmdirSync(profileDir);} catch (error) {
+          if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error;
+        }
+      }
+    } catch (error) {cleanupErrors.push(error);}
+    for (const error of cleanupErrors) process.stderr.write(`Cleanup failed: ${error.stack || error}\n`);
+    if (cleanupErrors.length && !primaryError) throw cleanupErrors[0];
   }
 }
 

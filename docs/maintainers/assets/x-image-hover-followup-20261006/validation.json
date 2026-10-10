@@ -1,0 +1,695 @@
+{
+  "base": "2e05d9e1e8a296cf4fd34e7bf2d3649be8e112da",
+  "passed": true,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "cases": [
+    {
+      "mode": "ordinary",
+      "entry": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "highlighted": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(250, 251, 253, 0.92)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterLeave": {
+        "visible": false
+      },
+      "modal": {
+        "visible": false,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": false,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterModal": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterClick": {
+        "visible": true,
+        "text": "关闭",
+        "phase": "error",
+        "rect": {
+          "x": 377,
+          "y": 315.1640625,
+          "width": 46,
+          "height": 32,
+          "top": 315.1640625,
+          "right": 423,
+          "bottom": 347.1640625,
+          "left": 377
+        },
+        "fontSize": 11,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 257,
+            "y": 311.1640625,
+            "width": 306,
+            "height": 36,
+            "top": 311.1640625,
+            "right": 563,
+            "bottom": 347.1640625,
+            "left": 257
+          },
+          "padding": "4px 0px 0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": false,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译首次使用需准备识别语言包，下载后自动继续查看错误详情关闭下载语言包并翻译文字关闭调整本地模型切换图片翻译服务"
+      }
+    },
+    {
+      "mode": "x-source-img",
+      "entry": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "highlighted": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(250, 251, 253, 0.92)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterLeave": {
+        "visible": false
+      },
+      "modal": {
+        "visible": false,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": false,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterModal": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterClick": {
+        "visible": true,
+        "text": "关闭",
+        "phase": "error",
+        "rect": {
+          "x": 377,
+          "y": 315.1640625,
+          "width": 46,
+          "height": 32,
+          "top": 315.1640625,
+          "right": 423,
+          "bottom": 347.1640625,
+          "left": 377
+        },
+        "fontSize": 11,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 257,
+            "y": 311.1640625,
+            "width": 306,
+            "height": 36,
+            "top": 311.1640625,
+            "right": 563,
+            "bottom": 347.1640625,
+            "left": 257
+          },
+          "padding": "4px 0px 0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": false,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译首次使用需准备识别语言包，下载后自动继续查看错误详情关闭下载语言包并翻译文字关闭调整本地模型切换图片翻译服务"
+      }
+    },
+    {
+      "mode": "x-inert-link",
+      "entry": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "highlighted": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(250, 251, 253, 0.92)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterLeave": {
+        "visible": false
+      },
+      "modal": {
+        "visible": false,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": false,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterModal": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 68,
+          "y": 444.6171875,
+          "width": 24,
+          "height": 24,
+          "top": 444.6171875,
+          "right": 92,
+          "bottom": 468.6171875,
+          "left": 68
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 68,
+            "y": 444.6171875,
+            "width": 24,
+            "height": 24,
+            "top": 444.6171875,
+            "right": 92,
+            "bottom": 468.6171875,
+            "left": 68
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      },
+      "afterClick": {
+        "visible": true,
+        "text": "关闭",
+        "phase": "error",
+        "rect": {
+          "x": 377,
+          "y": 315.1640625,
+          "width": 46,
+          "height": 32,
+          "top": 315.1640625,
+          "right": 423,
+          "bottom": 347.1640625,
+          "left": 377
+        },
+        "fontSize": 11,
+        "opacity": 1,
+        "frame": {
+          "rect": {
+            "x": 257,
+            "y": 311.1640625,
+            "width": 306,
+            "height": 36,
+            "top": 311.1640625,
+            "right": 563,
+            "bottom": 347.1640625,
+            "left": 257
+          },
+          "padding": "4px 0px 0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": false,
+        "iconFilter": "none",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译首次使用需准备识别语言包，下载后自动继续查看错误详情关闭下载语言包并翻译文字关闭调整本地模型切换图片翻译服务"
+      }
+    },
+    {
+      "mode": "native-button",
+      "entry": {
+        "visible": false
+      }
+    }
+  ],
+  "live": [
+    {
+      "index": 0,
+      "entry": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 301,
+          "y": 575.609375,
+          "width": 24,
+          "height": 24,
+          "top": 575.609375,
+          "right": 325,
+          "bottom": 599.609375,
+          "left": 301
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 301,
+            "y": 575.609375,
+            "width": 24,
+            "height": 24,
+            "top": 575.609375,
+            "right": 325,
+            "bottom": 599.609375,
+            "left": 301
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      }
+    },
+    {
+      "index": 1,
+      "entry": {
+        "visible": true,
+        "text": "翻译",
+        "phase": "idle",
+        "rect": {
+          "x": 301,
+          "y": 489.109375,
+          "width": 24,
+          "height": 24,
+          "top": 489.109375,
+          "right": 325,
+          "bottom": 513.109375,
+          "left": 301
+        },
+        "fontSize": 0,
+        "opacity": 0.28,
+        "frame": {
+          "rect": {
+            "x": 301,
+            "y": 489.109375,
+            "width": 24,
+            "height": 24,
+            "top": 489.109375,
+            "right": 325,
+            "bottom": 513.109375,
+            "left": 301
+          },
+          "padding": "0px",
+          "borderWidth": "0px",
+          "background": "rgba(0, 0, 0, 0)"
+        },
+        "iconLoaded": true,
+        "iconFilter": "grayscale(1)",
+        "hitButton": true,
+        "feedback": "FluentRead · 图片翻译翻译图片查看错误详情"
+      }
+    }
+  ],
+  "liveScope": "Anonymous X original post and quoted post, first two media images only",
+  "limitations": [
+    "Logged-in DOM inspected read-only; interaction verified in isolated fixture",
+    "Trusted clicks stopped at missing Tesseract language-pack preparation; no model downloads or online translation"
+  ],
+  "tests": {
+    "files": 3,
+    "cases": 250,
+    "coverage": {
+      "presentation": 100,
+      "controls": 100,
+      "dimensions": [
+        "statements",
+        "branches",
+        "functions",
+        "lines"
+      ]
+    }
+  },
+  "checks": [
+    "compile",
+    "chrome-build",
+    "firefox-build",
+    "extension-manifests",
+    "test-audit",
+    "docs-build"
+  ],
+  "iconStyle": {
+    "buttonSize": 24,
+    "iconSize": 14,
+    "idleOpacity": 0.28,
+    "outerPadding": 0,
+    "outerBorder": 0,
+    "outerBackground": "transparent",
+    "highlightedOpacity": 1
+  }
+}

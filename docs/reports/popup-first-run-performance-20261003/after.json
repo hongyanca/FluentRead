@@ -1,0 +1,1323 @@
+{
+  "date": "2026-10-03",
+  "scope": "first-use-and-normal-popup",
+  "baselineCommit": "f568dc058206dd571bd1eb0220c3912b91d8c21b",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "displayTarget": "secondary",
+    "windowState": "normal",
+    "browserFrontmost": false
+  },
+  "statistics": "Navigation to ready DOM and following rAF; cold sample once per phase; six warm samples; even median averages middle two. Recomputed from untouched raw samples.",
+  "summary": {
+    "onboarding": {
+      "first": {
+        "readyMs": 202.5,
+        "frameMs": 264,
+        "scriptBytes": 838031,
+        "coldWorkerStopped": true
+      },
+      "medianReadyMs": 69.75,
+      "medianFrameMs": 72.89999985694885
+    },
+    "main": {
+      "first": {
+        "readyMs": 187,
+        "frameMs": 188.69999980926514,
+        "scriptBytes": 1038403,
+        "coldWorkerStopped": true
+      },
+      "medianReadyMs": 82.25,
+      "medianFrameMs": 83.54999995231628
+    }
+  },
+  "samples": [
+    {
+      "readyMs": 202.5,
+      "frameMs": 264,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 61.09999990463257,
+          "duration": 112.40000009536743
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 105.5,
+          "duration": 75.69999980926514
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 185.59999990463257,
+          "duration": 0.9000000953674316
+        }
+      ],
+      "fetches": [],
+      "longTasks": [
+        {
+          "start": 191.59999990463257,
+          "duration": 70
+        }
+      ],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 0,
+      "coldWorkerStopped": true,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.05838,
+        "ScriptDuration": 0.035964,
+        "TaskDuration": 0.165459,
+        "JSHeapUsedSize": 5583344
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 98.19999980926514,
+      "frameMs": 109,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 14.599999904632568,
+          "duration": 15.299999713897705
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 55.09999990463257,
+          "duration": 10.900000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 70.5,
+          "duration": 13.5
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 1,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001163,
+        "ScriptDuration": 0.03229,
+        "TaskDuration": 0.098836,
+        "JSHeapUsedSize": 6269448
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 71.80000019073486,
+      "frameMs": 75.09999990463257,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 13.400000095367432,
+          "duration": 29.299999713897705
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 33.09999990463257,
+          "duration": 10.900000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 46.19999980926514,
+          "duration": 3.5
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 2,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001194,
+        "ScriptDuration": 0.02027,
+        "TaskDuration": 0.068589,
+        "JSHeapUsedSize": 8219320
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 73.2999997138977,
+      "frameMs": 76.39999961853027,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 13.5,
+          "duration": 31
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 34.19999980926514,
+          "duration": 11.599999904632568
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.19999980926514,
+          "duration": 4
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 3,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001011,
+        "ScriptDuration": 0.021316,
+        "TaskDuration": 0.069701,
+        "JSHeapUsedSize": 12913752
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 65.90000009536743,
+      "frameMs": 68.40000009536743,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 15.400000095367432,
+          "duration": 6.799999713897705
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35,
+          "duration": 11.599999904632568
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.59999990463257,
+          "duration": 3.0999999046325684
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 4,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.000851,
+        "ScriptDuration": 0.020771,
+        "TaskDuration": 0.070071,
+        "JSHeapUsedSize": 8988448
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 67.69999980926514,
+      "frameMs": 70.69999980926514,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 14.099999904632568,
+          "duration": 27.90000009536743
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35.09999990463257,
+          "duration": 8
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 44.80000019073486,
+          "duration": 1.0999999046325684
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 5,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001061,
+        "ScriptDuration": 0.018405,
+        "TaskDuration": 0.062708,
+        "JSHeapUsedSize": 20376348
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 63.80000019073486,
+      "frameMs": 65.90000009536743,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 19.200000286102295,
+          "duration": 7.599999904632568
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 37.10000038146973,
+          "duration": 9.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.30000019073486,
+          "duration": 2
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": false,
+          "used": false
+        }
+      ],
+      "domNodes": 53,
+      "onboardingVisible": true,
+      "englishReady": true,
+      "height": 460,
+      "overflowX": false,
+      "phase": "onboarding",
+      "index": 6,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupOnboarding-BGMrAv0t.js",
+          "bytes": 2539
+        },
+        {
+          "file": "/chunks/UiLanguageOnboarding--QjBmdXv.js",
+          "bytes": 5626
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.000866,
+        "ScriptDuration": 0.017204,
+        "TaskDuration": 0.063019,
+        "JSHeapUsedSize": 32772000
+      },
+      "scriptBytes": 838031
+    },
+    {
+      "readyMs": 187,
+      "frameMs": 188.69999980926514,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 62.59999990463257,
+          "duration": 79.7999997138977
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 84.59999990463257,
+          "duration": 69.09999990463257
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 155.5,
+          "duration": 1.3999996185302734
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 0,
+      "coldWorkerStopped": true,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.020001,
+        "ScriptDuration": 0.025947,
+        "TaskDuration": 0.124061,
+        "JSHeapUsedSize": 7218768
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 96.30000019073486,
+      "frameMs": 98,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 15.699999809265137,
+          "duration": 30
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 34.59999990463257,
+          "duration": 12.800000190734863
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 49.59999990463257,
+          "duration": 3.8000001907348633
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 1,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001832,
+        "ScriptDuration": 0.022209,
+        "TaskDuration": 0.093161,
+        "JSHeapUsedSize": 10675052
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 81.7000002861023,
+      "frameMs": 83,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 15.5,
+          "duration": 7.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 35.30000019073486,
+          "duration": 12.400000095367432
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 50,
+          "duration": 3.0999999046325684
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 2,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001664,
+        "ScriptDuration": 0.022,
+        "TaskDuration": 0.087403,
+        "JSHeapUsedSize": 11585020
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 85.59999990463257,
+      "frameMs": 88.40000009536743,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 14.5,
+          "duration": 26
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 32.90000009536743,
+          "duration": 9.399999618530273
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 44.09999990463257,
+          "duration": 4
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 3,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001702,
+        "ScriptDuration": 0.018759,
+        "TaskDuration": 0.087091,
+        "JSHeapUsedSize": 6874608
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 80.90000009536743,
+      "frameMs": 82.09999990463257,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 14.5,
+          "duration": 6.700000286102295
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 33.90000009536743,
+          "duration": 11.699999809265137
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48.09999990463257,
+          "duration": 3.700000286102295
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 4,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.00166,
+        "ScriptDuration": 0.021095,
+        "TaskDuration": 0.086865,
+        "JSHeapUsedSize": 15131960
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 80.90000009536743,
+      "frameMs": 82.5,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 18,
+          "duration": 6.699999809265137
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 36.69999980926514,
+          "duration": 9.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 48,
+          "duration": 3.4000000953674316
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 5,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001803,
+        "ScriptDuration": 0.019305,
+        "TaskDuration": 0.082742,
+        "JSHeapUsedSize": 30698808
+      },
+      "scriptBytes": 1038403
+    },
+    {
+      "readyMs": 82.7999997138977,
+      "frameMs": 84.09999990463257,
+      "messages": [
+        {
+          "type": "popupStartup",
+          "start": 14.299999713897705,
+          "duration": 6.700000286102295
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:config",
+          "start": 33.5,
+          "duration": 11.5
+        },
+        {
+          "type": "configStorageRead",
+          "key": "local:credentials",
+          "start": 47.40000009536743,
+          "duration": 4.599999904632568
+        }
+      ],
+      "fetches": [],
+      "longTasks": [],
+      "startupHints": [
+        {
+          "received": true,
+          "used": true
+        }
+      ],
+      "domNodes": 143,
+      "onboardingVisible": false,
+      "englishReady": false,
+      "height": 437,
+      "overflowX": false,
+      "phase": "main",
+      "index": 6,
+      "coldWorkerStopped": false,
+      "scripts": [
+        {
+          "file": "/popup-startup.js",
+          "bytes": 1153
+        },
+        {
+          "file": "/chunks/popup-CnPyNny-.js",
+          "bytes": 2126
+        },
+        {
+          "file": "/chunks/sha2-BsatFpqL.js",
+          "bytes": 206509
+        },
+        {
+          "file": "/chunks/i18n-CRiZxvn1.js",
+          "bytes": 610055
+        },
+        {
+          "file": "/chunks/interface-skins-D1-sl5bC.js",
+          "bytes": 9892
+        },
+        {
+          "file": "/chunks/PopupApp-B_MH07AF.js",
+          "bytes": 40197
+        },
+        {
+          "file": "/chunks/128-rof0LK9z.js",
+          "bytes": 40
+        },
+        {
+          "file": "/chunks/capabilities-Dy9LlSiw.js",
+          "bytes": 117932
+        },
+        {
+          "file": "/chunks/featureServices-CxA__76x.js",
+          "bytes": 44837
+        },
+        {
+          "file": "/chunks/_plugin-vue_export-helper-DlAUqK2U.js",
+          "bytes": 91
+        },
+        {
+          "file": "/chunks/InterfaceBackdrop-D_HVv7M2.js",
+          "bytes": 4883
+        },
+        {
+          "file": "/chunks/capabilities-DfIhzXAC.js",
+          "bytes": 688
+        }
+      ],
+      "metrics": {
+        "LayoutDuration": 0.001658,
+        "ScriptDuration": 0.021136,
+        "TaskDuration": 0.089797,
+        "JSHeapUsedSize": 14590368
+      },
+      "scriptBytes": 1038403
+    }
+  ],
+  "assetHashes": {
+    "chunks/128-rof0LK9z.js": "c2c1b4849a455abe1d0addec181081392aa5edda088f006af669128962b63628",
+    "chunks/InterfaceBackdrop-D_HVv7M2.js": "a897ee7b37742677889d1745607d46c44db621241b8e92370d1a50fcf439b80b",
+    "chunks/PopupApp-B_MH07AF.js": "de2538d8fda925e70cded9f1dd72043e5285a09511d8129d1db50cb223a506f9",
+    "chunks/PopupOnboarding-BGMrAv0t.js": "422129678f21831b172ec8786b5d33142f97cb73a8dcb91ff4f5c01293ec1fc2",
+    "chunks/UiLanguageOnboarding--QjBmdXv.js": "099054bdfadadda587bffd052ac8362ce8f75aca0793439e76b70739a0287345",
+    "chunks/_plugin-vue_export-helper-DlAUqK2U.js": "cb85b0f263dbe24e857338301c0627076592e9f1f1a5662929f86d2c126444aa",
+    "chunks/capabilities-DfIhzXAC.js": "4ba7e230c31b77d6819390e41aff4a9cc834ee1abb36d39d6608c2461977bd61",
+    "chunks/capabilities-Dy9LlSiw.js": "53fc45cd8f50ba644b4c83608f275a8ae3736fefc40efb16242434862bc07071",
+    "chunks/featureServices-CxA__76x.js": "f058c4ed6cea138b3afedc9ede2010613d88bac670f86152c78d31dc40a797b9",
+    "chunks/i18n-CRiZxvn1.js": "20453c1cd4d95dd67da838d37a0b804ef450132e77c02288492bb489460e9946",
+    "chunks/interface-skins-D1-sl5bC.js": "c5ed601e1234c561926b5b0c6ac65e0562ec87859958caa611064d27edf78bd4",
+    "chunks/popup-CnPyNny-.js": "f453ea3c77e453f3b2794bb350431d372b64b0f34f4f2f9d9c30cba7ddc18100",
+    "chunks/sha2-BsatFpqL.js": "484b8de444e33c315f400999f267743dda65fe5d55152933ea706ab02130efb2",
+    "manifest.json": "e856c27d1a2fff294c59f35d6ec80ca15b15f9d42997e01d749e960c362c1d5c",
+    "popup-startup.js": "6e3a0c0fdd2ff6e24a881adb8f7e44e3f08bc1d53d9ae1ed0706c2159213d805",
+    "popup.html": "352b5e8819dccbc7d6be5c8dd5f6c0e7a0f43d6f143f472a5849f55c1474eb78"
+  },
+  "errors": [],
+  "passed": true
+}

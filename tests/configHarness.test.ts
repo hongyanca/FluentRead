@@ -1,0 +1,222 @@
+import { describe, expect, it } from 'vitest'
+import { getHarnessModelCacheKey, HARNESS_ACTIONS, DEFAULT_HARNESS_ACTION_PROMPTS, DEFAULT_HARNESS_SYSTEM_PROMPT, HARNESS_PROMPT_MAX_LENGTH, getDefaultHarnessPrompt, resolveHarnessPrompt, renderHarnessPrompt, isHarnessService, normalizeHarnessPreferences } from '@/src/core/config/harness'
+import {UI_LANGUAGE_OPTIONS} from '@/src/core/i18n/language'
+import {type HarnessPromptKind} from '@/src/core/harness/prompts'
+import { Config, normalizeConfig } from '@/src/core/config/model'
+
+describe('Harness config contract', () => {
+  it('defaults to quiet dismissal while preserving an explicit opt-out and trigger choice', () => {
+    expect(new Config().selectionTranslatorAutoDismiss).toBe(true);
+    for (const value of [undefined, null, 'false', 0, true]) {
+      expect(normalizeConfig({selectionTranslatorAutoDismiss: value}).selectionTranslatorAutoDismiss).toBe(true);
+    }
+    expect(normalizeConfig({selectionTranslatorAutoDismiss: false, selectionTranslatorTrigger: 'direct'})).toMatchObject({
+      selectionTranslatorAutoDismiss: false, selectionTranslatorTrigger: 'direct',
+    });
+  });
+  it('preserves opt-in triggers and falls back safely for legacy or malformed settings', () => {
+    expect(normalizeHarnessPreferences({})).toMatchObject({trigger: 'click', customHotkey: 'Alt+R', hoverDelay: 600});
+    expect(normalizeHarnessPreferences({trigger: 'shortcut', customHotkey: ' Ctrl+Shift+R ', hoverDelay: 875.4})).toMatchObject({trigger: 'shortcut', customHotkey: 'Ctrl+Shift+R', hoverDelay: 875});
+    expect(normalizeHarnessPreferences({trigger: 'hover', customHotkey: 'r', hoverDelay: 0})).toMatchObject({trigger: 'hover', customHotkey: 'Alt+R', hoverDelay: 200});
+    for (const hoverDelay of [undefined, null, '500', NaN, Infinity]) {
+      expect(normalizeHarnessPreferences({trigger: 'invalid', customHotkey: null, hoverDelay})).toMatchObject({trigger: 'click', customHotkey: 'Alt+R', hoverDelay: 600});
+    }
+    expect(normalizeHarnessPreferences({hoverDelay: 9999}).hoverDelay).toBe(3000);
+  });
+
+  it('keeps the feature disabled and follows the active service by default', () => {
+    const config = new Config()
+    expect(config.harness).toMatchObject({
+      enabled: false,
+      memoryEnabled: false,
+      service: '',
+      model: '',
+      defaultAction: 'meaning',
+      contextMode: 'paragraph',
+      maxContextChars: 1500,
+      explanationDepth: 'concise',
+      learningLevel: 'intermediate',
+    })
+    expect(config.harness.actions).toEqual(HARNESS_ACTIONS.map((action) => action.id))
+  })
+
+  it('normalizes action whitelist, bounds, enums and arbitrary model names', () => {
+    const harness = normalizeHarnessPreferences({
+      enabled: 1,
+      service: '  openai  ',
+      model: `  ${'x'.repeat(200)}  `,
+      defaultAction: 'unknown',
+      actions: ['practice', 'practice', 'unknown', 'grammar'],
+      contextMode: 'bad',
+      maxContextChars: 99999,
+      explanationDepth: 'bad',
+      learningLevel: 'bad',
+    })
+    expect(harness).toMatchObject({
+      enabled: false,
+      service: 'openai',
+      model: 'x'.repeat(128),
+      defaultAction: 'meaning',
+      actions: ['meaning', 'practice', 'grammar'],
+      contextMode: 'paragraph',
+      maxContextChars: 4000,
+      explanationDepth: 'concise',
+      learningLevel: 'intermediate',
+    })
+  })
+
+  it('adds the nested field when normalizing legacy config', () => {
+    const config = normalizeConfig({ service: 'openai' })
+    expect(config.harness.enabled).toBe(false)
+    expect(config.harness.actions).toContain('meaning')
+    expect(config.harness.memoryEnabled).toBe(false)
+    expect(normalizeHarnessPreferences({memoryEnabled: true}).memoryEnabled).toBe(true)
+    expect(normalizeHarnessPreferences({memoryEnabled: 'true'}).memoryEnabled).toBe(false)
+  })
+
+  it('accepts only gateway-supported services and configured custom providers', () => {
+    expect(isHarnessService('openai')).toBe(true)
+    expect(isHarnessService('gemini')).toBe(true)
+    expect(isHarnessService('claude')).toBe(true)
+    expect(isHarnessService('google')).toBe(false)
+    expect(isHarnessService('custom:study')).toBe(false)
+    expect(isHarnessService('custom:study', [{ id: 'custom:study', name: 'Study', endpoint: '', models: ['study'] }])).toBe(true)
+  })
+
+  it('preserves the supported advanced learning level', () => {
+    expect(normalizeHarnessPreferences({ learningLevel: 'advanced' }).learningLevel).toBe('advanced')
+  })
+
+  it('covers selection context, detailed output and invalid service bounds', () => {
+    expect(isHarnessService('x'.repeat(129))).toBe(false)
+    expect(normalizeHarnessPreferences({ contextMode: 'selection', explanationDepth: 'detailed', maxContextChars: 2000 })).toMatchObject({
+      contextMode: 'selection', explanationDepth: 'detailed', maxContextChars: 2000,
+    })
+  })
+  it('normalizes custom providers before accepting their Harness selection', () => {
+    const provider = {id: 'custom:study', name: 'Study', endpoint: 'https://example.test/v1/chat/completions', models: ['reader']}
+    const config = normalizeConfig({customOpenAIProviders: [null, provider], harness: {enabled: true, service: 'custom:study', model: 'reader'}})
+    expect(config.harness.service).toBe('custom:study')
+    expect(normalizeConfig({customOpenAIProviders: 'broken', harness: {service: 'custom:study'}}).harness.service).toBe('')
+  })
+
+  it('keeps editable nested preferences separate from the persistence baseline', () => {
+    const baseline = new Config()
+    const edited = normalizeConfig(baseline)
+    edited.harness.enabled = true
+    edited.harness.contextMode = 'selection'
+    edited.harness.actions.pop()
+    expect(baseline.harness.enabled).toBe(false)
+    expect(baseline.harness.contextMode).toBe('paragraph')
+    expect(baseline.harness.actions).toHaveLength(4)
+  })
+
+})
+
+
+describe('翻译卡片提示词配置', () => {
+  it('旧配置使用实际默认提示词，非法类型回退且动作白名单和长度限制生效', () => {
+    for (const actionPrompts of [undefined, null, [], false, 'bad']) {
+      expect(normalizeHarnessPreferences({systemPrompt: 123, actionPrompts})).toMatchObject({systemPrompt: DEFAULT_HARNESS_SYSTEM_PROMPT, actionPrompts: DEFAULT_HARNESS_ACTION_PROMPTS});
+    }
+    const prefs = normalizeHarnessPreferences({systemPrompt: '', actionPrompts: {meaning: ' x ', grammar: 1, usage: 'z'.repeat(5000), practice: '', unknown: 'bad'}});
+    expect(prefs.systemPrompt).toBe('');
+    expect(prefs.actionPrompts).toEqual({meaning: ' x ', grammar: DEFAULT_HARNESS_ACTION_PROMPTS.grammar, usage: 'z'.repeat(HARNESS_PROMPT_MAX_LENGTH), practice: ''});
+    prefs.actionPrompts.grammar = 'edited';
+    expect(normalizeHarnessPreferences({}).actionPrompts.grammar).toBe(DEFAULT_HARNESS_ACTION_PROMPTS.grammar);
+  });
+  it('占位符只替换登记变量，不递归解析替换值、不执行表达式', () => {
+    expect(renderHarnessPrompt('{{to}} {{to}} {{learningLevel}} {{explanationDepth}} {{unknown}} {{constructor}}', {to: '{{learningLevel}}', learningLevel: 'beginner', explanationDepth: 'concise'}))
+      .toBe('{{learningLevel}} {{learningLevel}} beginner concise {{unknown}} {{constructor}}');
+  });
+});
+
+
+describe('localized Harness defaults', () => {
+  const kinds: HarnessPromptKind[] = ['system', ...HARNESS_ACTIONS.map(action => action.id)]
+  it.each(UI_LANGUAGE_OPTIONS)('provides all five templates in $value and preserves placeholders', ({value: locale}) => {
+    for (const kind of kinds) {
+      const template = getDefaultHarnessPrompt(kind, locale)
+      expect(template.length).toBeGreaterThan(50)
+      expect(template.length).toBeLessThanOrEqual(HARNESS_PROMPT_MAX_LENGTH)
+      if (kind === 'system') {
+        expect(template.match(/\{\{[^}]+\}\}/gu)?.sort()).toEqual(['{{to}}', '{{learningLevel}}', '{{explanationDepth}}'].sort())
+      } else expect(template).toContain('### ')
+      for (const {value: previous} of UI_LANGUAGE_OPTIONS) {
+        expect(resolveHarnessPrompt(getDefaultHarnessPrompt(kind, previous), kind, locale)).toBe(template)
+      }
+      expect(resolveHarnessPrompt('', kind, locale)).toBe(template)
+      expect(resolveHarnessPrompt(' \n ', kind, locale)).toBe(template)
+      const custom = '  自定义 / My prompt / 私の指示 {{to}} {{unknown}}  '
+      expect(resolveHarnessPrompt(custom, kind, locale)).toBe(custom)
+      expect(resolveHarnessPrompt(template + ' ', kind, locale)).toBe(template + ' ')
+    }
+  })
+  it('retains original Chinese defaults and safely resolves unknown languages', () => {
+    expect(getDefaultHarnessPrompt('system', undefined)).toBe(DEFAULT_HARNESS_SYSTEM_PROMPT)
+    for (const {id} of HARNESS_ACTIONS) expect(getDefaultHarnessPrompt(id, 'unknown')).toBe(DEFAULT_HARNESS_ACTION_PROMPTS[id])
+    for (const kind of kinds) expect(new Set(UI_LANGUAGE_OPTIONS.map(({value}) => getDefaultHarnessPrompt(kind, value))).size).toBe(7)
+  })
+})
+
+describe('reading model cache identity', () => {
+  it('ignores unrelated configuration notifications but tracks inherited and overridden model inputs', () => {
+    const config = new Config();
+    config.service = 'openai'; config.model.openai = 'reader';
+    const original = getHarnessModelCacheKey(config);
+    config.animations = !config.animations;
+    config.token.deepseek = 'unrelated-token';
+    expect(getHarnessModelCacheKey(config)).toBe(original);
+    config.model.openai = 'new-reader';
+    expect(getHarnessModelCacheKey(config)).not.toBe(original);
+    config.harness.service = 'deepseek'; config.harness.model = 'fixed-reader';
+    const fixed = getHarnessModelCacheKey(config);
+    config.service = 'gemini'; config.model.deepseek = 'unused-default';
+    expect(getHarnessModelCacheKey(config)).toBe(fixed);
+    config.proxy.deepseek = 'https://example.test/v1';
+    expect(getHarnessModelCacheKey(config)).not.toBe(fixed);
+    const endpoint = getHarnessModelCacheKey(config);
+    config.token.deepseek = 'changed-token';
+    expect(getHarnessModelCacheKey(config)).not.toBe(endpoint);
+  });
+});
+
+// 统一入口迁移必须是一次性的，不能在关闭划词后被旧学习开关重新开启。
+describe('unified selection preferences', () => {
+  it('uses one card presentation while preserving activation and legacy preferences', () => {
+    expect(normalizeConfig({}).selectionTranslatorPresentation).toBe('card');
+    expect(normalizeConfig({selectionTranslatorPresentation: 'simple'}).selectionTranslatorPresentation).toBe('card');
+    expect(normalizeConfig({selectionTranslatorMode: 'translation-only'})).toMatchObject({selectionTranslatorPresentation: 'card', selectionTranslatorMode: 'translation-only'});
+    const migrated = normalizeConfig({selectionTranslatorMode: 'disabled', harness: {enabled: true, trigger: 'shortcut', customHotkey: 'Alt+R', service: 'deepseek', model: 'custom-reader'}});
+    expect(migrated).toMatchObject({selectionTranslatorMode: 'bilingual', disableSelectionTranslator: false, selectionTranslatorPresentation: 'card', selectionTranslatorTrigger: 'custom', customSelectionTranslatorHotkey: 'Alt+R'});
+    expect(migrated.harness).toMatchObject({service: 'deepseek', model: 'custom-reader'});
+    expect(normalizeConfig({...migrated, selectionTranslatorMode: 'disabled'})).toMatchObject({selectionTranslatorMode: 'disabled', disableSelectionTranslator: true, harness: {enabled: true}});
+  });
+  it('migrates hover without overriding an existing selection shortcut', () => {
+    expect(normalizeConfig({harness: {enabled: true, trigger: 'hover', hoverDelay: 950}})).toMatchObject({selectionTranslatorTrigger: 'hover', harness: {hoverDelay: 950}});
+    expect(normalizeConfig({selectionTranslatorMode: 'bilingual', selectionTranslatorTrigger: 'Shift', harness: {enabled: true, trigger: 'shortcut', customHotkey: 'Alt+R'}}).selectionTranslatorTrigger).toBe('Shift');
+    expect(normalizeConfig({selectionTranslatorPresentation: 'invalid', harness: {enabled: true}}).selectionTranslatorMode).toBe('disabled');
+    expect(normalizeConfig({selectionTranslatorPresentation: 'simple', selectionTranslatorTrigger: 'hover'}).selectionTranslatorTrigger).toBe('hover');
+  });
+  it('updates exact built-in grammar prompts but retains custom instructions', () => {
+    const template = getDefaultHarnessPrompt('grammar', 'en-US');
+    expect(template).toContain('Text | POS | Role | Meaning');
+    const old = template.split('\n\nFor grammar analysis')[0];
+    expect(resolveHarnessPrompt(old, 'grammar', 'en-US')).toBe(template);
+    expect(resolveHarnessPrompt('My grammar instructions', 'grammar', 'zh-CN')).toBe('My grammar instructions');
+  });
+});
+
+it('groups meaningful phrases in the built-in grammar prompt and upgrades only exact old defaults', () => {
+  const current = getDefaultHarnessPrompt('grammar', 'zh-CN');
+  expect(current).toContain('Group the sentence into meaningful, contiguous syntactic units');
+  expect(current).toContain('infinitive phrase');
+  expect(current).toContain('never invent a full sentence or a subject');
+  const oldFormat = '\n\nFor grammar analysis, after the backbone explanation include one compact Markdown table with exactly these four headers: Text | POS | Role | Meaning. Each Text cell must quote a contiguous fragment from the selection verbatim, in source order. Never add invented words or reuse overlapping fragments. Use common English POS codes (article, noun, verb, adjective, adverb, pronoun, preposition, conjunction, determiner, auxiliary, numeral, phrase); distinguish part of speech from syntactic role such as subject or object. Write Role and Meaning in the requested target language. Include articles and other function words for a short sentence; for long selections use at most 40 meaningful fragments. If uncertain, use unknown rather than inventing a classification. The four fixed headers are a rendering contract; all explanatory content follows the target language. This compact table is allowed even when large tables are discouraged.';
+  for (const {value: locale} of UI_LANGUAGE_OPTIONS) {
+    const next = getDefaultHarnessPrompt('grammar', locale);
+    const body = next.slice(0, next.indexOf('\n\nFor grammar analysis'));
+    expect(resolveHarnessPrompt(body + oldFormat, 'grammar', locale)).toBe(next);
+    expect(resolveHarnessPrompt('My custom instructions' + oldFormat, 'grammar', locale)).toBe('My custom instructions' + oldFormat);
+  }
+});

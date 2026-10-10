@@ -1,18 +1,31 @@
 /**
  * @file src/core/config/diff.ts
  * 文件职责：把两份配置转换为可供预览的结构化差异，同时确保凭据和嵌套敏感内容只显示脱敏摘要。
- * 主要内容：维护设置字段到页面分组及中文标签的映射，格式化枚举、映射和长文本，递归检查未知对象并生成稳定的分组差异结果。
+ * 主要内容：维护设置字段到页面分组及中文标签的映射，按服务展示原生翻译合批开关，格式化枚举、映射和长文本，用迭代比较检查深层对象并对预览深度作安全摘要，生成稳定的分组差异结果。
  * 模块边界：本文件是无浏览器副作用的纯配置算法，不读取存储、不打开确认框也不执行恢复；设置页面只消费其脱敏后的 ConfigDiffResult。
  */
 import {CONFIG_CREDENTIAL_FIELDS, isSensitiveConfigKey} from './credentials';
 import {options} from './catalog';
+import {FREE_TRANSLATION_PROVIDERS} from './freeTranslation';
+import {isCustomOpenAIProviderId} from './customOpenAI';
+import {
+    interfaceSkinOptions,
+    interfaceVisibilityOptions,
+    popupModuleOptions,
+    popupQuickFeatureOptions,
+} from './interfaceAppearance';
+import {translationLoadingStyleOptions} from './translationLoadingStyle';
+import {SENTENCE_HIGHLIGHT_STYLES} from './sentenceHighlight';
+import {LOCAL_TTS_MODE_OPTIONS} from './localTts';
+import {parseApiKeyRequirementKey} from './validation';
 
 export const CONFIG_DIFF_GROUPS = [
     {id: 'general', label: '通用设置'},
     {id: 'translationServices', label: '翻译服务'},
     {id: 'translation', label: '翻译设置'},
     {id: 'siteRules', label: '网站规则'},
-    {id: 'imageAndArea', label: '图片与圈选翻译'},
+    {id: 'imageTranslation', label: '图片翻译'},
+    {id: 'areaTranslation', label: '圈选翻译'},
     {id: 'videoSubtitles', label: '视频字幕翻译'},
     {id: 'advanced', label: '高级'},
     {id: 'tools', label: '工具'},
@@ -45,6 +58,7 @@ type ValueFormatter = (value: unknown) => string;
 interface MappingDefinition {
     itemLabel: (key: string) => string;
     format: ValueFormatter;
+    formatItem?: (value: unknown, key: string) => string;
 }
 
 interface FieldDefinition {
@@ -60,12 +74,20 @@ const EXCLUDED_FIELDS = new Set([
     'count',
     'persistCredentials',
     'videoServiceDefaultMigrated',
+    'freeTranslationBilibiliDefaultApplied',
+    'uiLanguageSetupCompleted',
+    // 关闭前偏好随快照保存，但不作为独立用户操作重复展示。
+    'hoverShortcutBeforeDisable',
+    'selectionTranslatorModeBeforeDisable',
     '__fluentConfigRevision',
 ]);
 const CREDENTIAL_FIELDS = new Set<string>(CONFIG_CREDENTIAL_FIELDS);
 const SENSITIVE_SUMMARY_PREFIX = '敏感内容已隐藏';
 const MAX_INLINE_ITEMS = 4;
 const MAX_INLINE_TEXT_LENGTH = 120;
+const MAX_PREVIEW_DEPTH = 32;
+const DEPTH_LIMITED_PREVIEW = Symbol('depth-limited-preview');
+const DEPTH_LIMITED_SUMMARY = '已配置（内容已摘要）';
 
 function isRecord(value: unknown): value is ConfigRecord {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -88,14 +110,18 @@ function sensitiveSummary(value: string): string {
     return `${SENSITIVE_SUMMARY_PREFIX}（${value.length} 字符）`;
 }
 
-function sanitizeSensitiveValue(value: unknown, seen = new WeakSet<object>()): unknown {
+function sanitizeSensitiveContent(value: unknown, seen: WeakSet<object>, depth: number, preview: {depthLimited: boolean}): unknown {
+    if (depth >= MAX_PREVIEW_DEPTH) {
+        preview.depthLimited = true;
+        return DEPTH_LIMITED_PREVIEW;
+    }
     if (typeof value === 'string') {
         const trimmed = value.trim();
         if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
             try {
                 const parsed = JSON.parse(trimmed) as unknown;
                 if (isRecord(parsed) || Array.isArray(parsed)) {
-                    return sanitizeSensitiveValue(parsed, seen);
+                    return sanitizeSensitiveContent(parsed, seen, depth + 1, preview);
                 }
             } catch {
                 // 非 JSON 的 prompt 或模板会在下方按普通文本处理。
@@ -106,7 +132,9 @@ function sanitizeSensitiveValue(value: unknown, seen = new WeakSet<object>()): u
     if (Array.isArray(value)) {
         if (seen.has(value)) return '[循环引用]';
         seen.add(value);
-        return value.map((item) => sanitizeSensitiveValue(item, seen));
+        const result = value.map((item) => sanitizeSensitiveContent(item, seen, depth + 1, preview));
+        seen.delete(value);
+        return result;
     }
     if (!isRecord(value)) return value;
     if (seen.has(value)) return '[循环引用]';
@@ -115,47 +143,115 @@ function sanitizeSensitiveValue(value: unknown, seen = new WeakSet<object>()): u
     const result: ConfigRecord = {};
     for (const [key, item] of Object.entries(value)) {
         if (isSensitiveConfigKey(key)) continue;
-        result[key] = sanitizeSensitiveValue(item, seen);
+        Object.defineProperty(result, key, {
+            value: sanitizeSensitiveContent(item, seen, depth + 1, preview),
+            enumerable: true, configurable: true, writable: true,
+        });
     }
-    return result;
-}
-
-function canonicalize(value: unknown, seen = new WeakSet<object>()): unknown {
-    if (!Array.isArray(value) && !isRecord(value)) return value;
-    if (seen.has(value)) return '[循环引用]';
-    seen.add(value);
-    const result = Array.isArray(value)
-        ? value.map((item) => canonicalize(item, seen))
-        : Object.fromEntries(
-        Object.keys(value)
-            .sort((left, right) => left.localeCompare(right))
-            .map((key) => [key, canonicalize(value[key], seen)]),
-        );
     seen.delete(value);
     return result;
 }
 
+function sanitizeSensitiveValue(value: unknown): unknown {
+    const preview = {depthLimited: false};
+    const sanitized = sanitizeSensitiveContent(value, new WeakSet<object>(), 0, preview);
+    // 整个字段使用已翻译的摘要，避免嵌套键和值拼接后无法命中旧文案翻译。
+    return preview.depthLimited ? DEPTH_LIMITED_PREVIEW : sanitized;
+}
+
+function jsonComparableValue(value: unknown): unknown {
+    if (typeof value === 'number' && !Number.isFinite(value)) return null;
+    if (typeof value === 'function' || typeof value === 'symbol') return undefined;
+    return value;
+}
+
 function valuesEqual(left: unknown, right: unknown): boolean {
-    if (Object.is(left, right)) return true;
-    return JSON.stringify(canonicalize(left)) === JSON.stringify(canonicalize(right));
+    const pending: Array<[unknown, unknown]> = [[left, right]];
+    const compared = new WeakMap<object, WeakSet<object>>();
+    while (pending.length > 0) {
+        const [rawA, rawB] = pending.pop()!;
+        const a = jsonComparableValue(rawA), b = jsonComparableValue(rawB);
+        if (a === b) continue;
+        if ((!isRecord(a) && !Array.isArray(a)) || (!isRecord(b) && !Array.isArray(b))) return false;
+        if (Array.isArray(a) !== Array.isArray(b)) return false;
+        let pairs = compared.get(a);
+        if (pairs?.has(b)) continue;
+        if (!pairs) {pairs = new WeakSet(); compared.set(a, pairs);}
+        pairs.add(b);
+        if (Array.isArray(a)) {
+            if (a.length !== (b as unknown[]).length) return false;
+            for (let index = 0; index < a.length; index += 1) {
+                pending.push([jsonComparableValue(a[index]) ?? null, jsonComparableValue((b as unknown[])[index]) ?? null]);
+            }
+        } else {
+            const keys = Object.keys(a).filter(key => jsonComparableValue(a[key]) !== undefined);
+            if (keys.length !== Object.keys(b).filter(key => jsonComparableValue((b as ConfigRecord)[key]) !== undefined).length) return false;
+            for (const key of keys) {
+                if (!Object.hasOwn(b, key)) return false;
+                pending.push([a[key], (b as ConfigRecord)[key]]);
+            }
+        }
+    }
+    return true;
 }
 
 function labelsFor(...optionLists: ReadonlyArray<ReadonlyArray<Option>>): Map<unknown, string> {
     return new Map(optionLists.flatMap((items) => items.map((item) => [item.value, item.label] as const)));
 }
 
-const LANGUAGE_LABELS = labelsFor(options.to, options.inputBoxTranslationTarget, options.form);
-const SERVICE_LABELS = labelsFor(options.services);
+const LANGUAGE_LABELS = labelsFor(options.to, options.inputBoxTranslationTarget, options.from);
+const SERVICE_LABELS = labelsFor(options.services, FREE_TRANSLATION_PROVIDERS.map(provider => ({value: provider.id, label: provider.label})));
 const STYLE_LABELS = labelsFor(options.styles);
 const THEME_LABELS = labelsFor(options.theme);
+const UI_LANGUAGE_LABELS = new Map<unknown, string>([
+    ['zh-CN', '中文'],
+    ['en-US', 'English'],
+    ['ja-JP', '日本語'],
+    ['ko-KR', '한국어'],
+    ['fr-FR', 'Français'],
+    ['ru-RU', 'Русский'],
+    ['es-ES', 'Español'],
+]);
+const INTERFACE_SKIN_LABELS = labelsFor(interfaceSkinOptions);
+const INTERFACE_FONT_LABELS = new Map<unknown, string>([
+    ['inter', 'Inter · 推荐'],
+    ['system', '系统字体'],
+    ['noto-sans-sc', 'Noto Sans SC · 中文'],
+    ['roboto', 'Roboto · 简洁'],
+    ['source-sans-3', 'Source Sans 3 · 易读'],
+    ['ibm-plex-sans', 'IBM Plex Sans · 理性'],
+    ['manrope', 'Manrope · 几何'],
+    ['nunito-sans', 'Nunito Sans · 柔和'],
+    ['lxgw-wenkai', '霞鹜文楷 · 手写'],
+    ['noto-serif-sc', 'Noto Serif SC · 书卷'],
+]);
+const TRANSLATION_LOADING_STYLE_LABELS = labelsFor(translationLoadingStyleOptions);
+const TRANSLATION_SCOPE_LABELS = new Map<unknown, string>([['content', '关闭'], ['all', '开启']]);
+const POPUP_MODULE_LABELS = new Map<string, string>(popupModuleOptions.map((item) => [item.id, item.label]));
+const POPUP_QUICK_FEATURE_LABELS = new Map<string, string>(
+    popupQuickFeatureOptions.map((item) => [item.id, item.label]),
+);
 const HOVER_TRIGGER_LABELS = labelsFor(options.keys);
 const SELECTION_TRIGGER_LABELS = labelsFor(options.selectionTranslatorTriggers);
 const FLOATING_HOTKEY_LABELS = labelsFor(options.floatingBallHotkeys);
 const INPUT_TRIGGER_LABELS = labelsFor(options.inputBoxTranslationTrigger);
+const INPUT_OUTPUT_LABELS = new Map<unknown, string>([
+    ['replace', '替换原文'], ['append', '原文在前，译文在后'], ['prepend', '译文在前，原文在后'],
+]);
 const BILLING_PLAN_LABELS = labelsFor(options.minimaxBillingPlan, options.mimoBillingPlan);
+const DEEPL_API_PLAN_LABELS = new Map<unknown, string>([
+    ['free', 'API Free（免费）'],
+    ['pro', 'API Pro（付费）'],
+]);
 const REGION_LABELS = labelsFor(options.minimaxRegion, options.mimoRegion);
 const DEEPSEEK_API_LABELS = labelsFor(options.deepseekApiType);
 const DEEPSEEK_THINKING_LABELS = labelsFor(options.deepseekThinkingMode);
+const PARAGRAPH_COPY_CONTENT_LABELS = new Map<unknown, string>([
+    ['auto', '跟随页面显示'],
+    ['original', '原文'],
+    ['translation', '译文'],
+    ['bilingual', '原文和译文'],
+]);
 const DISPLAY_LABELS = new Map<unknown, string>([
     [0, '仅译文模式'],
     [1, '双语对照模式'],
@@ -169,6 +265,7 @@ const SELECTION_MODE_LABELS = new Map<unknown, string>([
     ['bilingual', '双语显示'],
     ['translation-only', '只显示译文'],
 ]);
+const LOCAL_TTS_MODE_LABELS = labelsFor(LOCAL_TTS_MODE_OPTIONS);
 const VIDEO_DISPLAY_MODE_LABELS = new Map<unknown, string>([
     ['bilingual', '双语显示'],
     ['translation-only', '只显示译文'],
@@ -177,6 +274,38 @@ const VIDEO_DISPLAY_MODE_LABELS = new Map<unknown, string>([
 const SIDE_LABELS = new Map<unknown, string>([
     ['left', '左侧'],
     ['right', '右侧'],
+]);
+const FLOATING_BALL_TOOLS_DISPLAY_LABELS = new Map<unknown, string>([
+    ['hover', '悬停时显示'],
+    ['always', '始终显示'],
+    ['hidden', '不显示'],
+]);
+const FLOATING_BALL_CLICK_ACTION_LABELS = new Map<unknown, string>([
+    ['translate', '翻译/显示原文'],
+    ['settings', '打开设置页'],
+    ['none', '仅拖动'],
+]);
+const TRANSLATION_APPEARANCE_FIELD_LABELS = new Map<string, string>([
+    ['textColor', '译文颜色'],
+    ['backgroundColor', '译文背景色'],
+    ['lineColor', '线条颜色'],
+    ['fillColor', '标记底色'],
+    ['fontScale', '译文字号'],
+    ['fontWeight', '译文字重'],
+    ['fontFamily', '译文字体'],
+    ['opacity', '译文不透明度'],
+    ['customCss', 'CSS'],
+]);
+// 颜色留空与 default 都表示沿用样式自带外观；字号和不透明度都是百分比。
+const TRANSLATION_APPEARANCE_VALUE_LABELS = new Map<unknown, string>([
+    ['', '默认'],
+    ['default', '默认'],
+    ['normal', '常规'],
+    ['semibold', '中粗'],
+    ['bold', '加粗'],
+    ['sans', '无衬线'],
+    ['serif', '衬线'],
+    ['mono', '等宽'],
 ]);
 
 function formatEnum(value: unknown, labels: Map<unknown, string>): string {
@@ -194,6 +323,15 @@ function formatNumber(value: unknown, suffix = ''): string {
         : formatValue(value);
 }
 
+function formatTranslationAppearanceValue(value: unknown): string {
+    if (typeof value === 'number') return formatNumber(value, '%');
+    return TRANSLATION_APPEARANCE_VALUE_LABELS.get(value) ?? formatValue(value);
+}
+
+function formatRequestRate(value: unknown): string {
+    return value === 0 ? '不限速' : formatNumber(value, ' 次');
+}
+
 function formatString(value: string): string {
     if (!value.trim()) return '未设置';
     if (value.startsWith(SENSITIVE_SUMMARY_PREFIX)) return value;
@@ -203,10 +341,9 @@ function formatString(value: string): string {
 
 function formatArray(value: unknown[], itemFormatter: ValueFormatter = formatValue): string {
     if (value.length === 0) return '无';
-    const formatted = value.map(itemFormatter);
-    const visible = formatted.slice(0, MAX_INLINE_ITEMS).join('、');
-    return formatted.length > MAX_INLINE_ITEMS
-        ? `${formatted.length} 项：${visible} 等`
+    const visible = value.slice(0, MAX_INLINE_ITEMS).map(itemFormatter).join('、');
+    return value.length > MAX_INLINE_ITEMS
+        ? `${value.length} 项：${visible} 等`
         : visible;
 }
 
@@ -253,7 +390,97 @@ function formatCustomBody(value: unknown): string {
 }
 
 function serviceName(key: string): string {
-    return SERVICE_LABELS.get(key) ?? key;
+    if (SERVICE_LABELS.has(key)) return SERVICE_LABELS.get(key)!;
+    if (isCustomOpenAIProviderId(key)) {
+        return `自定义服务 ${key.slice('custom:'.length)}`;
+    }
+    return key;
+}
+
+function formatService(value: unknown): string {
+    return typeof value === 'string' ? serviceName(value) : formatValue(value);
+}
+
+function formatInterfaceVisibility(value: unknown): string {
+    if (!isRecord(value)) return formatValue(value);
+    return interfaceVisibilityOptions
+        .map(({key, label}) => `${label}${value[key] === false ? '关闭' : '开启'}`)
+        .join('、');
+}
+
+function formatPopupModuleOrder(value: unknown): string {
+    if (!Array.isArray(value)) return formatValue(value);
+    if (value.length === 0) return '无';
+    return value.map((item) => typeof item === 'string'
+        ? POPUP_MODULE_LABELS.get(item) ?? item
+        : formatValue(item)).join(' → ');
+}
+
+function formatPopupQuickFeatureVisibility(value: unknown): string {
+    if (!isRecord(value)) return formatValue(value);
+    return popupQuickFeatureOptions
+        .map(({id, label}) => `${label}：${value[id] === false ? '隐藏' : '显示'}`)
+        .join('、');
+}
+
+function formatPopupQuickFeatureOrder(value: unknown): string {
+    if (!Array.isArray(value)) return formatValue(value);
+    if (value.length === 0) return '无';
+    return value.map((item) => typeof item === 'string'
+        ? POPUP_QUICK_FEATURE_LABELS.get(item) ?? item
+        : formatValue(item)).join(' → ');
+}
+
+function formatCustomOpenAIProviders(value: unknown): string {
+    if (!Array.isArray(value) || value.length === 0) return '无';
+    return formatArray(value, (item) => {
+        if (!isRecord(item)) return formatValue(item);
+        const name = typeof item.name === 'string' && item.name.trim() ? item.name.trim() : '未命名服务';
+        const endpoint = formatEndpoint(item.endpoint);
+        const models = Array.isArray(item.models) ? formatArray(item.models) : '无';
+        return `${name}（接口：${endpoint}；模型：${models}）`;
+    });
+}
+
+function formatQuickTranslationProfiles(value: unknown): string {
+    if (!Array.isArray(value) || value.length === 0) return '无';
+    return value.map((item) => {
+        if (!isRecord(item)) return formatValue(item);
+        const action = item.action === 'full-page' ? '全文' : '悬停';
+        const hotkey = typeof item.hotkey === 'string' && item.hotkey ? item.hotkey : '未设置';
+        const service = typeof item.service === 'string' && item.service
+            ? serviceName(item.service)
+            : '默认服务';
+        const model = typeof item.model === 'string' && item.model ? ` · ${item.model}` : '';
+        const language = typeof item.targetLanguage === 'string' && item.targetLanguage
+            ? formatEnum(item.targetLanguage, LANGUAGE_LABELS)
+            : '默认语言';
+        const display = item.displayMode === 'bilingual'
+            ? '双语'
+            : item.displayMode === 'translation-only' ? '仅译文' : '默认显示';
+        const range = item.action === 'full-page'
+            ? `，${item.fullPageMode === 'viewport'
+                ? '按阅读进度'
+                : item.fullPageMode === 'all' ? '立即翻译到网页底部' : '默认范围'}`
+            : '';
+        const disabled = item.enabled === false ? '（已停用）' : '';
+        const glossary = item.glossaryIds === undefined ? '' : `，术语库：${formatGlossarySelection(item.glossaryIds)}`;
+        return `${action} ${hotkey}${disabled}：${service}${model}，${language}，${display}${range}${glossary}`;
+    }).join('；');
+}
+
+/** 历史预览只显示规模，避免把用户保存的专业词句展开到配置差异中。 */
+function formatGlossaryLibraries(value: unknown): string {
+    if (!Array.isArray(value)) return formatValue(value);
+    const libraries = value.filter(isRecord);
+    const entries = libraries.reduce((count, library) => count + (Array.isArray(library.entries) ? library.entries.length : 0), 0);
+    return `${libraries.length} 套词库，${entries} 条术语`;
+}
+
+function formatGlossarySelection(value: unknown): string {
+    if (value == null) return '跟随全局词库';
+    if (!Array.isArray(value)) return formatValue(value);
+    return value.length ? `指定 ${value.length} 套词库` : '不使用术语库';
 }
 
 function serviceMapping(label: string, format: ValueFormatter = formatValue): MappingDefinition {
@@ -263,21 +490,72 @@ function serviceMapping(label: string, format: ValueFormatter = formatValue): Ma
     };
 }
 
+function apiKeyRequirementMapping(): MappingDefinition {
+    return {
+        itemLabel: (key) => {
+            const parsed = parseApiKeyRequirementKey(key);
+            if (!parsed) return `${serviceName(key)} API Key 校验`;
+            const [service, model] = parsed;
+            return `${serviceName(service)} · ${model || '默认模型'} API Key 校验`;
+        },
+        format: formatBoolean,
+    };
+}
+
 const FIELD_DEFINITIONS: Record<string, FieldDefinition> = {
     on: {group: 'general', label: '插件状态', format: formatBoolean},
+    uiLanguage: {group: 'general', label: '界面语言', format: (value) => formatEnum(value, UI_LANGUAGE_LABELS)},
     from: {group: 'general', label: '默认源语言', format: (value) => formatEnum(value, LANGUAGE_LABELS)},
     to: {group: 'general', label: '默认目标语言', format: (value) => formatEnum(value, LANGUAGE_LABELS)},
     theme: {group: 'general', label: '主题', format: (value) => formatEnum(value, THEME_LABELS)},
+    interfaceSkin: {group: 'general', label: '界面皮肤', format: (value) => formatEnum(value, INTERFACE_SKIN_LABELS)},
+    interfaceFont: {group: 'general', label: '界面字体', format: (value) => formatEnum(value, INTERFACE_FONT_LABELS)},
+    interfaceVisibility: {group: 'general', label: '界面栏目', format: formatInterfaceVisibility},
+    popupModuleOrder: {group: 'general', label: '菜单栏布局顺序', format: formatPopupModuleOrder},
+    popupQuickFeatureVisibility: {group: 'general', label: '快捷功能卡片', format: formatPopupQuickFeatureVisibility},
+    popupQuickFeatureOrder: {group: 'general', label: '快捷功能顺序', format: formatPopupQuickFeatureOrder},
 
     display: {group: 'general', label: '翻译模式', format: (value) => formatEnum(value, DISPLAY_LABELS)},
     style: {group: 'general', label: '译文样式', format: (value) => formatEnum(value, STYLE_LABELS)},
+    translationAppearance: {group: 'general', label: '译文外观', mapping: {
+        itemLabel: (key) => TRANSLATION_APPEARANCE_FIELD_LABELS.get(key) ?? key,
+        format: formatTranslationAppearanceValue,
+    }},
     disableFloatingBall: {group: 'general', label: '全文翻译悬浮球', format: (value) => formatBoolean(value, true)},
+    floatingBallToolsDisplay: {group: 'general', label: '悬浮球按钮显示方式', format: (value) => formatEnum(value, FLOATING_BALL_TOOLS_DISPLAY_LABELS)},
+    floatingBallHoverDelay: {group: 'general', label: '悬浮球展开延迟', format: (value) => formatNumber(value, ' ms')},
+    floatingBallClickAction: {group: 'general', label: '悬浮球点击行为', format: (value) => formatEnum(value, FLOATING_BALL_CLICK_ACTION_LABELS)},
+    floatingBallCompact: {group: 'general', label: '缩小悬浮球', format: formatBoolean},
+    floatingBallSettingsEntryVisible: {group: 'general', label: '悬浮球设置入口', format: formatBoolean},
+    floatingBallCollapsedOpacity: {group: 'general', label: '悬浮球收起不透明度', format: (value) => formatNumber(value, '%')},
     translationProgressPanelEnabled: {group: 'general', label: '翻译进度面板', format: formatBoolean},
+    bilingualSentenceHighlightEnabled: {group: 'translation', label: '双语逐句高亮', format: formatBoolean},
+    bilingualSentenceHighlightStyle: {group: 'translation', label: '逐句高亮样式', format: value => formatEnum(value, labelsFor(SENTENCE_HIGHLIGHT_STYLES))},
+    bilingualSentenceHighlightProfiles: {group: 'translation', label: '已保存的逐句高亮样式', format: value => Array.isArray(value) ? formatArray(value.map(profile => isRecord(profile) ? profile.name : profile)) : formatValue(value)},
+    activeSentenceHighlightProfileId: {group: 'translation', label: '当前逐句高亮配置', format: value => value ? '已选择保存的配置' : '未选择'},
+    bilingualSentenceHighlightAppearance: {group: 'translation', label: '逐句高亮自定义外观', mapping: {
+        itemLabel: key => ({backgroundColor: '高亮底色', backgroundOpacity: '底色不透明度', lineColor: '下划线颜色', lineOpacity: '下划线不透明度', lineStyle: '下划线形态', lineThickness: '线条粗细', customCss: 'CSS'} as Record<string, string>)[key] ?? key,
+        format: formatValue,
+        formatItem: (value, key) => {
+            if (value === null || value === undefined || value === '' || value === 'default') return '跟随预设';
+            if (key === 'lineStyle') return formatEnum(value, new Map([['none', '无下划线'], ['solid', '实线'], ['dotted', '点线'], ['dashed', '虚线'], ['double', '双线'], ['wavy', '波浪线']]));
+            if (key === 'customCss') return formatString(String(value));
+            if (key === 'lineThickness') return formatNumber(value, 'px');
+            if (key.endsWith('Opacity')) return formatNumber(value, '%');
+            return formatValue(value);
+        },
+    }},
 
-    service: {group: 'general', label: '默认翻译服务', format: (value) => formatEnum(value, SERVICE_LABELS)},
+    service: {group: 'general', label: '默认翻译服务', format: formatService},
+    favoriteServices: {group: 'translationServices', label: '常用翻译服务', format: (value) => Array.isArray(value) ? formatArray(value, formatService) : formatValue(value)},
+    customOpenAIProviders: {group: 'translationServices', label: '自定义 OpenAI 服务', format: formatCustomOpenAIProviders},
+    apiKeyRotationEnabled: {group: 'translationServices', label: '自动轮换', format: value => formatRecord(configRecord(value))},
     model: {group: 'translationServices', label: '服务模型', mapping: serviceMapping('模型')},
     customModel: {group: 'translationServices', label: '自定义模型', mapping: serviceMapping('自定义模型')},
-    requireApiKey: {group: 'translationServices', label: 'API Key 校验', mapping: serviceMapping(' API Key 校验', formatBoolean)},
+    customModels: {group: 'translationServices', label: '自定义模型列表', mapping: serviceMapping('自定义模型列表')},
+    modelThinking: {group: 'translationServices', label: '模型 Thinking', mapping: serviceMapping('模型 Thinking')},
+    nativeBatchTranslationEnabled: {group: 'translationServices', label: '原生翻译合批', mapping: serviceMapping('开启合并', formatBoolean)},
+    requireApiKey: {group: 'translationServices', label: 'API Key 校验', mapping: apiKeyRequirementMapping()},
     minimaxBillingPlan: {group: 'translationServices', label: 'MiniMax 计费方案', format: (value) => formatEnum(value, BILLING_PLAN_LABELS)},
     minimaxRegion: {group: 'translationServices', label: 'MiniMax API 区域', format: (value) => formatEnum(value, REGION_LABELS)},
     mimoBillingPlan: {group: 'translationServices', label: 'MiMo 计费方案', format: (value) => formatEnum(value, BILLING_PLAN_LABELS)},
@@ -285,59 +563,141 @@ const FIELD_DEFINITIONS: Record<string, FieldDefinition> = {
     customBody: {group: 'translationServices', label: '自定义请求体', mapping: serviceMapping('自定义请求体', formatCustomBody)},
     proxy: {group: 'translationServices', label: '代理地址', mapping: serviceMapping('代理地址', formatEndpoint)},
     custom: {group: 'translationServices', label: '自定义服务地址', format: formatEndpoint},
+    deeplApiPlan: {group: 'translationServices', label: 'DeepL API 套餐', format: (value) => formatEnum(value, DEEPL_API_PLAN_LABELS)},
     deeplx: {group: 'translationServices', label: 'DeepLX 服务地址', format: formatEndpoint},
     newApiUrl: {group: 'translationServices', label: 'New API 地址', format: formatEndpoint},
-    azureOpenaiEndpoint: {group: 'translationServices', label: 'Azure OpenAI 端点', format: formatEndpoint},
+    azureOpenaiEndpoint: {group: 'translationServices', label: 'Azure 端点', format: formatEndpoint},
     system_role: {group: 'translationServices', label: 'System 提示词', mapping: serviceMapping(' System 提示词', formatPrompt)},
     user_role: {group: 'translationServices', label: 'User 提示词', mapping: serviceMapping(' User 提示词', formatPrompt)},
     deepseekApiType: {group: 'translationServices', label: 'DeepSeek API 格式', format: (value) => formatEnum(value, DEEPSEEK_API_LABELS)},
     deepseekThinkingMode: {group: 'translationServices', label: 'DeepSeek 思考模式', format: (value) => formatEnum(value, DEEPSEEK_THINKING_LABELS)},
 
+    hoverTranslationService: {group: 'translation', label: '悬浮翻译服务', format: formatService},
+    selectionTranslationService: {group: 'translation', label: '划词翻译服务', format: formatService},
+    imageTranslationService: {group: 'tools', label: '图片翻译服务', format: formatService},
     hotkey: {group: 'translation', label: '鼠标悬浮快捷键', format: (value) => formatEnum(value, HOVER_TRIGGER_LABELS)},
     customHotkey: {group: 'translation', label: '自定义悬浮快捷键'},
     mouseHoverTranslationDelay: {group: 'translation', label: '悬浮翻译延迟', format: (value) => formatNumber(value, ' ms')},
+    paragraphCopyEnabled: {group: 'translation', label: '段落复制', format: formatBoolean},
+    paragraphCopyHotkey: {group: 'translation', label: '段落复制快捷键', format: value => value === 'custom' ? '自定义快捷键' : formatValue(value)},
+    customParagraphCopyHotkey: {group: 'translation', label: '自定义段落复制快捷键'},
+    paragraphCopyContent: {group: 'translation', label: '段落复制内容', format: (value) => formatEnum(value, PARAGRAPH_COPY_CONTENT_LABELS)},
+    sectionTranslationHotkeyEnabled: {group: 'translation', label: '局部翻译快捷键', format: formatBoolean},
+    sectionTranslationHotkey: {group: 'translation', label: '局部翻译快捷键组合', format: value => value === 'custom' ? '自定义快捷键' : formatValue(value)},
+    customSectionTranslationHotkey: {group: 'translation', label: '自定义局部翻译快捷键'},
     disableSelectionTranslator: {group: 'translation', label: '划词翻译', format: (value) => formatBoolean(value, true)},
+    selectionTranslatorPresentation: {group: 'translation', label: '划词呈现方式', format: (value) => value === 'card' ? '卡片模式' : '普通翻译'},
+    selectionTranslatorAutoDismiss: {group: 'translation', label: '继续阅读时自动收起'},
     selectionTranslatorMode: {group: 'translation', label: '划词显示模式', format: (value) => formatEnum(value, SELECTION_MODE_LABELS)},
     selectionTranslatorTrigger: {group: 'translation', label: '划词触发方式', format: (value) => formatEnum(value, SELECTION_TRIGGER_LABELS)},
     selectionTranslatorHotkey: {group: 'translation', label: '划词快捷键', format: (value) => formatEnum(value, SELECTION_TRIGGER_LABELS)},
     customSelectionTranslatorHotkey: {group: 'translation', label: '自定义划词快捷键'},
     selectionTranslatorDelay: {group: 'translation', label: '划词显示延迟', format: (value) => formatNumber(value, ' ms')},
+    selectionTranslatorBidirectional: {group: 'translation', label: '中英双向划词', format: (value) => formatBoolean(value, true)},
     selectionTtsVoices: {group: 'translation', label: '划词朗读音色'},
+    selectionTtsMode: {group: 'translation', label: '朗读合成策略', format: (value) => formatEnum(value, LOCAL_TTS_MODE_LABELS)},
+    selectionTtsLocalVoice: {group: 'translation', label: '本地朗读音色'},
     inputBoxTranslationTrigger: {group: 'translation', label: '输入框翻译触发方式', format: (value) => formatEnum(value, INPUT_TRIGGER_LABELS)},
     inputBoxTranslationTarget: {group: 'translation', label: '输入框翻译目标语言', format: (value) => formatEnum(value, LANGUAGE_LABELS)},
+    inputBoxTranslationOutputMode: {group: 'translation', label: '输入框翻译输出方式', format: (value) => formatEnum(value, INPUT_OUTPUT_LABELS)},
+    inputBoxTranslationInterval: {group: 'translation', label: '输入框翻译触发间隔', format: (value) => formatNumber(value, ' ms')},
+    inputBoxTranslationService: {group: 'translation', label: '输入框翻译服务', format: formatService},
+    inputBoxTranslationModel: {group: 'translation', label: '输入框翻译模型', format: (value) => typeof value === 'string' ? formatString(value) : formatValue(value)},
+    inputBoxTranslationPrompt: {group: 'translation', label: '输入框翻译提示词', format: formatPrompt},
+    inputBoxTranslationSystemPrompt: {group: 'translation', label: '输入框翻译系统提示词', format: formatPrompt},
     contextMenuEnabled: {group: 'translation', label: '右键全文翻译', format: formatBoolean},
     fullPageTranslationMode: {group: 'translation', label: '全文翻译范围', format: (value) => formatEnum(value, FULL_PAGE_MODE_LABELS)},
     floatingBallPosition: {group: 'translation', label: '悬浮球位置', format: (value) => formatEnum(value, SIDE_LABELS)},
+    floatingBallVerticalPosition: {group: 'translation', label: '悬浮球高度', format: (value) => typeof value === 'number'
+        ? `${Math.round(value * 100)}%` : '居中'},
     floatingBallHotkey: {group: 'translation', label: '全文翻译快捷键', format: (value) => formatEnum(value, FLOATING_HOTKEY_LABELS)},
     customFloatingBallHotkey: {group: 'translation', label: '自定义全文快捷键'},
+    quickTranslationProfiles: {group: 'translation', label: '快捷翻译方案', format: formatQuickTranslationProfiles},
+    excludedLanguages: {group: 'translation', label: '不翻译的语言', format: value => Array.isArray(value)
+        ? value.map(language => formatEnum(language, LANGUAGE_LABELS)).join('、') || '无' : '无'},
+    glossaryEnabled: {group: 'translation', label: '术语库', format: formatBoolean},
+    glossaryLibraries: {group: 'translation', label: '术语库内容', format: formatGlossaryLibraries},
 
     autoTranslate: {group: 'siteRules', label: '所有网站自动翻译', format: formatBoolean},
     alwaysTranslateDomains: {group: 'siteRules', label: '始终翻译网站'},
     disabledExtensionDomains: {group: 'siteRules', label: '禁用扩展网站'},
+    floatingBallDisabledDomains: {group: 'siteRules', label: '禁用悬浮球网站'},
 
-    disableImageTranslator: {group: 'imageAndArea', label: '图片翻译', format: (value) => formatBoolean(value, true)},
-    selectionAreaEnabled: {group: 'imageAndArea', label: '圈选翻译', format: formatBoolean},
+    imageTranslationMangaEnabled: {group: 'imageTranslation', label: '漫画连续翻译入口', format: formatBoolean},
+    imageTranslationMangaPromptEnabled: {group: 'imageTranslation', label: '独立漫画按钮', format: formatBoolean},
+    imageTranslationMangaDownloadConfirmed: {group: 'imageTranslation', label: '已了解漫画资源下载', format: formatBoolean},
+    imageTranslationMangaSites: {group: 'imageTranslation', label: '自定义漫画网站'},
+    imageTranslationMangaPrefetchPages: {group: 'imageTranslation', label: '提前翻译后续页面'},
+    imageTranslationMangaCachePages: {group: 'imageTranslation', label: '快速缓存图片数量'},
+    imageTranslationOcrEngine: {group: 'imageTranslation', label: '图片识别方式', format: value => formatEnum(value, new Map([['tesseract', 'Tesseract（轻量模型）'], ['paddle', 'PaddleOCR（标准模型）']]))},
+    imageTranslationHoverEnabled: {group: 'imageTranslation', label: '图片悬浮按钮', format: formatBoolean},
+    imageTranslationContextMenuEnabled: {group: 'imageTranslation', label: '图片右键菜单', format: formatBoolean},
+    disableImageTranslator: {group: 'imageTranslation', label: '图片翻译', format: (value) => formatBoolean(value, true)},
+    selectionAreaEnabled: {group: 'areaTranslation', label: '圈选翻译', format: formatBoolean},
+    selectionAreaHotkey: {group: 'areaTranslation', label: '圈选快捷键', format: value => value === 'custom' ? '自定义快捷键' : formatValue(value)},
+    customSelectionAreaHotkey: {group: 'areaTranslation', label: '自定义圈选快捷键'},
+    areaTranslationMode: {group: 'areaTranslation', label: '圈选翻译方式', format: value => value === 'ai' ? 'AI 上下文增强' : '标准翻译'},
+    areaTranslationService: {group: 'areaTranslation', label: '圈选翻译服务', format: value => value ? formatService(value) : '跟随当前服务'},
+    areaRecognitionMode: {group: 'areaTranslation', label: '圈选识别方式', format: value => value === 'prefer-vision' ? '优先模型识图' : '本地 OCR'},
+    areaVisionPrompt: {group: 'areaTranslation', label: '模型识图提示词', format: formatPrompt},
+    modelVision: {group: 'translationServices', label: '模型识图能力覆盖', format: value => formatRecord(configRecord(value))},
 
     videoTranslationEnabled: {group: 'videoSubtitles', label: '视频字幕翻译', format: formatBoolean},
-    videoService: {group: 'videoSubtitles', label: '视频翻译服务', format: (value) => formatEnum(value, SERVICE_LABELS)},
+    videoMeetingAutoEnabled: {group: 'videoSubtitles', label: '会议平台自动开启双语字幕', format: formatBoolean},
+    videoPreferHumanSubtitles: {group: 'videoSubtitles', label: '优先使用人工字幕', format: formatBoolean},
+    videoService: {group: 'videoSubtitles', label: '视频翻译服务', format: formatService},
+    videoSourceLanguage: {group: 'videoSubtitles', label: '视频原语言'},
+    videoGlossaryIds: {group: 'videoSubtitles', label: '字幕术语库', format: formatGlossarySelection},
     videoSubtitleVisible: {group: 'videoSubtitles', label: '显示视频字幕', format: formatBoolean},
     videoSubtitleDisplayMode: {group: 'videoSubtitles', label: '视频字幕显示模式', format: (value) => formatEnum(value, VIDEO_DISPLAY_MODE_LABELS)},
     videoSubtitleFontSize: {group: 'videoSubtitles', label: '视频字幕字号', format: (value) => formatNumber(value, '%')},
+    videoSubtitleOffsetMs: {group: 'videoSubtitles', label: '字幕时间偏移', format: (value) => formatNumber(value, 'ms')},
+    videoSubtitleAppearance: {group: 'videoSubtitles', label: '视频字幕外观'},
 
     useCache: {group: 'advanced', label: '缓存翻译结果', format: formatBoolean},
+    translationCacheMaxBytes: {group: 'advanced', label: '翻译缓存容量上限', format: (value) => formatNumber(value, ' B')},
+    translationCacheMaxEntries: {group: 'advanced', label: '翻译缓存条数上限', format: (value) => formatNumber(value, ' 条')},
     enableAIContext: {group: 'general', label: 'AI 智能上下文', format: formatBoolean},
     enableAIMultiSegment: {group: 'translation', label: 'AI 多段翻译', format: formatBoolean},
     maxConcurrentTranslations: {group: 'advanced', label: '翻译并发数'},
+    translationRequestsPerSecond: {group: 'advanced', label: '每秒最多请求数', format: formatRequestRate},
+    translationRequestsPerMinute: {group: 'advanced', label: '每分钟最多请求数', format: formatRequestRate},
+    serviceRequestLimits: {group: 'advanced', label: '服务请求限制', format: formatValue},
+    modelRequestLimits: {group: 'advanced', label: '模型请求限制', format: formatValue},
+    apiKeyRecoveryMs: {group: 'advanced', label: '失败 Key 冷却时间', format: (value) => formatNumber(typeof value === 'number' ? Math.round(value / 60_000) : value, ' 分钟')},
+    freeTranslationOrder: {group: 'translationServices', label: '免费翻译顺序', format: (value) => Array.isArray(value) ? formatArray(value, formatService) : formatValue(value)},
+    freeTranslationMode: {group: 'translationServices', label: '免费翻译分配方式', format: (value) => value === 'sequential' ? '优先顺序' : '自动均衡'},
+    freeTranslationTimeoutMs: {group: 'translationServices', label: '每路免费翻译超时', format: (value) => formatNumber(value, ' ms')},
+    freeTranslationCooldownMs: {group: 'translationServices', label: '免费翻译失败后休息', format: (value) => formatNumber(value, ' ms')},
+    myMemoryEmail: {group: 'translationServices', label: 'MyMemory 邮箱', format: formatValue},
+    translationMaxRetries: {group: 'advanced', label: '失败后最多重试', format: (value) => formatNumber(value, ' 次')},
+    translationBackoffBaseMs: {group: 'advanced', label: '退避初始间隔', format: (value) => formatNumber(value, ' ms')},
+    translationBackoffMaxMs: {group: 'advanced', label: '退避最大间隔', format: (value) => formatNumber(value, ' ms')},
     animations: {group: 'advanced', label: '动画效果', format: formatBoolean},
+    translationScope: {group: 'advanced', label: '识别全部节点', format: (value) => formatEnum(value, TRANSLATION_SCOPE_LABELS)},
+    pageTitleTranslationEnabled: {group: 'advanced', label: '翻译页面标题', format: formatBoolean},
+    sidebarTranslationEnabled: {group: 'advanced', label: '侧边栏翻译', format: formatBoolean},
+    minTranslationTextLength: {group: 'advanced', label: '翻译段落最少字符数', format: (value) => formatNumber(value, ' 字符')},
+    eagerTranslationCharacters: {group: 'advanced', label: '免滚动预翻译字符数', format: (value) => formatNumber(value, ' 字符')},
+    longParagraphLineBreakEnabled: {group: 'advanced', label: '长段落自动换行', format: formatBoolean},
+    translationBeforeOriginal: {group: 'advanced', label: '译文在原文之前', format: formatBoolean},
+    translationLoadingStyle: {group: 'advanced', label: '段落加载样式', format: (value) => formatEnum(value, TRANSLATION_LOADING_STYLE_LABELS)},
 
-    documentService: {group: 'tools', label: '文档翻译服务', format: (value) => formatEnum(value, SERVICE_LABELS)},
+    documentService: {group: 'tools', label: '文档翻译服务', format: formatService},
+    documentGlossaryIds: {group: 'tools', label: '文档术语库', format: formatGlossarySelection},
     documentModel: {group: 'tools', label: '文档翻译模型', mapping: serviceMapping('文档模型')},
     documentCustomModel: {group: 'tools', label: '文档自定义模型', mapping: serviceMapping('文档自定义模型')},
-    translationCenterServices: {group: 'tools', label: '翻译中心服务', format: (value) => Array.isArray(value) ? formatArray(value, (item) => formatEnum(item, SERVICE_LABELS)) : formatValue(value)},
+    translationCenterServices: {group: 'tools', label: '翻译中心服务', format: (value) => Array.isArray(value) ? formatArray(value, formatService) : formatValue(value)},
     translationCenterSourceLanguage: {group: 'tools', label: '翻译中心源语言', format: (value) => formatEnum(value, LANGUAGE_LABELS)},
     translationCenterTargetLanguage: {group: 'tools', label: '翻译中心目标语言', format: (value) => formatEnum(value, LANGUAGE_LABELS)},
+    translationCenterLayout: {group: 'tools', label: '翻译中心结果布局', format: (value) => value === 'grid' ? '并排对比' : '列表阅读'},
     vocabularyBookEnabled: {group: 'tools', label: '单词本', format: formatBoolean},
+    vocabularyReencounterEnabled: {group: 'tools', label: '再次遇见收藏表达', format: formatBoolean},
 };
+/** 云备份复用已知设置的名称；未知字段绝不将原始键当作可见标签。 */
+export function configDiffFieldLabel(field: string): string | undefined {
+    return Object.hasOwn(FIELD_DEFINITIONS, field) ? FIELD_DEFINITIONS[field].label : undefined;
+}
 const FIELD_ORDER = new Map(Object.keys(FIELD_DEFINITIONS).map((field, index) => [field, index]));
 
 function configRecord(value: unknown): ConfigRecord {
@@ -361,24 +721,28 @@ function diffMapping(
     const keys = [...new Set([...Object.keys(beforeRecord), ...Object.keys(afterRecord)])]
         .filter((key) => !isSensitiveConfigKey(key))
         .sort((left, right) => left.localeCompare(right));
-    const format = definition.mapping.format;
+    const mapping = definition.mapping;
+    const format = (value: unknown, key: string) => value === DEPTH_LIMITED_PREVIEW ? DEPTH_LIMITED_SUMMARY
+        : mapping.formatItem ? mapping.formatItem(value, key) : mapping.format(value);
 
     return keys.flatMap((key) => {
-        if (valuesEqual(beforeRecord[key], afterRecord[key])) return [];
-        const safeBefore = sanitizeSensitiveValue(beforeRecord[key]);
-        const safeAfter = sanitizeSensitiveValue(afterRecord[key]);
+        const beforeValue = Object.hasOwn(beforeRecord, key) ? beforeRecord[key] : undefined;
+        const afterValue = Object.hasOwn(afterRecord, key) ? afterRecord[key] : undefined;
+        if (valuesEqual(beforeValue, afterValue)) return [];
+        const safeBefore = sanitizeSensitiveValue(beforeValue);
+        const safeAfter = sanitizeSensitiveValue(afterValue);
         return [{
             key: `${field}.${key}`,
             label: definition.mapping!.itemLabel(key),
-            before: format(safeBefore),
-            after: format(safeAfter),
+            before: format(safeBefore, key),
+            after: format(safeAfter, key),
         }];
     });
 }
 
 function diffField(field: string, before: unknown, after: unknown): {group: ConfigDiffGroupId; changes: ConfigDiffItem[]} | null {
     if (EXCLUDED_FIELDS.has(field) || CREDENTIAL_FIELDS.has(field)) return null;
-    const definition = FIELD_DEFINITIONS[field];
+    const definition = Object.hasOwn(FIELD_DEFINITIONS, field) ? FIELD_DEFINITIONS[field] : undefined;
     if (!definition && isSensitiveConfigKey(field)) return null;
     if (valuesEqual(before, after)) return null;
 
@@ -391,13 +755,17 @@ function diffField(field: string, before: unknown, after: unknown): {group: Conf
     }
 
     const format = definition?.format ?? formatValue;
+    const formattedBefore = safeBefore === DEPTH_LIMITED_PREVIEW ? DEPTH_LIMITED_SUMMARY : format(safeBefore);
+    const formattedAfter = safeAfter === DEPTH_LIMITED_PREVIEW ? DEPTH_LIMITED_SUMMARY : format(safeAfter);
     return {
         group: definition?.group ?? 'other',
         changes: [{
             key: field,
             label: definition?.label ?? humanizeUnknownKey(field),
-            before: format(safeBefore),
-            after: format(safeAfter),
+            before: formattedBefore,
+            after: safeBefore !== DEPTH_LIMITED_PREVIEW && safeAfter !== DEPTH_LIMITED_PREVIEW
+                && ['glossaryLibraries', 'bilingualSentenceHighlightProfiles', 'activeSentenceHighlightProfileId'].includes(field) && formattedBefore === formattedAfter
+                ? `${formattedAfter}（内容已更新）` : formattedAfter,
         }],
     };
 }
@@ -419,7 +787,10 @@ export function buildConfigDiff(current: unknown, target: unknown): ConfigDiffRe
     });
 
     for (const field of fields) {
-        const result = diffField(field, currentConfig[field], targetConfig[field]);
+        const result = diffField(field,
+            Object.hasOwn(currentConfig, field) ? currentConfig[field] : undefined,
+            Object.hasOwn(targetConfig, field) ? targetConfig[field] : undefined,
+        );
         if (!result) continue;
         changesByGroup.get(result.group)!.push(...result.changes);
     }

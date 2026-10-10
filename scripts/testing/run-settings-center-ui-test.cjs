@@ -1,8 +1,20 @@
 'use strict';
+const {guardBrowserClose} = require('./owned-browser-close.cjs');
+const {waitForAsyncCondition} = require('./wait-for-async-condition.cjs');
 
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const {execFile} = require('node:child_process');
+const {promisify} = require('node:util');
+
+const execFileAsync = promisify(execFile);
+
+const macFrontmostApplicationScript = [
+  "ObjC.import('AppKit');",
+  'const app = $.NSWorkspace.sharedWorkspace.frontmostApplication;',
+  "JSON.stringify({ pid: Number(app.processIdentifier), name: ObjC.unwrap(app.localizedName) || '' });",
+].join('\n');
 
 function argument(name, fallback) {
   const index = process.argv.indexOf(`--${name}`);
@@ -12,32 +24,135 @@ function argument(name, fallback) {
 const extensionDir = path.resolve(argument('extension-dir', '.output/chrome-mv3'));
 const playwrightRoot = path.resolve(argument('playwright-root', ''));
 // 统一回归 runner 使用 --focus-safe-helper；旧的 --focus-helper 仅保留为本脚本的兼容别名。
-const focusHelper = path.resolve(argument('focus-safe-helper', argument('focus-helper', '')));
+const focusHelper = path.resolve(argument('focus-safe-helper', argument('focus-helper', path.join(__dirname, 'focus-safe-browser.cjs'))));
 const artifactsDir = path.resolve(argument('artifacts-dir', '/private/tmp/fluentread-settings-center-ui'));
 const browserPath = argument('browser-path', '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge');
 const timeout = Number(argument('timeout', '30000'));
+
+function parseHexColor(value) {
+  const raw = String(value || '').trim().replace(/^#/u, '');
+  const normalized = raw.length === 3 ? [...raw].map(char => `${char}${char}`).join('') : raw;
+  if (!/^[\da-f]{6}$/iu.test(normalized)) return null;
+  return [0, 2, 4].map(offset => Number.parseInt(normalized.slice(offset, offset + 2), 16));
+}
+
+function parseCssColor(value) {
+  const hex = parseHexColor(value);
+  if (hex) return hex;
+  const match = /^rgba?\(([^)]+)\)$/iu.exec(String(value || '').trim());
+  if (!match) return null;
+  const parts = match[1].trim().split(/[\s,/]+/u);
+  if (parts.length !== 3 && parts.length !== 4) return null;
+  const channel = part => /^\d*\.?\d+%?$/u.test(part)
+    ? Number.parseFloat(part) * (part.endsWith('%') ? 2.55 : 1)
+    : NaN;
+  const channels = parts.slice(0, 3).map(channel);
+  if (channels.some(item => !Number.isFinite(item) || item < 0 || item > 255)) return null;
+  if (parts.length === 4) {
+    const alpha = channel(parts[3]) / (parts[3].endsWith('%') ? 255 : 1);
+    // 透明色必须先与实际底色合成；本检查只接受不透明的真实按钮颜色，避免误报通过。
+    if (!Number.isFinite(alpha) || Math.abs(alpha - 1) > .00001) return null;
+  }
+  return channels;
+}
+
+function contrastRatio(foreground, background) {
+  const colors = [foreground, background].map(parseCssColor);
+  if (colors.some(color => color === null)) return 0;
+  const luminance = color => color
+    .map(channel => channel / 255)
+    .map(channel => channel <= .04045 ? channel / 12.92 : ((channel + .055) / 1.055) ** 2.4)
+    .reduce((sum, channel, index) => sum + channel * [.2126, .7152, .0722][index], 0);
+  const [first, second] = colors.map(luminance).sort((left, right) => right - left);
+  return (first + .05) / (second + .05);
+}
+// 栏目契约对应 navigation.ts；分组折叠按钮不属于栏目，旧入口通过别名保留。
 const expectedNavigation = [
   ['settings-general', '通用设置'],
   ['settings-services', '翻译服务'],
   ['settings-translation', '翻译设置'],
-  ['settings-image-translation', '图片与圈选翻译'],
+  ['settings-interface', '界面风格'],
+  ['settings-selection', '划词翻译'],
+  ['settings-image-translation', '图片/漫画翻译'],
   ['settings-video', '视频字幕翻译'],
-  ['settings-sites', '网站规则'],
+  ['settings-writing', '写作助手'],
   ['settings-translation-center', '翻译中心'],
-  ['settings-model-usage', '模型用量'],
-  ['settings-vocabulary', '单词本'],
+  ['settings-vocabulary', '学习中心'],
+  ['settings-glossary', '术语库'],
+  ['settings-sites', '网站规则'],
+  ['settings-translation-stats', '翻译统计'],
   ['settings-advanced', '高级选项'],
-  ['settings-data', '配置管理'],
+  ['settings-data', '备份与恢复'],
   ['settings-about', '关于流畅阅读'],
 ];
 const expectedNavigationGroups = [
-  ['基础配置', ['settings-general', 'settings-services', 'settings-translation']],
-  ['专项翻译', ['settings-image-translation', 'settings-video', 'settings-sites']],
-  ['工具与学习', ['settings-translation-center', 'settings-model-usage', 'settings-vocabulary']],
+  ['基础配置', ['settings-general', 'settings-services', 'settings-translation', 'settings-interface']],
+  ['专项翻译', ['settings-selection', 'settings-image-translation', 'settings-video']],
+  ['工具与学习', ['settings-writing', 'settings-translation-center', 'settings-vocabulary', 'settings-glossary', 'settings-sites', 'settings-translation-stats']],
   ['系统与数据', ['settings-advanced', 'settings-data', 'settings-about']],
 ];
-const expectedGeneralGroups = ['选择翻译服务', '译文显示', '网页辅助'];
-const expectedTranslationGroups = ['鼠标悬浮翻译', '划词翻译', '输入框翻译', '全文翻译'];
+const settingsNavigationSelector = 'nav[aria-label="设置分类"] button[data-section]';
+// 默认四项；用例显式添加译文显示后，完整皮肤矩阵必须保留全部五项。
+const expectedExpandedQuickFeatureCount = 5;
+const modelUsageAverageSelector = '#settings-model-usage section.usage-average-card';
+const modelUsageRequestLogSelector = '#settings-model-usage section.usage-request-log-card';
+const expectedDefaultServiceDescription = '未单独指定方案时，全文、悬浮和划词翻译使用此服务';
+function matchesAboutSupportQrBounds(bounds, availableWidth) {
+  // 赞赏图片应填满卡片内容宽度，桌面与窄屏都按实际可用空间判断。
+  return Boolean(bounds && Number.isFinite(bounds.width) && Number.isFinite(bounds.height)
+    && Number.isFinite(availableWidth) && availableWidth > 0
+    && Math.abs(bounds.width - availableWidth) <= 1
+    && Math.abs(bounds.height - availableWidth) <= 1
+    && Math.abs(bounds.width - bounds.height) <= 1);
+}
+function matchesPalettePopupSurfaces(metrics) {
+  const actual = parseCssColor(metrics.translateButtonBackground);
+  const declared = parseCssColor(metrics.declaredActionBackground);
+  return Boolean(actual && declared && Number.isFinite(metrics.actionContrast) && metrics.actionContrast >= 4.5
+    && JSON.stringify(actual) === JSON.stringify(declared)
+    && metrics.translateButtonBackgroundImage === 'none'
+    && metrics.shellBackgroundImage === 'none');
+}
+function matchesWrappedServiceLabel(metrics) {
+  return Number.isFinite(metrics.cardLeft) && Number.isFinite(metrics.cardRight)
+    && Number.isFinite(metrics.labelLeft) && Number.isFinite(metrics.labelRight)
+    && Number.isFinite(metrics.labelWidth) && Number.isFinite(metrics.labelHeight)
+    && metrics.labelWidth > 0 && metrics.labelHeight > 0
+    && metrics.labelLeft >= metrics.cardLeft - 1 && metrics.labelRight <= metrics.cardRight + 1
+    && metrics.overflow === 'visible' && metrics.textOverflow === 'clip'
+    && metrics.whiteSpace === 'normal' && metrics.overflowWrap === 'anywhere';
+}
+function resolveSolidBackground(layers) {
+  for (const {color, image} of layers) {
+    // 透明的 OCR 行使用祖先表面；带图片或半透明的表面不能按纯色猜测对比度。
+    if (image !== 'none') return null;
+    if (color === 'transparent' || /^rgba\([^)]*,\s*0(?:\.0+)?\)$/u.test(color)) continue;
+    return parseCssColor(color) ? color : null;
+  }
+  return null;
+}
+const expectedGeneralGroups = ['基础配置', '翻译服务选择', '网页辅助', '基本偏好'];
+const expectedGeneralSubgroups = [];
+const expectedInterfaceGroups = ['译文样式', '逐句高亮样式', '界面与弹窗', '动画与加载效果', '菜单栏布局', '界面字体'];
+// 划词触发、翻译卡片与朗读均在划词页；阅读辅助保留在翻译设置首项。
+const expectedTranslationGroups = ['阅读辅助', '鼠标悬浮翻译', '输入框翻译', '全文翻译', '右键菜单', '悬浮球进阶设置', '段落复制', '局部翻译', '不翻译的语言'];
+const expectedLoadingStyles = [
+  ['ring', '柔和圆环'],
+  ['minimal', '简洁'],
+  ['dots', '跳跃圆点'],
+  ['orbit', '行星轨道'],
+  ['sparkle', '星光'],
+  ['pulse', '涟漪扩散'],
+  ['wave', '起伏波形'],
+  ['sweep', '光线扫过'],
+  ['hourglass', '流沙沙漏'],
+  ['comet', '小彗星'],
+  ['flip', '翻转方块'],
+  ['bounce', '弹跳小球'],
+  ['typing', '打字光标'],
+  ['scan', '扫描线'],
+  ['signal', '信号柱'],
+];
 const configDatabaseName = 'FluentReadConfiguration';
 const expectedEncryptedRecordKeys = [
   'local:config',
@@ -67,14 +182,566 @@ fs.mkdirSync(artifactsDir, {recursive: true});
 
 const {chromium} = require(path.join(playwrightRoot, 'playwright'));
 const {
+  activateExtensionTabWithoutForeground,
   launchFocusSafePersistentContext,
   newPageWithoutForeground,
 } = require(focusHelper);
 
+async function readMacFrontmostApplication() {
+  if (process.platform !== 'darwin') return null;
+  const {stdout} = await execFileAsync('/usr/bin/osascript', [
+    '-l',
+    'JavaScript',
+    '-e',
+    macFrontmostApplicationScript,
+  ], {timeout: 5000});
+  const application = JSON.parse(stdout.trim());
+  return Number.isInteger(application?.pid) && application.pid > 0 ? application : null;
+}
+
+async function readTestBrowserPid(context) {
+  const browser = context.browser();
+  if (!browser) throw new Error('无法获取隔离浏览器实例；无法执行复用页签的焦点校验');
+  const session = await browser.newBrowserCDPSession();
+  let hasPrimaryError = false;
+  try {
+    const {processInfo} = await session.send('SystemInfo.getProcessInfo');
+    const pid = processInfo.find(process => process.type === 'browser')?.id;
+    if (!Number.isInteger(pid) || pid <= 0) throw new Error('无法确认测试 Edge 的精确进程 ID；焦点校验已停止');
+    return pid;
+  } catch (error) {
+    hasPrimaryError = true;
+    throw error;
+  } finally {
+    try {
+      await session.detach();
+    } catch (error) {
+      console.error('Cleanup failed (browser PID CDP session):', error);
+      process.exitCode = 1;
+      if (!hasPrimaryError) throw error;
+    }
+  }
+}
+
+async function assertTestBrowserRemainsBackground(context, label) {
+  const pending = [readTestBrowserPid(context), readMacFrontmostApplication()];
+  let browserPid, frontmost;
+  try {
+    [browserPid, frontmost] = await Promise.all(pending);
+  } finally {
+    // Join both checks before main can close their browser/child-process owners.
+    await Promise.allSettled(pending);
+  }
+  if (!frontmost) throw new Error(`无法读取 macOS 前台应用（${label}）；焦点校验已停止`);
+  if (frontmost.pid === browserPid) {
+    throw new Error(`测试 Edge 进程 ${browserPid} 成为了前台应用（${label}）；测试已停止`);
+  }
+}
+
+// 桌面点击真实侧栏入口，窄屏选择生产移动导航；不绕过用户导航写 hash。
+async function selectSettingsSection(page, sectionId, panelId) {
+  const mobile = page.locator('select.mobile-settings-navigation');
+  if (await mobile.isVisible()) {
+    await mobile.selectOption(sectionId);
+  } else {
+    const button = page.locator(`${settingsNavigationSelector}[data-section="${sectionId}"]`);
+    if (!await button.isVisible()) {
+      await button.locator('xpath=ancestor::section[contains(concat(" ", normalize-space(@class), " "), " nav-group ")][1]')
+        .locator('.nav-group-toggle').click();
+    }
+    await button.click();
+  }
+  await page.locator(`${settingsNavigationSelector}[data-section="${sectionId}"][aria-current="page"]`)
+    .waitFor({state: 'attached', timeout});
+  if (panelId) await page.locator(`.settings-page-tabs button[data-settings-category="${panelId}"]`).click();
+}
+
+function inspectSettingsNavigationVisibility() {
+  const mobile = document.querySelector('select.mobile-settings-navigation');
+  const sidebar = document.querySelector('nav[aria-label="设置分类"] button[data-section][aria-current="page"]');
+  const active = mobile?.getClientRects().length ? mobile : sidebar;
+  if (!active || !sidebar || (active === mobile && mobile.value !== sidebar.dataset.section)) return false;
+  const rect = active.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0 && rect.left >= -1 && rect.right <= innerWidth + 1
+    && rect.top >= -1 && rect.bottom <= innerHeight + 1;
+}
+
+// 同页图片/漫画/圈选共用一套 OCR 管理器；用真实 disclosure 点击展开资源。
+async function openSharedOcrResources(page) {
+  for (const selector of ['.image-ocr-engine-details', '.image-ocr-language-details']) {
+    const details = page.locator(`#settings-image-translation ${selector}`);
+    if (await details.getAttribute('open') === null) await details.locator(':scope > summary').click();
+  }
+  await page.locator('#settings-image-translation .image-ocr-pack-card').first().waitFor({state: 'visible', timeout});
+}
+
+async function settleFiniteUiAnimations(page) {
+  await page.evaluate(async () => {
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const finite = document.getAnimations().filter(animation => Number.isFinite(animation.effect?.getComputedTiming().endTime));
+    await Promise.allSettled(finite.map(animation => animation.finished));
+  });
+}
+
 async function screenshot(page, file) {
+  await settleFiniteUiAnimations(page);
   const target = path.join(artifactsDir, file);
   await page.screenshot({path: target, fullPage: false});
   return target;
+}
+
+async function screenshotElement(locator, file) {
+  await settleFiniteUiAnimations(locator.page());
+  const target = path.join(artifactsDir, file);
+  await locator.screenshot({path: target});
+  return target;
+}
+
+async function dragWholeElement(page, source, target, axis = 'y', position = 'before') {
+  await source.scrollIntoViewIfNeeded();
+  await target.scrollIntoViewIfNeeded();
+  const sourceBounds = await source.boundingBox();
+  const targetBounds = await target.boundingBox();
+  if (!sourceBounds || !targetBounds) throw new Error('原生鼠标拖放目标不可见');
+  const sourcePoint = {
+    x: sourceBounds.x + sourceBounds.width / 2,
+    y: sourceBounds.y + sourceBounds.height / 2,
+  };
+  const targetPoint = axis === 'x'
+    ? {
+        x: targetBounds.x + (position === 'after' ? targetBounds.width - 4 : 4),
+        y: targetBounds.y + targetBounds.height / 2,
+      }
+    : {
+        x: targetBounds.x + targetBounds.width / 2,
+        y: targetBounds.y + (position === 'after' ? targetBounds.height - 4 : 4),
+      };
+  await page.mouse.move(sourcePoint.x, sourcePoint.y);
+  await page.mouse.down();
+  await page.mouse.move(sourcePoint.x + (axis === 'x' ? 8 : 0), sourcePoint.y + (axis === 'y' ? 8 : 0), {steps: 8});
+  await page.mouse.move(targetPoint.x, targetPoint.y, {steps: 16});
+  await page.mouse.up();
+}
+
+// 横向失败保留即时和过渡结束后的真实 DOM；只补诊断，不依据延迟读数放过失败。
+async function capturePopupOverflowFailure(page, label) {
+  const inspect = () => page.locator('.popup-shell').evaluate(element => {
+    const describe = node => {
+      const rect = node.getBoundingClientRect();
+      const style = getComputedStyle(node);
+      return {
+        tag: node.tagName,
+        className: node.className,
+        text: node.textContent?.trim().slice(0, 100),
+        rect: {left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height},
+        clientWidth: node.clientWidth,
+        scrollWidth: node.scrollWidth,
+        overflowX: style.overflowX,
+        overflowY: style.overflowY,
+        transform: style.transform,
+        animationName: style.animationName,
+        animationDuration: style.animationDuration,
+        transitionProperty: style.transitionProperty,
+        transitionDuration: style.transitionDuration,
+        width: style.width,
+        minWidth: style.minWidth,
+        paddingLeft: style.paddingLeft,
+        paddingRight: style.paddingRight,
+        marginLeft: style.marginLeft,
+        marginRight: style.marginRight,
+      };
+    };
+    const shell = describe(element);
+    const initialScrollTop = element.scrollTop;
+    const initialScrollLeft = element.scrollLeft;
+    let reachableScrollLeft;
+    try {
+      element.scrollTo({top: initialScrollTop, left: element.scrollWidth, behavior: 'instant'});
+      reachableScrollLeft = element.scrollLeft;
+    } finally {
+      element.scrollTo({top: initialScrollTop, left: initialScrollLeft, behavior: 'instant'});
+    }
+    return {
+      shell,
+      initialScrollLeft,
+      reachableScrollLeft,
+      restoredScrollLeft: element.scrollLeft,
+      elements: [...element.querySelectorAll('*')].map(describe)
+        .filter(node => node.rect.width > 0 && node.rect.height > 0 && (
+          node.scrollWidth > node.clientWidth + 1
+          || node.rect.right > shell.rect.right + 1
+          || node.rect.left < shell.rect.left - 1
+        )),
+      animations: element.getAnimations({subtree: true}).map(animation => ({
+        playState: animation.playState,
+        currentTime: animation.currentTime,
+        target: animation.effect?.target?.className,
+        timing: animation.effect?.getComputedTiming(),
+      })),
+    };
+  });
+  const before = await inspect();
+  const beforeScreenshot = await screenshot(page, 'failure-popup-overflow-before.png');
+  await page.waitForTimeout(800);
+  const after = await inspect();
+  const afterScreenshot = await screenshot(page, 'failure-popup-overflow-after.png');
+  const file = path.join(artifactsDir, 'failure-popup-overflow-diagnostics.json');
+  fs.writeFileSync(file, JSON.stringify({label, before, after, waitedMs: 800, beforeScreenshot, afterScreenshot}, null, 2));
+  return {file, beforeScreenshot, afterScreenshot};
+}
+
+// 扩展页在固定测试 viewport 中也必须按内容排版；documentElement.scrollHeight 至少等于
+// viewport 高度，不能据此推断 Popup 的自然高度。短内容检查整条高度链及底部留白；
+// 长内容按生产的 560px 内部滚动契约检查末尾可达性，不能把初始位置的底栏越界当作裁切。
+async function inspectPopupContentHeight(page, label) {
+  const metrics = await page.locator('.popup-shell').evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    const shellStyle = getComputedStyle(element);
+    const app = document.querySelector('#app');
+    const lastModule = [...element.querySelectorAll('.popup-content > [data-popup-module]')].at(-1);
+    const lastRect = lastModule?.getBoundingClientRect();
+    const lastStyle = lastModule ? getComputedStyle(lastModule) : null;
+    const initialScrollTop = element.scrollTop;
+    const initialScrollLeft = element.scrollLeft;
+    const scrolling = {
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      maxHeight: Number.parseFloat(shellStyle.maxHeight),
+      overflowY: shellStyle.overflowY,
+      initialScrollTop,
+      // scrollHeight/clientHeight 已取整；即使仅多 1px，也需要验证滚动到底。
+      longContent: element.scrollHeight > element.clientHeight,
+      horizontalOverflow: [document.documentElement, document.body, app, element]
+        .filter(Boolean).some(node => node.scrollWidth > node.clientWidth + 1),
+      end: null,
+      restoredScrollTop: initialScrollTop,
+    };
+    if (scrolling.longContent) {
+      try {
+        element.scrollTo({top: element.scrollHeight, left: initialScrollLeft, behavior: 'instant'});
+        const endRect = lastModule?.getBoundingClientRect();
+        scrolling.end = {
+          scrollTop: element.scrollTop,
+          maxScrollTop: element.scrollHeight - element.clientHeight,
+          lastModuleTop: endRect?.top ?? null,
+          lastModuleBottom: endRect?.bottom ?? null,
+          viewportTop: rect.top + element.clientTop,
+          viewportBottom: rect.top + element.clientTop + element.clientHeight,
+          lastModuleBottomGap: endRect ? rect.bottom - endRect.bottom : null,
+        };
+      } finally {
+        element.scrollTo({top: initialScrollTop, left: initialScrollLeft, behavior: 'instant'});
+        scrolling.restoredScrollTop = element.scrollTop;
+      }
+    }
+    return {
+      shellHeight: rect.height,
+      shellBottom: rect.bottom,
+      htmlHeight: document.documentElement.getBoundingClientRect().height,
+      bodyHeight: document.body.getBoundingClientRect().height,
+      appHeight: app?.getBoundingClientRect().height || 0,
+      heightMode: document.documentElement.dataset.popupHeight,
+      htmlMinHeight: getComputedStyle(document.documentElement).minHeight,
+      bodyMinHeight: getComputedStyle(document.body).minHeight,
+      appMinHeight: app ? getComputedStyle(app).minHeight : null,
+      shellMinHeight: shellStyle.minHeight,
+      lastModule: lastModule?.getAttribute('data-popup-module') || null,
+      lastModuleBottomGap: lastRect ? rect.bottom - lastRect.bottom : null,
+      expectedBottomGap: lastStyle
+        ? Number.parseFloat(shellStyle.paddingBottom) + Number.parseFloat(shellStyle.borderBottomWidth)
+          + Number.parseFloat(lastStyle.marginBottom)
+        : null,
+      visibleQuickFeatures: element.querySelectorAll('[data-popup-quick-feature]').length,
+      scrolling,
+    };
+  });
+  // 短内容也检查内部横向范围，不能依赖外层 overflow-x:hidden 掩盖底栏越界。
+  if (metrics.scrolling.horizontalOverflow) {
+    metrics.failureDiagnostics = await capturePopupOverflowFailure(page, label);
+    throw new Error(`${label}存在内部横向溢出：${JSON.stringify(metrics)}`);
+  }
+  if (metrics.heightMode !== 'content'
+    || [metrics.htmlMinHeight, metrics.bodyMinHeight, metrics.appMinHeight, metrics.shellMinHeight]
+      .some(value => value !== '0px')
+    || !Number.isFinite(metrics.shellHeight) || metrics.shellHeight <= 0
+    || [metrics.htmlHeight, metrics.bodyHeight, metrics.appHeight]
+      .some(height => Math.abs(height - metrics.shellHeight) > 1)
+    || !metrics.lastModule
+    || !Number.isFinite(metrics.lastModuleBottomGap)
+    || !Number.isFinite(metrics.expectedBottomGap)
+    || (!metrics.scrolling.longContent
+      && Math.abs(metrics.lastModuleBottomGap - metrics.expectedBottomGap) > 1)) {
+    throw new Error(`${label}没有按内容确定高度或底部留下额外空白：${JSON.stringify(metrics)}`);
+  }
+  const {scrolling} = metrics;
+  if (scrolling.longContent && (
+    metrics.shellHeight > 561
+    || scrolling.maxHeight !== 560
+    || !['auto', 'scroll'].includes(scrolling.overflowY)
+    || !scrolling.end
+    || scrolling.end.scrollTop <= 0
+    || Math.abs(scrolling.end.scrollTop - scrolling.end.maxScrollTop) > 1
+    || !Number.isFinite(scrolling.end.lastModuleTop)
+    || !Number.isFinite(scrolling.end.lastModuleBottom)
+    || scrolling.end.lastModuleTop < scrolling.end.viewportTop - 1
+    || scrolling.end.lastModuleBottom > scrolling.end.viewportBottom + 1
+    || Math.abs(scrolling.end.lastModuleBottomGap - metrics.expectedBottomGap) > 1
+    || Math.abs(scrolling.restoredScrollTop - scrolling.initialScrollTop) > 1
+  )) {
+    throw new Error(`${label}没有满足560px内部滚动、末尾完整可见及位置恢复：${JSON.stringify(metrics)}`);
+  }
+  return metrics;
+}
+
+async function inspectInterfaceMotif(locator, skin) {
+  const metrics = await locator.evaluate(element => {
+    const motifs = [...element.querySelectorAll(':scope > [data-interface-motif]')];
+    return motifs.map(motif => {
+      const style = getComputedStyle(motif);
+      const rect = motif.getBoundingClientRect();
+      return {
+        motif: motif.getAttribute('data-interface-motif'),
+        ariaHidden: motif.getAttribute('aria-hidden'),
+        pointerEvents: style.pointerEvents,
+        position: style.position,
+        opacity: Number(style.opacity),
+        width: rect.width,
+        height: rect.height,
+        graphics: motif.querySelectorAll('svg path, svg circle, svg ellipse, .emoji-stickers span').length,
+      };
+    });
+  });
+  // 任何风格都不再挂载主题图案：传统色风格只用平涂色，正文与控件背后没有装饰。
+  if (metrics.length !== 0) {
+    throw new Error(`${skin.label}不应挂载主题图案：${JSON.stringify(metrics)}`);
+  }
+  return metrics;
+}
+
+async function verifyInterfaceDesignMatrix(page, skin, report) {
+  const cases = [];
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), theme === 'dark');
+    for (const viewport of [
+      {width: 1440, height: 1000},
+      {width: 820, height: 900},
+      {width: 390, height: 844},
+    ]) {
+      await page.setViewportSize(viewport);
+      await selectSettingsSection(page, 'settings-interface');
+      await page.locator('.interface-skin-live-preview').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(150);
+      const metrics = await page.evaluate(() => {
+        const root = document.documentElement;
+        const style = getComputedStyle(root);
+        const bounds = element => {
+          const rect = element.getBoundingClientRect();
+          return rect.left >= -1 && rect.right <= innerWidth + 1 && rect.width > 0;
+        };
+        return {
+          horizontalOverflow: root.scrollWidth > root.clientWidth + 1,
+          selectedSkin: root.dataset.interfaceSkin,
+          cardCount: document.querySelectorAll('.interface-skin-option').length,
+          cardsWithinViewport: [...document.querySelectorAll('.interface-skin-option')].every(bounds),
+          previewWithinViewport: bounds(document.querySelector('.interface-skin-live-preview')),
+          groupsWithinViewport: [...document.querySelectorAll('#settings-interface .settings-group')].every(bounds),
+          workspaceBackgroundImage: getComputedStyle(document.querySelector('.workspace')).backgroundImage,
+          ink: style.getPropertyValue('--ink').trim(),
+          surface: style.getPropertyValue('--surface').trim(),
+        };
+      });
+      metrics.textContrast = contrastRatio(metrics.ink, metrics.surface);
+      if (metrics.horizontalOverflow || metrics.selectedSkin !== skin.value || metrics.cardCount !== 14
+        || !metrics.cardsWithinViewport || !metrics.previewWithinViewport || !metrics.groupsWithinViewport
+        || metrics.textContrast < 4.5 || metrics.workspaceBackgroundImage !== 'none') {
+        throw new Error(`${skin.label} ${theme} ${viewport.width}px 界面布局异常：${JSON.stringify(metrics)}`);
+      }
+      const workspaceMotif = await inspectInterfaceMotif(page.locator('.workspace'), skin);
+      const previewMotif = await inspectInterfaceMotif(page.locator('.interface-skin-live-preview .preview-popup'), skin);
+      const cardMotif = await inspectInterfaceMotif(page.locator(`.interface-skin-option[data-skin="${skin.value}"] .interface-skin-preview`), skin);
+      report.screenshots.push(await screenshot(page, `settings-design-${skin.value}-${theme}-${viewport.width}.png`));
+      const workbench = page.locator('[data-popup-layout-workbench]');
+      await workbench.scrollIntoViewIfNeeded();
+      const layoutMetrics = await workbench.evaluate(element => {
+        const within = target => {
+          const rect = target.getBoundingClientRect();
+          return rect.left >= -1 && rect.right <= innerWidth + 1 && rect.width > 0;
+        };
+        const preview = element.querySelector('.popup-layout-live-preview');
+        const panel = element.querySelector('.popup-layout-control-panel');
+        return {
+          workbenchWithinViewport: within(element),
+          previewWithinViewport: within(preview),
+          controlsWithinViewport: within(panel),
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          moduleCount: preview.querySelectorAll('[data-preview-popup-module]').length,
+          featureCount: preview.querySelectorAll('[data-preview-quick-feature]').length,
+        };
+      });
+      if (!layoutMetrics.workbenchWithinViewport || !layoutMetrics.previewWithinViewport
+        || !layoutMetrics.controlsWithinViewport || layoutMetrics.horizontalOverflow
+        || layoutMetrics.moduleCount !== 4 || layoutMetrics.featureCount !== expectedExpandedQuickFeatureCount) {
+        throw new Error(`${skin.label} ${theme} ${viewport.width}px 菜单栏工作台异常：${JSON.stringify(layoutMetrics)}`);
+      }
+      const layoutMotif = await inspectInterfaceMotif(page.locator('.popup-layout-live-preview .preview-popup'), skin);
+      report.screenshots.push(await screenshot(page, `settings-menu-layout-${skin.value}-${theme}-${viewport.width}.png`));
+      if (viewport.width === 1440) {
+        report.screenshots.push(await screenshotElement(page.locator('.interface-skin-live-preview'), `settings-design-preview-${skin.value}-${theme}.png`));
+        report.screenshots.push(await screenshotElement(page.locator('.popup-layout-live-preview'), `settings-design-layout-preview-${skin.value}-${theme}.png`));
+      }
+      cases.push({theme, ...viewport, metrics, layoutMetrics, workspaceMotif, previewMotif, cardMotif, layoutMotif});
+    }
+  }
+  await page.evaluate(() => document.documentElement.classList.remove('dark'));
+  await page.setViewportSize({width: 1440, height: 1000});
+  return cases;
+}
+
+async function verifyBilingualHighlightPreview(page) {
+  // 阅读辅助拥有开关与交互预览；样式页保留独立外观预览。
+  await selectSettingsSection(page, 'settings-translation');
+  const reading = page.locator('#settings-translation .reading-assistance-settings');
+  const preview = reading.getByTestId('bilingual-highlight-preview');
+  const source = preview.getByTestId('bilingual-highlight-preview-source');
+  const translation = preview.getByTestId('bilingual-highlight-preview-translation');
+  const toggle = reading.getByRole('switch', {name: '双语逐句高亮', exact: true});
+  await preview.waitFor({state: 'visible', timeout});
+  if (await source.count() !== 1 || await translation.count() !== 1 || await toggle.count() !== 1) {
+    throw new Error('双语逐句高亮预览缺少唯一的原文、译文或开关');
+  }
+  const firstGroup = (await page.locator('#settings-translation .settings-group-heading h2').first().innerText()).trim();
+  if (firstGroup !== '阅读辅助') throw new Error(`翻译设置第一组不是阅读辅助：${firstGroup}`);
+
+  const setEnabled = async (enabled) => {
+    if ((await toggle.getAttribute('aria-checked') === 'true') === enabled) return;
+    await toggle.locator('..').click();
+    await page.waitForFunction(expected => document.querySelector('#settings-translation .reading-assistance-settings [data-testid="bilingual-highlight-preview"]')
+      ?.getAttribute('data-bilingual-highlight-enabled') === expected, String(enabled), {timeout});
+  };
+  const readState = () => preview.evaluate(element => ({
+    highlighted: [...element.querySelectorAll('.is-sentence-highlighted')].map(node => node.textContent.trim()),
+    rect: (({x, y, width, height}) => ({x, y, width, height}))(element.getBoundingClientRect()),
+  }));
+  await preview.scrollIntoViewIfNeeded();
+  const initialEnabled = await toggle.getAttribute('aria-checked') === 'true';
+  await setEnabled(false);
+  await page.mouse.move(0, 0);
+  const before = await readState();
+  await source.locator('span').nth(1).hover();
+  await page.waitForTimeout(150);
+  const disabledHover = await readState();
+  if (disabledHover.highlighted.length) throw new Error(`关闭双语逐句高亮后预览仍响应 hover：${JSON.stringify(disabledHover)}`);
+
+  await setEnabled(true);
+  await source.locator('span').nth(0).hover();
+  await page.waitForTimeout(150);
+  const sourceHover = await readState();
+  await translation.locator('.fluent-read-translation-text > span').nth(1).hover();
+  await page.waitForTimeout(150);
+  const translationHover = await readState();
+  await page.mouse.move(0, 0);
+  await translation.locator('.fluent-read-translation-text > span').nth(0).focus();
+  await page.waitForTimeout(150);
+  const keyboardFocus = await readState();
+  for (const [state, expected] of [[sourceHover, 'Reading should'], [translationHover, 'Move over'], [keyboardFocus, 'Reading should']]) {
+    if (state.highlighted.length !== 2 || !state.highlighted[0].includes(expected)) {
+      throw new Error(`双语逐句高亮预览没有同步高亮原文与译文：${JSON.stringify({sourceHover, translationHover, keyboardFocus})}`);
+    }
+  }
+  const geometryDelta = Math.max(...[sourceHover, translationHover, keyboardFocus].flatMap(state => [
+    Math.abs(state.rect.x - before.rect.x),
+    Math.abs(state.rect.y - before.rect.y),
+    Math.abs(state.rect.width - before.rect.width),
+    Math.abs(state.rect.height - before.rect.height),
+  ]));
+  if (geometryDelta > 0.5) throw new Error(`双语逐句高亮预览改变了几何尺寸：${geometryDelta}px`);
+
+  const screenshot = await screenshotElement(preview, 'settings-bilingual-highlight-preview.png');
+  await page.evaluate(() => {
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+  });
+  await setEnabled(initialEnabled);
+  await page.mouse.move(0, 0);
+  await selectSettingsSection(page, 'settings-general');
+  await page.locator('#settings-general').waitFor({state: 'visible', timeout});
+
+  return {
+    initialEnabled,
+    disabledHover,
+    sourceHover,
+    translationHover,
+    keyboardFocus,
+    geometryDelta,
+    screenshot,
+  };
+}
+
+async function verifyNamedTranslationStyles(page) {
+  const readConfig = async () => page.evaluate(async () => {
+    const response = await chrome.runtime.sendMessage({type: 'configStorageRead', key: 'local:config'});
+    return typeof response.value === 'string' ? JSON.parse(response.value) : response.value;
+  });
+  const waitForProfiles = async (count, activeName) => waitForAsyncCondition(() => page.evaluate(async ({count, activeName}) => {
+    const response = await chrome.runtime.sendMessage({type: 'configStorageRead', key: 'local:config'});
+    const config = typeof response.value === 'string' ? JSON.parse(response.value) : response.value;
+    const active = config.translationStyleProfiles.find(profile => profile.id === config.activeTranslationStyleProfileId);
+    return config.translationStyleProfiles.length === count && (active?.name || '') === activeName;
+  }, {count, activeName}), {timeoutMs: timeout, pollingMs: 100, message: `命名译文样式未持久化：期望 ${count} 套 / ${activeName || '无激活样式'}`});
+
+  await selectSettingsSection(page, 'settings-interface');
+  const panel = page.getByTestId('translation-style-settings');
+  await panel.waitFor({state: 'visible', timeout});
+  const original = await readConfig();
+  if (original.translationStyleProfiles.length || original.activeTranslationStyleProfileId) {
+    throw new Error('隔离设置页并非空白译文样式状态');
+  }
+  const disclosure = panel.locator('.translation-appearance-disclosure');
+  if (await disclosure.getAttribute('aria-expanded') !== 'false') throw new Error('自定义外观未默认折叠');
+  await disclosure.click();
+  const name = panel.locator('#translation-profile-name');
+  await name.fill('回归阅读');
+  await panel.getByRole('button', {name: '保存为新样式'}).click();
+  await waitForProfiles(1, '回归阅读');
+  const first = await readConfig();
+  await panel.locator(`.translation-style-card:not([data-style-value="${first.style}"])`).first().click();
+  await name.fill('回归对照');
+  await panel.getByRole('button', {name: '保存为新样式'}).click();
+  await waitForProfiles(2, '回归对照');
+  const second = await readConfig();
+  if (second.translationStyleProfiles[0].style === second.translationStyleProfiles[1].style) {
+    throw new Error('第二套命名样式未保存独立的内置样式选择');
+  }
+  await page.reload({waitUntil: 'domcontentloaded', timeout});
+  await selectSettingsSection(page, 'settings-interface');
+  await panel.waitFor({state: 'visible', timeout});
+  const saved = panel.locator('.translation-style-saved-list');
+  if (await saved.getByRole('radio').count() !== 2
+    || await saved.getByRole('radio', {name: /回归对照/u}).getAttribute('aria-checked') !== 'true') {
+    throw new Error('两套命名样式在设置页重载后未恢复');
+  }
+  await saved.getByRole('radio', {name: /回归阅读/u}).click();
+  await waitForProfiles(2, '回归阅读');
+  if ((await readConfig()).style !== first.style) throw new Error('切换已保存样式后未恢复对应译文样式');
+  await saved.getByRole('radio', {name: /回归对照/u}).click();
+  await waitForProfiles(2, '回归对照');
+  await panel.locator('.translation-appearance-disclosure').click();
+  await panel.getByRole('button', {name: '删除已选样式'}).click();
+  await waitForProfiles(1, '');
+  await saved.getByRole('radio', {name: /回归阅读/u}).click();
+  await waitForProfiles(1, '回归阅读');
+  await panel.getByRole('button', {name: '删除已选样式'}).click();
+  await waitForProfiles(0, '');
+  const restored = await readConfig();
+  if (restored.style !== original.style
+    || JSON.stringify(restored.translationAppearance) !== JSON.stringify(original.translationAppearance)) {
+    throw new Error('删除测试样式后未恢复初始译文外观');
+  }
+  await selectSettingsSection(page, 'settings-general');
+  await page.locator('#settings-general').waitFor({state: 'visible', timeout});
+  return {savedNames: second.translationStyleProfiles.map(profile => profile.name), reloadRestored: true,
+    selectionRestored: true, deleted: true, initialStyleRestored: true};
 }
 
 async function seedModelUsageFixture(page) {
@@ -128,10 +795,64 @@ async function seedModelUsageFixture(page) {
       kimiTokens: 1100,
       kimiK2Tokens: 500,
       todayKimiTokens: 200,
-      allAverageInput: 205,
-      allAverageOutput: 108,
-      todayKimiAverageInput: 120,
+      // 缓存构成只对服务商确实返回 cachedInputTokens 的请求计算；当前 fixture
+      // 唯一可计算请求为 120 输入（其中 20 缓存读取）与 80 输出。
+      allAverageUncachedInput: 100,
+      allAverageCachedInput: 20,
+      allAverageOutput: 80,
+      todayKimiAverageUncachedInput: 100,
+      todayKimiAverageCachedInput: 20,
       todayKimiAverageOutput: 80,
+    };
+  });
+}
+
+async function seedVocabularyBackupFixture(page) {
+  return page.evaluate(async () => {
+    const privateContext = {
+      text: 'private vocabulary context sentinel',
+      sourceUrl: 'https://private-vocabulary-context.invalid/article',
+      pageTitle: 'Private vocabulary context title sentinel',
+    };
+    const stored = await chrome.runtime.sendMessage({type: 'configStorageRead', key: 'local:config'});
+    if (!stored?.success || !stored.value || typeof stored.value !== 'object') {
+      throw new Error(stored?.error || '读取单词本 Beta 配置基线失败');
+    }
+    const previousBetaEnabled = stored.value.vocabularyBookEnabled === true;
+    const enabled = await chrome.runtime.sendMessage({
+      type: 'persistConfig',
+      mode: 'patch',
+      config: {vocabularyBookEnabled: true},
+      expected: {vocabularyBookEnabled: previousBetaEnabled},
+      clientId: 'settings-browser-vocabulary-backup-fixture',
+      sequence: 1,
+    });
+    if (!enabled?.success) throw new Error(enabled?.error || '开启单词本 Beta 测试基线失败');
+    const clearResponse = await chrome.runtime.sendMessage({
+      type: 'fluentReadVocabularyBook',
+      action: 'clear',
+    });
+    if (!clearResponse?.success) {
+      throw new Error(clearResponse?.error?.message || '清空单词本测试基线失败');
+    }
+    const response = await chrome.runtime.sendMessage({
+      type: 'fluentReadVocabularyBook',
+      action: 'upsert',
+      input: {
+        sourceLanguage: 'en',
+        targetLanguage: 'zh-Hans',
+        term: 'backup-contract-sentinel',
+        translation: '备份契约测试',
+        context: {...privateContext, capturedAt: Date.now()},
+      },
+    });
+    if (!response?.success || !response.data?.id) {
+      throw new Error(response?.error?.message || '建立单词本备份测试基线失败');
+    }
+    return {
+      entryId: response.data.id,
+      term: 'backup-contract-sentinel',
+      privateContext,
     };
   });
 }
@@ -177,8 +898,8 @@ async function appendModelUsageRefreshEvent(page) {
   });
 }
 
-async function chooseDifferentSelectOption(page, ariaLabel) {
-  const input = page.locator(`input[aria-label="${ariaLabel}"]`);
+async function chooseDifferentSelectOption(page, inputSelector) {
+  const input = page.locator(inputSelector);
   await input.waitFor({state: 'visible', timeout});
   const wrapper = input.locator('xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " el-select__wrapper ")][1]');
   const selectedLabel = wrapper.locator('.el-select__placeholder');
@@ -191,35 +912,42 @@ async function chooseDifferentSelectOption(page, ariaLabel) {
     if ((await option.textContent())?.trim() !== before) {
       await option.click();
       await page.waitForFunction(
-        ({label, previous}) => document.querySelector(`input[aria-label="${label}"]`)
+        ({selector, previous}) => document.querySelector(selector)
           ?.closest('.el-select__wrapper')
           ?.querySelector('.el-select__placeholder')
           ?.textContent?.trim() !== previous,
-        {label: ariaLabel, previous: before},
+        {selector: inputSelector, previous: before},
         {timeout},
       );
       const after = (await selectedLabel.textContent())?.trim();
-      if (after === before) throw new Error(`${ariaLabel} 未切换到其他选项`);
+      if (after === before) throw new Error(`${inputSelector} 未切换到其他选项`);
       return {before, after};
     }
   }
-  throw new Error(`${ariaLabel} 没有可切换的选项`);
+  throw new Error(`${inputSelector} 没有可切换的选项`);
 }
 
 async function selectElementPlusOption(page, ariaLabel, optionText) {
-  const input = page.locator(`input[aria-label="${ariaLabel}"]`);
+  const input = page.locator(`input[aria-label="${ariaLabel}"]:visible`);
   await input.waitFor({state: 'visible', timeout});
   const wrapper = input.locator('xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " el-select__wrapper ")][1]');
+  const previouslyOpenDropdown = page.locator('.el-select-dropdown:visible').first();
+  if (await previouslyOpenDropdown.isVisible()) {
+    await page.keyboard.press('Escape');
+    await previouslyOpenDropdown.waitFor({state: 'hidden', timeout});
+  }
   await wrapper.click();
-  const option = page.locator('.el-select-dropdown:visible .el-select-dropdown__item:not(.is-disabled)')
-    .filter({hasText: optionText})
-    .first();
+  const openDropdown = page.locator('.el-select-dropdown:visible').first();
+  await page.waitForTimeout(50);
+  if (!await openDropdown.isVisible()) await input.press('ArrowDown');
+  await openDropdown.waitFor({state: 'visible', timeout});
+  const option = openDropdown.getByRole('option', {name: optionText, exact: true});
   await option.waitFor({state: 'visible', timeout});
   await option.evaluate(element => element.click());
   try {
     await page.waitForFunction(({label, expected}) => {
       const inputElement = [...document.querySelectorAll('input[aria-label]')]
-        .find(element => element.getAttribute('aria-label') === label);
+        .find(element => element.getAttribute('aria-label') === label && element.getClientRects().length);
       const selectWrapper = inputElement?.closest('.el-select__wrapper');
       const displayed = selectWrapper?.querySelector('.el-select__selected-item, .el-select__placeholder');
       return displayed?.textContent?.trim() === expected
@@ -247,17 +975,17 @@ function assertExportContainsAllUserConfiguration(value) {
   ];
   for (const field of credentialFields) {
     if (!Object.prototype.hasOwnProperty.call(value, field)) {
-      throw new Error(`导出配置缺少专用凭据字段：${field}`);
+      throw new Error(`完整备份配置缺少专用凭据字段：${field}`);
     }
   }
   for (const field of ['system_role', 'user_role', 'model', 'customModel', 'customBody', 'proxy']) {
     if (!value[field] || typeof value[field] !== 'object' || Array.isArray(value[field])) {
-      throw new Error(`导出配置缺少完整用户映射：${field}`);
+      throw new Error(`完整备份配置缺少完整用户映射：${field}`);
     }
   }
   for (const field of ['count', 'persistCredentials', '__fluentConfigRevision', '__fluentCountOperations']) {
     if (Object.prototype.hasOwnProperty.call(value, field)) {
-      throw new Error(`导出配置包含不可迁移运行字段：${field}`);
+      throw new Error(`完整备份配置包含不可迁移运行字段：${field}`);
     }
   }
 }
@@ -281,9 +1009,89 @@ function assertImportedSentinels(value, sentinels) {
   };
   for (const [field, sentinel] of Object.entries(sentinels)) {
     if (expected[field] !== sentinel) {
-      throw new Error(`重载后的导出配置未保留 ${field}：${JSON.stringify(expected[field])}`);
+      throw new Error(`重载后的完整备份未保留 ${field}：${JSON.stringify(expected[field])}`);
     }
   }
+}
+
+function assertCompleteBackupEnvelope(value, sentinels, options = {}) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('下载内容不是完整备份 JSON 对象');
+  }
+  if (value.format !== 'fluentread-data-backup'
+    || value.version !== 2
+    || value.configCredentialMode !== 'exact-replace'
+    || !Number.isFinite(value.exportedAt)) {
+    throw new Error(`完整备份顶层信封异常：${JSON.stringify({
+      format: value.format,
+      version: value.version,
+      configCredentialMode: value.configCredentialMode,
+      exportedAt: value.exportedAt,
+    })}`);
+  }
+  assertExportContainsAllUserConfiguration(value.config);
+  assertImportedSentinels(value.config, sentinels);
+  if (value.vocabulary?.format !== 'fluentread-vocabulary-book'
+    || value.vocabulary?.version !== 1
+    || !Number.isFinite(value.vocabulary?.exportedAt)
+    || typeof value.vocabulary?.includesPrivateContext !== 'boolean'
+    || !Array.isArray(value.vocabulary?.entries)
+    || !Array.isArray(value.vocabulary?.reviewLogs)) {
+    throw new Error('完整备份中的单词本信封异常');
+  }
+  if (value.modelUsage?.format !== 'fluentread-model-usage'
+    || value.modelUsage?.version !== 1
+    || !Number.isFinite(value.modelUsage?.exportedAt)
+    || !Array.isArray(value.modelUsage?.events)) {
+    throw new Error('完整备份中的模型用量信封异常');
+  }
+  if (Number.isInteger(options.minimumVocabularyEntries)
+    && value.vocabulary.entries.length < options.minimumVocabularyEntries) {
+    throw new Error(`完整备份丢失单词本记录：${value.vocabulary.entries.length}`);
+  }
+  if (Number.isInteger(options.minimumModelUsageEvents)
+    && value.modelUsage.events.length < options.minimumModelUsageEvents) {
+    throw new Error(`完整备份丢失模型用量记录：${value.modelUsage.events.length}`);
+  }
+  if (options.expectPrivateContext === false) {
+    if (value.vocabulary.includesPrivateContext !== false) {
+      throw new Error('选择“不包含并导出”后备份仍标记为包含单词上下文');
+    }
+    const serializedVocabulary = JSON.stringify(value.vocabulary);
+    for (const sentinel of Object.values(options.privateContextSentinels || {})) {
+      if (serializedVocabulary.includes(sentinel)) {
+        throw new Error(`安全导出的单词本泄露上下文：${sentinel}`);
+      }
+    }
+  }
+}
+
+async function downloadCompleteBackup(page, includePrivateContext = false) {
+  const downloadPromise = page.waitForEvent('download', {timeout});
+  await page.getByRole('button', {name: '导出备份', exact: true}).click();
+  const contextDialog = page.locator('.el-message-box:visible');
+  await contextDialog.getByText('是否包含单词上下文？', {exact: true}).waitFor({state: 'visible', timeout});
+  for (const label of ['不包含并导出', '包含并导出']) {
+    await contextDialog.getByRole('button', {name: label, exact: true}).waitFor({state: 'visible', timeout});
+  }
+  await contextDialog.getByRole('button', {
+    name: includePrivateContext ? '包含并导出' : '不包含并导出',
+    exact: true,
+  }).click();
+  const download = await downloadPromise;
+  const downloadedPath = await download.path();
+  if (!downloadedPath) throw new Error('完整备份下载未产生可读文件');
+  const suggestedFilename = download.suggestedFilename();
+  if (!/^fluentread-backup-\d{4}-\d{2}-\d{2}\.json$/.test(suggestedFilename)) {
+    throw new Error(`完整备份文件名异常：${suggestedFilename}`);
+  }
+  let backup;
+  try {
+    backup = JSON.parse(fs.readFileSync(downloadedPath, 'utf8'));
+  } catch (error) {
+    throw new Error(`完整备份下载内容不是有效 JSON：${error instanceof Error ? error.message : String(error)}`);
+  }
+  return {backup, suggestedFilename};
 }
 
 async function inspectEncryptedConfigurationStorage(page, sentinels, expectedRecordKeys = expectedEncryptedRecordKeys) {
@@ -390,6 +1198,8 @@ async function seedLegacyStorageAndReloadExtension(page, context, extensionOrigi
         display: 1,
         from: 'auto',
         to: 'zh-Hans',
+        uiLanguage: 'zh-CN',
+        uiLanguageSetupCompleted: true,
         persistCredentials: true,
         token: {openai: 'legacy-embedded-token-must-lose-precedence'},
         appid: 'legacy-embedded-appid-must-lose-precedence',
@@ -435,10 +1245,144 @@ async function seedLegacyStorageAndReloadExtension(page, context, extensionOrigi
   throw new Error(`扩展重载后设置页不可用：${lastError instanceof Error ? lastError.message : String(lastError)}`);
 }
 
+async function verifyIndependentAreaSettings(page, context, extensionOrigin, report, attachPageDiagnostics) {
+  await selectSettingsSection(page, 'settings-image-translation');
+  const readChoice = label => page.locator(`#settings-image-translation input[aria-label="${label}"]`).locator('xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " el-select__wrapper ")][1]').locator('.el-select__placeholder').textContent();
+  const before = {
+    enabled: await page.locator('#settings-area-translation').getByRole('switch', {name: '圈选翻译设置', exact: true}).getAttribute('aria-checked'),
+    service: (await readChoice('圈选翻译服务'))?.trim(),
+    mode: (await readChoice('翻译方式'))?.trim(),
+    recognitionMode: (await readChoice('文字识别'))?.trim(),
+    sourceLanguage: (await readChoice('识别语言'))?.trim(),
+  };
+  if (before.enabled !== 'true') await page.locator('#settings-area-translation').getByRole('switch', {name: '圈选翻译设置', exact: true}).click();
+  await selectElementPlusOption(page, '圈选翻译服务', '微软翻译');
+  await selectElementPlusOption(page, '翻译方式', '标准翻译');
+  const modeInput = page.locator('input[aria-label="翻译方式"]');
+  await modeInput.locator('xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " el-select__wrapper ")][1]').click();
+  await page.locator('.el-select-dropdown:visible').getByRole('option', {name: 'AI 上下文增强', exact: true}).waitFor({state: 'visible', timeout});
+  const aiDisabled = await page.locator('.el-select-dropdown:visible').getByRole('option', {name: 'AI 上下文增强', exact: true}).getAttribute('aria-disabled');
+  if (aiDisabled !== 'true') throw new Error('微软翻译未禁用不支持的 AI 上下文增强选项');
+  await page.keyboard.press('Escape');
+  await selectElementPlusOption(page, '圈选翻译服务', 'OpenAI');
+  await selectElementPlusOption(page, '翻译方式', 'AI 上下文增强');
+  // 识别语言只对本地 OCR 生效；切到本地 OCR 并展开共享资源，再修改语言并立即关闭设置页。
+  await selectElementPlusOption(page, '文字识别', '本地 OCR');
+  await openSharedOcrResources(page);
+  await selectElementPlusOption(page, '识别语言', '繁體中文');
+  const reopenedUrl = page.url();
+  await page.close();
+  page = await newPageWithoutForeground(context, timeout);
+  attachPageDiagnostics(page);
+  await page.setViewportSize({width: 1440, height: 1000});
+  await page.goto(reopenedUrl, {waitUntil: 'domcontentloaded', timeout});
+  await page.locator('#settings-area-translation').waitFor({state: 'visible', timeout});
+  await openSharedOcrResources(page);
+  const after = {
+    enabled: await page.locator('#settings-area-translation').getByRole('switch', {name: '圈选翻译设置', exact: true}).getAttribute('aria-checked'),
+    service: (await readChoice('圈选翻译服务'))?.trim(),
+    mode: (await readChoice('翻译方式'))?.trim(),
+    recognitionMode: (await readChoice('文字识别'))?.trim(),
+    sourceLanguage: (await readChoice('识别语言'))?.trim(),
+  };
+  if (JSON.stringify(after) !== JSON.stringify({enabled: 'true', service: 'OpenAI', mode: 'AI 上下文增强', recognitionMode: '本地 OCR', sourceLanguage: '繁體中文'})) {
+    throw new Error(`圈选设置快速关闭后丢失：${JSON.stringify({before, after})}`);
+  }
+  report.persistenceCases.push({case: 'independent-area-options-quick-close', before, after, closedImmediatelyAfterChange: true});
+  report.screenshots.push(await screenshot(page, 'settings-area-reopened-persisted.png'));
+  const popup = await newPageWithoutForeground(context, timeout);
+  attachPageDiagnostics(popup);
+  await popup.setViewportSize({width: 400, height: 600});
+  await popup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+  await popup.locator('.popup-shell[data-config-ready="true"]').waitFor({state: 'visible', timeout});
+  const ids = await popup.locator('[data-popup-quick-feature]').evaluateAll(elements => elements.map(element => element.getAttribute('data-popup-quick-feature')));
+  if (JSON.stringify(ids) !== JSON.stringify(['hover', 'selection', 'image', 'document']) || new Set(ids).size !== ids.length) throw new Error(`Popup 默认快捷入口异常：${JSON.stringify(ids)}`);
+  await popup.locator('[data-popup-quick-feature="image"]').click();
+  const areaDrawer = popup.locator('.drawer-surface');
+  await areaDrawer.getByRole('heading', {name: '图片翻译', exact: true}).waitFor({state: 'visible', timeout});
+  if (await areaDrawer.getByRole('switch', {name: '启用或关闭圈选翻译'}).getAttribute('aria-checked') !== 'true') throw new Error('Popup 没有同步圈选开关');
+  if (!await areaDrawer.getByTestId('area-translation-demo').isVisible() || !(await areaDrawer.locator('.image-method-shortcut').innerText()).includes('Shift+Z')) throw new Error('Popup 图片抽屉缺少圈选快捷键与操作示例');
+  report.screenshots.push(await screenshot(popup, 'popup-area-independent-drawer.png'));
+  await areaDrawer.getByRole('button', {name: '关闭', exact: true}).click();
+  await popup.locator('[data-popup-quick-feature="image"]').click();
+  await areaDrawer.getByRole('heading', {name: '图片翻译', exact: true}).waitFor({state: 'visible', timeout});
+  if (await areaDrawer.getByRole('switch', {name: '启用或关闭图片翻译'}).count() !== 1 || await areaDrawer.getByRole('switch', {name: '启用或关闭圈选翻译'}).count() !== 1) throw new Error('图片抽屉没有各自独立的图片与圈选开关');
+  report.screenshots.push(await screenshot(popup, 'popup-image-independent-drawer.png'));
+  const imageOptionsCreated = context.waitForEvent('page', {timeout});
+  await areaDrawer.locator('.drawer-settings-link').click();
+  const imageOptionsPage = await imageOptionsCreated;
+  attachPageDiagnostics(imageOptionsPage);
+  await imageOptionsPage.waitForURL(`${extensionOrigin}/options.html#settings-image-translation`, {timeout});
+  await imageOptionsPage.locator('#settings-image-translation').waitFor({state: 'visible', timeout});
+  await imageOptionsPage.close();
+  if (!popup.isClosed()) await popup.close();
+  const areaLinkPopup = await newPageWithoutForeground(context, timeout);
+  attachPageDiagnostics(areaLinkPopup);
+  await areaLinkPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+  await areaLinkPopup.locator('.popup-shell[data-config-ready="true"]').waitFor({state: 'visible', timeout});
+  await areaLinkPopup.locator('[data-popup-quick-feature="image"]').click();
+  const areaOptionsCreated = context.waitForEvent('page', {timeout});
+  await areaLinkPopup.locator('.drawer-settings-link').click();
+  const areaOptionsPage = await areaOptionsCreated;
+  attachPageDiagnostics(areaOptionsPage);
+  await areaOptionsPage.waitForURL(`${extensionOrigin}/options.html#settings-image-translation`, {timeout});
+  await areaOptionsPage.locator('#settings-area-translation').waitFor({state: 'visible', timeout});
+  await areaOptionsPage.close();
+  if (!areaLinkPopup.isClosed()) await areaLinkPopup.close();
+  report.assertions.independentImageAndAreaSettingsLinks = true;
+  report.crossPageSync.areaOptionsToPopup = true;
+  report.areaTranslationUi = {standardMachineSupported: true, unsupportedAiDisabled: true, aiModeSaved: true, cardIds: ids, responsive: []};
+  for (const width of [1440, 1024, 820, 390]) {
+    await page.setViewportSize({width, height: 900});
+    for (const dark of [false, true]) {
+      await page.evaluate(value => document.documentElement.classList.toggle('dark', value), dark);
+      await settleFiniteUiAnimations(page);
+      const metrics = await page.locator('#settings-area-translation').evaluate(element => {
+        const ocrBackgroundLayers = [];
+        for (let node = document.querySelector('#settings-image-translation .image-ocr-pack-card'); node; node = node.parentElement) {
+          const style = getComputedStyle(node);
+          ocrBackgroundLayers.push({color: style.backgroundColor, image: style.backgroundImage});
+        }
+        return {
+        horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        controlsWithinViewport: [...element.querySelectorAll('.el-select, [role="switch"]')].every(control => {
+          const box = control.getBoundingClientRect();
+          return box.left >= -1 && box.right <= innerWidth + 1;
+        }),
+        ocrCardBackground: getComputedStyle(document.querySelector('#settings-image-translation .image-ocr-pack-card')).backgroundColor,
+        ocrBackgroundLayers,
+        ocrTitleColor: getComputedStyle(document.querySelector('#image-ocr-pack-title')).color,
+        duplicateIds: [...document.querySelectorAll('[id]')].map(node => node.id).filter((id, index, list) => list.indexOf(id) !== index),
+        };
+      });
+      if (metrics.horizontalOverflow || !metrics.controlsWithinViewport || metrics.duplicateIds.length) throw new Error(`圈选 ${width}px ${dark ? 'dark' : 'light'} 布局异常：${JSON.stringify(metrics)}`);
+      metrics.ocrEffectiveBackground = resolveSolidBackground(metrics.ocrBackgroundLayers);
+      const backgroundChannels = parseCssColor(metrics.ocrEffectiveBackground);
+      const titleChannels = parseCssColor(metrics.ocrTitleColor);
+      if (!backgroundChannels || !titleChannels
+        || (dark && backgroundChannels.reduce((sum, channel) => sum + channel, 0) / 3 >= 90)
+        || contrastRatio(metrics.ocrTitleColor, metrics.ocrEffectiveBackground) < 4.5) {
+        throw new Error(`共享 OCR ${dark ? 'dark' : 'light'} 主题不可读：${JSON.stringify(metrics)}`);
+      }
+      report.areaTranslationUi.responsive.push({width, dark, ...metrics});
+      report.screenshots.push(await screenshot(page, `settings-area-${width}-${dark ? 'dark' : 'light'}.png`));
+    }
+  }
+  await page.setViewportSize({width: 1440, height: 1000});
+  await page.evaluate(() => document.documentElement.classList.remove('dark'));
+  await selectElementPlusOption(page, '圈选翻译服务', before.service);
+  await selectElementPlusOption(page, '翻译方式', before.mode);
+  await selectElementPlusOption(page, '识别语言', before.sourceLanguage);
+  await selectElementPlusOption(page, '文字识别', before.recognitionMode);
+  if (before.enabled !== 'true') await page.locator('#settings-area-translation').getByRole('switch', {name: '圈选翻译设置', exact: true}).click();
+  await assertTestBrowserRemainsBackground(context, '独立圈选设置验证完成');
+  return page;
+}
+
 async function main() {
-  const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fluentread-settings-center-profile-'));
   const errors = [];
   const report = {
+    ok: false,
     extensionDir,
     artifactsDir,
     launchMode: null,
@@ -447,13 +1391,23 @@ async function main() {
     navigation: [],
     responsive: [],
     defaultServiceCard: {responsive: []},
+    bilingualHighlightPreview: null,
+    translationLoadingStyles: {},
     informationArchitecture: {},
+    persistenceCases: [],
+    quickClose: {},
+    crossPageSync: {},
+    latestWriteWins: {},
     assertions: {},
     consoleErrors: errors,
     screenshots: [],
   };
-  let launched;
+  let launched, profileDir;
+  let hasPrimaryError = false;
+  let launchAttempted = false;
   try {
+    profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fluentread-settings-center-profile-'));
+    launchAttempted = true;
     launched = await launchFocusSafePersistentContext({
       chromium,
       profileDir,
@@ -469,6 +1423,7 @@ async function main() {
       viewport: {width: 1440, height: 1000},
       timeout,
     });
+    guardBrowserClose(launched, profileDir);
     report.launchMode = launched.launchMode;
     report.focusPolicy = launched.focusPolicy;
     report.windowPlacement = launched.windowPlacement;
@@ -493,11 +1448,11 @@ async function main() {
     page = migration.page;
     attachPageDiagnostics(page);
     await page.setViewportSize({width: 1440, height: 1000});
-    await page.locator('button[data-section="settings-data"]').click();
+    await selectSettingsSection(page, 'settings-data');
     await page.getByRole('heading', {name: '最近修改', exact: true}).waitFor({state: 'visible', timeout});
-    await page.getByRole('heading', {name: '定时备份', exact: true}).waitFor({state: 'visible', timeout});
+    await page.getByRole('heading', {name: '自动设置快照', exact: true}).waitFor({state: 'visible', timeout});
     const migratedRecordKeys = ['local:config', 'local:configAutoBackups', 'local:credentials'];
-    await page.waitForFunction(async ({databaseName, expectedKeys}) => {
+    await waitForAsyncCondition(() => page.evaluate(async ({databaseName, expectedKeys}) => {
       const database = await new Promise((resolve, reject) => {
         const request = indexedDB.open(databaseName);
         request.onsuccess = () => resolve(request.result);
@@ -513,36 +1468,48 @@ async function main() {
       } finally {
         database.close();
       }
-    }, {databaseName: configDatabaseName, expectedKeys: migratedRecordKeys}, {timeout});
+    }, {databaseName: configDatabaseName, expectedKeys: migratedRecordKeys}), {timeoutMs: timeout, pollingMs: 100, message: '旧存储迁移后缺少预期的加密配置记录'});
     report.legacyMigration = {
       ...migration.legacySources,
       ...(await inspectEncryptedConfigurationStorage(page, legacyMigrationSentinels, migratedRecordKeys)),
       legacyPersistentCredentialsMigratedAfterExtensionReload: true,
       legacySessionRecordAbsent: true,
     };
-    await page.locator('button[data-section="settings-general"]').click();
+    await selectSettingsSection(page, 'settings-general');
 
-    const navButtons = page.locator('nav[aria-label="设置分类"] button');
+    const navButtons = page.locator(settingsNavigationSelector);
     const navCount = await navButtons.count();
-    if (navCount !== expectedNavigation.length) throw new Error(`导航数量异常：${navCount}`);
     const ids = await navButtons.evaluateAll(buttons => buttons.map(button => button.dataset.section));
-    if (new Set(ids).size !== ids.length) throw new Error('导航 section id 重复');
     const navigationContract = await navButtons.evaluateAll(buttons => buttons.map(button => [
       button.dataset.section,
       button.querySelector('strong')?.textContent?.trim(),
     ]));
+    // 数量失败也保留实际 DOM 契约，避免下一次报告只有数量而没有栏目证据。
+    report.informationArchitecture.navigation = navigationContract;
+    report.informationArchitecture.navigationButtonCounts = {
+      sections: navCount,
+      groupToggles: await page.locator('nav[aria-label="设置分类"] .nav-group-toggle').count(),
+    };
+    if (navCount !== expectedNavigation.length) throw new Error(`导航数量异常：${navCount}，期望 ${expectedNavigation.length}：${JSON.stringify(navigationContract)}`);
+    if (new Set(ids).size !== ids.length) throw new Error('导航 section id 重复');
     if (JSON.stringify(navigationContract) !== JSON.stringify(expectedNavigation)) {
       throw new Error(`导航顺序或名称异常：${JSON.stringify(navigationContract)}`);
     }
     report.informationArchitecture.navigation = navigationContract;
     const navigationGroupContract = await page.locator('nav[aria-label="设置分类"] .nav-group').evaluateAll(groups => groups.map(group => [
-      group.querySelector('.nav-group-label')?.textContent?.trim(),
+      group.querySelector('.nav-group-toggle > span:first-child')?.textContent?.trim(),
       [...group.querySelectorAll('button[data-section]')].map(button => button.dataset.section),
     ]));
     if (JSON.stringify(navigationGroupContract) !== JSON.stringify(expectedNavigationGroups)) {
       throw new Error(`导航分组异常：${JSON.stringify(navigationGroupContract)}`);
     }
     report.informationArchitecture.navigationGroups = navigationGroupContract;
+    const mobileNavigationContract = await page.locator('select.mobile-settings-navigation option')
+      .evaluateAll(options => options.map(option => [option.value, option.textContent?.trim()]));
+    if (JSON.stringify(mobileNavigationContract) !== JSON.stringify(expectedNavigation)) {
+      throw new Error(`移动导航栏目、名称或顺序异常：${JSON.stringify(mobileNavigationContract)}`);
+    }
+    report.informationArchitecture.mobileNavigation = mobileNavigationContract;
 
     for (let index = 0; index < navCount; index += 1) {
       const button = navButtons.nth(index);
@@ -555,7 +1522,115 @@ async function main() {
       }
       const anchor = page.locator(`#${id}`);
       if (await anchor.count() !== 1 || !await anchor.isVisible()) throw new Error(`页面锚点不可见：${id}`);
-      const visiblePageHeadings = await page.locator('.topbar h1:visible').count();
+      if (id === 'settings-image-translation') {
+        await openSharedOcrResources(page);
+        if (await anchor.locator('#image-ocr-pack-title').count() !== 1
+          || await page.locator('.image-ocr-pack-list').count() !== 1) {
+          throw new Error('图片/漫画/圈选未复用唯一的活动 OCR 语言包管理界面');
+        }
+        const area = anchor.locator('#settings-area-translation');
+        if (await area.count() !== 1 || !await area.getByRole('switch', {name: '圈选翻译设置', exact: true}).isVisible()) {
+          throw new Error('图片/漫画页没有唯一的圈选设置入口');
+        }
+        const areaCopy = await area.innerText();
+        for (const expected of ['圈选翻译服务', '文字识别', '优先使用模型识图', '翻译方式', '圈选快捷键', 'Shift+Z']) {
+          if (!areaCopy.includes(expected)) throw new Error(`圈选设置缺少产品信息：${expected}`);
+        }
+        // 隐私说明在真实帮助浮层，共享语言包管理独立于圈选卡片。
+        const recognitionHelp = area.locator('.settings-item').filter({hasText: '文字识别'}).locator('.field-help');
+        await recognitionHelp.hover();
+        await page.locator('.fluentread-field-help-popper:visible').getByText(/模型识图会上传选区图片/).waitFor({state: 'visible', timeout});
+        await recognitionHelp.press('Escape');
+        await page.mouse.move(0, 0);
+        report.assertions.independentAreaSettings = true;
+      }
+      if (id === 'settings-about') {
+        const supportPanel = anchor.locator('.about-support-panel');
+        const supportMethods = supportPanel.locator('.about-support-method');
+        if (await supportPanel.count() !== 1 || await supportMethods.count() !== 2) {
+          throw new Error('关于页缺少微信与 Ko-fi 两个赞赏入口');
+        }
+        const supportLinks = await supportMethods.evaluateAll(methods => methods.map(method => ({
+          provider: method.dataset.supportMethod,
+          href: method.getAttribute('href'),
+          text: method.textContent?.trim(),
+        })));
+        if (supportLinks[0]?.provider !== 'wechat' || supportLinks[0]?.href !== null
+          || supportLinks[1]?.provider !== 'kofi' || supportLinks[1]?.href !== 'https://ko-fi.com/thinkstu') {
+          throw new Error(`关于页赞赏链接异常：${JSON.stringify(supportLinks)}`);
+        }
+        const qrBounds = await supportPanel.locator('.about-support-qr').boundingBox();
+        const availableQrWidth = await supportPanel.locator('.about-support-wechat').evaluate(card => {
+          const style = getComputedStyle(card);
+          return card.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+        });
+        if (!matchesAboutSupportQrBounds(qrBounds, availableQrWidth)) {
+          throw new Error(`关于页赞赏图片未填满卡片内容宽度或不是正方形：${JSON.stringify({qrBounds, availableQrWidth})}`);
+        }
+        const pageCount = context.pages().length;
+        const aboutUrl = page.url();
+        const checkQrPreview = async kind => {
+          const contact = kind === 'contact';
+          const triggerSelector = contact ? '#settings-about .about-wechat-contact' : '#settings-about .about-support-wechat';
+          const preview = page.locator(contact ? '.about-wechat-contact-dialog' : '.about-approve-dialog');
+          await page.locator(triggerSelector).click();
+          await preview.waitFor({state: 'visible', timeout});
+          const image = await preview.locator('img').evaluate(async image => {
+            await image.decode();
+            return {
+              src: image.currentSrc,
+              width: image.naturalWidth,
+              height: image.naturalHeight,
+              declaredWidth: image.getAttribute('width'),
+              declaredHeight: image.getAttribute('height'),
+            };
+          });
+          const expectedWidth = contact ? '888' : '1152';
+          const expectedHeight = contact ? '1131' : '1152';
+          if (!image.src || image.width <= 0 || image.height <= 0
+            || image.declaredWidth !== expectedWidth || image.declaredHeight !== expectedHeight) {
+            throw new Error(`关于页 ${kind} 二维码没有正确解码或尺寸异常：${JSON.stringify(image)}`);
+          }
+          if (context.pages().length !== pageCount || page.url() !== aboutUrl) {
+            throw new Error(contact ? '点击联系码离开了关于页或打开了新标签页' : '点击赞赏码离开了关于页或打开了新标签页');
+          }
+          await page.keyboard.press('Escape');
+          await preview.waitFor({state: 'hidden', timeout});
+          await page.waitForFunction(selector => document.querySelector(selector) === document.activeElement, triggerSelector, {timeout});
+          return image;
+        };
+        const supportImage = await checkQrPreview('support');
+        const contactImage = await checkQrPreview('contact');
+        if (contactImage.src === supportImage.src) throw new Error('微信联系码错误地使用了赞赏码图片');
+
+        await selectSettingsSection(page, 'settings-general');
+        await page.locator('#settings-general').waitFor({state: 'visible', timeout});
+        await anchor.waitFor({state: 'hidden', timeout});
+        if (await page.locator('.about-qr-dialog:visible').count() !== 0) throw new Error('离开关于页后仍显示二维码弹窗');
+        await button.click();
+        await anchor.waitFor({state: 'visible', timeout});
+        const returnedContactImage = await checkQrPreview('contact');
+        const returnedSupportImage = await checkQrPreview('support');
+        if (returnedContactImage.src !== contactImage.src || returnedSupportImage.src !== supportImage.src) {
+          throw new Error('返回关于页后联系码或赞赏码图片发生错误切换');
+        }
+        report.assertions.aboutQrRoundTrip = {contactImage, supportImage, returnedContactImage, returnedSupportImage};
+        if (await anchor.locator('.about-experience, .about-features, .about-feature').count() !== 0) {
+          throw new Error('关于页仍显示已删除的核心体验介绍');
+        }
+        if (await supportPanel.locator('.about-support-original-link').count() !== 0) {
+          throw new Error('关于页仍显示多余的原图文字链接');
+        }
+        const supportCopy = await supportPanel.innerText();
+        if (!supportCopy.includes('FluentRead的发展离不开社区的慷慨支持，你可以通过微信赞赏或Ko-fi支持我们。')) {
+          throw new Error('关于页赞赏说明没有使用当前中文 i18n 文案');
+        }
+        if (await anchor.locator('.about-feature-list').count() !== 0) {
+          throw new Error('关于页仍显示已替换的核心体验列表');
+        }
+        report.assertions.aboutSupportArea = true;
+      }
+      const visiblePageHeadings = await page.locator('.workspace > .settings-content-title:visible').count();
       if (visiblePageHeadings !== 1) throw new Error(`${id} 页面级标题数量异常：${visiblePageHeadings}`);
       if (await page.locator('.card-intro:visible').count() !== 0) throw new Error(`${id} 仍有重复 card intro`);
       const metrics = await page.evaluate(() => ({
@@ -566,14 +1641,1018 @@ async function main() {
       if (metrics.horizontalOverflow) throw new Error(`${id} 出现横向滚动：${JSON.stringify(metrics)}`);
       const file = `settings-${String(index + 1).padStart(2, '0')}-${id}.png`;
       report.screenshots.push(await screenshot(page, file));
-      report.navigation.push({id, label, title: (await page.locator('.topbar h1').textContent())?.trim(), metrics});
+      report.navigation.push({id, label, title: (await page.locator('.workspace > .settings-content-title').textContent())?.trim(), metrics});
     }
+    page = await verifyIndependentAreaSettings(page, context, extensionOrigin, report, attachPageDiagnostics);
     report.assertions.navigation = true;
     report.assertions.singlePageIntro = true;
     report.assertions.noLegacyIntros = await page.locator('.video-settings-hero, .image-ocr-kicker, .site-rules-kicker').count() === 0;
     if (!report.assertions.noLegacyIntros) throw new Error('仍存在旧的重复介绍元素');
 
-    await page.locator('button[data-section="settings-model-usage"]').click();
+    const interfaceSearchCases = [];
+    for (const query of ['界面风格', '菜单栏布局', '传统色', '青花', '水墨', '乌金']) {
+      await selectSettingsSection(page, 'settings-general');
+      await page.locator('.search-box input').fill(query);
+      const interfaceResult = page.locator('.search-results button').filter({has: page.locator('strong', {hasText: /^界面风格$/u})});
+      if (await interfaceResult.count() !== 1) throw new Error(`搜索“${query}”没有唯一的界面风格入口`);
+      await interfaceResult.click();
+      await page.locator('#settings-interface').waitFor({state: 'visible', timeout});
+      if (await page.locator('.search-box input').inputValue() !== ''
+        || await page.locator('.search-results').count() !== 0
+        || await page.locator('button[data-section="settings-interface"]').getAttribute('aria-current') !== 'page') {
+        throw new Error(`搜索“${query}”跳转后没有正确激活界面布局或清空查询`);
+      }
+      interfaceSearchCases.push({query, destination: 'settings-interface', clearedAfterNavigation: true});
+    }
+    await page.locator('.search-box input').fill('fluentread-no-such-interface-setting');
+    await page.locator('.search-empty').waitFor({state: 'visible', timeout});
+    await page.locator('.search-box input').fill('');
+    const legacyNavigationCases = [];
+    for (const [hash, destination] of [
+      ['settings-interface', 'settings-interface'],
+      ['settings-shortcuts', 'settings-translation'],
+      ['settings-harness', 'settings-selection'],
+      ['settings-area-translation', 'settings-image-translation'],
+      ['settings-model-usage', 'settings-translation-stats'],
+    ]) {
+      await page.goto(`${extensionOrigin}/options.html#${hash}`, {waitUntil: 'domcontentloaded', timeout});
+      await page.reload({waitUntil: 'domcontentloaded', timeout});
+      await page.locator(`#${hash === 'settings-model-usage' ? 'settings-model-usage' : destination}`).waitFor({state: 'visible', timeout});
+      if (await page.locator(`button[data-section="${destination}"]`).getAttribute('aria-current') !== 'page') {
+        throw new Error(`旧设置链接 #${hash} 没有正确激活 ${destination}`);
+      }
+      legacyNavigationCases.push({hash, destination});
+    }
+    report.informationArchitecture.interfaceSearchCases = interfaceSearchCases;
+    report.informationArchitecture.legacyNavigationCases = legacyNavigationCases;
+    report.assertions.interfaceSearchAndLegacyNavigation = true;
+
+    // 界面布局中的段落加载样式必须用真实运行时指示器预览，并经统一配置链路持久化。
+    await selectSettingsSection(page, 'settings-interface');
+    const loadingStyleGroup = page.locator('.settings-section:visible .settings-group').filter({hasText: '动画与加载效果'});
+    await loadingStyleGroup.waitFor({state: 'visible', timeout});
+    const loadingStyleCards = loadingStyleGroup.locator('.loading-style-option');
+    const loadingStyleContract = await loadingStyleCards.evaluateAll(cards => cards.map(card => ({
+      value: card.querySelector('input[type="radio"]')?.value,
+      label: card.querySelector('.loading-style-copy strong')?.textContent?.trim(),
+      description: card.querySelector('.loading-style-copy small')?.textContent?.trim(),
+      previewStyle: card.querySelector('.fluent-read-loading')?.getAttribute('data-fr-loading-style'),
+    })));
+    if (JSON.stringify(loadingStyleContract.map(item => [item.value, item.label])) !== JSON.stringify(expectedLoadingStyles)
+      || loadingStyleContract.some(item => item.previewStyle !== item.value || !item.description)) {
+      throw new Error(`段落加载样式或真实预览契约异常：${JSON.stringify(loadingStyleContract)}`);
+    }
+    const loadingPreviewMetrics = await loadingStyleGroup.locator('.fluent-read-loading').evaluateAll(indicators => indicators.map(indicator => {
+      const rect = indicator.getBoundingClientRect();
+      const style = indicator.style;
+      return {
+        loadingStyle: indicator.getAttribute('data-fr-loading-style'),
+        motion: indicator.getAttribute('data-fr-motion'),
+        width: rect.width,
+        height: rect.height,
+        closedShadowRoot: indicator.shadowRoot === null,
+        widthPriority: style.getPropertyPriority('width'),
+        animationPriority: style.getPropertyPriority('animation'),
+      };
+    }));
+    if (loadingPreviewMetrics.some(item => item.motion !== 'animated'
+      || item.width !== 16
+      || item.height !== 16
+      || !item.closedShadowRoot
+      || item.widthPriority !== 'important'
+      || item.animationPriority !== 'important')) {
+      throw new Error(`段落加载预览没有保持隔离尺寸或动画状态：${JSON.stringify(loadingPreviewMetrics)}`);
+    }
+    for (const [value] of expectedLoadingStyles) {
+      const optionCard = loadingStyleCards.filter({has: page.locator(`input[value="${value}"]`)});
+      await optionCard.click();
+      await page.waitForFunction(selected => (
+        document.querySelector(`.loading-style-option input[value="${selected}"]`)?.checked === true
+      ), value, {timeout});
+    }
+    await page.waitForTimeout(500);
+    const storedLoadingStyle = await page.evaluate(async () => {
+      const response = await chrome.runtime.sendMessage({type: 'configStorageRead', key: 'local:config'});
+      return response?.value?.translationLoadingStyle;
+    });
+    if (storedLoadingStyle !== 'signal') {
+      throw new Error(`段落加载样式没有持久化最终选择：${String(storedLoadingStyle)}`);
+    }
+    report.screenshots.push(await screenshot(page, 'settings-interface-loading-styles-animated.png'));
+
+    const animationSwitch = loadingStyleGroup.locator('.settings-item').filter({hasText: '动画效果'}).locator('.el-switch');
+    await animationSwitch.click();
+    await page.waitForFunction(() => (
+      document.querySelector('.loading-style-picker')?.getAttribute('aria-disabled') === 'true'
+      && [...document.querySelectorAll('.loading-style-picker .fluent-read-loading')]
+        .every(indicator => indicator.getAttribute('data-fr-motion') === 'static')
+    ), undefined, {timeout});
+    report.screenshots.push(await screenshot(page, 'settings-interface-loading-styles-static.png'));
+    await animationSwitch.click();
+    await loadingStyleCards.filter({has: page.locator('input[value="ring"]')}).click();
+    await page.waitForTimeout(500);
+    const restoredLoadingStyle = await page.evaluate(async () => {
+      const response = await chrome.runtime.sendMessage({type: 'configStorageRead', key: 'local:config'});
+      return response?.value?.translationLoadingStyle;
+    });
+    if (restoredLoadingStyle !== 'ring') {
+      throw new Error(`段落加载样式没有持久化恢复值：${String(restoredLoadingStyle)}`);
+    }
+    report.translationLoadingStyles = {
+      options: loadingStyleContract,
+      previewMetrics: loadingPreviewMetrics,
+      persistedSelection: storedLoadingStyle,
+      staticFallback: true,
+      restoredSelection: restoredLoadingStyle,
+    };
+    report.assertions.translationLoadingStyles = true;
+
+    // 基础配置中的界面布局统一容纳风格和菜单栏编排；默认风格保持原布局。
+    // 设置页需要真实拖动并保存 Popup 模块顺序；Popup 重开后还要消费同一份布局与栏目配置。
+    await selectSettingsSection(page, 'settings-interface');
+    const interfaceSection = page.locator('#settings-interface');
+    await interfaceSection.waitFor({state: 'visible', timeout});
+    const interfaceSettingsGroup = page.locator('.settings-section:visible .settings-group').filter({hasText: '界面与弹窗'});
+    const menuLayoutSettingsGroup = page.locator('.settings-section:visible .settings-group').filter({has: page.getByRole('heading', {name: '菜单栏布局', exact: true})});
+    const interfaceGroups = (await interfaceSection.locator('.settings-group-heading h2').allTextContents()).map(value => value.trim());
+    if (await interfaceSettingsGroup.count() !== 1 || await menuLayoutSettingsGroup.count() !== 1
+      || JSON.stringify(interfaceGroups) !== JSON.stringify(expectedInterfaceGroups)) {
+      throw new Error(`界面风格没有按顺序提供译文样式、界面与弹窗、动画、菜单栏布局和字体分组：${JSON.stringify(interfaceGroups)}`);
+    }
+    if (/Popup\s*布局/iu.test(await interfaceSection.innerText())) {
+      throw new Error('界面布局仍向用户显示 Popup 布局旧名称');
+    }
+    const expectedInterfaceSkins = [
+      {value: 'default', label: '默认风格', kind: 'default', contentHeight: true, popupWidth: 320, brand: '#ef4776', surface: '#fff', darkSurface: '#1d2027'},
+      {value: 'minimal', label: '简约风格', kind: 'minimal', contentHeight: true, popupWidth: 310, brand: '#ef4776', surface: '#fff', darkSurface: '#1d2027'},
+      {value: 'compact', label: '紧凑风格', kind: 'compact', contentHeight: true, popupWidth: 300, brand: '#ef4776', surface: '#fff', darkSurface: '#1d2027'},
+      {value: 'contrast', label: '高对比 ⚡', kind: 'contrast', contentHeight: true, popupWidth: 320, brand: '#111', surface: '#fff', darkSurface: '#050505'},
+      {value: 'qinghua', label: '青花', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#183a65', surface: '#ffffff', darkSurface: '#111d31'},
+      {value: 'zhusha', label: '朱砂', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#c3272b', surface: '#ffffff', darkSurface: '#211a17'},
+      {value: 'shuimo', label: '水墨', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#3d3b4f', surface: '#ffffff', darkSurface: '#17181d'},
+      {value: 'zhuqing', label: '竹青', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#057748', surface: '#ffffff', darkSurface: '#17221b'},
+      {value: 'ouhe', label: '藕荷', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#574266', surface: '#ffffff', darkSurface: '#221b27'},
+      {value: 'xiangse', label: '缃色', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#8a6200', surface: '#ffffff', darkSurface: '#1f1c16'},
+      {value: 'qinglv', label: '青绿', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#205580', surface: '#ffffff', darkSurface: '#142430'},
+      {value: 'yuebai', label: '月白', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#576d93', surface: '#ffffff', darkSurface: '#1b2c37'},
+      {value: 'xuanqing', label: '玄青', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#8db4dc', surface: '#1e2030', darkSurface: '#1e2030'},
+      {value: 'wujin', label: '乌金', kind: 'palette', contentHeight: true, popupWidth: 320, brand: '#f2be45', surface: '#1b1a16', darkSurface: '#1b1a16'},
+    ];
+    const skinCards = interfaceSettingsGroup.locator('.interface-skin-option');
+    if (await skinCards.count() !== expectedInterfaceSkins.length) {
+      throw new Error(`弹窗风格选项数量异常：${await skinCards.count()}`);
+    }
+    const skinLabels = (await skinCards.locator('.interface-skin-copy strong').allTextContents()).map(value => value.trim());
+    if (JSON.stringify(skinLabels) !== JSON.stringify(expectedInterfaceSkins.map(item => item.label))) {
+      throw new Error(`弹窗风格名称或顺序异常：${JSON.stringify(skinLabels)}`);
+    }
+    if (await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="default"][aria-checked="true"]').count() !== 1) {
+      throw new Error('默认风格没有保持当前界面选中状态');
+    }
+    const liveSkinPreview = interfaceSettingsGroup.locator('.interface-skin-live-preview');
+    if (await liveSkinPreview.count() !== 1
+      || await liveSkinPreview.getAttribute('data-preview-skin') !== 'default'
+      || await interfaceSettingsGroup.getByText('风格只改变扩展界面的呈现，不影响网页翻译效果。', {exact: true}).count() !== 0) {
+      throw new Error('弹窗风格没有用唯一的实时 DOM 范例替换静态说明');
+    }
+    const popupLayoutWorkbench = menuLayoutSettingsGroup.locator('[data-popup-layout-workbench]');
+    const popupLayoutPreview = popupLayoutWorkbench.locator('.popup-layout-live-preview');
+    const popupModuleTab = popupLayoutWorkbench.locator('[data-popup-layout-tab="popupModule"]');
+    const popupQuickFeatureTab = popupLayoutWorkbench.locator('[data-popup-layout-tab="quickFeature"]');
+    if (await popupLayoutWorkbench.count() !== 1
+      || await popupLayoutPreview.count() !== 1
+      || await popupModuleTab.getAttribute('aria-selected') !== 'true'
+      || await popupQuickFeatureTab.getAttribute('aria-selected') !== 'false') {
+      throw new Error('Popup 布局工作台没有呈现唯一实时范例或正确的默认标签页');
+    }
+    await popupModuleTab.focus();
+    await popupModuleTab.press('ArrowRight');
+    if (await popupQuickFeatureTab.getAttribute('aria-selected') !== 'true') {
+      throw new Error('Popup 布局标签页方向键没有切换到快捷入口');
+    }
+    await popupQuickFeatureTab.press('ArrowLeft');
+    if (await popupModuleTab.getAttribute('aria-selected') !== 'true') {
+      throw new Error('Popup 布局标签页方向键没有切回整体区域');
+    }
+    const readPreviewLayoutOrder = () => popupLayoutPreview.locator('[data-preview-popup-module]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-preview-popup-module')),
+    );
+    const readPreviewQuickFeatureOrder = () => popupLayoutPreview.locator('[data-preview-quick-feature]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-preview-quick-feature')),
+    );
+    const popupLayoutEditor = menuLayoutSettingsGroup.locator('[data-popup-layout-editor]');
+    if (await popupLayoutEditor.count() !== 1) throw new Error('菜单栏布局中没有唯一的布局编辑器');
+    const readLayoutOrder = () => popupLayoutEditor.locator('[data-popup-layout-module]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-layout-module')),
+    );
+    const defaultLayoutOrder = ['translation', 'siteRule', 'quickFeatures', 'footer'];
+    const customLayoutOrder = ['quickFeatures', 'translation', 'siteRule', 'footer'];
+    const initialLayoutOrder = await readLayoutOrder();
+    if (JSON.stringify(initialLayoutOrder) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`Popup 默认模块顺序异常：${JSON.stringify(initialLayoutOrder)}`);
+    }
+    if (JSON.stringify(await readPreviewLayoutOrder()) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`Popup 范例没有呈现默认模块顺序：${JSON.stringify(await readPreviewLayoutOrder())}`);
+    }
+    const hideButtons = popupLayoutEditor.locator('.popup-layout-hide');
+    if (await hideButtons.count() !== 3) throw new Error(`弹窗栏目隐藏按钮数量异常：${await hideButtons.count()}`);
+    if (await popupLayoutEditor.locator('.popup-layout-hidden-chip').count() !== 0) {
+      throw new Error('默认弹窗栏目不应出现隐藏项目');
+    }
+    const popupQuickFeatureEditor = menuLayoutSettingsGroup.locator('[data-popup-quick-feature-editor]');
+    if (await popupQuickFeatureEditor.count() !== 1) {
+      throw new Error('菜单栏布局中没有唯一的快捷功能布局编辑器');
+    }
+    const readQuickFeatureOrder = () => popupQuickFeatureEditor.locator('[data-popup-quick-feature-layout]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-quick-feature-layout')),
+    );
+    const defaultVisibleQuickFeatures = ['hover', 'selection', 'image', 'document'];
+    if (JSON.stringify(await readQuickFeatureOrder()) !== JSON.stringify(defaultVisibleQuickFeatures)) {
+      throw new Error('快捷功能默认应显示四项并隐藏译文显示');
+    }
+    await popupQuickFeatureTab.click();
+    await popupQuickFeatureEditor.getByRole('button', {name: '添加译文显示', exact: true}).click();
+    await page.waitForFunction(() => !!document.querySelector('[data-popup-quick-feature-layout="appearance"]'));
+    await popupModuleTab.click();
+    // 后续继续覆盖用户显式添加译文显示后的五项排序、隐藏、主题与持久化。
+    const defaultQuickFeatureOrder = ['hover', 'selection', 'appearance', 'image', 'document'];
+    const customQuickFeatureOrder = ['document', 'hover', 'selection', 'appearance', 'image'];
+    const visibleCustomQuickFeatureOrder = customQuickFeatureOrder.filter(feature => feature !== 'image');
+    if (JSON.stringify(await readQuickFeatureOrder()) !== JSON.stringify(defaultQuickFeatureOrder)) {
+      throw new Error(`快捷功能默认顺序异常：${JSON.stringify(await readQuickFeatureOrder())}`);
+    }
+    if (JSON.stringify(await readPreviewQuickFeatureOrder()) !== JSON.stringify(defaultQuickFeatureOrder)) {
+      throw new Error(`Popup 范例没有呈现默认快捷功能顺序：${JSON.stringify(await readPreviewQuickFeatureOrder())}`);
+    }
+    if (await popupQuickFeatureEditor.locator('.popup-layout-hide').count() !== defaultQuickFeatureOrder.length) {
+      throw new Error(`快捷功能隐藏按钮数量异常：${await popupQuickFeatureEditor.locator('.popup-layout-hide').count()}`);
+    }
+    if (await page.locator('html').getAttribute('data-interface-skin') !== 'default') {
+      throw new Error('Options 初始弹窗风格不是默认风格');
+    }
+    report.screenshots.push(await screenshotElement(
+      interfaceSettingsGroup.locator('.interface-skin-picker'),
+      'settings-interface-skin-picker.png',
+    ));
+
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="minimal"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'minimal', undefined, {timeout});
+    if (!await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="minimal"][aria-checked="true"]').isVisible()) {
+      throw new Error('简约风格切换后没有进入选中状态');
+    }
+
+    const quickFeaturesHandle = popupLayoutEditor
+      .locator('[data-popup-layout-module="quickFeatures"] .popup-layout-handle');
+    const translationCard = popupLayoutEditor.locator('[data-popup-layout-module="translation"]');
+    const siteRuleCard = popupLayoutEditor.locator('[data-popup-layout-module="siteRule"]');
+    await quickFeaturesHandle.dragTo(translationCard, {targetPosition: {x: 40, y: 4}});
+    const draggedLayoutOrder = await readLayoutOrder();
+    if (JSON.stringify(draggedLayoutOrder) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 模块拖动没有更新顺序：${JSON.stringify(draggedLayoutOrder)}`);
+    }
+    if (JSON.stringify(await readPreviewLayoutOrder()) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 范例没有即时同步模块顺序：${JSON.stringify(await readPreviewLayoutOrder())}`);
+    }
+
+    // 真实鼠标拖动预览中的整块模块，确认预览本身就是可编辑入口。
+    await dragWholeElement(
+      page,
+      popupLayoutPreview.locator('[data-preview-popup-module="quickFeatures"]'),
+      popupLayoutPreview.locator('[data-preview-popup-module="siteRule"]'),
+      'y',
+      'after',
+    );
+    if (JSON.stringify(await readLayoutOrder()) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`预览整块模块拖动没有更新回默认顺序：${JSON.stringify(await readLayoutOrder())}`);
+    }
+    if (JSON.stringify(await readPreviewLayoutOrder()) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`预览整块模块拖动后的范例顺序异常：${JSON.stringify(await readPreviewLayoutOrder())}`);
+    }
+    await dragWholeElement(
+      page,
+      popupLayoutPreview.locator('[data-preview-popup-module="quickFeatures"]'),
+      popupLayoutPreview.locator('[data-preview-popup-module="translation"]'),
+      'y',
+      'before',
+    );
+    if (JSON.stringify(await readLayoutOrder()) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`预览整块模块拖动没有再次更新顺序：${JSON.stringify(await readLayoutOrder())}`);
+    }
+
+    // 右侧编辑器允许拖动整张可见卡片，确保按钮区域不会成为唯一拖动入口。
+    await dragWholeElement(
+      page,
+      popupLayoutEditor.locator('[data-popup-layout-module="quickFeatures"]'),
+      siteRuleCard,
+      'y',
+      'after',
+    );
+    if (JSON.stringify(await readLayoutOrder()) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`右侧整卡拖动没有更新回默认顺序：${JSON.stringify(await readLayoutOrder())}`);
+    }
+    await dragWholeElement(
+      page,
+      popupLayoutEditor.locator('[data-popup-layout-module="quickFeatures"]'),
+      translationCard,
+      'y',
+      'before',
+    );
+    if (JSON.stringify(await readLayoutOrder()) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`右侧整卡拖动没有再次更新顺序：${JSON.stringify(await readLayoutOrder())}`);
+    }
+
+    const previewTranslationHandle = popupLayoutPreview
+      .locator('[data-preview-popup-module="translation"] > .layout-preview-drag-handle');
+    await previewTranslationHandle.focus();
+    await previewTranslationHandle.press('ArrowDown');
+    if (JSON.stringify(await readPreviewLayoutOrder()) !== JSON.stringify(['quickFeatures', 'siteRule', 'translation', 'footer'])) {
+      throw new Error(`预览模块键盘下移失败：${JSON.stringify(await readPreviewLayoutOrder())}`);
+    }
+    await previewTranslationHandle.press('ArrowUp');
+    if (JSON.stringify(await readPreviewLayoutOrder()) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`预览模块键盘上移失败：${JSON.stringify(await readPreviewLayoutOrder())}`);
+    }
+
+    // 不额外等待就重载设置页，覆盖短生命周期页面中的最终布局保存。
+    await page.reload({waitUntil: 'domcontentloaded', timeout});
+    await interfaceSection.waitFor({state: 'visible', timeout});
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'minimal', undefined, {timeout});
+    const persistedLayoutOrder = await readLayoutOrder();
+    if (JSON.stringify(persistedLayoutOrder) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 模块顺序在设置页重载后丢失：${JSON.stringify(persistedLayoutOrder)}`);
+    }
+
+    const translationHandle = popupLayoutEditor
+      .locator('[data-popup-layout-module="translation"] .popup-layout-handle');
+    await translationHandle.focus();
+    await translationHandle.press('ArrowDown');
+    const keyboardMovedOrder = await readLayoutOrder();
+    const intermediateLayoutOrder = ['quickFeatures', 'siteRule', 'translation', 'footer'];
+    if (JSON.stringify(keyboardMovedOrder) !== JSON.stringify(intermediateLayoutOrder)) {
+      throw new Error(`Popup 模块键盘下移失败：${JSON.stringify(keyboardMovedOrder)}`);
+    }
+    await translationHandle.press('ArrowUp');
+    if (JSON.stringify(await readLayoutOrder()) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 模块键盘上移失败：${JSON.stringify(await readLayoutOrder())}`);
+    }
+    // 连续两次修改后立即重载，最终顺序必须胜出，不能被较早快照覆盖。
+    await page.reload({waitUntil: 'domcontentloaded', timeout});
+    await interfaceSection.waitFor({state: 'visible', timeout});
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'minimal', undefined, {timeout});
+    const latestWriteLayoutOrder = await readLayoutOrder();
+    if (JSON.stringify(latestWriteLayoutOrder) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 模块连续排序后没有保留最终值：${JSON.stringify(latestWriteLayoutOrder)}`);
+    }
+    await popupLayoutWorkbench.scrollIntoViewIfNeeded();
+    report.screenshots.push(await screenshotElement(popupLayoutWorkbench, 'settings-popup-layout-workbench-custom.png'));
+
+    await popupQuickFeatureTab.click();
+    await popupQuickFeatureTab.waitFor({state: 'visible', timeout});
+    if (await popupQuickFeatureTab.getAttribute('aria-selected') !== 'true') {
+      throw new Error('快捷功能布局标签页没有进入选中状态');
+    }
+    const documentFeatureHandle = popupQuickFeatureEditor
+      .locator('[data-popup-quick-feature-layout="document"] .popup-layout-handle');
+    const hoverFeatureCard = popupQuickFeatureEditor.locator('[data-popup-quick-feature-layout="hover"]');
+    await documentFeatureHandle.dragTo(hoverFeatureCard, {targetPosition: {x: 40, y: 4}});
+    if (JSON.stringify(await readQuickFeatureOrder()) !== JSON.stringify(customQuickFeatureOrder)) {
+      throw new Error(`快捷功能卡片拖动没有更新顺序：${JSON.stringify(await readQuickFeatureOrder())}`);
+    }
+    if (JSON.stringify(await readPreviewQuickFeatureOrder()) !== JSON.stringify(customQuickFeatureOrder)) {
+      throw new Error(`Popup 范例没有即时同步快捷功能顺序：${JSON.stringify(await readPreviewQuickFeatureOrder())}`);
+    }
+    // 快捷入口在预览中横向排列，使用真实鼠标拖动一整张卡片覆盖 before/after 的水平几何判断。
+    await dragWholeElement(
+      page,
+      popupLayoutPreview.locator('[data-preview-quick-feature="document"]'),
+      popupLayoutPreview.locator('[data-preview-quick-feature="image"]'),
+      'x',
+      'after',
+    );
+    if (JSON.stringify(await readQuickFeatureOrder()) !== JSON.stringify(defaultQuickFeatureOrder)) {
+      throw new Error(`预览整块快捷入口拖动没有更新回默认顺序：${JSON.stringify(await readQuickFeatureOrder())}`);
+    }
+    await dragWholeElement(
+      page,
+      popupLayoutPreview.locator('[data-preview-quick-feature="document"]'),
+      popupLayoutPreview.locator('[data-preview-quick-feature="hover"]'),
+      'x',
+      'before',
+    );
+    if (JSON.stringify(await readQuickFeatureOrder()) !== JSON.stringify(customQuickFeatureOrder)) {
+      throw new Error(`预览整块快捷入口拖动没有再次更新顺序：${JSON.stringify(await readQuickFeatureOrder())}`);
+    }
+    await popupQuickFeatureEditor.locator('[data-popup-quick-feature-layout="image"] .popup-layout-hide').click();
+    if (await page.evaluate(() => document.activeElement?.classList.contains('popup-layout-handle'))) {
+      throw new Error('鼠标隐藏入口不应强制移动焦点到其他卡片的手柄');
+    }
+    await page.waitForFunction(() => (
+      document.querySelector('[data-popup-layout-workbench] [data-preview-quick-feature="image"]') === null
+    ), undefined, {timeout});
+    await page.reload({waitUntil: 'domcontentloaded', timeout});
+    await interfaceSection.waitFor({state: 'visible', timeout});
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'minimal', undefined, {timeout});
+    await popupQuickFeatureTab.click();
+    const persistedQuickFeatureOrder = await readQuickFeatureOrder();
+    if (JSON.stringify(persistedQuickFeatureOrder) !== JSON.stringify(visibleCustomQuickFeatureOrder)
+      || await popupQuickFeatureEditor.locator('[data-popup-quick-feature-layout="image"]').count() !== 0
+      || await popupQuickFeatureEditor.locator('.popup-layout-hidden-chip').filter({hasText: '图片翻译'}).count() !== 1) {
+      throw new Error(`快捷功能顺序或单项显隐在设置页重载后丢失：${JSON.stringify(persistedQuickFeatureOrder)}`);
+    }
+    await popupLayoutWorkbench.scrollIntoViewIfNeeded();
+    report.screenshots.push(await screenshotElement(
+      popupLayoutWorkbench,
+      'settings-popup-layout-workbench-quick-features.png',
+    ));
+
+    await context.route('http://fluentread-interface.test/**', route => route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<!doctype html><html><body><main>FluentRead interface fixture</main></body></html>',
+    }));
+    const interfaceHostPage = await newPageWithoutForeground(context, timeout);
+    await interfaceHostPage.goto('http://fluentread-interface.test/article', {waitUntil: 'domcontentloaded', timeout});
+    await activateExtensionTabWithoutForeground(context, interfaceHostPage, timeout);
+
+    // 迁移基线已明确完成界面语言设置；先用真实 Popup 确认不会重新弹出引导，
+    // 再验证每套皮肤，避免把尚未读取当前标签页的中间态误判成栏目缺失。
+    const initializedPopup = await newPageWithoutForeground(context, timeout);
+    attachPageDiagnostics(initializedPopup);
+    await initializedPopup.setViewportSize({width: 400, height: 600});
+    await initializedPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+    await initializedPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+    await initializedPopup.locator('.site-rule-row').waitFor({state: 'visible', timeout});
+    if (await initializedPopup.getByTestId('ui-language-onboarding').count() !== 0) {
+      throw new Error('已完成界面语言设置的迁移配置仍重复显示首次引导');
+    }
+    report.assertions.uiLanguageOnboardingCompletedBaseline = true;
+    if (await initializedPopup.locator('.site-rule-row').count() !== 1) {
+      throw new Error('简约风格没有在普通网页上下文显示当前网站栏目');
+    }
+    const popupModuleOrder = await initializedPopup.locator('[data-popup-module]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-module')),
+    );
+    if (JSON.stringify(popupModuleOrder) !== JSON.stringify(customLayoutOrder)) {
+      throw new Error(`Popup 没有按保存布局渲染模块：${JSON.stringify(popupModuleOrder)}`);
+    }
+    const popupQuickFeatureOrder = await initializedPopup.locator('[data-popup-quick-feature]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-quick-feature')),
+    );
+    if (JSON.stringify(popupQuickFeatureOrder) !== JSON.stringify(visibleCustomQuickFeatureOrder)
+      || await initializedPopup.locator('[data-popup-quick-feature="image"]').count() !== 0) {
+      throw new Error(`Popup 没有应用快捷功能卡片的顺序与显隐：${JSON.stringify(popupQuickFeatureOrder)}`);
+    }
+    const reorderedModuleSpacing = await initializedPopup.evaluate(() => {
+      const quickFeatures = document.querySelector('[data-popup-module="quickFeatures"]')?.getBoundingClientRect();
+      const translation = document.querySelector('[data-popup-module="translation"]')?.getBoundingClientRect();
+      const lastFeatureCard = document
+        .querySelector('[data-popup-module="quickFeatures"] .feature-card:last-child')
+        ?.getBoundingClientRect();
+      const mainAction = document
+        .querySelector('[data-popup-module="translation"] [data-testid="page-translation"]')
+        ?.getBoundingClientRect();
+      return {
+        moduleGap: quickFeatures && translation ? translation.top - quickFeatures.bottom : -1,
+        controlGap: lastFeatureCard && mainAction ? mainAction.top - lastFeatureCard.bottom : -1,
+      };
+    });
+    if (reorderedModuleSpacing.moduleGap < 10 || reorderedModuleSpacing.controlGap < 10) {
+      throw new Error(`重排后快捷功能与网页翻译控件间距不足：${JSON.stringify(reorderedModuleSpacing)}`);
+    }
+    report.screenshots.push(await screenshotElement(
+      initializedPopup.locator('.popup-shell'),
+      'popup-interface-minimal-custom-layout.png',
+    ));
+    await initializedPopup.close();
+
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="default"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'default', undefined, {timeout});
+    await page.waitForTimeout(450);
+    const defaultSingleFeatureHiddenPopup = await newPageWithoutForeground(context, timeout);
+    attachPageDiagnostics(defaultSingleFeatureHiddenPopup);
+    await defaultSingleFeatureHiddenPopup.setViewportSize({width: 400, height: 600});
+    await defaultSingleFeatureHiddenPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+    await defaultSingleFeatureHiddenPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+    await defaultSingleFeatureHiddenPopup.waitForTimeout(300);
+    const defaultSingleFeatureHiddenMetrics = await inspectPopupContentHeight(
+      defaultSingleFeatureHiddenPopup, '默认风格隐藏单张快捷卡片',
+    );
+    if (defaultSingleFeatureHiddenMetrics.visibleQuickFeatures !== 4
+      || await defaultSingleFeatureHiddenPopup.locator('[data-popup-quick-feature="image"]').count() !== 0) {
+      throw new Error(`默认风格没有应用单张快捷卡片显隐：${JSON.stringify(defaultSingleFeatureHiddenMetrics)}`);
+    }
+    report.screenshots.push(await screenshotElement(
+      defaultSingleFeatureHiddenPopup.locator('.popup-shell'),
+      'popup-interface-default-single-feature-hidden.png',
+    ));
+    await defaultSingleFeatureHiddenPopup.close();
+
+    // 先证明单项配置跨页面生效，再恢复显式添加后的五张卡片，避免影响后续完整皮肤矩阵。
+    await popupQuickFeatureEditor.locator('.popup-layout-hidden-chip').filter({hasText: '图片翻译'}).getByRole('button', {name: '添加图片翻译', exact: true}).click();
+    await popupQuickFeatureEditor.getByRole('button', {name: '恢复默认顺序'}).click();
+    await page.waitForFunction((expected) => (
+      JSON.stringify(
+        [...document.querySelectorAll('[data-popup-quick-feature-editor] [data-popup-quick-feature-layout]')]
+          .map(element => element.getAttribute('data-popup-quick-feature-layout')),
+      ) === JSON.stringify(expected)
+      && document.querySelector('[data-popup-quick-feature-editor] [data-popup-quick-feature-layout="image"]') !== null
+      && document.querySelector('[data-popup-quick-feature-editor] .popup-layout-hidden-chip') === null
+    ), defaultQuickFeatureOrder, {timeout});
+    await page.waitForTimeout(500);
+
+    const skinCases = [];
+    // 矩阵较长：异常时也必须导出已完成的真实 case，避免只剩截图而丢失验证范围。
+    report.informationArchitecture.interfaceSettings = {
+      location: 'settings-interface',
+      groups: interfaceGroups,
+      skinOptions: expectedInterfaceSkins.map(item => item.value),
+      skinCases,
+    };
+    const visualSignatures = new Set();
+    // 皮肤矩阵复用同一真实扩展页，每次完整导航重新读取持久化配置。
+    // 短生命周期关闭/重开由前面的独立 case 覆盖；避免反复创建 Target 使 macOS 激活 Edge。
+    const skinPopup = await newPageWithoutForeground(context, timeout);
+    attachPageDiagnostics(skinPopup);
+    await skinPopup.setViewportSize({width: 400, height: 600});
+    for (const skin of expectedInterfaceSkins) {
+      const skinCard = interfaceSettingsGroup.locator(`.interface-skin-option[data-skin="${skin.value}"]`);
+      await skinCard.click();
+      await page.waitForFunction(({value, kind}) => (
+        document.documentElement.dataset.interfaceSkin === value
+        && document.documentElement.dataset.interfaceSkinKind === kind
+        && document.querySelector('.interface-skin-live-preview')?.getAttribute('data-preview-skin') === value
+      ), {value: skin.value, kind: skin.kind}, {timeout});
+      if (await skinCard.getAttribute('aria-checked') !== 'true') {
+        throw new Error(`${skin.label}切换后没有进入选中状态`);
+      }
+      const optionsMetrics = await page.evaluate(() => {
+        const rootStyle = getComputedStyle(document.documentElement);
+        return {
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          brand: rootStyle.getPropertyValue('--brand').trim(),
+          workspaceBackground: getComputedStyle(document.querySelector('.workspace')).backgroundColor,
+          sidebarBackground: getComputedStyle(document.querySelector('.sidebar')).backgroundColor,
+          groupBackground: getComputedStyle(document.querySelector('#settings-interface .settings-group-body')).backgroundColor,
+        };
+      });
+      if (optionsMetrics.horizontalOverflow
+        || optionsMetrics.brand !== skin.brand
+        || !optionsMetrics.workspaceBackground
+        || !optionsMetrics.sidebarBackground
+        || !optionsMetrics.groupBackground) {
+        throw new Error(`${skin.label}设置页布局异常：${JSON.stringify(optionsMetrics)}`);
+      }
+      report.screenshots.push(await screenshotElement(skinCard, `settings-interface-${skin.value}.png`));
+      report.screenshots.push(await screenshotElement(liveSkinPreview, `settings-interface-preview-${skin.value}.png`));
+      const designMatrix = await verifyInterfaceDesignMatrix(page, skin, report);
+      await page.waitForTimeout(320);
+
+      await skinPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+      await skinPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+      await skinPopup.waitForTimeout(280);
+      await skinPopup.evaluate(() => document.documentElement.classList.remove('dark'));
+      await skinPopup.waitForTimeout(220);
+      if (await skinPopup.locator(`main[data-interface-skin="${skin.value}"]`).count() !== 1) {
+        throw new Error(`Popup 重新加载后没有应用${skin.label}`);
+      }
+      if (await skinPopup.locator('html').getAttribute('data-interface-skin-kind') !== skin.kind) {
+        throw new Error(`${skin.label}没有应用注册的布局类型 ${skin.kind}`);
+      }
+      if (await skinPopup.locator('.site-rule-row').count() !== 1) {
+        throw new Error(`${skin.label}没有在普通网页上下文显示当前网站栏目`);
+      }
+      const metrics = await skinPopup.locator('.popup-shell').evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        const rootStyle = getComputedStyle(document.documentElement);
+        return {
+          shellHeight: rect.height,
+          shellWidth: rect.width,
+          heightMode: document.documentElement.dataset.popupHeight,
+          popupWidthVariable: rootStyle.getPropertyValue('--interface-popup-width').trim(),
+          htmlMinHeight: rootStyle.minHeight,
+          bodyMinHeight: getComputedStyle(document.body).minHeight,
+          appMinHeight: getComputedStyle(document.querySelector('#app')).minHeight,
+          shellMinHeight: getComputedStyle(element).minHeight,
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          brand: rootStyle.getPropertyValue('--brand').trim(),
+          surface: rootStyle.getPropertyValue('--surface').trim(),
+          ink: rootStyle.getPropertyValue('--ink').trim(),
+          actionText: getComputedStyle(document.querySelector('.translate-button')).color,
+          shellBackgroundImage: getComputedStyle(element).backgroundImage,
+          heroRadius: getComputedStyle(document.querySelector('.hero-card')).borderRadius,
+          visibleBetaBadges: [...document.querySelectorAll('.beta-badge')]
+            .filter(badge => getComputedStyle(badge).display !== 'none').length,
+          translateButtonBackground: getComputedStyle(document.querySelector('.translate-button')).backgroundColor,
+          declaredActionBackground: rootStyle.getPropertyValue('--skin-action-background').trim() || rootStyle.getPropertyValue('--brand').trim(),
+          translateButtonBackgroundImage: getComputedStyle(document.querySelector('.translate-button')).backgroundImage,
+          translateButtonShadow: getComputedStyle(document.querySelector('.translate-button')).boxShadow,
+          siteRuleBackground: getComputedStyle(document.querySelector('.site-rule-row [data-setting="always-translate-site"]')).backgroundColor,
+          siteRuleKnobBackground: getComputedStyle(document.querySelector('.site-rule-row [data-setting="always-translate-site"] i')).backgroundColor,
+          brandIconFilter: getComputedStyle(document.querySelector('.popup-shell .brand img')).filter,
+          brandIconOpacity: getComputedStyle(document.querySelector('.popup-shell .brand img')).opacity,
+        };
+      });
+      metrics.textContrast = contrastRatio(metrics.ink, metrics.surface);
+      metrics.motifs = await inspectInterfaceMotif(skinPopup.locator('.popup-shell'), skin);
+      metrics.actionContrast = skin.kind === 'palette'
+        ? contrastRatio(metrics.actionText, metrics.translateButtonBackground)
+        : null;
+      Object.assign(metrics, await inspectPopupContentHeight(skinPopup, `${skin.label}完整栏目`));
+      if (Math.abs(metrics.shellWidth - skin.popupWidth) > 1
+        || metrics.popupWidthVariable !== `${skin.popupWidth}px`
+        || metrics.shellHeight > 560
+        || metrics.horizontalOverflow
+        || metrics.brand !== skin.brand
+        || metrics.surface !== skin.surface
+        || !metrics.ink
+        || metrics.textContrast < 4.5
+        || (skin.kind === 'palette' && (
+          !matchesPalettePopupSurfaces(metrics)
+        ))) {
+        throw new Error(`${skin.label}基础布局异常：${JSON.stringify(metrics)}`);
+      }
+      if (skin.value === 'minimal' && (
+        metrics.visibleBetaBadges !== 0
+        || metrics.translateButtonBackgroundImage !== 'none'
+        || metrics.translateButtonShadow !== 'none'
+        || metrics.translateButtonBackground === 'rgb(239, 71, 118)'
+        || metrics.siteRuleBackground === 'rgb(239, 71, 118)'
+        || metrics.brandIconFilter !== 'none'
+        || metrics.brandIconOpacity !== '1'
+      )) {
+        throw new Error(`简约风格仍包含装饰标签或高强调控件：${JSON.stringify(metrics)}`);
+      }
+      visualSignatures.add(JSON.stringify([
+        skin.kind,
+        metrics.brand,
+        metrics.surface,
+        metrics.shellBackgroundImage,
+        metrics.heroRadius,
+      ]));
+      report.screenshots.push(await screenshotElement(skinPopup.locator('.popup-shell'), `popup-interface-${skin.value}.png`));
+
+      await skinPopup.evaluate(() => document.documentElement.classList.add('dark'));
+      await skinPopup.waitForTimeout(skin.kind === 'palette' ? 200 : 80);
+      const darkMetrics = await skinPopup.evaluate(() => {
+        const rootStyle = getComputedStyle(document.documentElement);
+        return {
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          brand: rootStyle.getPropertyValue('--brand').trim(),
+          elementPrimary: rootStyle.getPropertyValue('--el-color-primary').trim(),
+          surface: rootStyle.getPropertyValue('--surface').trim(),
+          ink: rootStyle.getPropertyValue('--ink').trim(),
+          actionText: getComputedStyle(document.querySelector('.translate-button')).color,
+          translateButtonBackground: getComputedStyle(document.querySelector('.translate-button')).backgroundColor,
+          declaredActionBackground: rootStyle.getPropertyValue('--skin-action-background').trim() || rootStyle.getPropertyValue('--brand').trim(),
+          translateButtonBackgroundImage: getComputedStyle(document.querySelector('.translate-button')).backgroundImage,
+          shellBackgroundImage: getComputedStyle(document.querySelector('.popup-shell')).backgroundImage,
+          bodyBackground: getComputedStyle(document.body).backgroundColor,
+        };
+      });
+      darkMetrics.textContrast = contrastRatio(darkMetrics.ink, darkMetrics.surface);
+      darkMetrics.motifs = await inspectInterfaceMotif(skinPopup.locator('.popup-shell'), skin);
+      darkMetrics.actionContrast = skin.kind === 'palette'
+        ? contrastRatio(darkMetrics.actionText, darkMetrics.translateButtonBackground)
+        : null;
+      if (darkMetrics.horizontalOverflow
+        || darkMetrics.surface !== skin.darkSurface
+        || !darkMetrics.brand
+        || !darkMetrics.ink
+        || darkMetrics.textContrast < 4.5
+        || (skin.kind === 'palette' && (
+          !matchesPalettePopupSurfaces(darkMetrics)
+          || darkMetrics.elementPrimary !== darkMetrics.brand
+        ))) {
+        throw new Error(`${skin.label}暗色布局异常：${JSON.stringify(darkMetrics)}`);
+      }
+      report.screenshots.push(await screenshotElement(skinPopup.locator('.popup-shell'), `popup-interface-${skin.value}-dark.png`));
+      await skinPopup.evaluate(() => document.documentElement.classList.remove('dark'));
+
+      // 用明显长于中文的德文式文案逐套验证关键操作可换行且不会造成横向溢出。
+      await skinPopup.evaluate(() => {
+        const longCopy = new Map([
+          ['.translate-label', 'Diese gesamte Webseite jetzt in die ausgewählte Sprache übersetzen'],
+          ['.feature-card:nth-child(1) strong', 'Übersetzung beim Bewegen des Mauszeigers'],
+          ['.feature-card:nth-child(3) strong', 'Darstellung der Übersetzung anpassen'],
+          ['[data-popup-quick-feature="document"] strong', 'Dokumente in mehreren Sprachen übersetzen'],
+        ]);
+        for (const [selector, value] of longCopy) {
+          const element = document.querySelector(selector);
+          if (element) element.textContent = value;
+        }
+      });
+      const multilingualMetrics = await skinPopup.evaluate(() => {
+        const selectors = ['.translate-button', '.feature-card:nth-child(1)', '.feature-card:nth-child(3)', '[data-popup-quick-feature="document"]'];
+        return {
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          shellHeight: document.querySelector('.popup-shell')?.getBoundingClientRect().height || 0,
+          items: selectors.map(selector => {
+            const element = document.querySelector(selector);
+            return {
+              selector,
+              clientWidth: element?.clientWidth || 0,
+              scrollWidth: element?.scrollWidth || 0,
+            };
+          }),
+        };
+      });
+      multilingualMetrics.contentHeight = await inspectPopupContentHeight(skinPopup, `${skin.label}长文案`);
+      if (multilingualMetrics.horizontalOverflow
+        || multilingualMetrics.items.some(item => item.scrollWidth > item.clientWidth + 1)) {
+        throw new Error(`${skin.label}无法容纳长文案：${JSON.stringify(multilingualMetrics)}`);
+      }
+      report.screenshots.push(await screenshotElement(skinPopup.locator('.popup-shell'), `popup-interface-${skin.value}-long-copy.png`));
+      skinCases.push({
+        ...skin,
+        designMatrix,
+        optionsMetrics,
+        metrics,
+        darkMetrics,
+        multilingualMetrics,
+      });
+    }
+    // Edge 的 CDP 附加在长皮肤矩阵后新建 Target 可能激活原生窗口。
+    // 保留同一隔离页，每项先完整离开 Popup 再重新加载，销毁旧文档及组件状态。
+    await assertTestBrowserRemainsBackground(context, '皮肤矩阵后重建 Popup 文档前');
+    await skinPopup.goto('about:blank', {waitUntil: 'domcontentloaded', timeout});
+    report.skinPopupLifecycle = {
+      isolatedPages: 1,
+      fullNavigations: expectedInterfaceSkins.length,
+      appearanceReopenNavigations: 0,
+      appearanceReopenMode: 'blank-then-popup',
+    };
+    if (visualSignatures.size !== expectedInterfaceSkins.length) {
+      throw new Error(`所有皮肤没有形成独立视觉签名：${visualSignatures.size}`);
+    }
+
+    // 配色型皮肤的共享适配层必须覆盖独立 feature，而不是只覆盖通用设置组件。
+    // 同时用水墨遍历全部导航，阻止任何新页面重新引入大面积纯白表面。
+    const paletteSkins = expectedInterfaceSkins.filter(item => item.kind === 'palette');
+    const specialtyPages = [
+      {section: 'settings-services', ready: '.service-detail'},
+      {section: 'settings-image-translation', ready: '.image-ocr-pack-card'},
+      {section: 'settings-image-translation', ready: '#settings-area-translation .feature-enable-card', feature: 'area'},
+      {section: 'settings-vocabulary', ready: '.vocabulary-book'},
+    ];
+    const auditLargeWhiteSurfaces = () => page.evaluate(() => {
+      const surface = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim().toLowerCase();
+      // 明亮皮肤可以有意使用纯白内容卡；只拦截与当前皮肤语义底色不一致的硬编码白块。
+      if (surface === '#fff' || surface === '#ffffff') return [];
+      // 收款二维码需要白底保证扫码对比度，不属于皮肤表面。
+      // 译文样式预览与卡片缩略图模拟网站自身配色，按设计不随扩展皮肤着色。
+      const excluded = '.translation-style-preview-page, .translation-style-card-sample, .interface-skin-live-preview, .popup-layout-live-preview, .about-support-wechat';
+      return [...document.querySelectorAll('.settings-card *')]
+        .filter(element => {
+          if (!(element instanceof HTMLElement) || element.closest(excluded)) return false;
+          const rect = element.getBoundingClientRect();
+          if (rect.width * rect.height < 2800 || rect.width < 90 || rect.height < 26) return false;
+          const style = getComputedStyle(element);
+          return style.display !== 'none'
+            && style.visibility !== 'hidden'
+            && Number(style.opacity) > 0
+            && style.backgroundColor === 'rgb(255, 255, 255)';
+        })
+        .map(element => ({
+          tag: element.tagName.toLowerCase(),
+          className: element.className,
+          width: Math.round(element.getBoundingClientRect().width),
+          height: Math.round(element.getBoundingClientRect().height),
+        }));
+    });
+    const paletteSurfaceCoverage = [];
+    for (const skin of paletteSkins) {
+      await interfaceSettingsGroup.locator(`.interface-skin-option[data-skin="${skin.value}"]`).click();
+      await page.waitForFunction(value => document.documentElement.dataset.interfaceSkin === value, skin.value, {timeout});
+      for (const specialty of specialtyPages) {
+        await selectSettingsSection(page, specialty.section);
+        if (specialty.ready === '.image-ocr-pack-card') await openSharedOcrResources(page);
+        await page.locator(specialty.ready).first().waitFor({state: 'visible', timeout});
+        await page.waitForTimeout(120);
+        const whiteSurfaces = await auditLargeWhiteSurfaces();
+        if (whiteSurfaces.length) {
+          throw new Error(`${skin.label}在${specialty.section}仍有大面积纯白表面：${JSON.stringify(whiteSurfaces)}`);
+        }
+        paletteSurfaceCoverage.push({skin: skin.value, section: specialty.section, feature: specialty.feature || specialty.section});
+      }
+      await selectSettingsSection(page, 'settings-interface');
+      await liveSkinPreview.waitFor({state: 'visible', timeout});
+    }
+
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="shuimo"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'shuimo', undefined, {timeout});
+    const paperPageCoverage = [];
+    for (const [section] of expectedNavigation) {
+      await selectSettingsSection(page, section);
+      await page.locator(`button[data-section="${section}"].active`).waitFor({state: 'visible', timeout});
+      await page.waitForTimeout(120);
+      const whiteSurfaces = await auditLargeWhiteSurfaces();
+      if (whiteSurfaces.length) {
+        throw new Error(`水墨在${section}仍有大面积纯白表面：${JSON.stringify(whiteSurfaces)}`);
+      }
+      paperPageCoverage.push(section);
+      report.screenshots.push(await screenshot(page, `settings-paper-${section}.png`));
+    }
+    report.paletteSurfaceCoverage = paletteSurfaceCoverage;
+    report.paperPageCoverage = paperPageCoverage;
+    report.informationArchitecture.fullNavigationPalette = 'shuimo';
+    report.assertions.paletteSurfaceCoverage = true;
+
+    await selectSettingsSection(page, 'settings-interface');
+    await interfaceSettingsGroup.waitFor({state: 'visible', timeout});
+    const minimalSkinCase = skinCases.find(item => item.value === 'minimal');
+    if (!minimalSkinCase) throw new Error('缺少简约风格验证结果');
+    const minimalPopupMetrics = minimalSkinCase.metrics;
+    const multilingualMetrics = minimalSkinCase.multilingualMetrics;
+
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="minimal"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'minimal', undefined, {timeout});
+    await page.waitForTimeout(400);
+
+    await popupModuleTab.click();
+    await popupLayoutEditor.locator('[data-popup-layout-module="quickFeatures"] .popup-layout-hide').click();
+    await popupLayoutEditor.locator('[data-popup-layout-module="footer"] .popup-layout-hide').click();
+    await page.waitForFunction(() => (
+      document.querySelector('[data-popup-layout-module="quickFeatures"]') === null
+      && document.querySelector('[data-popup-layout-module="footer"]') === null
+      && document.querySelector('.popup-layout-hidden-chip') !== null
+    ), undefined, {timeout});
+    await page.waitForTimeout(500);
+
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 前');
+    await skinPopup.setViewportSize({width: 400, height: 600});
+    await skinPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+    report.skinPopupLifecycle.appearanceReopenNavigations += 1;
+    await skinPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+    await skinPopup.waitForTimeout(350);
+    if (await skinPopup.locator('.features').count() !== 0) {
+      const visibilityDiagnostics = await skinPopup.locator('.popup-shell').evaluate(element => ({
+        quickFeatures: element.getAttribute('data-popup-quick-features-visible'),
+        siteRule: element.getAttribute('data-popup-site-rule-visible'),
+        footer: element.getAttribute('data-popup-footer-visible'),
+        moduleOrder: element.getAttribute('data-popup-module-order'),
+      }));
+      throw new Error(`关闭快捷功能栏后 Popup 仍显示快捷功能：${JSON.stringify(visibilityDiagnostics)}`);
+    }
+    if (await skinPopup.locator('footer').count() !== 0) throw new Error('关闭底部信息栏后 Popup 仍显示底部信息');
+    if (await skinPopup.locator('main[data-interface-skin="minimal"]').count() !== 1) {
+      throw new Error('Popup 重开后没有应用简约风格');
+    }
+    const popupMetrics = await inspectPopupContentHeight(skinPopup, '简约风格隐藏栏目');
+    if (popupMetrics.shellHeight >= minimalPopupMetrics.shellHeight - 40) {
+      throw new Error(`隐藏 Popup 栏目后空白区域没有随内容收缩：${JSON.stringify(popupMetrics)}`);
+    }
+    report.screenshots.push(await screenshotElement(skinPopup.locator('.popup-shell'), 'popup-interface-minimal-hidden-sections.png'));
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 完成简约隐藏栏目检查后');
+    await skinPopup.goto('about:blank', {waitUntil: 'domcontentloaded', timeout});
+
+    // 默认风格的完整布局与隐藏栏目均按内容高度排版，不保留固定空白。
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="default"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'default', undefined, {timeout});
+    await page.waitForTimeout(500);
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 进行默认隐藏栏目检查前');
+    await skinPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+    report.skinPopupLifecycle.appearanceReopenNavigations += 1;
+    await skinPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+    await skinPopup.waitForTimeout(350);
+    const defaultHiddenMetrics = await inspectPopupContentHeight(skinPopup, '默认风格隐藏栏目');
+    const defaultSkinCase = skinCases.find(item => item.value === 'default');
+    if (!defaultSkinCase || defaultHiddenMetrics.shellHeight >= defaultSkinCase.metrics.shellHeight - 40) {
+      throw new Error(`默认风格隐藏栏目后没有按内容收缩：${JSON.stringify(defaultHiddenMetrics)}`);
+    }
+    report.screenshots.push(await screenshotElement(skinPopup.locator('.popup-shell'), 'popup-interface-default-hidden-sections.png'));
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 完成默认隐藏栏目检查后');
+    await skinPopup.goto('about:blank', {waitUntil: 'domcontentloaded', timeout});
+
+    await popupLayoutEditor.locator('.popup-layout-hidden-chip').filter({hasText: '快捷功能栏'}).getByRole('button', {name: '添加快捷功能栏', exact: true}).click();
+    await popupLayoutEditor.locator('.popup-layout-hidden-chip').filter({hasText: '底部信息栏'}).getByRole('button', {name: '添加底部信息栏', exact: true}).click();
+    await page.waitForFunction(() => (
+      document.querySelector('[data-popup-layout-module="quickFeatures"]') !== null
+      && document.querySelector('[data-popup-layout-module="footer"]') !== null
+    ), undefined, {timeout});
+    await popupLayoutEditor.getByRole('button', {name: '恢复默认顺序'}).click();
+    await page.waitForFunction((expected) => JSON.stringify(
+      [...document.querySelectorAll('[data-popup-layout-editor] [data-popup-layout-module]')]
+        .map(element => element.getAttribute('data-popup-layout-module')),
+    ) === JSON.stringify(expected), defaultLayoutOrder, {timeout});
+    await page.waitForTimeout(500);
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 进行默认完整栏目检查前');
+    await skinPopup.goto(`${extensionOrigin}/popup.html`, {waitUntil: 'domcontentloaded', timeout});
+    report.skinPopupLifecycle.appearanceReopenNavigations += 1;
+    await skinPopup.locator('.popup-shell').waitFor({state: 'visible', timeout});
+    await skinPopup.waitForTimeout(350);
+    const defaultFullMetrics = await inspectPopupContentHeight(skinPopup, '恢复默认完整栏目');
+    const defaultFooterBottomGap = defaultFullMetrics.scrolling.longContent
+      ? defaultFullMetrics.scrolling.end.lastModuleBottomGap
+      : defaultFullMetrics.lastModuleBottomGap;
+    if (defaultFullMetrics.lastModule !== 'footer'
+      || Math.abs(defaultFooterBottomGap - defaultFullMetrics.expectedBottomGap) > 1
+      || defaultFullMetrics.shellHeight <= defaultHiddenMetrics.shellHeight + 40) {
+      throw new Error(`默认完整布局的页脚边距或内容伸展异常：${JSON.stringify(defaultFullMetrics)}`);
+    }
+    const restoredPopupModuleOrder = await skinPopup.locator('[data-popup-module]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-module')),
+    );
+    if (JSON.stringify(restoredPopupModuleOrder) !== JSON.stringify(defaultLayoutOrder)) {
+      throw new Error(`恢复默认后 Popup 模块顺序异常：${JSON.stringify(restoredPopupModuleOrder)}`);
+    }
+    const restoredPopupQuickFeatureOrder = await skinPopup.locator('[data-popup-quick-feature]').evaluateAll(
+      elements => elements.map(element => element.getAttribute('data-popup-quick-feature')),
+    );
+    if (JSON.stringify(restoredPopupQuickFeatureOrder) !== JSON.stringify(defaultQuickFeatureOrder)) {
+      throw new Error(`恢复默认后快捷功能卡片顺序异常：${JSON.stringify(restoredPopupQuickFeatureOrder)}`);
+    }
+    const deliverablePopupSkins = [];
+    for (const skin of ['yuebai', 'shuimo']) {
+      await interfaceSettingsGroup.locator(`.interface-skin-option[data-skin="${skin}"]`).click();
+      await page.waitForFunction(value => document.documentElement.dataset.interfaceSkin === value, skin, {timeout});
+      await page.waitForTimeout(450);
+      await skinPopup.reload({waitUntil: 'domcontentloaded', timeout});
+      await skinPopup.waitForFunction(value => document.documentElement.dataset.interfaceSkin === value, skin, {timeout});
+      await skinPopup.evaluate(() => document.documentElement.classList.remove('dark'));
+      await skinPopup.waitForTimeout(220);
+      const visibleOrder = await skinPopup.locator('[data-popup-module]').evaluateAll(elements => elements.map(element => element.getAttribute('data-popup-module')));
+      if (JSON.stringify(visibleOrder) !== JSON.stringify(defaultLayoutOrder)) {
+        throw new Error(`交付用 ${skin} 菜单栏没有恢复默认栏目顺序：${JSON.stringify(visibleOrder)}`);
+      }
+      const file = await screenshotElement(skinPopup.locator('.popup-shell'), `deliverable-popup-${skin}.png`);
+      report.screenshots.push(file);
+      deliverablePopupSkins.push({skin, moduleOrder: visibleOrder, file});
+    }
+    await page.setViewportSize({width: 1440, height: 1000});
+    await selectSettingsSection(page, 'settings-interface');
+    await liveSkinPreview.scrollIntoViewIfNeeded();
+    report.screenshots.push(await screenshot(page, 'deliverable-settings-shuimo-1440.png'));
+    report.deliverablePopupSkins = deliverablePopupSkins;
+    await interfaceSettingsGroup.locator('.interface-skin-option[data-skin="default"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.interfaceSkin === 'default', undefined, {timeout});
+    await assertTestBrowserRemainsBackground(context, '复用 skinPopup 完成默认完整栏目与交付皮肤检查后');
+    await skinPopup.close();
+    await interfaceHostPage.close();
+
+    report.informationArchitecture.interfaceSettings = {
+      location: 'settings-interface',
+      skinOptions: expectedInterfaceSkins.map(item => item.value),
+      skinGroups: {
+        utility: expectedInterfaceSkins.filter(item => item.kind !== 'palette').map(item => item.value),
+        palette: expectedInterfaceSkins.filter(item => item.kind === 'palette').map(item => item.value),
+      },
+      selectedSkin: 'default',
+      skinCases,
+      minimalPopupMetrics,
+      hiddenSections: ['popupQuickFeatures', 'popupFooter'],
+      hiddenMinimalMetrics: popupMetrics,
+      hiddenDefaultMetrics: defaultHiddenMetrics,
+      fullDefaultMetrics: defaultFullMetrics,
+      multilingualMetrics,
+      popupLayout: {
+        defaultOrder: defaultLayoutOrder,
+        draggedOrder: draggedLayoutOrder,
+        persistedOrder: persistedLayoutOrder,
+        latestWriteOrder: latestWriteLayoutOrder,
+        popupOrder: popupModuleOrder,
+        reorderedModuleSpacing,
+        restoredOrder: restoredPopupModuleOrder,
+        keyboardReorder: true,
+        livePreview: true,
+      },
+      popupQuickFeatures: {
+        defaultOrder: defaultQuickFeatureOrder,
+        customOrder: customQuickFeatureOrder,
+        persistedOrder: persistedQuickFeatureOrder,
+        popupOrder: popupQuickFeatureOrder,
+        hiddenFeature: 'image',
+        hiddenDefaultMetrics: defaultSingleFeatureHiddenMetrics,
+        restoredOrder: restoredPopupQuickFeatureOrder,
+      },
+      popupRoundTrip: true,
+    };
+    report.persistenceCases.push({
+      name: 'popupModuleOrder',
+      before: defaultLayoutOrder,
+      after: customLayoutOrder,
+      reopened: popupModuleOrder,
+    });
+    report.persistenceCases.push({
+      name: 'popupQuickFeatureOrderAndVisibility',
+      before: defaultQuickFeatureOrder,
+      after: {order: customQuickFeatureOrder, hidden: ['image']},
+      reopened: popupQuickFeatureOrder,
+    });
+    report.quickClose.popupModuleOrder = true;
+    report.quickClose.popupQuickFeatureOrderAndVisibility = true;
+    report.crossPageSync.popupModuleOrder = true;
+    report.crossPageSync.popupQuickFeatureOrderAndVisibility = true;
+    report.latestWriteWins.popupModuleOrder = true;
+    report.assertions.interfaceSettings = true;
+    report.assertions.interfaceSkinMatrix = true;
+    report.assertions.interfaceSkinLightDarkResponsiveMatrix = true;
+    report.assertions.interfaceMotifParity = true;
+    report.assertions.interfaceVisibility = true;
+    report.assertions.popupLayoutPersistence = true;
+    report.assertions.popupQuickFeatureLayoutPersistence = true;
+    report.assertions.multilingualInterfaceLayout = true;
+
+    await selectSettingsSection(page, 'settings-translation-stats', 'usage');
     await page.locator('#settings-model-usage').waitFor({state: 'visible', timeout});
     await page.waitForFunction(() => document.querySelector('#settings-model-usage .usage-state-card, #settings-model-usage .usage-summary-grid'), undefined, {timeout});
     const modelUsageFixture = await seedModelUsageFixture(page);
@@ -626,22 +2705,46 @@ async function main() {
     report.screenshots.push(await screenshot(page, 'settings-model-usage-filter-open.png'));
     await page.keyboard.press('Escape');
     await openFilterDropdown.waitFor({state: 'hidden', timeout});
+    // ModelUsageDashboard.vue 将平均构成和模型调用记录改为常驻 section。
+    // 保留默认可见性与明确命名的检查，随后继续逐项验证实际统计值。
+    const averageComposition = page.locator(modelUsageAverageSelector);
+    if (await averageComposition.count() !== 1 || !await averageComposition.isVisible()
+      || await averageComposition.getAttribute('aria-label') !== '平均每次请求') {
+      throw new Error('模型用量平均构成没有常驻显示或缺少明确名称');
+    }
+    const requestRecords = page.locator(modelUsageRequestLogSelector);
+    const requestRecordsState = {
+      visible: await requestRecords.isVisible(),
+      labelledBy: await requestRecords.getAttribute('aria-labelledby'),
+      title: (await requestRecords.locator('#usage-request-log-title').textContent())?.trim(),
+    };
+    if (await requestRecords.count() !== 1 || !requestRecordsState.visible
+      || requestRecordsState.labelledBy !== 'usage-request-log-title'
+      || requestRecordsState.title !== '模型调用记录') {
+      throw new Error(`模型用量调用记录没有默认显示或缺少明确入口：${JSON.stringify(requestRecordsState)}`);
+    }
+    const allCoverageNotice = await page.locator('#settings-model-usage .usage-coverage-note').textContent();
+    if (!allCoverageNotice?.includes('66.7%')) {
+      throw new Error(`全部调用 Token 上报率没有计入失败请求：${allCoverageNotice}`);
+    }
+    await averageComposition.scrollIntoViewIfNeeded();
     const allAverageValues = (await page.locator('#settings-model-usage .usage-average-value strong').allTextContents())
       .map(value => value.trim());
     if (JSON.stringify(allAverageValues) !== JSON.stringify([
-      String(modelUsageFixture.allAverageInput),
+      String(modelUsageFixture.allAverageUncachedInput),
+      String(modelUsageFixture.allAverageCachedInput),
       String(modelUsageFixture.allAverageOutput),
     ])) {
-      throw new Error(`全部范围的平均输入输出异常：${JSON.stringify(allAverageValues)}`);
+      throw new Error(`全部范围的平均无缓存输入/缓存读取/输出异常：${JSON.stringify(allAverageValues)}`);
     }
     const breakdownHeaders = (await page.locator('#settings-model-usage .usage-breakdown-heading > *').allTextContents())
       .map(value => value.trim());
-    if (JSON.stringify(breakdownHeaders) !== JSON.stringify(['服务 / 模型', '输入', '输出', '次数', '总计'])) {
+    if (JSON.stringify(breakdownHeaders) !== JSON.stringify(['服务 / 模型', '输入', '缓存', '输出', '次数', '总计'])) {
       throw new Error('模型用量分布列异常：' + JSON.stringify(breakdownHeaders));
     }
     const breakdownTotals = (await page.locator('#settings-model-usage .usage-breakdown-total').allTextContents())
       .map(value => value.trim());
-    if (JSON.stringify(breakdownTotals) !== JSON.stringify(['600', '500', '150', '0'])) {
+    if (JSON.stringify(breakdownTotals) !== JSON.stringify(['600', '500', '150', '—'])) {
       throw new Error('模型用量分布排序异常：' + JSON.stringify(breakdownTotals));
     }
     const breakdownRequests = (await page.locator('#settings-model-usage .usage-breakdown-requests').allTextContents())
@@ -650,16 +2753,18 @@ async function main() {
       throw new Error('模型用量请求次数列异常：' + JSON.stringify(breakdownRequests));
     }
     await page.getByRole('button', {name: '按输入排序', exact: true}).click();
-    const breakdownSortedByInput = (await page.locator('#settings-model-usage .usage-breakdown-value').evaluateAll(elements => elements
-      .filter((_, index) => index % 4 === 0)
-      .map(element => element.textContent?.trim())))
-      .every((value, index, values) => index === 0 || Number(values[index - 1]) >= Number(value));
-    if (!breakdownSortedByInput) throw new Error('模型用量没有按输入 Token 降序排列');
+    const inputValues = await page.locator('#settings-model-usage .usage-breakdown-value').evaluateAll(elements => elements
+      .filter((_, index) => index % 5 === 0)
+      .map(element => element.textContent?.trim()));
+    // DeepSeek 的这条失败调用没有上报 Token，必须明确显示“—”并排在末尾。
+    // 不把它强制转为 0；真实上报的零 Token 与缺少用量是不同状态。
+    const breakdownSortedByInput = JSON.stringify(inputValues) === JSON.stringify(['420', '300', '100', '—']);
+    if (!breakdownSortedByInput) throw new Error('模型用量没有按输入 Token 降序排列并将未知值置后：' + JSON.stringify(inputValues));
     await page.getByRole('button', {name: '按输出排序', exact: true}).click();
     const outputValues = (await page.locator('#settings-model-usage .usage-breakdown-list > button .usage-breakdown-value').evaluateAll(elements => elements
-      .filter((_, index) => index % 4 === 1)
+      .filter((_, index) => index % 5 === 2)
       .map(element => element.textContent?.trim())));
-    if (JSON.stringify(outputValues) !== JSON.stringify(['200', '180', '50', '0'])) {
+    if (JSON.stringify(outputValues) !== JSON.stringify(['200', '180', '50', '—'])) {
       throw new Error('模型用量没有按输出 Token 降序排列：' + JSON.stringify(outputValues));
     }
     await page.getByRole('button', {name: '按次数排序', exact: true}).click();
@@ -697,10 +2802,11 @@ async function main() {
     const todayAverageValues = (await page.locator('#settings-model-usage .usage-average-value strong').allTextContents())
       .map(value => value.trim());
     if (JSON.stringify(todayAverageValues) !== JSON.stringify([
-      String(modelUsageFixture.todayKimiAverageInput),
+      String(modelUsageFixture.todayKimiAverageUncachedInput),
+      String(modelUsageFixture.todayKimiAverageCachedInput),
       String(modelUsageFixture.todayKimiAverageOutput),
     ])) {
-      throw new Error(`今日范围的平均输入输出异常：${JSON.stringify(todayAverageValues)}`);
+      throw new Error(`今日范围的平均无缓存输入/缓存读取/输出异常：${JSON.stringify(todayAverageValues)}`);
     }
     const usageRequestCount = Number((await page.locator('#settings-model-usage .usage-compact-card').first().locator('strong').textContent())?.replace(/[^0-9]/g, '') || 0);
     if (usageRequestCount !== 2) throw new Error(`Kimi 今日请求数异常：${usageRequestCount}`);
@@ -709,7 +2815,7 @@ async function main() {
     await page.getByRole('button', {name: '清除统计', exact: true}).click();
     const resetDialog = page.getByRole('alertdialog', {name: '清除本机模型用量？'});
     await resetDialog.waitFor({state: 'visible', timeout});
-    if (!await resetDialog.getByText(/不会删除 API Key、翻译设置、缓存或配置历史/).isVisible()) {
+    if (!await resetDialog.getByText(/不会删除 API Key、翻译设置、FluentRead 译文缓存或配置历史/).isVisible()) {
       throw new Error('模型用量重置没有明确隔离其他本地数据');
     }
     const resetCancelButton = resetDialog.getByRole('button', {name: '取消', exact: true});
@@ -742,14 +2848,15 @@ async function main() {
     await selectElementPlusOption(page, '模型用量模型', 'deepseek-chat');
     await page.waitForFunction(() => {
       const text = document.querySelector('#settings-model-usage .usage-token-card .usage-card-heading strong')?.textContent || '';
-      return Number(text.replace(/[^0-9]/g, '')) === 0
+      return text.trim() === '—'
         && document.querySelector('#settings-model-usage .usage-compact-card')?.textContent?.includes('1');
     }, undefined, {timeout});
     if (await page.locator('#settings-model-usage .usage-ratio').count() !== 0) {
       throw new Error('零 Token 请求仍显示了虚假的输入输出比例');
     }
-    if (!await page.getByText('尚无已报告的输入 / 输出 Token', {exact: true}).isVisible()) {
-      throw new Error('零 Token 请求没有显示未报告说明');
+    if (!await page.getByText('缓存读取未上报', {exact: true}).isVisible()
+      || !await page.getByText('暂时无法拆分输入与缓存构成', {exact: true}).isVisible()) {
+      throw new Error('零 Token 请求没有显示缓存明细未上报边界');
     }
     const zeroTokenBreakdownWidth = await page.locator('#settings-model-usage .usage-breakdown-copy i b').first().evaluate(bar => bar.style.width);
     if (zeroTokenBreakdownWidth !== '0%') {
@@ -767,9 +2874,11 @@ async function main() {
       filteredProvider: 'moonshot',
       filteredModel: 'kimi-k2.6',
       todayRequestCount: usageRequestCount,
-      allAverageInput: modelUsageFixture.allAverageInput,
+      allAverageUncachedInput: modelUsageFixture.allAverageUncachedInput,
+      allAverageCachedInput: modelUsageFixture.allAverageCachedInput,
       allAverageOutput: modelUsageFixture.allAverageOutput,
-      todayAverageInput: modelUsageFixture.todayKimiAverageInput,
+      todayAverageUncachedInput: modelUsageFixture.todayKimiAverageUncachedInput,
+      todayAverageCachedInput: modelUsageFixture.todayKimiAverageCachedInput,
       todayAverageOutput: modelUsageFixture.todayKimiAverageOutput,
       breakdownHeaders,
       breakdownTotals,
@@ -781,6 +2890,10 @@ async function main() {
       filterPlaceholderMetrics,
       filterDropdownMetrics,
       tokenCoverage: coverageNotice,
+      allCallTokenCoverage: allCoverageNotice?.trim(),
+      progressiveDisclosure: false,
+      averageCompositionAlwaysVisible: true,
+      requestRecordsAlwaysVisible: true,
       resetCancelPreserved: true,
       rangeKeyboard: true,
       resetFocusLoop: true,
@@ -793,9 +2906,9 @@ async function main() {
     report.assertions.modelUsageResetFocus = true;
     report.assertions.modelUsageZeroTokenEncoding = true;
 
-    await page.locator('button[data-section="settings-general"]').click();
+    await selectSettingsSection(page, 'settings-general');
     const refreshEvent = await appendModelUsageRefreshEvent(page);
-    await page.locator('button[data-section="settings-model-usage"]').click();
+    await selectSettingsSection(page, 'settings-translation-stats', 'usage');
     const refreshedTokenTotal = modelUsageFixture.allTokens + refreshEvent.deltaTokens;
     await page.waitForFunction(expected => {
       const text = document.querySelector('#settings-model-usage .usage-token-card .usage-card-heading strong')?.textContent || '';
@@ -803,7 +2916,7 @@ async function main() {
     }, refreshedTokenTotal, {timeout});
     report.modelUsage.returnRefreshTokens = refreshedTokenTotal;
     report.assertions.modelUsageReturnRefresh = true;
-    await page.locator('button[data-section="settings-general"]').click();
+    await selectSettingsSection(page, 'settings-general');
     const themeGroup = page.getByRole('radiogroup', {name: '界面主题'});
     const initialThemeRadio = themeGroup.locator('[role="radio"][aria-checked="true"]');
     await initialThemeRadio.focus();
@@ -826,17 +2939,64 @@ async function main() {
     };
     if (!Object.values(darkColors).every(isDarkColor)) throw new Error(`暗色主题表面仍为亮色：${JSON.stringify(darkColors)}`);
     report.screenshots.push(await screenshot(page, 'settings-dark-general.png'));
-    await page.locator('button[data-section="settings-services"]').click();
+    await selectSettingsSection(page, 'settings-services');
+    if (await page.getByTestId('model-thinking-control').count() === 0) {
+      // 直接从完整服务列表打开 OpenAI。
+      await page.locator('[data-service-value="openai"]:visible').first().click();
+    }
+    await page.locator('[id$="tab-translation"]').click();
+    const darkTranslationSettings = page.locator('[data-configuration-group="translation"]');
+    await darkTranslationSettings.waitFor({state: 'visible', timeout});
+    const darkThinkingSwitch = darkTranslationSettings.getByRole('switch', {
+      name: '当前模型是否启用 Thinking',
+      includeHidden: true,
+    });
+    const darkThinkingControl = darkThinkingSwitch.locator('..');
+    await darkThinkingControl.waitFor({state: 'visible', timeout});
+    const thinkingDarkSurface = await darkTranslationSettings.evaluate(element => {
+      // 页签面板使用透明背景，检查实际承载它的表面，不能把透明黑当作暗色通过。
+      for (let surface = element; surface; surface = surface.parentElement) {
+        const color = getComputedStyle(surface).backgroundColor;
+        const channels = color.match(/\d+(?:\.\d+)?/g)?.map(Number) || [];
+        if (channels.length === 3 || (channels.length === 4 && channels[3] > 0)) return color;
+      }
+      return '';
+    });
+    if (!isDarkColor(thinkingDarkSurface)) {
+      throw new Error(`包含模型 Thinking 的模型偏好表面仍为亮色：${thinkingDarkSurface}`);
+    }
+    report.informationArchitecture.modelThinkingDarkSurface = thinkingDarkSurface;
     report.screenshots.push(await screenshot(page, 'settings-dark-services.png'));
-    await page.locator('button[data-section="settings-translation"]').click();
+    await page.locator('[data-service-settings-tabs] [id$="tab-requests"]').click();
+    if (await darkTranslationSettings.isVisible()
+      || await page.locator('[data-service-settings-tabs] [role="tabpanel"]:visible').count() !== 1) {
+      throw new Error('暗色验证后没有切回唯一的请求策略页签并隐藏模型偏好');
+    }
+    await selectSettingsSection(page, 'settings-translation');
     report.screenshots.push(await screenshot(page, 'settings-dark-translation.png'));
-    await page.locator('button[data-section="settings-model-usage"]').click();
+    await selectSettingsSection(page, 'settings-interface');
+    await page.locator('#settings-interface .loading-style-option').first().waitFor({state: 'visible', timeout});
+    const darkLoadingStyleSurfaces = await page.locator('.loading-style-option').evaluateAll(cards => (
+      cards.map(card => ({
+        selected: card.classList.contains('selected'),
+        backgroundColor: getComputedStyle(card).backgroundColor,
+      }))
+    ));
+    const selectedDarkLoadingStyle = darkLoadingStyleSurfaces.find(item => item.selected);
+    if (darkLoadingStyleSurfaces.length !== expectedLoadingStyles.length
+      || darkLoadingStyleSurfaces.filter(item => !item.selected).some(item => !isDarkColor(item.backgroundColor))
+      || !selectedDarkLoadingStyle
+      || !selectedDarkLoadingStyle.backgroundColor.startsWith('rgba(')) {
+      throw new Error(`段落加载样式暗色卡片仍为亮色：${JSON.stringify(darkLoadingStyleSurfaces)}`);
+    }
+    report.screenshots.push(await screenshot(page, 'settings-dark-loading-styles.png'));
+    await selectSettingsSection(page, 'settings-translation-stats', 'usage');
     const usageDarkSurface = await page.locator('#settings-model-usage .usage-card').first().evaluate(card => getComputedStyle(card).backgroundColor);
     if (!isDarkColor(usageDarkSurface)) throw new Error(`模型用量暗色卡片仍为亮色：${usageDarkSurface}`);
     report.screenshots.push(await screenshot(page, 'settings-dark-model-usage.png'));
-    await page.locator('button[data-section="settings-data"]').click();
+    await selectSettingsSection(page, 'settings-data');
     report.screenshots.push(await screenshot(page, 'settings-dark-data.png'));
-    await page.locator('button[data-section="settings-general"]').click();
+    await selectSettingsSection(page, 'settings-general');
     await themeGroup.getByRole('radio', {name: '亮色主题', exact: true}).click();
     await page.waitForFunction(() => !document.documentElement.classList.contains('dark'), undefined, {timeout});
     report.assertions.segmentedKeyboard = true;
@@ -845,10 +3005,19 @@ async function main() {
     const generalSection = page.locator('#settings-general');
     const generalGroups = (await page.locator('.settings-section:visible .settings-group-heading h2').allTextContents())
       .map(title => title.trim());
-    if (JSON.stringify(generalGroups) !== JSON.stringify(expectedGeneralGroups)) {
-      throw new Error(`通用设置分组异常：${JSON.stringify(generalGroups)}`);
+    const generalSubgroups = (await page.locator('.settings-section:visible .settings-subgroup-heading h3').allTextContents())
+      .map(title => title.trim());
+    if (JSON.stringify(generalGroups) !== JSON.stringify(expectedGeneralGroups)
+      || JSON.stringify(generalSubgroups) !== JSON.stringify(expectedGeneralSubgroups)) {
+      throw new Error(`通用设置分组异常：${JSON.stringify({generalGroups, generalSubgroups})}`);
     }
     report.informationArchitecture.generalGroups = generalGroups;
+    report.informationArchitecture.generalSubgroups = generalSubgroups;
+    report.bilingualHighlightPreview = await verifyBilingualHighlightPreview(page);
+    report.screenshots.push(report.bilingualHighlightPreview.screenshot);
+    report.assertions.bilingualHighlightPreview = true;
+    report.namedTranslationStyles = await verifyNamedTranslationStyles(page);
+    report.assertions.namedTranslationStyles = true;
 
     const defaultServiceCard = generalSection.getByTestId('default-translation-service-card');
     await defaultServiceCard.waitFor({state: 'visible', timeout});
@@ -856,7 +3025,8 @@ async function main() {
       const item = card.closest('.settings-item');
       const label = item?.querySelector('.settings-item-copy strong');
       const description = item?.querySelector('.settings-item-copy small');
-      const icon = card.querySelector('.service-brand-icon');
+      // 统一下拉框后，服务图标位于 el-select 的前缀槽内，与选中文字同处一个控件。
+      const icon = card.querySelector('.el-select__prefix .service-brand-icon');
       const selected = card.querySelector('.el-select__placeholder');
       const cardStyle = getComputedStyle(card);
       const iconRect = icon?.getBoundingClientRect();
@@ -875,12 +3045,12 @@ async function main() {
     });
     if (!defaultServiceMetrics.defaultService
       || defaultServiceMetrics.label !== '默认网页翻译服务'
-      || defaultServiceMetrics.description !== '全文、悬浮和划词翻译默认使用此服务。'
+      || defaultServiceMetrics.description !== expectedDefaultServiceDescription
       || !defaultServiceMetrics.selectedService
       || defaultServiceMetrics.backgroundImage !== 'none'
       || defaultServiceMetrics.controlShadow !== 'none'
-      || defaultServiceMetrics.controlDisplay !== 'grid'
-      || defaultServiceMetrics.iconWidth < 39
+      || defaultServiceMetrics.controlDisplay !== 'flex'
+      || defaultServiceMetrics.iconWidth < 20
       || defaultServiceMetrics.selectWidth < 180) {
       throw new Error(`默认翻译服务没有融入标准设置行：${JSON.stringify(defaultServiceMetrics)}`);
     }
@@ -888,16 +3058,16 @@ async function main() {
     report.screenshots.push(await screenshot(page, 'settings-default-service-light.png'));
     report.assertions.defaultServiceHarmonious = true;
 
-    const aiContextSwitch = page.getByRole('switch', {name: 'AI 智能上下文', exact: true});
-    if (await aiContextSwitch.count() !== 1) throw new Error('通用设置没有唯一的 AI 智能上下文开关');
-    if (await aiContextSwitch.isDisabled()) throw new Error('机器翻译作为默认服务时，AI 智能上下文开关不可操作');
+    const aiContextSwitch = page.getByRole('switch', {name: 'AI 精翻（智能上下文）', exact: true});
+    if (await aiContextSwitch.count() !== 1) throw new Error('通用设置没有唯一的 AI 精翻（智能上下文）开关');
+    if (await aiContextSwitch.isDisabled()) throw new Error('机器翻译作为默认服务时，AI 精翻（智能上下文）开关不可操作');
     const aiContextControl = aiContextSwitch.locator('..');
     if (!await aiContextControl.isVisible()) throw new Error('AI 智能上下文开关没有可见的交互控件');
     const aiContextBefore = await aiContextSwitch.getAttribute('aria-checked');
     if (!['true', 'false'].includes(aiContextBefore)) throw new Error(`AI 智能上下文开关状态异常：${aiContextBefore}`);
     await aiContextControl.click();
     await page.waitForFunction(
-      previous => document.querySelector('[aria-label="AI 智能上下文"]')
+      previous => document.querySelector('[aria-label="AI 精翻（智能上下文）"]')
         ?.getAttribute('aria-checked') !== previous,
       aiContextBefore,
       {timeout},
@@ -905,14 +3075,14 @@ async function main() {
     const aiContextAfter = await aiContextSwitch.getAttribute('aria-checked');
     await aiContextControl.click();
     await page.waitForFunction(
-      expected => document.querySelector('[aria-label="AI 智能上下文"]')
+      expected => document.querySelector('[aria-label="AI 精翻（智能上下文）"]')
         ?.getAttribute('aria-checked') === expected,
       aiContextBefore,
       {timeout},
     );
     const aiContextRestored = await aiContextSwitch.getAttribute('aria-checked');
 
-    await page.locator('button[data-section="settings-services"]').click();
+    await selectSettingsSection(page, 'settings-services');
     const servicesSection = page.locator('#settings-services');
     const serviceCatalog = servicesSection.locator('.service-catalog');
     await serviceCatalog.waitFor({state: 'visible', timeout});
@@ -930,26 +3100,112 @@ async function main() {
       || serviceOnlyMetrics.defaultService !== defaultServiceMetrics.defaultService) {
       throw new Error(`翻译服务页不是纯服务目录：${JSON.stringify(serviceOnlyMetrics)}`);
     }
+    // 服务目录按分类展示；分类、顺序与免费候选的完整矩阵归
+    // run-service-catalog-ui-test.cjs，这里只锁定设置中心依赖的目录契约。
+    const expectedServiceSections = ['machine-services', 'cloud-services', 'ai-providers', 'ai-platforms'];
+    const expectedProviderServices = [
+      'deepseek', 'tongyi', 'doubao', 'moonshot', 'zhipu', 'huanYuan',
+      'huanYuanTranslation', 'yiyan', 'minimax', 'mimo', 'jieyue', 'openai',
+      'gemini', 'claude', 'grok',
+    ];
+    const expectedPlatformServices = [
+      'siliconCloud', 'newapi', 'infini', 'openrouter', 'groq', 'azureOpenai',
+      'mistral', 'cohere', 'cerebras', 'togetherai', 'fireworks', 'deepinfra', 'perplexity', 'ollama',
+    ];
+    const serviceViews = await serviceCatalog.locator('[data-service-view]')
+      .evaluateAll(buttons => buttons.map(button => button.dataset.serviceView));
+    if (serviceViews.length !== 0) {
+      throw new Error(`服务目录视图入口异常：${JSON.stringify(serviceViews)}`);
+    }
+    const serviceDirectory = serviceCatalog.locator('.service-rail');
+    await serviceDirectory.waitFor({state: 'visible', timeout});
+    const serviceSections = await serviceDirectory.locator('[data-service-section]').evaluateAll(sections => sections.map(section => ({
+      id: section.dataset.serviceSection,
+      services: [...section.querySelectorAll('[data-service-value]')].map(item => item.dataset.serviceValue),
+    })));
+    const sectionServices = id => serviceSections.find(section => section.id === id)?.services || [];
+    if (JSON.stringify(serviceSections.map(section => section.id)) !== JSON.stringify(expectedServiceSections)) {
+      throw new Error(`服务目录分类异常：${JSON.stringify(serviceSections.map(section => section.id))}`);
+    }
+    const providerServices = sectionServices('ai-providers');
+    const platformServices = sectionServices('ai-platforms');
+    const machineServices = sectionServices('machine-services');
+    if (JSON.stringify(providerServices) !== JSON.stringify(expectedProviderServices)) {
+      throw new Error(`模型服务商分类或顺序异常：${JSON.stringify(providerServices)}`);
+    }
+    if (JSON.stringify(platformServices) !== JSON.stringify(expectedPlatformServices)) {
+      throw new Error(`聚合平台分类或顺序异常：${JSON.stringify(platformServices)}`);
+    }
+
+    // 新版自定义 OpenAI 服务使用持久化的 custom:* profile，不再把不可用的旧
+    // static `custom` 入口混入聚合平台；首个自定义服务出现前也不显示空的自定义分类。
+    const customServiceFixture = {
+      name: '浏览器自定义服务',
+      endpoint: 'https://custom-browser-fixture.invalid/v1/chat/completions',
+      apiKey: 'browser-custom-key-sensitive-sentinel',
+      model: 'fixture-model-v1',
+      secondModel: 'fixture-model-v2',
+    };
+    const customServiceSection = serviceDirectory.locator('[data-service-section="custom"]');
+    const customServiceAdd = serviceCatalog.getByTestId('custom-service-add');
+    if (serviceSections.some(section => section.services.includes('custom'))
+      || await customServiceSection.count() !== 0) {
+      throw new Error('没有自定义服务时目录仍显示自定义分类或旧 custom 入口');
+    }
+    if (!await customServiceAdd.isVisible() || await customServiceAdd.isDisabled()) {
+      throw new Error('服务目录工具栏没有可用的自定义服务入口');
+    }
+    let customServiceId;
+
+    const serviceSearch = serviceCatalog.getByRole('searchbox', {name: '搜索所有翻译服务'});
+    await serviceSearch.fill('微软翻译');
+    const microsoftSearch = await serviceDirectory.locator('[data-service-section]').evaluateAll(sections => sections.map(section => ({
+      id: section.dataset.serviceSection,
+      services: [...section.querySelectorAll('[data-service-value]')].map(item => item.dataset.serviceValue),
+    })));
+    if (JSON.stringify(microsoftSearch) !== JSON.stringify([{id: 'machine-services', services: ['microsoft']}])) {
+      throw new Error(`服务搜索没有唯一命中机器翻译中的微软翻译：${JSON.stringify(microsoftSearch)}`);
+    }
+    await serviceSearch.fill('');
+    report.screenshots.push(await screenshot(page, 'settings-service-catalog-all.png'));
+
+    const defaultServiceSection = serviceSections
+      .find(section => section.services.includes(defaultServiceMetrics.defaultService))?.id;
+    if (defaultServiceSection !== 'machine-services') {
+      throw new Error(`AI 上下文开关用例没有运行在机器默认服务下：${defaultServiceSection}`);
+    }
     const defaultServiceItem = serviceCatalog.locator(
-      `.service-item[data-service-value="${defaultServiceMetrics.defaultService}"]`,
+      `[data-service-value="${defaultServiceMetrics.defaultService}"]`,
     );
-    if (await defaultServiceItem.count() !== 1) throw new Error('服务目录没有显示当前默认服务');
-    const defaultServiceKind = (await defaultServiceItem.locator('.service-copy small').textContent())?.trim();
-    if (defaultServiceKind !== '机器翻译') {
-      throw new Error(`AI 上下文开关用例没有运行在机器默认服务下：${defaultServiceKind}`);
+    if (await defaultServiceItem.count() !== 1 || !await defaultServiceItem.isVisible()) {
+      throw new Error('服务目录没有显示当前默认服务');
     }
     report.informationArchitecture.services = serviceOnlyMetrics;
+    report.informationArchitecture.serviceCatalogHierarchy = {
+      views: serviceViews,
+      sections: serviceSections.map(section => section.id),
+      providerServices,
+      platformServices,
+      machineServices,
+      customService: {
+        initialSectionVisible: false,
+        addEnabled: true,
+      },
+      searchCrossesCategories: true,
+    };
     report.informationArchitecture.machineDefaultAiContext = {
       defaultService: defaultServiceMetrics.defaultService,
-      serviceKind: defaultServiceKind,
+      serviceSection: defaultServiceSection,
       before: aiContextBefore,
       after: aiContextAfter,
       restored: aiContextRestored,
     };
     report.assertions.servicesCatalogOnly = true;
+    report.assertions.serviceCatalogHierarchy = true;
+    report.assertions.serviceCatalogSearch = true;
     report.assertions.machineDefaultAiContextOperable = true;
 
-    await page.locator('button[data-section="settings-translation"]').click();
+    await selectSettingsSection(page, 'settings-translation');
     const translationSection = page.locator('#settings-translation');
     await translationSection.waitFor({state: 'visible', timeout});
     const translationGroups = (await page.locator('.settings-section:visible .settings-group-heading h2').allTextContents())
@@ -960,15 +3216,16 @@ async function main() {
     report.informationArchitecture.translationGroups = translationGroups;
     report.assertions.translationGroupOrder = true;
 
-    await page.locator('button[data-section="settings-general"]').click();
-    const targetChange = await chooseDifferentSelectOption(page, '默认目标语言');
+    await selectSettingsSection(page, 'settings-general');
+    const targetLanguageSelector = '[data-config-field="to"] input';
+    const targetChange = await chooseDifferentSelectOption(page, targetLanguageSelector);
     await page.waitForTimeout(500);
-    await page.locator('button[data-section="settings-data"]').click();
+    await selectSettingsSection(page, 'settings-data');
     await page.getByRole('heading', {name: '最近修改', exact: true}).waitFor({state: 'visible', timeout});
-    await page.getByRole('heading', {name: '定时备份', exact: true}).waitFor({state: 'visible', timeout});
+    await page.getByRole('heading', {name: '自动设置快照', exact: true}).waitFor({state: 'visible', timeout});
     const recentEntries = page.locator('#settings-data .version-panel').nth(0).locator('.version-entry');
     const backupEntries = page.locator('#settings-data .version-panel').nth(1).locator('.version-entry');
-    if (await recentEntries.count() < 1 || await backupEntries.count() < 1) throw new Error('最近修改或定时备份没有建立基线');
+    if (await recentEntries.count() < 1 || await backupEntries.count() < 1) throw new Error('最近修改或自动设置快照没有建立基线');
     await backupEntries.first().click();
     const previewDialog = page.locator('.config-preview-dialog:visible');
     await previewDialog.waitFor({state: 'visible', timeout});
@@ -979,63 +3236,250 @@ async function main() {
     await page.waitForTimeout(250);
     report.screenshots.push(await screenshot(page, 'settings-config-version-preview.png'));
     await restoreButton.click();
-    const restoreConfirm = page.locator('.el-message-box:visible');
+    const restoreConfirm = page.locator('.config-restore-confirm-dialog:visible');
+    await restoreConfirm.waitFor({state: 'visible', timeout});
+    // 浏览器 hash 导航使已访问页面失活；未确认的恢复不得发送，返回后 busy 必须释放。
+    await page.evaluate(() => {window.location.hash = '#settings-general';});
+    await page.locator('#settings-general').waitFor({state: 'visible', timeout});
+    await restoreConfirm.waitFor({state: 'hidden', timeout});
+    await previewDialog.waitFor({state: 'hidden', timeout});
+    await page.waitForFunction(
+      ({selector, expected}) => document.querySelector(selector)
+        ?.closest('.el-select__wrapper')?.querySelector('.el-select__placeholder')?.textContent?.trim() === expected,
+      {selector: targetLanguageSelector, expected: targetChange.after}, {timeout},
+    );
+    report.assertions.configRestoreHashCancellation = true;
+    await selectSettingsSection(page, 'settings-data');
+    await page.getByRole('heading', {name: '自动设置快照', exact: true}).waitFor({state: 'visible', timeout});
+    await backupEntries.first().click();
+    await previewDialog.waitFor({state: 'visible', timeout});
+    if (await restoreButton.isDisabled()) throw new Error('离开并返回后恢复 busy 没有释放');
+    await restoreButton.click();
+    await restoreConfirm.waitFor({state: 'visible', timeout});
+    await restoreConfirm.getByRole('button', {name: '取消', exact: true}).click();
+    await restoreConfirm.waitFor({state: 'hidden', timeout});
+    await previewDialog.waitFor({state: 'visible', timeout});
+    if (await restoreButton.isDisabled()) throw new Error('取消确认后恢复按钮仍不可用');
+    await restoreButton.click();
+    await restoreConfirm.waitFor({state: 'visible', timeout});
+    await page.keyboard.press('Escape');
+    await restoreConfirm.waitFor({state: 'hidden', timeout});
+    await previewDialog.waitFor({state: 'visible', timeout});
+    if (await restoreButton.isDisabled()) throw new Error('Escape 后恢复按钮仍不可用');
+    await page.waitForFunction(() => document.activeElement?.closest('.config-preview-dialog')
+      && document.activeElement?.textContent?.trim() === '恢复此版本', undefined, {timeout}).catch(async error => {
+        report.configRestoreFocusFailure = await page.evaluate(() => ({
+          activeElement: document.activeElement?.outerHTML.slice(0, 1200),
+          activeDialog: document.activeElement?.closest('.el-dialog')?.className,
+          previewActions: [...document.querySelectorAll('.config-preview-dialog .el-dialog__footer button')].map(button => ({
+            text: button.textContent?.trim(), disabled: button.disabled,
+            rect: button.getBoundingClientRect().toJSON(),
+          })),
+          confirmationCount: document.querySelectorAll('.config-restore-confirm-dialog').length,
+        })).catch(() => null);
+        throw error;
+      });
+    report.assertions.configRestoreCancelEscapeFocusRetry = true;
+    await restoreButton.click();
     await restoreConfirm.waitFor({state: 'visible', timeout});
     await restoreConfirm.getByRole('button', {name: '恢复', exact: true}).click();
     await previewDialog.waitFor({state: 'hidden', timeout});
+    report.assertions.configRestoreOwnedConfirmation = true;
 
-    await page.locator('button[data-section="settings-general"]').click();
-    const targetInput = page.locator('input[aria-label="默认目标语言"]');
+    await selectSettingsSection(page, 'settings-general');
+    const targetInput = page.locator(targetLanguageSelector);
     await targetInput.waitFor({state: 'visible', timeout});
     await page.waitForFunction(
       ({selector, expected}) => document.querySelector(selector)
         ?.closest('.el-select__wrapper')
         ?.querySelector('.el-select__placeholder')
         ?.textContent?.trim() === expected,
-      {selector: 'input[aria-label="默认目标语言"]', expected: targetChange.before},
+      {selector: targetLanguageSelector, expected: targetChange.before},
       {timeout},
     );
 
-    await page.locator('button[data-section="settings-data"]').click();
+    // 配置版本恢复按设计会回到旧快照，所以在该用例之后创建 profile，再把它继续
+    // 带过完整备份、精确恢复和页面重载，覆盖目录、配置、凭据与持久化整条链路。
+    await selectSettingsSection(page, 'settings-services');
+    await serviceCatalog.waitFor({state: 'visible', timeout});
+    await customServiceAdd.click();
+    const customServiceDialog = page.getByTestId('custom-service-dialog');
+    await customServiceDialog.waitFor({state: 'visible', timeout});
+    await customServiceDialog.getByTestId('custom-service-save').click();
+    if (await customServiceDialog.getByRole('alert').count() !== 3) {
+      throw new Error('自定义服务空表单没有同时校验名称、接口和模型');
+    }
+    await customServiceDialog.getByTestId('custom-service-name').fill(customServiceFixture.name);
+    await customServiceDialog.getByTestId('custom-service-endpoint').fill(customServiceFixture.endpoint);
+    await customServiceDialog.getByTestId('custom-service-api-key').fill(customServiceFixture.apiKey);
+    await customServiceDialog.getByTestId('custom-service-model').fill(customServiceFixture.model);
+    await customServiceDialog.getByTestId('custom-service-save').click();
+    await customServiceDialog.waitFor({state: 'hidden', timeout});
+    // 新建后直接成为已保存的编辑目标，并出现在自定义分类里。
+    const customServiceItem = serviceCatalog.locator('[data-service-value^="custom:"]');
+    await customServiceItem.waitFor({state: 'visible', timeout});
+    customServiceId = await customServiceItem.getAttribute('data-service-value');
+    if (!customServiceId?.startsWith('custom:')) throw new Error(`自定义服务没有稳定动态 ID：${customServiceId}`);
+    if (await customServiceItem.count() !== 1
+      || !(await customServiceItem.textContent())?.includes(customServiceFixture.name)) {
+      throw new Error('新建自定义服务没有以名称出现在已保存配置中');
+    }
+    const customDirectoryItems = await customServiceSection.locator('[data-service-value]')
+      .evaluateAll(items => items.map(item => item.dataset.serviceValue));
+    if (JSON.stringify(customDirectoryItems) !== JSON.stringify([customServiceId])) {
+      throw new Error(`全部服务的自定义分类异常：${JSON.stringify(customDirectoryItems)}`);
+    }
+    const customServiceLabelLayout = await customServiceSection.locator(`[data-service-value="${customServiceId}"]`).evaluate(button => {
+      const card = button.closest('.library-item')?.getBoundingClientRect();
+      const label = button.querySelector('.library-copy strong');
+      const labelRect = label?.getBoundingClientRect();
+      const labelStyle = label ? getComputedStyle(label) : null;
+      return {
+        cardLeft: card?.left ?? null,
+        cardRight: card?.right ?? null,
+        labelLeft: labelRect?.left ?? null,
+        labelRight: labelRect?.right ?? null,
+        labelWidth: labelRect?.width || 0,
+        labelHeight: labelRect?.height || 0,
+        overflow: labelStyle?.overflow ?? '',
+        textOverflow: labelStyle?.textOverflow ?? '',
+        whiteSpace: labelStyle?.whiteSpace ?? '',
+        overflowWrap: labelStyle?.overflowWrap ?? '',
+        status: button.querySelector('.library-copy small')?.textContent?.trim() || '',
+      };
+    });
+    // ServiceCatalogItem.vue 明确允许完整名称换行，仍必须可见且落在卡片边界内。
+    if (!matchesWrappedServiceLabel(customServiceLabelLayout)) {
+      throw new Error(`自定义服务目录卡片名称没有完整换行显示或超出边界：${JSON.stringify(customServiceLabelLayout)}`);
+    }
+    report.informationArchitecture.serviceCatalogHierarchy.customServiceLabel = customServiceLabelLayout;
+    report.assertions.customServiceDescriptionBounded = true;
+    if (await customServiceItem.getAttribute('aria-pressed') !== 'true'
+      || await serviceCatalog.getAttribute('data-editing-service') !== customServiceId
+      || await serviceCatalog.getAttribute('data-default-service') !== defaultServiceMetrics.defaultService) {
+      throw new Error('新建自定义服务没有成为当前配置项，或误改了默认服务');
+    }
+    if (await serviceCatalog.getByLabel('自定义服务名称').inputValue() !== customServiceFixture.name
+      || await serviceCatalog.getByLabel('自定义服务接口地址').inputValue() !== customServiceFixture.endpoint
+      || !(await serviceCatalog.getByTestId('model-picker-trigger').getAttribute('aria-label'))
+        ?.includes(customServiceFixture.model)
+      // API Key 由多密钥列表逐行编辑；新建服务只写入第一行。
+      || await serviceCatalog.locator('[data-api-key-list] input[type="password"]').first().inputValue()
+        !== customServiceFixture.apiKey) {
+      throw new Error('新建自定义服务的名称、接口、模型或 API Key 没有进入详情配置');
+    }
+    const translationSettings = serviceCatalog.locator('[data-configuration-group="translation"]');
+    const currentThinkingSwitch = translationSettings.getByRole('switch', {
+      name: '当前模型是否启用 Thinking',
+      includeHidden: true,
+    });
+    if (await serviceCatalog.locator('[data-service-settings-tabs] [role="tabpanel"]:visible').count() !== 1) {
+      throw new Error('新建自定义服务时只应显示当前配置页签');
+    }
+    if (await currentThinkingSwitch.getAttribute('aria-checked') !== 'false') {
+      throw new Error('新建模型的 Thinking 没有保持默认关闭');
+    }
+    const currentThinkingControl = currentThinkingSwitch.locator('..');
+    await serviceCatalog.locator('[id$="tab-translation"]').click();
+    if (!await currentThinkingControl.isVisible()) throw new Error('当前模型 Thinking 开关没有可见的交互控件');
+    await currentThinkingControl.click();
+    await page.waitForFunction(() => document.querySelector('[aria-label="当前模型是否启用 Thinking"]')
+      ?.getAttribute('aria-checked') === 'true', undefined, {timeout});
+
+    await serviceCatalog.getByTestId('model-picker-trigger').click();
+    let modelPickerPanel = page.locator('.model-picker-popper:visible');
+    await modelPickerPanel.getByTestId('add-custom-model').click();
+    await modelPickerPanel.getByTestId('custom-model-input').fill(customServiceFixture.secondModel);
+    await modelPickerPanel.getByTestId('custom-model-submit').click();
+    await page.waitForFunction(model => document.querySelector('[data-testid="model-picker-trigger"]')
+      ?.getAttribute('aria-label')?.includes(model), customServiceFixture.secondModel, {timeout});
+    if (await currentThinkingSwitch.getAttribute('aria-checked') !== 'false') {
+      throw new Error('新增的第二个模型错误继承了第一个模型的 Thinking');
+    }
+
+    if (await page.locator('.model-picker-popper:visible').count() === 0) {
+      await serviceCatalog.getByTestId('model-picker-trigger').click();
+    }
+    modelPickerPanel = page.locator('.model-picker-popper:visible');
+    await modelPickerPanel.locator(`[data-model-id="${customServiceFixture.model}"] .model-picker-option`).click();
+    await page.waitForFunction(model => {
+      const trigger = document.querySelector('[data-testid="model-picker-trigger"]');
+      const toggle = document.querySelector('[aria-label="当前模型是否启用 Thinking"]');
+      return trigger?.getAttribute('aria-label')?.includes(model)
+        && toggle?.getAttribute('aria-checked') === 'true';
+    }, customServiceFixture.model, {timeout});
+    report.screenshots.push(await screenshot(page, 'settings-custom-service-thinking.png'));
+
+    await serviceCatalog.getByTestId('model-picker-trigger').click();
+    modelPickerPanel = page.locator('.model-picker-popper:visible');
+    await modelPickerPanel.locator(`[data-model-id="${customServiceFixture.secondModel}"] .model-picker-option`).click();
+    await page.waitForFunction(model => {
+      const trigger = document.querySelector('[data-testid="model-picker-trigger"]');
+      const toggle = document.querySelector('[aria-label="当前模型是否启用 Thinking"]');
+      return trigger?.getAttribute('aria-label')?.includes(model)
+        && toggle?.getAttribute('aria-checked') === 'false';
+    }, customServiceFixture.secondModel, {timeout});
+    await page.waitForTimeout(500);
+    report.assertions.modelThinkingPerModel = true;
+    report.assertions.modelThinkingInModelPreferences = true;
+    await page.waitForTimeout(500);
+    report.informationArchitecture.serviceCatalogHierarchy.customService = {
+      dynamicId: true,
+      count: 1,
+      defaultServiceUnchanged: true,
+      endpointPersisted: true,
+      model: customServiceFixture.model,
+    };
+    report.screenshots.push(await screenshot(page, 'settings-custom-service-created.png'));
+
+    const vocabularyBackupFixture = await seedVocabularyBackupFixture(page);
+    await selectSettingsSection(page, 'settings-data');
     const transferActionLabels = (await page.locator('#settings-data .transfer-actions button').allTextContents())
       .map(label => label.trim());
-    if (JSON.stringify(transferActionLabels) !== JSON.stringify(['导出配置', '导入配置'])) {
-      throw new Error(`配置迁移入口不是唯一的导出/导入两个选项：${JSON.stringify(transferActionLabels)}`);
+    if (JSON.stringify(transferActionLabels) !== JSON.stringify(['导出备份', '从备份恢复'])) {
+      throw new Error(`完整备份区不是唯一的导出/恢复两个入口：${JSON.stringify(transferActionLabels)}`);
     }
     if (await page.getByTestId('persist-credentials-switch').count()) {
-      throw new Error('配置管理仍显示已废弃的凭据持久化开关');
+      throw new Error('备份与恢复页仍显示已废弃的凭据持久化开关');
     }
     if ((await page.locator('#settings-data').textContent()).includes('跨浏览器重启保存 API 凭据')) {
-      throw new Error('配置管理仍显示已废弃的凭据持久化文案');
+      throw new Error('备份与恢复页仍显示已废弃的凭据持久化文案');
     }
-    await page.evaluate(() => {
-      const clipboard = navigator.clipboard;
-      if (!clipboard?.writeText) throw new Error('当前扩展页不支持 Clipboard.writeText');
-      const originalWriteText = clipboard.writeText.bind(clipboard);
-      Object.defineProperty(clipboard, 'writeText', {
-        configurable: true,
-        value: async text => {
-          await originalWriteText(text);
-          window.__fluentReadLastClipboardWrite = text;
-        },
-      });
+
+    const initialDownload = await downloadCompleteBackup(page, false);
+    const exportedBackup = initialDownload.backup;
+    assertCompleteBackupEnvelope(exportedBackup, legacyMigrationSentinels, {
+      minimumVocabularyEntries: 1,
+      minimumModelUsageEvents: modelUsageFixture.eventCount,
+      expectPrivateContext: false,
+      privateContextSentinels: vocabularyBackupFixture.privateContext,
     });
-    await page.getByRole('button', {name: '导出配置', exact: true}).click();
-    const transferDialog = page.getByTestId('config-transfer-dialog');
-    await transferDialog.waitFor({state: 'visible', timeout});
-    await transferDialog.getByText('导出配置 JSON', {exact: true}).waitFor({state: 'visible', timeout});
-    const exportedText = await transferDialog.getByLabel('配置 JSON').inputValue();
-    const exportedConfig = JSON.parse(exportedText);
-    assertExportContainsAllUserConfiguration(exportedConfig);
-    assertImportedSentinels(exportedConfig, legacyMigrationSentinels);
-    await page.waitForTimeout(250);
-    report.screenshots.push(await screenshot(page, 'settings-config-export-dialog.png'));
-    await transferDialog.getByRole('button', {name: '复制', exact: true}).click();
-    await page.locator('.el-message:visible').filter({hasText: '配置 JSON 已复制'}).waitFor({state: 'visible', timeout});
-    const clipboardText = await page.evaluate(() => window.__fluentReadLastClipboardWrite);
-    if (clipboardText !== exportedText) throw new Error('复制按钮写入剪贴板的 JSON 与对话框内容不一致');
-    await transferDialog.getByRole('button', {name: '取消', exact: true}).click();
-    await transferDialog.waitFor({state: 'hidden', timeout});
+    const exportedConfig = exportedBackup.config;
+    const exportedCustomProvider = exportedConfig.customOpenAIProviders
+      ?.find(provider => provider.id === customServiceId);
+    if (exportedCustomProvider?.name !== customServiceFixture.name
+      || exportedCustomProvider.endpoint !== customServiceFixture.endpoint
+      || !exportedCustomProvider.models?.includes(customServiceFixture.model)
+      || !exportedCustomProvider.models?.includes(customServiceFixture.secondModel)
+      || exportedConfig.modelThinking?.[customServiceId]?.[customServiceFixture.model] !== true
+      || exportedConfig.modelThinking?.[customServiceId]?.[customServiceFixture.secondModel] !== false
+      || exportedConfig.token?.[customServiceId] !== customServiceFixture.apiKey) {
+      throw new Error('首次完整备份没有包含动态自定义服务、模型 Thinking 及其凭据');
+    }
+    report.completeBackup = {
+      contextChoice: 'exclude-private-context',
+      initialDownload: {
+        suggestedFilename: initialDownload.suggestedFilename,
+        format: exportedBackup.format,
+        version: exportedBackup.version,
+        configCredentialMode: exportedBackup.configCredentialMode,
+        vocabularyEntries: exportedBackup.vocabulary.entries.length,
+        vocabularyReviewLogs: exportedBackup.vocabulary.reviewLogs.length,
+        modelUsageEvents: exportedBackup.modelUsage.events.length,
+        privateVocabularyContextExcluded: true,
+        credentialsIncluded: true,
+      },
+    };
 
     const sentinels = {
       token: 'indexeddb-openai-token-sensitive-sentinel',
@@ -1056,6 +3500,8 @@ async function main() {
     const importedConfig = {
       ...exportedConfig,
       to: exportedConfig.to === 'en' ? 'ja' : 'en',
+      // 当前备份以有序 apiKeys 为准，token 只镜像首个 Key；两者需同时替换才代表真实的新备份。
+      apiKeys: {...exportedConfig.apiKeys, openai: [sentinels.token]},
       token: {...exportedConfig.token, openai: sentinels.token},
       ak: sentinels.ak,
       sk: sentinels.sk,
@@ -1071,33 +3517,77 @@ async function main() {
       proxy: {...exportedConfig.proxy, openai: sentinels.proxy},
       customBody: {...exportedConfig.customBody, openai: sentinels.customBody},
     };
-    await page.getByRole('button', {name: '导入配置', exact: true}).click();
-    await transferDialog.waitFor({state: 'visible', timeout});
-    await transferDialog.getByText('粘贴配置 JSON', {exact: true}).waitFor({state: 'visible', timeout});
-    await transferDialog.getByLabel('配置 JSON').fill(JSON.stringify(importedConfig));
-    report.screenshots.push(await screenshot(page, 'settings-config-import-dialog.png'));
-    await transferDialog.getByRole('button', {name: '查看差异', exact: true}).click();
-    await previewDialog.waitFor({state: 'visible', timeout});
-    if (await previewDialog.locator('.diff-item').count() < 1) throw new Error('导入预览没有显示差异');
-    await previewDialog.getByText('OpenAI API Key', {exact: true}).waitFor({state: 'visible', timeout});
-    await previewDialog.getByText('将新增（内容已隐藏）', {exact: true}).first().waitFor({state: 'visible', timeout});
-    if ((await previewDialog.textContent()).includes(sentinels.token)) throw new Error('导入预览泄露了凭据内容');
-    await previewDialog.getByRole('button', {name: '确认导入', exact: true}).click();
-    const importConfirm = page.locator('.el-message-box:visible');
-    await importConfirm.waitFor({state: 'visible', timeout});
-    await importConfirm.getByRole('button', {name: '导入', exact: true}).click();
-    await previewDialog.waitFor({state: 'hidden', timeout});
+    const importedBackup = {
+      ...exportedBackup,
+      exportedAt: Date.now(),
+      config: importedConfig,
+    };
+    await page.getByRole('button', {name: '从备份恢复', exact: true}).click();
+    const restoreSourceDialog = page.getByTestId('restore-source-dialog');
+    await restoreSourceDialog.waitFor({state: 'visible', timeout});
+    await restoreSourceDialog.getByText('选择备份文件', {exact: true}).waitFor({state: 'visible', timeout});
+    await restoreSourceDialog.getByText('粘贴旧版配置 JSON', {exact: true}).waitFor({state: 'visible', timeout});
+    const fileChooserPromise = page.waitForEvent('filechooser', {timeout});
+    await restoreSourceDialog.getByRole('button', {name: '选择文件', exact: true}).click();
+    const fileChooser = await fileChooserPromise;
+    const importFileName = 'fluentread-backup-browser-round-trip.json';
+    await fileChooser.setFiles({
+      name: importFileName,
+      mimeType: 'application/json',
+      buffer: Buffer.from(JSON.stringify(importedBackup)),
+    });
+    const localDataImportDialog = page.getByTestId('local-data-import-dialog');
+    await localDataImportDialog.waitFor({state: 'visible', timeout});
+    await localDataImportDialog.getByText('FluentRead 备份', {exact: true}).waitFor({state: 'visible', timeout});
+    await localDataImportDialog.getByText(importFileName, {exact: true}).waitFor({state: 'visible', timeout});
+    for (const sectionLabel of ['设置与凭据', '单词本', '模型用量']) {
+      await localDataImportDialog.getByText(sectionLabel, {exact: true}).first().waitFor({state: 'visible', timeout});
+    }
+    await localDataImportDialog.locator('.config-change-group h4')
+      .filter({hasText: /^凭据安全/u})
+      .waitFor({state: 'visible', timeout});
+    if (await localDataImportDialog.locator('.config-change-list article').count() < 1) {
+      throw new Error('完整备份导入预览没有显示配置或凭据变化');
+    }
+    await localDataImportDialog.getByText('OpenAI API Key', {exact: true}).waitFor({state: 'visible', timeout});
+    await localDataImportDialog.getByText('将替换（内容已隐藏）', {exact: true}).first().waitFor({state: 'visible', timeout});
+    const importPreviewText = await localDataImportDialog.textContent();
+    const hiddenCredentialSentinels = [
+      sentinels.token,
+      sentinels.ak,
+      sentinels.sk,
+      sentinels.appid,
+      sentinels.key,
+      sentinels.youdaoAppKey,
+      sentinels.youdaoAppSecret,
+      sentinels.tencentSecretId,
+      sentinels.tencentSecretKey,
+      sentinels.extra,
+    ];
+    for (const sentinel of hiddenCredentialSentinels) {
+      if (importPreviewText.includes(sentinel)) throw new Error(`完整备份导入预览泄露凭据内容：${sentinel}`);
+    }
+    if (!importPreviewText.includes(sentinels.proxy)) {
+      throw new Error('完整备份导入预览没有展示作为普通设置管理的代理地址变化');
+    }
+    report.screenshots.push(await screenshot(page, 'settings-complete-backup-import-preview.png'));
+    await localDataImportDialog.getByRole('button', {name: '确认导入', exact: true}).click();
+    await localDataImportDialog.waitFor({state: 'hidden', timeout});
+    await page.locator('.el-message:visible').filter({hasText: '导入完成'}).waitFor({state: 'visible', timeout});
 
-    await page.locator('button[data-section="settings-general"]').click();
+    await selectSettingsSection(page, 'settings-general');
     await page.waitForFunction(
       ({selector, expected}) => document.querySelector(selector)
         ?.closest('.el-select__wrapper')
         ?.querySelector('.el-select__placeholder')
         ?.textContent?.trim() === expected,
-      {selector: 'input[aria-label="默认目标语言"]', expected: importedConfig.to === 'en' ? '英语' : '日语'},
+      {
+        selector: targetLanguageSelector,
+        expected: importedConfig.to === 'en' ? 'English / 英语' : '日本語 / Japanese / 日语',
+      },
       {timeout},
     );
-    await page.locator('button[data-section="settings-data"]').click();
+    await selectSettingsSection(page, 'settings-data');
 
     report.encryptedConfigurationStorage = await inspectEncryptedConfigurationStorage(page, sentinels);
     report.assertions.indexedDbEncryptedAtRest = true;
@@ -1105,34 +3595,59 @@ async function main() {
 
     await page.reload({waitUntil: 'domcontentloaded', timeout});
     await page.locator('.settings-app').waitFor({state: 'visible', timeout});
-    await page.locator('button[data-section="settings-data"]').click();
-    await page.getByRole('button', {name: '导出配置', exact: true}).click();
-    await transferDialog.waitFor({state: 'visible', timeout});
-    const reloadedExportText = await transferDialog.getByLabel('配置 JSON').inputValue();
-    const reloadedExportConfig = JSON.parse(reloadedExportText);
-    assertExportContainsAllUserConfiguration(reloadedExportConfig);
-    assertImportedSentinels(reloadedExportConfig, sentinels);
+    await selectSettingsSection(page, 'settings-data');
+    const reloadedDownload = await downloadCompleteBackup(page, false);
+    const reloadedBackup = reloadedDownload.backup;
+    assertCompleteBackupEnvelope(reloadedBackup, sentinels, {
+      minimumVocabularyEntries: exportedBackup.vocabulary.entries.length,
+      minimumModelUsageEvents: exportedBackup.modelUsage.events.length,
+      expectPrivateContext: false,
+      privateContextSentinels: vocabularyBackupFixture.privateContext,
+    });
+    const reloadedExportConfig = reloadedBackup.config;
     if (reloadedExportConfig.to !== importedConfig.to) throw new Error('页面重载后目标语言没有从加密 IndexedDB 恢复');
-    report.reloadedExport = {
+    const reloadedCustomProvider = reloadedExportConfig.customOpenAIProviders
+      ?.find(provider => provider.id === customServiceId);
+    if (reloadedCustomProvider?.name !== customServiceFixture.name
+      || reloadedCustomProvider.endpoint !== customServiceFixture.endpoint
+      || !reloadedCustomProvider.models?.includes(customServiceFixture.model)
+      || !reloadedCustomProvider.models?.includes(customServiceFixture.secondModel)
+      || reloadedExportConfig.modelThinking?.[customServiceId]?.[customServiceFixture.model] !== true
+      || reloadedExportConfig.modelThinking?.[customServiceId]?.[customServiceFixture.secondModel] !== false
+      || reloadedExportConfig.token?.[customServiceId] !== customServiceFixture.apiKey) {
+      throw new Error('动态自定义服务及模型 Thinking 没有完整经过备份精确恢复、加密存储和页面重载');
+    }
+    report.reloadedCompleteBackup = {
+      suggestedFilename: reloadedDownload.suggestedFilename,
+      format: reloadedBackup.format,
+      version: reloadedBackup.version,
       targetLanguage: reloadedExportConfig.to,
       credentialFields: [
         'token', 'ak', 'sk', 'appid', 'key', 'youdaoAppKey', 'youdaoAppSecret',
         'tencentSecretId', 'tencentSecretKey', 'extra',
       ],
       roleFields: ['user_role', 'system_role'],
-      plaintextRoundTrip: true,
+      vocabularyEntries: reloadedBackup.vocabulary.entries.length,
+      modelUsageEvents: reloadedBackup.modelUsage.events.length,
+      customOpenAIServiceRoundTrip: true,
+      encryptedStorageRoundTrip: true,
     };
-    await transferDialog.getByRole('button', {name: '取消', exact: true}).click();
-    await transferDialog.waitFor({state: 'hidden', timeout});
+    report.completeBackup.restore = {
+      source: 'file-chooser',
+      fileName: importFileName,
+      credentialPreviewHidden: true,
+      confirmed: true,
+    };
     report.assertions.encryptedConfigReloadRoundTrip = true;
-    report.assertions.twoBackupStreams = true;
-    report.assertions.previewBeforeRestore = true;
-    report.assertions.restoreWithConfirmation = true;
-    report.assertions.onlyTwoTransferActions = true;
-    report.assertions.exportDialog = true;
-    report.assertions.exportIncludesUserConfiguration = true;
-    report.assertions.exportClipboard = true;
-    report.assertions.importPreview = true;
+    report.assertions.settingHistoryAndAutomaticSnapshots = true;
+    report.assertions.settingSnapshotPreviewBeforeRestore = true;
+    report.assertions.settingSnapshotRestoreWithConfirmation = true;
+    report.assertions.completeBackupOnlyTwoTransferActions = true;
+    report.assertions.completeBackupDownload = true;
+    report.assertions.completeBackupEnvelope = true;
+    report.assertions.completeBackupContextConfirmation = true;
+    report.assertions.completeBackupImportPreview = true;
+    report.assertions.completeBackupFileRestore = true;
 
     for (const viewport of [
       {width: 1366, height: 700},
@@ -1141,7 +3656,7 @@ async function main() {
       {width: 390, height: 844},
     ]) {
       await page.setViewportSize(viewport);
-      await page.locator('button[data-section="settings-general"]').click();
+      await selectSettingsSection(page, 'settings-general');
       await page.waitForTimeout(150);
       const serviceCardLayout = await defaultServiceCard.evaluate(card => {
         const item = card.closest('.settings-item');
@@ -1166,16 +3681,9 @@ async function main() {
             const rect = section.getBoundingClientRect();
             return rect.left >= -1 && rect.right <= window.innerWidth + 1;
           }),
-        activeNavigationVisible: (() => {
-          const active = document.querySelector('nav[aria-label="设置分类"] button[aria-current="page"]');
-          if (!active) return false;
-          const rect = active.getBoundingClientRect();
-          return rect.left >= -1
-            && rect.right <= window.innerWidth + 1
-            && rect.top >= -1
-            && rect.bottom <= window.innerHeight + 1;
-        })(),
+        activeNavigationVisible: false,
       }));
+      generalMetrics.activeNavigationVisible = await page.evaluate(inspectSettingsNavigationVisibility);
       if (generalMetrics.horizontalOverflow
         || !generalMetrics.sectionWithinViewport
         || !generalMetrics.activeNavigationVisible) {
@@ -1186,7 +3694,7 @@ async function main() {
       report.defaultServiceCard.responsive.push({...viewport, ...serviceCardLayout});
       report.responsive.push({page: 'settings-general', ...viewport, ...generalMetrics});
 
-      await page.locator('button[data-section="settings-translation"]').click();
+      await selectSettingsSection(page, 'settings-translation');
       await page.waitForTimeout(150);
       const translationMetrics = await page.evaluate(expectedGroups => ({
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
@@ -1204,16 +3712,9 @@ async function main() {
             return rect.left >= -1 && rect.right <= window.innerWidth + 1;
           }),
         expectedOrder: JSON.stringify(expectedGroups),
-        activeNavigationVisible: (() => {
-          const active = document.querySelector('nav[aria-label="设置分类"] button[aria-current="page"]');
-          if (!active) return false;
-          const rect = active.getBoundingClientRect();
-          return rect.left >= -1
-            && rect.right <= window.innerWidth + 1
-            && rect.top >= -1
-            && rect.bottom <= window.innerHeight + 1;
-        })(),
+        activeNavigationVisible: false,
       }), expectedTranslationGroups);
+      translationMetrics.activeNavigationVisible = await page.evaluate(inspectSettingsNavigationVisibility);
       if (translationMetrics.horizontalOverflow
         || !translationMetrics.groupsWithinViewport
         || !translationMetrics.activeNavigationVisible
@@ -1224,7 +3725,40 @@ async function main() {
       report.screenshots.push(await screenshot(page, translationFile));
       report.responsive.push({page: 'settings-translation', ...viewport, ...translationMetrics});
 
-      await page.locator('button[data-section="settings-model-usage"]').click();
+      await selectSettingsSection(page, 'settings-interface');
+      await page.waitForTimeout(150);
+      const loadingStyleMetrics = await page.evaluate(() => {
+        const picker = document.querySelector('.loading-style-picker');
+        const pickerRect = picker?.getBoundingClientRect();
+        const cards = [...(picker?.querySelectorAll('.loading-style-option') || [])];
+        const cardRects = cards.map(card => card.getBoundingClientRect());
+        return {
+          horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          pickerWithinViewport: Boolean(pickerRect
+            && pickerRect.left >= -1
+            && pickerRect.right <= window.innerWidth + 1),
+          cardsWithinPicker: Boolean(pickerRect && cardRects.every(rect => (
+            rect.left >= pickerRect.left - 1 && rect.right <= pickerRect.right + 1
+          ))),
+          optionCount: cards.length,
+          columnCount: new Set(cardRects.map(rect => Math.round(rect.left))).size,
+          activeNavigationVisible: false,
+        };
+      });
+      loadingStyleMetrics.activeNavigationVisible = await page.evaluate(inspectSettingsNavigationVisibility);
+      if (loadingStyleMetrics.horizontalOverflow
+        || !loadingStyleMetrics.pickerWithinViewport
+        || !loadingStyleMetrics.cardsWithinPicker
+        || !loadingStyleMetrics.activeNavigationVisible
+        || loadingStyleMetrics.optionCount !== 15
+        || (viewport.width <= 480 && loadingStyleMetrics.columnCount > 2)) {
+        throw new Error(`${viewport.width}px 段落加载样式响应式异常：${JSON.stringify(loadingStyleMetrics)}`);
+      }
+      const loadingStyleFile = `settings-interface-loading-styles-${viewport.width}.png`;
+      report.screenshots.push(await screenshot(page, loadingStyleFile));
+      report.responsive.push({page: 'settings-interface-loading-styles', ...viewport, ...loadingStyleMetrics});
+
+      await selectSettingsSection(page, 'settings-translation-stats', 'usage');
       await page.waitForTimeout(150);
       const usageMetrics = await page.evaluate(() => {
         const dashboard = document.querySelector('#settings-model-usage');
@@ -1286,11 +3820,53 @@ async function main() {
     report.assertions.modelUsageReset = true;
     report.screenshots.push(await screenshot(page, 'settings-model-usage-empty-after-reset.png'));
     report.assertions.responsive = true;
+    await assertTestBrowserRemainsBackground(context, '设置中心测试完成');
+    report.assertions.reusedPopupStayedBackground = true;
     if (errors.length) throw new Error(`浏览器控制台存在错误：${errors.join(' | ')}`);
+    report.ok = true;
+  } catch (error) {
+    hasPrimaryError = true;
+    report.failure = error instanceof Error ? {message: error.message, stack: error.stack} : {message: String(error)};
+    if (/测试 Edge 进程 \d+ 成为了前台应用/u.test(report.failure.message)) {
+      report.focusSafetyFailure = true;
+      // helper在抛错前保留上次成功快照；报告要记录失败事实，不能把旧 false 当作本轮结论。
+      if (report.windowPlacement) report.windowPlacement.browserFrontmost = true;
+    }
+    throw error;
   } finally {
-    fs.writeFileSync(path.join(artifactsDir, 'report.json'), JSON.stringify(report, null, 2));
-    await launched?.close();
-    fs.rmSync(profileDir, {recursive: true, force: true});
+    const cleanupErrors = [];
+    const cleanup = async (resource, release) => {
+      try {
+        await release();
+      } catch (error) {
+        cleanupErrors.push(error);
+        (report.cleanupErrors ||= []).push({resource, error: String(error?.stack || error)});
+        report.ok = false;
+        process.exitCode = 1;
+        console.error(`Cleanup failed (${resource}):`, error);
+      }
+    };
+    let browserClosed = false;
+    await cleanup('browser', async () => {
+      if (launched) {
+        await launched.close();
+        browserClosed = true;
+      }
+    });
+    await cleanup('profile', () => {
+      if (!profileDir) return;
+      if (browserClosed) fs.rmSync(profileDir, {recursive: true, force: true});
+      else if (!launchAttempted) {
+        try {fs.rmdirSync(profileDir);} catch (error) {
+          // No browser launch was attempted; only remove an empty initial profile.
+          if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error;
+        }
+      }
+    });
+    await cleanup('report', () => {
+      fs.writeFileSync(path.join(artifactsDir, 'report.json'), JSON.stringify(report, null, 2));
+    });
+    if (cleanupErrors.length && !hasPrimaryError) throw cleanupErrors[0];
   }
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

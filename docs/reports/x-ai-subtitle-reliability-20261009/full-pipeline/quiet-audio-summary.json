@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-09",
+  "scope": "Controlled weak-voice regression and original non-speech risk diagnostics; no new browser launches, no new model downloads, no user HAR.",
+  "sourceSha256": {
+    "src/features/video-subtitle/content/video-ai/audioWindow.ts": "8d09848dbeb4564a7e58229a5991f7c71a085feb5c02fb3c15347df31f51b409",
+    "src/features/video-subtitle/content/video-ai/speechAlignment.ts": "545d6f208fb3f4d775731406f278f5df115f86837910b324e9477267b5a0e2ee",
+    "src/features/video-subtitle/transcription.ts": "813c7025cce6d42a27442d2bd281dfb9b8c49dd08fbcb60c3c035d9c35c722c2",
+    "src/features/video-subtitle/content/video-ai/fullCapture.ts": "efe0327ae657da0089feda4855cff355f4b728766677f8831e4748107a2ed22c",
+    "src/features/video-subtitle/content/video-ai/streamingTranscript.ts": "7c00e05e2d11d56639f68a54d2113cfc0d48727944e447d24088aefa6e0a3bb8",
+    "src/features/video-subtitle/offscreen/transcription.worker.ts": "0d4d69c3bfc8de0bc15b87cc6070c399dd2bbe1f2709f7731e6f0d7aa85487ef",
+    "src/features/video-subtitle/offscreen/timestampParser.ts": "36da2c87309106f968332f44452be8cca1811b22fc23de61255f7c61959e9c26"
+  },
+  "baselineHead": "8e3f5bcc7d2e4bc21569dd383ea18e7cf2b139f6",
+  "changes": [
+    "Shared one-PCM16-step digital-silence peak contract with Worker audio preparation. RMS and active-frame ratio remain diagnostics, never whole-window rejection criteria.",
+    "Speech alignment defaults to the same finite-sample peak contract; adaptive RMS threshold requires a stable noise plateau and at least fourfold speech energy separation.",
+    "No automatic gain, bitrate-default change, model change, semantic VAD, or new transcript filter."
+  ],
+  "validation": {
+    "directedRegressionTests": 152,
+    "pureModuleCoverageTests": 137,
+    "fourDimensions": 100,
+    "compile": "passed",
+    "diffCheck": "passed",
+    "coverageDirectory": "/private/tmp/fluentread-audio-gate-coverage-20261009"
+  },
+  "jfkLowGain": {
+    "gain": 0.003,
+    "oldPhase": "error",
+    "oldTranscribeCalls": 0,
+    "newPhase": "ready",
+    "newTranscribeCalls": 1,
+    "pcmSha256": "db07c91f275b46307eae44ebc5b01c04f6ad73857f9d02723dff6ec5c601d1d9",
+    "windowPcmHashes": [
+      "db07c91f275b46307eae44ebc5b01c04f6ad73857f9d02723dff6ec5c601d1d9"
+    ],
+    "matchesActualAsrPcm": true,
+    "actualAsrBackend": "Base q4 WASM, Transformers.js 3.8.1, ORT Web 1.23.2",
+    "referenceWords": 22,
+    "predictionWords": 22,
+    "wordErrors": 0,
+    "wer": 0,
+    "newInferenceDuringReplay": false,
+    "finalCues": 2
+  },
+  "quietTail": {
+    "controlledMontage": true,
+    "voiceRangeMs": [
+      9700,
+      10400
+    ],
+    "oldSubmittedEndMs": 9600,
+    "oldAlignedEndMs": 9240,
+    "newCalls": [
+      {
+        "startMs": 0,
+        "endMs": 9450
+      },
+      {
+        "startMs": 9450,
+        "endMs": 10400
+      }
+    ],
+    "newAlignedEndMs": 10400
+  },
+  "silenceDilution": {
+    "controlledAppend": true,
+    "voiceRangeMs": [
+      0,
+      12000
+    ],
+    "digitalSilenceMs": 60000,
+    "oldWholeActive": false,
+    "newWholeActive": true,
+    "newCallCoverage": [
+      {
+        "model": "tiny",
+        "phase": "ready",
+        "calls": [
+          {
+            "startMs": 0,
+            "endMs": 10000
+          },
+          {
+            "startMs": 8800,
+            "endMs": 15400
+          }
+        ],
+        "voiceRangeFullyCovered": true,
+        "errors": []
+      },
+      {
+        "model": "base",
+        "phase": "ready",
+        "calls": [
+          {
+            "startMs": 0,
+            "endMs": 13000
+          }
+        ],
+        "voiceRangeFullyCovered": true,
+        "errors": []
+      }
+    ]
+  },
+  "nonSpeechRisk": {
+    "originalSynthesis": true,
+    "durationMs": 11000,
+    "rmsAbout": 0.0006028,
+    "rawActualAsrReports": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/non-speech-gate-risk-report.json",
+    "productionPostprocess": [
+      {
+        "sample": "white-noise",
+        "pcmSha256": "04cc155338a0c8fa735ddac20202269ce11ee9541022c6dddb9b64ab163ad0cf",
+        "rawTextCharacters": 14,
+        "rawClassification": "blank-audio-annotation",
+        "cleanedTextCharacters": 0,
+        "cleanedSegments": 0,
+        "calls": 1,
+        "phase": "error",
+        "finalCues": 0,
+        "previewCueCounts": [],
+        "errors": [
+          "本地 AI 没有识别出可读字幕，请确认视频有清晰人声并检查视频原语言后重试"
+        ],
+        "finalCueSha256": []
+      },
+      {
+        "sample": "pure-tone-317hz",
+        "pcmSha256": "2bb89b087b8c4eab44fc8e53432f5ee8af4b4c3a9648f004074231d5f9f370d0",
+        "rawTextCharacters": 8,
+        "rawClassification": "music-annotation",
+        "cleanedTextCharacters": 7,
+        "cleanedSegments": 1,
+        "calls": 1,
+        "phase": "error",
+        "finalCues": 0,
+        "previewCueCounts": [],
+        "errors": [
+          "本地 AI 没有识别出可读字幕，请确认视频有清晰人声并检查视频原语言后重试"
+        ],
+        "finalCueSha256": []
+      }
+    ],
+    "newInferenceDuringPostprocess": false,
+    "conclusion": "Both raw annotations produce zero preview/final cues after current Worker cleaning and complete stabilizer. No confirmed product false-caption result in these two samples. Nonzero weak noises still incur model inference cost; these two samples do not guarantee all noise/music behavior."
+  },
+  "limits": [
+    "Actual ASR was performed directly on local float32 PCM; replay matches that inference window SHA and reuses actual saved output. Browser capture, PCM16 message transport, native WebGPU and user failing URL remain unverified.",
+    "JFK has an official 22-word reference; no general accuracy improvement rate is claimed.",
+    "Quiet-tail and silence-dilution montages verify numerical window coverage, not new ASR quality.",
+    "All reference/transcription text and full source media remain outside repository."
+  ],
+  "modifiedSourceFiles": [
+    "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+    "src/features/video-subtitle/content/video-ai/speechAlignment.ts",
+    "src/features/video-subtitle/transcription.ts"
+  ]
+}

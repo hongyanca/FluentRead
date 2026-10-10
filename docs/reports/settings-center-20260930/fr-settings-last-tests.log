@@ -1,0 +1,20 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/optionsAppNavigationLifecycle.test.ts" "tests/userscriptFullOptions.test.ts" "tests/i18n.test.ts" "tests/settingsUiArchitecture.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/optionsAppNavigationLifecycle.test.ts tests/userscriptFullOptions.test.ts tests/i18n.test.ts tests/settingsUiArchitecture.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 102ms
+ ✓ tests/i18n.test.ts (52 tests) 2191ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 818ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 658ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 469ms
+ ✓ tests/optionsAppNavigationLifecycle.test.ts (5 tests) 552ms
+ ✓ tests/userscriptFullOptions.test.ts (7 tests) 6ms
+
+ Test Files  4 passed (4)
+      Tests  97 passed (97)
+   Start at  09:37:26
+   Duration  4.84s (transform 875ms, setup 0ms, collect 1.44s, tests 2.85s, environment 1ms, prepare 136ms)

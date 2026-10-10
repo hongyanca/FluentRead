@@ -1,0 +1,81 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "paragraphs": 1500,
+  "evidence": "Production extension and real browser; local deterministic Microsoft transport, no live provider claims",
+  "consoleErrors": [],
+  "phases": [
+    {
+      "name": "translate",
+      "elapsedMs": 64579.300000190735,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 114.09999990463257,
+      "p95HeartbeatGapMs": 74.09999990463257,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 109
+    },
+    {
+      "name": "scroll-translated",
+      "elapsedMs": 1355,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 26.09999990463257,
+      "p95HeartbeatGapMs": 23.100000143051147,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 12
+    },
+    {
+      "name": "restore",
+      "elapsedMs": 533.3000001907349,
+      "longTasks": [
+        {
+          "start": 68091.79999995232,
+          "duration": 257
+        }
+      ],
+      "maxHeartbeatGapMs": 285.2000000476837,
+      "p95HeartbeatGapMs": 285.2000000476837,
+      "totalBlockingMs": 207,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 1
+    },
+    {
+      "name": "retranslate-cached",
+      "elapsedMs": 73338,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 118.39999985694885,
+      "p95HeartbeatGapMs": 72,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 162
+    }
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "cpuRate": 4,
+  "metrics": {
+    "ScriptDuration": 18.327028,
+    "LayoutDuration": 12.775696,
+    "RecalcStyleDuration": 7.019599,
+    "TaskDuration": 64.18320299999999,
+    "LayoutCount": 3000,
+    "RecalcStyleCount": 6830
+  },
+  "requests": 1501,
+  "items": 1501,
+  "submittedChinese": [],
+  "ok": true,
+  "sourceBase": "perf/translation-responsiveness-20260929"
+}

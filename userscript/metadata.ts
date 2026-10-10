@@ -1,6 +1,9 @@
+import brandTaglines from '../src/core/i18n/messages/brand-taglines.json';
+
 export interface UserscriptMetadataOptions {
     version: string;
     iconDataUrl?: string;
+    requires?: readonly string[];
 }
 const grants = [
     'GM_getValue',
@@ -9,18 +12,26 @@ const grants = [
     'GM_listValues',
     'GM_xmlhttpRequest',
     'GM_registerMenuCommand',
+    'GM_openInTab',
     'GM_addStyle',
+    'GM.getValue',
+    'GM.setValue',
+    'GM.deleteValue',
+    'GM.listValues',
+    'GM.xmlHttpRequest',
+    'GM.openInTab',
 ];
 
-export function createUserscriptMetadata({version, iconDataUrl}: UserscriptMetadataOptions): string {
+export function createUserscriptMetadata({version, iconDataUrl, requires = []}: UserscriptMetadataOptions): string {
     const lines = [
         '// ==UserScript==',
-        '// @name         流畅阅读',
+        '// @name         FluentRead-流畅阅读',
         '// @name:en      FluentRead',
         '// @namespace    https://fr.unmeta.cn/',
         `// @version      ${version}`,
-        '// @description  双语网页翻译、悬浮翻译与划词翻译的 FluentRead userscript 版本。',
-        '// @description:en FluentRead bilingual page, hover, and selection translation userscript.',
+        `// @description  ${brandTaglines['en-US']} ${brandTaglines['zh-CN']}`,
+        ...Object.entries(brandTaglines).map(([language, tagline]) =>
+            `// @description:${language === 'zh-CN' ? language : language.split('-')[0]} ${tagline}`),
         '// @author       ThinkStu',
         '// @license      GPL-3.0-only',
         '// @homepageURL  https://github.com/FluentRead/FluentRead',
@@ -31,6 +42,7 @@ export function createUserscriptMetadata({version, iconDataUrl}: UserscriptMetad
         '// @inject-into  content',
         '// @noframes',
         '// @connect      *',
+        ...requires.map((url) => `// @require      ${url}`),
         ...grants.map((grant) => `// @grant        ${grant}`),
         ...(iconDataUrl ? [`// @icon         ${iconDataUrl}`] : []),
         '// ==/UserScript==',

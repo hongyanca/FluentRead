@@ -1,0 +1,75 @@
+{
+  "sourceCommit": "56aab82ae82a47ab009f05500bb140fbf7caea22",
+  "directedTests": [
+    "tests/videoAiFullCapture.test.ts",
+    "tests/videoAiStreaming.test.ts",
+    "tests/mainWorldBridgeCore.test.ts",
+    "tests/videoAiFullCaptureFailures.test.ts",
+    "tests/videoAiBackendCoverage.test.ts",
+    "tests/videoAiWorker.test.ts",
+    "tests/videoUiI18n.test.ts",
+    "tests/videoAiCapture.test.ts",
+    "tests/videoSubtitleTrackPriorityRuntime.test.ts",
+    "tests/videoAiOffscreen.test.ts",
+    "tests/hlsAudio.test.ts",
+    "tests/xHlsAudioRuntime.test.ts",
+    "tests/xVideoSubtitleData.test.ts",
+    "tests/videoAiModelSetup.test.ts",
+    "tests/videoSubtitleDownloads.test.ts",
+    "tests/videoTranscriptionCacheClient.test.ts",
+    "tests/videoAiBackground.test.ts",
+    "tests/videoAiSubtitleCache.test.ts",
+    "tests/videoSpeechAlignment.test.ts",
+    "tests/videoAiModelCache.test.ts",
+    "tests/videoTranscription.test.ts",
+    "tests/videoTranslationScheduler.test.ts",
+    "tests/mainWorldBridgeLifecycle.test.ts",
+    "tests/videoAiAlgorithmsCoverage.test.ts",
+    "tests/implementationAudit49D.test.ts"
+  ],
+  "coverageModules": [
+    "src/features/video-subtitle/content/hlsAudio.ts",
+    "src/features/video-subtitle/content/xVideoSubtitleData.ts",
+    "src/features/video-subtitle/content/youtubeTimedTextBridgeCore.ts",
+    "src/features/video-subtitle/transcription.ts",
+    "src/features/video-subtitle/content/video-ai/fullCapture.ts",
+    "src/features/video-subtitle/content/video-ai/cueTimeline.ts",
+    "src/features/video-subtitle/content/playerMenu.ts",
+    "src/features/video-subtitle/content/downloads.ts",
+    "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+    "src/features/video-subtitle/content/video-ai/speechAlignment.ts",
+    "src/features/video-subtitle/content/video-ai/streamingTranscript.ts"
+  ],
+  "testCount": 463,
+  "coverageFourDimensions": 100,
+  "logs": [
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-compile-20261009.log",
+      "sha256": "e4e05cdc46e186b98ee8d986aeae5d079c921e473815979976d774592feff674"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-coverage-20261009.log",
+      "sha256": "83322bd73b93063575354407315f6e42c2f705d975ffbe842c7c323adc0e69af"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-audit-20261009.log",
+      "sha256": "54c1b5e5b2b360a11989e2135501b0c0e83f2231a7e26862961022d0a35af041"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-chrome-build-20261009.log",
+      "sha256": "8479d3d498f204774bb69d7ccf69bac360471d2369d2ec10dbe2b51c7f25c843"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-firefox-build-20261009.log",
+      "sha256": "7666319ea44c28e40d097d94d8dfe7f8c6a55f338ddac196e826f461c004cff6"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-final-manifests-20261009.log",
+      "sha256": "6864417951e11f48ccdac246df316316cdd9cb1b31c067bf64ad4b5cf0067d0c"
+    },
+    {
+      "path": "/private/tmp/fluentread-x-ai-followup-architecture-20261009.log",
+      "sha256": "b5e153f8b3bf9f1a120417a0e0d9bfd1bfb370e55092565b92d7960a32448b4a"
+    }
+  ]
+}

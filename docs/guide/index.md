@@ -1,39 +1,10 @@
-# 认识 FluentRead
+---
+title: 使用文档
+description: FluentRead 安装、网页翻译、划词学习、文档字幕与设置指南。
+sidebar: true
+outline: false
+next: false
+prev: false
+---
 
-FluentRead 是一个面向真实阅读场景的浏览器翻译扩展。它不要求你离开当前页面，也不把原文替换掉，而是把译文以双语段落、选区气泡或图片文本的方式放回阅读现场。
-
-<img class="doc-screenshot" src="/screenshots/translation.png" alt="FluentRead bilingual translation in a real article" />
-
-## 它适合什么场景？
-
-- 阅读英文新闻、技术文档、论文和产品说明时，需要快速建立上下文。
-- 只想确认一个句子、术语或段落，不想等待整页翻译。
-- 需要在原文与译文之间来回切换，并保留原页面的排版。
-- 希望使用自己的 API、AI 服务或本地模型，而不是被固定服务绑定。
-
-## FluentRead 的工作方式
-
-1. 在当前页面中识别适合翻译的文本节点。
-2. 按你选择的服务和目标语言请求翻译。
-3. 将译文作为独立的双语内容插入原文附近。
-4. 你可以恢复原文，或者在调整设置后重新翻译。
-
-不同网站的 DOM 结构差异很大，因此极少数站点可能需要手动选择文本或调整过滤规则。遇到异常时，先参考[常见问题](/guide/faq)。
-
-## 三条推荐路径
-
-### 只想马上读懂一页内容
-
-打开[安装与第一次翻译](/guide/getting-started)，使用默认服务完成第一次页面翻译。
-
-### 想控制质量、速度或成本
-
-阅读[翻译服务](/config/translation-engines)，再到[设置总览](/config/)选择合适的引擎。
-
-### 想让体验更贴合自己的工作流
-
-先看[功能总览](/guide/features)，然后在[自定义快捷键](/guide/custom-hotkey)中修改触发方式。
-
-## 关于隐私
-
-FluentRead 不托管你的翻译账号。翻译请求由你在设置中启用的服务处理；使用云端服务时，选中的文本或页面内容会发送到对应服务。免费翻译也会按回退顺序尝试第三方接口。若不希望内容离开本机，可以使用本地 Ollama（前提是本机已运行兼容模型）。完整说明见[数据与隐私](/guide/privacy)。
+<DocsHome />

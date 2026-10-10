@@ -1,0 +1,163 @@
+{
+  "sourceRevision": "809e4d8b8d7e9364a914909bb777679606c178b8",
+  "fonts": [
+    {
+      "asset": "IBMPlexSans.woff2",
+      "bytes": 229852,
+      "weights": [
+        [
+          "wght",
+          100,
+          700
+        ],
+        [
+          "wdth",
+          75,
+          100
+        ]
+      ],
+      "glyphs": 891,
+      "sourceSha256": "3b031aa4216174205bd8471f88a49b91f093169e9e87bd5262242bc5967fe2e3",
+      "assetSha256": "4aea8c49bb04155bced7cdea9ed0ed86b5a45da94b2ca54065ac9cb4098efcdb"
+    },
+    {
+      "asset": "Inter.woff2",
+      "bytes": 350460,
+      "weights": [
+        [
+          "opsz",
+          14,
+          32
+        ],
+        [
+          "wght",
+          100,
+          900
+        ]
+      ],
+      "glyphs": 2849,
+      "sourceSha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "assetSha256": "13b4cddc57045d40b411008e61588c8f81aa0bd72fe884624831a0ff9c4d159a"
+    },
+    {
+      "asset": "LXGWWenKaiTC-Bold.woff2",
+      "bytes": 5388928,
+      "weights": 700,
+      "glyphs": 22401,
+      "sourceSha256": "5c9feadfd928f3ae3860e7d001ad3d0d0c55b0157fff08cd4d51b51aca677f23",
+      "assetSha256": "4f6c21fcb0392aca87c19f69a570c5b7138f24e8e2693641716666e21d37fbcd"
+    },
+    {
+      "asset": "LXGWWenKaiTC-Regular.woff2",
+      "bytes": 4920616,
+      "weights": 400,
+      "glyphs": 22401,
+      "sourceSha256": "4fcc5aec11cbbf737b0cfab7b63796f7f280087a7a656b2f13342cd5e5318d95",
+      "assetSha256": "1b591d017b86f72585138181e1dc30fb48e1f0c386ca5ecdbe0a4941bb6bde52"
+    },
+    {
+      "asset": "Manrope.woff2",
+      "bytes": 53732,
+      "weights": [
+        [
+          "wght",
+          200,
+          800
+        ]
+      ],
+      "glyphs": 678,
+      "sourceSha256": "d0639be45d0af36e798172419d7bd173c4bd4f29e2b76cbb69db1d11bf8b0a40",
+      "assetSha256": "e391a6ac08ae3daf2a2cd250425a2c7fb6c46947983ff7dbac8e5a8202314e0d"
+    },
+    {
+      "asset": "NotoSansSC.woff2",
+      "bytes": 7782072,
+      "weights": [
+        [
+          "wght",
+          100,
+          900
+        ]
+      ],
+      "glyphs": 30890,
+      "sourceSha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+      "assetSha256": "aef8c34277afad81ecd0227138a830263c0caea65b7aea66d1195395f097b55a"
+    },
+    {
+      "asset": "NotoSerifSC.woff2",
+      "bytes": 11032420,
+      "weights": [
+        [
+          "wght",
+          200,
+          900
+        ]
+      ],
+      "glyphs": 30928,
+      "sourceSha256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
+      "assetSha256": "4ee9b0921ec9bd3f8b04587c7bc66c62731045e89d74eec054f37fc7a2d26383"
+    },
+    {
+      "asset": "NunitoSans.woff2",
+      "bytes": 208864,
+      "weights": [
+        [
+          "wght",
+          200,
+          1000
+        ],
+        [
+          "wdth",
+          75,
+          125
+        ],
+        [
+          "opsz",
+          6,
+          12
+        ],
+        [
+          "YTLC",
+          440,
+          540
+        ]
+      ],
+      "glyphs": 939,
+      "sourceSha256": "f934d7142fb4784bf828da485b7dcbd90c0c80d514e9d49a5da0ed3a1ae2491d",
+      "assetSha256": "443c5b7d3731face4a49115327b46288bae5616b79630f31e2c098680194a93d"
+    },
+    {
+      "asset": "Roboto.woff2",
+      "bytes": 222128,
+      "weights": [
+        [
+          "wght",
+          100,
+          900
+        ],
+        [
+          "wdth",
+          75,
+          100
+        ]
+      ],
+      "glyphs": 927,
+      "sourceSha256": "d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134",
+      "assetSha256": "66e3a7dafb09acdf7af615078ae7f281a048d18e37816dd093c4722a37b8c884"
+    },
+    {
+      "asset": "SourceSans3.woff2",
+      "bytes": 169416,
+      "weights": [
+        [
+          "wght",
+          200,
+          900
+        ]
+      ],
+      "glyphs": 1615,
+      "sourceSha256": "042fe2cc0b933e328410d7acbd0aa6a1873dca5aef81875f4bc214b08825c7b9",
+      "assetSha256": "707229357fb90c9c5da177826aac06c6da031f569a9a520bfa7fcca5cd03355a"
+    }
+  ]
+}

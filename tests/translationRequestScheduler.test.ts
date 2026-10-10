@@ -1,0 +1,402 @@
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {
+    createTranslationRequestScheduler,
+    TranslationRequestSchedulerDeadlineError,
+} from '@/src/services/translation/requestScheduler';
+
+function deferred<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((resolvePromise, rejectPromise) => {
+        resolve = resolvePromise;
+        reject = rejectPromise;
+    });
+    return {promise, resolve, reject};
+}
+
+async function flushMicrotasks(times = 8): Promise<void> {
+    for (let index = 0; index < times; index += 1) await Promise.resolve();
+}
+
+describe('translation request scheduler', () => {
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(0);
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
+    it('按配置限制并发请求并保持 FIFO', async () => {
+        const config = {
+            maxConcurrentTranslations: 2,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const controls = Array.from({length: 3}, () => deferred<number>());
+        const started: number[] = [];
+        const jobs = controls.map((control, index) => scheduler.schedule(async () => {
+            started.push(index);
+            return control.promise;
+        }));
+
+        expect(started).toEqual([0, 1]);
+        controls[0]!.resolve(0);
+        await expect(jobs[0]).resolves.toBe(0);
+        await vi.waitFor(() => expect(started).toEqual([0, 1, 2]));
+
+        controls[1]!.resolve(1);
+        controls[2]!.resolve(2);
+        await expect(Promise.all(jobs)).resolves.toEqual([0, 1, 2]);
+    });
+
+    it('同时执行每秒和每分钟滑动窗口限制', async () => {
+        const config = {
+            maxConcurrentTranslations: 10,
+            translationRequestsPerSecond: 2,
+            translationRequestsPerMinute: 3,
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const started: number[] = [];
+        const jobs = Array.from({length: 4}, (_, index) => scheduler.schedule(async () => {
+            started.push(Date.now());
+            return index;
+        }));
+
+        await flushMicrotasks();
+        expect(started).toHaveLength(2);
+        expect(started).toEqual([0, 0]);
+
+        await vi.advanceTimersByTimeAsync(999);
+        expect(started).toHaveLength(2);
+        await vi.advanceTimersByTimeAsync(1);
+        await flushMicrotasks();
+        expect(started).toHaveLength(3);
+        expect(started[2]).toBe(1000);
+
+        await vi.advanceTimersByTimeAsync(58_999);
+        expect(started).toHaveLength(3);
+        await vi.advanceTimersByTimeAsync(1);
+        await flushMicrotasks();
+        expect(started).toHaveLength(4);
+        expect(started[3]).toBe(60_000);
+        await expect(Promise.all(jobs)).resolves.toEqual([0, 1, 2, 3]);
+    });
+
+    it('排队中的请求可取消，并在达到 provider 预算前拒绝过期任务', async () => {
+        const config = {
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const blocker = deferred<string>();
+        const first = scheduler.schedule(async () => blocker.promise);
+        const controller = new AbortController();
+        const cancelled = scheduler.schedule(async () => 'never', {signal: controller.signal});
+        const expired = scheduler.schedule(async () => 'never', {deadlineAt: 100});
+        const later = scheduler.schedule(async () => 'never', {deadlineAt: 200});
+        const expiredOutcome = expired.catch((error) => error);
+        const laterOutcome = later.catch((error) => error);
+
+        controller.abort();
+        await expect(cancelled).rejects.toMatchObject({name: 'AbortError'});
+        await vi.advanceTimersByTimeAsync(100);
+        await expect(expiredOutcome).resolves.toBeInstanceOf(TranslationRequestSchedulerDeadlineError);
+        await vi.advanceTimersByTimeAsync(100);
+        await expect(laterOutcome).resolves.toBeInstanceOf(TranslationRequestSchedulerDeadlineError);
+
+        blocker.resolve('done');
+        await expect(first).resolves.toBe('done');
+    });
+
+    it('调用方先收到结果时仍保留真实 transport 的调度槽', async () => {
+        const config = {
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const transport = deferred<void>();
+        const started: string[] = [];
+        const first = scheduler.schedule(async (lease) => {
+            started.push('first');
+            lease.holdUntil(transport.promise);
+            return 'caller-result';
+        });
+        const second = scheduler.schedule(async () => {
+            started.push('second');
+            return 'second-result';
+        });
+
+        await expect(first).resolves.toBe('caller-result');
+        expect(started).toEqual(['first']);
+        transport.resolve();
+        await expect(second).resolves.toBe('second-result');
+        expect(started).toEqual(['first', 'second']);
+    });
+
+    it('请求任务结束后不允许继续追加 transport lease', async () => {
+        let capturedLease: {holdUntil: (settlement: PromiseLike<unknown>) => void} | undefined;
+        await expect(schedulerForLeaseTest((lease) => {
+            capturedLease = lease;
+            return Promise.resolve('done');
+        })).resolves.toBe('done');
+        expect(() => capturedLease?.holdUntil(Promise.resolve())).toThrow(
+            '翻译请求已结束，无法继续占用调度槽',
+        );
+    });
+
+    it('配置读取失败时回退到安全默认调度', async () => {
+        const scheduler = createTranslationRequestScheduler(() => {
+            throw new Error('config unavailable');
+        });
+
+        await expect(scheduler.schedule(async () => 'safe-default')).resolves.toBe('safe-default');
+    });
+
+    it('入队前已取消的请求立即拒绝且不启动任务', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        const controller = new AbortController();
+        controller.abort();
+        const task = vi.fn(async () => 'never');
+
+        await expect(scheduler.schedule(task, {signal: controller.signal}))
+            .rejects.toMatchObject({name: 'AbortError'});
+        expect(task).not.toHaveBeenCalled();
+
+        const completedController = new AbortController();
+        await expect(scheduler.schedule(async () => 'completed', {
+            signal: completedController.signal,
+        })).resolves.toBe('completed');
+    });
+
+    it('任务内部再次入队时保持防重入并继续调度', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        let nested!: Promise<string>;
+        const first = scheduler.schedule(async () => {
+            nested = scheduler.schedule(async () => 'nested');
+            return 'first';
+        });
+
+        await expect(first).resolves.toBe('first');
+        await expect(nested).resolves.toBe('nested');
+    });
+
+    it('非有限时钟回退到系统时间，并在时钟回拨后清理旧窗口', async () => {
+        const nonFiniteScheduler = createTranslationRequestScheduler(
+            () => ({maxConcurrentTranslations: 1}),
+            {now: () => Number.NaN},
+        );
+        await expect(nonFiniteScheduler.schedule(async () => 'system-time')).resolves.toBe('system-time');
+
+        const clockValues = [100, 50, 50];
+        const backwardsScheduler = createTranslationRequestScheduler(
+            () => ({
+                maxConcurrentTranslations: 1,
+                translationRequestsPerSecond: 1,
+                translationRequestsPerMinute: 0,
+            }),
+            {now: () => clockValues.shift() ?? 50},
+        );
+        await expect(backwardsScheduler.schedule(async () => 'first')).resolves.toBe('first');
+        await flushMicrotasks();
+        await expect(backwardsScheduler.schedule(async () => 'second')).resolves.toBe('second');
+    });
+
+    it('配置返回 null 时仍使用安全默认调度', async () => {
+        const scheduler = createTranslationRequestScheduler(() => null as never);
+        await expect(scheduler.schedule(async () => 'null-config')).resolves.toBe('null-config');
+    });
+
+    it('独立服务 bucket 互不占用全局并发，并跳过被阻塞的服务队首', async () => {
+        const config = {
+            maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0,
+            serviceRequestLimits: {
+                alpha: {enabled: true, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}},
+                beta: {enabled: true, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}},
+            },
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const alphaBlocker = deferred<void>(); const started: string[] = [];
+        const first = scheduler.schedule(async () => { started.push('alpha-1'); await alphaBlocker.promise; }, {identity: {service: 'alpha', model: 'a'}});
+        const second = scheduler.schedule(async () => { started.push('alpha-2'); }, {identity: {service: 'alpha', model: 'a'}});
+        const beta = scheduler.schedule(async () => { started.push('beta'); }, {identity: {service: 'beta', model: 'b'}});
+        await flushMicrotasks();
+        expect(started).toEqual(['alpha-1', 'beta']);
+        alphaBlocker.resolve();
+        await expect(Promise.all([first, second, beta])).resolves.toEqual([undefined, undefined, undefined]);
+        expect(started).toEqual(['alpha-1', 'beta', 'alpha-2']);
+    });
+
+    it('模型 bucket 与服务 aggregate 同时生效，模型任务不绕过服务 cap', async () => {
+        const config = {
+            maxConcurrentTranslations: 6, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0,
+            serviceRequestLimits: {svc: {enabled: true, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}}},
+            modelRequestLimits: {svc: {
+                a: {enabled: true, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}},
+                b: {enabled: true, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}},
+            }},
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const blocker = deferred<void>(); const started: string[] = [];
+        const first = scheduler.schedule(async () => { started.push('a'); await blocker.promise; }, {identity: {service: 'svc', model: 'a'}});
+        const second = scheduler.schedule(async () => { started.push('b'); }, {identity: {service: 'svc', model: 'b'}});
+        await flushMicrotasks(); expect(started).toEqual(['a']);
+        blocker.resolve(); await expect(Promise.all([first, second])).resolves.toEqual([undefined, undefined]);
+        expect(started).toEqual(['a', 'b']);
+    });
+
+    it('后续服务同步取消阻塞队首时，立即重新派发已越过的可运行模型', async () => {
+        const limits = {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0};
+        const scheduler = createTranslationRequestScheduler(() => ({
+            ...limits,
+            serviceRequestLimits: {svc: {enabled: true, limits: {...limits, maxConcurrentTranslations: 2}}},
+            modelRequestLimits: {svc: {a: {enabled: true, limits}, b: {enabled: true, limits}}},
+        }));
+        const activeGate = deferred<void>();
+        const laterGate = deferred<void>();
+        const active = scheduler.schedule(async () => activeGate.promise, {identity: {service: 'svc', model: 'a'}});
+        const cancel = new AbortController();
+        const blocked = scheduler.schedule(async () => 'never', {identity: {service: 'svc', model: 'a'}, signal: cancel.signal});
+        const blockedOutcome = blocked.catch(error => error);
+        const started: string[] = [];
+        const ready = scheduler.schedule(async () => {started.push('ready');}, {identity: {service: 'svc', model: 'b'}});
+        const later = scheduler.schedule(async () => {cancel.abort(); return laterGate.promise;}, {identity: {service: 'other'}});
+        await flushMicrotasks();
+        // 两个活动请求都没结束，没有新的 timer 或 promise settlement 替它再次唤醒。
+        expect(started).toEqual(['ready']);
+        expect(await blockedOutcome).toMatchObject({name: 'AbortError'});
+        activeGate.resolve(); laterGate.resolve();
+        await Promise.all([active, ready, later]);
+    });
+
+    it('真实 HTTP attempt 可越过同 bucket 的等待 provider，且仍在 attempt 间保持 FIFO', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1, translationRequestsPerSecond: 1, translationRequestsPerMinute: 0,
+        }));
+        const attempts: string[] = []; let attempt!: Promise<string>;
+        const outer = scheduler.schedule(async () => {
+            attempt = scheduler.scheduleAttempt(async () => { attempts.push('attempt'); return 'ok'; });
+            return 'outer';
+        }, {countRate: false});
+        const waiting = scheduler.schedule(async () => { attempts.push('waiting'); return 'waiting'; });
+        await expect(outer).resolves.toBe('outer');
+        await expect(attempt).resolves.toBe('ok');
+        expect(attempts).toEqual(['attempt']);
+        await vi.advanceTimersByTimeAsync(1_000);
+        await expect(waiting).resolves.toBe('waiting');
+    });
+
+    it('服务限制未启用或模型身份为空时回退 global bucket', async () => {
+        const config = {
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+            serviceRequestLimits: {svc: {enabled: false, limits: {maxConcurrentTranslations: 1, translationRequestsPerSecond: 0, translationRequestsPerMinute: 0}}},
+        };
+        const scheduler = createTranslationRequestScheduler(() => config);
+        const blocker = deferred<void>();
+        const first = scheduler.schedule(async () => blocker.promise, {identity: {service: 'svc'}});
+        const second = scheduler.schedule(async () => 'second', {identity: {service: 'svc'}});
+        await flushMicrotasks();
+        blocker.resolve();
+        await expect(Promise.all([first, second])).resolves.toEqual([undefined, 'second']);
+    });
+
+    it('attempt 在已有并发任务和普通等待任务前仍可取得速率许可', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        const blocker = deferred<void>();
+        const active = scheduler.schedule(async () => blocker.promise);
+        const waiting = scheduler.schedule(async () => 'waiting');
+        const attempt = scheduler.scheduleAttempt(async () => 'attempt');
+        await expect(attempt).resolves.toBe('attempt');
+        blocker.resolve();
+        await expect(Promise.all([active, waiting])).resolves.toEqual([undefined, 'waiting']);
+    });
+
+    it('等待速率许可的 attempt 按 FIFO 挡住同 bucket 的更晚 attempt，同轮扫描复用 bucket key', async () => {
+        const limits = {maxConcurrentTranslations: 4, translationRequestsPerSecond: 1, translationRequestsPerMinute: 0};
+        const scheduler = createTranslationRequestScheduler(() => ({
+            ...limits,
+            serviceRequestLimits: {svc: {enabled: true, limits}},
+            modelRequestLimits: {svc: {m: {enabled: true, limits}}},
+        }));
+        const identity = {service: 'svc', model: 'm'};
+        const order: string[] = [];
+        const attempts: Promise<string>[] = [];
+        const outer = scheduler.schedule(async () => {
+            for (const name of ['first', 'second', 'third']) {
+                attempts.push(scheduler.scheduleAttempt(async () => { order.push(name); return name; }, {identity}));
+            }
+            return 'outer';
+        }, {identity, countRate: false});
+        await expect(outer).resolves.toBe('outer');
+        await flushMicrotasks();
+        expect(order).toEqual(['first']);
+        await vi.advanceTimersByTimeAsync(1_000);
+        expect(order).toEqual(['first', 'second']);
+        await vi.advanceTimersByTimeAsync(1_000);
+        await expect(Promise.all(attempts)).resolves.toEqual(['first', 'second', 'third']);
+    });
+
+    it('大量等待请求经过内部压缩后仍保持结果顺序', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        const jobs = Array.from({length: 2_500}, (_, index) => scheduler.schedule(async () => index));
+        await expect(Promise.all(jobs)).resolves.toEqual(Array.from({length: 2_500}, (_, index) => index));
+    }, 10_000);
+
+    it('超时和执行失败时都清理已注册的取消监听', async () => {
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        const blocker = deferred<string>();
+        const first = scheduler.schedule(async () => blocker.promise);
+        const timedController = new AbortController();
+        const timed = scheduler.schedule(async () => 'never', {
+            signal: timedController.signal,
+            deadlineAt: 100,
+        });
+        const timedOutcome = timed.catch((error) => error);
+
+        await vi.advanceTimersByTimeAsync(100);
+        await expect(timedOutcome).resolves.toBeInstanceOf(TranslationRequestSchedulerDeadlineError);
+        blocker.resolve('done');
+        await expect(first).resolves.toBe('done');
+
+        const errorController = new AbortController();
+        await expect(scheduler.schedule(async () => {
+            throw new Error('scheduler task failed');
+        }, {signal: errorController.signal})).rejects.toThrow('scheduler task failed');
+    });
+});
+
+function schedulerForLeaseTest(
+    task: (lease: {holdUntil: (settlement: PromiseLike<unknown>) => void}) => Promise<string>,
+): Promise<string> {
+    return createTranslationRequestScheduler(() => ({
+        maxConcurrentTranslations: 1,
+        translationRequestsPerSecond: 0,
+        translationRequestsPerMinute: 0,
+    })).schedule(task);
+}

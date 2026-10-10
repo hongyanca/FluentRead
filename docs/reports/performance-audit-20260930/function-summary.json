@@ -1,0 +1,570 @@
+{
+  "files": 684,
+  "functions": 9900,
+  "parseErrors": [],
+  "chains": {
+    "entrypoints/background.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/content.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/document": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/localTranslationWorker.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/localTtsWorker.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/neteaseMailFrame.content.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/offscreen": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/options": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/popup": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/shadowBridge.content.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/supportedFrame.content.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/videoTranscriptionWorker.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/xVideoBridge.content.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "entrypoints/youtubeBridge.content.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "integrations/obsidian": {
+      "files": 7,
+      "functions": 57,
+      "flaggedFunctions": 16
+    },
+    "src/app/background": {
+      "files": 44,
+      "functions": 285,
+      "flaggedFunctions": 53
+    },
+    "src/app/content": {
+      "files": 22,
+      "functions": 212,
+      "flaggedFunctions": 37
+    },
+    "src/app/document-translation": {
+      "files": 5,
+      "functions": 136,
+      "flaggedFunctions": 22
+    },
+    "src/app/offscreen": {
+      "files": 8,
+      "functions": 157,
+      "flaggedFunctions": 22
+    },
+    "src/app/options": {
+      "files": 2,
+      "functions": 35,
+      "flaggedFunctions": 8
+    },
+    "src/app/popup": {
+      "files": 6,
+      "functions": 150,
+      "flaggedFunctions": 18
+    },
+    "src/app/translation": {
+      "files": 3,
+      "functions": 68,
+      "flaggedFunctions": 17
+    },
+    "src/core/config": {
+      "files": 41,
+      "functions": 594,
+      "flaggedFunctions": 41
+    },
+    "src/core/context-menu": {
+      "files": 2,
+      "functions": 22,
+      "flaggedFunctions": 2
+    },
+    "src/core/glossary": {
+      "files": 5,
+      "functions": 62,
+      "flaggedFunctions": 11
+    },
+    "src/core/harness": {
+      "files": 5,
+      "functions": 41,
+      "flaggedFunctions": 14
+    },
+    "src/core/hotkey": {
+      "files": 1,
+      "functions": 19,
+      "flaggedFunctions": 3
+    },
+    "src/core/i18n": {
+      "files": 19,
+      "functions": 39,
+      "flaggedFunctions": 5
+    },
+    "src/core/language": {
+      "files": 10,
+      "functions": 88,
+      "flaggedFunctions": 11
+    },
+    "src/core/site-adaptation": {
+      "files": 6,
+      "functions": 65,
+      "flaggedFunctions": 14
+    },
+    "src/core/site-rules": {
+      "files": 1,
+      "functions": 14,
+      "flaggedFunctions": 2
+    },
+    "src/core/translation": {
+      "files": 20,
+      "functions": 300,
+      "flaggedFunctions": 62
+    },
+    "src/features/area-translation": {
+      "files": 14,
+      "functions": 89,
+      "flaggedFunctions": 28
+    },
+    "src/features/document-translation": {
+      "files": 7,
+      "functions": 211,
+      "flaggedFunctions": 29
+    },
+    "src/features/floating-ball": {
+      "files": 5,
+      "functions": 77,
+      "flaggedFunctions": 12
+    },
+    "src/features/full-page-translation": {
+      "files": 43,
+      "functions": 885,
+      "flaggedFunctions": 173
+    },
+    "src/features/glossary": {
+      "files": 3,
+      "functions": 69,
+      "flaggedFunctions": 11
+    },
+    "src/features/hover-translation": {
+      "files": 2,
+      "functions": 30,
+      "flaggedFunctions": 7
+    },
+    "src/features/image-translation": {
+      "files": 23,
+      "functions": 437,
+      "flaggedFunctions": 115
+    },
+    "src/features/input-translation": {
+      "files": 6,
+      "functions": 78,
+      "flaggedFunctions": 23
+    },
+    "src/features/local-translation": {
+      "files": 7,
+      "functions": 126,
+      "flaggedFunctions": 48
+    },
+    "src/features/local-tts": {
+      "files": 7,
+      "functions": 102,
+      "flaggedFunctions": 38
+    },
+    "src/features/model-usage": {
+      "files": 4,
+      "functions": 116,
+      "flaggedFunctions": 11
+    },
+    "src/features/page-notice": {
+      "files": 2,
+      "functions": 18,
+      "flaggedFunctions": 3
+    },
+    "src/features/paragraph-copy": {
+      "files": 3,
+      "functions": 22,
+      "flaggedFunctions": 6
+    },
+    "src/features/quick-translation": {
+      "files": 3,
+      "functions": 23,
+      "flaggedFunctions": 1
+    },
+    "src/features/reading-assistant": {
+      "files": 12,
+      "functions": 140,
+      "flaggedFunctions": 43
+    },
+    "src/features/section-translation": {
+      "files": 4,
+      "functions": 66,
+      "flaggedFunctions": 22
+    },
+    "src/features/selection-translation": {
+      "files": 22,
+      "functions": 439,
+      "flaggedFunctions": 105
+    },
+    "src/features/settings": {
+      "files": 59,
+      "functions": 1142,
+      "flaggedFunctions": 104
+    },
+    "src/features/site-rules": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "src/features/translation-center": {
+      "files": 2,
+      "functions": 76,
+      "flaggedFunctions": 9
+    },
+    "src/features/translation-stats": {
+      "files": 3,
+      "functions": 97,
+      "flaggedFunctions": 12
+    },
+    "src/features/video-subtitle": {
+      "files": 41,
+      "functions": 914,
+      "flaggedFunctions": 253
+    },
+    "src/features/vocabulary": {
+      "files": 9,
+      "functions": 252,
+      "flaggedFunctions": 43
+    },
+    "src/features/writing-assistant": {
+      "files": 15,
+      "functions": 176,
+      "flaggedFunctions": 54
+    },
+    "src/platform/browser": {
+      "files": 4,
+      "functions": 26,
+      "flaggedFunctions": 6
+    },
+    "src/platform/http": {
+      "files": 2,
+      "functions": 13,
+      "flaggedFunctions": 6
+    },
+    "src/platform/i18n": {
+      "files": 1,
+      "functions": 15,
+      "flaggedFunctions": 1
+    },
+    "src/platform/offscreen": {
+      "files": 4,
+      "functions": 64,
+      "flaggedFunctions": 17
+    },
+    "src/platform/shadow-ui": {
+      "files": 4,
+      "functions": 27,
+      "flaggedFunctions": 5
+    },
+    "src/platform/storage": {
+      "files": 11,
+      "functions": 232,
+      "flaggedFunctions": 75
+    },
+    "src/providers/translation": {
+      "files": 40,
+      "functions": 272,
+      "flaggedFunctions": 88
+    },
+    "src/services/config": {
+      "files": 7,
+      "functions": 171,
+      "flaggedFunctions": 50
+    },
+    "src/services/harness": {
+      "files": 8,
+      "functions": 76,
+      "flaggedFunctions": 10
+    },
+    "src/services/interfaceFonts.ts": {
+      "files": 1,
+      "functions": 34,
+      "flaggedFunctions": 7
+    },
+    "src/services/model-usage": {
+      "files": 2,
+      "functions": 30,
+      "flaggedFunctions": 4
+    },
+    "src/services/translation-stats": {
+      "files": 3,
+      "functions": 49,
+      "flaggedFunctions": 11
+    },
+    "src/services/translation": {
+      "files": 23,
+      "functions": 442,
+      "flaggedFunctions": 120
+    },
+    "src/services/writing": {
+      "files": 1,
+      "functions": 17,
+      "flaggedFunctions": 3
+    },
+    "src/shared/dom": {
+      "files": 2,
+      "functions": 5,
+      "flaggedFunctions": 1
+    },
+    "src/shared/function": {
+      "files": 2,
+      "functions": 3,
+      "flaggedFunctions": 1
+    },
+    "src/shared/geometry": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 1
+    },
+    "src/shared/image": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "src/shared/onnx": {
+      "files": 2,
+      "functions": 15,
+      "flaggedFunctions": 5
+    },
+    "src/ui/components": {
+      "files": 10,
+      "functions": 54,
+      "flaggedFunctions": 9
+    },
+    "src/ui/i18n.ts": {
+      "files": 1,
+      "functions": 38,
+      "flaggedFunctions": 11
+    },
+    "src/ui/interfaceAppearance.ts": {
+      "files": 1,
+      "functions": 25,
+      "flaggedFunctions": 4
+    },
+    "src/ui/translationLoadingIndicator.ts": {
+      "files": 1,
+      "functions": 4,
+      "flaggedFunctions": 1
+    },
+    "src/ui/view-model": {
+      "files": 3,
+      "functions": 19,
+      "flaggedFunctions": 1
+    },
+    "userscript/SettingsPanel.vue": {
+      "files": 1,
+      "functions": 57,
+      "flaggedFunctions": 4
+    },
+    "userscript/api.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "userscript/browser.ts": {
+      "files": 1,
+      "functions": 27,
+      "flaggedFunctions": 9
+    },
+    "userscript/chromeTranslator.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "userscript/compression.ts": {
+      "files": 1,
+      "functions": 2,
+      "flaggedFunctions": 0
+    },
+    "userscript/context.ts": {
+      "files": 1,
+      "functions": 5,
+      "flaggedFunctions": 0
+    },
+    "userscript/count.ts": {
+      "files": 1,
+      "functions": 28,
+      "flaggedFunctions": 6
+    },
+    "userscript/credentialContext.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "userscript/dexie.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "userscript/http.ts": {
+      "files": 1,
+      "functions": 27,
+      "flaggedFunctions": 6
+    },
+    "userscript/initialize.ts": {
+      "files": 1,
+      "functions": 12,
+      "flaggedFunctions": 2
+    },
+    "userscript/main.ts": {
+      "files": 1,
+      "functions": 20,
+      "flaggedFunctions": 5
+    },
+    "userscript/metadata.ts": {
+      "files": 1,
+      "functions": 3,
+      "flaggedFunctions": 0
+    },
+    "userscript/pageContext.ts": {
+      "files": 1,
+      "functions": 6,
+      "flaggedFunctions": 2
+    },
+    "userscript/pageTranslationContext.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "userscript/pakoBundled.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "userscript/pakoRuntime.ts": {
+      "files": 1,
+      "functions": 1,
+      "flaggedFunctions": 0
+    },
+    "userscript/platform.ts": {
+      "files": 1,
+      "functions": 4,
+      "flaggedFunctions": 1
+    },
+    "userscript/platformFull.ts": {
+      "files": 1,
+      "functions": 10,
+      "flaggedFunctions": 2
+    },
+    "userscript/settings.ts": {
+      "files": 1,
+      "functions": 3,
+      "flaggedFunctions": 1
+    },
+    "userscript/settingsFull.ts": {
+      "files": 1,
+      "functions": 15,
+      "flaggedFunctions": 5
+    },
+    "userscript/settingsPage.ts": {
+      "files": 1,
+      "functions": 3,
+      "flaggedFunctions": 0
+    },
+    "userscript/shadow-root.ts": {
+      "files": 1,
+      "functions": 6,
+      "flaggedFunctions": 1
+    },
+    "userscript/storage.ts": {
+      "files": 1,
+      "functions": 30,
+      "flaggedFunctions": 12
+    },
+    "userscript/uiLanguageBundles.ts": {
+      "files": 1,
+      "functions": 11,
+      "flaggedFunctions": 2
+    },
+    "userscript/unsupportedCapabilities.ts": {
+      "files": 1,
+      "functions": 11,
+      "flaggedFunctions": 0
+    },
+    "userscript/vendor.vite.config.ts": {
+      "files": 1,
+      "functions": 6,
+      "flaggedFunctions": 2
+    },
+    "userscript/vendorEntry.ts": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "userscript/vite.config.ts": {
+      "files": 1,
+      "functions": 44,
+      "flaggedFunctions": 10
+    },
+    "userscript/vueElementPlusBridge.v1.js": {
+      "files": 1,
+      "functions": 0,
+      "flaggedFunctions": 0
+    },
+    "userscript/writingAssistant.ts": {
+      "files": 1,
+      "functions": 3,
+      "flaggedFunctions": 0
+    }
+  },
+  "scope": "Working tree TS/JS functions and Vue script blocks, including callbacks; excludes vendor assets, templates, generated output and declaration-only signatures. Markers are review aids, not proof of defects or coverage.",
+  "excluded": [
+    {
+      "path": "userscript/resources",
+      "reason": "Generated and third-party pinned resource bundles; verified by userscript build and resource verifier"
+    }
+  ],
+  "baseline": "83a7783a23e4b440e2422d7b8ed1e1adb55706db"
+}

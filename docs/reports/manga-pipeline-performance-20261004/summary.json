@@ -1,0 +1,92 @@
+{
+  "baseline": "PR #783 head 22aa69496490a05d5f7907930992ec6c3fca82c8",
+  "optimizedEvidence": "delivery-final-gpu",
+  "browser": "Chrome 154",
+  "sampleSizePerImagePerBuild": 3,
+  "samples": [
+    {
+      "input": "02-original.png",
+      "baseline": {
+        "firstMs": 13169,
+        "warmMs": [
+          9610,
+          8818
+        ],
+        "medianMs": 9214.0,
+        "ocrMedianMs": 1446.5499999523163,
+        "inpaintMedianMs": 6543.100000143051,
+        "encodeMedianMs": 26.299999952316284,
+        "gpuSubmissions": [
+          0,
+          0,
+          0
+        ]
+      },
+      "optimized": {
+        "firstMs": 7988,
+        "warmMs": [
+          2216,
+          2006
+        ],
+        "medianMs": 2111.0,
+        "ocrMedianMs": 812.6499998569489,
+        "inpaintMedianMs": 406.9999997615814,
+        "encodeMedianMs": 26.600000143051147,
+        "gpuSubmissions": [
+          1090,
+          314,
+          314
+        ]
+      },
+      "pixelComparison": {
+        "changedPixels": 13,
+        "maxChannelDifference": 1,
+        "alphaIdentical": true,
+        "OCRBatchesIdentical": true
+      },
+      "totalReductionPercent": 77.08921206859128
+    },
+    {
+      "input": "03-original.png",
+      "baseline": {
+        "firstMs": 8812,
+        "warmMs": [
+          7648,
+          7637
+        ],
+        "medianMs": 7642.5,
+        "ocrMedianMs": 5943.849999189377,
+        "inpaintMedianMs": 750.7000000476837,
+        "encodeMedianMs": 19.100000143051147,
+        "gpuSubmissions": [
+          0,
+          0,
+          0
+        ]
+      },
+      "optimized": {
+        "firstMs": 6690,
+        "warmMs": [
+          5521,
+          5416
+        ],
+        "medianMs": 5468.5,
+        "ocrMedianMs": 4197.5,
+        "inpaintMedianMs": 105.80000019073486,
+        "encodeMedianMs": 18.549999952316284,
+        "gpuSubmissions": [
+          566,
+          566,
+          566
+        ]
+      },
+      "pixelComparison": {
+        "changedPixels": 0,
+        "maxChannelDifference": 0,
+        "alphaIdentical": true,
+        "OCRBatchesIdentical": true
+      },
+      "totalReductionPercent": 28.446189074255802
+    }
+  ]
+}

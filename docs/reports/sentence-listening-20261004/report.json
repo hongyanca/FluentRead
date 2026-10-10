@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-sentence-listening-20261004/.output/chrome-mv3",
+  "artifactsDir": "/private/tmp/fluentread-sentence-listening",
+  "checks": [
+    "highlight toolbar plays original source from the translation side and stops its browser fallback",
+    "translation-side hover saves the exact original and translation, enables saving, preserves host DOM and geometry",
+    "sentence list, manual explanation and reopening persistence",
+    "quick copy original and bilingual",
+    "existing TTS backend failure routes to browser speech with exact original; stop releases ownership",
+    "on-demand short explanation uses grounded sentence prompt and saves separately from translation",
+    "actual downloaded JSON round trips original, translation, explanation, sentence identity and review records",
+    "malformed import preserves existing collection and gives retryable feedback",
+    "pointer exit and restore remove sentence actions; narrow layout stays within viewport"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-sentence-listening/highlight-save.png",
+    "/private/tmp/fluentread-sentence-listening/sentence-listening-study.png",
+    "/private/tmp/fluentread-sentence-listening/saved-sentences.png",
+    "/private/tmp/fluentread-sentence-listening/saved-sentences-mobile.png"
+  ],
+  "evidenceBoundary": "Real production extension and storage; local deterministic translation/explanation; synthetic browser voice validates text and stop lifecycle, not audible voice quality or Firefox runtime.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1041,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "requests": [
+    {
+      "kind": "translation"
+    },
+    {
+      "kind": "explanation"
+    }
+  ]
+}

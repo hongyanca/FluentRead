@@ -1,0 +1,484 @@
+[
+  {
+    "label": "before-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": null,
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "before-zh-840",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 30,
+      "y": 370.3046875
+    },
+    "featureTop": 490.3046875,
+    "heading": {
+      "height": 117.109375,
+      "width": 780,
+      "x": 30,
+      "y": 134
+    },
+    "hero": {
+      "height": 410.3046875,
+      "width": 840,
+      "x": 0,
+      "y": 80
+    },
+    "icon": null,
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 30,
+      "y": 279.109375
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 840
+  },
+  {
+    "label": "after-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "after-zh-840",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 30,
+      "y": 370.3046875
+    },
+    "featureTop": 490.3046875,
+    "heading": {
+      "height": 117.109375,
+      "width": 780,
+      "x": 30,
+      "y": 134
+    },
+    "hero": {
+      "height": 410.3046875,
+      "width": 840,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 30,
+      "y": 279.109375
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 840
+  },
+  {
+    "label": "after-zh-390",
+    "actions": {
+      "height": 48.5,
+      "width": 350,
+      "x": 20,
+      "y": 460.984375
+    },
+    "featureTop": 573.484375,
+    "heading": {
+      "height": 90.390625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 505.484375,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 350,
+      "x": 20,
+      "y": 346.390625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 390
+  },
+  {
+    "label": "after-zh-320",
+    "actions": {
+      "height": 104,
+      "width": 280,
+      "x": 20,
+      "y": 480.546875
+    },
+    "featureTop": 648.546875,
+    "heading": {
+      "height": 82.953125,
+      "width": 280,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 580.546875,
+      "width": 320,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 128,
+      "y": 140
+    },
+    "intro": {
+      "height": 111.59375,
+      "width": 280,
+      "x": 20,
+      "y": 338.953125
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 320
+  },
+  {
+    "label": "after-zh-430",
+    "actions": {
+      "height": 48.5,
+      "width": 390,
+      "x": 20,
+      "y": 470.265625
+    },
+    "featureTop": 582.765625,
+    "heading": {
+      "height": 99.671875,
+      "width": 390,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 514.765625,
+      "width": 430,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 183,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 390,
+      "x": 20,
+      "y": 355.671875
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 430
+  },
+  {
+    "label": "after-zh-640",
+    "actions": {
+      "height": 48.5,
+      "width": 600,
+      "x": 20,
+      "y": 444.265625
+    },
+    "featureTop": 556.765625,
+    "heading": {
+      "height": 102.46875,
+      "width": 600,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 488.765625,
+      "width": 640,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 288,
+      "y": 140
+    },
+    "intro": {
+      "height": 55.796875,
+      "width": 600,
+      "x": 20,
+      "y": 358.46875
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 640
+  },
+  {
+    "label": "after-zh-760",
+    "actions": {
+      "height": 56,
+      "width": 712,
+      "x": 24,
+      "y": 489.0078125
+    },
+    "featureTop": 609.0078125,
+    "heading": {
+      "height": 129.8125,
+      "width": 712,
+      "x": 24,
+      "y": 240
+    },
+    "hero": {
+      "height": 529.0078125,
+      "width": 760,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 348,
+      "y": 152
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 712,
+      "x": 24,
+      "y": 397.8125
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 760
+  },
+  {
+    "label": "after-zh-761",
+    "actions": {
+      "height": 56,
+      "width": 713,
+      "x": 24,
+      "y": 370.3046875
+    },
+    "featureTop": 490.3046875,
+    "heading": {
+      "height": 117.109375,
+      "width": 713,
+      "x": 24,
+      "y": 134
+    },
+    "hero": {
+      "height": 410.3046875,
+      "width": 761,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 713,
+      "x": 24,
+      "y": 279.109375
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 761
+  },
+  {
+    "label": "after-en-320",
+    "actions": {
+      "height": 104,
+      "width": 280,
+      "x": 20,
+      "y": 504.46875
+    },
+    "featureTop": 672.46875,
+    "heading": {
+      "height": 78.078125,
+      "width": 280,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 604.46875,
+      "width": 320,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 128,
+      "y": 140
+    },
+    "intro": {
+      "height": 140.390625,
+      "width": 280,
+      "x": 20,
+      "y": 334.078125
+    },
+    "overflow": 0,
+    "title": "Closer languages. A bigger world.",
+    "width": 320
+  },
+  {
+    "label": "after-en-390",
+    "actions": {
+      "height": 106.5,
+      "width": 350,
+      "x": 20,
+      "y": 512.03125
+    },
+    "featureTop": 682.53125,
+    "heading": {
+      "height": 85.640625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 614.53125,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 140.390625,
+      "width": 350,
+      "x": 20,
+      "y": 341.640625
+    },
+    "overflow": 0,
+    "title": "Closer languages. A bigger world.",
+    "width": 390
+  },
+  {
+    "label": "after-en-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "Closer languages. A bigger world.",
+    "width": 1280
+  }
+]

@@ -1,12 +1,13 @@
 /**
  * @file src/app/background/handlers/configPersistence.ts
- * 文件职责：在后台可信边界接收整份配置替换或字段补丁，规范化客户端身份与序号，并协调串行持久化和响应。
- * 主要内容：声明 persistConfig replace/patch 协议及依赖，校验普通对象、mode、clientId 与非负 sequence，屏蔽同客户端过期序号，共享同序号在途结果并允许失败后重试，最后返回实际提交 revision。
+ * 文件职责：在后台可信边界接收整份配置替换、字段补丁或补丁批次，规范化客户端身份与序号，并协调串行持久化和响应。
+ * 主要内容：声明 persistConfig replace/patch 与 persistConfigBatch 协议及依赖，完整校验批次后逐条复用单次保存，屏蔽同客户端过期序号，共享同序号在途结果并允许失败后重试，最后返回实际提交 revision。
  * 模块边界：这里只处理跨上下文消息和保存编排，不定义 Config 字段、不直接操作 browser.storage，也不负责历史裁剪；校验、凭据拆分和存储事务由注入的配置服务承担。
  */
 import type {BackgroundMessageHandler} from '../messageRouter';
 
 export const CONFIG_PERSIST_MESSAGE_TYPE = 'persistConfig' as const;
+export const CONFIG_PERSIST_BATCH_MESSAGE_TYPE = 'persistConfigBatch' as const;
 export type ConfigPersistenceMode = 'replace' | 'patch';
 
 export interface ConfigPersistenceMessage {
@@ -17,6 +18,12 @@ export interface ConfigPersistenceMessage {
     clientId?: unknown;
     sequence?: unknown;
     baseRevision?: unknown;
+}
+
+export interface ConfigPersistenceBatchMessage {
+    type: typeof CONFIG_PERSIST_BATCH_MESSAGE_TYPE;
+    clientId?: unknown;
+    patches?: unknown;
 }
 
 export interface ConfigPersistenceContext {
@@ -83,6 +90,82 @@ interface ParsedConfigPersistenceRequest {
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
     return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isBatchPlainRecord(value: unknown): value is Record<string, unknown> {
+    if (!isPlainRecord(value)) return false;
+    const prototype = Object.getPrototypeOf(value);
+    return prototype === Object.prototype || prototype === null;
+}
+
+function hasExactKeys(record: Record<string, unknown>, expectedKeys: readonly string[]): boolean {
+    const keys = Reflect.ownKeys(record);
+    return keys.length === expectedKeys.length
+        && keys.every((key) => typeof key === 'string' && expectedKeys.includes(key));
+}
+
+function parseConfigPersistenceBatchMessage(message: ConfigPersistenceBatchMessage): ConfigPersistenceMessage[] {
+    if (!isBatchPlainRecord(message)
+        || !hasExactKeys(message, ['type', 'clientId', 'patches'])
+        || message.type !== CONFIG_PERSIST_BATCH_MESSAGE_TYPE) {
+        throw new TypeError('配置批量保存 payload 仅允许 type、clientId 和 patches');
+    }
+    if (typeof message.clientId !== 'string' || !message.clientId.trim()) {
+        throw new TypeError('配置批量保存 clientId 必须是非空字符串');
+    }
+    if (!Array.isArray(message.patches) || message.patches.length === 0 || message.patches.length > 256) {
+        throw new TypeError('配置批量保存 patches 必须包含 1 至 256 个补丁');
+    }
+
+    const requests: ConfigPersistenceMessage[] = [];
+    let previousSequence = 0;
+    for (const patch of message.patches) {
+        if (!isBatchPlainRecord(patch) || !hasExactKeys(patch, ['sequence', 'config', 'expected'])) {
+            throw new TypeError('配置批量保存补丁仅允许 sequence、config 和 expected');
+        }
+        if (typeof patch.sequence !== 'number'
+            || !Number.isSafeInteger(patch.sequence)
+            || patch.sequence <= previousSequence) {
+            throw new TypeError('配置批量保存 sequence 必须是严格递增的正安全整数');
+        }
+        if (!isBatchPlainRecord(patch.config) || !isBatchPlainRecord(patch.expected)) {
+            throw new TypeError('配置批量保存 config 和 expected 必须是普通对象');
+        }
+        const configKeys = Reflect.ownKeys(patch.config);
+        if (configKeys.length === 0
+            || configKeys.some((key) => typeof key !== 'string')
+            || !hasExactKeys(patch.expected, configKeys as string[])) {
+            throw new TypeError('配置批量保存 config 必须非空且与 expected 字段一致');
+        }
+        requests.push({
+            type: CONFIG_PERSIST_MESSAGE_TYPE,
+            mode: 'patch',
+            clientId: message.clientId,
+            sequence: patch.sequence,
+            config: patch.config,
+            expected: patch.expected,
+        });
+        previousSequence = patch.sequence;
+    }
+    return requests;
+}
+
+/** 完整校验后按序复用单次 handler，保留同序号去重、字段 CAS 和原 sender 权限。 */
+export function createConfigPersistenceBatchHandler(
+    singleHandler: BackgroundMessageHandler<ConfigPersistenceContext, ConfigPersistenceMessage, ConfigPersistenceResponse>,
+): BackgroundMessageHandler<ConfigPersistenceContext, ConfigPersistenceBatchMessage, ConfigPersistenceResponse> {
+    return {
+        type: CONFIG_PERSIST_BATCH_MESSAGE_TYPE,
+        async handle(message, context) {
+            const requests = parseConfigPersistenceBatchMessage(message);
+            let revision = 0;
+            for (const request of requests) {
+                const response = await singleHandler.handle(request, context);
+                revision = response.revision;
+            }
+            return {success: true, revision};
+        },
+    };
 }
 
 function fallbackClientId(sender: ConfigPersistenceContext['sender']): string {
@@ -189,6 +272,10 @@ export function createConfigPersistenceHandler<TConfig>(
                         return dependencies.getCurrentRevision?.() ?? 0;
                     }
                     await dependencies.ready;
+                    // 水合的 await 期间同一客户端可能提交更新的序号，旧请求不能写入历史或触发 CAS 冲突。
+                    if (request.sequence && latestSequenceByClient.get(request.clientId) !== request.sequence) {
+                        return dependencies.getCurrentRevision?.() ?? 0;
+                    }
 
                     const currentRevision = dependencies.getCurrentRevision?.();
                     if (request.mode === 'replace'

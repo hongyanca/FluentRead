@@ -6,6 +6,7 @@
  * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
  */
 
+import {normalizeChineseLanguageCode} from '@/src/core/language/chinese';
 import { method } from "@/src/core/config/constants";
 import { config } from "@/src/services/config/store";
 import {getTranslationLanguages} from '@/src/services/translation/languages';
@@ -117,8 +118,10 @@ async function tencent(message: TranslationProviderRequest<string>) {
 
     // 转换语言代码
     const {sourceLanguage, targetLanguage} = getTranslationLanguages(message);
-    const sourceLang = languageMap[sourceLanguage] || sourceLanguage;
-    const targetLang = languageMap[targetLanguage] || targetLanguage;
+    const normalizedSource = normalizeChineseLanguageCode(sourceLanguage);
+    const normalizedTarget = normalizeChineseLanguageCode(targetLanguage);
+    const sourceLang = (Object.hasOwn(languageMap, normalizedSource) ? languageMap[normalizedSource] : sourceLanguage);
+    const targetLang = (Object.hasOwn(languageMap, normalizedTarget) ? languageMap[normalizedTarget] : targetLanguage);
 
     if (!targetLang || targetLang === 'auto') {
         throw new Error('腾讯云机器翻译不支持目标语言自动检测');
@@ -157,10 +160,10 @@ async function tencent(message: TranslationProviderRequest<string>) {
     }
 
     const result = await readJsonResponse<any>(response, '腾讯云机器翻译返回的不是有效 JSON');
-    if (result.Response?.Error) {
+    if (result?.Response?.Error) {
         throw createProviderCodeError('腾讯云机器翻译错误', result.Response.Error.Code);
     }
-    if (result.Response?.TargetText) {
+    if (typeof result?.Response?.TargetText === 'string' && result.Response.TargetText) {
         return result.Response.TargetText;
     }
     throw new Error('腾讯云机器翻译返回格式异常');

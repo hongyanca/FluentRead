@@ -1,0 +1,686 @@
+{
+  "extensionDir": "/private/tmp/fluentread-perf-20260913/baseline",
+  "version": "0.0.33",
+  "runs": 5,
+  "method": "Fresh temporary profile; first document then repeated new documents in one browser. Local files may be OS-cached. Timings are descriptive, not a cross-device guarantee.",
+  "samples": [
+    {
+      "readyMs": 279.09999990463257,
+      "longTasks": [
+        {
+          "start": 123.29999995231628,
+          "duration": 155
+        }
+      ],
+      "domContentLoadedMs": 107.59999990463257,
+      "nodes": 417,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-D8RUD7F-.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/popup-VVROg8X-.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1068566,
+      "cssBytes": 477180,
+      "scriptMs": 47.138,
+      "taskMs": 326.772,
+      "heapBytes": 8327940,
+      "idleTaskMs": 82.94600000000003,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 485.39999997615814,
+      "longTasks": [
+        {
+          "start": 47,
+          "duration": 436
+        },
+        {
+          "start": 485.2999999523163,
+          "duration": 74
+        },
+        {
+          "start": 585.1000000238419,
+          "duration": 54
+        }
+      ],
+      "domContentLoadedMs": 480.10000002384186,
+      "nodes": 5379,
+      "resources": [],
+      "kind": "options",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D4_CJeFy.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "chunks/GlossaryLibrarySelect-BAHBRkfH.js",
+        "chunks/localTranslationSupport-DABWQzcD.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "assets/options-Dm78dYz5.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1802094,
+      "cssBytes": 822560,
+      "scriptMs": 350.091,
+      "taskMs": 722.076,
+      "heapBytes": 32227152,
+      "idleTaskMs": 1.2999999999999678,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 173.19999992847443,
+      "longTasks": [
+        {
+          "start": 11.799999952316284,
+          "duration": 138
+        }
+      ],
+      "domContentLoadedMs": 171.39999997615814,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:57863/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.5
+        }
+      ],
+      "kind": "content",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "scriptBytes": 0,
+      "cssBytes": 210478,
+      "scriptMs": 103.931,
+      "taskMs": 212.66299999999998,
+      "heapBytes": 9029004,
+      "idleTaskMs": 3.519999999999995,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 115.60000002384186,
+      "longTasks": [
+        {
+          "start": 49.700000047683716,
+          "duration": 64
+        }
+      ],
+      "domContentLoadedMs": 45.200000047683716,
+      "nodes": 417,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-D8RUD7F-.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/popup-VVROg8X-.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1068566,
+      "cssBytes": 477180,
+      "scriptMs": 22.379,
+      "taskMs": 176.46,
+      "heapBytes": 11981632,
+      "idleTaskMs": 93.38000000000002,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 329.5,
+      "longTasks": [
+        {
+          "start": 29,
+          "duration": 300
+        },
+        {
+          "start": 329.5,
+          "duration": 72
+        },
+        {
+          "start": 454.5,
+          "duration": 51
+        }
+      ],
+      "domContentLoadedMs": 326.7000000476837,
+      "nodes": 5379,
+      "resources": [],
+      "kind": "options",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D4_CJeFy.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "chunks/GlossaryLibrarySelect-BAHBRkfH.js",
+        "chunks/localTranslationSupport-DABWQzcD.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "assets/options-Dm78dYz5.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1802094,
+      "cssBytes": 822560,
+      "scriptMs": 262.823,
+      "taskMs": 549.341,
+      "heapBytes": 31956340,
+      "idleTaskMs": 3.063000000000038,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 165.5,
+      "longTasks": [
+        {
+          "start": 8.5,
+          "duration": 134
+        }
+      ],
+      "domContentLoadedMs": 164,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:57863/favicon.ico",
+          "initiatorType": "other",
+          "duration": 2
+        }
+      ],
+      "kind": "content",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "scriptBytes": 0,
+      "cssBytes": 210478,
+      "scriptMs": 103.64800000000001,
+      "taskMs": 217.09400000000002,
+      "heapBytes": 7426060,
+      "idleTaskMs": 2.7510000000000034,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 163.39999997615814,
+      "longTasks": [
+        {
+          "start": 58.199999928474426,
+          "duration": 104
+        }
+      ],
+      "domContentLoadedMs": 46.89999997615814,
+      "nodes": 417,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-D8RUD7F-.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/popup-VVROg8X-.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1068566,
+      "cssBytes": 477180,
+      "scriptMs": 24.565,
+      "taskMs": 221.183,
+      "heapBytes": 35587688,
+      "idleTaskMs": 113.67400000000002,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 368,
+      "longTasks": [
+        {
+          "start": 28.300000071525574,
+          "duration": 339
+        },
+        {
+          "start": 368,
+          "duration": 95
+        },
+        {
+          "start": 508.40000009536743,
+          "duration": 60
+        }
+      ],
+      "domContentLoadedMs": 365.10000002384186,
+      "nodes": 5379,
+      "resources": [],
+      "kind": "options",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D4_CJeFy.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "chunks/GlossaryLibrarySelect-BAHBRkfH.js",
+        "chunks/localTranslationSupport-DABWQzcD.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "assets/options-Dm78dYz5.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1802094,
+      "cssBytes": 822560,
+      "scriptMs": 301.681,
+      "taskMs": 609.7470000000001,
+      "heapBytes": 52677564,
+      "idleTaskMs": 2.0769999999999955,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 164.69999992847443,
+      "longTasks": [
+        {
+          "start": 8.5,
+          "duration": 133
+        }
+      ],
+      "domContentLoadedMs": 163,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:57863/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.399999976158142
+        }
+      ],
+      "kind": "content",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "scriptBytes": 0,
+      "cssBytes": 210478,
+      "scriptMs": 101.77600000000001,
+      "taskMs": 206.92,
+      "heapBytes": 8978560,
+      "idleTaskMs": 2.8630000000000044,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 121.89999997615814,
+      "longTasks": [
+        {
+          "start": 59.699999928474426,
+          "duration": 61
+        }
+      ],
+      "domContentLoadedMs": 51.5,
+      "nodes": 417,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-D8RUD7F-.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/popup-VVROg8X-.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1068566,
+      "cssBytes": 477180,
+      "scriptMs": 29.551000000000002,
+      "taskMs": 184.577,
+      "heapBytes": 11420176,
+      "idleTaskMs": 109.83700000000002,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 312,
+      "longTasks": [
+        {
+          "start": 26.800000071525574,
+          "duration": 284
+        },
+        {
+          "start": 312,
+          "duration": 67
+        },
+        {
+          "start": 419.39999997615814,
+          "duration": 50
+        }
+      ],
+      "domContentLoadedMs": 309,
+      "nodes": 5379,
+      "resources": [],
+      "kind": "options",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D4_CJeFy.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "chunks/GlossaryLibrarySelect-BAHBRkfH.js",
+        "chunks/localTranslationSupport-DABWQzcD.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "assets/options-Dm78dYz5.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1802094,
+      "cssBytes": 822560,
+      "scriptMs": 243.751,
+      "taskMs": 503.889,
+      "heapBytes": 29660004,
+      "idleTaskMs": 2.7169999999999694,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 156.10000002384186,
+      "longTasks": [
+        {
+          "start": 7.600000023841858,
+          "duration": 127
+        }
+      ],
+      "domContentLoadedMs": 154.70000004768372,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:57863/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.399999976158142
+        }
+      ],
+      "kind": "content",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "scriptBytes": 0,
+      "cssBytes": 210478,
+      "scriptMs": 95.96499999999999,
+      "taskMs": 196.727,
+      "heapBytes": 8991160,
+      "idleTaskMs": 2.0899999999999808,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 122.80000007152557,
+      "longTasks": [
+        {
+          "start": 61.200000047683716,
+          "duration": 61
+        }
+      ],
+      "domContentLoadedMs": 50,
+      "nodes": 417,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-D8RUD7F-.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/popup-VVROg8X-.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1068566,
+      "cssBytes": 477180,
+      "scriptMs": 28.472,
+      "taskMs": 191.007,
+      "heapBytes": 11795084,
+      "idleTaskMs": 115.98899999999998,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 372.89999997615814,
+      "longTasks": [
+        {
+          "start": 40.60000002384186,
+          "duration": 331
+        },
+        {
+          "start": 372.7999999523163,
+          "duration": 79
+        },
+        {
+          "start": 524.3999999761581,
+          "duration": 119
+        }
+      ],
+      "domContentLoadedMs": 369.89999997615814,
+      "nodes": 5379,
+      "resources": [],
+      "kind": "options",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D4_CJeFy.js",
+        "chunks/localTts-3WIwG2ul.js",
+        "chunks/capabilities-BaCP_x1k.js",
+        "chunks/interface-skins-BH70GXXW.js",
+        "chunks/GlossaryLibrarySelect-BAHBRkfH.js",
+        "chunks/localTranslationSupport-DABWQzcD.js",
+        "assets/capabilities-H15GffIL.css",
+        "assets/interface-skins-CTyaitFj.css",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "assets/options-Dm78dYz5.css",
+        "icon/128.png"
+      ],
+      "scriptBytes": 1802094,
+      "cssBytes": 822560,
+      "scriptMs": 324.41900000000004,
+      "taskMs": 726.476,
+      "heapBytes": 32543096,
+      "idleTaskMs": 4.17500000000004,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 175.70000004768372,
+      "longTasks": [
+        {
+          "start": 9.200000047683716,
+          "duration": 141
+        }
+      ],
+      "domContentLoadedMs": 174,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:57863/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.899999976158142
+        }
+      ],
+      "kind": "content",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "scriptBytes": 0,
+      "cssBytes": 210478,
+      "scriptMs": 107.648,
+      "taskMs": 218.516,
+      "heapBytes": 8973172,
+      "idleTaskMs": 2.3420000000000107,
+      "idleScriptMs": 0
+    }
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    }
+  },
+  "summary": {
+    "popup": {
+      "readyMs": {
+        "first": 279.09999990463257,
+        "median": 122.80000007152557
+      },
+      "scriptMs": {
+        "first": 47.138,
+        "median": 28.472
+      },
+      "taskMs": {
+        "first": 326.772,
+        "median": 191.007
+      },
+      "heapBytes": {
+        "first": 8327940,
+        "median": 11795084
+      },
+      "nodes": {
+        "first": 417,
+        "median": 417
+      },
+      "scriptBytes": {
+        "first": 1068566,
+        "median": 1068566
+      },
+      "cssBytes": {
+        "first": 477180,
+        "median": 477180
+      },
+      "idleTaskMs": {
+        "first": 82.94600000000003,
+        "median": 109.83700000000002
+      }
+    },
+    "options": {
+      "readyMs": {
+        "first": 485.39999997615814,
+        "median": 368
+      },
+      "scriptMs": {
+        "first": 350.091,
+        "median": 301.681
+      },
+      "taskMs": {
+        "first": 722.076,
+        "median": 609.7470000000001
+      },
+      "heapBytes": {
+        "first": 32227152,
+        "median": 32227152
+      },
+      "nodes": {
+        "first": 5379,
+        "median": 5379
+      },
+      "scriptBytes": {
+        "first": 1802094,
+        "median": 1802094
+      },
+      "cssBytes": {
+        "first": 822560,
+        "median": 822560
+      },
+      "idleTaskMs": {
+        "first": 1.2999999999999678,
+        "median": 2.7169999999999694
+      }
+    },
+    "content": {
+      "readyMs": {
+        "first": 173.19999992847443,
+        "median": 165.5
+      },
+      "scriptMs": {
+        "first": 103.931,
+        "median": 103.64800000000001
+      },
+      "taskMs": {
+        "first": 212.66299999999998,
+        "median": 212.66299999999998
+      },
+      "heapBytes": {
+        "first": 9029004,
+        "median": 8978560
+      },
+      "nodes": {
+        "first": 1008,
+        "median": 1008
+      },
+      "scriptBytes": {
+        "first": 0,
+        "median": 0
+      },
+      "cssBytes": {
+        "first": 210478,
+        "median": 210478
+      },
+      "idleTaskMs": {
+        "first": 3.519999999999995,
+        "median": 2.7510000000000034
+      }
+    }
+  },
+  "ok": true
+}

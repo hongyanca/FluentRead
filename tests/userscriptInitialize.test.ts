@@ -91,8 +91,14 @@ describe('legacy userscript migration', () => {
         expect(stored.model[services.tongyi]).toBe(defaultModels.get(services.tongyi));
         expect(stored.model[services.zhipu]).toBe(defaultModels.get(services.zhipu));
         expect(stored.model[services.moonshot]).toBe(defaultModels.get(services.moonshot));
-        expect(stored.model[services.custom]).toBe(customModelString);
-        expect(stored.customModel[services.custom]).toBe('private-ollama-model:latest');
+        expect(stored.model[services.custom]).toBe('private-ollama-model:latest');
+        expect(stored.customModel[services.custom]).toBeUndefined();
+        expect(stored.customOpenAIProviders).toEqual([{
+            id: services.custom,
+            name: '自定义接口',
+            endpoint: 'http://127.0.0.1:11434/v1/chat/completions',
+            models: ['private-ollama-model:latest'],
+        }]);
         expect(stored.custom).toBe('http://127.0.0.1:11434/v1/chat/completions');
         expect(stored.requireApiKey[getApiKeyRequirementKey(services.custom, stored)]).toBe(false);
         expect(stored.token[services.yiyan]).toBe('legacy-yiyan-access-token');
@@ -109,6 +115,7 @@ describe('legacy userscript migration', () => {
         const existing = new Config();
         existing.service = service;
         existing.videoService = service;
+        existing.inputBoxTranslationService = service;
         existing.contextMenuEnabled = true;
         existing.selectionAreaEnabled = true;
         existing.disableImageTranslator = false;
@@ -125,6 +132,7 @@ describe('legacy userscript migration', () => {
         const stored = readStoredConfig(values);
         expect(stored.service).toBe(services.microsoft);
         expect(stored.videoService).toBe(services.microsoft);
+        expect(stored.inputBoxTranslationService).toBe(services.microsoft);
         expect(stored.contextMenuEnabled).toBe(false);
         expect(stored.selectionAreaEnabled).toBe(false);
         expect(stored.disableImageTranslator).toBe(true);
@@ -132,6 +140,40 @@ describe('legacy userscript migration', () => {
         expect(stored.maxConcurrentTranslations).toBe(20);
         expect(stored.token[services.openai]).toBe('preserved-token');
         expect(stored.extra).toEqual({preserved: true});
+    });
+
+    it('preserves a configured dynamic OpenAI-compatible service and its saved model', () => {
+        const existing = new Config();
+        existing.customOpenAIProviders = [{
+            id: 'custom:1',
+            name: '本地网关',
+            endpoint: 'http://127.0.0.1:11434/v1/chat/completions',
+            models: ['qwen-local', 'gemma:7b'],
+        }];
+        existing.service = 'custom:1';
+        existing.model['custom:1'] = 'gemma:7b';
+        existing.token['custom:1'] = 'dynamic-provider-token';
+
+        const normalized = normalizeUserscriptConfig(existing);
+
+        expect(normalized.service).toBe('custom:1');
+        expect(normalized.model['custom:1']).toBe('gemma:7b');
+        expect(normalized.token['custom:1']).toBe('dynamic-provider-token');
+        expect(normalized.customOpenAIProviders).toEqual(existing.customOpenAIProviders);
+    });
+
+    it('往返保留内置服务的多个自定义模型与当前选择', () => {
+        const existing = new Config();
+        existing.service = services.grok;
+        existing.model[services.grok] = customModelString;
+        existing.customModel[services.grok] = 'grok-private-b';
+        existing.customModels[services.grok] = ['grok-private-a', 'grok-private-b'];
+
+        const normalized = normalizeUserscriptConfig(existing);
+        expect(normalized.customModels[services.grok]).toEqual(['grok-private-a', 'grok-private-b']);
+        expect(normalized.model[services.grok]).toBe(customModelString);
+        expect(normalized.customModel[services.grok]).toBe('grok-private-b');
+        expect(normalizeUserscriptConfig(normalized)).toEqual(normalized);
     });
 
     it('只为已有安全配置建立一次计数基数，不因内部 revision 重写配置', async () => {
@@ -146,5 +188,28 @@ describe('legacy userscript migration', () => {
         expect(storage.writes).toBe(1);
         expect([...storage.values.keys()].some((key) => key.startsWith('fluentread:count:v1:base:'))).toBe(true);
         expect((readStoredConfig(storage.values) as Config & {__fluentConfigRevision?: number}).__fluentConfigRevision).toBe(7);
+    });
+
+    it('在配置 store 水合前把陈旧计数投影恢复为专用副本总数', async () => {
+        const existing = normalizeUserscriptConfig(new Config());
+        existing.count = 15;
+        const {values} = installLegacyStorage([
+            ['local:config', JSON.stringify(existing)],
+            ['fluentread:count:v1:base:existing', JSON.stringify({version: 1, value: 14})],
+            ['fluentread:count:v1:replica:first', JSON.stringify({
+                version: 1,
+                value: 1,
+                recentOperations: [{id: 'count-first-tab', delta: 1}],
+            })],
+            ['fluentread:count:v1:replica:second', JSON.stringify({
+                version: 1,
+                value: 1,
+                recentOperations: [{id: 'count-second-tab', delta: 1}],
+            })],
+        ]);
+
+        await ensureUserscriptConfigForTest();
+
+        expect(readStoredConfig(values).count).toBe(16);
     });
 });

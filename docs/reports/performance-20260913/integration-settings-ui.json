@@ -1,0 +1,137 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-performance-lightweight-20260913/.output/chrome-mv3",
+  "manifest": {
+    "options": "options.html",
+    "popup": "popup.html",
+    "version": "0.0.33"
+  },
+  "cases": [
+    "first-general-mount-excludes-unvisited-sections",
+    "translation-language-label-and-selector-share-one-row",
+    "interface-deep-link-mounts-target-section-first",
+    "services-loads-on-first-navigation",
+    "video-loads-on-first-navigation",
+    "interface-loads-on-first-navigation",
+    "data-loads-on-first-navigation",
+    "learning-loads-on-first-navigation",
+    "about-is-the-only-visible-content-branch",
+    "visited-sections-remain-mounted-after-return",
+    "learning-component-retains-its-instance-after-reactivation",
+    "boolean-setting-survives-immediate-options-close-and-reopen",
+    "rapid-consecutive-setting-writes-retain-final-value",
+    "options-setting-is-visible-in-reopened-popup",
+    "options-change-updates-an-already-open-popup",
+    "popup-service-picker-opens-and-closes-with-escape",
+    "popup-selection-drawer-opens-and-closes"
+  ],
+  "screenshots": [
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/01-general-first-use.png",
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/translation-language-single-row.png",
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/02-interface-deep-link.png",
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/02-about-only.png",
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/03-options-reopened-persistence.png",
+    "/private/tmp/fluentread-perf-merge-20260913/settings-ui/04-popup-selector-and-drawer.png"
+  ],
+  "consoleErrors": [],
+  "lazyMount": {
+    "initial": {
+      "hiddenSelectors": {
+        "services": true,
+        "video": true,
+        "interface": true,
+        "data": true,
+        "learning": true,
+        "usage": true
+      },
+      "visibleAbout": 0,
+      "visibleGeneral": true
+    },
+    "services": {
+      "mounted": true,
+      "defaultService": "freeTranslation"
+    },
+    "video": {
+      "mounted": true
+    },
+    "interface": {
+      "mounted": true
+    },
+    "data": {
+      "mounted": true
+    },
+    "learning": {
+      "mounted": true
+    },
+    "retainedAfterReturn": {
+      "services": 1,
+      "video": 1,
+      "interface": 1,
+      "data": 1,
+      "learning": 0
+    }
+  },
+  "persistenceCases": [
+    {
+      "field": "on",
+      "before": "true",
+      "after": "false",
+      "closedImmediately": true
+    },
+    {
+      "field": "on",
+      "reopened": "false"
+    },
+    {
+      "field": "on",
+      "rapidValues": [
+        "false",
+        "true",
+        "false"
+      ],
+      "reopened": "false"
+    }
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "crossPageSync": true,
+  "deepLink": true,
+  "popup": {
+    "mount": true,
+    "servicePicker": true,
+    "drawer": true
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    }
+  },
+  "languageLayout": {
+    "label": "翻译语言",
+    "redundantHeadingCount": 0,
+    "sameRow": true,
+    "controlToRight": true
+  }
+}

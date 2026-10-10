@@ -1,0 +1,99 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/optionsNavigation.test.ts" "tests/optionsAppNavigationLifecycle.test.ts" "tests/settingsUiArchitecture.test.ts" "tests/settingsCompositionAutosave.test.ts" "tests/userscriptFullOptions.test.ts" "tests/i18n.test.ts" "tests/featureTranslationServices.test.ts" "tests/configCount.test.ts" "tests/configTransfer.test.ts" "tests/configDiff.test.ts" "tests/imageTranslationRuntime.test.ts" "tests/backgroundFeatureHandlers.test.ts" "tests/fullPageVisibilityScheduling.test.ts" "tests/quickTranslationRuntime.test.ts" "tests/architecture/moduleBoundaries.test.ts" "tests/architecture/sourceFileHeaders.test.ts" "tests/architecture/verificationOwnership.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/optionsNavigation.test.ts tests/optionsAppNavigationLifecycle.test.ts tests/settingsUiArchitecture.test.ts tests/settingsCompositionAutosave.test.ts tests/userscriptFullOptions.test.ts tests/i18n.test.ts tests/featureTranslationServices.test.ts tests/configCount.test.ts tests/configTransfer.test.ts tests/configDiff.test.ts tests/imageTranslationRuntime.test.ts tests/backgroundFeatureHandlers.test.ts tests/fullPageVisibilityScheduling.test.ts tests/quickTranslationRuntime.test.ts tests/architecture/moduleBoundaries.test.ts tests/architecture/sourceFileHeaders.test.ts tests/architecture/verificationOwnership.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+
+ ✓ tests/fullPageVisibilityScheduling.test.ts (210 tests) 1227ms
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 91ms
+ ✓ tests/backgroundFeatureHandlers.test.ts (45 tests) 2146ms
+   ✓ 后台 feature handlers > 区域截图 handler 接受 windowId=0 并拒绝空截图与非法窗口 1210ms
+   ✓ 后台 feature handlers > 圈选截图必须属于sender的当前活动标签页，并在捕获完成后再次核对 604ms
+ ✓ tests/imageTranslationRuntime.test.ts (128 tests) 266ms
+ ✓ tests/i18n.test.ts (52 tests) 2148ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 766ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 649ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 454ms
+ ✓ tests/configDiff.test.ts (42 tests) 20ms
+ ✓ tests/configTransfer.test.ts (28 tests) 99ms
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 1 failed) 590ms
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 405ms
+     → expected [ Array(7) ] to deeply equal []
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 1 failed) 2259ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 808ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 628ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 323ms
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 304ms
+   × architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限 7ms
+     → expected [ { …(3) } ] to deeply equal []
+ ✓ tests/optionsNavigation.test.ts (24 tests) 7ms
+ ✓ tests/configCount.test.ts (11 tests) 9ms
+ ✓ tests/optionsAppNavigationLifecycle.test.ts (4 tests) 457ms
+ ✓ tests/settingsCompositionAutosave.test.ts (3 tests) 156ms
+ ✓ tests/userscriptFullOptions.test.ts (7 tests) 5ms
+ ✓ tests/quickTranslationRuntime.test.ts (3 tests) 4ms
+ ✓ tests/featureTranslationServices.test.ts (5 tests) 12ms
+ ✓ tests/architecture/sourceFileHeaders.test.ts (685 tests) 183ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "ceiling": 1887,
++     "lines": 1909,
++     "path": "src/features/video-subtitle/content/runtime.ts",
++   },
++ ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:430:24
+    428|             .filter(({lines, ceiling}) => lines > ceiling);
+    429|
+    430|         expect(growth).toEqual([]);
+       |                        ^
+    431|     });
+    432| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(7) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:318:27
+    316|             && !strictCoverage.has(path));
+    317|
+    318|         expect(uncovered).toEqual([]);
+       |                           ^
+    319|     });
+    320|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  2 failed | 15 passed (17)
+      Tests  2 failed | 1300 passed (1302)
+   Start at  09:29:55
+   Duration  15.99s (transform 1.63s, setup 0ms, collect 3.62s, tests 9.68s, environment 2ms, prepare 603ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

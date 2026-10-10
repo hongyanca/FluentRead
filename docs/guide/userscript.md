@@ -1,118 +1,92 @@
-# Userscript（油猴脚本）构建
+# 油猴脚本
 
-FluentRead 可以从当前 Vue / TypeScript 源码生成一个自包含的 userscript，目标是让 Via、Tampermonkey 和 Violentmonkey 用户获得与浏览器扩展接近的核心网页翻译体验。该方案对应 [Issue #220](https://github.com/FluentRead/FluentRead/issues/220)，目前仍属于实验性构建目标。
+如果你使用 Tampermonkey、Violentmonkey、Via 或 Safari Userscripts，也可以安装 FluentRead 油猴脚本，在网页中使用核心翻译功能。具体支持情况取决于浏览器和脚本管理器版本。
 
-## 本地生成
+<GuideVisual kind="userscript" />
 
-```bash
-pnpm install
-pnpm build:userscript
-```
+## 直接安装
 
-产物位于：
+打开 [Greasy Fork 安装流畅阅读油猴脚本](https://greasyfork.org/zh-CN/scripts/482986-%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB)，按照脚本管理器提示完成安装。
 
-```text
-.output/userscript/fluent-read.user.js
-```
+Greasy Fork 上的版本可能晚于 GitHub 源码。排查问题时，请先查看安装页和脚本设置中的版本号。当前运行验证覆盖 Chrome 与 Violentmonkey，以及 Android 模拟器中的 Via 7.3.3；Safari Userscripts 和 Via 真机仍需设备验证。
 
-这是一个经典 IIFE 单文件，metadata 位于文件开头，不使用 CDN `@require`，CSS、图标、Vue 运行时和 FluentRead 翻译核心均已打包。把该文件导入支持 userscript 的脚本管理器即可。不同 Via / Android WebView 版本的导入入口可能不同，请以当前 Via 版本提供的脚本管理界面为准。
+### 从源码构建独立脚本
 
-FluentRead 产品版本与 userscript 更新版本是两个不同概念：设置面板会同时显示当前 `package.json` 产品版本（例如 `0.0.31`）和 userscript 版本；metadata 的 `@version` 使用独立 userscript 版本线，首个新版构建为 `2.0.0`。不能直接把 `@version` 改成 `0.0.31`，否则脚本管理器会把它视为低于旧版 `1.31`。发布 userscript 新版本时应单独递增 `userscriptVersion`，产品版本则继续由 `version` 提供。
+如果要试用仓库中尚未发布到 Greasy Fork 的修复，可以在 FluentRead 仓库安装依赖后运行 `pnpm test:userscript:standalone`，将生成的 `.output/userscript-standalone/fluent-read.user.js` 通过脚本管理器的「从文件安装」导入。**Via 请使用这个独立版**：Via 7.3.3 模拟器实测没有加载精简版的 `@require` 依赖，导致悬浮球无法启动。独立版把 Vue、界面库和旧浏览器所需的 gzip 解压库一起打包，安装时不依赖 `@require` 下载；普通翻译服务和首次切换其他界面语言仍需要联网。请选择安装独立版或精简版其中一种，避免重复运行。
 
-新版保留旧脚本的 `@name` 与 `@namespace`。当脚本管理器将新旧版本识别为同一脚本并保留原 GM 存储时，首次运行会尽量迁移 2024 版配置，包括语言、悬浮快捷键、服务、模型、普通 Token、自定义 OpenAI / Ollama 地址和提示词。旧根目录 `userscripts.js` 只作为历史实现参考，不再是新版构建源。
+仓库也提供 `pnpm test:userscript` 生成体积较小的 `.output/userscript/fluent-read.user.js`，它在安装时需要脚本管理器下载固定版本的 `@require` 依赖。Violentmonkey 的首次文件安装曾出现依赖尚未就绪便执行脚本的问题；独立版在隔离的真实管理器中通过了立即打开页面的测试。两种构建都不是当前 Greasy Fork 页面已发布版本。
 
-## 为什么不是 WXT 直接转换
+仓库另有面向 Greasy Fork 源码规则的精简版：运行 `pnpm build:userscript:greasyfork`，生成 `.output/userscript-greasyfork/fluent-read.user.js`。它保留可阅读的翻译逻辑，并把第三方库、静态词条、站点规则和样式放在固定 Git 提交的 `@require` 资源中。安装时必须联网下载这些资源；使用精简设置面板。源码构建低于 Greasy Fork 的 2 MB 上限，但是否被网站接受仍取决于实际提交审核，仓库构建不会自动更新 Greasy Fork 页面。维护资源时先运行 `node scripts/build-userscript-greasyfork.mjs --prepare-resources` 并提交生成的两个文件，再运行正式构建，使两个 `@require` 都锁定到该提交。
 
-FluentRead 锁定的 WXT 0.20.18 没有 userscript 入口类型；官方源码只定义了 background、content script、popup、options、sidepanel 等扩展入口。因此 userscript 使用独立 Vite 配置生成 IIFE，但复用当前业务模块，而不是拼接 WXT 的扩展产物。参见 [WXT 0.20.18 类型定义](https://github.com/wxt-dev/wxt/blob/wxt-v0.20.18/packages/wxt/src/types.ts#L765-L818) 与 [WXT Entrypoints](https://wxt.dev/guide/essentials/entrypoints)。
+安装完成后：
 
-共享与适配边界如下：
+1. 打开一篇普通网页；
+2. 在脚本管理器中确认 FluentRead 已启用；
+3. 使用页面翻译、划词翻译或悬浮球开始阅读。提供脚本菜单的管理器也可以从菜单打开设置。
 
-| 层 | 浏览器扩展 | Userscript |
-| --- | --- | --- |
-| DOM 候选、翻译状态、恢复、动态节点 | 共享 `src/core/translation/` 与全文 feature runtime | 同一份代码 |
-| 翻译服务与请求模板 | 共享 `src/providers/translation/` | 同一份代码 |
-| HTTP | 原生 `fetch` + 扩展 host permissions | `GM_xmlhttpRequest` 的 fetch 兼容层 |
-| 配置 | WXT storage | legacy `GM_getValue` / `GM_setValue` |
-| 翻译调度与缓存 | 扩展 background | 当前页面内调用共享 broker |
-| UI | popup / options / WXT Shadow UI | 页内 Shadow DOM 设置面板与悬浮球 |
+仓库构建的**独立版**提供与浏览器扩展共用的完整设置中心：点击悬浮球中的设置或脚本菜单，桌面脚本管理器支持专用开标签 API 时会在当前网址的新标签页打开；Android（包括 Via）以及未提供该 API 的环境会在当前页的隔离面板中打开，分区导航不会改写网页地址。语言、服务和外观等设置保存在脚本管理器的私有存储中。图片翻译、圈选翻译、视频字幕、写作助手、翻译统计与模型用量分区在油猴脚本中会显示不可用提示；右键菜单和扩展 Popup 布局也只显示说明，避免保存无法生效的设置。**精简版**仍使用较小的设置面板。Greasy Fork 页面上当前安装到的脚本可能没有这些新行为，请先核对版本。
 
-Via 官方列出的脚本 API 包含 legacy GM 存储、跨域请求和菜单命令；当前实现以这些 API 作为最低兼容面，不依赖 `GM.*` Promise API。参见 [Via 官方资源中的脚本 API 列表](https://github.com/tuyafeng/Via/blob/master/app/src/main/res/values-zh-rCN/strings.xml#L547-L584)。
+独立版已超过 [Greasy Fork 的脚本体积与代码规则](https://greasyfork.org/zh-CN/help/code-rules)允许的直接发布范围，目前只能从仓库构建后通过脚本管理器安装。仓库中的构建验证不代表该版本已发布到 Greasy Fork。
 
-## 功能范围
+<details class="guide-details">
+<summary>Via 安装与排查</summary>
 
-当前 userscript 复用或提供：
+## Via 安装与排查
 
-- 全文翻译、恢复原文、再次翻译、双语 / 仅译文模式，以及“按阅读进度 / 立即翻译到网页底部”两种范围。
-- 动态 DOM、已打开以及脚本启动后动态创建的 open Shadow Root 翻译。
-- 鼠标悬浮、双击、长按、中键和触摸手势翻译。
-- 划词翻译、复制和浏览器语音回退。
-- 输入框翻译。
-- 全文悬浮球、翻译进度面板、`Alt + T` / `Option + T` 快捷键和 GM 菜单命令。
-- 当前翻译服务目录、模型、Token、自定义端点、代理、提示词、自定义请求体与 AI 网页上下文。
-- GM 配置存储和页面内 IndexedDB 翻译缓存。
+在仓库中构建上面的独立版，进入 Via 的「设置 → 脚本 → + → 导入脚本」，选择生成的 `.user.js` 文件。确认脚本已启用后，重新打开普通的 HTTP(S) 网页。**不要同时启用 Greasy Fork 版或精简版**，以免重复注入。若悬浮球仍未出现，请附上 Via、Android、脚本版本及网页地址。
 
-以下能力只能降级：
+在隔离的 Android 13 模拟器中，Via 7.3.3 导入独立版后，已实际点击悬浮球完成英文段落翻译、恢复原文、再次翻译，并验证设置主题在刷新后保留；翻译使用受控测试页面和译文响应。模拟器结果不代表 Android 真机，也不证明公开翻译服务持续可用。
 
-- TTS 使用 Web Speech / 页面音频回退，不使用扩展 Offscreen 音频。
-- Userscript 在 page-world 执行时会复用扩展的 `attachShadow` / SPA route bridge；若脚本晚于页面脚本注入，已经创建的 closed Shadow Root 仍无法补获。不同脚本管理器的隔离 sandbox 不一定与页面共享 DOM 原型，必须通过对应管理器的真实安装测试确认动态 Shadow Root bridge，而不能只依据桌面 smoke 推断。
-- 缓存位于当前网站的 IndexedDB，不能像扩展 background 那样跨所有网站共享；配置和 API Key 仍位于脚本管理器的 GM 存储。
-- Android 上的可用 JavaScript / DOM 能力由系统 WebView 决定；当前代码为没有 `WeakRef` 的旧 WebView 提供有界强引用回退。
+</details>
 
-以下能力依赖浏览器扩展权限，当前 userscript 不提供，设置面板也不会开放入口：
+<details class="guide-details">
+<summary>Safari Userscripts 安装与排查</summary>
 
-- 浏览器级右键菜单、跨标签页广播和后台 alarms。
-- `captureVisibleTab`、Offscreen Document、圈选截图 OCR 与图片翻译。
-- Chrome 内置 Translation API。
-- YouTube main-world timedtext 桥与视频字幕下载。
-- iframe 内单独注入（metadata 使用 `@noframes`，避免每个子框架重复挂载界面）。
+## Safari Userscripts 安装与排查
 
-因此对外应描述为“核心网页翻译体验接近一致”，不能宣称与扩展所有能力 100% 相同。
+1. 从 App Store 安装 Userscripts，并在 Safari 的扩展设置中启用。iPhone/iPad 上打开「设置 → Safari → 扩展 → Userscripts」；允许它访问所有网站，并在 Safari 中选择「始终允许」。macOS 上也要为访问的网站授予权限。
+2. 在 Userscripts App 中确认脚本目录；新版 iPhone/iPad 客户端通常会自动设置默认目录，macOS 也可使用默认目录。安装 Greasy Fork 版本时，在 Safari 打开上方安装页，通过 Userscripts 工具栏的安装提示保存并启用。试用从源码构建的独立版时，把生成的 `.user.js` 放入该脚本目录，再打开 Userscripts 弹出窗口刷新文件列表。安装精简版时保持联网，让管理器下载 `@require` 中的界面依赖。
+3. 在 Userscripts 弹出窗口确认「Enable Injection」已开启，FluentRead 对当前网页已匹配且启用，然后刷新一个普通的 HTTP(S) 网页。设置从页面悬浮球打开；Safari Userscripts 没有脚本菜单命令。
+4. 如果脚本是直接加入脚本目录或从外部编辑器修改的，至少打开一次 Userscripts 弹出窗口，让它重新读取文件。仍未出现悬浮球时，请检查脚本版本、站点权限、当前页是否匹配，以及管理器是否成功下载依赖；反馈时附上 Safari、系统、Userscripts 版本和出问题的网页地址。
 
-## 权限与隐私
+这些步骤依据 [Userscripts 官方安装与元数据说明](https://github.com/quoid/userscripts/tree/release/4.x.x)；Safari 上的实际运行情况仍需设备验证。
 
-metadata 包含 `@connect *`，因为 FluentRead 支持用户自定义 API / 代理地址，构建时无法穷举目标域名。翻译请求只会发送到用户当前选择的服务；API Key 保存在脚本管理器的 GM 存储中，设置面板使用 closed ShadowRoot，常规页面脚本无法通过宿主元素的 `shadowRoot` 直接读取凭据输入框。真实管理器的 sandbox 隔离强度仍需分别验证。
+</details>
 
-若运行环境没有提供 GM 存储，当前页面会使用只存在于内存中的临时配置，不会回退到网站 `localStorage`，避免污染网站数据。没有 `GM_xmlhttpRequest` 时只能使用原生 fetch，跨域翻译可能被 CORS 阻止。
+<details class="guide-details">
+<summary>可以做什么？</summary>
 
-## 验证
+## 可以做什么？
 
-构建与静态验证：
+- 全文翻译、恢复原文和再次翻译；
+- 划词、悬浮、双击、长按和中键翻译；
+- 输入框翻译、复制和朗读；
+- 使用免费服务、云端服务、AI 服务或自定义接口；
+- 在脚本自己的设置页中保存语言、服务和显示偏好；仓库独立版使用完整设置中心。
 
-```bash
-pnpm test:userscript
-node --check .output/userscript/fluent-read.user.js
-```
+精简版首次安装需要脚本管理器访问 jsDelivr，取得固定版本的界面依赖；独立版已将这些依赖打包。简体中文和英文界面随脚本提供；首次切换到日语、韩语、法语、俄语或西班牙语时，脚本会从 jsDelivr 或 GitHub 下载对应的静态界面语言文件，并缓存在脚本管理器的私有存储中。这些请求不包含正在阅读的网页内容或 API Key。离线环境中，尚未缓存的语言会暂时使用中文界面。
 
-隔离 Edge 烟雾测试使用临时 profile、屏幕外窗口和 deterministic legacy `GM_xmlhttpRequest` 浏览器 shim：
+</details>
 
-```bash
-node scripts/run-userscript-smoke-test.cjs \
-  --artifact .output/userscript/fluent-read.user.js \
-  --playwright-root <playwright-node_modules> \
-  --focus-safe-helper <fluentread-browser-translation-test>/scripts/focus-safe-browser.cjs \
-  --artifacts-dir /private/tmp/fluentread-userscript-evidence \
-  --background
-```
+<details class="guide-details">
+<summary>和浏览器扩展有什么不同？</summary>
 
-后台模式必须显式传入 `--focus-safe-helper`，或设置 `FLUENTREAD_FOCUS_SAFE_HELPER`。脚本会创建临时 profile，以 LaunchServices 隐藏 CDP 模式启动正常尺寸、屏幕外的 Edge 窗口；不使用最小化窗口、用户日常 profile 或 `bringToFront()`。成功证据会记录 `launchMode`、`focusPolicy` 和 `windowPlacement`。只有在已明确授权前台观察时才使用 `--headed`。
+## 和浏览器扩展有什么不同？
 
-一键回归在确定性 `build:userscript` 与静态验证完成后，会在显式的 `--browser` 门禁下自动运行同一个 smoke：
+油猴脚本受脚本管理器和网页权限限制，不能提供浏览器扩展的全部能力。图片 OCR、圈选截图、Chrome 内置翻译、跨标签页后台功能和 YouTube 字幕功能可能不可用；不同脚本管理器的行为也可能不同。
 
-```bash
-pnpm test:regression:all -- --browser \
-  --playwright-root <playwright-node_modules> \
-  --browser-path "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge" \
-  --focus-safe-helper <fluentread-browser-translation-test>/scripts/focus-safe-browser.cjs
-```
+</details>
 
-该测试覆盖 closed-Shadow 设置、light-DOM 错误提示样式、悬浮 `[1, 0, 1]`、全文“翻译—恢复—再翻译”、动态 DOM、脚本启动后创建的 open Shadow Root、`pushState` 路由事件、bridge 清理、扩展专属能力禁用、禁止翻译区域和重复译文。测试通过 `page.addScriptTag` 在 page-world 执行产物，只证明生成产物与 legacy GM API 协议能在真实 Edge page-world 中运行，不能代替 Via Android、Tampermonkey 和 Violentmonkey 各自的真实安装与 sandbox 测试。
+<details class="guide-details">
+<summary>数据与隐私</summary>
 
-## 发布前门槛
+## 数据与隐私
 
-正式托管 `.user.js` 或添加自动更新地址前，至少分别在以下环境安装验证：
+脚本配置保存在脚本管理器提供的私有存储中。翻译请求会发送到你当前选择的服务；界面依赖和语言文件按上文所述从 jsDelivr 或 GitHub 获取。使用云端服务前，请确认服务商的数据政策。不要在共享设备上填写 API Key，也不要把密钥放进网页、截图或公开反馈。
 
-1. Via Android：默认免费服务、GM 配置跨站保留、菜单、全文与悬浮翻译。
-2. Tampermonkey：首次安装、从旧 `1.31` 升级、跨域服务、自定义端点。
-3. Violentmonkey：IIFE 单文件加载、Shadow UI、配置和跨域请求。
+</details>
 
-发布和设置 `downloadURL` / `updateURL` 是独立操作；本地构建不会自动上传或覆盖旧 GreasyFork 脚本。
+## 相关文档
+
+- [文档首页](/docs/)
+- [遇到问题](/guide/faq)

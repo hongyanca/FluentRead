@@ -1,0 +1,244 @@
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/videoCaptionPlatformRuntime.test.ts" "tests/videoCaptionPlatforms.test.ts" "tests/videoSubtitleDownloads.test.ts" "tests/videoSubtitle.test.ts" "tests/videoSubtitleLogic.test.ts" "tests/videoSubtitleLanguage.test.ts" "tests/youtubeSubtitleData.test.ts" "tests/videoTranslationCache.test.ts" "tests/videoTranslationScheduler.test.ts" "tests/config.test.ts" "tests/configDiff.test.ts" "tests/siteAdaptationCore.test.ts" "tests/siteAdaptationCatalog.test.ts" "tests/videoUiI18n.test.ts" "tests/architecture/verificationOwnership.test.ts" "tests/architecture/moduleBoundaries.test.ts" "tests/architecture/sourceFileHeaders.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/videoCaptionPlatformRuntime.test.ts tests/videoCaptionPlatforms.test.ts tests/videoSubtitleDownloads.test.ts tests/videoSubtitle.test.ts tests/videoSubtitleLogic.test.ts tests/videoSubtitleLanguage.test.ts tests/youtubeSubtitleData.test.ts tests/videoTranslationCache.test.ts tests/videoTranslationScheduler.test.ts tests/config.test.ts tests/configDiff.test.ts tests/siteAdaptationCore.test.ts tests/siteAdaptationCatalog.test.ts tests/videoUiI18n.test.ts tests/architecture/verificationOwnership.test.ts tests/architecture/moduleBoundaries.test.ts tests/architecture/sourceFileHeaders.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002
+
+stderr | tests/config.test.ts > 统一配置存储 > 凭据水合失败前收到更高 revision 时 fallback 也采用最新公开配置
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: storage.local credentials unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:73:19)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+stderr | tests/config.test.ts > 统一配置存储 > 前驱与队尾 patch 都失败且队尾回读失败时不复活前驱乐观字段
+[FluentRead] 配置保存失败后的权威快照回读失败 Error: config read unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:1458:65)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as getItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at reconcileFailedConfigRequest (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:1259:29)
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:1597:23
+
+stderr | tests/config.test.ts > 统一配置存储 > 后台重启后旧 session 读取失败仍先水合计数操作日志
+[FluentRead] 旧会话凭据暂不可读，保留原记录并暂停配置写入 Error: storage.session unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:79:19)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as getItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:645:35)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at operation (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:806:9)
+    at Module.incrementConfigCount (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:848:16)
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:1595:9
+    at file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+
+stderr | tests/config.test.ts > 统一配置存储 > 后台重启后local 检查点写入失败仍先水合计数操作日志
+[FluentRead] 配置安全迁移未完成，保留当前运行时与旧存储以便重试 Error: persistent credentials unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:86:19)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as setItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at writeAndVerifyCredentials (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:384:19)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:704:19)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at operation (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:806:9)
+    at Module.incrementConfigCount (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:848:16)
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:1595:9
+    at file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+
+stderr | tests/config.test.ts > 统一配置存储 > 凭据载体读取失败时保留已读取的公开配置并禁止覆盖旧存储
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: storage.local credentials unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:73:19)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as getItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:629:53)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+stderr | tests/config.test.ts > 统一配置存储 > 失败请求回读失败时同样消费等待期间 deferred 的权威快照
+[FluentRead] 配置保存失败后的回读失败，采用并发到达的权威快照 Error: config read unavailable
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:2128:20
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vitest@2.1.9_@types+node@22.10.7/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+    at withEnv (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vitest@2.1.9_@types+node@22.10.7/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)
+
+stderr | tests/config.test.ts > 统一配置存储 > local 凭据写入失败时不删除或改写旧载体
+[FluentRead] 配置安全迁移未完成，保留当前运行时与旧存储以便重试 Error: persistent credentials unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:86:19)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as setItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at writeAndVerifyCredentials (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:384:19)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:704:19)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+stderr | tests/config.test.ts > 统一配置存储 > local 凭据读回校验失败时不删除或改写旧载体
+[FluentRead] 配置安全迁移未完成，保留当前运行时与旧存储以便重试 Error: local:credentials 凭据写入校验失败
+    at verifyStoredCredentials (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:393:15)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at writeAndVerifyCredentials (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:385:5)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:704:13)
+
+stderr | tests/config.test.ts > 统一配置存储 > 凭据安全水合失败时不交接乐观补丁
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: storage.local credentials unavailable
+    at Object.<anonymous> (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/tests/config.test.ts:73:19)
+    at Object.mockCall (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/@vitest+spy@2.1.9/node_modules/@vitest/spy/dist/index.js:61:17)
+    at Object.spy [as getItem] (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/tinyspy@3.0.2/node_modules/tinyspy/dist/index.js:45:80)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:629:53)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+ ✓ tests/config.test.ts (128 tests) 9748ms
+   ✓ 统一配置存储 > 补丁链超过后台批次上限时不发出部分链 1964ms
+ ❯ tests/configDiff.test.ts (43 tests | 1 failed) 30ms
+   × 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值 7ms
+     → expected [ Array(5) ] to deeply equal ArrayContaining{…}
+ ✓ tests/siteAdaptationCore.test.ts (36 tests) 147ms
+ ✓ tests/videoSubtitle.test.ts (29 tests) 31ms
+stderr | tests/videoUiI18n.test.ts
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/platform/storage/configStorageRuntime.ts:36:29)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:595:41)
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/services/config/store.ts:750:28
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at VitestExecutor.runModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:399:5)
+    at VitestExecutor.directRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:381:5)
+    at VitestExecutor.cachedRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:206:14)
+    at VitestExecutor.dependencyRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:259:12)
+    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002/src/features/video-subtitle/content/ui.ts:2:31
+    at VitestExecutor.runModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:399:5)
+
+ ✓ tests/videoUiI18n.test.ts (12 tests) 37ms
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 1 failed) 721ms
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 513ms
+     → expected [ Array(8) ] to deeply equal []
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 1 failed) 2558ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 911ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 717ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 367ms
+   × architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片 24ms
+     → expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 339ms
+ ✓ tests/videoCaptionPlatformRuntime.test.ts (14 tests) 65ms
+ ✓ tests/youtubeSubtitleData.test.ts (14 tests) 8ms
+ ✓ tests/siteAdaptationCatalog.test.ts (235 tests) 1064ms
+ ✓ tests/videoSubtitleLogic.test.ts (18 tests) 37ms
+ ✓ tests/videoCaptionPlatforms.test.ts (25 tests) 35ms
+ ✓ tests/videoSubtitleDownloads.test.ts (7 tests) 34ms
+ ✓ tests/architecture/sourceFileHeaders.test.ts (699 tests) 204ms
+ ✓ tests/videoTranslationCache.test.ts (8 tests) 16ms
+ ✓ tests/videoSubtitleLanguage.test.ts (3 tests) 16ms
+ ✓ tests/videoTranslationScheduler.test.ts (3 tests) 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/configDiff.test.ts > 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值
+AssertionError: expected [ Array(5) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ Array [
+    Object {
+      "after": "简约风格",
+      "before": "默认风格",
+      "key": "interfaceSkin",
+      "label": "界面皮肤",
+    },
+    Object {
+      "after": "快捷功能栏关闭、当前网站栏目开启、底部信息栏关闭",
+      "before": "快捷功能栏开启、当前网站栏目开启、底部信息栏开启",
+      "key": "interfaceVisibility",
+      "label": "界面栏目",
+    },
+    Object {
+      "after": "快捷功能栏 → 翻译控制 → 当前网站栏目 → 底部信息栏",
+      "before": "翻译控制 → 当前网站栏目 → 快捷功能栏 → 底部信息栏",
+      "key": "popupModuleOrder",
+      "label": "菜单栏布局顺序",
+    },
+    Object {
+-     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
+-     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
++     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、文档翻译：显示",
++     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、文档翻译：显示",
+      "key": "popupQuickFeatureVisibility",
+      "label": "快捷功能卡片",
+    },
+    Object {
+-     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译",
+-     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译 → 文档翻译",
++     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video",
++     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video → 文档翻译",
+      "key": "popupQuickFeatureOrder",
+      "label": "快捷功能顺序",
+    },
+  ]
+
+ ❯ tests/configDiff.test.ts:314:51
+    312|         });
+    313|
+    314|         expect(group(result, 'general')?.changes).toEqual(expect.array…
+       |                                                   ^
+    315|             {key: 'interfaceSkin', label: '界面皮肤', before: '默认风…
+    316|             {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片
+AssertionError: expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+
+- Expected
++ Received
+
+  Array [
++   "@/src/services/translation/errors",
+    "@/src/app/document-translation",
+  ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:372:35
+    370|             .filter((specifier) => specifier.startsWith('@/entrypoints…
+    371|
+    372|         expect(documentUiImports).toEqual(['@/src/app/document-transla…
+       |                                   ^
+    373|         expect(featureEntrypointImports).toEqual([]);
+    374|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/core/i18n/messages/siteRules.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:320:27
+    318|             && !strictCoverage.has(path));
+    319|
+    320|         expect(uncovered).toEqual([]);
+       |                           ^
+    321|     });
+    322|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+ Test Files  3 failed | 14 passed (17)
+      Tests  3 failed | 1293 passed (1296)
+   Start at  17:15:33
+   Duration  21.32s (transform 1.53s, setup 0ms, collect 4.18s, tests 14.76s, environment 2ms, prepare 614ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

@@ -13,17 +13,18 @@ function extractBlock(startNeedle: string, endNeedle: string): string {
 }
 
 describe('VocabularyBook component lifecycle wiring', () => {
-  it('opens the merged translation settings when selection translation is disabled', () => {
-    expect(source).toContain("emit('navigate', 'settings-translation')");
+  it('opens selection settings when selection translation is disabled', () => {
+    expect(source).toContain("emit('navigate', 'settings-selection')");
     expect(source).not.toContain("emit('navigate', 'settings-shortcuts')");
   });
 
   it('keeps learning and domain actions in the wordbook while routing full restore to one page', () => {
     expect(source).toContain("emit('navigate', 'settings-data')");
-    expect(source).toContain('>备份与恢复</button>');
+    const center = readFileSync(resolve(process.cwd(), 'src/features/settings/ui/LearningCenter.vue'), 'utf8');
+    expect(center).toContain("emit('navigate', 'settings-data')");
     expect(source).toContain('>从备份恢复</button>');
     expect(source).toContain('>导出到 Anki</button>');
-    expect(source).toContain('>清空单词本</button>');
+    expect(source).toContain("t('learning.collection.clear')");
     expect(source).toContain("confirmButtonText: '不包含'");
     expect(source).not.toContain('独立备份与迁移');
     expect(source).not.toContain('分别管理');

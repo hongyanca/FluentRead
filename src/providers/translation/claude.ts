@@ -11,12 +11,13 @@ import {method, urls} from "@/src/core/config/constants";
 import {claudeMsgTemplate} from '@/src/services/translation/templates';
 import {config} from "@/src/services/config/store";
 import {appendOptionalHeader} from './auth';
-import {createHttpStatusError, readJsonResponse} from '@/src/platform/http/errors';
-import {runtimeFetch} from '@/src/platform/http/runtime';
+import {createHttpStatusError, createImageInputHttpError, readJsonResponse} from '@/src/platform/http/errors';
+import {abortErrorFromSignal, runtimeFetch} from '@/src/platform/http/runtime';
 import {
     getTranslationProviderConfig,
     reportTranslationModelUsage,
     reportTranslationModelUsageFailure,
+    getTranslationImageInput,
     type TranslationProviderRequest,
 } from '@/src/services/translation/requestSnapshot';
 import {normalizeClaudeUsage} from './usage';
@@ -24,6 +25,7 @@ import {normalizeClaudeUsage} from './usage';
 async function claude(message: TranslationProviderRequest<string>) {
     const current = getTranslationProviderConfig(message, config);
     const service = message.serviceOverride || services.claude;
+    if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
     const configuredModel = resolveConfiguredModel(
         message.modelOverride || current.model[service],
         current.customModel[service],
@@ -37,7 +39,7 @@ async function claude(message: TranslationProviderRequest<string>) {
 
     const url = current.proxy[service] || urls[services.claude];
 
-    const body = claudeMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current);
+    const body = claudeMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current, message.thinkingOverride, getTranslationImageInput(message));
     const startedAt = Date.now();
     let attemptReported = false;
     try {
@@ -50,14 +52,24 @@ async function claude(message: TranslationProviderRequest<string>) {
         if (!resp.ok) {
             reportTranslationModelUsageFailure(message, undefined, startedAt, configuredModel, resp.status);
             attemptReported = true;
-            throw createHttpStatusError(resp);
+            throw getTranslationImageInput(message) ? await createImageInputHttpError(resp, '请求失败') : createHttpStatusError(resp, '请求失败');
         }
 
         const result = await readJsonResponse<any>(resp, 'Claude 返回的不是有效 JSON');
+        if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
         const actualModel = typeof result?.model === 'string' && result.model.trim()
             ? result.model
             : configuredModel;
-        const translatedText = result.content[0].text;
+        const translatedText = Array.isArray(result?.content)
+            ? result.content
+                .filter((item: unknown): item is {type?: string; text: string} => Boolean(
+                    item && typeof item === 'object' && typeof (item as {text?: unknown}).text === 'string'
+                        && (!(item as {type?: unknown}).type || (item as {type?: unknown}).type === 'text'),
+                ))
+                .map((item: {text: string}) => item.text)
+                .join('')
+            : '';
+        if (!translatedText.trim()) throw new Error('Claude 返回数据格式异常：缺少文本内容');
         reportTranslationModelUsage(message, {
             ...normalizeClaudeUsage(result?.usage, actualModel),
             startedAt,

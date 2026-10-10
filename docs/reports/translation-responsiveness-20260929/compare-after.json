@@ -1,0 +1,615 @@
+{
+  "evidence": "Production extension and real browser; local deterministic Microsoft transport, no live provider claims",
+  "consoleErrors": [],
+  "phases": [
+    {
+      "name": "idle-disabled",
+      "elapsedMs": 3012.5,
+      "longTasks": [
+        {
+          "start": 13917.200000047684,
+          "duration": 91
+        },
+        {
+          "start": 14955.5,
+          "duration": 65
+        }
+      ],
+      "maxHeartbeatGapMs": 156.29999995231628,
+      "p95HeartbeatGapMs": 33.10000014305115,
+      "totalBlockingMs": 56,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 26,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 0.2938080000000003,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.01596299999999995,
+        "TaskDuration": 0.9662790000000001,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 53
+      },
+      "clickMaxMs": 75,
+      "items": 0
+    },
+    {
+      "name": "idle-enabled",
+      "elapsedMs": 3075.2000000476837,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 109.19999980926514,
+      "p95HeartbeatGapMs": 31,
+      "totalBlockingMs": 0,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 27,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 0.2610299999999999,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.01557799999999987,
+        "TaskDuration": 1.0929520000000004,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 55
+      },
+      "clickMaxMs": 24,
+      "items": 0
+    },
+    {
+      "name": "translate",
+      "elapsedMs": 15234.200000047684,
+      "longTasks": [
+        {
+          "start": 13984.799999952316,
+          "duration": 126
+        },
+        {
+          "start": 14279.799999952316,
+          "duration": 61
+        },
+        {
+          "start": 14435.899999856949,
+          "duration": 108
+        },
+        {
+          "start": 14682.399999856949,
+          "duration": 165
+        },
+        {
+          "start": 14882.199999809265,
+          "duration": 53
+        },
+        {
+          "start": 15491.399999856949,
+          "duration": 110
+        },
+        {
+          "start": 15952.399999856949,
+          "duration": 159
+        },
+        {
+          "start": 16112.099999904633,
+          "duration": 53
+        },
+        {
+          "start": 16453,
+          "duration": 281
+        },
+        {
+          "start": 16832.099999904633,
+          "duration": 207
+        },
+        {
+          "start": 17399,
+          "duration": 169
+        },
+        {
+          "start": 17662.199999809265,
+          "duration": 289
+        },
+        {
+          "start": 18041.89999985695,
+          "duration": 163
+        },
+        {
+          "start": 18285.799999952316,
+          "duration": 71
+        },
+        {
+          "start": 18437.299999952316,
+          "duration": 166
+        },
+        {
+          "start": 18684.099999904633,
+          "duration": 71
+        },
+        {
+          "start": 18836.799999952316,
+          "duration": 144
+        },
+        {
+          "start": 19072.599999904633,
+          "duration": 168
+        },
+        {
+          "start": 19420.89999985695,
+          "duration": 210
+        },
+        {
+          "start": 19673.599999904633,
+          "duration": 180
+        },
+        {
+          "start": 20055.699999809265,
+          "duration": 80
+        },
+        {
+          "start": 20228.199999809265,
+          "duration": 184
+        },
+        {
+          "start": 20501.89999985695,
+          "duration": 72
+        },
+        {
+          "start": 20657.5,
+          "duration": 166
+        },
+        {
+          "start": 20859.599999904633,
+          "duration": 142
+        },
+        {
+          "start": 21154.5,
+          "duration": 165
+        },
+        {
+          "start": 21337.199999809265,
+          "duration": 65
+        },
+        {
+          "start": 21555.299999952316,
+          "duration": 187
+        },
+        {
+          "start": 21835.799999952316,
+          "duration": 85
+        },
+        {
+          "start": 22136.199999809265,
+          "duration": 151
+        },
+        {
+          "start": 22498.39999985695,
+          "duration": 200
+        },
+        {
+          "start": 22787.89999985695,
+          "duration": 236
+        },
+        {
+          "start": 23105.39999985695,
+          "duration": 72
+        },
+        {
+          "start": 23291.5,
+          "duration": 158
+        },
+        {
+          "start": 23623.299999952316,
+          "duration": 198
+        },
+        {
+          "start": 23945.89999985695,
+          "duration": 121
+        },
+        {
+          "start": 24067.39999985695,
+          "duration": 119
+        },
+        {
+          "start": 24374.699999809265,
+          "duration": 70
+        }
+      ],
+      "maxHeartbeatGapMs": 394.2000000476837,
+      "p95HeartbeatGapMs": 278,
+      "totalBlockingMs": 3525,
+      "wrappers": 25,
+      "chineseWrappers": 0,
+      "hostClicks": 94,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 4.692062,
+        "LayoutDuration": 0.1796040000000001,
+        "RecalcStyleDuration": 0.07513999999999998,
+        "TaskDuration": 13.557165000000001,
+        "LayoutCount": 110,
+        "RecalcStyleCount": 243
+      },
+      "clickMaxMs": 288,
+      "items": 91
+    },
+    {
+      "name": "scroll-translated",
+      "elapsedMs": 3084.9000000953674,
+      "longTasks": [
+        {
+          "start": 29631.599999904633,
+          "duration": 56
+        },
+        {
+          "start": 29801.099999904633,
+          "duration": 54
+        },
+        {
+          "start": 29933.599999904633,
+          "duration": 53
+        },
+        {
+          "start": 30048.699999809265,
+          "duration": 52
+        },
+        {
+          "start": 30186,
+          "duration": 53
+        },
+        {
+          "start": 30387.39999985695,
+          "duration": 51
+        },
+        {
+          "start": 30498.199999809265,
+          "duration": 52
+        },
+        {
+          "start": 30680.5,
+          "duration": 52
+        },
+        {
+          "start": 30915.89999985695,
+          "duration": 50
+        },
+        {
+          "start": 31280.799999952316,
+          "duration": 116
+        },
+        {
+          "start": 31698.299999952316,
+          "duration": 50
+        },
+        {
+          "start": 32281.599999904633,
+          "duration": 117
+        }
+      ],
+      "maxHeartbeatGapMs": 171,
+      "p95HeartbeatGapMs": 118.5,
+      "totalBlockingMs": 156,
+      "wrappers": 25,
+      "chineseWrappers": 0,
+      "hostClicks": 23,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 1.3033520000000003,
+        "LayoutDuration": 0.0018500000000001293,
+        "RecalcStyleDuration": 0.00947600000000004,
+        "TaskDuration": 3.0179609999999997,
+        "LayoutCount": 1,
+        "RecalcStyleCount": 46
+      },
+      "clickMaxMs": 60,
+      "items": 92
+    },
+    {
+      "name": "restore",
+      "elapsedMs": 3417.2000000476837,
+      "longTasks": [
+        {
+          "start": 32955.799999952316,
+          "duration": 139
+        },
+        {
+          "start": 33095.59999990463,
+          "duration": 173
+        }
+      ],
+      "maxHeartbeatGapMs": 398.7999999523163,
+      "p95HeartbeatGapMs": 34.5,
+      "totalBlockingMs": 212,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 27,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 0.4429149999999993,
+        "LayoutDuration": 0.012459999999999916,
+        "RecalcStyleDuration": 0.01527999999999996,
+        "TaskDuration": 1.3324059999999989,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 57
+      },
+      "clickMaxMs": 51,
+      "items": 95
+    },
+    {
+      "name": "retranslate",
+      "elapsedMs": 15197.600000143051,
+      "longTasks": [
+        {
+          "start": 36550.09999990463,
+          "duration": 80
+        },
+        {
+          "start": 37167.699999809265,
+          "duration": 98
+        },
+        {
+          "start": 37265.799999952316,
+          "duration": 57
+        },
+        {
+          "start": 37401.09999990463,
+          "duration": 65
+        },
+        {
+          "start": 38530.5,
+          "duration": 103
+        },
+        {
+          "start": 39113.39999985695,
+          "duration": 143
+        },
+        {
+          "start": 39266.799999952316,
+          "duration": 53
+        },
+        {
+          "start": 39646.699999809265,
+          "duration": 114
+        },
+        {
+          "start": 39761.5,
+          "duration": 117
+        },
+        {
+          "start": 40203.39999985695,
+          "duration": 144
+        },
+        {
+          "start": 40348.299999952316,
+          "duration": 116
+        },
+        {
+          "start": 40464.5,
+          "duration": 52
+        },
+        {
+          "start": 40692.89999985695,
+          "duration": 145
+        },
+        {
+          "start": 40849.199999809265,
+          "duration": 120
+        },
+        {
+          "start": 41082.699999809265,
+          "duration": 160
+        },
+        {
+          "start": 41585,
+          "duration": 162
+        },
+        {
+          "start": 41900.199999809265,
+          "duration": 113
+        },
+        {
+          "start": 42013.699999809265,
+          "duration": 123
+        },
+        {
+          "start": 42407.5,
+          "duration": 115
+        },
+        {
+          "start": 42523.699999809265,
+          "duration": 55
+        },
+        {
+          "start": 42894.799999952316,
+          "duration": 166
+        },
+        {
+          "start": 43278.89999985695,
+          "duration": 163
+        },
+        {
+          "start": 43487.09999990463,
+          "duration": 141
+        },
+        {
+          "start": 43628.299999952316,
+          "duration": 62
+        },
+        {
+          "start": 43738.39999985695,
+          "duration": 155
+        },
+        {
+          "start": 43893.39999985695,
+          "duration": 253
+        },
+        {
+          "start": 44553,
+          "duration": 163
+        },
+        {
+          "start": 44870.699999809265,
+          "duration": 111
+        },
+        {
+          "start": 44982.5,
+          "duration": 52
+        },
+        {
+          "start": 45038.299999952316,
+          "duration": 63
+        },
+        {
+          "start": 45212.199999809265,
+          "duration": 68
+        },
+        {
+          "start": 45280.89999985695,
+          "duration": 113
+        },
+        {
+          "start": 45394.39999985695,
+          "duration": 73
+        },
+        {
+          "start": 45765.59999990463,
+          "duration": 169
+        },
+        {
+          "start": 46114.199999809265,
+          "duration": 140
+        },
+        {
+          "start": 46254.699999809265,
+          "duration": 131
+        },
+        {
+          "start": 46448.799999952316,
+          "duration": 156
+        },
+        {
+          "start": 46959.89999985695,
+          "duration": 113
+        },
+        {
+          "start": 47072.89999985695,
+          "duration": 54
+        },
+        {
+          "start": 47296,
+          "duration": 225
+        },
+        {
+          "start": 47584.799999952316,
+          "duration": 160
+        },
+        {
+          "start": 47948.59999990463,
+          "duration": 106
+        },
+        {
+          "start": 51593.199999809265,
+          "duration": 81
+        }
+      ],
+      "maxHeartbeatGapMs": 1101.3999998569489,
+      "p95HeartbeatGapMs": 355.39999985694885,
+      "totalBlockingMs": 2903,
+      "wrappers": 25,
+      "chineseWrappers": 0,
+      "hostClicks": 97,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 3.7333040000000004,
+        "LayoutDuration": 0.10288800000000009,
+        "RecalcStyleDuration": 0.06214800000000009,
+        "TaskDuration": 14.154677000000003,
+        "LayoutCount": 88,
+        "RecalcStyleCount": 227
+      },
+      "clickMaxMs": 271,
+      "items": 95
+    },
+    {
+      "name": "restore-repeat",
+      "elapsedMs": 3441,
+      "longTasks": [
+        {
+          "start": 51997.5,
+          "duration": 136
+        },
+        {
+          "start": 52133.5,
+          "duration": 179
+        }
+      ],
+      "maxHeartbeatGapMs": 346,
+      "p95HeartbeatGapMs": 30.200000047683716,
+      "totalBlockingMs": 215,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 27,
+      "protectedCode": {
+        "checked": 4889,
+        "changed": 0
+      },
+      "metrics": {
+        "ScriptDuration": 0.4298549999999999,
+        "LayoutDuration": 0.011587999999999932,
+        "RecalcStyleDuration": 0.019406999999999952,
+        "TaskDuration": 1.2984809999999953,
+        "LayoutCount": 2,
+        "RecalcStyleCount": 57
+      },
+      "clickMaxMs": 54,
+      "items": 95
+    }
+  ],
+  "cpuRate": 4,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "ok": true,
+  "build": "working-tree performance fix based on 0d17e95f",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "compare": {
+    "url": "https://github.com/openai/codex/compare/rust-v0.160.0-alpha.3...d7f7fa410698fbbb75548cde553a4fbf43fc268e",
+    "modes": [
+      {
+        "enabled": false,
+        "title": "Comparing rust-v0.160.0-alpha.3...d7f7fa410698fbbb75548cde553a4fbf43fc268e · openai/codex · GitHub",
+        "nodes": 64645,
+        "textLength": 665663,
+        "href": "https://github.com/openai/codex/compare/rust-v0.160.0-alpha.3...d7f7fa410698fbbb75548cde553a4fbf43fc268e"
+      },
+      {
+        "enabled": true,
+        "title": "Comparing rust-v0.160.0-alpha.3...d7f7fa410698fbbb75548cde553a4fbf43fc268e · openai/codex · GitHub",
+        "nodes": 64646,
+        "textLength": 665663,
+        "href": "https://github.com/openai/codex/compare/rust-v0.160.0-alpha.3...d7f7fa410698fbbb75548cde553a4fbf43fc268e"
+      }
+    ]
+  }
+}

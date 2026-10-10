@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- Issue #225 新版 QQ 邮箱阅读页的合成结构；正文为虚构样例，不包含用户邮件与登录信息。 -->
+<html lang="en">
+<body>
+  <div class="mail-detail-content" data-testid="mail-detail-content">
+    <div class="qmbox" data-testid="qmbox">
+      <table role="presentation" data-testid="mail-shell"><tbody><tr><td>
+        <table role="presentation"><tbody><tr><td>
+          <p data-testid="mail-greeting">Hello <a data-testid="mail-inline-link" href="https://example.test">reader</a>,<br><strong>Welcome to the project update.</strong></p>
+          <p data-testid="mail-body">This message contains a readable paragraph with <a href="https://example.test/docs">inline documentation</a> and a line break.<br>It should remain one translation owner.</p>
+          <table role="presentation"><tbody><tr>
+            <td data-testid="mail-table-cell">A readable table cell remains a separate leaf.</td>
+            <td data-testid="mail-table-cell-two"><p data-testid="mail-nested-cell">A nested cell paragraph remains readable.</p></td>
+          </tr></tbody></table>
+          <p data-testid="mail-protected-around">Readable text around <code data-testid="mail-code">SECRET_CODE_DO_NOT_TRANSLATE</code> and <span translate="no" data-testid="mail-no-translate">PROTECTED_TOKEN</span>.</p>
+          <p data-testid="mail-editable" contenteditable="true">Page controlled editor text.</p>
+          <p data-testid="mail-hidden" hidden>Hidden page chrome.</p>
+        </td></tr></tbody></table>
+      </td></tr></tbody></table>
+    </div>
+  </div>
+</body>
+</html>

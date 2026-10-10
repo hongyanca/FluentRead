@@ -1,64 +1,47 @@
 /**
  * @file src/features/image-translation/services/remoteImage.ts
- * 文件职责：定义远程图片抓取的纯安全规则，把候选 URL 限制为允许的 HTTP(S) 地址，并将受限字节响应编码为 OCR 可消费的 data URL。
- * 主要内容：包含 16 MiB 最大响应常量、URL/重定向的公网边界校验、图片 MIME 解析，以及 ArrayBuffer 到 data URL 的受限转换。
- * 模块边界：本文件不发起网络请求、不跟随重定向也不读取页面 DOM；后台 remoteImageFetcher 负责受控 fetch 和响应上限，内容页只能通过扩展消息获得结果。
+ * 文件职责：为网页 CORS 与 Offscreen 读取图片提供统一的有界响应处理，把图片字节转换为 OCR 可消费的 data URL。
+ * 主要内容：扩展读取仅允许公网 HTTPS 域名、拒绝凭据、端口和重定向；共享 MIME、16 MiB、取消与总时限校验，区分网络失败和不可重试的响应错误。
+ * 模块边界：本文件不监听 runtime 消息、不读取页面 DOM；消息路由和 Offscreen 生命周期由 app 层负责，内容脚本只能拿到最终 data URL。
  */
+
 export const MAX_REMOTE_IMAGE_BYTES = 16 * 1024 * 1024;
+export const REMOTE_IMAGE_TIMEOUT_MS = 15_000;
 
-const PRIVATE_REMOTE_IMAGE_ERROR = '不允许访问本地或私有网络图片';
+/** 已收到响应后的状态、内容或读取失败，不能当作 CORS 拒绝再次联网。 */
+export class ImageReadError extends Error {}
 
-function parseIpv4(hostname: string): number[] | null {
-    if (!/^\d{1,3}(?:\.\d{1,3}){3}$/u.test(hostname)) return null;
-    // URL 构造器已把合法 IPv4 规范化为四段十进制，并拒绝越界段。
-    return hostname.split('.').map(Number);
+export interface RemoteImageResponse {
+    readonly ok: boolean;
+    readonly status: number;
+    readonly url?: string;
+    readonly headers: {
+        get(name: string): string | null;
+    };
+    readonly body?: ReadableStream<Uint8Array> | null;
+    arrayBuffer(): Promise<ArrayBuffer>;
 }
 
-function isPrivateIpv4(parts: number[]): boolean {
-    const [a, b] = parts;
-    return a === 0
-        || a === 10
-        || a === 127
-        || (a === 100 && b >= 64 && b <= 127)
-        || (a === 169 && b === 254)
-        || (a === 172 && b >= 16 && b <= 31)
-        || (a === 192 && b === 168);
+export type RemoteImageRequest = (
+    url: string,
+    init: {credentials: 'omit'; redirect: 'error'; signal: AbortSignal},
+) => Promise<RemoteImageResponse>;
+
+function isPublicImageHost(hostname: string): boolean {
+    const host = hostname.replace(/\.$/u, '').toLowerCase();
+    // URL 已把十进制、八进制和十六进制 IPv4 规范化；不接受任何 IP、单标签或保留本地域。
+    return /^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z][a-z0-9-]*$/u.test(host)
+        && !/(?:^|\.)(?:localhost|localdomain|local|internal|lan|home|corp|test|invalid|example)$/u.test(host)
+        && !host.endsWith('.home.arpa');
 }
 
-function parseIpv6(hostname: string): number[] | null {
-    const value = hostname.replace(/^\[|\]$/gu, '').toLowerCase();
-    if (!value.includes(':')) return null;
-    // URL 已校验 IPv6 语法并把嵌入式 IPv4 转为十六进制；这里只展开一次 :: 压缩。
-    const halves = value.split('::');
-    const left = halves[0].split(':').filter(Boolean);
-    const right = (halves[1] ?? '').split(':').filter(Boolean);
-    const groups = [...left, ...Array(8 - left.length - right.length).fill('0'), ...right];
-    return groups.map(group => Number.parseInt(group, 16));
+function createRemoteImageAbortError(): Error {
+    const error = new Error('远程图片读取已取消');
+    error.name = 'AbortError';
+    return error;
 }
 
-function isPrivateIpv6(parts: number[]): boolean {
-    const embeddedIpv4 = parts.slice(0, 5).every(part => part === 0)
-        && (parts[5] === 0 || parts[5] === 0xffff)
-        ? [parts[6] >> 8, parts[6] & 0xff, parts[7] >> 8, parts[7] & 0xff]
-        : null;
-    return parts.every(part => part === 0)
-        || (parts.slice(0, 7).every(part => part === 0) && parts[7] === 1)
-        || (parts[0] & 0xfe00) === 0xfc00
-        || (parts[0] & 0xffc0) === 0xfe80
-        || (embeddedIpv4 !== null && isPrivateIpv4(embeddedIpv4));
-}
-
-function assertPublicRemoteImageHost(url: URL): void {
-    const hostname = url.hostname.replace(/\.$/u, '').toLowerCase();
-    if (hostname === 'localhost' || hostname.endsWith('.localhost')) {
-        throw new Error(PRIVATE_REMOTE_IMAGE_ERROR);
-    }
-    const ipv4 = parseIpv4(hostname);
-    if (ipv4 && isPrivateIpv4(ipv4)) throw new Error(PRIVATE_REMOTE_IMAGE_ERROR);
-    const ipv6 = parseIpv6(hostname);
-    if (ipv6 && isPrivateIpv6(ipv6)) throw new Error(PRIVATE_REMOTE_IMAGE_ERROR);
-}
-
+/** 公网 HTTPS 图片策略；后台还须核验发起页面中当前图片任务的独立授权。 */
 export function normalizeRemoteImageUrl(source: string): string {
     let url: URL;
     try {
@@ -67,44 +50,175 @@ export function normalizeRemoteImageUrl(source: string): string {
         throw new Error('图片地址无效');
     }
 
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-        throw new Error('只支持网页图片地址');
-    }
-    if (url.username || url.password) throw new Error('图片地址不能包含凭据');
-    assertPublicRemoteImageHost(url);
-
+    if (url.protocol !== 'https:') throw new Error('跨域图片读取只支持 HTTPS');
+    if (url.username || url.password || url.port) throw new Error('图片地址不能包含凭据或自定义端口');
+    if (!isPublicImageHost(url.hostname)) throw new Error('不支持本地或内网图片地址');
+    url.hash = '';
     return url.href;
 }
 
-/** 校验 fetch 跟随重定向后的最终地址，并禁止 HTTPS 降级到 HTTP。 */
+/** 在读取响应体前复核最终地址；拒绝由适配器或服务器引入的未授权第二跳。 */
 export function validateRemoteImageResponseUrl(initialUrl: string, responseUrl?: string): string {
     const normalizedInitial = normalizeRemoteImageUrl(initialUrl);
     const normalizedFinal = normalizeRemoteImageUrl(responseUrl || normalizedInitial);
-    if (new URL(normalizedInitial).protocol === 'https:' && new URL(normalizedFinal).protocol !== 'https:') {
-        throw new Error('图片重定向不能从 HTTPS 降级到 HTTP');
-    }
+    if (normalizedInitial !== normalizedFinal) throw new ImageReadError('跨域图片不允许重定向');
     return normalizedFinal;
 }
 
 export function normalizeRemoteImageMimeType(contentType: string): string {
     const mimeType = contentType.split(';', 1)[0]?.trim().toLowerCase();
-    if (!mimeType?.startsWith('image/')) throw new Error('远程地址不是图片');
+    if (!mimeType?.startsWith('image/')) throw new ImageReadError('远程地址不是图片');
     return mimeType;
 }
 
 export function imageBufferToDataUrl(buffer: ArrayBuffer, contentType: string): string {
-    if (buffer.byteLength > MAX_REMOTE_IMAGE_BYTES) {
-        throw new Error('图片文件过大');
-    }
+    if (buffer.byteLength > MAX_REMOTE_IMAGE_BYTES) throw new ImageReadError('图片文件过大');
 
     const mimeType = normalizeRemoteImageMimeType(contentType);
-
     const bytes = new Uint8Array(buffer);
     const chunkSize = 0x8000;
     let binary = '';
     for (let index = 0; index < bytes.length; index += chunkSize) {
         binary += String.fromCharCode(...bytes.subarray(index, index + chunkSize));
     }
-
     return `data:${mimeType};base64,${btoa(binary)}`;
+}
+
+function discardResponseBody(response: RemoteImageResponse, reason: unknown): void {
+    if (response.body) void response.body.cancel(reason).catch(() => undefined);
+}
+
+async function readResponseBuffer(
+    response: RemoteImageResponse,
+    abortPromise: Promise<never>,
+): Promise<ArrayBuffer> {
+    if (!response.body) return Promise.race([response.arrayBuffer(), abortPromise]);
+
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let byteLength = 0;
+    try {
+        while (true) {
+            const {done, value} = await Promise.race([reader.read(), abortPromise]);
+            if (done) break;
+            if (!value || value.byteLength === 0) continue;
+            byteLength += value.byteLength;
+            if (byteLength > MAX_REMOTE_IMAGE_BYTES) throw new ImageReadError('图片文件过大');
+            chunks.push(value);
+        }
+    } catch (error) {
+        void reader.cancel(error).catch(() => undefined);
+        throw error;
+    } finally {
+        try {
+            reader.releaseLock();
+        } catch {
+            // 取消中的 reader 可能仍有未完成 read；底层 fetch signal 已负责终止传输。
+        }
+    }
+
+    const bytes = new Uint8Array(byteLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+        bytes.set(chunk, offset);
+        offset += chunk.byteLength;
+    }
+    return bytes.buffer;
+}
+
+/** 两种读取路径共享 deadline，连响应头等待与悬挂 body 都会被主动终止。 */
+async function fetchImageForOcr(
+    source: string,
+    request: RemoteImageRequest,
+    callerSignal?: AbortSignal,
+    timeoutMs = REMOTE_IMAGE_TIMEOUT_MS,
+    validateResponse?: (response: RemoteImageResponse) => void,
+): Promise<string> {
+    if (callerSignal?.aborted) throw createRemoteImageAbortError();
+
+    const controller = new AbortController();
+    const timeoutError = new ImageReadError('图片读取超时');
+    timeoutError.name = 'TimeoutError';
+    let abortReason: Error | null = null;
+    let rejectAbort!: (reason: Error) => void;
+    const abortPromise = new Promise<never>((_resolve, reject) => {
+        rejectAbort = reject;
+    });
+    const abortWith = (reason: Error): void => {
+        if (abortReason) return;
+        abortReason = reason;
+        controller.abort();
+        rejectAbort(reason);
+    };
+    const onCallerAbort = () => abortWith(createRemoteImageAbortError());
+    callerSignal?.addEventListener('abort', onCallerAbort, {once: true});
+    const timer = setTimeout(() => abortWith(timeoutError), timeoutMs);
+
+    try {
+        const responseWork = request(source, {
+            credentials: 'omit',
+            // Fetch 的 manual 模式无法安全检查 Location；error 模式会在第二跳前失败。
+            redirect: 'error',
+            signal: controller.signal,
+        });
+        void responseWork.then((lateResponse) => {
+            if (controller.signal.aborted) discardResponseBody(lateResponse, abortReason!);
+        }, () => undefined);
+        const response = await Promise.race([responseWork, abortPromise]);
+        try {
+            validateResponse?.(response);
+        } catch (error) {
+            discardResponseBody(response, error);
+            throw error;
+        }
+        if (!response.ok) {
+            const error = new ImageReadError(`图片服务器返回 ${response.status}`);
+            discardResponseBody(response, error);
+            throw error;
+        }
+
+        const contentLength = Number(response.headers.get('content-length') || 0);
+        if (contentLength > MAX_REMOTE_IMAGE_BYTES) {
+            const error = new ImageReadError('图片文件过大');
+            discardResponseBody(response, error);
+            throw error;
+        }
+
+        let mimeType: string;
+        try {
+            mimeType = normalizeRemoteImageMimeType(response.headers.get('content-type') || '');
+        } catch (error) {
+            discardResponseBody(response, error);
+            throw error;
+        }
+        try {
+            const buffer = await readResponseBuffer(response, abortPromise);
+            if (controller.signal.aborted) throw abortReason!;
+            return imageBufferToDataUrl(buffer, mimeType);
+        } catch (error) {
+            // 有响应后的流错误不是 CORS 拒绝，保留原因且不触发扩展重抓。
+            if (controller.signal.aborted) throw abortReason!;
+            throw error instanceof ImageReadError ? error : new ImageReadError(error instanceof Error ? error.message : '图片数据读取失败');
+        }
+    } finally {
+        clearTimeout(timer);
+        callerSignal?.removeEventListener('abort', onCallerAbort);
+    }
+}
+
+/** 网页 CORS 读取使用网页权限；响应验证与超时清理和扩展读取保持一致。 */
+export function fetchPageImageForOcr(source: string, signal?: AbortSignal, timeoutMs = REMOTE_IMAGE_TIMEOUT_MS): Promise<string> {
+    return fetchImageForOcr(source, (url, init) => fetch(url, {...init, mode: 'cors', redirect: 'follow'}), signal, timeoutMs);
+}
+
+/** Offscreen 只读取已授权的公网 HTTPS 图片；error 模式在第二跳前中断。 */
+export async function fetchRemoteImageForOcr(source: string, request: RemoteImageRequest, callerSignal?: AbortSignal): Promise<string> {
+    const url = normalizeRemoteImageUrl(source);
+    return fetchImageForOcr(url, request, callerSignal, REMOTE_IMAGE_TIMEOUT_MS,
+        response => { validateRemoteImageResponseUrl(url, response.url); });
+}
+
+/** Offscreen 的真实网络端口；调用方只接收已校验的 data URL。 */
+export function fetchImageInOffscreen(source: string, signal: AbortSignal): Promise<string> {
+    return fetchRemoteImageForOcr(source, (url, init) => fetch(url, init), signal);
 }

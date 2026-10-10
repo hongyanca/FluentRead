@@ -1,0 +1,113 @@
+{
+  "scope": "manga typography and original-background classification; controlled text transport separated from real Google",
+  "base": "dc6a5646badfe03fa9094ab0e43ed75ae0753ab7",
+  "tests": {
+    "affected": 83,
+    "adjacent": 905,
+    "changedModuleCoverage": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "rendering": {
+    "regions": 25,
+    "firstPlusWarmRounds": 31,
+    "before": {
+      "medianMs": 10.799999713897705,
+      "p95Ms": 14,
+      "measureCalls": 2056
+    },
+    "after": {
+      "medianMs": 10,
+      "p95Ms": 11.300000190734863,
+      "measureCalls": 368
+    }
+  },
+  "production": {
+    "translation": "deterministic Google text transport",
+    "profileRemoved": true,
+    "errors": [],
+    "consoleErrors": [],
+    "modelDownloadRequests": 0,
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": "background-visible-no-focus",
+    "browserFrontmost": false,
+    "rounds": [
+      {
+        "sample": "chapter-page-1.png",
+        "round": 0,
+        "clickToPollEndMs": 15126,
+        "renderToSourceHiddenMs": 114,
+        "renderToNextFrameMs": 116,
+        "gpuSubmissions": 1174
+      },
+      {
+        "sample": "chapter-page-1.png",
+        "round": 1,
+        "clickToPollEndMs": 7951,
+        "renderToSourceHiddenMs": 68,
+        "renderToNextFrameMs": 74,
+        "gpuSubmissions": 398
+      },
+      {
+        "sample": "chapter-page-1.png",
+        "round": 2,
+        "clickToPollEndMs": 8412,
+        "renderToSourceHiddenMs": 97,
+        "renderToNextFrameMs": 100,
+        "gpuSubmissions": 398
+      },
+      {
+        "sample": "chapter-page-2.png",
+        "round": 0,
+        "clickToPollEndMs": 12659,
+        "renderToSourceHiddenMs": 430,
+        "renderToNextFrameMs": 433,
+        "gpuSubmissions": 2386
+      },
+      {
+        "sample": "chapter-page-2.png",
+        "round": 1,
+        "clickToPollEndMs": 12534,
+        "renderToSourceHiddenMs": 330,
+        "renderToNextFrameMs": 333,
+        "gpuSubmissions": 2386
+      },
+      {
+        "sample": "chapter-page-2.png",
+        "round": 2,
+        "clickToPollEndMs": 13938,
+        "renderToSourceHiddenMs": 208,
+        "renderToNextFrameMs": 211,
+        "gpuSubmissions": 2386
+      }
+    ]
+  },
+  "live": {
+    "translation": "live Google",
+    "rounds": 2,
+    "profileRemoved": true,
+    "errors": [],
+    "consoleErrors": [],
+    "modelDownloadRequests": 0
+  },
+  "limitations": [
+    "Small same-machine sample; no competitor timing comparison",
+    "Controlled text fixtures do not prove translation quality",
+    "Artistic title omissions and original-lettering remnants remain in real Google sample",
+    "System fonts may differ between operating systems"
+  ],
+  "finalSmoke": {
+    "codeCommit": "cb8935f59b1ade0497f078f73dc0996f714d76da",
+    "status": "passed",
+    "translation": "live Google",
+    "rounds": 2,
+    "profileRemoved": true,
+    "errors": [],
+    "consoleErrors": [],
+    "modelDownloadRequests": 0
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "success": true,
+  "evidence": "Real Whisper on three synthetic Mandarin clips; raw CER excludes punctuation but counts simplified/traditional differences; no live X audio",
+  "models": [
+    "base"
+  ],
+  "languages": [
+    "zh-Hans",
+    "auto"
+  ],
+  "audioPaddingMs": 0,
+  "silenceProbe": true,
+  "prepareTimeoutMs": 300000,
+  "inferenceTimeoutMs": 120000,
+  "extensionInstall": "cdp",
+  "modelCache": {
+    "source": "/private/tmp/fluentread-x-ai-public-model-cache-20261009",
+    "entries": [
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/config.json",
+        "file": "tiny/config.json",
+        "contentType": "application/json",
+        "bytes": 2243,
+        "sha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/generation_config.json",
+        "file": "tiny/generation_config.json",
+        "contentType": "application/json",
+        "bytes": 3772,
+        "sha256": "f5c67e5a4f7102f8cb4d058bc95da276bbc19eeec997267c3bb0f25ef68facd1"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+        "file": "tiny/preprocessor_config.json",
+        "contentType": "application/json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/tokenizer.json",
+        "file": "tiny/tokenizer.json",
+        "contentType": "application/json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/tokenizer_config.json",
+        "file": "tiny/tokenizer_config.json",
+        "contentType": "application/json",
+        "bytes": 282683,
+        "sha256": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/onnx/encoder_model_q4.onnx",
+        "file": "tiny/onnx/encoder_model_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 9020667,
+        "sha256": "45a55cedf1ff46606520f5938ed40c94bd4f6b38beb2a646eed8636225342488"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "file": "tiny/onnx/decoder_model_merged_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 86713702,
+        "sha256": "a7573efde84f7d018d59e50e7f860c03e26623d68e23eb6037b76135367e72eb"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/config.json",
+        "file": "base/config.json",
+        "contentType": "application/json",
+        "bytes": 2243,
+        "sha256": "f4d0608f7d918166da7edb3e188de5ef1bfe70d9802e785d271fd88111e9cf4b"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/generation_config.json",
+        "file": "base/generation_config.json",
+        "contentType": "application/json",
+        "bytes": 3832,
+        "sha256": "61070cf8de25b1e9256e8e102ded49d8d24a8369ed36ef84fdf21549e68125a0"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/preprocessor_config.json",
+        "file": "base/preprocessor_config.json",
+        "contentType": "application/json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer.json",
+        "file": "base/tokenizer.json",
+        "contentType": "application/json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer_config.json",
+        "file": "base/tokenizer_config.json",
+        "contentType": "application/json",
+        "bytes": 282682,
+        "sha256": "2e036e4dbacfdeb7242c7d4ec4149f4a16e86026048f94d1637e3a8ee9c6a573"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/encoder_model_q4.onnx",
+        "file": "base/onnx/encoder_model_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 18772451,
+        "sha256": "9d4e9c31e8559e71de3e0e49d60b830951484699ef53747a4a06261bbbc8cb88"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "file": "base/onnx/decoder_model_merged_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 123602419,
+        "sha256": "09f83b71ceedc97dab1d90b914715dc532a646a147abda11d83c64867b7c319c"
+      }
+    ]
+  },
+  "results": [
+    {
+      "version": "fixed",
+      "model": "base",
+      "prepareMs": 7,
+      "prepared": {
+        "success": true,
+        "model": "base",
+        "dtype": "q4",
+        "models": [
+          "base"
+        ]
+      },
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "spokenAudioSeconds": 3.47675,
+          "wallMs": 1908,
+          "realTimeFactor": 0.5487883799525418,
+          "inferenceMs": 625.5,
+          "decodeMs": 1.4000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 3476.75,
+              "text": "我寫天子已令豬猴,天下都给我让到。"
+            }
+          ],
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "spokenAudioSeconds": 5.856875,
+          "wallMs": 818,
+          "realTimeFactor": 0.139664923700779,
+          "inferenceMs": 796.8000001907349,
+          "decodeMs": 0.6000003814697266,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 5856.875,
+              "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。"
+            }
+          ],
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "spokenAudioSeconds": 9.2171875,
+          "wallMs": 1140,
+          "realTimeFactor": 0.12368197999660958,
+          "inferenceMs": 1113.9000000953674,
+          "decodeMs": 1,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 9200,
+              "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。"
+            }
+          ],
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我寫天子已令豬猴,天下都给我让到。",
+          "audioSeconds": 3.47675,
+          "spokenAudioSeconds": 3.47675,
+          "wallMs": 898,
+          "realTimeFactor": 0.25828719349967644,
+          "inferenceMs": 526.7999997138977,
+          "decodeMs": 0.7000002861022949,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 3476.75,
+              "text": "我寫天子已令豬猴,天下都给我让到。"
+            }
+          ],
+          "cer": {
+            "errors": 5,
+            "characters": 15,
+            "rate": 0.3333333333333333
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。",
+          "audioSeconds": 5.856875,
+          "spokenAudioSeconds": 5.856875,
+          "wallMs": 939,
+          "realTimeFactor": 0.16032440507950058,
+          "inferenceMs": 692.7000002861023,
+          "decodeMs": 0.6999998092651367,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 5856.875,
+              "text": "我们正在测试中文视频字幕,实别结果应该保持完整,不要重复。"
+            }
+          ],
+          "cer": {
+            "errors": 1,
+            "characters": 26,
+            "rate": 0.038461538461538464
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。",
+          "audioSeconds": 9.2171875,
+          "spokenAudioSeconds": 9.2171875,
+          "wallMs": 1140,
+          "realTimeFactor": 0.12368197999660958,
+          "inferenceMs": 1114.5,
+          "decodeMs": 0.8000001907348633,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 9200,
+              "text": "今天我們測試自動生成視頻字幕,中文實別需要正確判斷語言,完整保留每一句對白,遇到背景音樂也不要輸出大量重復文字。"
+            }
+          ],
+          "cer": {
+            "errors": 15,
+            "characters": 52,
+            "rate": 0.28846153846153844
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 1666.953125,
+          "peakBrowserRssMb": 3271.140625,
+          "cpuSeconds": 7.843463000000005
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 3268.640625,
+          "peakBrowserRssMb": 3326.234375,
+          "cpuSeconds": 3.192080000000009
+        }
+      ]
+    }
+  ],
+  "fixed": {
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 1458,
+        "name": "uTools"
+      },
+      "frontmostAfter": {
+        "pid": 1458,
+        "name": "uTools"
+      }
+    },
+    "extensionWorkerSha256": "80bee67c596eb5cab68b551139ed687069a0089a1bf12d297c7229c03e5f4334",
+    "extensionSource": "/private/tmp/fluentread-x-ai-fixed-final-20261009/chrome-mv3",
+    "browserVersion": "154.0.8037.98",
+    "focusChecks": [
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      },
+      {
+        "pid": 1458
+      }
+    ]
+  },
+  "silenceProbes": [
+    {
+      "version": "fixed",
+      "model": "base",
+      "audioSeconds": 6,
+      "wallMs": 83,
+      "result": {
+        "success": true,
+        "text": "",
+        "segments": [],
+        "model": "base",
+        "decodeMs": 2.1999998092651367,
+        "inferenceMs": 0,
+        "audioDurationMs": 6000
+      }
+    }
+  ]
+}

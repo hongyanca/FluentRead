@@ -15,9 +15,11 @@ vi.mock("@/src/services/config/store", () => ({config: mockConfig}));
 
 import deeplx, {
     getDeepLXRequestLanguages,
-    normalizeDeepLXLanguage,
 } from "@/src/providers/translation/deeplx";
-import {DEFAULT_DEEPLX_ENDPOINT, DEEPLX_ENDPOINT_PRESETS, getDeepLXEndpoints} from '@/src/core/config/deeplx';
+import {DEFAULT_DEEPLX_ENDPOINT, getDeepLXEndpoints, requiresDeepLXToken} from '@/src/core/config/deeplx';
+
+const FANYIMAO_ENDPOINT = 'https://freeapi.fanyimao.cn/translate?token={{apiKey}}';
+const DEEPLX_COMMUNITY_ENDPOINT = 'https://api.deeplx.org/{{apiKey}}/translate';
 
 const fetchMock = vi.fn<typeof fetch>();
 
@@ -49,6 +51,8 @@ afterEach(() => {
 describe("DeepLX endpoint configuration", () => {
     it("uses the verified public endpoint when no URL is configured", () => {
         expect(getDeepLXEndpoints("", "")).toEqual([DEFAULT_DEEPLX_ENDPOINT]);
+        expect(requiresDeepLXToken('', '')).toBe(false);
+        expect(requiresDeepLXToken('https://self-hosted.example/translate', '')).toBe(false);
     });
 
     it("parses comma- and newline-separated URLs and gives proxy URLs priority", () => {
@@ -59,10 +63,22 @@ describe("DeepLX endpoint configuration", () => {
     });
 
     it("resolves token placeholders without returning a secret in the configured URL", () => {
-        expect(getDeepLXEndpoints(DEEPLX_ENDPOINT_PRESETS[1].url, "", "site-token"))
+        expect(getDeepLXEndpoints(FANYIMAO_ENDPOINT, "", "site-token"))
             .toEqual(["https://freeapi.fanyimao.cn/translate?token=site-token"]);
-        expect(getDeepLXEndpoints(DEEPLX_ENDPOINT_PRESETS[2].url, "", ""))
-            .toEqual([DEFAULT_DEEPLX_ENDPOINT]);
+        expect(() => getDeepLXEndpoints(DEEPLX_COMMUNITY_ENDPOINT, "", ""))
+            .toThrow('DeepLX 地址包含 {{apiKey}} 或 {{token}} 占位符');
+        expect(requiresDeepLXToken(DEEPLX_COMMUNITY_ENDPOINT, '')).toBe(true);
+        expect(requiresDeepLXToken('https://self-hosted.example/translate', DEEPLX_COMMUNITY_ENDPOINT)).toBe(true);
+    });
+
+    it('空 Key 跳过混合列表中的占位符地址，但不绕过 proxy 或回落默认公共地址', () => {
+        expect(getDeepLXEndpoints(`${DEEPLX_COMMUNITY_ENDPOINT},https://public.example/translate`, '', ''))
+            .toEqual(['https://public.example/translate']);
+        expect(getDeepLXEndpoints('https://configured.example/translate', `${DEEPLX_COMMUNITY_ENDPOINT},https://proxy.example/translate`, ''))
+            .toEqual(['https://proxy.example/translate']);
+        expect(requiresDeepLXToken('https://configured.example/translate', `${DEEPLX_COMMUNITY_ENDPOINT},https://proxy.example/translate`)).toBe(false);
+        expect(() => getDeepLXEndpoints('https://configured.example/translate', DEEPLX_COMMUNITY_ENDPOINT, ''))
+            .toThrow('DeepLX 地址包含 {{apiKey}} 或 {{token}} 占位符');
     });
 });
 
@@ -110,6 +126,25 @@ describe("DeepLX adapter", () => {
         expect(fetchMock).toHaveBeenCalledTimes(2);
     });
 
+    it.each([[400], [429], [503], [400, 400], [400, 422]])('preserves safe HTTP classification across failed endpoints %j', async (...statuses) => {
+        mockConfig.deeplx = statuses.map((_, index) => `https://endpoint-${index}.example/translate`).join(',');
+        for (const status of statuses) {
+            fetchMock.mockResolvedValueOnce(mockResponse({}, {ok: false, status}));
+        }
+        await expect(deeplx({origin: 'private original'})).rejects.toMatchObject({statusCode: statuses[0]});
+    });
+
+    it.each([429, 503, undefined])('does not mask a mixed availability failure with a parameter error %s', async status => {
+        mockConfig.deeplx = 'https://primary.example/translate,https://backup.example/translate';
+        fetchMock.mockResolvedValueOnce(mockResponse({}, {ok: false, status: 400}));
+        if (status === undefined) fetchMock.mockRejectedValueOnce(new Error('network secret'));
+        else fetchMock.mockResolvedValueOnce(mockResponse({}, {ok: false, status}));
+        const request = deeplx({origin: 'private original'});
+        await expect(request).rejects.not.toHaveProperty('statusCode');
+        await expect(request).rejects.toThrow('备用站点 1: 请求失败: 400；备用站点 2:');
+        await expect(request).rejects.not.toThrow('secret');
+    });
+
     it("adds an optional bearer token without exposing it in the URL", async () => {
         mockConfig.token = {deeplx: "test-token"};
         fetchMock.mockResolvedValue(mockResponse({code: 200, data: "你好"}));
@@ -123,7 +158,7 @@ describe("DeepLX adapter", () => {
     });
 
     it("supports a token placeholder in a preset endpoint", async () => {
-        mockConfig.deeplx = DEEPLX_ENDPOINT_PRESETS[1].url;
+        mockConfig.deeplx = FANYIMAO_ENDPOINT;
         mockConfig.token = {deeplx: "site-token"};
         fetchMock.mockResolvedValue(mockResponse({code: 200, data: "你好"}));
 
@@ -177,11 +212,21 @@ describe("DeepLX adapter", () => {
     });
 
     it("normalizes Chinese language variants", () => {
-        expect(normalizeDeepLXLanguage("zh-Hans")).toBe("ZH");
-        expect(normalizeDeepLXLanguage("zh-TW")).toBe("ZH-HANT");
+        expect(getDeepLXRequestLanguages("zh-Hans", "zh-TW")).toEqual({sourceLang: "ZH", targetLang: "ZH-HANT"});
         expect(getDeepLXRequestLanguages("auto", "zh-Hans")).toEqual({
             sourceLang: "AUTO",
             targetLang: "ZH",
         });
+    });
+});
+
+it('DeepLX 脚本及地区别名归一后保持繁体目标', () => {
+    expect(getDeepLXRequestLanguages('zh-Hans-CN', 'zh-Hant-HK')).toEqual({sourceLang: 'ZH', targetLang: 'ZH-HANT'});
+    expect(getDeepLXRequestLanguages('zh-Hant', 'zh-SG')).toEqual({sourceLang: 'ZH-HANT', targetLang: 'ZH'});
+});
+
+describe('DeepLX 菲律宾语兼容', () => {
+    it('统一目录 fil 转换为 DeepL 的 TL', () => {
+        expect(getDeepLXRequestLanguages('fil', 'fil').targetLang).toBe('TL');
     });
 });

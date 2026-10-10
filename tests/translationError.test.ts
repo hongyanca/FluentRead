@@ -25,6 +25,7 @@ describe('translation error serialization', () => {
   it.each([
     ['request timed out', 'timeout', true],
     ['NetworkError while fetching', 'network', true],
+    ['Extension context invalidated.', 'unknown', false],
     ['HTTP 400 invalid request', 'bad-request', false],
     ['HTTP 503 service unavailable', 'provider', true],
     ['unexpected provider reply', 'unknown', true],
@@ -115,6 +116,9 @@ describe('translation error serialization', () => {
     }
 
     expect(isRetryableTranslationError(new Error('legacy failure'))).toBe(true);
+    expect(isRetryableTranslationError(new Error('Extension context invalidated.'))).toBe(false);
+    expect(isRetryableTranslationError('Extension context invalidated.')).toBe(false);
+    expect(isRetryableTranslationError(null)).toBe(true);
     expect(isRetryableTranslationError(new TranslationRequestError(
       serializeTranslationError('network error'),
     ))).toBe(true);

@@ -1,0 +1,16 @@
+RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-cloud-backup-audit-20261004
+
+[resource-safe] 等待全局测试锁（5 个并发槽已占满，当前: wxt build; vue-tsc --noEmit; vitest /Users/thinkstu/Desktop/copy/FluentRead-sentence-listening-20261004/node_modules/vitest/vitest.mjs run tests/vocabularyBook.test.ts tests/vocabularyRepositoryEdges.test.ts tests/vocabularyBookComponent.test.ts tests/vocabularyBookComponentLifecycle.test.ts tests/vocabularyLearningModel.test.ts tests/vocabularyBackgroundHandler.test.ts tests/sentenceActionsMount.test.ts tests/contentRuntimeLifecycle.test.ts tests/bilingualSentenceHighlight.test.ts tests/harnessRuntime.test.ts tests/harnessBackground.test.ts tests/readingPanelLifecycle.test.ts --coverage --coverage.include=src/features/vocabulary/repository.ts --coverage.include=src/features/vocabulary/learningModel.ts --coverage.include=src/features/vocabulary/background/handler.ts --coverage.include=src/features/full-page-translation/content/sentenceHighlight.ts --coverage.include=src/features/vocabulary/content.ts --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=/private/tmp/fluentread-sentence-coverage; vue-tsc --noEmit; vue-tsc --noEmit）
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 134ms
+ ✓ tests/i18n.test.ts (56 tests) 3018ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 1103ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 864ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 707ms
+ ✓ tests/configDiff.test.ts (49 tests) 34ms
+ ✓ tests/googleDriveConfig.test.ts (11 tests) 91ms
+ ✓ tests/googleDrivePreview.test.ts (3 tests) 3ms
+
+ Test Files  5 passed (5)
+      Tests  152 passed (152)
+   Start at  08:18:46
+   Duration  11.93s (transform 1.51s, setup 0ms, collect 2.52s, tests 3.28s, environment 1ms, prepare 309ms)

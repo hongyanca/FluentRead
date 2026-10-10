@@ -85,6 +85,8 @@ describe('完整配置加密 IndexedDB 集成', () => {
                 user_role: {openai: userRole},
                 system_role: {openai: systemRole},
                 customBody: {openai: '{"temperature":0.2}'},
+                customOpenAIProviders: [{id: 'custom:headers', name: 'Header service', endpoint: 'https://headers.example/v1/chat/completions', models: ['model']}],
+                customHeaders: {'custom:headers': '{"x-auth":"integration-header-sentinel"}'},
                 alwaysTranslateDomains: ['example.com'],
             },
         });
@@ -96,6 +98,7 @@ describe('完整配置加密 IndexedDB 集成', () => {
         const first = await loadConfigStore(firstStorage);
 
         expect(first.config.token.openai).toBe(legacySecret);
+        expect(first.config.customHeaders['custom:headers']).toContain('integration-header-sentinel');
         expect(first.config.user_role.openai).toBe(userRole);
         expect(first.config.system_role.openai).toBe(systemRole);
         expect(first.config.appid).toBe('integration-app-id');
@@ -112,7 +115,7 @@ describe('完整配置加密 IndexedDB 集成', () => {
         await first.saveConfig({...first.config, to: 'ja'}, {recordHistory: true, immediateHistory: true});
         const rawAfterSave = await database.records.toArray();
         const rawJson = JSON.stringify(rawAfterSave);
-        for (const sentinel of [legacySecret, userRole, systemRole, 'integration-secret-key']) {
+        for (const sentinel of [legacySecret, userRole, systemRole, 'integration-secret-key', 'integration-header-sentinel']) {
             expect(rawJson).not.toContain(sentinel);
         }
         expect(rawAfterSave.map(record => record.key)).toEqual(expect.arrayContaining([
@@ -148,6 +151,7 @@ describe('完整配置加密 IndexedDB 集成', () => {
         expect(nextSession.config.system_role.openai).toBe(systemRole);
         expect(nextSession.config.appid).toBe('integration-app-id');
         expect(nextSession.config.key).toBe('integration-secret-key');
+        expect(nextSession.config.customHeaders['custom:headers']).toContain('integration-header-sentinel');
         await expect(nextSessionRepository.get<Record<string, unknown>>('local:credentials'))
             .resolves.toMatchObject({
                 token: {openai: legacySecret},

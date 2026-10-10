@@ -15,4 +15,6 @@ export interface OcrLine {
         x1: number;
         y1: number;
     };
+    /** 竖排文字区域：同一气泡的相邻竖列已按从右到左合并，绘制时不按细长列框的高度外扩留白。 */
+    vertical?: true;
 }

@@ -1,0 +1,300 @@
+{
+  "success": false,
+  "completedScopeSuccess": true,
+  "evidence": "Real Whisper on three synthetic Mandarin clips; raw CER excludes punctuation but counts simplified/traditional differences; no live X audio",
+  "scope": "Six completed Tiny subruns from an archive-based baseline. The original mixed Tiny/Base process failed while preparing Base; this is not a successful whole-suite run.",
+  "baselineCommit": "9ce9d7b5b",
+  "models": [
+    "tiny"
+  ],
+  "languages": [
+    "zh-Hans",
+    "auto"
+  ],
+  "results": [
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "prepareMs": 12236,
+      "prepared": {
+        "success": true,
+        "model": "tiny",
+        "dtype": "q4",
+        "models": [
+          "tiny"
+        ]
+      },
+      "runs": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 3295,
+          "realTimeFactor": 0.9477241676853383,
+          "inferenceMs": 1709.9000000953674,
+          "decodeMs": 1.9000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 3440,
+              "text": "我协天子以令珠侯,天下都给我让到"
+            }
+          ],
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 1201,
+          "realTimeFactor": 0.20505815814747627,
+          "inferenceMs": 1159.9000000953674,
+          "decodeMs": 0.7999997138977051,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 2560,
+              "text": "我們正在測試中文視頻字幕"
+            },
+            {
+              "startMs": 2560,
+              "endMs": 5040,
+              "text": "10別結果應該保持完整"
+            },
+            {
+              "startMs": 5040,
+              "endMs": 5856.875,
+              "text": "不要重複"
+            }
+          ],
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "zh-Hans",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1111,
+          "realTimeFactor": 0.12053568401423971,
+          "inferenceMs": 1078.2000002861023,
+          "decodeMs": 0.9000000953674316,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 2360,
+              "text": "今天我們測試自動聲誠是評自母"
+            },
+            {
+              "startMs": 2360,
+              "endMs": 4600,
+              "text": "中文時別需要正確判斷語言"
+            },
+            {
+              "startMs": 4600,
+              "endMs": 6400,
+              "text": "完整保留每一句對白"
+            },
+            {
+              "startMs": 6400,
+              "endMs": 9217.1875,
+              "text": "遇到背景音樂也不要輸出大量重複文字"
+            }
+          ],
+          "cer": {
+            "errors": 19,
+            "characters": 52,
+            "rate": 0.36538461538461536
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我挟天子以令诸侯，天下都给我让道。",
+          "text": "我协天子以令珠侯,天下都给我让到",
+          "audioSeconds": 3.47675,
+          "wallMs": 642,
+          "realTimeFactor": 0.1846552096066729,
+          "inferenceMs": 424.90000009536743,
+          "decodeMs": 0.6000003814697266,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 3440,
+              "text": "我协天子以令珠侯,天下都给我让到"
+            }
+          ],
+          "cer": {
+            "errors": 3,
+            "characters": 15,
+            "rate": 0.2
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+          "text": "我們正在測試中文視頻字幕10別結果應該保持完整不要重複",
+          "audioSeconds": 5.856875,
+          "wallMs": 806,
+          "realTimeFactor": 0.13761604951445952,
+          "inferenceMs": 587.1999998092651,
+          "decodeMs": 0.8999996185302734,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 2560,
+              "text": "我們正在測試中文視頻字幕"
+            },
+            {
+              "startMs": 2560,
+              "endMs": 5040,
+              "text": "10別結果應該保持完整"
+            },
+            {
+              "startMs": 5040,
+              "endMs": 5856.875,
+              "text": "不要重複"
+            }
+          ],
+          "cer": {
+            "errors": 12,
+            "characters": 26,
+            "rate": 0.46153846153846156
+          }
+        },
+        {
+          "sourceLanguage": "auto",
+          "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+          "text": "今天我們測試自動聲誠是評自母中文時別需要正確判斷語言完整保留每一句對白遇到背景音樂也不要輸出大量重複文字",
+          "audioSeconds": 9.2171875,
+          "wallMs": 1121,
+          "realTimeFactor": 0.12162061366333277,
+          "inferenceMs": 1076.5,
+          "decodeMs": 4,
+          "backend": "webgpu",
+          "dtype": "q4",
+          "segments": [
+            {
+              "startMs": 0,
+              "endMs": 2360,
+              "text": "今天我們測試自動聲誠是評自母"
+            },
+            {
+              "startMs": 2360,
+              "endMs": 4600,
+              "text": "中文時別需要正確判斷語言"
+            },
+            {
+              "startMs": 4600,
+              "endMs": 6400,
+              "text": "完整保留每一句對白"
+            },
+            {
+              "startMs": 6400,
+              "endMs": 9217.1875,
+              "text": "遇到背景音樂也不要輸出大量重複文字"
+            }
+          ],
+          "cer": {
+            "errors": 19,
+            "characters": 52,
+            "rate": 0.36538461538461536
+          }
+        }
+      ],
+      "resources": [
+        {
+          "sourceLanguage": "zh-Hans",
+          "initialBrowserRssMb": 1102.65625,
+          "peakBrowserRssMb": 2170.84375,
+          "cpuSeconds": 9.042778000000002
+        },
+        {
+          "sourceLanguage": "auto",
+          "initialBrowserRssMb": 2170.125,
+          "peakBrowserRssMb": 2170.125,
+          "cpuSeconds": 3.389834
+        }
+      ]
+    }
+  ],
+  "baseline": {
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 212,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 52700,
+        "name": "ChatGPT"
+      },
+      "frontmostAfter": {
+        "pid": 52700,
+        "name": "ChatGPT"
+      }
+    },
+    "extensionWorkerSha256": "792e3b0212e064cb21a235569f6811910d7c3cde91adb7844f0a604bd3617687",
+    "browserVersion": "154.0.8037.98",
+    "focusChecks": [
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      },
+      {
+        "pid": 52700
+      }
+    ]
+  },
+  "wholeProcessError": {
+    "message": "page.evaluate: Target page, context or browser has been closed",
+    "stack": "page.evaluate: Target page, context or browser has been closed\n    at main (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-video-ai-recognition-benchmark.cjs:156:38)"
+  }
+}

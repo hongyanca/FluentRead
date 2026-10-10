@@ -1,0 +1,99 @@
+{
+  "success": false,
+  "url": "https://x.com/home",
+  "extensionDir": "/private/tmp/FluentRead-x-ai-baseline-20261009/.output/chrome-mv3",
+  "expiredMaster": false,
+  "hungMaster": false,
+  "metadataVariantsOnly": true,
+  "previewFailure": false,
+  "videoOnlyInit": "generated H.264",
+  "evidence": "Production extension; two real MSE videos; real HLS/MP4 recovery and PCM decode; simulated Base ASR and Microsoft translation",
+  "checks": [
+    {
+      "name": "Unreadable MSE audio gives a concise optional retry hint",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Poster enrichment of the same blob video retains its own failure",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Switching to video B clears video A error and restores the generate action",
+      "pass": true,
+      "details": {
+        "label": "生成 AI 字幕",
+        "detail": "",
+        "original": "",
+        "translation": ""
+      }
+    }
+  ],
+  "errors": [],
+  "mediaRequests": [],
+  "timedMediaRequests": [],
+  "downloads": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 1458,
+      "name": "uTools"
+    },
+    "frontmostAfter": {
+      "pid": 1458,
+      "name": "uTools"
+    }
+  },
+  "videoA": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoAEnriched": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoBInitial": {
+    "label": "生成 AI 字幕",
+    "detail": "",
+    "original": "",
+    "translation": ""
+  },
+  "failure": "page.waitForFunction: Timeout 15000ms exceeded.\n    at /Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-x-home-audio-recovery-test.cjs:211:14",
+  "failureState": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  }
+}

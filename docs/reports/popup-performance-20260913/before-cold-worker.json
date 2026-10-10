@@ -1,0 +1,218 @@
+{
+  "extensionDir": "/private/tmp/fluentread-popup-perf-baseline-20260913",
+  "samples": [
+    {
+      "readyMs": 251.10000002384186,
+      "longTasks": [
+        {
+          "start": 173.20000004768372,
+          "duration": 88
+        }
+      ],
+      "treeWalks": 1,
+      "frameMs": 262.39999997615814,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.029921,
+        "RecalcStyleDuration": 0.003076,
+        "ScriptDuration": 0.033829,
+        "TaskDuration": 0.190895,
+        "JSHeapUsedSize": 8475764
+      },
+      "index": 0
+    },
+    {
+      "readyMs": 115.79999995231628,
+      "longTasks": [
+        {
+          "start": 69.89999997615814,
+          "duration": 59
+        }
+      ],
+      "treeWalks": 1,
+      "frameMs": 135.89999997615814,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.002794,
+        "RecalcStyleDuration": 0.002101,
+        "ScriptDuration": 0.030452,
+        "TaskDuration": 0.142753,
+        "JSHeapUsedSize": 16054804
+      },
+      "index": 1
+    },
+    {
+      "readyMs": 66.60000002384186,
+      "longTasks": [],
+      "treeWalks": 1,
+      "frameMs": 77.20000004768372,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.002283,
+        "RecalcStyleDuration": 0.002006,
+        "ScriptDuration": 0.014106,
+        "TaskDuration": 0.081662,
+        "JSHeapUsedSize": 9333200
+      },
+      "index": 2
+    },
+    {
+      "readyMs": 68.29999995231628,
+      "longTasks": [],
+      "treeWalks": 1,
+      "frameMs": 78.29999995231628,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.00235,
+        "RecalcStyleDuration": 0.002148,
+        "ScriptDuration": 0.013845,
+        "TaskDuration": 0.082615,
+        "JSHeapUsedSize": 9436444
+      },
+      "index": 3
+    },
+    {
+      "readyMs": 64,
+      "longTasks": [],
+      "treeWalks": 1,
+      "frameMs": 75,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.002267,
+        "RecalcStyleDuration": 0.002052,
+        "ScriptDuration": 0.014337,
+        "TaskDuration": 0.078151,
+        "JSHeapUsedSize": 9311660
+      },
+      "index": 4
+    },
+    {
+      "readyMs": 65.80000007152557,
+      "longTasks": [],
+      "treeWalks": 1,
+      "frameMs": 75.20000004768372,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.00223,
+        "RecalcStyleDuration": 0.002092,
+        "ScriptDuration": 0.01365,
+        "TaskDuration": 0.079514,
+        "JSHeapUsedSize": 9330524
+      },
+      "index": 5
+    },
+    {
+      "readyMs": 67.60000002384186,
+      "longTasks": [],
+      "treeWalks": 1,
+      "frameMs": 77.60000002384186,
+      "domNodes": 393,
+      "hiddenOptions": 105,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 4,
+        "LayoutDuration": 0.002375,
+        "RecalcStyleDuration": 0.002277,
+        "ScriptDuration": 0.013825,
+        "TaskDuration": 0.081347,
+        "JSHeapUsedSize": 13532436
+      },
+      "index": 6
+    }
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    }
+  },
+  "manifestEntrypoint": "popup.html",
+  "coldWorkerStopped": true,
+  "initialScripts": [
+    {
+      "file": "/chunks/interface-skins-QiiG3MXb.js",
+      "bytes": 40634
+    },
+    {
+      "file": "/chunks/popup-D1uKG0dC.js",
+      "bytes": 53021
+    },
+    {
+      "file": "/chunks/ServiceIcon-DXQd5zYQ.js",
+      "bytes": 50753
+    },
+    {
+      "file": "/chunks/_plugin-vue_export-helper-Ci_FtaK1.js",
+      "bytes": 637994
+    },
+    {
+      "file": "/chunks/capabilities-Dt8qAqLu.js",
+      "bytes": 1831
+    },
+    {
+      "file": "/chunks/_commonjs-dynamic-modules-Dw5-P7-C.js",
+      "bytes": 168543
+    }
+  ],
+  "initialScriptBytes": 952776,
+  "median": {
+    "readyMs": 67.60000002384186,
+    "frameMs": 77.60000002384186,
+    "scriptMs": 14.106
+  },
+  "ok": true
+}

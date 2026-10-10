@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FluentRead 网站适配规则包",
+  "description": "版本 1。运行时额外检查 UTF-8 编码不超过 2 MB、规则标识唯一、模板引用存在、有效 focus 规则包含内容目标。CSS 语法由浏览器在保存时检查。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "rules"],
+  "properties": {
+    "version": {"const": 1},
+    "profiles": {
+      "type": "object",
+      "maxProperties": 100,
+      "propertyNames": {"$ref": "#/$defs/identifier"},
+      "additionalProperties": {"$ref": "#/$defs/recipe"}
+    },
+    "rules": {
+      "type": "array",
+      "maxItems": 2000,
+      "items": {"$ref": "#/$defs/rule"}
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1, "pattern": "^(?!\\s*$)[^\\u0000-\\u001f\\u007f]+$"},
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,95}$",
+      "not": {"enum": ["__proto__", "prototype", "constructor"]}
+    },
+    "selectors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {"allOf": [{"$ref": "#/$defs/text"}, {"maxLength": 1024}]}
+    },
+    "content": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["css"],
+        "properties": {
+          "css": {"$ref": "#/$defs/selectors"},
+          "resolve": {"enum": ["self", "closest"], "default": "self"},
+          "atomic": {"type": "boolean", "default": true},
+          "splitOnBr": {"type": "boolean", "default": false},
+          "key": {"allOf": [{"$ref": "#/$defs/text"}, {"maxLength": 128}]}
+        }
+      }
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "pattern": "^/[^?#\\\\\\u0000-\\u001f\\u007f]*$",
+        "description": "按 pathname 匹配，只有 * 是通配符，其余字符按字面匹配。"
+      }
+    },
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {"enum": ["augment", "focus"], "default": "augment"},
+        "content": {"$ref": "#/$defs/content"},
+        "protect": {"$ref": "#/$defs/selectors"},
+        "exclude": {"$ref": "#/$defs/selectors"},
+        "watchIgnore": {"$ref": "#/$defs/selectors"},
+        "omit": {"$ref": "#/$defs/selectors"},
+        "literalLabels": {"$ref": "#/$defs/selectors"},
+        "literalTokens": {"$ref": "#/$defs/selectors"}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "match"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "name": {"allOf": [{"$ref": "#/$defs/text"}, {"maxLength": 160}]},
+        "profile": {"$ref": "#/$defs/identifier"},
+        "priority": {"type": "integer", "minimum": -10000, "maximum": 10000, "default": 0},
+        "allScopes": {"type": "boolean", "default": false, "description": "显式让规则在正文与全部节点范围都生效。"},
+        "mode": {"enum": ["augment", "focus"]},
+        "content": {"$ref": "#/$defs/content"},
+        "protect": {"$ref": "#/$defs/selectors"},
+        "exclude": {"$ref": "#/$defs/selectors"},
+        "watchIgnore": {"$ref": "#/$defs/selectors"},
+        "omit": {"$ref": "#/$defs/selectors"},
+        "literalLabels": {"$ref": "#/$defs/selectors"},
+        "literalTokens": {"$ref": "#/$defs/selectors"},
+        "match": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hosts"],
+          "properties": {
+            "hosts": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 128,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255,
+                "pattern": "^(\\*\\.)?[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\\.?$",
+                "description": "精确域名或 *.域名；后者包含根域与全部子域，不包含协议、端口和路径。"
+              }
+            },
+            "paths": {"$ref": "#/$defs/paths"},
+            "excludePaths": {"$ref": "#/$defs/paths"}
+          }
+        }
+      }
+    }
+  }
+}

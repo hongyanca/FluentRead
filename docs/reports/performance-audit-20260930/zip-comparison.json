@@ -1,0 +1,11 @@
+{
+  "method": "JSZip 3.10.1, DEFLATE level 6, sorted files, fixed 2000-01-01 timestamp, no directories; synthetic ZIP comparison, not a store package",
+  "baseline": {
+    "zipBytes": 23489848
+  },
+  "current": {
+    "zipBytes": 23098455
+  },
+  "savedBytes": 391393,
+  "savedPercent": 1.666221935535726
+}

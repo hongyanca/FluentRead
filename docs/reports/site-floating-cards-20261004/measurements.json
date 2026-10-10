@@ -1,0 +1,781 @@
+[
+  {
+    "label": "final-en-original",
+    "buttons": [
+      {
+        "active": true,
+        "label": "Preview reading the original",
+        "pressed": "true"
+      },
+      {
+        "active": false,
+        "label": "Preview reading the translation",
+        "pressed": "false"
+      }
+    ],
+    "geometry": {
+      "height": 530,
+      "width": 652.5,
+      "x": 545.5,
+      "y": 1326.3515625
+    },
+    "note": "Read-aloud preview · no sound",
+    "orbitActive": "false",
+    "playing": "false",
+    "speechState": null,
+    "step": "3"
+  },
+  {
+    "label": "final-en-translation",
+    "buttons": [
+      {
+        "active": false,
+        "label": "Preview reading the original",
+        "pressed": "false"
+      },
+      {
+        "active": true,
+        "label": "Preview reading the translation",
+        "pressed": "true"
+      }
+    ],
+    "geometry": {
+      "height": 530,
+      "width": 652.5,
+      "x": 545.5,
+      "y": 1326.3515625
+    },
+    "note": "Read-aloud preview · no sound",
+    "orbitActive": "false",
+    "playing": "false",
+    "speechState": null,
+    "step": "4"
+  },
+  {
+    "label": "checked-en-1101",
+    "width": 1101,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 582.5,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 518.5,
+        "y": 162
+      },
+      {
+        "bottom": 384.3125,
+        "height": 134.3125,
+        "right": 940.5,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 160.5,
+        "y": 250
+      },
+      {
+        "bottom": 473.5078125,
+        "height": 61.1953125,
+        "right": 940.5,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 160.5,
+        "y": 412.3125
+      },
+      {
+        "bottom": 559.5078125,
+        "height": 56,
+        "right": 940.5,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 160.5,
+        "y": 503.5078125
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-1280",
+    "width": 1280,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 672,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 608,
+        "y": 162
+      },
+      {
+        "bottom": 406.15625,
+        "height": 156.15625,
+        "right": 1030,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 250,
+        "y": 250
+      },
+      {
+        "bottom": 495.3515625,
+        "height": 61.1953125,
+        "right": 1030,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 250,
+        "y": 434.15625
+      },
+      {
+        "bottom": 581.3515625,
+        "height": 56,
+        "right": 1030,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 250,
+        "y": 525.3515625
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-1440",
+    "width": 1440,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 752,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 688,
+        "y": 162
+      },
+      {
+        "bottom": 406.15625,
+        "height": 156.15625,
+        "right": 1110,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 330,
+        "y": 250
+      },
+      {
+        "bottom": 495.3515625,
+        "height": 61.1953125,
+        "right": 1110,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 330,
+        "y": 434.15625
+      },
+      {
+        "bottom": 581.3515625,
+        "height": 56,
+        "right": 1110,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 330,
+        "y": 525.3515625
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-1100",
+    "width": 1100,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 198,
+        "height": 64,
+        "right": 582,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 518,
+        "y": 134
+      },
+      {
+        "bottom": 356.1875,
+        "height": 134.1875,
+        "right": 940,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 160,
+        "y": 222
+      },
+      {
+        "bottom": 445.3828125,
+        "height": 61.1953125,
+        "right": 940,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 160,
+        "y": 384.1875
+      },
+      {
+        "bottom": 531.3828125,
+        "height": 56,
+        "right": 940,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 160,
+        "y": 475.3828125
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-760",
+    "width": 760,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 216,
+        "height": 64,
+        "right": 412,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 348,
+        "y": 152
+      },
+      {
+        "bottom": 369.8125,
+        "height": 129.8125,
+        "right": 736,
+        "selector": "#fr-title",
+        "width": 712,
+        "x": 24,
+        "y": 240
+      },
+      {
+        "bottom": 459.0078125,
+        "height": 61.1953125,
+        "right": 736,
+        "selector": ".bv-hero-intro",
+        "width": 712,
+        "x": 24,
+        "y": 397.8125
+      },
+      {
+        "bottom": 545.0078125,
+        "height": 56,
+        "right": 736,
+        "selector": ".bv-install-actions",
+        "width": 712,
+        "x": 24,
+        "y": 489.0078125
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-390",
+    "width": 390,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 204,
+        "height": 64,
+        "right": 227,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 163,
+        "y": 140
+      },
+      {
+        "bottom": 313.640625,
+        "height": 85.640625,
+        "right": 370,
+        "selector": "#fr-title",
+        "width": 350,
+        "x": 20,
+        "y": 228
+      },
+      {
+        "bottom": 482.03125,
+        "height": 140.390625,
+        "right": 370,
+        "selector": ".bv-hero-intro",
+        "width": 350,
+        "x": 20,
+        "y": 341.640625
+      },
+      {
+        "bottom": 618.53125,
+        "height": 106.5,
+        "right": 370,
+        "selector": ".bv-install-actions",
+        "width": 350,
+        "x": 20,
+        "y": 512.03125
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-en-320",
+    "width": 320,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 204,
+        "height": 64,
+        "right": 192,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 128,
+        "y": 140
+      },
+      {
+        "bottom": 306.078125,
+        "height": 78.078125,
+        "right": 300,
+        "selector": "#fr-title",
+        "width": 280,
+        "x": 20,
+        "y": 228
+      },
+      {
+        "bottom": 474.46875,
+        "height": 140.390625,
+        "right": 300,
+        "selector": ".bv-hero-intro",
+        "width": 280,
+        "x": 20,
+        "y": 334.078125
+      },
+      {
+        "bottom": 608.46875,
+        "height": 104,
+        "right": 300,
+        "selector": ".bv-install-actions",
+        "width": 280,
+        "x": 20,
+        "y": 504.46875
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-320",
+    "width": 320,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 204,
+        "height": 64,
+        "right": 192,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 128,
+        "y": 140
+      },
+      {
+        "bottom": 310.953125,
+        "height": 82.953125,
+        "right": 300,
+        "selector": "#fr-title",
+        "width": 280,
+        "x": 20,
+        "y": 228
+      },
+      {
+        "bottom": 450.546875,
+        "height": 111.59375,
+        "right": 300,
+        "selector": ".bv-hero-intro",
+        "width": 280,
+        "x": 20,
+        "y": 338.953125
+      },
+      {
+        "bottom": 584.546875,
+        "height": 104,
+        "right": 300,
+        "selector": ".bv-install-actions",
+        "width": 280,
+        "x": 20,
+        "y": 480.546875
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-390",
+    "width": 390,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 204,
+        "height": 64,
+        "right": 227,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 163,
+        "y": 140
+      },
+      {
+        "bottom": 318.390625,
+        "height": 90.390625,
+        "right": 370,
+        "selector": "#fr-title",
+        "width": 350,
+        "x": 20,
+        "y": 228
+      },
+      {
+        "bottom": 430.984375,
+        "height": 84.59375,
+        "right": 370,
+        "selector": ".bv-hero-intro",
+        "width": 350,
+        "x": 20,
+        "y": 346.390625
+      },
+      {
+        "bottom": 509.484375,
+        "height": 48.5,
+        "right": 370,
+        "selector": ".bv-install-actions",
+        "width": 350,
+        "x": 20,
+        "y": 460.984375
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-760",
+    "width": 760,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 216,
+        "height": 64,
+        "right": 412,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 348,
+        "y": 152
+      },
+      {
+        "bottom": 369.8125,
+        "height": 129.8125,
+        "right": 736,
+        "selector": "#fr-title",
+        "width": 712,
+        "x": 24,
+        "y": 240
+      },
+      {
+        "bottom": 459.0078125,
+        "height": 61.1953125,
+        "right": 736,
+        "selector": ".bv-hero-intro",
+        "width": 712,
+        "x": 24,
+        "y": 397.8125
+      },
+      {
+        "bottom": 545.0078125,
+        "height": 56,
+        "right": 736,
+        "selector": ".bv-install-actions",
+        "width": 712,
+        "x": 24,
+        "y": 489.0078125
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-1100",
+    "width": 1100,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 198,
+        "height": 64,
+        "right": 582,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 518,
+        "y": 134
+      },
+      {
+        "bottom": 356.1875,
+        "height": 134.1875,
+        "right": 940,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 160,
+        "y": 222
+      },
+      {
+        "bottom": 445.3828125,
+        "height": 61.1953125,
+        "right": 940,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 160,
+        "y": 384.1875
+      },
+      {
+        "bottom": 531.3828125,
+        "height": 56,
+        "right": 940,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 160,
+        "y": 475.3828125
+      }
+    ],
+    "cardsVisible": 0,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-1101",
+    "width": 1101,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 582.5,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 518.5,
+        "y": 162
+      },
+      {
+        "bottom": 384.3125,
+        "height": 134.3125,
+        "right": 940.5,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 160.5,
+        "y": 250
+      },
+      {
+        "bottom": 473.5078125,
+        "height": 61.1953125,
+        "right": 940.5,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 160.5,
+        "y": 412.3125
+      },
+      {
+        "bottom": 559.5078125,
+        "height": 56,
+        "right": 940.5,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 160.5,
+        "y": 503.5078125
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-1280",
+    "width": 1280,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 672,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 608,
+        "y": 162
+      },
+      {
+        "bottom": 406.15625,
+        "height": 156.15625,
+        "right": 1030,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 250,
+        "y": 250
+      },
+      {
+        "bottom": 495.3515625,
+        "height": 61.1953125,
+        "right": 1030,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 250,
+        "y": 434.15625
+      },
+      {
+        "bottom": 581.3515625,
+        "height": 56,
+        "right": 1030,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 250,
+        "y": 525.3515625
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "checked-zh-1440",
+    "width": 1440,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 752,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 688,
+        "y": 162
+      },
+      {
+        "bottom": 406.15625,
+        "height": 156.15625,
+        "right": 1110,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 330,
+        "y": 250
+      },
+      {
+        "bottom": 495.3515625,
+        "height": 61.1953125,
+        "right": 1110,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 330,
+        "y": 434.15625
+      },
+      {
+        "bottom": 581.3515625,
+        "height": 56,
+        "right": 1110,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 330,
+        "y": 525.3515625
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  },
+  {
+    "label": "final-zh-original",
+    "buttons": [
+      {
+        "active": true,
+        "label": "演示朗读原文",
+        "pressed": "true"
+      },
+      {
+        "active": false,
+        "label": "演示朗读译文",
+        "pressed": "false"
+      }
+    ],
+    "geometry": {
+      "height": 530,
+      "width": 652.5,
+      "x": 545.5,
+      "y": 1326.3515625
+    },
+    "note": "朗读动作示意，不播放声音",
+    "orbitActive": "false",
+    "playing": "false",
+    "speechState": null,
+    "step": "3"
+  },
+  {
+    "label": "final-zh-translation",
+    "buttons": [
+      {
+        "active": false,
+        "label": "演示朗读原文",
+        "pressed": "false"
+      },
+      {
+        "active": true,
+        "label": "演示朗读译文",
+        "pressed": "true"
+      }
+    ],
+    "geometry": {
+      "height": 530,
+      "width": 652.5,
+      "x": 545.5,
+      "y": 1326.3515625
+    },
+    "note": "朗读动作示意，不播放声音",
+    "orbitActive": "false",
+    "playing": "false",
+    "speechState": null,
+    "step": "4"
+  },
+  {
+    "label": "checked-zh-1280-repeat",
+    "width": 1280,
+    "overflow": 0,
+    "primary": [
+      {
+        "bottom": 226,
+        "height": 64,
+        "right": 672,
+        "selector": ".bv-hero-icon",
+        "width": 64,
+        "x": 608,
+        "y": 162
+      },
+      {
+        "bottom": 406.15625,
+        "height": 156.15625,
+        "right": 1030,
+        "selector": "#fr-title",
+        "width": 780,
+        "x": 250,
+        "y": 250
+      },
+      {
+        "bottom": 495.3515625,
+        "height": 61.1953125,
+        "right": 1030,
+        "selector": ".bv-hero-intro",
+        "width": 780,
+        "x": 250,
+        "y": 434.15625
+      },
+      {
+        "bottom": 581.3515625,
+        "height": 56,
+        "right": 1030,
+        "selector": ".bv-install-actions",
+        "width": 780,
+        "x": 250,
+        "y": 525.3515625
+      }
+    ],
+    "cardsVisible": 3,
+    "greetings": 10
+  }
+]

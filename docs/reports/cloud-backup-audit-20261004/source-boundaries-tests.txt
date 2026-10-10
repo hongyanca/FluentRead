@@ -1,0 +1,14 @@
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-cloud-backup-audit-20261004
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/architecture/sourceFileHeaders.test.ts" "tests/architecture/providerBoundaries.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/architecture/sourceFileHeaders.test.ts tests/architecture/providerBoundaries.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-cloud-backup-audit-20261004
+
+ ✓ tests/architecture/providerBoundaries.test.ts (6 tests) 113ms
+ ✓ tests/architecture/sourceFileHeaders.test.ts (769 tests) 230ms
+
+ Test Files  2 passed (2)
+      Tests  775 passed (775)
+   Start at  08:27:29
+   Duration  992ms (transform 40ms, setup 0ms, collect 322ms, tests 343ms, environment 0ms, prepare 72ms)

@@ -1,0 +1,28 @@
+{
+  "scope": "Zero-inference exact installed Transformers3.8.1 Whisper generate parameter forwarding contract. Parent generate is intercepted; no model/session/audio/browser.",
+  "libraryVersion": "3.8.1",
+  "upstreamWhisperGenerateSha256": "904970304636a4011abcbb1b7ddf2361e102341a7c89b1bb07182698c9f16f5a",
+  "supplied": {
+    "stoppingCriteria": "actual InterruptableStoppingCriteria instance",
+    "maxNewTokens": 440
+  },
+  "superReceived": {
+    "hasStoppingCriteria": false,
+    "generationConfigHasStoppingCriteria": false,
+    "maxNewTokens": 440,
+    "decoderInitialPromptTokens": 3
+  },
+  "actualCriteriaInterruptWorks": true,
+  "validation": {
+    "allPassed": true,
+    "networkAttempts": 0,
+    "modelInitializations": 0,
+    "newInferences": 0,
+    "browserLaunched": false
+  },
+  "boundary": [
+    "Confirms the caller criteria is omitted by the installed Whisper override; does not execute decoder steps or measure wall-time.",
+    "Production Worker still marks interrupted at15s and rejects after generation returns; offscreen independently terminates initial attempt at16s within32s CPU-fallback envelope.",
+    "Omission exists in baseline library, predates440 budget change, and is not itself introduced by the patch."
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "scope": "modal-first-full-page-translation-local-fixture",
+  "provider": "microsoft-local-deterministic-response",
+  "profileMode": "new-temporary-profile",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 13983,
+      "name": "Claude"
+    },
+    "frontmostAfter": {
+      "pid": 13983,
+      "name": "Claude"
+    }
+  },
+  "cases": [
+    {
+      "name": "native-showModal-priority-close-continues",
+      "requestStart": 0,
+      "firstRequests": [
+        {
+          "at": 1789189344703,
+          "payload": [
+            "Urgent native announcement"
+          ]
+        },
+        {
+          "at": 1789189344910,
+          "payload": [
+            "Please read this announcement before continuing the article."
+          ]
+        },
+        {
+          "at": 1789189345104,
+          "payload": [
+            "Close announcement"
+          ]
+        }
+      ],
+      "modalHintLabel": "关闭弹窗后自动继续翻译",
+      "modalProgress": {
+        "phase": "waiting",
+        "deferred": "7"
+      },
+      "bodyAfterClose": 10,
+      "passed": true,
+      "restored": true
+    },
+    {
+      "name": "aria-modal-priority-close-continues",
+      "requestStart": 10,
+      "firstRequests": [
+        {
+          "at": 1789189347290,
+          "payload": [
+            "Accessible announcement"
+          ]
+        },
+        {
+          "at": 1789189347493,
+          "payload": [
+            "This accessible announcement must take priority while it is visible."
+          ]
+        },
+        {
+          "at": 1789189347689,
+          "payload": [
+            "Close accessible announcement"
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "dynamic-aria-modal-during-in-flight",
+      "requestStart": 20,
+      "beforeOpenRequestCount": 21,
+      "requests": [
+        {
+          "at": 1789189349677,
+          "payload": [
+            "Modal first translation article"
+          ]
+        },
+        {
+          "at": 1789189349865,
+          "payload": [
+            "Dynamic announcement"
+          ]
+        },
+        {
+          "at": 1789189350059,
+          "payload": [
+            "A new announcement appeared while the article was being translated."
+          ]
+        },
+        {
+          "at": 1789189350260,
+          "payload": [
+            "Close dynamic announcement"
+          ]
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "ordinary-non-modal-does-not-block",
+      "passed": true
+    }
+  ],
+  "requests": [
+    {
+      "at": 1789189344703,
+      "payload": [
+        "Urgent native announcement"
+      ]
+    },
+    {
+      "at": 1789189344910,
+      "payload": [
+        "Please read this announcement before continuing the article."
+      ]
+    },
+    {
+      "at": 1789189345104,
+      "payload": [
+        "Close announcement"
+      ]
+    },
+    {
+      "at": 1789189345571,
+      "payload": [
+        "Modal first translation article"
+      ]
+    },
+    {
+      "at": 1789189345786,
+      "payload": [
+        "The article explains why an urgent announcement should be translated before the surrounding page."
+      ]
+    },
+    {
+      "at": 1789189345980,
+      "payload": [
+        "The remaining paragraphs continue after the announcement has been dismissed by the reader."
+      ]
+    },
+    {
+      "at": 1789189346179,
+      "payload": [
+        "This paragraph is intentionally separate so request ordering remains visible in the local provider log."
+      ]
+    },
+    {
+      "at": 1789189346373,
+      "payload": [
+        "This ordinary dialog is part of the page and must not block the article."
+      ]
+    },
+    {
+      "at": 1789189346579,
+      "payload": [
+        "Open translated announcement"
+      ]
+    },
+    {
+      "at": 1789189346770,
+      "payload": [
+        "Open dynamic announcement"
+      ]
+    },
+    {
+      "at": 1789189347290,
+      "payload": [
+        "Accessible announcement"
+      ]
+    },
+    {
+      "at": 1789189347493,
+      "payload": [
+        "This accessible announcement must take priority while it is visible."
+      ]
+    },
+    {
+      "at": 1789189347689,
+      "payload": [
+        "Close accessible announcement"
+      ]
+    },
+    {
+      "at": 1789189348138,
+      "payload": [
+        "Modal first translation article"
+      ]
+    },
+    {
+      "at": 1789189348365,
+      "payload": [
+        "The article explains why an urgent announcement should be translated before the surrounding page."
+      ]
+    },
+    {
+      "at": 1789189348569,
+      "payload": [
+        "The remaining paragraphs continue after the announcement has been dismissed by the reader."
+      ]
+    },
+    {
+      "at": 1789189348778,
+      "payload": [
+        "This paragraph is intentionally separate so request ordering remains visible in the local provider log."
+      ]
+    },
+    {
+      "at": 1789189348990,
+      "payload": [
+        "This ordinary dialog is part of the page and must not block the article."
+      ]
+    },
+    {
+      "at": 1789189349185,
+      "payload": [
+        "Open translated announcement"
+      ]
+    },
+    {
+      "at": 1789189349381,
+      "payload": [
+        "Open dynamic announcement"
+      ]
+    },
+    {
+      "at": 1789189349677,
+      "payload": [
+        "Modal first translation article"
+      ]
+    },
+    {
+      "at": 1789189349865,
+      "payload": [
+        "Dynamic announcement"
+      ]
+    },
+    {
+      "at": 1789189350059,
+      "payload": [
+        "A new announcement appeared while the article was being translated."
+      ]
+    },
+    {
+      "at": 1789189350260,
+      "payload": [
+        "Close dynamic announcement"
+      ]
+    },
+    {
+      "at": 1789189350710,
+      "payload": [
+        "The article explains why an urgent announcement should be translated before the surrounding page."
+      ]
+    },
+    {
+      "at": 1789189350911,
+      "payload": [
+        "The remaining paragraphs continue after the announcement has been dismissed by the reader."
+      ]
+    },
+    {
+      "at": 1789189351122,
+      "payload": [
+        "This paragraph is intentionally separate so request ordering remains visible in the local provider log."
+      ]
+    },
+    {
+      "at": 1789189351337,
+      "payload": [
+        "This ordinary dialog is part of the page and must not block the article."
+      ]
+    },
+    {
+      "at": 1789189351544,
+      "payload": [
+        "Open translated announcement"
+      ]
+    },
+    {
+      "at": 1789189351761,
+      "payload": [
+        "Open dynamic announcement"
+      ]
+    },
+    {
+      "at": 1789189352097,
+      "payload": [
+        "Modal first translation article"
+      ]
+    },
+    {
+      "at": 1789189352304,
+      "payload": [
+        "The article explains why an urgent announcement should be translated before the surrounding page."
+      ]
+    },
+    {
+      "at": 1789189352511,
+      "payload": [
+        "The remaining paragraphs continue after the announcement has been dismissed by the reader."
+      ]
+    },
+    {
+      "at": 1789189352739,
+      "payload": [
+        "This paragraph is intentionally separate so request ordering remains visible in the local provider log."
+      ]
+    },
+    {
+      "at": 1789189352936,
+      "payload": [
+        "This ordinary dialog is part of the page and must not block the article."
+      ]
+    },
+    {
+      "at": 1789189353139,
+      "payload": [
+        "Open translated announcement"
+      ]
+    },
+    {
+      "at": 1789189353339,
+      "payload": [
+        "Open dynamic announcement"
+      ]
+    }
+  ],
+  "screenshots": [
+    "native-modal-first.png",
+    "native-body-after-close.png",
+    "aria-modal-first.png",
+    "dynamic-modal-during-flight.png",
+    "ordinary-non-modal.png"
+  ],
+  "consoleErrors": [],
+  "unexpectedNetworkRequests": [],
+  "passed": true,
+  "evidenceLimit": "本地 mock provider 只证明扩展调度、请求顺序和浏览器 DOM 行为，不证明真实翻译服务质量。",
+  "finalDom": "\n    <article id=\"article\">\n      <h1 id=\"article-title\">Modal first translation article<span class=\"fluent-read-bilingual-content fluent-display-bold\" data-fr-translation-owned=\"true\" translate=\"no\" lang=\"zh-Hans\" dir=\"auto\">测试译文：Modal first translation article</span></h1>\n      <p id=\"body-one\">The article explains why an urgent announcement should be translated before the surrounding page.<span class=\"fluent-read-bilingual-content fluent-display-bold\" data-fr-translation-owned=\"true\" translate=\"no\" lang=\"zh-Hans\" dir=\"auto\">测试译文：The article explains why an urgent announcement should be translated before the surrounding page.</span></p>\n      <p id=\"body-two\">The remaining paragraphs continue after the announcement has been dismissed by the reader.<span class=\"fluent-read-bilingual-content fluent-display-bold\" data-fr-translation-owned=\"true\" translate=\"no\" lang=\"zh-Hans\" dir=\"auto\">测试译文：The remaining paragraphs continue after the announcement has been dismissed by the reader.</span></p>\n      <p id=\"body-three\">This paragraph is intentionally separate so request ordering remains visible in the local provider log.<span class=\"fluent-read-bilingual-content fluent-display-bold\" data-fr-translation-owned=\"true\" translate=\"no\" lang=\"zh-Hans\" dir=\"auto\">测试译文：This paragraph is intentionally separate so request ordering remains visible in the local provider log.</span></p>\n      <section id=\"ordinary-dialog\" role=\"dialog\" aria-label=\"Non modal information\">\n        <p id=\"ordinary-copy\">This ordinary dialog is part of the page and must not block the article.<span class=\"fluent-read-bilingual-content fluent-display-bold\" data-fr-translation-owned=\"true\" translate=\"no\" lang=\"zh-Hans\" dir=\"auto\">测试译文：This ordinary dialog is part of the page and must not block the article.</span></p>\n      </section>\n      <button id=\"open-aria\" type=\"button\">测试译文：Open translated announcement</button>\n      <button id=\"open-dynamic\" type=\"button\">测试译文：Open dynamic announcement</button>\n    </article>\n  "
+}

@@ -1,0 +1,324 @@
+{
+  "scope": "One gain=.003 JFK sample, one real Base q4 Node-hosted ORT Web WASM inference after exact production encodeVideoAiPcm16Base64/decodePcm16Base64 round trip; current FullCapture getAudio logic replay with actual codec-model output. No browser/WebGPU/extension message bridge/HLS/provider-translation acceptance. No audio/transcript redistribution.",
+  "sourceReports": [
+    {
+      "file": "/private/tmp/fluentread-x-ai-pcm16-lowgain-20261009/codec-input-report.json",
+      "sha256": "f7aaf722af6044c8cac082bf0b7fbd10c88f6ab2790c4383c7e14ad961607df1"
+    },
+    {
+      "file": "/private/tmp/fluentread-x-ai-pcm16-lowgain-20261009/jfk-codec-base-q4-report.json",
+      "sha256": "7865beeed5dbc2c15e2add3b5aaa5143a1bdd8bd474a6aba6485860d6ad0c2e7"
+    },
+    {
+      "file": "/private/tmp/fluentread-x-ai-pcm16-lowgain-20261009/jfk-codec-fullcapture-replay-report.json",
+      "sha256": "88121602da490afef259f0bac9eb71f0a27612fb07a0bbe961d2729844064355"
+    },
+    {
+      "file": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/jfk-lowgain-base-q4-report.json",
+      "sha256": "f9d107015571752f612c824a87f4aeb4c617fa5168d6156a76fed2dad9e7ab5c"
+    }
+  ],
+  "gain": 0.003,
+  "samples": 176000,
+  "sampleRate": 16000,
+  "durationMs": 11000,
+  "sourceFloat32": {
+    "file": "/private/tmp/fluentread-audio-gate-diagnostic-20261009/jfk-gain-0.003.f32le",
+    "bytes": 704000,
+    "sha256": "db07c91f275b46307eae44ebc5b01c04f6ad73857f9d02723dff6ec5c601d1d9"
+  },
+  "encodedPcm16": {
+    "bytes": 352000,
+    "sha256": "dd524ded969ae2091ab163921226b98ecd1cdbd5228954d504fed0c998e7fe5b",
+    "base64Characters": 469336
+  },
+  "modelFloat32Input": {
+    "file": "/private/tmp/fluentread-x-ai-pcm16-lowgain-20261009/jfk-gain-0.003-pcm16-roundtrip.f32le",
+    "bytes": 704000,
+    "sha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4",
+    "peak": 0.003326517529785633,
+    "zeroSamples": 24432
+  },
+  "clippedSourceSamples": 0,
+  "exactProductionAstExtraction": [
+    {
+      "name": "encodeVideoAiPcm16Base64",
+      "sourceFile": "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+      "sourceSha256": "8d09848dbeb4564a7e58229a5991f7c71a085feb5c02fb3c15347df31f51b409",
+      "extractedStatementSha256": "3a28e60070a9d61d07bd35979997fa1572d64b89d51ac0bfa5a018b83681bc75",
+      "startLine": 184,
+      "endLine": 200,
+      "exactAstStatementNoBodyChanges": true
+    },
+    {
+      "name": "MAX_WHISPER_AUDIO_SECONDS",
+      "sourceFile": "src/features/video-subtitle/offscreen/transcription.ts",
+      "sourceSha256": "2388cba63e532a2e4d7bf1bb5a19a9533ba5bc57107307acc4acf0a894fba4e6",
+      "extractedStatementSha256": "7650411154d0afbae77a2cd7afbcdb580f4f8f5a09d954ca695169b12cf91865",
+      "startLine": 94,
+      "endLine": 94,
+      "exactAstStatementNoBodyChanges": true
+    },
+    {
+      "name": "decodePcm16Base64",
+      "sourceFile": "src/features/video-subtitle/offscreen/transcription.ts",
+      "sourceSha256": "2388cba63e532a2e4d7bf1bb5a19a9533ba5bc57107307acc4acf0a894fba4e6",
+      "extractedStatementSha256": "a3355829519f9cac0cb3c1f2ce8f1ec8e9cda9106bc90dce01ed93d265958ac9",
+      "startLine": 262,
+      "endLine": 278,
+      "exactAstStatementNoBodyChanges": true
+    }
+  ],
+  "codecTranspiledSha256": "24c57ee7bd34afd195343fe90e540e847789b7408045d73353f4ef3e2980f020",
+  "numericalRepresentationSNR": {
+    "definition": "Not acoustic speech/background SNR. Old/new compare representation to unrounded original Float32 sample times gain=.003 in Float64.",
+    "oldFloat32": {
+      "signalRms": 0.0006028855296026259,
+      "errorRms": 1.531938220837556e-11,
+      "maxAbsError": 1.1548399909966367e-10,
+      "snrDb": 151.89987216875434
+    },
+    "newPcm16": {
+      "signalRms": 0.0006028855296026259,
+      "errorRms": 8.789096299270938e-06,
+      "maxAbsError": 1.525919605046511e-05,
+      "snrDb": 36.725812743531435
+    },
+    "codecErrorVsInputFloat32": {
+      "signalRms": 0.0006028855297708365,
+      "errorRms": 8.789096291242544e-06,
+      "maxAbsError": 1.5259196516126394e-05,
+      "snrDb": 36.725812753888995
+    }
+  },
+  "realInference": {
+    "backend": "wasm",
+    "threads": 1,
+    "libraries": {
+      "transformers": "3.8.1",
+      "onnxruntimeWeb": "1.23.2",
+      "onnxruntimeCommon": "1.23.2",
+      "defaultNativeOrtNotUsed": "1.21.0"
+    },
+    "dtypes": {
+      "encoder_model": "q4",
+      "decoder_model_merged": "q4"
+    },
+    "actualSessions": {
+      "model": {
+        "dtype": "q4",
+        "requestedDevice": "auto",
+        "executionProviders": [
+          "wasm"
+        ]
+      },
+      "decoder_model_merged": {
+        "dtype": "q4",
+        "requestedDevice": "auto",
+        "executionProviders": [
+          "wasm"
+        ]
+      }
+    },
+    "sessionOptions": {
+      "executionProviders": [
+        "wasm"
+      ],
+      "extra": {
+        "optimization": {
+          "disable_specified_optimizers": "QDQSelectorActionTransformer"
+        },
+        "session": {
+          "use_ort_model_bytes_directly": "1"
+        }
+      },
+      "enableCpuMemArena": false,
+      "enableMemPattern": false,
+      "executionMode": "sequential"
+    },
+    "inferenceHarnessSha256": "3fb24ead43089c1947ac24a0fe0a4f04f1539a2c1655cb56d10034da5550fdee",
+    "helpers": [
+      {
+        "file": "transcription.mjs",
+        "sha256": "a6128cd0914d901600539d45e893fc36dbed5661ee49befd4386dae20c44c496"
+      },
+      {
+        "file": "transcriptionOptions.mjs",
+        "sha256": "c6252a662623b115b606b43479e17b9ca19108cc33846844470cf29354336946"
+      }
+    ],
+    "originalAudioDurationMs": 11000,
+    "audioOffsetMs": 0,
+    "preparedAudioSamples": 176000,
+    "generationOptions": {
+      "return_timestamps": true,
+      "force_full_sequences": false,
+      "max_new_tokens": 77,
+      "do_sample": false,
+      "num_beams": 1,
+      "no_repeat_ngram_size": 8,
+      "language": "en",
+      "task": "transcribe"
+    },
+    "detectedLanguage": {
+      "language": "en",
+      "confidence": 0.9311492121586441
+    },
+    "wordCount": 22,
+    "wer": {
+      "errors": 0,
+      "referenceWords": 22,
+      "predictionWords": 22,
+      "rate": 0,
+      "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+    },
+    "textSha256": "0d851226f095dd0328ede6664926a966047e5701925629071f53daa29eea5d91",
+    "inferenceMsSingleObservation": 4014.9549160000006,
+    "exactRawTextMatchesPriorDirectFloat32": true,
+    "priorDirectFloat32Wer": {
+      "errors": 0,
+      "referenceWords": 22,
+      "predictionWords": 22,
+      "rate": 0,
+      "normalizer": "lowercase; replace Unicode punctuation/symbols with spaces; whitespace word split"
+    }
+  },
+  "controllerLogicReplay": {
+    "actualModelInputFloat32Sha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4",
+    "inputSourceFloat32Sha256": "db07c91f275b46307eae44ebc5b01c04f6ad73857f9d02723dff6ec5c601d1d9",
+    "transcribeCalls": [
+      {
+        "startMs": 0,
+        "durationMs": 11000,
+        "samples": 176000,
+        "encodedPcm16Bytes": 352000,
+        "modelInputSha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4"
+      }
+    ],
+    "finalPhase": "ready",
+    "finalProgress": {
+      "phase": "ready",
+      "progress": 1,
+      "capturedMs": 11000,
+      "durationMs": 11000,
+      "transcribedMs": 11000,
+      "windowIndex": 1,
+      "windowCount": 1,
+      "captureMode": "fast-decode"
+    },
+    "wordCount": 22,
+    "wer": {
+      "errors": 0,
+      "referenceWords": 22,
+      "predictionWords": 22,
+      "rate": 0
+    },
+    "finalTextSha256": "dfe1af694958a82c9d89d31bf0378075a10d40f715e670b6e5169042c8680cec",
+    "timelineChecks": {
+      "allFinitePositive": true,
+      "noSpokenOverlap": true,
+      "insidePcmBounds": true
+    },
+    "productionSources": [
+      {
+        "path": "src/features/video-subtitle/transcription.ts",
+        "sourceSha256": "813c7025cce6d42a27442d2bd281dfb9b8c49dd08fbcb60c3c035d9c35c722c2",
+        "transpiledSha256": "a6128cd0914d901600539d45e893fc36dbed5661ee49befd4386dae20c44c496"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+        "sourceSha256": "8d09848dbeb4564a7e58229a5991f7c71a085feb5c02fb3c15347df31f51b409",
+        "transpiledSha256": "b1acbfcc128db67e571392e8d277b3ffe6ed1c532d90efeab36d0d9154eae75c"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/streamingTranscript.ts",
+        "sourceSha256": "7c00e05e2d11d56639f68a54d2113cfc0d48727944e447d24088aefa6e0a3bb8",
+        "transpiledSha256": "45b64684befa04a94d6bd44bce7f83672efbe3442e40138c6045899a16c24226"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/cueTimeline.ts",
+        "sourceSha256": "c9ef561386208a9a5d1833aff25ff07c4b4132b754a4c97c27380f57321bf539",
+        "transpiledSha256": "a8771d288b02305fc3f78b839b13db08fecca418fea88761eb20da95de320eda"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/speechAlignment.ts",
+        "sourceSha256": "545d6f208fb3f4d775731406f278f5df115f86837910b324e9477267b5a0e2ee",
+        "transpiledSha256": "37f006801594762a2aff4f73177a14b141e957fd50125e75a34c5f2a5a65b39a"
+      },
+      {
+        "path": "src/features/video-subtitle/content/hlsAudio.ts",
+        "sourceSha256": "8a4239b481fd09d1d87e706ab52a9a974f471c0d63e07288b80f1090d08430d0",
+        "transpiledSha256": "f7d3fc3f43c2ce363349acbb3eecb6a88253354bb59338fa2ff56fa7ecbc11ad"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/fullCapture.ts",
+        "sourceSha256": "efe0327ae657da0089feda4855cff355f4b728766677f8831e4748107a2ed22c",
+        "transpiledSha256": "b3d4ee3ee1a4867aef29e6c11608bf0e03d0ec0a7ae38b203ec1d6469bc9382f"
+      }
+    ],
+    "replayHarnessSha256": "7c1671527dbe7cf00e301112cdfe4406dd7d85fe8d0e98d3d50539242bd03d5f"
+  },
+  "limit": "One controlled attenuated natural English reference clip supports this transport path only. It does not establish general weak-audio accuracy, noisy-video accuracy, browser backend equivalence, or original full-amplitude JFK PCM16 behavior.",
+  "finalControllerReplay": {
+    "success": true,
+    "sourceReport": {
+      "file": "/private/tmp/fluentread-x-ai-followup-final-replay-20261009/codec/jfk-codec-fullcapture-replay-report.json",
+      "sha256": "fef244178c0f665dd3cdb894b863ef97dd7d9dde42d32e01393c4235a844e8a8"
+    },
+    "productionSources": [
+      {
+        "path": "src/features/video-subtitle/transcription.ts",
+        "sourceSha256": "813c7025cce6d42a27442d2bd281dfb9b8c49dd08fbcb60c3c035d9c35c722c2",
+        "transpiledSha256": "a6128cd0914d901600539d45e893fc36dbed5661ee49befd4386dae20c44c496"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/audioWindow.ts",
+        "sourceSha256": "8d09848dbeb4564a7e58229a5991f7c71a085feb5c02fb3c15347df31f51b409",
+        "transpiledSha256": "b1acbfcc128db67e571392e8d277b3ffe6ed1c532d90efeab36d0d9154eae75c"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/streamingTranscript.ts",
+        "sourceSha256": "7c00e05e2d11d56639f68a54d2113cfc0d48727944e447d24088aefa6e0a3bb8",
+        "transpiledSha256": "45b64684befa04a94d6bd44bce7f83672efbe3442e40138c6045899a16c24226"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/cueTimeline.ts",
+        "sourceSha256": "c9ef561386208a9a5d1833aff25ff07c4b4132b754a4c97c27380f57321bf539",
+        "transpiledSha256": "a8771d288b02305fc3f78b839b13db08fecca418fea88761eb20da95de320eda"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/speechAlignment.ts",
+        "sourceSha256": "545d6f208fb3f4d775731406f278f5df115f86837910b324e9477267b5a0e2ee",
+        "transpiledSha256": "37f006801594762a2aff4f73177a14b141e957fd50125e75a34c5f2a5a65b39a"
+      },
+      {
+        "path": "src/features/video-subtitle/content/hlsAudio.ts",
+        "sourceSha256": "8a4239b481fd09d1d87e706ab52a9a974f471c0d63e07288b80f1090d08430d0",
+        "transpiledSha256": "f7d3fc3f43c2ce363349acbb3eecb6a88253354bb59338fa2ff56fa7ecbc11ad"
+      },
+      {
+        "path": "src/features/video-subtitle/content/video-ai/fullCapture.ts",
+        "sourceSha256": "b50ebe9ccea57971a8aad363996f8b3d9168b1277dae8a288446c417c40963ff",
+        "transpiledSha256": "665a17e885d46b11847c69d618474588c77d670f9f2c33e357b89da73b03c23f"
+      }
+    ],
+    "transcribeCalls": [
+      {
+        "startMs": 0,
+        "durationMs": 11000,
+        "samples": 176000,
+        "encodedPcm16Bytes": 352000,
+        "modelInputSha256": "0af4a923fab3f9f50220dcc5e274285e86a72c43375fc1a92a61603c2899c1e4"
+      }
+    ],
+    "finalPhase": "ready",
+    "finalWordCount": 22,
+    "finalWer": 0,
+    "finalTextSha256": "dfe1af694958a82c9d89d31bf0378075a10d40f715e670b6e5169042c8680cec",
+    "timelineChecks": {
+      "allFinitePositive": true,
+      "noSpokenOverlap": true,
+      "insidePcmBounds": true
+    }
+  }
+}

@@ -1,0 +1,2686 @@
+{
+  "hero": [
+    {
+      "label": "zh-1280",
+      "brandCenterDelta": 0,
+      "collisionPairs": [],
+      "greetings": [
+        {
+          "display": "block",
+          "h": 60.40045166015625,
+          "lang": "en",
+          "text": "Hello",
+          "w": 88.68719482421875,
+          "x": 950.2775268554688,
+          "y": 92.99232482910156
+        },
+        {
+          "display": "block",
+          "h": 59.6712646484375,
+          "lang": "zh-CN",
+          "text": "你好",
+          "w": 80.35186767578125,
+          "x": 292.2225036621094,
+          "y": 610.4600219726562
+        },
+        {
+          "display": "block",
+          "h": 62.5228271484375,
+          "lang": "fr",
+          "text": "Bonjour",
+          "w": 112.94608306884766,
+          "x": 125.8863296508789,
+          "y": 140.19618225097656
+        },
+        {
+          "display": "block",
+          "h": 59.94769287109375,
+          "lang": "es",
+          "text": "Hola",
+          "w": 83.51165771484375,
+          "x": 138.62698364257812,
+          "y": 521.3020629882812
+        },
+        {
+          "display": "block",
+          "h": 53.74346923828125,
+          "lang": "ja",
+          "text": "こんにちは",
+          "w": 111.467529296875,
+          "x": 1080.6724853515625,
+          "y": 619.37890625
+        },
+        {
+          "display": "block",
+          "h": 52.9202880859375,
+          "lang": "ko",
+          "text": "안녕하세요",
+          "w": 102.05809020996094,
+          "x": 23.842050552368164,
+          "y": 642.294677734375
+        },
+        {
+          "display": "block",
+          "h": 58.98582458496094,
+          "lang": "de",
+          "text": "Hallo",
+          "w": 87.59564208984375,
+          "x": 305.4404602050781,
+          "y": 97.678955078125
+        },
+        {
+          "display": "block",
+          "h": 57.88006591796875,
+          "lang": "pt",
+          "text": "Olá",
+          "w": 71.78271484375,
+          "x": 1133.194580078125,
+          "y": 96.04019165039062
+        },
+        {
+          "display": "block",
+          "h": 60.56187438964844,
+          "lang": "ru",
+          "text": "Привет",
+          "w": 110.1343994140625,
+          "x": 774.7960815429688,
+          "y": 94.2165985107422
+        },
+        {
+          "display": "block",
+          "h": 58.881744384765625,
+          "lang": "ar",
+          "text": "مرحبا",
+          "w": 86.10708618164062,
+          "x": 75.04020690917969,
+          "y": 203.18475341796875
+        }
+      ],
+      "heroTitle": "流畅阅读",
+      "navLeftDelta": 0,
+      "ornamentCollisions": [],
+      "protectedCollisions": [],
+      "viewport": [
+        1280,
+        720
+      ],
+      "widthOverflow": 0
+    },
+    {
+      "label": "zh-840",
+      "brandCenterDelta": 0,
+      "collisionPairs": [],
+      "greetings": [
+        {
+          "display": "block",
+          "h": 41.86469268798828,
+          "lang": "en",
+          "text": "Hello",
+          "w": 63.2625732421875,
+          "x": 711.0288696289062,
+          "y": 84.05116271972656
+        },
+        {
+          "display": "block",
+          "h": 41.316558837890625,
+          "lang": "zh-CN",
+          "text": "你好",
+          "w": 56.99749755859375,
+          "x": 384.8996887207031,
+          "y": 86.3260498046875
+        },
+        {
+          "display": "block",
+          "h": 43.34020233154297,
+          "lang": "fr",
+          "text": "Bonjour",
+          "w": 80.12788391113281,
+          "x": 40.545433044433594,
+          "y": 88.55817413330078
+        },
+        {
+          "display": "block",
+          "h": 41.544677734375,
+          "lang": "es",
+          "text": "Hola",
+          "w": 59.60471725463867,
+          "x": 40.5062370300293,
+          "y": 671.5548706054688
+        },
+        {
+          "display": "block",
+          "h": 40.357421875,
+          "lang": "ja",
+          "text": "こんにちは",
+          "w": 85.58203125,
+          "x": 722.115234375,
+          "y": 673.2900390625
+        },
+        {
+          "display": "block",
+          "h": 39.7105712890625,
+          "lang": "ko",
+          "text": "안녕하세요",
+          "w": 78.18846130371094,
+          "x": 40.6948356628418,
+          "y": 722.043212890625
+        },
+        {
+          "display": "block",
+          "h": 40.851318359375,
+          "lang": "de",
+          "text": "Hallo",
+          "w": 62.495330810546875,
+          "x": 40.79139709472656,
+          "y": 141.5587158203125
+        },
+        {
+          "display": "block",
+          "h": 40.076904296875,
+          "lang": "pt",
+          "text": "Olá",
+          "w": 51.4207763671875,
+          "x": 638.6060180664062,
+          "y": 720.110107421875
+        },
+        {
+          "display": "block",
+          "h": 41.93470764160156,
+          "lang": "ru",
+          "text": "Привет",
+          "w": 77.98876953125,
+          "x": 704.404052734375,
+          "y": 142.2609100341797
+        },
+        {
+          "display": "block",
+          "h": 40.74176025390625,
+          "lang": "ar",
+          "text": "مرحبا",
+          "w": 60.9288330078125,
+          "x": 343.18792724609375,
+          "y": 137.00411987304688
+        }
+      ],
+      "heroTitle": "流畅阅读",
+      "navLeftDelta": 0,
+      "ornamentCollisions": [],
+      "protectedCollisions": [],
+      "viewport": [
+        840,
+        900
+      ],
+      "widthOverflow": 0
+    },
+    {
+      "label": "zh-320",
+      "brandCenterDelta": 0.00390625,
+      "collisionPairs": [],
+      "greetings": [
+        {
+          "display": "block",
+          "h": 41.86469268798828,
+          "lang": "en",
+          "text": "Hello",
+          "w": 63.26261901855469,
+          "x": 232.6304168701172,
+          "y": 71.82718658447266
+        },
+        {
+          "display": "block",
+          "h": 41.31656646728515,
+          "lang": "zh-CN",
+          "text": "你好",
+          "w": 56.99749755859375,
+          "x": 145.69656372070312,
+          "y": 74.67538452148438
+        },
+        {
+          "display": "block",
+          "h": 43.3402099609375,
+          "lang": "fr",
+          "text": "Bonjour",
+          "w": 80.12788391113281,
+          "x": 14.54543399810791,
+          "y": 76.41258239746094
+        },
+        {
+          "display": "block",
+          "h": 41.544677734375,
+          "lang": "es",
+          "text": "Hola",
+          "w": 59.60471725463867,
+          "x": 14.50623607635498,
+          "y": 658.7215576171875
+        },
+        {
+          "display": "block",
+          "h": 40.35736083984375,
+          "lang": "ja",
+          "text": "こんにちは",
+          "w": 85.58209228515625,
+          "x": 222.91207885742188,
+          "y": 660.2035522460938
+        },
+        {
+          "display": "block",
+          "h": 39.71051025390625,
+          "lang": "ko",
+          "text": "안녕하세요",
+          "w": 78.18846130371094,
+          "x": 14.69483470916748,
+          "y": 709.3892822265625
+        },
+        {
+          "display": "block",
+          "h": 40.851318359375,
+          "lang": "de",
+          "text": "Hallo",
+          "w": 62.495330810546875,
+          "x": 14.79139804840088,
+          "y": 129.16709899902344
+        },
+        {
+          "display": "block",
+          "h": 40.076904296875,
+          "lang": "pt",
+          "text": "Olá",
+          "w": 51.42082214355469,
+          "x": 212.2075653076172,
+          "y": 706.5621948242188
+        },
+        {
+          "display": "block",
+          "h": 41.934722900390625,
+          "lang": "ru",
+          "text": "Привет",
+          "w": 77.98875427246094,
+          "x": 220.8025054931641,
+          "y": 130.35577392578125
+        },
+        {
+          "display": "block",
+          "h": 40.74177551269531,
+          "lang": "ar",
+          "text": "مرحبا",
+          "w": 60.9288330078125,
+          "x": 129.98480224609375,
+          "y": 125.02696228027344
+        }
+      ],
+      "heroTitle": "流畅阅读",
+      "navLeftDelta": 0,
+      "ornamentCollisions": [],
+      "protectedCollisions": [],
+      "viewport": [
+        320,
+        760
+      ],
+      "widthOverflow": 0
+    },
+    {
+      "label": "en-390",
+      "brandCenterDelta": 0.00390625,
+      "collisionPairs": [],
+      "greetings": [
+        {
+          "display": "block",
+          "h": 41.86469268798828,
+          "lang": "en",
+          "text": "Hello",
+          "w": 63.26263427734375,
+          "x": 297.0288391113281,
+          "y": 72.56709289550781
+        },
+        {
+          "display": "block",
+          "h": 41.316558837890625,
+          "lang": "zh-CN",
+          "text": "你好",
+          "w": 56.99749755859375,
+          "x": 177.89968872070312,
+          "y": 73.61798095703125
+        },
+        {
+          "display": "block",
+          "h": 43.3402099609375,
+          "lang": "fr",
+          "text": "Bonjour",
+          "w": 80.12788391113281,
+          "x": 18.045433044433594,
+          "y": 76.6921157836914
+        },
+        {
+          "display": "block",
+          "h": 41.544677734375,
+          "lang": "es",
+          "text": "Hola",
+          "w": 59.60472106933594,
+          "x": 18.006235122680664,
+          "y": 690.4865112304688
+        },
+        {
+          "display": "block",
+          "h": 40.35736083984375,
+          "lang": "ja",
+          "text": "こんにちは",
+          "w": 85.58209228515625,
+          "x": 290.1152038574219,
+          "y": 692.6500854492188
+        },
+        {
+          "display": "block",
+          "h": 39.7105712890625,
+          "lang": "ko",
+          "text": "안녕하세요",
+          "w": 78.18846130371094,
+          "x": 18.194833755493164,
+          "y": 740.5831909179688
+        },
+        {
+          "display": "block",
+          "h": 40.851318359375,
+          "lang": "de",
+          "text": "Hallo",
+          "w": 62.495330810546875,
+          "x": 18.291399002075195,
+          "y": 130.1387176513672
+        },
+        {
+          "display": "block",
+          "h": 40.076904296875,
+          "lang": "pt",
+          "text": "Olá",
+          "w": 51.42083740234375,
+          "x": 269.6059875488281,
+          "y": 740.1990356445312
+        },
+        {
+          "display": "block",
+          "h": 41.934722900390625,
+          "lang": "ru",
+          "text": "Привет",
+          "w": 77.98876953125,
+          "x": 285.904052734375,
+          "y": 129.97198486328125
+        },
+        {
+          "display": "block",
+          "h": 40.74177551269531,
+          "lang": "ar",
+          "text": "مرحبا",
+          "w": 60.9288330078125,
+          "x": 158.68792724609375,
+          "y": 125.0750732421875
+        }
+      ],
+      "heroTitle": "FluentRead",
+      "navLeftDelta": 0,
+      "ornamentCollisions": [],
+      "protectedCollisions": [],
+      "viewport": [
+        390,
+        844
+      ],
+      "widthOverflow": 0
+    }
+  ],
+  "demo": [
+    {
+      "label": "en-390",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 1,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 1,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 2,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 2,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-sentence-card fd-reveal",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 3,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 3,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 4,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 4,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 5,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 5,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 6,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 6,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 7,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 7,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 8,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 8,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 304,
+          "x": 43,
+          "y": 97.2734375
+        }
+      ]
+    },
+    {
+      "label": "en-390",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5520,
+      "pageWidth": 390,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 466,
+        "w": 342,
+        "x": 24,
+        "y": -19.7265625
+      },
+      "rows": [
+        {
+          "height": 807.34375,
+          "kind": "webpage",
+          "top": 795.3828125
+        },
+        {
+          "height": 769.546875,
+          "kind": "selection",
+          "top": 1602.7265625
+        },
+        {
+          "height": 769.546875,
+          "kind": "document",
+          "top": 2372.2734375
+        },
+        {
+          "height": 769.546875,
+          "kind": "image",
+          "top": 3141.8203125
+        },
+        {
+          "height": 869.34375,
+          "kind": "video",
+          "top": 3911.3671875
+        }
+      ],
+      "scrollY": 1881,
+      "stage": {
+        "h": 364,
+        "w": 340,
+        "x": 25,
+        "y": 33.2734375
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        390,
+        844
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 1,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 1,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 2,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 2,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-sentence-card fd-reveal",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 3,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 3,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 4,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 4,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 5,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 5,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 6,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 6,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 7,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 7,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 8,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 8,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 261.0859375,
+          "w": 420,
+          "x": 661.75,
+          "y": 47.59375
+        }
+      ]
+    },
+    {
+      "label": "zh-1280",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 4215,
+      "pageWidth": 1280,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 456,
+        "w": 652.5,
+        "x": 545.5,
+        "y": -71.40625
+      },
+      "rows": [
+        {
+          "height": 585,
+          "kind": "webpage",
+          "top": 730.09375
+        },
+        {
+          "height": 585,
+          "kind": "selection",
+          "top": 1315.09375
+        },
+        {
+          "height": 585,
+          "kind": "document",
+          "top": 1900.09375
+        },
+        {
+          "height": 585,
+          "kind": "image",
+          "top": 2485.09375
+        },
+        {
+          "height": 585,
+          "kind": "video",
+          "top": 3070.09375
+        }
+      ],
+      "scrollY": 1450.5,
+      "stage": {
+        "h": 354,
+        "w": 650.5,
+        "x": 546.5,
+        "y": -18.40625
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 1,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 1,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": []
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 2,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 2,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-sentence-card fd-reveal",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 3,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 3,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 4,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 4,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 5,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 5,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-structure-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 6,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 6,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 7,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 7,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 8,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 8,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": [
+        {
+          "class": "fd-selection-card fd-word-card",
+          "h": 260.3984375,
+          "w": 250,
+          "x": 35,
+          "y": 35.578125
+        }
+      ]
+    },
+    {
+      "label": "zh-320",
+      "requestedPhase": 0,
+      "explanationBottomOverflow": 0,
+      "pageHeight": 5413,
+      "pageWidth": 320,
+      "partLabelOverflow": [
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        },
+        {
+          "height": 0,
+          "width": 0
+        }
+      ],
+      "playing": "true",
+      "root": {
+        "h": 486,
+        "w": 280,
+        "x": 20,
+        "y": -81.421875
+      },
+      "rows": [
+        {
+          "height": 761.796875,
+          "kind": "webpage",
+          "top": 762.984375
+        },
+        {
+          "height": 761.796875,
+          "kind": "selection",
+          "top": 1524.78125
+        },
+        {
+          "height": 789.546875,
+          "kind": "document",
+          "top": 2286.578125
+        },
+        {
+          "height": 761.796875,
+          "kind": "image",
+          "top": 3076.125
+        },
+        {
+          "height": 878.1953125,
+          "kind": "video",
+          "top": 3837.921875
+        }
+      ],
+      "scrollY": 1837,
+      "stage": {
+        "h": 384,
+        "w": 278,
+        "x": 21,
+        "y": -28.421875
+      },
+      "stageOverflow": 0,
+      "step": 0,
+      "viewport": [
+        320,
+        760
+      ],
+      "visibleCards": []
+    }
+  ],
+  "keyboard": {
+    "playing": "false",
+    "pressed": [
+      {
+        "pressed": "false",
+        "text": "A good book主语名词短语"
+      },
+      {
+        "pressed": "true",
+        "text": "opens谓语动词"
+      },
+      {
+        "pressed": "false",
+        "text": "a new world.宾语名词短语"
+      }
+    ],
+    "step": "4"
+  }
+}

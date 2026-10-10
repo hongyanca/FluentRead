@@ -1,32 +1,71 @@
 /**
  * @file src/features/selection-translation/background/offscreenAdapter.ts
  * 文件职责：把划词 TTS 的播放、停止及路由信息转换为平台 Offscreen 消息，并验证隔离文档是否接受了对应音频请求。
- * 主要内容：定义 SelectionTtsOffscreenResponse，提供 createSelectionTtsOffscreenAdapter 和默认实例，发送 play/stop 消息时携带 tabId 与 clientRequestId 防止旧状态串扰。
+ * 主要内容：定义响应与默认适配器，先读取接收端实例/版本、领取一次性播放许可，再携带本地 AbortSignal 发送 PLAY；仅在实例重建后有限重领，停止和 5 秒跳转携带稳定路由；跳转仅连接已有播放器。
  * 模块边界：适配器不合成音频、不创建 Audio 或 Offscreen document；音频资源生命周期归 offscreen 应用，Edge/Google TTS 获取归 handler/services，平台 client 负责文档创建与复用。
  */
+import {extensionDomClient} from '@/src/platform/offscreen/extensionClient';
+import {parseSelectionTtsRoute} from '@/src/features/selection-translation/protocol';
 import type {
     SelectionTtsPlaybackRequest,
     SelectionTtsRoute,
 } from '@/src/features/selection-translation/protocol';
 import {
-    chromeOffscreenClient,
     type OffscreenClient,
 } from '@/src/platform/offscreen/client';
 
 interface SelectionTtsOffscreenResponse {
     readonly success?: boolean;
     readonly error?: string;
+    readonly seeked?: boolean;
+    readonly revision?: string;
+    readonly playbackToken?: string;
+    readonly conflict?: boolean;
+    readonly receiverId?: string;
+    readonly errorCode?: string;
 }
 
 /** TTS 消息始终携带 {tabId, clientRequestId}，不依赖可重启 worker 的内存。 */
-export function createSelectionTtsOffscreenAdapter(client: OffscreenClient = chromeOffscreenClient) {
+export function createSelectionTtsOffscreenAdapter(client: OffscreenClient = extensionDomClient) {
     return {
-        async play(payload: SelectionTtsPlaybackRequest): Promise<void> {
-            const response = await client.send<SelectionTtsOffscreenResponse>({
-                type: 'PLAY_SELECTION_TTS',
-                ...payload,
-            });
-            if (!response?.success) throw new Error(response?.error || 'Offscreen TTS 播放失败');
+        async play(payload: SelectionTtsPlaybackRequest, signal?: AbortSignal): Promise<void> {
+            const route = parseSelectionTtsRoute(payload);
+            const options = {signal, cancelMessage: {type: 'STOP_SELECTION_TTS', ...route}};
+            const checkCancelled = () => {
+                if (!signal?.aborted) return;
+                const error = new Error('Offscreen 请求已取消');
+                error.name = 'AbortError';
+                throw error;
+            };
+            // READ 无副作用；RESERVE 是 compare-and-swap，STOP/新许可会推进版本。
+            // 不保存 cancelled UUID 列表。总共最多尝试三次；取消后绝不重领。
+            for (let attempt = 0; attempt < 3; attempt += 1) {
+                checkCancelled();
+                const snapshot = await client.send<SelectionTtsOffscreenResponse>({type: 'READ_SELECTION_TTS_REVISION'}, options);
+                checkCancelled();
+                if (!snapshot?.success || typeof snapshot.revision !== 'string' || typeof snapshot.receiverId !== 'string') {
+                    throw new Error(snapshot?.error || 'Offscreen TTS 播放许可不可用');
+                }
+                const reservation = await client.send<SelectionTtsOffscreenResponse>({
+                    type: 'RESERVE_SELECTION_TTS', ...route, expectedRevision: snapshot.revision,
+                }, options);
+                checkCancelled();
+                if (reservation?.conflict) continue;
+                if (!reservation?.success || typeof reservation.playbackToken !== 'string') {
+                    throw new Error(reservation?.error || 'Offscreen TTS 播放许可不可用');
+                }
+                const response = await client.send<SelectionTtsOffscreenResponse>({
+                    type: 'PLAY_SELECTION_TTS', ...payload, playbackToken: reservation.playbackToken,
+                }, options);
+                checkCancelled();
+                // 重建后的新接收端拒绝旧 token；只有确认实例变化且尚未进入 Audio
+                // 时才重领。同实例的 STOP/消费/竞争失效及真实播放错误都立即结束。
+                if (response?.errorCode === 'selection-tts-permit-invalid'
+                    && typeof response.receiverId === 'string' && response.receiverId !== snapshot.receiverId) continue;
+                if (!response?.success) throw new Error(response?.error || 'Offscreen TTS 播放失败');
+                return;
+            }
+            throw new Error('语音播放未能启动，请重试');
         },
 
         async stop(route: SelectionTtsRoute): Promise<void> {
@@ -35,6 +74,14 @@ export function createSelectionTtsOffscreenAdapter(client: OffscreenClient = chr
                 ...route,
             });
             if (response && !response.success) throw new Error(response.error || 'Offscreen TTS 停止失败');
+        },
+
+        async seek(route: SelectionTtsRoute, offsetSeconds: -5 | 5): Promise<boolean> {
+            const response = await client.sendIfPresent<SelectionTtsOffscreenResponse>({
+                type: 'SEEK_SELECTION_TTS', ...route, offsetSeconds,
+            });
+            if (response && !response.success) throw new Error(response.error || '语音跳转失败');
+            return response?.seeked === true;
         },
     };
 }

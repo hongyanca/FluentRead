@@ -1,0 +1,244 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-skip-time-dynamic-numbers-20261003/.output/chrome-mv3",
+  "evidenceBoundary": "Production extension, isolated real Edge, deterministic local Microsoft transport; no live-provider or Firefox runtime claims.",
+  "cases": [
+    {
+      "mode": "bilingual",
+      "continuouslyChangingRequests": 0,
+      "settledRequests": 1,
+      "running": {
+        "sameNeighbor": true,
+        "lastSamples": [
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          }
+        ],
+        "clicks": 1,
+        "duplicates": 0
+      },
+      "restoreRetranslate": true
+    },
+    {
+      "mode": "single",
+      "continuouslyChangingRequests": 0,
+      "settledRequests": 1,
+      "running": {
+        "sameNeighbor": true,
+        "lastSamples": [
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          },
+          {
+            "counterArtifacts": 0,
+            "changingArtifacts": 0
+          }
+        ],
+        "clicks": 1,
+        "duplicates": 0
+      },
+      "restoreRetranslate": true
+    },
+    {
+      "mode": "hover",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "durationArtifacts": 0,
+      "neighborArtifacts": 0
+    }
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 4664,
+      "name": "GoLand"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "payloads": [
+    [
+      "Dynamic source fixture"
+    ],
+    [
+      "The task takes 5 minutes and processes 123 records."
+    ],
+    [
+      "Readers can continue reading this stable neighboring paragraph."
+    ],
+    [
+      "Visitors: 100"
+    ],
+    [
+      "Processing the first section."
+    ],
+    [
+      "This stable paragraph includes",
+      "records and a timer"
+    ],
+    [
+      "The processing task is now complete."
+    ],
+    [
+      "A newly published article is ready."
+    ],
+    [
+      "Dynamic source fixture"
+    ],
+    [
+      "The task takes 5 minutes and processes 123 records."
+    ],
+    [
+      "Readers can continue reading this stable neighboring paragraph."
+    ],
+    [
+      "A newly published article is ready."
+    ],
+    [
+      "The processing task is now complete."
+    ],
+    [
+      "This stable paragraph includes",
+      "records and a timer"
+    ],
+    [
+      "Dynamic source fixture"
+    ],
+    [
+      "The task takes 5 minutes and processes 123 records."
+    ],
+    [
+      "Readers can continue reading this stable neighboring paragraph."
+    ],
+    [
+      "Visitors: 100"
+    ],
+    [
+      "Processing the first section."
+    ],
+    [
+      "This stable paragraph includes",
+      "records and a timer"
+    ],
+    [
+      "The processing task is now complete."
+    ],
+    [
+      "A newly published article is ready."
+    ],
+    [
+      "Dynamic source fixture"
+    ],
+    [
+      "The task takes 5 minutes and processes 123 records."
+    ],
+    [
+      "Readers can continue reading this stable neighboring paragraph."
+    ],
+    [
+      "A newly published article is ready."
+    ],
+    [
+      "The processing task is now complete."
+    ],
+    [
+      "This stable paragraph includes",
+      "records and a timer"
+    ],
+    [
+      "The task takes 5 minutes and processes 123 records."
+    ]
+  ]
+}

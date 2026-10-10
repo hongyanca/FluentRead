@@ -1,0 +1,27 @@
+
+> FluentRead-流畅阅读@0.0.35 test:coverage /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run --config vitest.coverage.config.ts "tests/featureTranslationServices.test.ts" "tests/optionsNavigation.test.ts" "--coverage.include=src/core/config/featureServices.ts" "--coverage.include=src/features/settings/model/navigation.ts" "--coverage.reportsDirectory=/private/tmp/fr-settings-merge-coverage"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run --config vitest.coverage.config.ts tests/featureTranslationServices.test.ts tests/optionsNavigation.test.ts --coverage.include=src/core/config/featureServices.ts --coverage.include=src/features/settings/model/navigation.ts --coverage.reportsDirectory=/private/tmp/fr-settings-merge-coverage
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+      Coverage enabled with v8
+
+ ✓ tests/optionsNavigation.test.ts (24 tests) 8ms
+ ✓ tests/featureTranslationServices.test.ts (5 tests) 14ms
+
+ Test Files  2 passed (2)
+      Tests  29 passed (29)
+   Start at  13:04:18
+   Duration  883ms (transform 246ms, setup 0ms, collect 360ms, tests 22ms, environment 0ms, prepare 81ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |     100 |     100 |
+ core/config       |     100 |      100 |     100 |     100 |
+  ...reServices.ts |     100 |      100 |     100 |     100 |
+ ...settings/model |     100 |      100 |     100 |     100 |
+  navigation.ts    |     100 |      100 |     100 |     100 |
+-------------------|---------|----------|---------|---------|-------------------

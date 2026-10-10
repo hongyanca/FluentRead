@@ -1,0 +1,427 @@
+{
+  "ok": true,
+  "suite": "popup-quick-settings-focused",
+  "artifactKind": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-quick-settings-20260912/.output/chrome-mv3",
+  "artifactsDir": "/private/tmp/fluentread-popup-quick-settings-merge",
+  "browser": "Microsoft Edge",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-popup-quick-settings-edge-KuPOQI",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 2127,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 2127,
+      "name": "Google Chrome"
+    }
+  },
+  "manifest": {
+    "manifest_version": 3,
+    "name": "FluentRead-流畅阅读",
+    "description": "An open-source browser extension for bilingual translation. 一款开源的浏览器双语翻译插件。",
+    "version": "0.0.32",
+    "icons": {
+      "16": "icon/16.png",
+      "32": "icon/32.png",
+      "48": "icon/48.png",
+      "64": "icon/64.png",
+      "128": "icon/128.png",
+      "256": "icon/256.png",
+      "512": "icon/512.png"
+    },
+    "permissions": [
+      "storage",
+      "unlimitedStorage",
+      "alarms",
+      "contextMenus",
+      "offscreen"
+    ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+    },
+    "host_permissions": [
+      "<all_urls>",
+      "https://translate.google.com/*",
+      "https://translate.google.co.uk/*",
+      "https://translate.googleapis.com/*",
+      "https://dev.microsofttranslator.com/*",
+      "https://*.tts.speech.microsoft.com/*",
+      "https://deeplx.1stg.me/*",
+      "https://freeapi.fanyimao.cn/*",
+      "https://api.deeplx.org/*",
+      "http://localhost/*",
+      "http://127.0.0.1/*",
+      "http://*/*",
+      "https://*/*"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "icon/32.png",
+          "icon/48.png",
+          "icon/128.png"
+        ],
+        "matches": [
+          "<all_urls>"
+        ],
+        "use_dynamic_url": true
+      },
+      {
+        "resources": [
+          "content-scripts/content.css"
+        ],
+        "use_dynamic_url": true,
+        "matches": [
+          "<all_urls>"
+        ]
+      },
+      {
+        "resources": [
+          "content-scripts/qqMailFrame.css"
+        ],
+        "use_dynamic_url": true,
+        "matches": [
+          "https://mail.qq.com/*"
+        ]
+      }
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_title": "FluentRead-流畅阅读",
+      "default_popup": "popup.html"
+    },
+    "options_ui": {
+      "open_in_tab": true,
+      "page": "options.html"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "run_at": "document_end",
+        "js": [
+          "content-scripts/content.js"
+        ]
+      },
+      {
+        "matches": [
+          "https://mail.qq.com/cgi-bin/readmail*"
+        ],
+        "all_frames": true,
+        "run_at": "document_end",
+        "js": [
+          "content-scripts/qqMailFrame.js"
+        ]
+      },
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "run_at": "document_start",
+        "js": [
+          "content-scripts/shadowBridge.js"
+        ],
+        "world": "MAIN"
+      },
+      {
+        "matches": [
+          "*://*.twitter.com/*",
+          "*://*.x.com/*",
+          "*://twitter.com/*",
+          "*://x.com/*"
+        ],
+        "run_at": "document_start",
+        "js": [
+          "content-scripts/xVideoBridge.js"
+        ],
+        "world": "MAIN"
+      },
+      {
+        "matches": [
+          "*://*.youtube.com/*",
+          "*://youtube.com/*"
+        ],
+        "run_at": "document_start",
+        "js": [
+          "content-scripts/youtubeBridge.js"
+        ],
+        "world": "MAIN"
+      }
+    ]
+  },
+  "layout": {
+    "popup": {
+      "width": 360,
+      "height": 528,
+      "scrollWidth": 360,
+      "clientWidth": 360,
+      "horizontalOverflow": false,
+      "featureIds": [
+        "hover",
+        "selection",
+        "appearance",
+        "image",
+        "area",
+        "video",
+        "document"
+      ],
+      "duplicateIds": [],
+      "unlabeledControls": []
+    },
+    "optionsNarrow": {
+      "width": 390,
+      "scrollWidth": 390,
+      "overflow": false
+    }
+  },
+  "caseCoverage": {
+    "drawers": {
+      "hover": {
+        "text": "快捷设置鼠标悬停翻译设置把鼠标停在文本上，用轻量快捷键获取即时译文。×↖＋Alt+J＝即时翻译默认悬浮快捷键关闭后不再使用默认快捷键触发关闭悬停翻译设置快捷键与独立翻译方案↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 312.1484375,
+          "scrollHeight": 314,
+          "clientHeight": 314,
+          "width": 320
+        }
+      },
+      "selection": {
+        "text": "快捷设置划词翻译设置选中网页文字，按你的偏好获取译文。×选择文字＋Alt+K＝翻译所选内容划词翻译关闭双语显示仅译文单词本开启后可从单词学习卡收藏并复习›划词翻译设置触发方式、显示延迟与朗读声音↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 381.1484375,
+          "scrollHeight": 383,
+          "clientHeight": 383,
+          "width": 320
+        }
+      },
+      "appearance": {
+        "text": "快捷设置译文显示设置双语对照保留原文，仅译文专注阅读翻译。×翻译模式仅译文模式双语对照模式译文显示设置更多样式与阅读偏好↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 223.1484375,
+          "scrollHeight": 234,
+          "clientHeight": 234,
+          "width": 320
+        }
+      },
+      "image": {
+        "text": "快捷设置图片翻译设置把鼠标移到图片上，从图片左下角打开翻译入口。×文字文悬停图片显示翻译入口点击图片左下角的小图标即可识别并翻译图片文字启用图片翻译在网页图片左下角显示“翻译”按钮图片翻译设置文字识别与翻译偏好↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 330.1484375,
+          "scrollHeight": 332,
+          "clientHeight": 332,
+          "width": 320
+        }
+      },
+      "area": {
+        "text": "快捷设置圈选翻译设置截取页面中的一块文字，在结果面板中核对原文和译文。×启用圈选翻译翻译图片或无法直接选中的页面文字ShiftZ＋＝翻译选中区域按 Shift + Z 后拖拽页面区域，释放鼠标后识别并翻译；按 Esc 可取消或关闭结果。兼容微软、免费翻译等服务。仅翻译 OCR 识别出的文字；识别错误、断行和复杂版面可能影响译文质量。圈选翻译设置识别方式与翻译服务↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 394.5390625,
+          "scrollHeight": 397,
+          "clientHeight": 397,
+          "width": 320
+        }
+      },
+      "video": {
+        "text": "快捷设置视频字幕设置翻译 YouTube/X 字幕，或在 X 本地生成字幕。×字幕翻译翻译 YouTube / X 的视频字幕字幕显示模式双语仅译文仅原文在播放器的字幕菜单中，可显示或隐藏字幕、下载原文或译文；支持的 X 视频还可生成本地 AI 字幕。视频翻译设置翻译服务、字幕外观与本地 AI↗",
+        "settingsRoute": true,
+        "layout": {
+          "height": 354.3359375,
+          "scrollHeight": 356,
+          "clientHeight": 356,
+          "width": 320
+        }
+      }
+    },
+    "settingsLinks": {
+      "hover": "#settings-translation",
+      "selection": "#settings-translation",
+      "appearance": "#settings-general",
+      "image": "#settings-image-translation",
+      "area": "#settings-area-translation",
+      "video": "#settings-video"
+    },
+    "hoverShortcut": {
+      "disabledAfterReopen": true,
+      "savedCustomHotkey": "Alt+J",
+      "settingsRoute": "#settings-translation",
+      "noImplicitControl": true,
+      "explicitlyRestored": true
+    },
+    "optionsNavigation": {
+      "count": 17,
+      "ids": [
+        "settings-general",
+        "settings-interface",
+        "settings-services",
+        "settings-translation",
+        "settings-harness",
+        "settings-image-translation",
+        "settings-area-translation",
+        "settings-video",
+        "settings-sites",
+        "settings-writing",
+        "settings-translation-center",
+        "settings-vocabulary",
+        "settings-glossary",
+        "settings-model-usage",
+        "settings-advanced",
+        "settings-data",
+        "settings-about"
+      ]
+    },
+    "videoModelCards": {
+      "modelCount": 2,
+      "initialModel": "base",
+      "selectedAfterDescription": "tiny",
+      "capabilityDisabled": false,
+      "disabledSelectionRetained": true,
+      "downloading": 0
+    },
+    "subtitleAppearance": {
+      "collapsedInitially": true,
+      "updatedAfterDraftReplacement": true,
+      "skin": "clean",
+      "fontScale": 130
+    },
+    "movedVoices": {
+      "editedVoices": [
+        "en-US-AriaNeural",
+        "en-US-AvaMultilingualNeural"
+      ],
+      "reopened": true
+    }
+  },
+  "persistenceCases": [
+    {
+      "case": "popup-language-service",
+      "before": "日本語 / Japanese / 日语",
+      "after": "简体中文 / Simplified Chinese",
+      "service": "microsoft",
+      "closedImmediatelyAfterChange": true
+    },
+    {
+      "case": "popup-reopen",
+      "value": "简体中文 / Simplified Chinese",
+      "serviceSelected": null
+    },
+    {
+      "case": "options-toggle-language",
+      "changed": {
+        "before": "简体中文 / Simplified Chinese",
+        "after": "繁體中文 / Traditional Chinese"
+      },
+      "switchAriaChecked": "false"
+    }
+  ],
+  "quickClose": {
+    "popup": true,
+    "changed": {
+      "before": "日本語 / Japanese / 日语",
+      "after": "简体中文 / Simplified Chinese",
+      "service": "microsoft"
+    }
+  },
+  "crossPageSync": {
+    "optionsChanged": true,
+    "popupReopen": true,
+    "expected": "繁體中文 / Traditional Chinese",
+    "actual": "繁體中文 / Traditional Chinese"
+  },
+  "latestWriteWins": {
+    "first": "简体中文 / Simplified Chinese",
+    "second": "繁體中文 / Traditional Chinese",
+    "final": "繁體中文 / Traditional Chinese",
+    "passed": true
+  },
+  "migration": {
+    "ok": true,
+    "method": "runtime-persisted-compatibility-snapshot",
+    "seedResponse": {
+      "success": true,
+      "revision": 2
+    },
+    "popupState": {
+      "target": "日本語 / Japanese / 日语",
+      "featureIds": [
+        "hover",
+        "selection",
+        "appearance",
+        "image",
+        "area",
+        "video",
+        "document"
+      ]
+    },
+    "selectionModes": [
+      "关闭",
+      "双语显示",
+      "仅译文"
+    ],
+    "retainedSelectionMode": "translation-only",
+    "retainedVideoMode": "original-only",
+    "hiddenVideoRestored": true
+  },
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-popup-quick-settings-merge/popup-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/popup-migration-video-restored.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-hover-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-selection-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-selection-dark.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-appearance-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-image-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-area-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-video-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-video-dark.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/drawer-hover-disabled.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/popup-reopened-persisted.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/popup-cross-page-persisted.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/options-narrow-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/options-narrow-dark.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/options-video-models-light.png",
+    "/private/tmp/fluentread-popup-quick-settings-merge/options-selection-voices.png"
+  ],
+  "fullSuiteBaseline": {
+    "status": "not-run-by-focused-runner",
+    "note": "full UI runner 独立运行；结果见交付报告，专项结果不代表完整套件通过。"
+  },
+  "retainedPreferences": {
+    "videoService": "microsoft",
+    "videoLocalModel": "base",
+    "videoSourceLanguage": "ko",
+    "customHotkey": "Alt+J",
+    "selectionTranslatorTrigger": "custom",
+    "customSelectionTranslatorHotkey": "Alt+K",
+    "selectionTranslatorDelay": 450,
+    "selectionTtsVoices": [
+      "en-US-AriaNeural"
+    ],
+    "style": 4
+  }
+}

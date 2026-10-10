@@ -1,0 +1,96 @@
+{
+  "source": "/Users/thinkstu/Desktop/copy/FluentRead-performance-lightweight-20260913/.output/chrome-mv3",
+  "prototype": false,
+  "cases": [
+    {
+      "label": "opus-whisper",
+      "backend": "wasm",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 21596019,
+      "digest": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39",
+      "decompressedMs": 62.5,
+      "totalMs": 341.7999999523163
+    },
+    {
+      "label": "opus-whisper",
+      "backend": "webgpu",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 21596019,
+      "digest": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39",
+      "decompressedMs": 43.799999952316284,
+      "totalMs": 313.2999999523163
+    },
+    {
+      "label": "kokoro",
+      "backend": "wasm",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 23567050,
+      "digest": "e0c0c6d3e73d43b8a249972f8358f845b08cc16fec3c80efafdf8bed40366786",
+      "decompressedMs": 48.699999928474426,
+      "totalMs": 348
+    },
+    {
+      "label": "kokoro",
+      "backend": "webgpu",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 23567050,
+      "digest": "e0c0c6d3e73d43b8a249972f8358f845b08cc16fec3c80efafdf8bed40366786",
+      "decompressedMs": 48.39999997615814,
+      "totalMs": 376.39999997615814
+    }
+  ],
+  "errors": [],
+  "evidence": "Real ONNX Identity session in an owned extension Worker; this does not claim full translation, speech synthesis or transcription quality.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 302,
+      "top": -940,
+      "width": 1100,
+      "height": 800
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    }
+  },
+  "ok": true
+}

@@ -1,0 +1,102 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/optionsNavigation.test.ts" "tests/optionsAppNavigationLifecycle.test.ts" "tests/settingsUiArchitecture.test.ts" "tests/settingsCompositionAutosave.test.ts" "tests/userscriptFullOptions.test.ts" "tests/i18n.test.ts" "tests/featureTranslationServices.test.ts" "tests/configCount.test.ts" "tests/configTransfer.test.ts" "tests/configDiff.test.ts" "tests/imageTranslationRuntime.test.ts" "tests/backgroundFeatureHandlers.test.ts" "tests/fullPageVisibilityScheduling.test.ts" "tests/quickTranslationRuntime.test.ts" "tests/glossarySettingsComponent.test.ts" "tests/glossary.test.ts" "tests/translationGlossaryIntegration.test.ts" "tests/readingAssistantPresentation.test.ts" "tests/readingPanelLifecycle.test.ts" "tests/architecture/sourceFileHeaders.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/optionsNavigation.test.ts tests/optionsAppNavigationLifecycle.test.ts tests/settingsUiArchitecture.test.ts tests/settingsCompositionAutosave.test.ts tests/userscriptFullOptions.test.ts tests/i18n.test.ts tests/featureTranslationServices.test.ts tests/configCount.test.ts tests/configTransfer.test.ts tests/configDiff.test.ts tests/imageTranslationRuntime.test.ts tests/backgroundFeatureHandlers.test.ts tests/fullPageVisibilityScheduling.test.ts tests/quickTranslationRuntime.test.ts tests/glossarySettingsComponent.test.ts tests/glossary.test.ts tests/translationGlossaryIntegration.test.ts tests/readingAssistantPresentation.test.ts tests/readingPanelLifecycle.test.ts tests/architecture/sourceFileHeaders.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+
+ ✓ tests/fullPageVisibilityScheduling.test.ts (210 tests) 786ms
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 98ms
+ ✓ tests/backgroundFeatureHandlers.test.ts (45 tests) 2122ms
+   ✓ 后台 feature handlers > 区域截图 handler 接受 windowId=0 并拒绝空截图与非法窗口 1204ms
+   ✓ 后台 feature handlers > 圈选截图必须属于sender的当前活动标签页，并在捕获完成后再次核对 603ms
+ ✓ tests/imageTranslationRuntime.test.ts (128 tests) 218ms
+ ✓ tests/i18n.test.ts (52 tests) 2209ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 830ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 667ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 463ms
+ ✓ tests/configDiff.test.ts (42 tests) 21ms
+ ✓ tests/glossarySettingsComponent.test.ts (41 tests) 8581ms
+   ✓ GlossarySettings compiled component > renders separate script choices from the shared translation catalog and persists traditional scope 573ms
+ ✓ tests/glossary.test.ts (53 tests) 304ms
+ ✓ tests/configTransfer.test.ts (28 tests) 105ms
+ ✓ tests/translationGlossaryIntegration.test.ts (25 tests) 49ms
+ ✓ tests/readingAssistantPresentation.test.ts (21 tests) 49ms
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > omits duplicate source only when the current answer really renders the source annotations
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > reuses meaning after grammar and unrelated config refreshes, including deactivate/reactivate
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > restores each completed action and its follow-up context without requesting again; explicit regeneration requests once
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > cancels switched requests, ignores late deltas, and keeps the last successful answer after a failed regeneration
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > invalidates answers for changed source context, language, and model settings
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > restores completed actions from a saved session and does not include the failed answer in retry history
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > handles negative settings responses and allows saving original text before the model answers
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+stderr | tests/readingPanelLifecycle.test.ts > reading action ownership and reuse > only remembers completed answers after an explicit click with memory enabled outside private windows
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/platform/storage/configStorageRuntime.ts:24:11)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:420:63)
+    at eval (/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/src/services/config/store.ts:513:21)
+    at instantiateModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite@5.4.19_@types+node@22.10.7/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:53020:5)
+
+ ✓ tests/readingPanelLifecycle.test.ts (8 tests) 2987ms
+   ✓ reading action ownership and reuse > omits duplicate source only when the current answer really renders the source annotations 724ms
+   ✓ reading action ownership and reuse > reuses meaning after grammar and unrelated config refreshes, including deactivate/reactivate 376ms
+   ✓ reading action ownership and reuse > restores each completed action and its follow-up context without requesting again; explicit regeneration requests once 327ms
+   ✓ reading action ownership and reuse > cancels switched requests, ignores late deltas, and keeps the last successful answer after a failed regeneration 327ms
+   ✓ reading action ownership and reuse > invalidates answers for changed source context, language, and model settings 307ms
+   ✓ reading action ownership and reuse > handles negative settings responses and allows saving original text before the model answers 324ms
+   ✓ reading action ownership and reuse > only remembers completed answers after an explicit click with memory enabled outside private windows 303ms
+ ✓ tests/optionsNavigation.test.ts (24 tests) 8ms
+ ✓ tests/configCount.test.ts (11 tests) 10ms
+ ✓ tests/optionsAppNavigationLifecycle.test.ts (5 tests) 518ms
+ ✓ tests/settingsCompositionAutosave.test.ts (3 tests) 174ms
+ ✓ tests/userscriptFullOptions.test.ts (7 tests) 6ms
+ ✓ tests/quickTranslationRuntime.test.ts (3 tests) 4ms
+ ✓ tests/featureTranslationServices.test.ts (5 tests) 12ms
+ ✓ tests/architecture/sourceFileHeaders.test.ts (687 tests) 201ms
+
+ Test Files  20 passed (20)
+      Tests  1431 passed (1431)
+   Start at  13:03:05
+   Duration  25.06s (transform 1.61s, setup 0ms, collect 4.02s, tests 18.46s, environment 2ms, prepare 650ms)

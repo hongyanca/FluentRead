@@ -1,7 +1,7 @@
 /**
  * @file src/features/settings/ui/settings-sections.css
- * 文件职责：定义 SettingsSections 各业务分区的专属样式，覆盖网站规则、视频、译文预览、连接配置和能力禁用提示。
- * 主要内容：包含设置行、服务 endpoint 提示、深色主题、响应式调整，以及多种 fluent-display 译文效果的实时预览类。
+ * 文件职责：定义 SettingsSections 各业务分区的专属样式，覆盖通用设置、网站规则、视频、连接配置和能力禁用提示。
+ * 主要内容：包含通用页默认服务与配置按钮的自适应排列、设置行、服务 endpoint 提示、深色主题与响应式调整；译文样式预览已移至界面风格页，并直接复用网页的 translation-display.css。
  * 模块边界：该样式表只描述设置分区的视觉，不应改变配置行为或宿主网页；Options 页面骨架由 settings-page.css 管理，图片 OCR 等独立组件保留自己的 scoped CSS。
  */
 
@@ -9,13 +9,49 @@
   min-width: 0;
 }
 
+.general-settings-section .general-service-control {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.general-settings-section .general-service-control :deep(.el-select) {
+  flex: 1 1 180px;
+  width: auto;
+}
+
+.general-settings-section .general-service-configure {
+  flex: 0 0 auto;
+  max-width: 100%;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--brand-strong);
+  background: var(--surface);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.general-settings-section .general-service-configure:hover {
+  border-color: var(--brand);
+  background: var(--surface-soft);
+}
+
+.general-settings-section .general-service-configure:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
 .site-settings-section {
   padding: 0 0 12px;
 }
 
 .service-default-control {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
@@ -33,24 +69,57 @@
   min-width: 0;
 }
 
+.fluentread-service-option { display: flex; align-items: center; gap: 10px; min-width: 0; width: 100%; }
+.fluentread-service-option > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.fluentread-service-option :deep(.service-brand-icon) { flex: none; box-shadow: none; }
+
+.settings-subgroup-heading {
+  padding: 16px 16px 10px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.settings-subgroup-heading h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.settings-subgroup-heading p {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+:deep(.settings-navigation-link),
+.settings-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  color: var(--brand-strong);
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+:deep(.settings-navigation-link) { padding: 6px 0; }
+:deep(.settings-navigation-link:hover),
+.settings-inline-link:hover { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+:deep(.settings-navigation-link:focus-visible),
+.settings-inline-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+:deep(.settings-navigation-link .el-icon) { font-size: 14px; }
+.settings-inline-link { padding: 0; font-size: inherit; font-weight: 700; }
+
 @media (max-width: 480px) {
   .service-default-control { max-width: none; }
 }
 
 .capability-warning { margin: 6px 0 0; color: #d9345e; font-size: 11px; line-height: 1.5; }
-.ai-context-label { flex-direction: column; align-items: flex-start !important; gap: 4px; }
-.ai-context-label small { color: #8b93a4; font-size: 10px; line-height: 1.45; }
 .settings-switch { --el-switch-on-color: #ef4776; --el-switch-off-color: #cfd5df; }
-
-.style-preview-card {
-  margin: 0;
-  padding: 14px 16px 16px;
-  border-top: 1px solid #e3e7ef;
-  background: linear-gradient(145deg, #fbfcff, #fff8fa);
-}
-.style-preview-example { margin: 0; padding: 14px 16px; border: 1px solid #e5e8ef; border-radius: 14px; background: #fff; }
-.style-preview-source { margin: 0 0 8px; color: #7f889b; font-size: 11px; }
-.style-preview-text { margin: 0; color: #172033; font-size: 15px; line-height: 1.7; transition: all 160ms ease; }
 
 .feature-help {
   width: min(100%, 1080px);
@@ -64,30 +133,6 @@
 }
 .feature-help summary { padding: 11px 0; color: var(--ink); cursor: pointer; font-weight: 700; }
 .feature-help p { margin: 0; padding: 0 0 12px; line-height: 1.6; }
-.style-preview-text.fluent-display-default { color: #273247; }
-.style-preview-text.fluent-display-bold { font-weight: 800; }
-.style-preview-text.fluent-display-italic { font-style: italic; }
-.style-preview-text.fluent-display-text-shadow { text-shadow: 1px 2px 3px rgba(23, 32, 51, .22); }
-.style-preview-text.fluent-display-solid-underline { text-decoration: underline; text-decoration-color: #4d8eea; text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.style-preview-text.fluent-display-dot-underline { text-decoration: underline dotted #4d8eea 2px; text-underline-offset: 4px; }
-.style-preview-text.fluent-display-wavy { text-decoration: underline wavy #ef4776 2px; text-underline-offset: 4px; }
-.style-preview-text.fluent-display-card-mode { padding: 8px 10px; border-radius: 8px; background: #f4f6fb; }
-.style-preview-text.fluent-display-modern-card { padding: 8px 10px; border-radius: 8px; background: linear-gradient(90deg, #fff0f4, #f1f4ff); }
-.style-preview-text.fluent-display-paper { padding: 8px 10px; border: 1px solid #eadfca; background: #fffaf0; }
-.style-preview-text.fluent-display-learning-mode { padding: 2px 6px; background: #fff1a8; }
-.style-preview-text.fluent-display-marker { padding: 2px 6px; background: #d6f5b7; }
-.style-preview-text.fluent-display-highlight-fade { padding: 2px 6px; background: linear-gradient(90deg, #fff0b8, transparent); }
-.style-preview-text.fluent-display-lightyellow { padding: 4px 8px; background: #fff7db; }
-.style-preview-text.fluent-display-lightblue { padding: 4px 8px; background: #eaf4ff; }
-.style-preview-text.fluent-display-lightgray { padding: 4px 8px; background: #f1f3f5; }
-.style-preview-text.fluent-display-quote { padding-left: 10px; border-left: 3px solid #ef4776; }
-.style-preview-text.fluent-display-border { padding: 6px 9px; border: 1px solid #bfc8d8; border-radius: 6px; }
-.style-preview-text.fluent-display-focus { padding: 5px 8px; border-radius: 6px; box-shadow: 0 0 0 3px rgba(239, 71, 118, .12); }
-.style-preview-text.fluent-display-clean { border-bottom: 2px solid #ef4776; }
-.style-preview-text.fluent-display-tech { padding: 5px 8px; border-radius: 5px; color: #245070; background: #edf6fb; font-family: ui-monospace, SFMono-Regular, monospace; }
-.style-preview-text.fluent-display-elegant { font-family: Georgia, "Songti SC", serif; letter-spacing: .04em; }
-.style-preview-text.fluent-display-dimmed { opacity: .62; }
-.style-preview-text.fluent-display-transparent-mode { opacity: .82; }
 
 .disabled-section {
   margin: 18px 12px 8px;
@@ -160,19 +205,139 @@
   justify-content: flex-end;
 }
 
-.translation-delay-field {
+/* 请求限制的三项数值由独立组件渲染，补上它与后续设置行之间的分隔线。 */
+.request-limit-fields + .settings-item { border-top: 1px solid var(--line); }
+.request-retry-settings { border-top: 1px solid var(--line); }
+.request-retry-settings > summary { padding: 14px 20px; color: var(--ink); font-size: 13px; cursor: pointer; }
+.request-retry-settings[open] > summary { border-bottom: 1px solid var(--line); }
+.task-scheduler-group :deep(.settings-group-body) {
+  padding: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.task-scheduler-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.scheduler-setting-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 6px;
+  gap: 14px;
+  min-width: 0;
+  min-height: 68px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface-soft);
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
-.translation-delay-field :deep(.el-input-number) {
+.scheduler-setting-row:hover {
+  border-color: #efb5c5;
+  background: var(--surface);
+  box-shadow: 0 7px 18px rgba(31, 40, 61, .045);
+}
+
+.scheduler-setting-row .settings-control-label,
+.scheduler-setting-row .settings-control-field {
+  min-width: 0;
+}
+
+.scheduler-setting-row .settings-control-label {
+  display: flex;
+  align-items: center;
+}
+
+.scheduler-setting-row .settings-control-field {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.scheduler-setting-row .popup-text {
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.scheduler-number-field {
+  position: relative;
+  width: min(100%, 184px);
+  min-width: 0;
+}
+
+.scheduler-number-field :deep(.el-input-number) {
   width: 100%;
+  min-width: 0;
 }
 
-.input-suffix {
+.scheduler-number-field :deep(.el-input-number .el-input__inner) {
+  text-align: right;
+}
+
+.scheduler-number-field[data-unit] :deep(.el-input-number .el-input__inner) {
+  padding-right: 38px;
+}
+
+.scheduler-number-field[data-unit]::after {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  z-index: 1;
+  color: var(--muted);
+  content: attr(data-unit);
+  font-size: 11px;
+  line-height: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.scheduler-setting-row :deep(.el-input-number__increase),
+.scheduler-setting-row :deep(.el-input-number__decrease) {
+  display: none;
+}
+
+.scheduler-effect-row {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(239, 71, 118, .18);
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--brand-soft), var(--surface));
+}
+
+.scheduler-effect-label {
   flex: 0 0 auto;
+  color: var(--brand-strong);
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.scheduler-effect-row p {
+  min-width: 0;
+  margin: 0;
   color: var(--muted);
   font-size: 11px;
+  line-height: 1.55;
+}
+
+@media (max-width: 820px) {
+  .task-scheduler-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .task-scheduler-group :deep(.settings-group-body) { padding: 9px; }
+  .scheduler-setting-row { grid-template-columns: 1fr; gap: 8px; }
+  .scheduler-setting-row .settings-control-field { justify-content: stretch; }
+  .scheduler-number-field { width: 100%; max-width: none; }
+  .scheduler-effect-row { align-items: flex-start; flex-direction: column; gap: 4px; }
 }
 
 .select-divider {
@@ -236,15 +401,21 @@
   width: 100%;
 }
 
+/* 触发方式下方的提示沿用设置行说明的字号，只在入口不可用时改用警示色。 */
+.selection-context-menu-hint.is-unavailable {
+  color: var(--el-color-warning-dark-2);
+}
+
 .custom-hotkey-display {
   display: flex;
   align-items: center;
-  padding: 6px 6px 6px 10px;
-  background: var(--el-color-primary-light-9);
-  border: 1px solid var(--el-color-primary-light-7);
-  border-radius: 4px;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 8px 4px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
   font-size: 12px;
-  height: 32px;
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
@@ -290,22 +461,6 @@
   font-weight: normal !important;
 }
 
-/* 自定义快捷键行样式 */
-.custom-hotkey-row {
-  border-color: #f2c2d0;
-  background: var(--brand-soft);
-}
-
-.custom-hotkey-row:hover {
-  border-color: #ef9ab1;
-  background: #fff;
-  transform: none;
-  box-shadow: 0 8px 22px rgba(239, 71, 118, .08);
-}
-
-.custom-hotkey-row::before,
-.custom-hotkey-row::after { display: none; }
-
 /* 错误样式 */
 .input-error {
   border-color: var(--el-color-danger) !important;
@@ -323,5 +478,6 @@
   line-height: 1.4;
 }
 
-.output-filter-control { width: 100%; }
-.output-filter-success { margin-top: 4px; color: var(--el-color-success); font-size: 12px; line-height: 1.4; }
+.image-settings-details { margin: 0; }
+.image-settings-details > summary, .area-translation-details > summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--el-text-color-primary); }
+.image-settings-details[open] > summary { margin-bottom: 14px; }

@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "lines": [
+        0.9999420683262712,
+        0.9999420683262712
+      ],
+      "overflow": 0,
+      "page": "home-zh",
+      "width": 320
+    },
+    {
+      "left": 39,
+      "page": "install-menu",
+      "right": 281,
+      "width": 320
+    },
+    {
+      "lines": [
+        {
+          "height": 37.7578125,
+          "lineHeight": "37.76px",
+          "text": "Bilingual translation."
+        },
+        {
+          "height": 37.7578125,
+          "lineHeight": "37.76px",
+          "text": "Keep the original."
+        }
+      ],
+      "overflow": 0,
+      "page": "home-en",
+      "width": 320
+    },
+    {
+      "columns": "272px",
+      "overflow": 0,
+      "page": "docs-zh",
+      "width": 320
+    },
+    {
+      "overflow": 0,
+      "page": "home-en",
+      "width": 768
+    },
+    {
+      "directory": 22,
+      "heading": "Documentation",
+      "overflow": 0,
+      "page": "docs-en-client-navigation",
+      "search": true,
+      "width": 768
+    },
+    {
+      "hasHeader": true,
+      "headline": "Bilingual translation.Keep the original.",
+      "page": "return-home-en"
+    },
+    {
+      "page": "grammar-interaction",
+      "playing": "false",
+      "selected": "a new way宾语 · 名词短语",
+      "step": "2"
+    },
+    {
+      "caption": "Let’s review the plan together.我们一起回顾一下计划。",
+      "changed": true,
+      "page": "video-demo",
+      "running": "false"
+    },
+    {
+      "overflow": 0,
+      "page": "home-zh-wide",
+      "platforms": "YouTubeXGoogle MeetTeamsZoom",
+      "width": 1280
+    },
+    {
+      "headline": "Bilingual translation.Keep the original.",
+      "overflow": 0,
+      "page": "home-en-wide",
+      "width": 1920
+    },
+    {
+      "directory": 22,
+      "name": "流畅阅读",
+      "overflow": 0,
+      "page": "docs-zh-desktop",
+      "width": 320
+    },
+    {
+      "comicHeight": 248,
+      "overflow": 0,
+      "page": "comic-mobile",
+      "width": 390
+    },
+    {
+      "brand": "流畅阅读",
+      "directory": 22,
+      "overflow": 0,
+      "page": "docs-zh-final",
+      "width": 1280
+    }
+  ],
+  "errors": {
+    "home": [],
+    "docs": []
+  },
+  "notes": [
+    "OS reduced-motion settings, store installation and live translation providers were not exercised.",
+    "Viewport records use measured innerWidth, not requested size."
+  ]
+}

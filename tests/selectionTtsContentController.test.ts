@@ -85,6 +85,17 @@ describe('selection TTS content controller', () => {
         });
     });
 
+
+    it('page handoff ignores delayed old offscreen error without invalidating page playback generation', () => {
+        const {controller, stopRemote} = fixture();
+        const request = controller.beginRemoteRequest();
+        expect(controller.completeRemoteRequest(request, {success: true, transport: 'page'})).toBe('page');
+        const generation = controller.currentGeneration();
+        expect(controller.matchRemoteState({type: 'selectionTtsState', clientRequestId: request.clientRequestId, state: 'error'})).toBeNull();
+        expect(controller.isCurrentGeneration(generation)).toBe(true);
+        expect(stopRemote).not.toHaveBeenCalled();
+    });
+
     it('stop then new play keeps the new pending UUID and precisely cleans a late offscreen success', async () => {
         const {controller, stopRemote} = fixture();
         const oldRequest = controller.beginRemoteRequest();

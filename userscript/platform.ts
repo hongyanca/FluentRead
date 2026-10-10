@@ -1,4 +1,5 @@
-import {translateMicrosoftTexts} from '@/src/providers/translation/microsoft';
+import {createVisionProbeHandlers} from '@/src/app/background/handlers/visionProbe';
+import {modelVisionProbe} from '@/src/app/translation/visionProbeRuntime';
 import {runTranslationServiceConnectionTest} from '@/src/providers/translation/connectionTest';
 import {
     applyConfigHistoryAction,
@@ -6,6 +7,8 @@ import {
     configReady,
     CONFIG_HISTORY_MESSAGE,
     CONFIG_PERSIST_MESSAGE,
+    getConfigRevision,
+    prepareConfigPatchRequest,
     saveConfig,
 } from '@/src/services/config/store';
 import {
@@ -21,7 +24,9 @@ import {
     translateWithCache,
 } from '@/src/app/translation/runtime';
 import {lookupWord} from '@/src/features/selection-translation/services/wordDictionary';
+import {createInputBoxTranslationHandler} from '@/src/features/input-translation/background';
 import {UNHANDLED_RUNTIME_MESSAGE} from './browser';
+import {attachTranslationGlossaryContext, createTranslationProviderConfigSnapshot} from '@/src/services/translation/requestSnapshot';
 
 const UNSUPPORTED_CAPABILITY_MESSAGE = '该功能依赖浏览器扩展权限，userscript 版本暂不支持';
 
@@ -30,8 +35,21 @@ const UNSUPPORTED_CAPABILITY_MESSAGE = '该功能依赖浏览器扩展权限，u
  * 其余翻译、配置和缓存请求仍复用共享业务实现。
  */
 export function createPlatformMessageHandler(openSettings: () => void) {
+    const visionHandlers = createVisionProbeHandlers({ready: configReady, getConfig: () => config, isSettingsUrl: () => true, resolve: modelVisionProbe.resolve});
+
+    const inputBoxTranslationHandler = createInputBoxTranslationHandler({
+        ready: configReady,
+        getConfig: () => config,
+        translate: translateWithCache,
+    });
+
     return async (message: any): Promise<any> => {
         if (!message || typeof message !== 'object') return UNHANDLED_RUNTIME_MESSAGE;
+        const visionHandler = visionHandlers.find(handler => handler.type === message.type);
+        if (visionHandler) {
+            try { return await visionHandler.handle(message, {}); }
+            catch { return {success: false, error: '识图检测失败，请检查服务配置后重试'}; }
+        }
 
         if (message.type === 'openOptionsPage') {
             openSettings();
@@ -41,8 +59,20 @@ export function createPlatformMessageHandler(openSettings: () => void) {
         if (message.type === 'fullPageTranslationState') return {success: true};
 
         if (message.type === CONFIG_PERSIST_MESSAGE) {
-            await saveConfig(message.config, {recordHistory: true});
-            return {success: true};
+            await configReady;
+            // userscript 没有独立后台 store：发送方已在同一份运行时 config 上乐观合并 patch，
+            // message.config 只是字段子集，必须合并回当前配置，不能按整份配置归一化而重置其余设置和凭据。
+            const next = message.mode === 'patch' && message.config && typeof message.config === 'object'
+                ? prepareConfigPatchRequest(
+                    message.config,
+                    Object.fromEntries(Object.keys(message.config).map((key) => [key, config[key as keyof typeof config]])),
+                    config,
+                    true,
+                )
+                : message.config;
+            await saveConfig(next, {recordHistory: true});
+            // 与扩展后台契约一致返回提交 revision，发送方据此确认而不是回滚乐观状态。
+            return {success: true, revision: getConfigRevision()};
         }
 
         if (message.type === CONFIG_COUNT_INCREMENT_MESSAGE) {
@@ -51,9 +81,10 @@ export function createPlatformMessageHandler(openSettings: () => void) {
             const operationId = parseConfigCountOperationId(message.operationId);
             if (operationId === null) return {success: false, error: '无效的翻译计数操作标识'};
             const count = await incrementUserscriptConfigCount(delta, operationId);
-            // local:config.count 只供当前 UI 展示；跨标签精确值始终可由专用副本重新聚合。
+            // local:config.count 只是可重建投影。跨标签同时递增时，每个标签返回的
+            // 瞬时总数都可能随后被另一个副本推进；热路径不能用整份配置把较旧投影
+            // 反向覆盖。启动、聚焦和打开设置时会从专用副本重新聚合并落盘。
             config.count = count;
-            await saveConfig(config);
             return {success: true, count};
         }
 
@@ -69,7 +100,12 @@ export function createPlatformMessageHandler(openSettings: () => void) {
         if (message.type === CONNECTION_TEST_MESSAGE) {
             await configReady;
             try {
-                const result = await runTranslationServiceConnectionTest(String(message.service || ''));
+                const result = await runTranslationServiceConnectionTest(String(message.service || ''), {
+                    configSnapshot: createTranslationProviderConfigSnapshot(config),
+                    keyIndex: message.keyIndex,
+                    keyRevision: message.keyRevision,
+                    freeProviderId: message.freeProviderId,
+                });
                 return {success: true, ...result};
             } catch (error) {
                 return {success: false, error: error instanceof Error ? error.message : String(error)};
@@ -78,8 +114,7 @@ export function createPlatformMessageHandler(openSettings: () => void) {
 
         if (message.type === 'inputBoxTranslation') {
             try {
-                const translations = await translateMicrosoftTexts([String(message.text || '')], '', String(message.targetLang || 'zh-Hans'));
-                return {success: true, translatedText: translations[0] || String(message.text || '')};
+                return await inputBoxTranslationHandler.handle(message);
             } catch (error) {
                 return {success: false, error: error instanceof Error ? error.message : String(error)};
             }
@@ -119,7 +154,10 @@ export function createPlatformMessageHandler(openSettings: () => void) {
         }
 
         if (typeof message.origin === 'string' || Array.isArray(message.origin)) {
-            return translateWithCache(message);
+            return translateWithCache(attachTranslationGlossaryContext({...message}, {
+                pageUrl: globalThis.location?.href,
+                context: message.glossaryContext === 'video' ? 'video' : 'page',
+            }));
         }
 
         return UNHANDLED_RUNTIME_MESSAGE;

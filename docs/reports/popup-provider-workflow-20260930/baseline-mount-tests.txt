@@ -1,0 +1,46 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/contentFeatureMounting.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/contentFeatureMounting.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead
+
+ ❯ tests/contentFeatureMounting.test.ts (17 tests | 2 failed) 99ms
+   × 划词翻译挂载生命周期 > Harness 独立启用时保留共享挂载，并在两个入口都停用后丢弃待挂载 UI 5ms
+     → You must provide a Promise to expect() when using .resolves, not 'object'.
+   × 划词翻译挂载生命周期 > Harness 共享实例重挂载后，旧组件 Range 回调不得移动新 modal host 2ms
+     → Cannot read properties of undefined (reading '1')
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/contentFeatureMounting.test.ts > 划词翻译挂载生命周期 > Harness 独立启用时保留共享挂载，并在两个入口都停用后丢弃待挂载 UI
+TypeError: You must provide a Promise to expect() when using .resolves, not 'object'.
+ ❯ tests/contentFeatureMounting.test.ts:112:67
+    110|         const mounted = ui();
+    111|         mocks.createVueShadowUi.mockResolvedValueOnce(mounted);
+    112|         await expect(runtime.mountSelectionTranslator({} as never)).re…
+       |                                                                   ^
+    113|         runtime.unmountSelectionTranslator();
+    114|         const pending = pendingUi();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/contentFeatureMounting.test.ts > 划词翻译挂载生命周期 > Harness 共享实例重挂载后，旧组件 Range 回调不得移动新 modal host
+TypeError: Cannot read properties of undefined (reading '1')
+ ❯ tests/contentFeatureMounting.test.ts:139:65
+    137| 
+    138|         await runtime.mountSelectionTranslator({} as never);
+    139|         const firstReport = mocks.createVueShadowUi.mock.calls[0][1].p…
+       |                                                                 ^
+    140|         const range = {startContainer: {nodeType: 3}};
+    141|         firstReport(range);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 15 passed (17)
+   Start at  15:16:14
+   Duration  307ms (transform 68ms, setup 0ms, collect 42ms, tests 99ms, environment 0ms, prepare 34ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

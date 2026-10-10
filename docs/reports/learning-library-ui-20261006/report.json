@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-06",
+  "scope": "Selection card stability and learning-center collection study, filtering, review and layout; targeted production regression.",
+  "extensionArtifact": ".output/chrome-mv3",
+  "browser": "isolated Edge temporary profile",
+  "manifestEntries": {
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "ok": true,
+  "cases": [
+    "learning tabs explain destinations and the empty list enables saving without AI reference",
+    "settings and popup use one card presentation",
+    "translation is the first default tab and opening it does not request AI",
+    "grammar switch and streaming preserve the opening anchor",
+    "usage tab preserves the same anchor",
+    "study notes save while AI reference is off and do not populate saved words",
+    "saved key points appear in Study notes and view opens that tab directly",
+    "saved original opens Words and sentences separately from study notes",
+    "visible sentence and expression learning actions open the matching study page without requesting AI",
+    "type, translation search and mastery filters work and empty results have a reset action",
+    "management toggles persist after reopening and disabling the saving entry keeps the collection",
+    "review asks for recall before reveal and only an explicit rating updates the persisted schedule",
+    "return to translation preserves the anchor",
+    "completed grammar is reused without a second AI request",
+    "播放原文 start and stop keep position and height",
+    "播放译文 start and stop keep position and height",
+    "word pronunciation start and stop keep position and height",
+    "narrow viewport tab switch stays anchored and scrolls inside",
+    "close and reselect restore the translation tab and fresh geometry",
+    "collection actions and learning buttons fit the narrow viewport in all seven interface languages",
+    "English learning tabs and notes remain usable in a narrow viewport"
+  ],
+  "caseCount": 21,
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "persistenceCases": [
+    {
+      "name": "collection settings in management menu",
+      "reopenVerified": true,
+      "savedEntriesRetained": 3
+    }
+  ],
+  "quickClose": {
+    "tested": false,
+    "reason": "Configuration persistence protocol did not change in this UI round; reopen checks were run."
+  },
+  "crossPageSync": {
+    "tested": true,
+    "scope": "Collection setting read from another extension page after toggling."
+  },
+  "latestWriteWins": {
+    "tested": false,
+    "reason": "Persistence protocol unchanged."
+  },
+  "layout": {
+    "widths": [
+      1024,
+      390
+    ],
+    "dark": true,
+    "narrowLanguages": [
+      "zh-CN",
+      "en-US",
+      "ja-JP",
+      "ko-KR",
+      "fr-FR",
+      "ru-RU",
+      "es-ES"
+    ],
+    "visibleCollectionActionsInsideViewport": true
+  },
+  "tests": {
+    "featureLifecycle": {
+      "passed": 34,
+      "files": 5
+    },
+    "i18n": {
+      "passed": 54,
+      "baselineFailures": 3,
+      "details": [
+        "MangaSettings cache wording missing translations",
+        "Three stale Google/Lingva runtime-feedback source entries",
+        "Five stale provider/account legacy-correction source entries"
+      ]
+    },
+    "compile": "passed",
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed",
+    "userscriptBuild": "passed",
+    "userscriptVerifier": "passed",
+    "audit": "passed"
+  },
+  "limitations": [
+    "Translation and AI replies are deterministic local fixtures; no live AI quality claim.",
+    "Audio endpoint returns silent fixture WAV; no listening-quality verification.",
+    "Firefox build only; no real Firefox UI verification.",
+    "Options-open message and query validation are real; browser tab creation is adapted to a pre-created background tab to preserve user focus.",
+    "Targeted regression, not the full test suite."
+  ],
+  "screenshots": [
+    "learning-library-desktop.png",
+    "learning-library-390.png",
+    "learning-library-management-mobile.png",
+    "learning-library-dark.png",
+    "learning-library-review.png",
+    "learning-sentence-study.png",
+    "learning-library-english-narrow.png",
+    "learning-memory-destination.png"
+  ],
+  "referenceProjectsUsed": false
+}

@@ -1,0 +1,15 @@
+
+> FluentRead-流畅阅读@0.0.35 test:audit /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+> node scripts/testing/audit-test-suite.mjs
+
+{
+  "status": "ok",
+  "groups": {
+    "architecture": 29,
+    "unit": 268,
+    "functional": 81,
+    "regression": 31
+  },
+  "files": 409,
+  "cases": 5265
+}

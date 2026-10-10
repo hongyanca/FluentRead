@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004/.output/chrome-mv3",
+  "scope": "Russian preview controls at 390px in translation and appearance settings; master help and grouping note assertions. No real provider, account or Firefox runtime.",
+  "views": [
+    {
+      "label": "ru-RU-settings-translation-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    },
+    {
+      "label": "ru-RU-settings-interface-390",
+      "width": 390,
+      "documentWidth": 390,
+      "appOverflow": false,
+      "issues": []
+    }
+  ],
+  "checks": [
+    "ru-RU master help",
+    "ru-RU sentence help and grouping note",
+    "switch back to Chinese"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "sections": [
+    "settings-translation",
+    "settings-interface"
+  ],
+  "evidenceNote": "仅移除了用户前台应用名称与进程号；视图、断言、问题和焦点策略保持原始结果。"
+}

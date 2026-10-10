@@ -1,0 +1,423 @@
+{
+  "ok": true,
+  "date": "2026-09-13",
+  "browserVersion": "151.0.7922.34",
+  "adapter": {
+    "vendor": "apple",
+    "architecture": "metal-3",
+    "device": "",
+    "description": ""
+  },
+  "workerSha256": {
+    "localTtsWorker": "51c5d67be4b558a6363c33bd5ea4b82671e5920e25ba761b2370d7220e4947dc",
+    "videoTranscriptionWorker": "827578cd90ad683e0e4b158cea2d96f5920f562b79fcb2225232bd5f15bba7b1"
+  },
+  "caseCount": 10,
+  "cases": [
+    {
+      "name": "tts-gpu",
+      "elapsedMs": 5752,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "webgpu"
+        },
+        "outputs": [
+          {
+            "backend": "webgpu",
+            "language": "en",
+            "audioBytes": 206444,
+            "samples": 103200,
+            "peak": 10247,
+            "samplingRate": 24000
+          },
+          {
+            "backend": "webgpu",
+            "language": "zh",
+            "audioBytes": 162044,
+            "samples": 81000,
+            "peak": 13840,
+            "samplingRate": 24000
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 2558197760,
+      "peakRssBytes": 3717332992,
+      "sourceRun": "tts-matrix"
+    },
+    {
+      "name": "tts-cpu",
+      "elapsedMs": 13696,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "wasm"
+        },
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "audioBytes": 206444,
+            "samples": 103200,
+            "peak": 10608,
+            "samplingRate": 24000
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "audioBytes": 162044,
+            "samples": 81000,
+            "peak": 13768,
+            "samplingRate": 24000
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 2135244800,
+      "peakRssBytes": 3397599232,
+      "sourceRun": "tts-matrix"
+    },
+    {
+      "name": "tts-unavailable",
+      "elapsedMs": 13716,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "wasm"
+        },
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "audioBytes": 206444,
+            "samples": 103200,
+            "peak": 11072,
+            "samplingRate": 24000
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "audioBytes": 162044,
+            "samples": 81000,
+            "peak": 13582,
+            "samplingRate": 24000
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 1771585536,
+      "peakRssBytes": 3246292992,
+      "sourceRun": "tts-matrix"
+    },
+    {
+      "name": "tts-init-failure",
+      "elapsedMs": 14126,
+      "result": {
+        "prepared": {
+          "requestId": 2,
+          "success": true,
+          "backend": "wasm"
+        },
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "audioBytes": 206444,
+            "samples": 103200,
+            "peak": 10616,
+            "samplingRate": 24000
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "audioBytes": 162044,
+            "samples": 81000,
+            "peak": 13593,
+            "samplingRate": 24000
+          }
+        ],
+        "cpuRebuilds": 1
+      },
+      "baselineRssBytes": 1874116608,
+      "peakRssBytes": 3344793600,
+      "sourceRun": "tts-matrix"
+    },
+    {
+      "name": "tts-device-loss",
+      "elapsedMs": 15331,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "backend": "webgpu",
+          "injectedDeviceLoss": 1
+        },
+        "outputs": [
+          {
+            "backend": "wasm",
+            "language": "en",
+            "audioBytes": 206444,
+            "samples": 103200,
+            "peak": 10607,
+            "samplingRate": 24000
+          },
+          {
+            "backend": "wasm",
+            "language": "zh",
+            "audioBytes": 162044,
+            "samples": 81000,
+            "peak": 13814,
+            "samplingRate": 24000
+          }
+        ],
+        "cpuRebuilds": 1
+      },
+      "baselineRssBytes": 2595930112,
+      "peakRssBytes": 4441899008,
+      "sourceRun": "device-loss-replay"
+    },
+    {
+      "name": "whisper-gpu",
+      "elapsedMs": 3064,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "model": "tiny",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4"
+        },
+        "outputs": [
+          {
+            "requestId": 2,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "webgpu",
+            "gpuInfo": "apple / metal-3",
+            "inferenceMs": 645.7999999523163,
+            "audioDurationMs": 2667,
+            "dtype": "q4"
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 1699659776,
+      "peakRssBytes": 3101376512,
+      "sourceRun": "final-whisper-matrix"
+    },
+    {
+      "name": "whisper-cpu",
+      "elapsedMs": 3717,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "model": "tiny",
+          "backend": "wasm",
+          "threads": 1,
+          "dtype": "q4"
+        },
+        "outputs": [
+          {
+            "requestId": 2,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "inferenceMs": 1401.2999999523163,
+            "audioDurationMs": 2667,
+            "threads": 1,
+            "dtype": "q4"
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 2865135616,
+      "peakRssBytes": 3044573184,
+      "sourceRun": "final-whisper-matrix"
+    },
+    {
+      "name": "whisper-unavailable",
+      "elapsedMs": 3725,
+      "result": {
+        "prepared": {
+          "requestId": 1,
+          "success": true,
+          "model": "tiny",
+          "backend": "wasm",
+          "threads": 1,
+          "dtype": "q4"
+        },
+        "outputs": [
+          {
+            "requestId": 2,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "inferenceMs": 1390.3999999761581,
+            "audioDurationMs": 2667,
+            "threads": 1,
+            "dtype": "q4"
+          }
+        ],
+        "cpuRebuilds": 0
+      },
+      "baselineRssBytes": 2161262592,
+      "peakRssBytes": 3057598464,
+      "sourceRun": "final-whisper-matrix"
+    },
+    {
+      "name": "whisper-init-failure",
+      "elapsedMs": 4001,
+      "result": {
+        "prepared": {
+          "requestId": 2,
+          "success": true,
+          "model": "tiny",
+          "backend": "wasm",
+          "threads": 1,
+          "dtype": "q4"
+        },
+        "outputs": [
+          {
+            "requestId": 3,
+            "success": true,
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "inferenceMs": 1388,
+            "audioDurationMs": 2667,
+            "threads": 1,
+            "dtype": "q4"
+          }
+        ],
+        "cpuRebuilds": 1
+      },
+      "baselineRssBytes": 2174566400,
+      "peakRssBytes": 3036299264,
+      "sourceRun": "final-whisper-matrix"
+    },
+    {
+      "name": "whisper-device-loss",
+      "elapsedMs": 20651,
+      "result": {
+        "prepared": {
+          "model": "tiny",
+          "backend": "webgpu",
+          "gpuInfo": "apple / metal-3",
+          "dtype": "q4"
+        },
+        "outputs": [
+          {
+            "text": "Hello world, this is a local speech test.",
+            "segments": [
+              {
+                "startMs": 0,
+                "endMs": 2667,
+                "text": "Hello world, this is a local speech test."
+              }
+            ],
+            "model": "tiny",
+            "backend": "wasm",
+            "decodeMs": 1.3000000715255737,
+            "inferenceMs": 1384.6999999284744,
+            "audioDurationMs": 2667,
+            "threads": 1,
+            "dtype": "q4"
+          }
+        ],
+        "cpuRebuilds": 1,
+        "injectedDeviceLoss": 1,
+        "ownerSourceHarness": true
+      },
+      "baselineRssBytes": 2167537664,
+      "peakRssBytes": 3051585536,
+      "sourceRun": "final-whisper-matrix"
+    }
+  ],
+  "errors": [],
+  "injectedFaultErrors": [
+    {
+      "case": "whisper-device-loss",
+      "message": "Failed to execute 'mapAsync' on 'GPUBuffer': The Device was lost before mapping was resolved."
+    }
+  ],
+  "sourceRuns": {
+    "tts-matrix": {
+      "selectedCasesPassed": true,
+      "note": "Selected four TTS cases from the complete matrix. The original aggregate run flagged an expected Whisper device-loss page error; both device-loss cases were replayed successfully with that intentional fault tracked separately."
+    },
+    "device-loss-replay": {
+      "aggregatePassed": true,
+      "selectedCases": [
+        "tts-device-loss"
+      ]
+    },
+    "final-whisper-matrix": {
+      "aggregatePassed": true,
+      "note": "All five Whisper cases rerun after restricting fallback hints to model execution failures."
+    }
+  },
+  "launch": {
+    "mode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "displayTarget": "secondary",
+    "browserFrontmost": false,
+    "temporaryProfileRemoved": true
+  },
+  "settingsModelText": "Kokoro 中文与英语\n约 343 MB；首次下载后在当前浏览器本地运行。\n本地运行\n\n可离线使用\n\n清除模型",
+  "validation": {
+    "focusedTestFiles": 11,
+    "focusedTestsPassed": 712,
+    "webGpuProbeCoveragePercent": 100,
+    "typeCheck": "passed",
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed",
+    "docsBuild": "passed",
+    "testRegistryAudit": "passed",
+    "manifestAudit": "passed"
+  },
+  "evidence": "Real production Kokoro FP32 and Whisper Tiny q4 workers; controlled synthesized speech, plus explicitly injected GPU initialization/device-loss faults. Does not cover live website audio capture.",
+  "limits": [
+    "Whisper device-loss runs actual owner source bundled for the fixture; other cases use the real production workers and a protocol driver that rebuilds once on a CPU hint. Owner behavior is additionally unit tested.",
+    "Controlled synthesized speech; no live website audio capture or long-video validation.",
+    "Whisper Tiny only; Base and real Firefox GPU inference not tested.",
+    "Timings are local samples, not cross-device performance guarantees.",
+    "Waveform integrity and nonzero amplitude are verified; this is not a subjective speech quality study."
+  ]
+}

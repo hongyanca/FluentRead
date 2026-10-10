@@ -1,0 +1,588 @@
+{
+  "success": true,
+  "evidence": "Production extension; X DOM fixture; seeded AI cache; mocked translation; no live ASR",
+  "checks": [
+    "320–960px 视频内图标固定在画中画和全屏之间；宿主移位/删除、控件重建、全屏进出后恢复，原生按钮仍可点击",
+    "观看首页隐藏重复关闭和导出，字幕选项可访问校时、下载、重新识别，Esc 返回并恢复焦点",
+    "关闭 AI 后字幕消失，按钮和已就绪状态立即更新",
+    "四段显示方式同步且保持单选；原文与双语切换保留已完成译文，不重复请求",
+    "“关闭”停止 AI 并收起时间行，重新选择显示方式后恢复缓存字幕",
+    "其他页面隐藏字幕时菜单显示为关闭，选择任一显示方式即恢复可见",
+    "模型状态读取失败时单行显示错误并允许重试",
+    "首次生成先在菜单内确认模型与大小，取消可返回，确认后下载失败给出单行错误且不跳转设置页",
+    "缓存命中时直接恢复 AI 字幕，不弹出模型确认",
+    "重新识别绕过当前视频缓存；模型确认前保留现有字幕，取消后仍可观看",
+    "原文、译文和双语下载及结果反馈正常，双语文件保留两行",
+    "控制栏重挂载保留菜单节点与状态，Esc 正常关闭",
+    "设置入口打开视频设置",
+    "观看首页在390×220、竖屏和桌面保持280px紧凑单列，不滚动、不越出播放器",
+    "识别结果已是目标语言时不请求翻译：双语只显示原文一行，仅译文模式仍显示该句",
+    "200 句缓存无需全片翻译即可就绪；服务空响应保留原文与时间轴，单独重试后恢复译文",
+    "方向键移动选项焦点、不触发播放器快进；Esc 和关闭按钮返回入口焦点",
+    "迟到的原生字幕优先于自动恢复的 AI 缓存；原生静音空档不混入旧 AI 字幕",
+    "无字幕时解释下一步并禁用空导出；仅原文模式可加载原生 sidecar 且翻译请求为零",
+    "初始隐藏字幕后选择仅原文可恢复本地字幕缓存，无需切到双语"
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 81256,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 81256,
+      "name": "ChatGPT"
+    }
+  },
+  "placement": [
+    {
+      "name": "width-960",
+      "player": {
+        "left": 24,
+        "right": 984,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 960,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 984,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 960,
+        "height": 540
+      },
+      "button": {
+        "left": 912,
+        "right": 940,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 880,
+        "right": 912,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 940,
+        "right": 972,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "width-572",
+      "player": {
+        "left": 24,
+        "right": 596,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 572,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 596,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 572,
+        "height": 540
+      },
+      "button": {
+        "left": 524,
+        "right": 552,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 492,
+        "right": 524,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 552,
+        "right": 584,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "width-360",
+      "player": {
+        "left": 24,
+        "right": 384,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 360,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 384,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 360,
+        "height": 540
+      },
+      "button": {
+        "left": 312,
+        "right": 340,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 280,
+        "right": 312,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 340,
+        "right": 372,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "width-320",
+      "player": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "button": {
+        "left": 272,
+        "right": 300,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 240,
+        "right": 272,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 300,
+        "right": 332,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "host-moved-icon",
+      "player": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "button": {
+        "left": 272,
+        "right": 300,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 240,
+        "right": 272,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 300,
+        "right": 332,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "host-removed-icon",
+      "player": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "button": {
+        "left": 272,
+        "right": 300,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 240,
+        "right": 272,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 300,
+        "right": 332,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "fullscreen",
+      "player": {
+        "left": 0,
+        "right": 1272,
+        "top": 0,
+        "bottom": 816,
+        "width": 1272,
+        "height": 816
+      },
+      "video": {
+        "left": 0,
+        "right": 1272,
+        "top": 0,
+        "bottom": 816,
+        "width": 1272,
+        "height": 816
+      },
+      "button": {
+        "left": 1200,
+        "right": 1228,
+        "top": 780,
+        "bottom": 808,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 1168,
+        "right": 1200,
+        "top": 778,
+        "bottom": 810,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 1228,
+        "right": 1260,
+        "top": 778,
+        "bottom": 810,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "exit-fullscreen",
+      "player": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "button": {
+        "left": 272,
+        "right": 300,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 240,
+        "right": 272,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 300,
+        "right": 332,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "controls-replaced",
+      "player": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 344,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 320,
+        "height": 540
+      },
+      "button": {
+        "left": 272,
+        "right": 300,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 240,
+        "right": 272,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 300,
+        "right": 332,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    },
+    {
+      "name": "controls-restored",
+      "player": {
+        "left": 24,
+        "right": 984,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 960,
+        "height": 540
+      },
+      "video": {
+        "left": 24,
+        "right": 984,
+        "top": 90.4375,
+        "bottom": 630.4375,
+        "width": 960,
+        "height": 540
+      },
+      "button": {
+        "left": 912,
+        "right": 940,
+        "top": 594.4375,
+        "bottom": 622.4375,
+        "width": 28,
+        "height": 28
+      },
+      "pip": {
+        "left": 880,
+        "right": 912,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "fullscreen": {
+        "left": 940,
+        "right": 972,
+        "top": 592.4375,
+        "bottom": 624.4375,
+        "width": 32,
+        "height": 32
+      },
+      "count": 1
+    }
+  ],
+  "downloads": {
+    "download-subtitles": {
+      "filename": "youtube-subtitles-ai.srt",
+      "body": "1\n00:00:00,000 --> 00:00:10,000\nSubtitle menu state fixture."
+    },
+    "download-translated-subtitles": {
+      "filename": "youtube-subtitles-zh-Hans-translated.srt",
+      "body": "1\n00:00:00,000 --> 00:00:10,000\n字幕菜单同步测试"
+    },
+    "download-bilingual-subtitles": {
+      "filename": "youtube-subtitles-zh-Hans-bilingual.srt",
+      "body": "1\n00:00:00,000 --> 00:00:10,000\nSubtitle menu state fixture.\n字幕菜单同步测试"
+    }
+  },
+  "menuLayouts": [
+    {
+      "name": "phone-landscape",
+      "layout": "stack",
+      "player": {
+        "top": 90.4375,
+        "left": 24,
+        "right": 414,
+        "bottom": 310.4375
+      },
+      "menu": {
+        "top": 128.4375,
+        "left": 126,
+        "right": 406,
+        "bottom": 270.4375,
+        "width": 280,
+        "height": 142
+      },
+      "scrolls": false,
+      "overflowX": false
+    },
+    {
+      "name": "portrait",
+      "layout": "stack",
+      "player": {
+        "top": 90.4375,
+        "left": 24,
+        "right": 324,
+        "bottom": 620.4375
+      },
+      "menu": {
+        "top": 438.4375,
+        "left": 36,
+        "right": 316,
+        "bottom": 580.4375,
+        "width": 280,
+        "height": 142
+      },
+      "scrolls": false,
+      "overflowX": false
+    },
+    {
+      "name": "desktop",
+      "layout": "stack",
+      "player": {
+        "top": 90.4375,
+        "left": 24,
+        "right": 984,
+        "bottom": 630.4375
+      },
+      "menu": {
+        "top": 448.4375,
+        "left": 696,
+        "right": 976,
+        "bottom": 590.4375,
+        "width": 280,
+        "height": 142
+      },
+      "scrolls": false,
+      "overflowX": false
+    }
+  ],
+  "compactStates": [
+    {
+      "name": "translation-failed",
+      "width": 280,
+      "height": 170,
+      "scrolls": false,
+      "overflowX": false
+    },
+    {
+      "name": "no-subtitles",
+      "width": 280,
+      "height": 166,
+      "scrolls": false,
+      "overflowX": false
+    }
+  ]
+}

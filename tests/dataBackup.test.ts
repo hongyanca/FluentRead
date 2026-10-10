@@ -1,11 +1,14 @@
 import {describe, expect, it, vi} from 'vitest';
 import {Config} from '@/src/core/config/model';
-import {prepareConfigForExport} from '@/src/core/config/transfer';
+import {prepareConfigForExport, prepareConfigForImport} from '@/src/core/config/transfer';
 import {
+    FLUENTREAD_DATA_BACKUP_EXACT_CREDENTIAL_MODE,
     FLUENTREAD_DATA_BACKUP_FORMAT,
     createFluentReadDataBackup,
     parseLocalDataImport,
+    resolveBackupConfigCredentialMode,
     summarizeLocalDataImport,
+    usesExactCredentialReplacement,
 } from '@/src/features/settings/model/dataBackup';
 import {
     VOCABULARY_BOOK_EXPORT_FORMAT,
@@ -40,16 +43,29 @@ function modelUsage(): ModelUsageTransferDocument {
 
 describe('统一本机数据备份信封', () => {
     it('组合并识别配置、单词本与模型用量完整备份', () => {
+        const config = new Config();
+        config.translationLoadingStyle = 'orbit';
         const backup = createFluentReadDataBackup({
-            config: prepareConfigForExport(new Config()),
+            config: prepareConfigForExport(config),
             vocabulary: vocabulary(),
             modelUsage: modelUsage(),
             exportedAt: 200,
         });
+        expect(backup.config.translationLoadingStyle).toBe('orbit');
 
-        expect(backup).toMatchObject({format: FLUENTREAD_DATA_BACKUP_FORMAT, version: 1, exportedAt: 200});
+        expect(backup).toMatchObject({
+            format: FLUENTREAD_DATA_BACKUP_FORMAT,
+            version: 2,
+            configCredentialMode: FLUENTREAD_DATA_BACKUP_EXACT_CREDENTIAL_MODE,
+            exportedAt: 200,
+        });
         const parsed = parseLocalDataImport(JSON.parse(JSON.stringify(backup)));
         expect(parsed).toEqual({kind: 'complete', backup});
+        if (parsed.kind === 'complete') {
+            expect(usesExactCredentialReplacement(parsed.backup)).toBe(true);
+            expect(resolveBackupConfigCredentialMode(parsed.backup)).toBe('replace');
+            expect(parsed.backup.config.translationLoadingStyle).toBe('orbit');
+        }
         expect(summarizeLocalDataImport(parsed)).toEqual({
             kind: 'complete',
             configIncluded: true,
@@ -57,6 +73,129 @@ describe('统一本机数据备份信封', () => {
             vocabularyReviewLogs: 0,
             modelUsageEvents: 0,
         });
+    });
+
+    it('旧 v1 完整备份保持兼容但不声明精确凭据替换', () => {
+        const current = createFluentReadDataBackup({
+            config: prepareConfigForExport(new Config()),
+            vocabulary: vocabulary(),
+            modelUsage: modelUsage(),
+            exportedAt: 100,
+        });
+        const {configCredentialMode: _marker, ...legacy} = current;
+        const parsed = parseLocalDataImport({...legacy, version: 1});
+
+        expect(parsed.kind).toBe('complete');
+        if (parsed.kind === 'complete') {
+            expect(usesExactCredentialReplacement(parsed.backup)).toBe(false);
+            expect(resolveBackupConfigCredentialMode(parsed.backup)).toBe('merge-hydration-safe');
+        }
+    });
+
+    it('恢复早期 v2 备份时补齐后来新增的凭据字段，并保留原密钥与用户设置', () => {
+        // 早期 v2 导出时尚未引入 secret、customHeaders 和 apiKeys。
+        // 独立构造历史格式，避免跟随当前 Config 默认值掩盖兼容回归。
+        const legacyConfig = {
+            on: true, service: 'openai', display: 1, from: 'en', to: 'zh-CN',
+            token: {openai: 'legacy-test-key'},
+            ak: 'legacy-test-ak', sk: '', appid: '', key: '',
+            youdaoAppKey: '', youdaoAppSecret: '', tencentSecretId: '', tencentSecretKey: '',
+            extra: {},
+            system_role: {openai: 'Keep this user-authored prompt.'},
+        };
+        const backup = {
+            format: FLUENTREAD_DATA_BACKUP_FORMAT,
+            version: 2,
+            configCredentialMode: FLUENTREAD_DATA_BACKUP_EXACT_CREDENTIAL_MODE,
+            exportedAt: 100,
+            config: legacyConfig,
+            vocabulary: vocabulary(),
+            modelUsage: modelUsage(),
+        };
+        const serialized = JSON.stringify(backup);
+        const parsed = parseLocalDataImport(JSON.parse(serialized));
+        expect(parsed.kind).toBe('complete');
+        if (parsed.kind !== 'complete') throw new Error('未识别旧版完整备份');
+
+        const current = new Config();
+        current.apiKeys = {openai: ['current-test-key'], deepseek: ['current-other-test-key']};
+        current.secret = {aliyunTranslation: 'current-test-secret'};
+        current.customHeaders = {openai: '{"x-test-key":"current-test-header"}'};
+        current.sk = 'current-test-sk';
+        const credentialMode = resolveBackupConfigCredentialMode(parsed.backup);
+        expect(credentialMode).toBe('replace');
+        const restored = prepareConfigForImport(parsed.backup.config, current, {credentialMode});
+        expect(restored.token).toEqual(legacyConfig.token);
+        expect(restored.apiKeys).toEqual({openai: ['legacy-test-key']});
+        expect(restored.secret).toEqual({});
+        expect(restored.customHeaders).toEqual({});
+        expect(restored.ak).toBe(legacyConfig.ak);
+        expect(restored.sk).toBe('');
+        expect(restored.system_role.openai).toBe(legacyConfig.system_role.openai);
+        expect(JSON.stringify(parsed.backup)).toBe(serialized);
+
+        const reexported = createFluentReadDataBackup({
+            config: prepareConfigForExport(restored),
+            vocabulary: parsed.backup.vocabulary,
+            modelUsage: parsed.backup.modelUsage,
+            exportedAt: 200,
+        });
+        expect(reexported.config).toMatchObject({secret: {}, customHeaders: {}, apiKeys: restored.apiKeys});
+        expect(parseLocalDataImport(JSON.parse(JSON.stringify(reexported))).kind).toBe('complete');
+    });
+
+    it.each([undefined, null, [], 'invalid', {aliyunTranslation: 123}])(
+        'v2 中显式提供的畸形 secret 不能当作旧版缺省值：%j', (secret) => {
+            const backup = createFluentReadDataBackup({
+                config: prepareConfigForExport(new Config()),
+                vocabulary: vocabulary(),
+                modelUsage: modelUsage(),
+            });
+            backup.config.secret = secret;
+            expect(() => parseLocalDataImport(backup)).toThrow('精确凭据快照');
+            expect(usesExactCredentialReplacement(backup)).toBe(false);
+        },
+    );
+
+    it('v2 精确替换拒绝缺失或畸形凭据快照，v1 仍按旧协议兼容', () => {
+        const complete = createFluentReadDataBackup({
+            config: prepareConfigForExport(new Config()),
+            vocabulary: vocabulary(),
+            modelUsage: modelUsage(),
+            exportedAt: 100,
+        });
+        const {token: _token, ...missingToken} = complete.config;
+
+        expect(() => createFluentReadDataBackup({
+            config: missingToken,
+            vocabulary: vocabulary(),
+            modelUsage: modelUsage(),
+        })).toThrow('精确凭据快照');
+        expect(() => parseLocalDataImport({...complete, config: missingToken}))
+            .toThrow('精确凭据快照');
+        expect(usesExactCredentialReplacement({...complete, config: missingToken})).toBe(false);
+        expect(usesExactCredentialReplacement({...complete, config: null as never})).toBe(false);
+        expect(usesExactCredentialReplacement({...complete, config: 'broken' as never})).toBe(false);
+        expect(usesExactCredentialReplacement({...complete, config: [] as never})).toBe(false);
+        expect(() => parseLocalDataImport({
+            ...complete,
+            config: {...complete.config, token: {openai: 123}},
+        })).toThrow('精确凭据快照');
+        expect(() => parseLocalDataImport({
+            ...complete,
+            config: {...complete.config, extra: null},
+        })).toThrow('精确凭据快照');
+        expect(() => parseLocalDataImport({
+            ...complete,
+            config: {...complete.config, ak: null},
+        })).toThrow('精确凭据快照');
+
+        const {configCredentialMode: _marker, ...legacy} = complete;
+        const parsedLegacy = parseLocalDataImport({...legacy, version: 1, config: missingToken});
+        expect(parsedLegacy.kind).toBe('complete');
+        if (parsedLegacy.kind === 'complete') {
+            expect(usesExactCredentialReplacement(parsedLegacy.backup)).toBe(false);
+        }
     });
 
     it('兼容识别旧版单词本、模型用量与配置文件', () => {
@@ -100,8 +239,16 @@ describe('统一本机数据备份信封', () => {
         expect(() => parseLocalDataImport(null)).toThrow('JSON 对象');
         expect(() => parseLocalDataImport([])).toThrow('JSON 对象');
         expect(() => parseLocalDataImport(new Date())).toThrow('JSON 对象');
-        expect(() => parseLocalDataImport({format: FLUENTREAD_DATA_BACKUP_FORMAT, version: 2}))
+        expect(() => parseLocalDataImport({format: FLUENTREAD_DATA_BACKUP_FORMAT, version: 3}))
             .toThrow('版本');
+        expect(() => parseLocalDataImport({
+            format: FLUENTREAD_DATA_BACKUP_FORMAT,
+            version: 2,
+            exportedAt: 100,
+            config,
+            vocabulary: vocabulary(),
+            modelUsage: modelUsage(),
+        })).toThrow('精确凭据快照标记');
         expect(() => createFluentReadDataBackup({config: {}, vocabulary: vocabulary(), modelUsage: modelUsage()}))
             .toThrow('配置');
         expect(() => parseLocalDataImport({

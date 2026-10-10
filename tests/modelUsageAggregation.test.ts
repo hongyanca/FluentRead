@@ -1,11 +1,13 @@
 import {describe, expect, it} from 'vitest';
 import {
     aggregateModelUsageTotals,
+    requestOutputTokensPerSecond,
     buildModelUsageDashboard,
     collectModelUsageDimensions,
     getModelUsageRangeStart,
     normalizeModelUsageFilter,
 } from '@/src/services/model-usage/aggregation';
+import {createNextCustomOpenAIProviderId} from '@/src/core/config/customOpenAI';
 import type {ModelUsageEvent} from '@/src/services/model-usage/types';
 
 function inTimezone<T>(timezone: string, run: () => T): T {
@@ -86,6 +88,8 @@ describe('模型用量纯聚合', () => {
             cacheRequestHitRate: 1,
             cacheCoverageRate: 1,
             reasoningTokens: 4,
+            outputTokensPerSecond: 62.5,
+            speedReportedRequests: 1,
             averageDurationMs: 320,
             averageTokensPerReportedRequest: 120,
             averageInputTokensPerReportedRequest: 100,
@@ -203,6 +207,33 @@ describe('模型用量纯聚合', () => {
             outputTokens: 50,
             totalTokens: 200,
         });
+    });
+
+    it('删除自定义服务后新建身份不会继承同模型的旧用量', () => {
+        const retiredServiceId = 'custom:retired-profile';
+        const replacementServiceId = createNextCustomOpenAIProviderId([], () => 'replacement-profile');
+        const snapshot = buildModelUsageDashboard([
+            event({
+                serviceId: retiredServiceId,
+                configuredModel: 'shared-model',
+                inputTokens: 70,
+                outputTokens: 30,
+                totalTokens: 100,
+            }),
+            event({
+                serviceId: replacementServiceId,
+                configuredModel: 'shared-model',
+                inputTokens: 15,
+                outputTokens: 5,
+                totalTokens: 20,
+            }),
+        ], {range: '30d'}, {now: new Date(2026, 7, 29, 12).getTime()});
+
+        expect(replacementServiceId).not.toBe(retiredServiceId);
+        expect(snapshot.breakdown.map(({serviceId, totals}) => [serviceId, totals.totalTokens])).toEqual([
+            [retiredServiceId, 100],
+            [replacementServiceId, 20],
+        ]);
     });
 
     it('按本地午夜计算 today，并生成完整二十四小时时间线', () => {
@@ -338,5 +369,31 @@ describe('模型用量纯聚合', () => {
             'a/x',
             'a/y',
         ]);
+    });
+});
+
+describe('输出速度统计', () => {
+    it('按同一组成功请求的总输出除以总耗时，排除失败及缺失数据', () => {
+        const totals = aggregateModelUsageTotals([
+            event({outputTokens: 100, durationMs: 1000}),
+            event({outputTokens: 100, durationMs: 3000}),
+            event({outputTokens: 900, durationMs: 1000, outcome: 'error'}),
+            event({durationMs: 5000}),
+            event({outputTokens: 700, durationMs: 1000, usageAvailability: 'unreported'}),
+            event({outputTokens: 100, durationMs: 0}),
+        ]);
+        expect(totals.outputTokensPerSecond).toBe(50);
+        expect(totals.speedReportedRequests).toBe(2);
+        expect(aggregateModelUsageTotals([]).outputTokensPerSecond).toBeNull();
+        expect(requestOutputTokensPerSecond(event({outputTokens: 0}))).toBe(0);
+    });
+    it('缺失、负数和非有限数不会形成虚假速度', () => {
+        for (const overrides of [
+            {outputTokens: undefined}, {outputTokens: -1}, {outputTokens: Infinity},
+            {outputTokens: 0.5}, {outputTokens: NaN}, {durationMs: 0},
+            {durationMs: -1}, {durationMs: Infinity}, {durationMs: NaN},
+            {durationMs: Number.MIN_VALUE}, {outcome: 'cancelled' as const},
+            {outcome: 'timeout' as const}, {usageAvailability: 'malformed' as const},
+        ]) expect(requestOutputTokensPerSecond(event({outputTokens: 10, ...overrides}))).toBeNull();
     });
 });

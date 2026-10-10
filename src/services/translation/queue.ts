@@ -2,7 +2,7 @@
  * @file src/services/translation/queue.ts
  *
  * 文件职责：提供带会话取消、并发上限和公平调度的翻译任务队列，供全文等批量场景控制 provider 压力。
- * 主要内容：定义 queue session/lease、TranslationQueueCancelledError，支持创建和取消会话、enqueue、释放租约、队列压缩及全局清理，确保已取消任务不会继续占用槽位。 可核对的公开符号包括 TranslationQueueSession、TranslationQueueLease、TranslationQueueCancelledError、createTranslationQueueSession、cancelTranslationQueueSession、enqueueTranslation、clearTranslationQueue。
+ * 主要内容：定义 queue session/lease、TranslationQueueCancelledError，支持创建和取消会话、enqueue、释放租约、按会话索引的 O(1) 取消、队列压缩及全局清理，确保已取消任务不会继续占用槽位。 可核对的公开符号包括 TranslationQueueSession、TranslationQueueLease、TranslationQueueCancelledError、createTranslationQueueSession、cancelTranslationQueueSession、enqueueTranslation、clearTranslationQueue。
  * 模块边界：本文件位于翻译 application service 层，负责用例编排和端口契约；不挂载页面 UI，且不应把某家供应商的网络细节扩散到 feature，具体 HTTP 协议由 providers/platform 实现。
  */
 
@@ -12,8 +12,8 @@
  */
 
 import {config} from '@/src/services/config/store';
+import {normalizeMaxConcurrentTranslations} from '@/src/core/config/model';
 
-const DEFAULT_MAX_CONCURRENT_TRANSLATIONS = 6;
 const COMPACTION_HEAD_THRESHOLD = 1024;
 
 export interface TranslationQueueSession {
@@ -34,6 +34,8 @@ type TranslationQueueSessionState =
 
 interface PendingTranslation {
   session: TranslationQueueSession;
+  /** 在 pendingTranslations 中的槽位；压缩队列时统一平移，保证取消是 O(1) 定位。 */
+  slot: number;
   execute: () => Promise<void>;
   cancel: (error: TranslationQueueCancelledError) => void;
 }
@@ -50,8 +52,46 @@ export class TranslationQueueCancelledError extends Error {
 let activeTranslations = 0;
 let pendingTranslations: Array<PendingTranslation | undefined> = [];
 let pendingHead = 0;
+let pendingCount = 0;
 let queueGeneration = 0;
 const sessionStates = new WeakMap<TranslationQueueSession, TranslationQueueSessionState>();
+/**
+ * 每个会话自己的等待项索引。全文翻译为每个候选创建独立会话，恢复原文或滚动
+ * 抖动会连续取消数百个会话；若每次取消都线性扫描整条队列，整页取消就是 O(N²)。
+ */
+const pendingBySession = new Map<TranslationQueueSession, Set<PendingTranslation>>();
+
+function sessionPendingEntries(session: TranslationQueueSession): Set<PendingTranslation> {
+  let entries = pendingBySession.get(session);
+  if (!entries) {
+    entries = new Set();
+    pendingBySession.set(session, entries);
+  }
+  return entries;
+}
+
+function forgetPendingTranslation(entry: PendingTranslation): void {
+  const entries = sessionPendingEntries(entry.session);
+  entries.delete(entry);
+  if (entries.size === 0) pendingBySession.delete(entry.session);
+}
+
+/**
+ * 摘除一个仍在等待的条目。索引只登记仍占用数组槽位的条目——出队与取消都会
+ * 同步移除索引——因此这里不需要再复验槽位归属。
+ */
+function detachPendingTranslation(entry: PendingTranslation): void {
+  pendingTranslations[entry.slot] = undefined;
+  pendingCount -= 1;
+  forgetPendingTranslation(entry);
+}
+
+function resetPendingQueue(): void {
+  pendingTranslations = [];
+  pendingHead = 0;
+  pendingCount = 0;
+  pendingBySession.clear();
+}
 
 function createSession(): TranslationQueueSession {
   const session = Object.freeze({generation: queueGeneration});
@@ -62,7 +102,9 @@ function createSession(): TranslationQueueSession {
 let defaultSession = createSession();
 
 function getMaxConcurrentTranslations(): number {
-  return config.maxConcurrentTranslations || DEFAULT_MAX_CONCURRENT_TRANSLATIONS;
+  // config 通常已经在存储边界归一化；这里仍防御运行时污染和旧上下文中的畸形值，
+  // 确保队列至少推进一个任务，也绝不会突破设置页公开的 100 并发上限。
+  return normalizeMaxConcurrentTranslations(config.maxConcurrentTranslations);
 }
 
 function normalizeCancellationError(reason?: unknown): TranslationQueueCancelledError {
@@ -80,15 +122,17 @@ function getSessionCancellationError(session: TranslationQueueSession): Translat
 }
 
 function compactPendingQueue(force = false): void {
-  if (pendingHead === 0) return;
-  if (pendingHead >= pendingTranslations.length) {
-    pendingTranslations = [];
-    pendingHead = 0;
+  // 队列已排空时无条件回收，取消整页候选后不再保留数千个空槽。
+  if (pendingCount === 0) {
+    if (pendingTranslations.length > 0 || pendingHead > 0) resetPendingQueue();
     return;
   }
+  if (pendingHead === 0) return;
   if (force || (pendingHead >= COMPACTION_HEAD_THRESHOLD && pendingHead * 2 >= pendingTranslations.length)) {
-    pendingTranslations = pendingTranslations.slice(pendingHead);
+    const offset = pendingHead;
+    pendingTranslations = pendingTranslations.slice(offset);
     pendingHead = 0;
+    for (const entry of pendingTranslations) if (entry) entry.slot -= offset;
   }
 }
 
@@ -97,6 +141,10 @@ function dequeuePendingTranslation(): PendingTranslation | undefined {
     const entry = pendingTranslations[pendingHead];
     pendingTranslations[pendingHead] = undefined;
     pendingHead += 1;
+    if (entry) {
+      pendingCount -= 1;
+      forgetPendingTranslation(entry);
+    }
     compactPendingQueue();
     if (entry) return entry;
   }
@@ -136,13 +184,15 @@ export function cancelTranslationQueueSession(session: TranslationQueueSession, 
 
   const error = normalizeCancellationError(reason);
   sessionStates.set(session, {cancelled: true, cancellationError: error});
-  for (let index = pendingHead; index < pendingTranslations.length; index += 1) {
-    const entry = pendingTranslations[index];
-    if (entry?.session !== session) continue;
-    pendingTranslations[index] = undefined;
-    entry.cancel(error);
+  const entries = pendingBySession.get(session);
+  if (entries) {
+    // 先快照再摘除：detach 会改写同一个 Set。
+    for (const entry of [...entries]) {
+      detachPendingTranslation(entry);
+      entry.cancel(error);
+    }
   }
-  compactPendingQueue(true);
+  compactPendingQueue();
 }
 
 /**
@@ -164,6 +214,7 @@ export function enqueueTranslation<T>(
   return new Promise<T>((resolve, reject) => {
     const entry: PendingTranslation = {
       session,
+      slot: pendingTranslations.length,
       cancel: (error) => {
         reject(error);
       },
@@ -195,6 +246,8 @@ export function enqueueTranslation<T>(
     };
 
     pendingTranslations.push(entry);
+    pendingCount += 1;
+    sessionPendingEntries(session).add(entry);
     processQueue();
   });
 }
@@ -211,13 +264,12 @@ export function clearTranslationQueue(): void {
   }
 
   queueGeneration += 1;
+  const cancelled: PendingTranslation[] = [];
   for (let index = pendingHead; index < pendingTranslations.length; index += 1) {
     const entry = pendingTranslations[index];
-    if (!entry) continue;
-    pendingTranslations[index] = undefined;
-    entry.cancel(error);
+    if (entry) cancelled.push(entry);
   }
-  pendingTranslations = [];
-  pendingHead = 0;
+  resetPendingQueue();
+  for (const entry of cancelled) entry.cancel(error);
   defaultSession = createSession();
 }

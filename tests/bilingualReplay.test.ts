@@ -1,0 +1,473 @@
+import {parseHTML} from 'linkedom';
+import {describe, expect, it, vi} from 'vitest';
+
+vi.mock('@/src/services/config/store', () => ({
+    config: {style: 1, to: 'zh-Hans'},
+}));
+vi.mock('@/src/core/config/catalog', () => ({
+    options: {styles: []},
+}));
+
+import {
+    applyTranslationsToSnapshot,
+    collectLiveTranslationTextSlots,
+    createTranslationSourceSnapshot,
+    getCurrentTranslationCore,
+} from '@/src/core/translation/public';
+import {config as liveConfig} from '@/src/services/config/store';
+import {refreshBilingualTranslationSkeleton} from
+    '@/src/features/full-page-translation/content/bilingualReplay';
+import {stabilizeBilingualArtifact, createBilingualRemountCapitulationRegistry} from
+    '@/src/features/full-page-translation/content/bilingualRemount';
+import {appendBilingualTranslation} from
+    '@/src/features/full-page-translation/content/renderer';
+import {
+    beginBilingualArtifactHostWriteGesture,
+    beginTranslation,
+    ensureTranslationTruncationLayout,
+    hasBilingualArtifactHostWriteBudget,
+    isBilingualArtifactDriftOnly,
+    isBilingualArtifactHostWriteBudgetCapitulated,
+    markTranslationComplete,
+    restoreAllTranslations,
+    setBilingualContent,
+    setBilingualSkeletonRefreshHandler,
+    setRenderedStyleAttribute,
+    tryRepairBilingualTranslationArtifact,
+    type TranslationState,
+} from '@/src/features/full-page-translation/content/state';
+import {isTranslationArtifactCurrent} from
+    '@/src/features/full-page-translation/content/translationStability';
+
+async function withDocumentRealm<T>(
+    document: Document,
+    callback: () => T | Promise<T>,
+): Promise<T> {
+    const realm = document.defaultView as unknown as Record<string, unknown>;
+    const globalRecord = globalThis as unknown as Record<string, unknown>;
+    const realmBindings: Record<string, unknown> = {
+        document,
+        window: document.defaultView,
+        DOMParser: class FixtureDOMParser {
+            parseFromString(source: string): Document {
+                return parseHTML(`<html><head></head><body>${source}</body></html>`).document;
+            }
+        },
+        Element: realm.Element,
+        HTMLElement: realm.HTMLElement,
+        MutationObserver: realm.MutationObserver,
+        Node: realm.Node,
+        ShadowRoot: realm.ShadowRoot,
+    };
+    const previousDescriptors = new Map<string, PropertyDescriptor | undefined>();
+
+    Object.entries(realmBindings).forEach(([name, value]) => {
+        previousDescriptors.set(name, Object.getOwnPropertyDescriptor(globalThis, name));
+        if (value !== undefined) {
+            Object.defineProperty(globalRecord, name, {
+                configurable: true,
+                writable: true,
+                value,
+            });
+        }
+    });
+
+    try {
+        return await callback();
+    } finally {
+        restoreAllTranslations();
+        Object.keys(realmBindings).forEach((name) => {
+            const descriptor = previousDescriptors.get(name);
+            if (descriptor) Object.defineProperty(globalRecord, name, descriptor);
+            else delete globalRecord[name];
+        });
+    }
+}
+
+interface CommittedReplayFixture {
+    owner: HTMLElement;
+    state: TranslationState;
+    wrapper: HTMLElement;
+    sources: readonly string[];
+    translations: readonly string[];
+}
+
+function createCommittedReplayFixture(
+    document: Document,
+    includeReplay = true,
+    allowTopLevelApplicationShell = false,
+): CommittedReplayFixture {
+    const base = document.createElement('base');
+    base.setAttribute('href', 'https://example.com/');
+    document.head.appendChild(base);
+    document.body.innerHTML = `
+        <p id="owner">
+            <span id="plain-source">Translate this sentence.</span>
+            <a id="source-link" href="https://example.com/before" title="Before">Read the details.</a>
+            <code id="source-code">const version = 'before';</code>
+            <mark id="source-no-translate" translate="no">Protected copy before.</mark>
+            <ruby id="source-math" class="MathJax"><strong>formula before</strong></ruby>
+        </p>
+    `;
+    const owner = document.querySelector<HTMLElement>('#owner')!;
+    const core = getCurrentTranslationCore();
+    const options = allowTopLevelApplicationShell
+        ? {allowTopLevelApplicationShell: true, protectedElement: owner}
+        : {protectedElement: owner};
+    const snapshot = createTranslationSourceSnapshot(
+        owner,
+        core.shouldStayOriginal,
+        undefined,
+        options,
+    );
+    const liveSlots = collectLiveTranslationTextSlots(
+        owner,
+        core.shouldStayOriginal,
+        undefined,
+        options,
+    );
+    const sources = snapshot.slots.map((slot) => slot.source);
+    const translations = Object.freeze(['这句话已翻译。', '阅读最新详情。']);
+    expect(sources).toEqual(['Translate this sentence.', 'Read the details.']);
+
+    const attempt = beginTranslation(
+        owner,
+        'bilingual',
+        'content',
+        false,
+        sources.join(' '),
+        liveSlots.map((slot) => slot.node),
+        allowTopLevelApplicationShell,
+    )!;
+    expect(markTranslationComplete(owner, attempt.state, attempt.generation)).toBe(true);
+    const translatedHTML = applyTranslationsToSnapshot(snapshot, translations);
+    const wrapper = appendBilingualTranslation(owner, translatedHTML, {
+        targetLanguage: 'zh-Hans',
+        style: 1,
+    });
+    setBilingualContent(owner, wrapper, includeReplay ? {
+        sources,
+        translations,
+        targetLanguage: 'zh-Hans',
+        style: 1,
+    } : undefined);
+    setRenderedStyleAttribute(owner);
+
+    return {owner, state: attempt.state, wrapper, sources, translations};
+}
+
+/**
+ * 单槽候选：整段可见文本就是一个链接。多槽候选会把整段译文降级成纯文本，
+ * 这里的骨架仍然携带复制来的内联节点，用于验证宿主改写这些节点属性时的行为。
+ */
+function createCommittedSingleSlotFixture(
+    document: Document, translation = '阅读最新详情。', longParagraphLineBreak = false,
+): CommittedReplayFixture {
+    const base = document.createElement('base');
+    base.setAttribute('href', 'https://example.com/');
+    document.head.appendChild(base);
+    document.body.innerHTML =
+        '<p id="owner"><a id="source-link" href="https://example.com/before" ' +
+        'title="Before">Read the details.</a></p>';
+    const owner = document.querySelector<HTMLElement>('#owner')!;
+    const core = getCurrentTranslationCore();
+    const options = {protectedElement: owner};
+    const snapshot = createTranslationSourceSnapshot(
+        owner, core.shouldStayOriginal, undefined, options);
+    const liveSlots = collectLiveTranslationTextSlots(owner, core.shouldStayOriginal, undefined, options);
+    const sources = snapshot.slots.map((slot) => slot.source);
+    const translations = Object.freeze([translation]);
+    expect(sources).toEqual(['Read the details.']);
+    const attempt = beginTranslation(
+        owner, 'bilingual', 'content', false, sources.join(' '),
+        liveSlots.map((slot) => slot.node), false,
+    )!;
+    expect(markTranslationComplete(owner, attempt.state, attempt.generation)).toBe(true);
+    const wrapper = appendBilingualTranslation(
+        owner, applyTranslationsToSnapshot(snapshot, translations), {targetLanguage: 'zh-Hans', style: 1, longParagraphLineBreak});
+    setBilingualContent(owner, wrapper, {sources, translations, targetLanguage: 'zh-Hans', style: 1, longParagraphLineBreak});
+    setRenderedStyleAttribute(owner);
+
+    return {owner, state: attempt.state, wrapper, sources, translations};
+}
+
+/**
+ * 布局观察器使用 realm 自身的 MutationObserver，linkedom 会异步投递记录，
+ * 因此宿主 mutation 之后需要让出几个宏任务，等观察器与状态机的微任务都执行完。
+ */
+async function flushLayoutRefresh(): Promise<void> {
+    for (let turn = 0; turn < 4; turn += 1) {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+}
+
+describe('双语译文骨架重放', () => {
+    it.each([true, false])('宿主刷新骨架时保持已提交的长段落换行 %s', async (frozen) => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const previous = liveConfig.longParagraphLineBreakEnabled;
+            try {
+                const translation = '这是第一句需要保留的较长译文内容。这是第二句需要保留的较长译文内容。'.repeat(5);
+                const fixture = createCommittedSingleSlotFixture(document, translation, frozen);
+                const originalBreaks = fixture.wrapper.querySelectorAll('br').length;
+                expect(originalBreaks > 0).toBe(frozen);
+                liveConfig.longParagraphLineBreakEnabled = !frozen;
+                fixture.owner.querySelector('#source-link')!.setAttribute('href', 'https://example.com/new');
+                expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(true);
+                expect(fixture.owner.lastChild).toBe(fixture.wrapper);
+                expect(fixture.wrapper.querySelectorAll('br')).toHaveLength(originalBreaks);
+                expect(fixture.wrapper.textContent).toBe(translation);
+                expect(fixture.wrapper.querySelector('a')?.getAttribute('href')).toBe('https://example.com/new');
+            } finally {
+                liveConfig.longParagraphLineBreakEnabled = previous;
+            }
+        });
+    });
+
+    it('保持同一 wrapper 并用最新安全骨架就地重放原 provider 译文', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedReplayFixture(document);
+            const replayTranslations = [...fixture.state.bilingualReplay!.translations];
+            const providerTranslations = [...fixture.translations];
+            const previousSourceNodes = [...(fixture.state.sourceTextNodes ?? [])];
+
+            const plain = fixture.owner.querySelector<HTMLElement>('#plain-source')!;
+            const replacementPlainText = document.createTextNode('Translate this sentence.');
+            plain.replaceChildren(replacementPlainText);
+            const link = fixture.owner.querySelector<HTMLAnchorElement>('#source-link')!;
+            link.setAttribute('href', 'https://example.com/after');
+            link.setAttribute('title', 'After');
+            fixture.owner.querySelector<HTMLElement>('#source-code')!.textContent =
+                "const version = 'after';";
+            fixture.owner.querySelector<HTMLElement>('#source-no-translate')!.textContent =
+                'Protected copy after.';
+            fixture.owner.querySelector<HTMLElement>('#source-math')!.innerHTML =
+                '<strong>formula after</strong>';
+
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(true);
+            expect(fixture.owner.querySelector(
+                ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]',
+            )).toBe(fixture.wrapper);
+            expect(fixture.wrapper.getAttribute('translate')).toBe('no');
+            expect(fixture.wrapper.querySelector('code')?.textContent).toBe("const version = 'after';");
+            expect(fixture.wrapper.querySelector('mark')?.textContent).toBe('Protected copy after.');
+            expect(fixture.wrapper.querySelector('ruby strong')?.textContent).toBe('formula after');
+            expect(fixture.wrapper.querySelector('a')?.getAttribute('href'))
+                .toBe('https://example.com/after');
+            expect(fixture.wrapper.querySelector('a')?.getAttribute('title')).toBe('After');
+            fixture.translations.forEach((translation) => {
+                expect(fixture.wrapper.textContent).toContain(translation);
+            });
+            expect(fixture.translations).toEqual(providerTranslations);
+            expect(fixture.state.bilingualReplay?.sources).toEqual(fixture.sources);
+            expect(fixture.state.bilingualReplay?.translations).toEqual(replayTranslations);
+            expect(fixture.state.sourceTextNodes).toContain(replacementPlainText);
+            expect(fixture.state.sourceTextNodes?.[0]).toBe(replacementPlainText);
+            expect(fixture.state.sourceTextNodes?.[0]).not.toBe(previousSourceNodes[0]);
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+        });
+    });
+
+    it('没有 replay 快照时拒绝刷新', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedReplayFixture(document, false);
+            const previousOuterHTML = fixture.wrapper.outerHTML;
+
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(false);
+            expect(fixture.wrapper.outerHTML).toBe(previousOuterHTML);
+            expect(fixture.state.bilingualReplay).toBeUndefined();
+        });
+    });
+
+    it('允许顶层应用壳时沿用相同保护边界重放', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedReplayFixture(document, true, true);
+
+            expect(fixture.state.allowTopLevelApplicationShell).toBe(true);
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(true);
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+        });
+    });
+
+    it('当前 wrapper 工件不完整时拒绝重放', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedReplayFixture(document);
+            fixture.wrapper.remove();
+
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(false);
+            expect(fixture.wrapper.parentNode).toBeNull();
+            expect(fixture.state.bilingualReplay?.translations).toEqual(fixture.translations);
+        });
+    });
+
+    it('provider source slots 发生变化时拒绝复用旧译文', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedReplayFixture(document);
+            const previousOuterHTML = fixture.wrapper.outerHTML;
+            const previousSourceNodes = fixture.state.sourceTextNodes;
+            fixture.owner.querySelector<HTMLElement>('#plain-source')!.textContent =
+                'This is a different provider source.';
+
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(false);
+            expect(fixture.wrapper.outerHTML).toBe(previousOuterHTML);
+            expect(fixture.state.sourceTextNodes).toBe(previousSourceNodes);
+            expect(fixture.state.bilingualReplay?.translations).toEqual(fixture.translations);
+        });
+    });
+
+    it('链接提示可与焦点和字体标记共同漂移：不重写、不计预算、不撤下译文', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedSingleSlotFixture(document);
+            const link = fixture.owner.querySelector(
+                ':scope > .fluent-read-bilingual-content a')!;
+
+            for (let round = 0; round < 6; round += 1) {
+                // 悬停预览会在指针进入/离开时反复改写我们复制进骨架的链接属性。
+                if (round % 3 === 0) link.setAttribute('title', `host-tooltip-${round}`);
+                else if (round % 3 === 1) link.setAttribute('title', '');
+                else link.removeAttribute('title');
+                link.setAttribute('tabindex', round % 2 ? '-1' : '0');
+                link.setAttribute('ultimate-bold-correct', '');
+                link.classList.add('ultimate-bold-correct');
+                beginBilingualArtifactHostWriteGesture();
+                expect(isBilingualArtifactDriftOnly(fixture.owner, fixture.state)).toBe(true);
+                expect(tryRepairBilingualTranslationArtifact(fixture.owner, fixture.state)).toBe('tolerated');
+            }
+
+            expect(link.isConnected).toBe(true);
+            expect(fixture.owner.querySelector(
+                ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]',
+            )).toBe(fixture.wrapper);
+            expect(fixture.wrapper.textContent).toContain('阅读最新详情。');
+            expect(hasBilingualArtifactHostWriteBudget(fixture.owner)).toBe(false);
+            expect(isBilingualArtifactHostWriteBudgetCapitulated(fixture.owner, fixture.state.sourceText,
+                fixture.state.sourceStructureSignature ?? '',
+                fixture.state.translationInvocationIdentity, fixture.state.scope)).toBe(false);
+            // 严格信任仍把它看作被改写的工件，显示与安全边界没有放松。
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(false);
+            expect(stabilizeBilingualArtifact(fixture.owner, fixture.state,
+                createBilingualRemountCapitulationRegistry())).toBe('current');
+        });
+    });
+
+    it.each([
+        ['href', 'https://example.com/unrelated'],
+        ['onclick', 'window.__unexpectedClick = true'],
+        ['style', 'display:none'],
+        ['aria-hidden', 'true'],
+        ['class', 'hidden'],
+        ['tabindex', '2'],
+    ])('译文链接单独改变 %s 时恢复可信属性，保留原文链接', async (attribute, value) => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedSingleSlotFixture(document);
+            const original = fixture.owner.querySelector('#source-link')!;
+            const originalHTML = original.outerHTML;
+            fixture.wrapper.querySelector('a')!.setAttribute(attribute, value);
+
+            expect(isBilingualArtifactDriftOnly(fixture.owner, fixture.state)).toBe(false);
+            expect(tryRepairBilingualTranslationArtifact(fixture.owner, fixture.state)).toBe('repaired');
+            const repairedLink = fixture.state.bilingualContent!.querySelector('a')!;
+            expect(repairedLink.getAttribute(attribute)).toBe(
+                fixture.state.bilingualContentTemplate!.querySelector('a')!.getAttribute(attribute));
+            expect(repairedLink.textContent).toBe('阅读最新详情。');
+            expect(original.outerHTML).toBe(originalHTML);
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+        });
+    });
+
+    it('wrapper 外层属性被改写时仍按篡改重建，而不是保留注入属性', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedSingleSlotFixture(document);
+            fixture.wrapper.setAttribute('style', 'display:none');
+
+            expect(isBilingualArtifactDriftOnly(fixture.owner, fixture.state)).toBe(false);
+            expect(tryRepairBilingualTranslationArtifact(fixture.owner, fixture.state)).toBe('repaired');
+
+            const rebuilt = fixture.owner.querySelector<HTMLElement>(
+                ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]')!;
+            expect(rebuilt).not.toBe(fixture.wrapper);
+            expect(rebuilt.hasAttribute('style')).toBe(false);
+            expect(rebuilt.textContent).toContain('阅读最新详情。');
+            expect(stabilizeBilingualArtifact(fixture.owner, fixture.state,
+                createBilingualRemountCapitulationRegistry())).toBe('current');
+        });
+    });
+
+    it('工件译文内容被改写时本地重建并清掉注入属性', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedSingleSlotFixture(document);
+            const link = fixture.wrapper.querySelector('a')!;
+            link.setAttribute('onclick', 'window.__pwned = true');
+            link.textContent = 'HOST INJECTED';
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(false);
+
+            expect(tryRepairBilingualTranslationArtifact(fixture.owner, fixture.state)).toBe('repaired');
+
+            const rebuilt = fixture.owner.querySelector<HTMLElement>(
+                ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]')!;
+            expect(rebuilt.querySelector('a')?.getAttribute('onclick')).toBeNull();
+            expect(rebuilt.querySelector('a')?.textContent).toBe('阅读最新详情。');
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+        });
+    });
+
+    it('工件内部属性漂移时可用已提交译文重建骨架', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, () => {
+            const fixture = createCommittedSingleSlotFixture(document);
+            fixture.owner.querySelector(':scope > .fluent-read-bilingual-content a')!
+                .setAttribute('title', 'host-tooltip');
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(false);
+
+            expect(refreshBilingualTranslationSkeleton(fixture.owner, fixture.state)).toBe(true);
+
+            // 骨架与当前 DOM 同步（清掉宿主注入的属性），并复用同一份已提交译文。
+            expect(fixture.owner.querySelector(
+                ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]',
+            )).toBe(fixture.wrapper);
+            expect(fixture.wrapper.querySelector('a')?.getAttribute('title')).toBe('Before');
+            expect(fixture.wrapper.textContent).toContain('阅读最新详情。');
+            expect(fixture.state.bilingualReplay?.translations).toEqual(fixture.translations);
+            expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+        });
+    });
+
+    it('宿主只改写骨架属性时重建骨架而不是撤下译文', async () => {
+        const {document} = parseHTML('<html><body></body></html>');
+        await withDocumentRealm(document, async () => {
+            // 与 content 组合根一致：state 只暴露钩子，实现留在 bilingualReplay。
+            setBilingualSkeletonRefreshHandler((owner, state) => refreshBilingualTranslationSkeleton(owner, state));
+            try {
+                const fixture = createCommittedSingleSlotFixture(document);
+                const previousSources = [...(fixture.state.bilingualReplay?.sources ?? [])];
+                expect(ensureTranslationTruncationLayout(fixture.owner)).toBe(true);
+
+                // 悬停预览会改写源链接的 title：结构签名漂移，但可译文本没变，
+                // 因此只能刷新骨架复用已提交译文。
+                fixture.owner.querySelector<HTMLAnchorElement>('#source-link')!
+                    .setAttribute('title', 'Host tooltip');
+                await flushLayoutRefresh();
+
+                expect(fixture.owner.querySelector(
+                    ':scope > .fluent-read-bilingual-content[data-fr-translation-owned="true"]',
+                )).toBe(fixture.wrapper);
+                expect(isTranslationArtifactCurrent(fixture.owner, fixture.state)).toBe(true);
+                expect(fixture.state.bilingualReplay?.sources).toEqual(previousSources);
+                expect(fixture.state.bilingualReplay?.translations).toEqual(fixture.translations);
+                // 骨架跟着最新 DOM 更新，不再保留旧 title。
+                expect(fixture.wrapper.querySelector('a')?.getAttribute('title')).toBe('Host tooltip');
+            } finally {
+                setBilingualSkeletonRefreshHandler(undefined);
+            }
+        });
+    });
+});

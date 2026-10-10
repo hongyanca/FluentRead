@@ -1,0 +1,119 @@
+{
+  "ok": true,
+  "extensionDir": ".output/chrome-mv3",
+  "cases": [
+    "real UI saves produce distinct field and before/after summaries after reopening",
+    "latest version shows its original edit and a separate zero-difference restore comparison",
+    "older version separates its historical edit from the settings restoration would change",
+    "restoring an older version persists the selected values and records the inverse change",
+    "earliest retained snapshot explicitly reports unavailable previous history",
+    "automatic snapshots use the current-settings recovery comparison",
+    "multi-setting summaries stay compact while details include every non-credential change",
+    "desktop and 1024/820/390 layouts including dark details have no horizontal overflow",
+    "history and comparison controls localize after switching the interface language"
+  ],
+  "screenshots": [
+    "settings-history-desktop.png",
+    "settings-history-panel.png",
+    "settings-history-latest-change.png",
+    "settings-history-restored.png",
+    "settings-history-backup-preview.png",
+    "settings-history-1024.png",
+    "settings-history-820.png",
+    "settings-history-390.png",
+    "settings-history-dark-390.png",
+    "settings-history-detail-dark-390.png",
+    "settings-history-english.png"
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1041,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "desktop": {
+    "horizontalOverflow": false,
+    "outerHorizontalOverflow": false,
+    "rowOverflow": false,
+    "panels": [
+      {
+        "width": 654.765625,
+        "height": 482.625
+      },
+      {
+        "width": 409.234375,
+        "height": 170.75
+      }
+    ]
+  },
+  "layouts": [
+    {
+      "width": 1024,
+      "horizontalOverflow": false,
+      "outerHorizontalOverflow": false,
+      "rowOverflow": false,
+      "panels": [
+        {
+          "width": 467.6875,
+          "height": 595.75
+        },
+        {
+          "width": 292.3125,
+          "height": 186.5
+        }
+      ]
+    },
+    {
+      "width": 820,
+      "horizontalOverflow": false,
+      "outerHorizontalOverflow": false,
+      "rowOverflow": false,
+      "panels": [
+        {
+          "width": 572,
+          "height": 595.75
+        },
+        {
+          "width": 572,
+          "height": 165.75
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "horizontalOverflow": false,
+      "outerHorizontalOverflow": false,
+      "rowOverflow": false,
+      "panels": [
+        {
+          "width": 362,
+          "height": 595.75
+        },
+        {
+          "width": 362,
+          "height": 170.75
+        }
+      ]
+    }
+  ],
+  "mobileDialog": {
+    "left": 16,
+    "right": 374,
+    "width": 358,
+    "overflow": false
+  }
+}

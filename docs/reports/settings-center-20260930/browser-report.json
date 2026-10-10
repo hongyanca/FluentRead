@@ -1,0 +1,1095 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930/.output/chrome-mv3",
+  "pages": [
+    "settings-general",
+    "settings-services",
+    "settings-translation",
+    "settings-interface",
+    "settings-selection",
+    "settings-image-translation",
+    "settings-area-translation",
+    "settings-video",
+    "settings-sites",
+    "settings-writing",
+    "settings-translation-center",
+    "settings-vocabulary",
+    "settings-glossary",
+    "settings-translation-stats",
+    "settings-advanced",
+    "settings-data",
+    "settings-about"
+  ],
+  "panels": [
+    "settings-services/assignments",
+    "settings-services/connections",
+    "settings-translation/hover",
+    "settings-translation/input",
+    "settings-translation/page",
+    "settings-translation/tools",
+    "settings-interface/translation",
+    "settings-interface/skin",
+    "settings-interface/layout",
+    "settings-interface/motion",
+    "settings-interface/font",
+    "settings-image-translation/entries",
+    "settings-image-translation/ocr",
+    "settings-video/general",
+    "settings-video/appearance",
+    "settings-video/local",
+    "settings-sites/rules",
+    "settings-sites/adaptation",
+    "settings-translation-stats/overview",
+    "settings-translation-stats/usage",
+    "settings-advanced/recognition",
+    "settings-advanced/requests",
+    "settings-advanced/cache",
+    "settings-data/backup",
+    "settings-data/history"
+  ],
+  "layouts": [
+    {
+      "label": "settings-general",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-services",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-services/assignments",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-services/connections",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1212,
+      "client": 1212,
+      "height": 767
+    },
+    {
+      "label": "settings-translation",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation/hover",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation/input",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation/page",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation/tools",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface/translation",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface/skin",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface/layout",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface/motion",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-interface/font",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-selection",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-image-translation",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-image-translation/entries",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-image-translation/ocr",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-area-translation",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-video",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-video/general",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-video/appearance",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-video/local",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-sites",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-sites/rules",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-sites/adaptation",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-writing",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-translation-center",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1212,
+      "client": 1212,
+      "height": 828
+    },
+    {
+      "label": "settings-vocabulary",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-glossary",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "settings-translation-stats",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation-stats/overview",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-translation-stats/usage",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-advanced",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-advanced/recognition",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-advanced/requests",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-advanced/cache",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-data",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-data/backup",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-data/history",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 767
+    },
+    {
+      "label": "settings-about",
+      "document": 1432,
+      "viewport": 1432,
+      "content": 1148,
+      "client": 1148,
+      "height": 828
+    },
+    {
+      "label": "1024-settings-general",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-services",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-translation",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-interface",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-selection",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-image-translation",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-area-translation",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-video",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-sites",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-writing",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-translation-center",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 828,
+      "client": 828,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-vocabulary",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-glossary",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "1024-settings-translation-stats",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-advanced",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-data",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 791
+    },
+    {
+      "label": "1024-settings-about",
+      "document": 1024,
+      "viewport": 1024,
+      "content": 780,
+      "client": 780,
+      "height": 852
+    },
+    {
+      "label": "820-settings-general",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-services",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-translation",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-interface",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-selection",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-image-translation",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-area-translation",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-video",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-sites",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-writing",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-translation-center",
+      "document": 820,
+      "viewport": 820,
+      "content": 624,
+      "client": 624,
+      "height": 852
+    },
+    {
+      "label": "820-settings-vocabulary",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-glossary",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "820-settings-translation-stats",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-advanced",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-data",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 791
+    },
+    {
+      "label": "820-settings-about",
+      "document": 820,
+      "viewport": 820,
+      "content": 576,
+      "client": 576,
+      "height": 852
+    },
+    {
+      "label": "390-settings-general",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-services",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-services/assignments",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-services/connections",
+      "document": 390,
+      "viewport": 390,
+      "content": 360,
+      "client": 360,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation/hover",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation/input",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation/page",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation/tools",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface/translation",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface/skin",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface/layout",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface/motion",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-interface/font",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-selection",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-image-translation",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-image-translation/entries",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-image-translation/ocr",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-area-translation",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-video",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-video/general",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-video/appearance",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-video/local",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-sites",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-sites/rules",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-sites/adaptation",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-writing",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-translation-center",
+      "document": 390,
+      "viewport": 390,
+      "content": 360,
+      "client": 360,
+      "height": 759
+    },
+    {
+      "label": "390-settings-vocabulary",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-glossary",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "390-settings-translation-stats",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation-stats/overview",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-translation-stats/usage",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-advanced",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-advanced/recognition",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-advanced/requests",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-advanced/cache",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-data",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-data/backup",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-data/history",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 702
+    },
+    {
+      "label": "390-settings-about",
+      "document": 390,
+      "viewport": 390,
+      "content": 362,
+      "client": 362,
+      "height": 759
+    },
+    {
+      "label": "dark-settings-general",
+      "document": 1440,
+      "viewport": 1440,
+      "content": 1156,
+      "client": 1156,
+      "height": 912
+    },
+    {
+      "label": "dark-settings-services",
+      "document": 1440,
+      "viewport": 1440,
+      "content": 1156,
+      "client": 1156,
+      "height": 851
+    },
+    {
+      "label": "dark-settings-interface",
+      "document": 1440,
+      "viewport": 1440,
+      "content": 1156,
+      "client": 1156,
+      "height": 851
+    },
+    {
+      "label": "dark-settings-glossary",
+      "document": 1440,
+      "viewport": 1440,
+      "content": 1156,
+      "client": 1156,
+      "height": 912
+    },
+    {
+      "label": "dark-settings-advanced",
+      "document": 1440,
+      "viewport": 1440,
+      "content": 1156,
+      "client": 1156,
+      "height": 851
+    }
+  ],
+  "screenshots": [
+    "feature-services.png",
+    "translation-settings.png",
+    "master-switch.png",
+    "statistics-model-usage.png",
+    "mobile-feature-services.png",
+    "popup-shortcut.png",
+    "dark-master-switch.png"
+  ],
+  "consoleErrors": [],
+  "persistenceCases": [
+    "Independent service assignments survive close and reopen",
+    "disableFloatingBall survives immediate options close"
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "crossPageSync": true,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 76304,
+      "name": "微信"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "serviceEditingPreservesDefault": true,
+  "categoryStatePreserved": true,
+  "search": true,
+  "crossCategoryLink": true,
+  "featureServiceAssignments": true,
+  "switchInteraction": true,
+  "statisticsConsolidation": true,
+  "popupMetrics": {
+    "width": 400,
+    "height": 600
+  },
+  "popupShortcut": true,
+  "testedSource": "76ef4011af5fe35d4015aee4010853fe8a50716e",
+  "integratedMain": "c653714189f8e7010f92b8964f4b0d4dfef795e6",
+  "evidenceScope": "Latest main integrated. Curated original screenshots; complete layout and interaction results retained."
+}

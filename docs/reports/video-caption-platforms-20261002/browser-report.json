@@ -1,0 +1,78 @@
+{
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "scope": "production-extension controlled DOM and TextTrack fixtures; deterministic translation provider; no authenticated live meetings or subscription videos",
+  "results": [
+    {
+      "platform": "meet",
+      "bilingual": true,
+      "humanPreference": false,
+      "translationRequestsBeforeToggle": 1,
+      "translationRequests": 1,
+      "restored": true
+    },
+    {
+      "platform": "teams",
+      "bilingual": true,
+      "humanPreference": false,
+      "translationRequestsBeforeToggle": 2,
+      "translationRequests": 2,
+      "restored": true
+    },
+    {
+      "platform": "zoom",
+      "bilingual": true,
+      "humanPreference": false,
+      "translationRequestsBeforeToggle": 3,
+      "translationRequests": 3,
+      "restored": true
+    },
+    {
+      "platform": "udemy",
+      "bilingual": true,
+      "humanPreference": true,
+      "translationRequestsBeforeToggle": 3,
+      "translationRequests": 4,
+      "restored": true
+    },
+    {
+      "platform": "disney",
+      "bilingual": true,
+      "humanPreference": true,
+      "translationRequestsBeforeToggle": 4,
+      "translationRequests": 5,
+      "restored": true
+    },
+    {
+      "platform": "youtube",
+      "bilingual": true,
+      "humanPreference": true,
+      "translationRequestsBeforeToggle": 5,
+      "translationRequests": 7,
+      "restored": false
+    }
+  ],
+  "settingsPersisted": true,
+  "bilingualDownload": true,
+  "errors": [],
+  "profileMode": "temporary-isolated",
+  "provider": "deterministic Microsoft translation fixture; no live provider validation",
+  "baseCommit": "bff83e318c654af2a7d3ee330f8c68638070e950"
+}

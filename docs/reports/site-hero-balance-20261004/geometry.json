@@ -1,0 +1,901 @@
+{
+  "samples": [
+    {
+      "label": "zh-desktop-1280",
+      "bodyHeight": 4125,
+      "faq": "免费开源",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 560,
+        "lineHeight": "28px",
+        "width": 1280,
+        "x": 0,
+        "y": 80
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 49.84375,
+          "width": 239.5078125,
+          "x": 420.453125,
+          "y": 276.4765625
+        },
+        {
+          "height": 49.84375,
+          "width": 199.5859375,
+          "x": 659.9609375,
+          "y": 276.4765625
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "42.24px",
+        "height": 49.84375,
+        "lineHeight": "49.8432px",
+        "width": 760,
+        "x": 260,
+        "y": 276.4765625
+      },
+      "title": {
+        "fontSize": "70.4px",
+        "height": 84.4765625,
+        "lineHeight": "84.48px",
+        "width": 760,
+        "x": 260,
+        "y": 170
+      },
+      "url": "http://127.0.0.1:4198/",
+      "viewport": {
+        "height": 800,
+        "width": 1280
+      }
+    },
+    {
+      "label": "en-desktop-1280",
+      "bodyHeight": 4125,
+      "faq": "Free and open source",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.55",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 560,
+        "lineHeight": "28px",
+        "width": 1280,
+        "x": 0,
+        "y": 80
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 49.84375,
+          "width": 316.5703125,
+          "x": 348.90625,
+          "y": 276.4765625
+        },
+        {
+          "height": 49.84375,
+          "width": 257.171875,
+          "x": 673.921875,
+          "y": 276.4765625
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "42.24px",
+        "height": 49.84375,
+        "lineHeight": "49.8432px",
+        "width": 760,
+        "x": 260,
+        "y": 276.4765625
+      },
+      "title": {
+        "fontSize": "70.4px",
+        "height": 84.4765625,
+        "lineHeight": "84.48px",
+        "width": 760,
+        "x": 260,
+        "y": 170
+      },
+      "url": "http://127.0.0.1:4198/en/",
+      "viewport": {
+        "height": 800,
+        "width": 1280
+      }
+    },
+    {
+      "label": "en-mobile-320",
+      "bodyHeight": 5590,
+      "faq": "Free and open source",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 556.6875,
+        "lineHeight": "28px",
+        "width": 320,
+        "x": 0,
+        "y": 68
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 37.7578125,
+          "width": 233.5,
+          "x": 43.25,
+          "y": 199.1953125
+        },
+        {
+          "height": 37.7578125,
+          "width": 194.828125,
+          "x": 62.5859375,
+          "y": 236.953125
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "32px",
+        "height": 75.515625,
+        "lineHeight": "37.76px",
+        "width": 280,
+        "x": 20,
+        "y": 199.1953125
+      },
+      "title": {
+        "fontSize": "46px",
+        "height": 55.1953125,
+        "lineHeight": "55.2px",
+        "width": 280,
+        "x": 20,
+        "y": 122
+      },
+      "url": "http://127.0.0.1:4198/en/",
+      "viewport": {
+        "height": 760,
+        "width": 320
+      }
+    },
+    {
+      "label": "en-tablet-840",
+      "bodyHeight": 3977,
+      "faq": "Free and open source",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 411.7890625,
+        "lineHeight": "28px",
+        "width": 840,
+        "x": 0,
+        "y": 80
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 35.3984375,
+          "width": 226.625,
+          "x": 211.734375,
+          "y": 220.796875
+        },
+        {
+          "height": 35.3984375,
+          "width": 183.90625,
+          "x": 444.359375,
+          "y": 220.796875
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "30px",
+        "height": 35.3984375,
+        "lineHeight": "35.4px",
+        "width": 760,
+        "x": 40,
+        "y": 220.796875
+      },
+      "title": {
+        "fontSize": "54px",
+        "height": 64.796875,
+        "lineHeight": "64.8px",
+        "width": 760,
+        "x": 40,
+        "y": 134
+      },
+      "url": "http://127.0.0.1:4198/en/",
+      "viewport": {
+        "height": 800,
+        "width": 840
+      }
+    },
+    {
+      "label": "zh-tablet-840",
+      "bodyHeight": 3977,
+      "faq": "免费开源",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 411.7890625,
+        "lineHeight": "28px",
+        "width": 840,
+        "x": 0,
+        "y": 80
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 35.3984375,
+          "width": 170.109375,
+          "x": 264.0625,
+          "y": 220.796875
+        },
+        {
+          "height": 35.3984375,
+          "width": 141.7578125,
+          "x": 434.171875,
+          "y": 220.796875
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "30px",
+        "height": 35.3984375,
+        "lineHeight": "35.4px",
+        "width": 760,
+        "x": 40,
+        "y": 220.796875
+      },
+      "title": {
+        "fontSize": "54px",
+        "height": 64.796875,
+        "lineHeight": "64.8px",
+        "width": 760,
+        "x": 40,
+        "y": 134
+      },
+      "url": "http://127.0.0.1:4198/",
+      "viewport": {
+        "height": 800,
+        "width": 840
+      }
+    },
+    {
+      "label": "zh-mobile-320",
+      "bodyHeight": 5229,
+      "faq": "免费开源",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 511.015625,
+        "lineHeight": "28px",
+        "width": 320,
+        "x": 0,
+        "y": 68
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 40.1171875,
+          "width": 160.65625,
+          "x": 79.671875,
+          "y": 199.1953125
+        },
+        {
+          "height": 40.1171875,
+          "width": 160.65625,
+          "x": 79.671875,
+          "y": 239.3125
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "34px",
+        "height": 80.234375,
+        "lineHeight": "40.12px",
+        "width": 280,
+        "x": 20,
+        "y": 199.1953125
+      },
+      "title": {
+        "fontSize": "46px",
+        "height": 55.1953125,
+        "lineHeight": "55.2px",
+        "width": 280,
+        "x": 20,
+        "y": 122
+      },
+      "url": "http://127.0.0.1:4198/",
+      "viewport": {
+        "height": 760,
+        "width": 320
+      }
+    },
+    {
+      "label": "zh-mobile-390",
+      "bodyHeight": 5016,
+      "faq": "免费开源",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 462.703125,
+        "lineHeight": "28px",
+        "width": 390,
+        "x": 0,
+        "y": 68
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 43.7109375,
+          "width": 175.0625,
+          "x": 107.46875,
+          "y": 199.1953125
+        },
+        {
+          "height": 43.7109375,
+          "width": 175.0625,
+          "x": 107.46875,
+          "y": 242.90625
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "37.05px",
+        "height": 87.421875,
+        "lineHeight": "43.719px",
+        "width": 350,
+        "x": 20,
+        "y": 199.1953125
+      },
+      "title": {
+        "fontSize": "46px",
+        "height": 55.1953125,
+        "lineHeight": "55.2px",
+        "width": 350,
+        "x": 20,
+        "y": 122
+      },
+      "url": "http://127.0.0.1:4198/",
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    },
+    {
+      "label": "zh-mobile-390-second-animation-phase",
+      "bodyHeight": 5016,
+      "faq": "免费开源",
+      "greetings": [
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hello"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "你好"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Bonjour"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hola"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "こんにちは"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "안녕하세요"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Hallo"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Olá"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "Привет"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "opacity": "0.3",
+          "position": "absolute",
+          "text": "مرحبا"
+        }
+      ],
+      "hero": {
+        "fontSize": "16px",
+        "height": 462.703125,
+        "lineHeight": "28px",
+        "width": 390,
+        "x": 0,
+        "y": 68
+      },
+      "heroIcons": 0,
+      "lines": [
+        {
+          "height": 43.7109375,
+          "width": 175.0625,
+          "x": 107.46875,
+          "y": 199.1953125
+        },
+        {
+          "height": 43.7109375,
+          "width": 175.0625,
+          "x": 107.46875,
+          "y": 242.90625
+        }
+      ],
+      "overflow": 0,
+      "slogan": {
+        "fontSize": "37.05px",
+        "height": 87.421875,
+        "lineHeight": "43.719px",
+        "width": 350,
+        "x": 20,
+        "y": 199.1953125
+      },
+      "title": {
+        "fontSize": "46px",
+        "height": 55.1953125,
+        "lineHeight": "55.2px",
+        "width": 350,
+        "x": 20,
+        "y": 122
+      },
+      "url": "http://127.0.0.1:4198/",
+      "viewport": {
+        "height": 844,
+        "width": 390
+      }
+    }
+  ],
+  "consoleWarningsAndErrors": []
+}

@@ -1,0 +1,348 @@
+{
+  "zh-CN": {
+    "settings-general": {
+      "src": "/screenshots/ui/zh-CN/settings-general.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 23.5625
+        },
+        {
+          "x": 83.203125,
+          "y": 41.2314453125
+        },
+        {
+          "x": 83.203125,
+          "y": 32.0517578125
+        }
+      ]
+    },
+    "settings-interface": {
+      "src": "/screenshots/ui/zh-CN/settings-interface.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 39.3125
+        },
+        {
+          "x": 76.58203125,
+          "y": 17.32421875
+        },
+        {
+          "x": 37.847900390625,
+          "y": 26.88720703125
+        }
+      ]
+    },
+    "settings-translation-center": {
+      "src": "/screenshots/ui/zh-CN/settings-translation-center.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 34.16015625,
+          "y": 52.98779296875
+        },
+        {
+          "x": 92.734375,
+          "y": 15.25
+        },
+        {
+          "x": 34.16015625,
+          "y": 85.7880859375
+        }
+      ]
+    },
+    "settings-data": {
+      "src": "/screenshots/ui/zh-CN/settings-data.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 90.25
+        },
+        {
+          "x": 81.8359375,
+          "y": 48.6650390625
+        },
+        {
+          "x": 91.2890625,
+          "y": 48.6650390625
+        }
+      ]
+    },
+    "settings-glossary": {
+      "src": "/screenshots/ui/zh-CN/settings-glossary.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 63.625
+        },
+        {
+          "x": 25.859375,
+          "y": 39.9619140625
+        },
+        {
+          "x": 48.125,
+          "y": 88.5244140625
+        }
+      ]
+    },
+    "settings-sites": {
+      "src": "/screenshots/ui/zh-CN/settings-sites.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 68.875
+        },
+        {
+          "x": 58.59375,
+          "y": 41.5927734375
+        },
+        {
+          "x": 33.75,
+          "y": 6.13720703125
+        }
+      ]
+    },
+    "settings-translation-stats": {
+      "src": "/screenshots/ui/zh-CN/settings-translation-stats.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 74.125
+        },
+        {
+          "x": 45.3125,
+          "y": 16.5869140625
+        },
+        {
+          "x": 58.59375,
+          "y": 34.5048828125
+        }
+      ]
+    },
+    "settings-vocabulary": {
+      "src": "/screenshots/ui/zh-CN/settings-vocabulary.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 58.375
+        },
+        {
+          "x": 58.59375,
+          "y": 13.125
+        },
+        {
+          "x": 58.59375,
+          "y": 33.59375
+        }
+      ]
+    },
+    "settings-provider": {
+      "src": "/screenshots/ui/zh-CN/settings-provider.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 26.3671875,
+          "y": 56.375
+        },
+        {
+          "x": 73.90625,
+          "y": 37.9375
+        },
+        {
+          "x": 8.5546875,
+          "y": 23.5625
+        }
+      ]
+    }
+  },
+  "en-US": {
+    "settings-general": {
+      "src": "/screenshots/ui/en-US/settings-general.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 25
+        },
+        {
+          "x": 83.203125,
+          "y": 42.8251953125
+        },
+        {
+          "x": 83.203125,
+          "y": 32.8486328125
+        }
+      ]
+    },
+    "settings-interface": {
+      "src": "/screenshots/ui/en-US/settings-interface.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 40.75
+        },
+        {
+          "x": 76.58203125,
+          "y": 18.2490234375
+        },
+        {
+          "x": 37.847900390625,
+          "y": 26.88720703125
+        }
+      ]
+    },
+    "settings-translation-center": {
+      "src": "/screenshots/ui/en-US/settings-translation-center.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 34.16015625,
+          "y": 51.6943359375
+        },
+        {
+          "x": 90.88409423828125,
+          "y": 15.25
+        },
+        {
+          "x": 34.16015625,
+          "y": 83.451171875
+        }
+      ]
+    },
+    "settings-data": {
+      "src": "/screenshots/ui/en-US/settings-data.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 90.25
+        },
+        {
+          "x": 74.9835205078125,
+          "y": 48.9638671875
+        },
+        {
+          "x": 88.63861083984375,
+          "y": 48.9638671875
+        }
+      ]
+    },
+    "settings-glossary": {
+      "src": "/screenshots/ui/en-US/settings-glossary.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 63.625
+        },
+        {
+          "x": 26.13800048828125,
+          "y": 39.9619140625
+        },
+        {
+          "x": 45.19683837890625,
+          "y": 88.5244140625
+        }
+      ]
+    },
+    "settings-sites": {
+      "src": "/screenshots/ui/en-US/settings-sites.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 68.875
+        },
+        {
+          "x": 58.59375,
+          "y": 40.5615234375
+        },
+        {
+          "x": 42.68951416015625,
+          "y": 6.13720703125
+        }
+      ]
+    },
+    "settings-translation-stats": {
+      "src": "/screenshots/ui/en-US/settings-translation-stats.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 74.125
+        },
+        {
+          "x": 46.54296875,
+          "y": 16.2744140625
+        },
+        {
+          "x": 58.59375,
+          "y": 34.0361328125
+        }
+      ]
+    },
+    "settings-vocabulary": {
+      "src": "/screenshots/ui/en-US/settings-vocabulary.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 8.5546875,
+          "y": 58.375
+        },
+        {
+          "x": 58.59375,
+          "y": 14.224609375
+        },
+        {
+          "x": 58.59375,
+          "y": 34.568359375
+        }
+      ]
+    },
+    "settings-provider": {
+      "src": "/screenshots/ui/en-US/settings-provider.webp",
+      "width": 2560,
+      "height": 1600,
+      "points": [
+        {
+          "x": 26.3671875,
+          "y": 56.375
+        },
+        {
+          "x": 73.90625,
+          "y": 37.625
+        },
+        {
+          "x": 8.5546875,
+          "y": 25
+        }
+      ]
+    }
+  }
+}

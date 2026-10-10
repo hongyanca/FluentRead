@@ -1,13 +1,14 @@
 /**
  * @file src/app/background/handlers/modelUsage.ts
  * 文件职责：为设置页提供类型化的大模型聚合、请求日志、导入导出与独立重置后台消息协议。
- * 主要内容：校验 query/list/export/import/reset 动作、筛选、游标和分页上限，调用注入仓库并把成功或存储错误转换成可传输响应。
+ * 主要内容：校验 query/list/export/import/reset 动作、筛选、游标、指定页时间边界和分页上限，调用注入仓库并把成功或存储错误转换成可传输响应。
  * 模块边界：本文件不直接访问 IndexedDB、不记录 provider 请求，也不处理图表渲染；仓库和采集器由后台组合根注入。
  */
 
 import type {BackgroundMessageHandler} from '../messageRouter';
 import {
     MODEL_USAGE_REQUEST_MAX_PAGE_SIZE,
+    MODEL_USAGE_MAX_STORED_EVENTS,
     type DashboardSnapshot,
     type Filter,
     type ModelUsageImportResult,
@@ -84,7 +85,7 @@ export interface ModelUsageRepositoryContract {
 const VALID_RANGES = new Set<Range>(['today', '7d', '30d']);
 const MAX_FILTER_LENGTH = 200;
 const MAX_TIMESTAMP = 8_640_000_000_000_000;
-const VALID_PURPOSES = new Set<ModelUsagePurpose>(['translation', 'page-summary', 'connection-test']);
+const VALID_PURPOSES = new Set<ModelUsagePurpose>(['translation', 'page-summary', 'connection-test', 'reading', 'writing']);
 const VALID_OUTCOMES = new Set<ModelUsageOutcome>(['success', 'error', 'timeout', 'cancelled']);
 const VALID_CACHE_STATUSES = new Set<ModelUsageCacheStatus>(['hit', 'miss', 'unreported']);
 
@@ -164,6 +165,13 @@ export function parseModelUsageRequestQuery(value: unknown): ModelUsageRequestQu
         cursor = {startedAt, id};
     }
     let limit: number | undefined;
+    if (value.offset !== undefined && (!Number.isInteger(value.offset) || (value.offset as number) < 0 || (value.offset as number) >= MODEL_USAGE_MAX_STORED_EVENTS)) {
+        throw new TypeError(`模型用量请求 offset 必须是 0-${MODEL_USAGE_MAX_STORED_EVENTS - 1} 的整数`);
+    }
+    if (value.offset !== undefined && cursor) throw new TypeError('模型用量请求 offset 与 cursor 不能同时使用');
+    if (value.asOf !== undefined && (typeof value.asOf !== 'number' || !Number.isFinite(value.asOf) || value.asOf < 0 || value.asOf > MAX_TIMESTAMP)) {
+        throw new TypeError('模型用量请求 asOf 无效');
+    }
     if (value.limit !== undefined) {
         if (!Number.isInteger(value.limit) || (value.limit as number) < 1 || (value.limit as number) > MODEL_USAGE_REQUEST_MAX_PAGE_SIZE) {
             throw new TypeError(`模型用量请求 limit 必须是 1-${MODEL_USAGE_REQUEST_MAX_PAGE_SIZE} 的整数`);
@@ -173,6 +181,8 @@ export function parseModelUsageRequestQuery(value: unknown): ModelUsageRequestQu
     return {
         filter,
         ...(cursor ? {cursor} : {}),
+        ...(value.offset !== undefined ? {offset: value.offset as number} : {}),
+        ...(value.asOf !== undefined ? {asOf: value.asOf as number} : {}),
         ...(limit ? {limit} : {}),
     };
 }

@@ -1,15 +1,34 @@
 /**
  * @file src/features/document-translation/ui/presentation.ts
- * 文件职责：提供文档翻译界面使用的纯展示派生规则，把 ParsedDocument 转换成预览统计、空状态提示、色调和格式特定的文本/样式标签。
- * 主要内容：包含字幕与富文本格式判断、页数章节数片段数等元数据、DOCX 部件名称映射、不同格式的阅读器文本清理，以及 source 节点 class 的选择。
+ * 文件职责：提供文档翻译界面使用的纯展示派生规则，把 ParsedDocument 转换成空状态提示和格式特定的文本/样式标签。
+ * 主要内容：相同译文保留原文且不重复展示；包含小型本地范例、基于有界编码与大型 JSON 摘录的导出预览、字幕与富文本格式判断、预览说明、DOCX 部件名称映射、阅读器文本清理（含整句送翻留下的编号占位符，ASS 的换行与空格代码显示成真正的换行和空格）、译文是否带占位符的判断及 source 节点 class 的选择。
  * 模块边界：本文件不创建 DOM、不解析文件也不调用翻译；它只消费 core 模型并返回 UI 可直接使用的值，实际预览 HTML 归 core/preview，PDF 位图和导出分别归 pdfPreview 与 binary。
  */
-import type {DocumentFormat, ParsedDocument} from '@/src/features/document-translation/core/document';
+import {hasDistinctTranslation} from '@/src/core/translation/result';
+import {renderDocument, resolveDocumentTranslation, type DocumentFormat, type DocumentRenderMode, type ParsedDocument} from '@/src/features/document-translation/core/document';
 
-export interface DocumentPreviewMeta {
-    eyebrow: string;
-    title: string;
-    hint: string;
+/** 小型本地范例只走正常导入流程，不预填译文或自动发起翻译。 */
+export const DOCUMENT_QUICK_SAMPLES = [
+    {name: 'reading-sample.md', label: '文章', description: '标题、段落与列表', content: '# A small reading guide\n\nA good book opens a window to another world.\n\n- Read a little every day.\n- Keep the words that matter to you.\n'},
+    {name: 'subtitle-sample.srt', label: '字幕文件', description: '时间轴与多行字幕', content: '1\n00:00:01,000 --> 00:00:03,000\nWelcome to a new story.\n\n2\n00:00:04,000 --> 00:00:07,000\nTake your time.\nEnjoy every moment.\n'},
+    {name: 'language-sample.json', label: '语言文件', description: '字符串与嵌套结构', content: '{\n  "title": "A new beginning",\n  "actions": {"read": "Start reading", "save": "Save for later"},\n  "version": 1,\n  "enabled": true\n}\n'},
+] as const;
+
+/** 大型 JSON 与二进制格式使用文字摘录，避免为了弹窗复制整棵 JSON 数据。 */
+export function isDocumentExportExcerpt(document: ParsedDocument): boolean {
+    return Boolean(document.binary) || (document.format === 'json' && document.segments.length > 200);
+}
+
+/** 文本格式使用有界导出编码，摘录格式仅访问前几个片段。 */
+export function getDocumentExportPreview(document: ParsedDocument, translations: readonly string[], mode: DocumentRenderMode): string {
+    const text = isDocumentExportExcerpt(document)
+        ? document.segments.slice(0, 3).map(segment => {
+            const translation = resolveDocumentTranslation(segment.source, translations[segment.id]).slice(0, 1601);
+            return mode === 'bilingual' && hasDistinctTranslation(segment.source, translations[segment.id])
+                ? `${segment.source.slice(0, 1601)}\n${translation}` : translation;
+        }).join('\n\n')
+        : renderDocument(document, translations, mode, 1601);
+    return text.length > 1600 ? `${text.slice(0, 1600)}\n…` : text;
 }
 
 const SUBTITLE_FORMATS = new Set<DocumentFormat>(['srt', 'vtt', 'ass', 'lrc']);
@@ -23,52 +42,9 @@ export function isRichDocumentFormat(format?: DocumentFormat): boolean {
     return format !== undefined && RICH_FORMATS.has(format);
 }
 
-export function getDocumentPreviewMeta(document: ParsedDocument | null): DocumentPreviewMeta {
-    if (document?.binary?.kind === 'pdf') return {
-        eyebrow: '版式阅读',
-        title: 'PDF 原页与译页',
-        hint: '使用 PDF.js 版面坐标重排译文；所有页面纵向连续滚动，双语模式逐页并排对照',
-    };
-    if (document?.binary?.kind === 'epub') return {
-        eyebrow: '电子书阅读',
-        title: 'ePub 章节双语阅读',
-        hint: '按目录切换章节，保留正文层级并导出可继续阅读的双语 ePub',
-    };
-    if (document?.binary?.kind === 'docx') return {
-        eyebrow: '页面阅读',
-        title: 'Word 文档原文与译文',
-        hint: '按正文、页眉、页脚和注释分区校对，下载结果仍为原生 DOCX',
-    };
-    if (isSubtitleDocumentFormat(document?.format)) return {
-        eyebrow: '时间轴校对',
-        title: '字幕原文与可编辑译文',
-        hint: '开始时间、结束时间和字幕标签保持不变，逐条校对后按原格式下载',
-    };
-    if (document?.format === 'json') return {
-        eyebrow: '结构化翻译',
-        title: 'JSON 路径与字符串译文',
-        hint: '只翻译字符串值，键名、数组、数字、布尔值和嵌套结构保持不变',
-    };
-    if (document?.format === 'markdown') return {
-        eyebrow: '排版阅读',
-        title: 'Markdown 双语文章',
-        hint: '标题、段落、列表、引用和代码块按文章样式呈现，而不是文本片段表格',
-    };
-    if (document?.format === 'html') return {
-        eyebrow: '网页文档阅读',
-        title: 'HTML 双语排版预览',
-        hint: '在隔离阅读器中保留标题、段落、列表与表格，脚本和外部请求不会运行',
-    };
-    return {
-        eyebrow: '流畅阅读',
-        title: '原文与译文',
-        hint: '按自然段连续阅读和校对，下载时保留原文件换行结构',
-    };
-}
-
 export function getDocumentEmptyReaderHint(document: ParsedDocument | null): string {
     if (document?.binary?.kind === 'pdf') {
-        return '点击“开始翻译”，译文会按原页面坐标写回并生成可下载 PDF。';
+        return 'document.pdfReading.startHint';
     }
     if (isSubtitleDocumentFormat(document?.format)) {
         return '点击“开始翻译”，译文会出现在对应时间轴行中。';
@@ -77,14 +53,6 @@ export function getDocumentEmptyReaderHint(document: ParsedDocument | null): str
         return '点击“开始翻译”，只会填充每个 JSON 路径对应的字符串译文。';
     }
     return '点击“开始翻译”，译文会按当前文档的阅读结构显示。';
-}
-
-export function getDocumentFormatTone(format?: DocumentFormat): 'coral' | 'teal' | 'violet' | 'sand' | 'slate' {
-    if (format === 'pdf' || format === 'html') return 'coral';
-    if (format === 'epub' || format === 'json') return 'teal';
-    if (isSubtitleDocumentFormat(format)) return 'violet';
-    if (format === 'markdown') return 'sand';
-    return 'slate';
 }
 
 export function getDocxPartLabel(path: string): string {
@@ -96,10 +64,19 @@ export function getDocxPartLabel(path: string): string {
     return '文档内容';
 }
 
+/** 整句送翻时代替行内标签和 Markdown 语法的编号占位符：`<g1>`、`</g1>`、`<g2/>`。 */
+const DOCUMENT_PLACEHOLDER = /<\/?g\d+\/?>/gu;
+
+/** 译文里是否带有编号占位符；带有时校订视图提示保留它们才能保留原来的格式。 */
+export function hasDocumentPlaceholder(value: string | undefined): boolean {
+    return Boolean(value) && /<\/?g\d+\/?>/u.test(value!);
+}
+
 export function formatDocumentReaderText(format: DocumentFormat | undefined, value: string): string {
-    if (format === 'html') return value.replace(/<[^>]+>/gu, '').trim();
+    if (format === 'html' || format === 'epub') return value.replace(/<[^>]+>/gu, '').trim();
     if (format === 'markdown') {
         return value
+            .replace(DOCUMENT_PLACEHOLDER, '')
             .replace(/^\s{0,3}#{1,6}\s+/u, '')
             .replace(/!\[([^\]]*)\]\([^)]*\)/gu, '$1')
             .replace(/\[([^\]]+)\]\([^)]*\)/gu, '$1')
@@ -108,7 +85,10 @@ export function formatDocumentReaderText(format: DocumentFormat | undefined, val
             .trim();
     }
     if (format !== undefined && ['srt', 'vtt', 'ass'].includes(format)) {
-        return value.replace(/<[^>]+>/gu, '').replace(/\{\\[^}]+\}/gu, '').trim();
+        // ASS 用 \N、\n 表示换行、\h 表示不换行空格：阅读时显示成真正的换行和空格，而不是这几个字符。
+        // 被翻译服务转成实体的样式标签（&lt;i&gt;）同样不属于可见文字。
+        const text = value.replace(/<[^>]+>/gu, '').replace(/&lt;\s*\/?\s*[a-z][^&<>]*&gt;/giu, '').replace(/\{\\[^}]+\}/gu, '');
+        return (format === 'ass' ? text.replace(/\\[Nn]/gu, '\n').replace(/\\h/gu, ' ') : text).trim();
     }
     return value.trim();
 }

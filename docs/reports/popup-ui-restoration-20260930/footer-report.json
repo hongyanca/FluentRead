@@ -1,0 +1,145 @@
+{
+  "ok": true,
+  "artifact": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3",
+  "cases": [
+    "light: neutral open-source capsule without visible border",
+    "dark: neutral open-source capsule without visible border",
+    "minimal: neutral open-source capsule without visible border",
+    "compact: neutral open-source capsule without visible border",
+    "ocean: neutral open-source capsule without visible border"
+  ],
+  "persistenceCases": [],
+  "quickClose": false,
+  "latestWriteWins": false,
+  "crossPageSync": false,
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-light.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-dark.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-minimal.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-compact.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-ocean.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-popup-hover.png",
+    "/private/tmp/fluentread-footer-softening-ui/footer-layout-preview.png"
+  ],
+  "layout": {
+    "light": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "footer-light": {
+      "border": "rgba(0, 0, 0, 0)",
+      "color": "rgb(115, 124, 143)",
+      "background": "rgb(247, 248, 251)"
+    },
+    "dark": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "footer-dark": {
+      "border": "rgba(0, 0, 0, 0)",
+      "color": "rgb(167, 173, 186)",
+      "background": "rgb(37, 40, 48)"
+    },
+    "minimal": {
+      "width": 330,
+      "height": 428,
+      "scrollHeight": 428,
+      "clientHeight": 428,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 428,
+      "viewportHeight": 428,
+      "duplicateIds": []
+    },
+    "footer-minimal": {
+      "border": "rgba(0, 0, 0, 0)",
+      "color": "rgb(115, 124, 143)",
+      "background": "rgb(247, 248, 251)"
+    },
+    "compact": {
+      "width": 320,
+      "height": 390,
+      "scrollHeight": 390,
+      "clientHeight": 390,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 386,
+      "viewportHeight": 390,
+      "duplicateIds": []
+    },
+    "footer-compact": {
+      "border": "rgba(0, 0, 0, 0)",
+      "color": "rgb(115, 124, 143)",
+      "background": "rgb(247, 248, 251)"
+    },
+    "ocean": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "footer-ocean": {
+      "border": "rgba(0, 0, 0, 0)",
+      "color": "rgb(71, 107, 124)",
+      "background": "rgb(238, 250, 255)"
+    }
+  },
+  "evidenceBoundary": "Production popup/footer and settings preview in isolated Edge; no translation or persistence matrix in this footer-only run.",
+  "manifest": {
+    "version": "0.0.35",
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 89270,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 89270,
+      "name": "ChatGPT"
+    }
+  },
+  "lastSaveResponse": {
+    "success": true,
+    "revision": 7
+  }
+}

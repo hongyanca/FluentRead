@@ -1,0 +1,79 @@
+{
+  "mainCommit": "00e59e314a426d18265eabbf653e9a499f78ef6a",
+  "unchangedChecks": [
+    {
+      "file": "scripts/run-selection-trigger-test.cjs",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/selection-translation/ui/SelectionTranslator.vue",
+      "identicalToMain": true
+    },
+    {
+      "file": "tests/browserFocusSafety.test.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "tests/contentTrustBoundary.test.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "scripts/capture-docs-ui.cjs",
+      "identicalToMain": true
+    },
+    {
+      "file": "scripts/verify-brand-copy.mjs",
+      "identicalToMain": true
+    },
+    {
+      "file": "scripts/verify-docs-build.mjs",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/app/popup/mount.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/core/config/shareCard.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/core/i18n/messages/onboarding.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/core/i18n/messages/siteRules.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/full-page-translation/content/excerpt.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/share-card/content/runtime.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/share-card/core.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/share-card/export.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/share-card/render.ts",
+      "identicalToMain": true
+    },
+    {
+      "file": "src/features/share-card/themes.ts",
+      "identicalToMain": true
+    }
+  ],
+  "contentRuntime": {
+    "mainLines": 282,
+    "currentLines": 281,
+    "ceiling": 277,
+    "method": "同架构测试移除文件头后计数"
+  }
+}

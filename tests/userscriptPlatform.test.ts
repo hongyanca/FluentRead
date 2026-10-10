@@ -50,8 +50,27 @@ vi.mock('@/src/features/selection-translation/services/wordDictionary', () => ({
 }));
 
 import {createPlatformMessageHandler} from '@/userscript/platform';
+import {getTranslationGlossaryContext} from '@/src/services/translation/requestSnapshot';
 
 describe('userscript 平台消息适配', () => {
+    it('免费池逐服务检查保留候选 ID，避免脚本端退回自动换线', async () => {
+        mocks.runTranslationServiceConnectionTest.mockResolvedValue({durationMs: 12});
+        const handler = createPlatformMessageHandler(vi.fn());
+        await expect(handler({type: 'testTranslationServiceConnection', service: 'freeTranslation', freeProviderId: 'transmart'}))
+            .resolves.toEqual({success: true, durationMs: 12});
+        expect(mocks.runTranslationServiceConnectionTest).toHaveBeenCalledWith('freeTranslation', expect.objectContaining({freeProviderId: 'transmart'}));
+    });
+    it('术语网站范围取当前页面而不是公开payload，视频仍使用独立入口', async () => {
+        vi.stubGlobal('location', {href: 'https://docs.example.com/article'});
+        mocks.translateWithCache.mockResolvedValue('译文');
+        const handler = createPlatformMessageHandler(vi.fn());
+        try {
+            await handler({origin: 'agent', pageUrl: 'https://forged.example', glossaryContext: 'document'});
+            expect(getTranslationGlossaryContext(mocks.translateWithCache.mock.calls[0][0])).toEqual({pageUrl: 'https://docs.example.com/article', context: 'page'});
+            await handler({origin: 'agent', glossaryContext: 'video'});
+            expect(getTranslationGlossaryContext(mocks.translateWithCache.mock.calls[1][0])).toEqual({pageUrl: 'https://docs.example.com/article', context: 'video'});
+        } finally { vi.unstubAllGlobals(); }
+    });
     beforeEach(() => {
         vi.clearAllMocks();
         mocks.config.count = 0;
@@ -59,7 +78,7 @@ describe('userscript 平台消息适配', () => {
         mocks.incrementUserscriptConfigCount.mockResolvedValue(14);
     });
 
-    it('通过 userscript 专用副本累加，并只把权威总数投影到共享配置', async () => {
+    it('通过 userscript 专用副本累加，并避免把瞬时总数作为跨标签持久投影', async () => {
         mocks.config.count = 12;
         const handler = createPlatformMessageHandler(vi.fn());
 
@@ -72,8 +91,7 @@ describe('userscript 平台消息适配', () => {
             count: 14,
         });
         expect(mocks.incrementUserscriptConfigCount).toHaveBeenCalledWith(2, 'userscript-operation-1');
-        expect(mocks.saveConfig).toHaveBeenCalledOnce();
-        expect(mocks.saveConfig).toHaveBeenCalledWith(mocks.config);
+        expect(mocks.saveConfig).not.toHaveBeenCalled();
         expect(mocks.config.count).toBe(14);
     });
 

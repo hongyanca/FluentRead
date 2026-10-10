@@ -1,11 +1,14 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
 
-const {adapter} = vi.hoisted(() => ({
+const {adapter, freeAdapter} = vi.hoisted(() => ({
     adapter: vi.fn(),
+    freeAdapter: vi.fn(),
 }));
+vi.mock('@/src/providers/translation/free-translation', () => ({translateFreeTranslationProvider: freeAdapter}));
 
 vi.mock('@/src/providers/translation/registry', () => ({
     translationProviderRegistry: {
+        custom: adapter,
         demo: adapter,
     },
 }));
@@ -18,9 +21,131 @@ import {
 } from '@/src/providers/translation/connectionTest';
 import {formatServiceError, getServiceErrorMessage} from '@/src/services/translation/serviceErrors';
 import {services} from '@/src/core/config/catalog';
-import {reportTranslationModelUsage} from '@/src/services/translation/requestSnapshot';
+import {getTranslationRequestScheduler, reportTranslationModelUsage, TRANSLATION_PROVIDER_CONFIG} from '@/src/services/translation/requestSnapshot';
+import {createTranslationRequestScheduler} from '@/src/services/translation/requestScheduler';
+import {createTranslationProviderConfigSnapshot, getTranslationProviderConfig} from '@/src/services/translation/requestSnapshot';
+import {Config, normalizeConfig} from '@/src/core/config/model';
+import {createApiKeyCheckRevision} from '@/src/core/config/apiKeyCheckIdentity';
+
+function deferred<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((resolvePromise, rejectPromise) => {
+        resolve = resolvePromise;
+        reject = rejectPromise;
+    });
+    return {promise, reject, resolve};
+}
 
 describe('翻译服务连接测试', () => {
+    it.each(['transmart', 'apertiumFree'])('免费池 %s 直接调用匿名适配器，使用支持的固定语言对', async freeProviderId => {
+        freeAdapter.mockResolvedValue('有效译文');
+        const source = Object.assign(new Config(), {from: 'auto', to: 'en'});
+        await expect(runTranslationServiceConnectionTest('freeTranslation', {
+            freeProviderId, configSnapshot: createTranslationProviderConfigSnapshot(source),
+        })).resolves.toEqual({durationMs: expect.any(Number)});
+        expect(freeAdapter).toHaveBeenLastCalledWith(freeProviderId, expect.objectContaining({
+            origin: CONNECTION_TEST_ORIGIN, sourceLanguage: 'en',
+            targetLanguage: freeProviderId === 'apertiumFree' ? 'es' : 'zh-Hans',
+            requestTimeoutMs: source.freeTranslationTimeoutMs, useCache: false,
+        }));
+        expect(source.to).toBe('en');
+    });
+
+    it('免费池单服务失败不被其他适配器成功掩盖，超时取消对应请求', async () => {
+        vi.useFakeTimers();
+        const source = Object.assign(new Config(), {freeTranslationTimeoutMs: 1000});
+        freeAdapter.mockImplementationOnce(() => new Promise(() => undefined));
+        const pending = runTranslationServiceConnectionTest('freeTranslation', {
+            freeProviderId: 'alibabaFree', config: createTranslationProviderConfigSnapshot(source),
+        });
+        const outcome = expect(pending).rejects.toThrow('翻译请求超时');
+        await vi.advanceTimersByTimeAsync(1000);
+        await outcome;
+        expect(freeAdapter.mock.calls.at(-1)![1].abortSignal.aborted).toBe(true);
+        freeAdapter.mockRejectedValueOnce(new Error('服务限流'));
+        await expect(runTranslationServiceConnectionTest('freeTranslation', {freeProviderId: 'alibabaFree'})).rejects.toThrow('服务限流');
+        freeAdapter.mockResolvedValueOnce(CONNECTION_TEST_ORIGIN);
+        await expect(runTranslationServiceConnectionTest('freeTranslation', {freeProviderId: 'alibabaFree'})).rejects.toThrow('未翻译测试文本');
+        await expect(runTranslationServiceConnectionTest('google', {freeProviderId: 'alibabaFree'})).rejects.toThrow('无效的免费翻译服务');
+        await expect(runTranslationServiceConnectionTest('freeTranslation', {freeProviderId: 'unknown'})).rejects.toThrow('无效的免费翻译服务');
+    });
+    it('指定 Key 的逐项检查仍共享请求调度，不会绕过频率限制', async () => {
+        vi.useFakeTimers();
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 6, translationRequestsPerSecond: 1, translationRequestsPerMinute: 0,
+        }));
+        const source = new Config();
+        source.apiKeys.demo = ['scheduled-first', 'scheduled-second'];
+        source.token.demo = 'scheduled-first';
+        const snapshot = createTranslationProviderConfigSnapshot(source);
+        const used: string[] = [];
+        adapter.mockImplementation(async message => {
+            used.push(getTranslationProviderConfig(message, snapshot).token.demo);
+            expect(getTranslationRequestScheduler(message)?.identity?.service).toBe('demo');
+            return '你好';
+        });
+        await runTranslationServiceConnectionTest('demo', {config: snapshot, keyIndex: 0, requestScheduler: scheduler});
+        const second = runTranslationServiceConnectionTest('demo', {config: snapshot, keyIndex: 1, requestScheduler: scheduler});
+        await vi.advanceTimersByTimeAsync(999);
+        expect(used).toEqual(['scheduled-first']);
+        await vi.advanceTimersByTimeAsync(1);
+        await second;
+        expect(used).toEqual(['scheduled-first', 'scheduled-second']);
+    });
+    it('逐项检查使用冻结凭据、不用其他 Key 掩盖失败，支持空行后的原始索引', async () => {
+        const source = new Config();
+        source.apiKeys.demo = ['fixture-connection-bad', '', 'fixture-connection-good'];
+        source.token.demo = 'fixture-connection-bad';
+        const snapshot = createTranslationProviderConfigSnapshot(source);
+        const used: string[] = [];
+        adapter.mockImplementation(async message => {
+            const key = getTranslationProviderConfig(message, snapshot).token.demo;
+            used.push(key);
+            if (key === 'fixture-connection-bad') throw Object.assign(new Error(`HTTP 401 ${key}`), {statusCode: 401});
+            return '你好';
+        });
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: snapshot, keyIndex: 0}))
+            .rejects.toThrow('已隐藏的密钥');
+        expect(used).toEqual(['fixture-connection-bad']);
+        source.apiKeys.demo[2] = 'changed-after-snapshot';
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: snapshot, keyIndex: 2})).resolves.toBeTruthy();
+        expect(used).toEqual(['fixture-connection-bad', 'fixture-connection-good']);
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: snapshot, keyIndex: 1})).rejects.toThrow('为空');
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: snapshot, keyIndex: -1})).rejects.toThrow('序号无效');
+        await expect(runTranslationServiceConnectionTest('demo', {keyIndex: 0})).rejects.toThrow('缺少配置快照');
+    });
+
+    it('配置指纹过期时在 provider 调用前拒绝检测', async () => {
+        const source = new Config();
+        source.apiKeys.demo = ['fixture-check-key'];
+        const snapshot = createTranslationProviderConfigSnapshot(source);
+        adapter.mockResolvedValue('不应发出');
+        const revision = createApiKeyCheckRevision(snapshot, 'demo');
+        await expect(runTranslationServiceConnectionTest('demo', {
+            configSnapshot: snapshot,
+            keyIndex: 0,
+            keyRevision: revision.replace(/^./u, revision[0] === 'a' ? 'b' : 'a'),
+        })).rejects.toThrow('服务配置已更改，请重新检查');
+        expect(adapter).not.toHaveBeenCalled();
+    });
+
+    it('无 Key 配置也冻结端点，旧未指定索引检查只验证第一个非空 Key', async () => {
+        const source = new Config();
+        source.apiKeys.demo = ['', 'fixture-single-check'];
+        const snapshot = createTranslationProviderConfigSnapshot(source);
+        adapter.mockImplementation(async message => {
+            expect(getTranslationProviderConfig(message, source).token.demo).toBe('fixture-single-check');
+            return '你好';
+        });
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: snapshot})).resolves.toBeTruthy();
+        adapter.mockImplementation(async message => {
+            expect(Object.isFrozen(getTranslationProviderConfig(message, source))).toBe(true);
+            expect(getTranslationProviderConfig(message, source).token.demo).toBe('');
+            return '你好';
+        });
+        await expect(runTranslationServiceConnectionTest('demo', {configSnapshot: createTranslationProviderConfigSnapshot(new Config())})).resolves.toBeTruthy();
+    });
     afterEach(() => {
         vi.useRealTimers();
         vi.restoreAllMocks();
@@ -37,6 +162,77 @@ describe('翻译服务连接测试', () => {
             serviceOverride: 'demo',
             useCache: false,
             abortSignal: expect.any(AbortSignal),
+        }));
+        expect(adapter.mock.calls[0][0]).not.toHaveProperty('sourceLanguage');
+        expect(adapter.mock.calls[0][0]).not.toHaveProperty('targetLanguage');
+    });
+
+    it('无 config 时不注入不完整的 provider snapshot，保持 adapter 原有 fallback', async () => {
+        adapter.mockImplementation(async (message: object) => {
+            expect(Object.prototype.hasOwnProperty.call(message, TRANSLATION_PROVIDER_CONFIG)).toBe(false);
+            return '测试译文';
+        });
+
+        await expect(runTranslationServiceConnectionTest('demo')).resolves.toEqual(expect.objectContaining({
+            durationMs: expect.any(Number),
+        }));
+    });
+
+    it('提供 config 时绑定调用方 snapshot，供 adapter 读取真实配置', async () => {
+        const config = createTranslationProviderConfigSnapshot(normalizeConfig({
+            service: 'demo',
+            model: {demo: 'configured-demo-model'},
+        }));
+        adapter.mockImplementation(async (message: object) => {
+            expect(Object.prototype.hasOwnProperty.call(message, TRANSLATION_PROVIDER_CONFIG)).toBe(true);
+            return '测试译文';
+        });
+
+        await expect(runTranslationServiceConnectionTest('demo', {config})).resolves.toEqual(expect.objectContaining({
+            durationMs: expect.any(Number),
+        }));
+    });
+
+    it('排队期间不调用 adapter，超时取消后也不会迟到发出真实请求', async () => {
+        vi.useFakeTimers();
+        const scheduler = createTranslationRequestScheduler(() => ({
+            maxConcurrentTranslations: 1,
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 0,
+        }));
+        const blocker = deferred<string>();
+        adapter.mockImplementationOnce((message: object) => {
+            expect(getTranslationRequestScheduler(message)?.identity?.model).toBe('effective-demo');
+            return blocker.promise;
+        }).mockResolvedValueOnce('不应发出的译文');
+
+        const first = runTranslationServiceConnectionTest('demo', {requestScheduler: scheduler, effectiveModel: ' effective-demo '});
+        const firstOutcome = first.catch(error => error);
+        await Promise.resolve();
+        expect(adapter).toHaveBeenCalledOnce();
+
+        const second = runTranslationServiceConnectionTest('demo', {requestScheduler: scheduler});
+        const secondOutcome = second.catch(error => error);
+        await Promise.resolve();
+        expect(adapter).toHaveBeenCalledOnce();
+
+        await vi.advanceTimersByTimeAsync(CONNECTION_TEST_TIMEOUT_MS);
+        await expect(secondOutcome).resolves.toMatchObject({message: '翻译请求超时'});
+        await expect(firstOutcome).resolves.toMatchObject({message: '翻译请求超时'});
+        blocker.resolve('第一个译文');
+        await Promise.resolve();
+        expect(adapter).toHaveBeenCalledOnce();
+    });
+
+    it('动态 custom:* 服务回退到共享 custom adapter，同时保留动态 serviceOverride', async () => {
+        adapter.mockResolvedValue('动态服务译文');
+
+        await expect(runTranslationServiceConnectionTest('custom:1')).resolves.toEqual({
+            durationMs: expect.any(Number),
+        });
+        expect(adapter).toHaveBeenCalledWith(expect.objectContaining({
+            serviceOverride: 'custom:1',
+            origin: CONNECTION_TEST_ORIGIN,
         }));
     });
 
@@ -91,8 +287,9 @@ describe('翻译服务连接测试', () => {
         await expect(runTranslationServiceConnectionTest('demo')).rejects.toBe(failure);
     });
 
-    it('把真实连接测试尝试旁路记录为 connection-test，且不等待统计写入', async () => {
-        const recordModelUsage = vi.fn(() => new Promise<void>(() => undefined));
+    it('把真实连接测试尝试记录为 connection-test，并在返回前等待统计写入', async () => {
+        const usageWrite = deferred<void>();
+        const recordModelUsage = vi.fn(() => usageWrite.promise);
         adapter.mockImplementation(async (message: Record<string, unknown>) => {
             reportTranslationModelUsage(message, {
                 actualModel: 'demo-model',
@@ -111,11 +308,16 @@ describe('翻译服务连接测试', () => {
             return '测试译文';
         });
 
-        await expect(runTranslationServiceConnectionTest('demo', {
+        let settled = false;
+        const request = runTranslationServiceConnectionTest('demo', {
             configuredModel: '  demo-config  ',
             recordModelUsage,
-        }))
-            .resolves.toEqual(expect.objectContaining({durationMs: expect.any(Number)}));
+        });
+        void request.finally(() => {
+            settled = true;
+        });
+        await vi.waitFor(() => expect(recordModelUsage).toHaveBeenCalledOnce());
+        expect(settled).toBe(false);
         expect(recordModelUsage).toHaveBeenCalledWith([
             expect.objectContaining({
                 serviceId: 'demo',
@@ -134,6 +336,37 @@ describe('翻译服务连接测试', () => {
                 usageAvailability: 'unreported',
             }),
         ]);
+        usageWrite.resolve();
+        await expect(request).resolves.toEqual(expect.objectContaining({durationMs: expect.any(Number)}));
+    });
+
+    it('连接测试用量写入超过宽限期后释放成功响应', async () => {
+        vi.useFakeTimers();
+        const recordModelUsage = vi.fn(() => new Promise<void>(() => undefined));
+        const warn = vi.fn();
+        adapter.mockImplementation(async (message: Record<string, unknown>) => {
+            reportTranslationModelUsage(message, {usageAvailability: 'unreported'});
+            return '测试译文';
+        });
+
+        const request = runTranslationServiceConnectionTest('demo', {
+            recordModelUsage,
+            warn,
+            persistenceGraceMs: 25,
+        });
+        for (let index = 0; index < 20; index += 1) await Promise.resolve();
+        expect(recordModelUsage).toHaveBeenCalledOnce();
+        await vi.advanceTimersByTimeAsync(24);
+        let settled = false;
+        void request.finally(() => { settled = true; });
+        await Promise.resolve();
+        expect(settled).toBe(false);
+        await vi.advanceTimersByTimeAsync(1);
+        await expect(request).resolves.toEqual(expect.objectContaining({durationMs: expect.any(Number)}));
+        expect(warn).toHaveBeenCalledWith(
+            '[FluentRead] connection test usage write timed out:',
+            expect.any(Error),
+        );
     });
 
     it('连接测试预检失败不造请求，结构化 timeout 会校准 transport cancelled', async () => {

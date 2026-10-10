@@ -1,0 +1,59 @@
+{
+  "ok": false,
+  "artifact": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3",
+  "browserPath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "cases": [],
+  "persistenceCases": [],
+  "quickClose": false,
+  "latestWriteWins": false,
+  "crossPageSync": false,
+  "consoleErrors": [],
+  "screenshots": [],
+  "layout": {},
+  "evidenceBoundary": "Real production extension in an isolated Chromium browser; active-tab lookup points to an actual local tab. Translation transport is a local deterministic provider. Failure UI uses named message-response fixtures. No live-provider or Firefox runtime claim.",
+  "manifest": {
+    "version": "0.0.35",
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 620,
+      "name": "loginwindow"
+    },
+    "frontmostAfter": {
+      "pid": 620,
+      "name": "loginwindow"
+    }
+  },
+  "focusMonitor": {
+    "samples": 30,
+    "violations": []
+  },
+  "extensionLoad": {
+    "method": "Extensions.loadUnpacked",
+    "id": "bbhdmcmciinifdiecamcmadphofgekmc"
+  },
+  "failure": {
+    "case": "launch",
+    "error": "Error: production extension worker: timeout\n    at until (/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/scripts/testing/run-popup-actions-service-ui-test.cjs:49:164)\n    at async main (/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/scripts/testing/run-popup-actions-service-ui-test.cjs:191:5)"
+  }
+}

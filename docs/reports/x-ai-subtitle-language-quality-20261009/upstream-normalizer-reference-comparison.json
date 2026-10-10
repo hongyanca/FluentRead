@@ -1,0 +1,52 @@
+{
+  "scope": "Reference-only denominator comparison; independent JavaScript implementation of Appendix C normalization, not ASR rescoring",
+  "source": "https://cdn.openai.com/papers/whisper.pdf#page=21",
+  "implementation": "NFKC, lowercase, remove brackets/parentheses, M/S/P replace space, collapse whitespace. Letter count shown; not exact historical regex grapheme evaluator execution.",
+  "unicodeVersion": "17.0",
+  "nodeVersion": "v22.23.2",
+  "inferenceCalls": 0,
+  "browserLaunched": false,
+  "networkCalls": 0,
+  "referenceTextIncluded": false,
+  "result": [
+    {
+      "language": "hi",
+      "clips": 3,
+      "currentWordUnits": 93,
+      "currentCodePointCerUnits": 372,
+      "openaiAppendixCWordUnits": 171,
+      "openaiAppendixCLetterUnits": 223,
+      "referenceSha256": [
+        "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+        "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+        "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac"
+      ]
+    },
+    {
+      "language": "ar",
+      "clips": 3,
+      "currentWordUnits": 69,
+      "currentCodePointCerUnits": 338,
+      "openaiAppendixCWordUnits": 72,
+      "openaiAppendixCLetterUnits": 330,
+      "referenceSha256": [
+        "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+        "d48ac6d5a80ae2a3a4b3213d54df2f04c26e06c526cdebc47ace44ed1e38f2af",
+        "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3"
+      ]
+    },
+    {
+      "language": "th",
+      "clips": 3,
+      "currentWordUnits": 12,
+      "currentCodePointCerUnits": 355,
+      "openaiAppendixCWordUnits": 76,
+      "openaiAppendixCLetterUnits": 277,
+      "referenceSha256": [
+        "1b43d7066947c9afdc46eaa7ddf21461bb0b911a3de1087db99faeff660b02c5",
+        "87b1c22fc92ea93959ec317f2947393c1974040d32376ec92b79686a6ae25f9b",
+        "4c2e25af290c9e6678e355173c20c0a79751a434f2de70f012b90aafa8b23420"
+      ]
+    }
+  ]
+}

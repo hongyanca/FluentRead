@@ -30,15 +30,24 @@ export function isValidCustomBody(raw?: unknown): boolean {
     return parseCustomBody(raw) !== undefined;
 }
 
-// 顶层浅合并，用户字段优先；返回新对象以避免修改原始 payload。
-export function mergeCustomBody<T extends Record<string, unknown>>(payload: T, raw?: unknown): T {
+// 默认仅顶层浅合并；调用方可指定需要保留默认子字段的对象键。用户字段始终优先。
+export function mergeCustomBody<T extends Record<string, unknown>>(payload: T, raw?: unknown, nestedKeys: readonly string[] = []): T {
     const customBody = parseCustomBody(raw);
     if (customBody === undefined) {
         console.warn('[FluentRead] 自定义请求体必须是合法的 JSON 对象，已忽略');
         return payload;
     }
 
-    return {...payload, ...customBody};
+    const merged: Record<string, unknown> = {...payload, ...customBody};
+    for (const key of nestedKeys) {
+        const defaults = payload[key];
+        const overrides = customBody[key];
+        if (defaults !== null && typeof defaults === 'object' && !Array.isArray(defaults)
+            && overrides !== null && typeof overrides === 'object' && !Array.isArray(overrides)) {
+            merged[key] = {...defaults, ...overrides};
+        }
+    }
+    return merged as T;
 }
 
 export function isCustomBodyMapping(value: unknown): value is Record<string, string> {

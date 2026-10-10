@@ -1,0 +1,16 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const Module = require('node:module');
+const script = '/Users/thinkstu/Desktop/copy/FluentRead-harness-actions-audio-20260905/scripts/run-harness-reading-test.cjs';
+const source = fs.readFileSync(script, 'utf8');
+const start = source.indexOf('        const beforeSelection = requests.length;');
+const end = source.indexOf('        const memoryPage = await newPage();');
+if (start < 0 || end <= start) throw new Error('无法定位记忆诊断边界');
+const diagnostic = source.slice(0, start)
+    + "        result.diagnosticSubset = 'memory-only; prior 43 scenarios excluded';\n"
+    + "        await persistConfig(configPage, {harness: {...(await readConfig(configPage)).harness, contextMode: 'selection'}});\n"
+    + source.slice(end);
+const runner = new Module(script, module);
+runner.filename = script;
+runner.paths = Module._nodeModulePaths(path.dirname(script));
+runner._compile(diagnostic, script);

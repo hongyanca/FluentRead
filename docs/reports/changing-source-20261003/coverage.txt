@@ -1,0 +1,36 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-skip-time-dynamic-numbers-20261003
+      Coverage enabled with v8
+
+ ✓ tests/translationCore.test.ts (136 tests) 2271ms
+   ✓ translation candidate core > bounds one readability probe on an extremely wide subtree 538ms
+   ✓ translation candidate core > shares text ancestor protection across one adversarially deep discovery 317ms
+ ✓ tests/translationState.test.ts (53 tests) 585ms
+   ✓ 指定节点翻译状态机 > removed subtree 查询不会读取大批无关 active owner 的状态 428ms
+ ✓ tests/translationStability.test.ts (41 tests) 149ms
+ ✓ tests/pageTranslationAdvanced.test.ts (16 tests) 40ms
+ ✓ tests/translationControlOwnership.test.ts (19 tests) 226ms
+ ✓ tests/serializationPerformance.test.ts (5 tests) 635ms
+   ✓ translation snapshot mapping performance > maps a large flat candidate with linear tree-walker work and no sibling path scans 547ms
+ ✓ tests/translationSourceStability.test.ts (45 tests) 29ms
+ ✓ tests/translationSourceStabilityGate.test.ts (17 tests) 15ms
+ ✓ tests/translationVisualProtection.test.ts (18 tests) 33ms
+
+ Test Files  9 passed (9)
+      Tests  350 passed (350)
+   Start at  14:18:26
+   Duration  7.32s (transform 411ms, setup 0ms, collect 1.44s, tests 3.98s, environment 1ms, prepare 381ms)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |     100 |      100 |     100 |     100 |                   
+ core/translation  |     100 |      100 |     100 |     100 |                   
+  dom.ts           |     100 |      100 |     100 |     100 |                   
+  liveData.ts      |     100 |      100 |     100 |     100 |                   
+  text.ts          |     100 |      100 |     100 |     100 |                   
+ ...lation/content |     100 |      100 |     100 |     100 |                   
+  ...eStability.ts |     100 |      100 |     100 |     100 |                   
+  ...bilityGate.ts |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

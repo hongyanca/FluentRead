@@ -1,0 +1,64 @@
+{
+  "source": "macOS say, three synthetic Mandarin clips; no human or live X audio",
+  "sampleRate": 16000,
+  "channels": 1,
+  "format": "s16le",
+  "entries": [
+    {
+      "file": "chinese-0.aiff",
+      "reference": "我挟天子以令诸侯，天下都给我让道。",
+      "voice": "Tingting",
+      "wordsPerMinute": 190,
+      "audioSeconds": 3.47675,
+      "aiffSha256": "4dfb82506015960f3c971335d2321db070cca2a24644481337278ba3237e5b39",
+      "pcm16Mono16kSha256": "c1fae5f80dd11107ff5b42c90bc0f02012d3057d309f0f303e7c813328597d42",
+      "padded2sPcmSha256": "204ff9035d4b1b12cb63eb589d99ae810ec6272092f30931b6847b8b57eabad2"
+    },
+    {
+      "file": "chinese-1.aiff",
+      "reference": "我们正在测试中文视频字幕，识别结果应该保持完整，不要重复。",
+      "voice": "Tingting",
+      "wordsPerMinute": 190,
+      "audioSeconds": 5.856875,
+      "aiffSha256": "2200611e936b553eef1a4effb25882ab58cab4460c5fcf27c5e6fb0a44a3d37d",
+      "pcm16Mono16kSha256": "e9939e0b2be3562a418cecc627da5a67757eac4b74b2afc97d848bea471e5002",
+      "padded2sPcmSha256": "0446036991d8555c49f417697baba4edc7457e34d45d688ca8d8a87455d7ed10"
+    },
+    {
+      "file": "chinese-2.aiff",
+      "reference": "今天我们测试自动生成视频字幕。中文识别需要正确判断语言，完整保留每一句对白，遇到背景音乐也不要输出大量重复文字。",
+      "voice": "Tingting",
+      "wordsPerMinute": 260,
+      "audioSeconds": 9.2171875,
+      "aiffSha256": "0e08d919336e8265b12c026ab58000fe4e325f57dd2f794c6366978a5a3161d1",
+      "pcm16Mono16kSha256": "d170f1ac05468b6dc7067880d46183efab604f7ceda488c047b4f1ca82ae9c1c",
+      "padded2sPcmSha256": "be7caca557d00ee5f4de93a715a58630153a699344e3bc2196f6d48184368e99"
+    }
+  ],
+  "sourceComparisons": [
+    {
+      "run": "baseline-tiny-asr (completed partial run)",
+      "aiffSourcesIdentical": true
+    },
+    {
+      "run": "baseline-base-asr",
+      "aiffSourcesIdentical": true
+    },
+    {
+      "run": "baseline-base-padded-asr",
+      "aiffSourcesIdentical": true
+    },
+    {
+      "run": "fixed-base-asr",
+      "aiffSourcesIdentical": true
+    },
+    {
+      "run": "fixed-base-padded-asr",
+      "aiffSourcesIdentical": true
+    },
+    {
+      "run": "fixed-tiny-asr",
+      "aiffSourcesIdentical": true
+    }
+  ]
+}

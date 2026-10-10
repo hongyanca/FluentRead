@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "id": "default-off-with-existing-saved-entries",
+      "status": "passed"
+    },
+    {
+      "id": "setting-label-follows-cross-page-interface-language",
+      "status": "passed"
+    },
+    {
+      "id": "inline-matching-protected-content-original-text-and-geometry",
+      "status": "passed"
+    },
+    {
+      "id": "click-current-and-saved-sentence-without-model-or-host-event-interference",
+      "status": "passed"
+    },
+    {
+      "id": "keyboard-entry-and-escape-without-model-request",
+      "status": "passed"
+    },
+    {
+      "id": "unapproved-sentence-context-disables-explanation",
+      "status": "passed"
+    },
+    {
+      "id": "explicit-current-context-only-and-unchanged-review-data",
+      "status": "passed"
+    },
+    {
+      "id": "dark-and-mobile-clamped-layout",
+      "status": "passed"
+    },
+    {
+      "id": "close-cancels-delayed-stream-without-resurrection",
+      "status": "passed"
+    },
+    {
+      "id": "model-failure-and-explicit-retry",
+      "status": "passed"
+    },
+    {
+      "id": "translate-restore-retranslate-excludes-translations-and-preserves-review-data",
+      "status": "passed"
+    },
+    {
+      "id": "dynamic-text-stale-card-and-late-shadow-root",
+      "status": "passed"
+    },
+    {
+      "id": "scroll-discovers-later-reading",
+      "status": "passed"
+    },
+    {
+      "id": "visit-pause-keeps-global-preference",
+      "status": "passed"
+    },
+    {
+      "id": "cross-page-delete-removes-all-corresponding-marks",
+      "status": "passed"
+    },
+    {
+      "id": "master-toggle-and-site-disable-clear-and-restore",
+      "status": "passed"
+    },
+    {
+      "id": "permanent-disable-persists-across-reload",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [
+    "/private/tmp/fluentread-sentence-merge-reencounter/new-and-saved-sentences.png",
+    "/private/tmp/fluentread-sentence-merge-reencounter/current-context-explanation.png",
+    "/private/tmp/fluentread-sentence-merge-reencounter/comparison-dark.png",
+    "/private/tmp/fluentread-sentence-merge-reencounter/comparison-mobile.png"
+  ],
+  "consoleErrors": [],
+  "evidenceBoundary": "Production extension and real Edge with local HTML and synthetic model responses; no live model or Firefox runtime quality claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1041,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "screenshotStates": [
+    {
+      "name": "new-and-saved-sentences",
+      "marks": [
+        "bank",
+        "take for",
+        " granted",
+        "bank"
+      ],
+      "ui": "再次遇见\n×\nbank\n这次读到的原句\nWe rested on the river bank after our walk.\n收藏时的原句\nI visited the bank to deposit money.\nOld reading\n收藏时的参考内容\n理解当前用法\n\n主动讲解会发送当前表达和这次原句；已启用的学习记忆沿用 AI 设置，不发送卡片中的旧收藏或来源网址。\n\n‹\n1 / 3\n›\n标记选项",
+      "config": {
+        "on": true,
+        "marking": true
+      }
+    },
+    {
+      "name": "current-context-explanation",
+      "marks": [
+        "bank",
+        "take for",
+        " granted",
+        "bank"
+      ],
+      "ui": "再次遇见\n×\nbank\n这次读到的原句\nWe rested on the river bank after our walk.\n收藏时的原句\nI visited the bank to deposit money.\nOld reading\n收藏时的参考内容\n重新讲解当前用法\n当前原句\n\n这里的 bank 指河岸；原句中的 river 是依据。\n\n主动讲解会发送当前表达和这次原句；已启用的学习记忆沿用 AI 设置，不发送卡片中的旧收藏或来源网址。\n\n‹\n1 / 3\n›\n标记选项",
+      "config": {
+        "on": true,
+        "marking": true
+      }
+    },
+    {
+      "name": "comparison-dark",
+      "marks": [
+        "bank",
+        "take for",
+        " granted",
+        "bank"
+      ],
+      "ui": "再次遇见\n×\nbank\n这次读到的原句\nWe rested on the river bank after our walk.\n收藏时的原句\nI visited the bank to deposit money.\nOld reading\n收藏时的参考内容\n重新讲解当前用法\n当前原句\n\n这里的 bank 指河岸；原句中的 river 是依据。\n\n主动讲解会发送当前表达和这次原句；已启用的学习记忆沿用 AI 设置，不发送卡片中的旧收藏或来源网址。\n\n‹\n1 / 3\n›\n标记选项",
+      "config": {
+        "on": true,
+        "marking": true
+      }
+    },
+    {
+      "name": "comparison-mobile",
+      "marks": [
+        "bank",
+        "take for",
+        " granted",
+        "bank"
+      ],
+      "ui": "再次遇见\n×\nbank\n这次读到的原句\nWe rested on the river bank after our walk.\n收藏时的原句\nI visited the bank to deposit money.\nOld reading\n收藏时的参考内容\n重新讲解当前用法\n当前原句\n\n这里的 bank 指河岸；原句中的 river 是依据。\n\n主动讲解会发送当前表达和这次原句；已启用的学习记忆沿用 AI 设置，不发送卡片中的旧收藏或来源网址。\n\n‹\n1 / 3\n›\n标记选项",
+      "config": {
+        "on": true,
+        "marking": true
+      }
+    }
+  ]
+}

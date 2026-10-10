@@ -75,7 +75,7 @@ src/
 
   core/
     translation/                     # 纯翻译/候选/序列化算法
-    language/
+    language/                        # 统一语言判断：标签规范、标识符遮蔽、文字/统计/中日韩识别与同目标跳过
     hotkey/
     site-rules/
 
@@ -164,9 +164,15 @@ WXT 会把 `entrypoints/` 下零层或一层的入口作为构建输入，并在
 - background/content 的浏览器运行时代码必须放在 `main()` 内，或放在被 `main()` 调用、且模块顶层无浏览器副作用的模块中。
 - 不使用运行时扫描目录或未知动态 import 自动发现 feature。
 - background、content、popup/options、offscreen 分别拥有静态注册表；不能创建一个会把所有上下文代码打进同一 bundle 的万能 barrel。
+- content 和仅包含 popup/options/unlisted-page 的构建组将配置存储解析为远端运行时，Dexie、加密仓库和旧配置迁移由 background 持有；配置写入仍经过后台权威持久化协议。包含 background 的构建组不进行替换，保留 Firefox MV2 后台页面的数据库能力。非中文界面语言包（含 legacy 精确文案与动态模板）作为 `i18n/<lang>.json` 按需 fetch，不进入 content 主包。内容脚本不能 `import()` 以 `use_dynamic_url` 暴露的扩展脚本：动态 ID 地址不满足隔离环境的 `script-src 'self'`，而固定地址会让网页探测扩展，因此 Defuddle 仍随内容脚本打包。
+- Options 首次只挂载当前设置分区，访问后的分区保留实例和编辑状态；学习中心与设置表单的 `KeepAlive` 必须使用不同缓存键。表单挂载前等待配置和界面语言就绪，避免默认值闪现及额外重渲染。Popup/Options 按实际使用的 Element Plus 组件引入样式。
+- 连续设置表单使用顶部同页导航：点击模块名称滚动到该模块，滚动时同步高亮，折叠模块按需展开；入口按可见 DOM 顺序排列，窄屏导航横向滚动。定位只操作内容容器，不修改 URL 或配置、不隐藏其他模块；翻译统计与网站规则继续使用原有视图切换。页内入口使用 `data-settings-panel` 或带标题的 `data-settings-anchor` 标记，搜索也支持同级 continuation 分区中的目标。
+- ONNX Runtime 的 WASM 随扩展以原始 `.wasm` 保存，由发布 ZIP 统一压缩，避免 Edge Partner Center 拒绝包内嵌套 `.gz` 文件。首次模型初始化时读取并校验 WASM 后注入 `env.wasm.wasmBinary`；静态 MJS 仍从扩展自身加载，CSP 不允许远程代码或 blob 脚本。CPU 和 WebGPU 初始化共用这个入口，成功或失败后都释放注入的二进制引用。OPUS/Whisper 使用 ORT 1.22 的 JSEP pair，Kokoro 使用其 Transformers 精确依赖 ORT 1.26 的 Asyncify pair；两者不能混用版本或 WASM/MJS 类型。wllama 是另一套独立引擎。打包方式不改变模型及原有 GPU 启用策略；共享加载器仍兼容旧 gzip 资源。
 - MV3 background 是 service worker，内存状态必须允许重启；需要持久化的数据进入 storage/IndexedDB。
-- offscreen 由 background 管理，content 和 UI 只通过类型化消息协议请求能力。
-- content 生命周期使用 WXT `ContentScriptContext` 与 `AbortSignal`，扩展失效后不得继续回写页面。
+- 扩展自有 DOM 运行时由 background 管理，content 和 UI 只通过类型化消息协议请求能力。Chrome/Edge MV3 使用原生 Offscreen，Firefox MV2 使用后台页面中的隐藏扩展 iframe；两者加载同一个 `offscreen.html`，复用同一份消息路由、OCR、图片/区域绘制、字幕推理和 TTS 播放逻辑。
+- `extensionDomClient` 只选择文档容器，并共用 `createOffscreenClient` 的准备、握手、截止时间、取消和重建。Firefox 特有代码仅负责 iframe 创建、查询和移除，不另写 feature handler、算法或配置。
+- `offscreenDocument` 仅表示原生 API 与权限；`extensionDom` 表示共享运行时可用。Firefox 的图片、区域、本地字幕和扩展朗读可用，但 Chrome Translator 仍单独受 `chromeTranslation` 约束；Firefox MV3 尚未开放此适配。
+- content 生命周期使用 WXT `ContentScriptContext` 与 `AbortSignal`，扩展失效后不得继续回写页面。上下文失效核查在可见页每秒运行，后台页降为每 5 秒，往返缓存暂停时停止，恢复前先核查；受支持 iframe 的状态通知合并为单个在途读取，并以失效代次拒绝迟到响应。默认关闭的输入翻译和段落复制不挂载监听器，由独立子 signal 随配置启停；图片悬浮的连续 pointermove 每帧仅检测最新事件，关闭和卸载时取消待处理帧。
 
 参考：[WXT Entrypoints](https://wxt.dev/guide/essentials/entrypoints)、[Content Scripts](https://wxt.dev/guide/essentials/content-scripts)、[Project Structure](https://wxt.dev/guide/essentials/project-structure)。
 
@@ -282,7 +288,25 @@ feature
 - 缓存 key 必须包含会改变结果的 service、model、endpoint、语言、prompt/context 与 transport profile。
 - background 与 userscript 共用同一 broker，不维护两份相似实现。
 - cache 失败只能降级为未命中，不能让翻译功能整体失效。
+- 翻译结果缓存默认及可调上限为 10,000 条、10 MiB（10 × 1024 × 1024 字节），任一达到上限就先清理过期项，再按 LRU 淘汰；有效期为 24 小时。保留已有较小配置，超出新上限的配置自动收敛。
+- 缓存通过 Dexie 存入扩展 IndexedDB，browser.storage 只承载容量配置，不承载整份翻译结果。容量统计为 UTF-8 键与译文之和，不包含数据库记录和索引开销，不能视作磁盘占用硬上限。正常统计增量更新、读取按键查询，内存热层最多 128 条；命中的访问时间只作为 LRU 排序提示，短窗口内合并为一次 bulkGet/bulkPut 事务，在依赖 LRU 顺序的写入和维护前先落盘，已清空、替换或删除的记录不会被写回。
+- Chrome storage.local 的 10 MB 配额不等同于 IndexedDB 配额；扩展已有 unlimitedStorage 权限，但磁盘不足仍可能使写入失败。容量扩大不需要增加权限，缓存写入失败时仍继续翻译。
 - MV3 重启后仍需复用的数据进入 IndexedDB；仅请求内去重可以保存在内存。
+
+### 动态页面的翻译稳定性
+
+悬浮和全文翻译共用候选、节点状态和渲染链路。稳定性分别由手势、请求、提交和 DOM 所有权保证，不能只靠防抖延长等待时间：
+
+- **手势有效性**：按键集合必须与当前配置精确匹配，部分释放期间不再响应移动。额外按键、选区接管、失焦或卸载取消当前悬浮手势；被取消的组合不能在下一次鼠标移动时自行恢复。
+- **请求复用**：相同请求按完整调用身份去重。共享结果的等待者仍保留自己的取消和截止时间；页面路由提交代次与内容缓存代次分开，过期结果不能回写新页面。
+- **提交校验**：异步返回后同时检查当前 owner、generation、候选资格及每个文本槽的原文。Text 对象相同或整段拼接原文相同都不足以证明结果有效。等价 Text 重建可以重绑，但必须同步更新恢复原文的快照，并使用当前空白前后缀。
+- **翻译单元**：正文双语的多槽候选若只被链接、加粗、斜体等内联包装与 `<br>` 切开（上下标仅限 `[1]` 这类脚注标记），作为一次整块请求送出：整段原文按渲染骨架重建，内联格式无缝拼接、源码空白折叠，`<br>` 以及 pre 系列宿主里的文本换行保留为换行。整段译文落在首个槽位、其余槽位留空，渲染为纯译文（换行还原为 `<br>`）而不是塞进首个内联元素；整段请求以整段原文为缓存身份，行内文本变化会重译整段。含行内代码、notranslate 术语、公式、图片、删除线或块级结构的段落无法用纯文本无损表达，继续逐槽请求并保留原骨架。仅译文、悬浮与控件路径不受影响。
+- **DOM 所有权**：MutationObserver 根据精确目标和最后写入值识别扩展自己的事务。同值属性写入是无操作；后代的 class/style 改动不能拿祖先快照抵消。真正的原文、保护区或候选资格变化仍会失效并重新发现。
+- **其他翻译器共存**：页面已有的译文节点及其直属原文单元作为外部翻译边界；正文与全部节点范围都避免叠加译文。该边界进入来源与提交校验，后出现的外部译文会使 FluentRead 释放自身译文；移除外部译文后，活动全文会话可重新发现原文。快照省略已被接管的单元，避免净化 HTML 时去掉对方标记又复制其译文；恢复只清理 FluentRead 的工件，普通 `notranslate` 术语、代码和未翻译的相邻段落不受影响。
+- **原文保全**：仅译文的轻 DOM 槽保存宿主原文。宿主克隆槽后会丢失闭合 ShadowRoot，清理必须先解包其中的原文，再删除失去所有权的容器，且不能拆掉其他活动翻译拥有的槽。
+- **展示稳定性**：等价双语重挂按来源、结构和译文工件验证后接管；鼠标高亮仅改变绘制，不改变宿主布局。持续与宿主争抢 DOM 时使用已有修复预算收敛，避免无限恢复和重译。悬停预览增删改复制链接的 `title` 时，工件按“链接提示属性漂移”保留且不计熔断，继续兼容 roving tabindex 的 `-1/0` 和已确认的字体标记。译文内部的 `href`、事件、隐藏样式、ARIA、其他属性及结构和文本仍需匹配可信模板；不能因为原文未变就放行译文副本的语义变化。原文骨架属性变化时可按当前 DOM 重建骨架并复用已提交译文；篡改仍走有界修复预算。
+
+回归需同时断言请求数、工件唯一性、原文恢复、迟到结果隔离和连续帧可见性；缓存命中导致请求数不增，仍可能发生 DOM 闪切。
 
 ## 配置与消息
 
@@ -390,6 +414,12 @@ pnpm test:regression:all -- --browser  # 追加屏幕外隔离浏览器 fixtures
 - [x] 完成本轮逐条需求审计。
 
 ## 变更规则
+
+## 阅读助手 Harness 核心
+
+阅读助手采用浏览器内的有界 ledger 和独立工具循环，参考 DeepSeek Harness `dsh-v0.1.3-alpha.1`（commit `d347e703908d0406b7a7ef80e3a0e594d86b2215`）的 `packages/core/session/src/surface.ts` 消息投影思想。FluentRead 只保留选区、已授权段落、追问历史和只读 `read_context` 工具，不引入上游桌面 host、bridge、Cordis、插件、文件系统、进程、沙箱或动态执行能力；模型仍由现有 AI SDK gateway 选择。兼容模型与原生 Anthropic/Google 模型均通过各自协议接入，不能假设任意模型都支持工具调用或流式输出。
+
+阅读卡通过 `fluentReadHarnessStream` port 接收模型、正文和会话进度，正文按模型返回的增量快照更新；停止、错误、关闭、换选区和 worker 中断会取消当前请求，已收到正文仍保留在卡片中。普通模式的会话按问答保存在本机 30 天，历史可从阅读卡或设置页折叠查看、恢复、删除和清空；恢复只加载已有 turns，不自动发起模型请求，后台重建上下文时最多使用最近四轮。隐私窗口不保存也不读取历史。
 
 每个迁移批次必须：
 

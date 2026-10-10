@@ -1,0 +1,41 @@
+{
+  "scope": "Zero-inference installed Whisper3.8.1 actual generate and generic generation setup; only fake model-instance hook, with real MaxLength/EOS/InterruptableStoppingCriteria. No model, session or decoder call.",
+  "libraryVersion": "3.8.1",
+  "actualGenerateSha256": "904970304636a4011abcbb1b7ddf2361e102341a7c89b1bb07182698c9f16f5a",
+  "actualOriginalHookSha256": "dec79823b91d5c98a0545dd31e36ba79d163676f83d44da8b6c8ecfc4f09d4d2",
+  "scriptSha256": "b73fe7991d47e1fa8a7369242e682b948a0bf52c19b3ec7de85ca515c958d411",
+  "calls": [
+    {
+      "suppliedCriteriaWasDropped": true,
+      "originalTypes": [
+        "MaxLengthCriteria",
+        "EosTokenCriteria"
+      ],
+      "ownedCriteriaAppended": true,
+      "stoppedBeforeInterrupt": false,
+      "stoppedAfterInterrupt": false,
+      "maxLength": 443
+    },
+    {
+      "suppliedCriteriaWasDropped": true,
+      "originalTypes": [
+        "MaxLengthCriteria",
+        "EosTokenCriteria"
+      ],
+      "ownedCriteriaAppended": true,
+      "stoppedBeforeInterrupt": false,
+      "stoppedAfterInterrupt": true,
+      "maxLength": 443
+    }
+  ],
+  "freshCriteriaListEachCall": true,
+  "validation": {
+    "allPassed": true,
+    "globalPrototypePatched": false,
+    "decoderCalls": 0,
+    "newInferences": 0,
+    "networkAttempts": 0,
+    "browserLaunched": false
+  },
+  "boundary": "Proves instance hook executes on each real generic generation setup and appended owned criteria controls the real stopping list. Does not run ONNX or a wall-clock15s model inference."
+}

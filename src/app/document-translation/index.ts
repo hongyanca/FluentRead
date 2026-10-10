@@ -5,24 +5,38 @@
  * 模块边界：该文件只整理稳定公开面，不执行页面挂载、不持有配置副本，也不暴露 document feature 内部实现；实际适配在 runtime，UI 状态在 DocumentApp。
  */
 export * from '@/src/features/document-translation/public';
+export {hasDistinctTranslation} from '@/src/core/translation/result';
+export {buildGlossaryRevision} from '@/src/core/glossary';
 export {Config} from '@/src/core/config/model';
+export {TranslationRequestError} from '@/src/services/translation/errors';
 export {getMissingCredentialMessage} from '@/src/core/config/validation';
 export {
     customModelString,
+    getMultilingualTargetLanguageLabel,
     models,
     options,
     resolveConfiguredModel,
     servicesType,
 } from '@/src/core/config/catalog';
 export {
+    getCustomOpenAIProvider,
+    withCustomOpenAIServiceOptions,
+} from '@/src/core/config/customOpenAI';
+export {
     config as runtimeConfig,
     configReady,
     requestConfigPatch,
     subscribeConfig,
 } from '@/src/services/config/store';
-export {createDocumentDownload, translateDocumentSegments} from './runtime';
+export {createDocumentDownload, createPdfPageRecognizer, documentRetryBackoff, translateDocumentSegments} from './runtime';
+export {scoreDocumentInformation} from './informationHighlight';
+export {useUiI18n} from '@/src/ui/i18n';
+export {default as GlossaryLibrarySelect} from '@/src/ui/components/GlossaryLibrarySelect.vue';
 export {
     filterAvailableTranslationServices,
     filterSelectableTranslationServices,
     getTranslationServiceUnavailableMessage,
+    supportsTranslationGlossary,
 } from '@/src/services/translation/capabilities';
+
+export {default as ElSelect} from '@/src/ui/components/UiSelect.vue';

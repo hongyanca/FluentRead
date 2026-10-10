@@ -6,7 +6,7 @@ const { fetchMock, mockConfig } = vi.hoisted(() => ({
         service: 'mimo',
         to: 'zh-Hans',
         token: { mimo: '' } as Record<string, string>,
-        model: { mimo: 'mimo-v2.5-pro' } as Record<string, string>,
+        model: { mimo: 'mimo-v2.6-pro' } as Record<string, string>,
         customModel: {} as Record<string, string>,
         customBody: {} as Record<string, string>,
         proxy: {} as Record<string, string>,
@@ -27,7 +27,7 @@ function successResponse() {
         id: 'chatcmpl-test',
         object: 'chat.completion',
         created: 1,
-        model: 'mimo-v2.5-pro',
+        model: 'mimo-v2.6-pro',
         choices: [{index: 0, message: {role: 'assistant', content: '译文'}, finish_reason: 'stop'}],
         usage: {prompt_tokens: 1, completion_tokens: 1, total_tokens: 2},
     }), {
@@ -58,6 +58,7 @@ describe('小米 MiMo OpenAI 兼容服务', () => {
         );
         const headers = new Headers(fetchMock.mock.calls[0][1].headers);
         expect(headers.get('Authorization')).toBe('Bearer sk-test');
+        expect(JSON.parse(fetchMock.mock.calls[0][1].body).model).toBe('mimo-v2.6-pro');
     });
 
     it('Token Plan 使用所选集群地址并发送 tp Key', async () => {

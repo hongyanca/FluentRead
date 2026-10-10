@@ -45,6 +45,7 @@ function createRepository(): ModelUsageRepositoryContract & {
             filter: query.filter,
             items: [],
             totalCount: 0,
+            offset: 0,
             nextCursor: null,
         })),
         exportData: vi.fn(async (): Promise<ModelUsageTransferDocument> => ({
@@ -109,6 +110,22 @@ describe('模型用量后台 handler', () => {
         expect(repository.clear).toHaveBeenCalledOnce();
         expect(repository.getDashboard).not.toHaveBeenCalled();
         expect(response).toEqual({success: true, data: {cleared: true}});
+    });
+
+    it('指定页查询接收写作与阅读场景，并严格校验偏移与固定时间', async () => {
+        const repository = createRepository();
+        for (const purpose of ['writing', 'reading']) {
+            const query = {filter: {range: '30d', purpose}, offset: 40, asOf: 1_000, limit: 20};
+            expect(await handler(repository).handle({type: MODEL_USAGE_MESSAGE_TYPE, action: 'list', query}, trustedContext)).toMatchObject({success: true});
+            expect(repository.getRequestLog).toHaveBeenLastCalledWith(query);
+        }
+        for (const offset of [-1, 1.5, 1_000, NaN, null, '20']) {
+            expect(() => parseModelUsageRequestQuery({offset})).toThrow('offset');
+        }
+        for (const asOf of [-1, Infinity, null, '1000', 8_640_000_000_000_001]) {
+            expect(() => parseModelUsageRequestQuery({asOf})).toThrow('asOf');
+        }
+        expect(() => parseModelUsageRequestQuery({offset: 0, cursor: {startedAt: 1, id: 'request'}})).toThrow('不能同时使用');
     });
 
     it('list 校验用途、状态、缓存和游标后委托稳定分页查询', async () => {

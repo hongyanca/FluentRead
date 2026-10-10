@@ -1,0 +1,88 @@
+<!doctype html>
+<!--
+GitHub Issue #1029 task-list DOM shape observed after React hydration on 2026-09-14.
+One UL/LI contains several DIV task rows. CSS module prefixes, checkbox siblings and DnD
+helper placement follow the observed page; the short task text is synthetic test content.
+The source capture lives in the browser evidence, not in this fixture.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hydrated GitHub task list</title>
+  <style>
+    body { margin: 0; font: 16px/1.55 -apple-system, BlinkMacSystemFont, sans-serif; color: #1f2328; }
+    main { width: 940px; max-width: calc(100% - 64px); margin: 32px auto; }
+    h3 { margin: 16px 0; }
+    ul { padding-left: 22px; }
+    .contains-task-list > li { list-style: none; }
+    .position-relative { position: relative; }
+    [class*="TaskListItem-module__left-aligned-content"], [class*="TaskListItem-module__checkbox-items"] { display: flex; align-items: flex-start; width: 100%; }
+    [class*="TaskListItem-module__task-list-item"] { margin: 8px 0; }
+    [class*="TaskListItem-module__task-list-html"] { flex: 1; min-width: 0; }
+    input { flex-shrink: 0; margin: 6px 10px 0 0; }
+    code { background: #f1f3f5; border-radius: 4px; padding: 2px 4px; }
+    a { color: #0969da; text-decoration: underline; }
+    .octicon { display: inline-block; vertical-align: -2px; fill: #8250df; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="markdown-body" data-testid="markdown-body">
+    <h3 data-testid="task-heading">Core support roadmap</h3>
+    <ul class="contains-task-list" data-testid="task-list">
+      <li data-testid="task-group">
+        <div class="DragAndDropContainer-module__container__zvZfn" style="margin-top: 1px;">
+          <div data-testid="task-rows">
+            <div class="position-relative TaskListItems-module__task-list-item__h6l0P" style="transform: none;">
+              <div class="position-relative" style="margin-left: 0px; margin-right: -8px;">
+                <div class="TaskListItem-module__task-list-item__nf0LI TaskListItem-module__disabled__oIAG1" data-testid="tasklist-item-0-0">
+                  <div class="TaskListItem-module__left-aligned-content__Pwb_R">
+                    <div class="TaskListItem-module__drag-drop-container__sq_g1"></div>
+                    <div class="TaskListItem-module__checkbox-items__v4LMp" id="checkbox-item-0">
+                      <input disabled aria-required="false" aria-invalid="false" aria-label="Initial model support checklist item" data-component="Checkbox" type="checkbox" checked aria-checked="true">
+                      <div class="TaskListItem-module__task-list-html__wqNZG" data-testid="task-content-0">Initial model support: training and inference (<span class="reference"><svg class="octicon octicon-git-merge" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 0h2v16H3z"></path></svg><a class="issue-link js-issue-link" href="https://github.com/kohya-ss/musubi-tuner/pull/1018">Add initial training support <span class="issue-shorthand">#1018</span></a></span> — thanks <a class="user-mention notranslate" href="https://github.com/sdbds">@sdbds</a>)</div>
+                    </div>
+                  </div>
+                  <div class="TaskListItem-module__TaskListItemActionsContainer__YAHNS"></div>
+                </div>
+              </div>
+            </div>
+            <div class="position-relative TaskListItems-module__task-list-item__h6l0P" style="transform: none;">
+              <div class="position-relative" style="margin-left: 0px; margin-right: -8px;">
+                <div class="TaskListItem-module__task-list-item__nf0LI TaskListItem-module__disabled__oIAG1" data-testid="tasklist-item-0-1">
+                  <div class="TaskListItem-module__left-aligned-content__Pwb_R">
+                    <div class="TaskListItem-module__drag-drop-container__sq_g1"></div>
+                    <div class="TaskListItem-module__checkbox-items__v4LMp" id="checkbox-item-1">
+                      <input disabled aria-required="false" aria-invalid="false" aria-label="Quantized weights checklist item" data-component="Checkbox" type="checkbox" checked aria-checked="true">
+                      <div class="TaskListItem-module__task-list-html__wqNZG" data-testid="task-content-1">Quantized base weights: automatic detection of compatible checkpoints (<a class="issue-link js-issue-link" href="https://github.com/kohya-ss/musubi-tuner/pull/1024">Add quantized weight support #1024</a>).</div>
+                    </div>
+                  </div>
+                  <div class="TaskListItem-module__TaskListItemActionsContainer__YAHNS"></div>
+                </div>
+              </div>
+            </div>
+            <div class="position-relative TaskListItems-module__task-list-item__h6l0P" style="transform: none;">
+              <div class="position-relative" style="margin-left: 0px; margin-right: -8px;">
+                <div class="TaskListItem-module__task-list-item__nf0LI TaskListItem-module__disabled__oIAG1" data-testid="tasklist-item-0-2">
+                  <div class="TaskListItem-module__left-aligned-content__Pwb_R">
+                    <div class="TaskListItem-module__drag-drop-container__sq_g1"></div>
+                    <div class="TaskListItem-module__checkbox-items__v4LMp" id="checkbox-item-2">
+                      <input disabled aria-required="false" aria-invalid="false" aria-label="Streaming encoder checklist item" data-component="Checkbox" type="checkbox" checked aria-checked="true">
+                      <div class="TaskListItem-module__task-list-html__wqNZG" data-testid="task-content-2"><strong>Streaming encoder support</strong> — reduce memory while running <code class="notranslate">model.encode()</code> with a fallback for older devices.</div>
+                    </div>
+                  </div>
+                  <div class="TaskListItem-module__TaskListItemActionsContainer__YAHNS"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="DndDescribedBy-0" style="display: none;">To pick up a draggable item, press the space bar. While dragging, use the arrow keys to move the item. Press space again to drop the item in its new position, or press escape to cancel.</div>
+        <div id="DndLiveRegion-0" role="status" aria-live="assertive" aria-atomic="true" style="position: fixed; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); clip-path: inset(100%); white-space: nowrap;">Hidden drag movement announcement sentinel.</div>
+      </li>
+    </ul>
+    <p data-testid="adjacent-paragraph">Ordinary paragraphs below the checklist remain independent.</p>
+  </div>
+</main>
+</body>
+</html>

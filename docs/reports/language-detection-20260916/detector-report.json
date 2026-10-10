@@ -1,0 +1,3967 @@
+{
+  "generatedAt": "2026-09-15T19:03:11.959Z",
+  "node": "v22.23.2",
+  "platform": "Darwin arm64",
+  "corpora": {
+    "calibration": 217,
+    "holdout": 94,
+    "holdout2": 61
+  },
+  "evidenceBoundary": "All candidates run on the same FluentRead-authored corpora. Numbers compare decisions on these texts only and are not general accuracy claims.",
+  "candidates": [
+    {
+      "name": "unified-franc-min",
+      "importMs": 107.99758299999999,
+      "importHeapBytes": 8530912,
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 0,
+          "expected": 176,
+          "skipped": 130,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "en-short-saved",
+            "en-short-sign-in",
+            "es-short-welcome",
+            "es-short-saved",
+            "es-short-file",
+            "pt-short-file",
+            "it-short-welcome",
+            "it-short-saved",
+            "cs-short-saved",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "sk-long-extension",
+            "ro-short-welcome",
+            "hu-short-welcome",
+            "tr-short-welcome",
+            "tr-short-login",
+            "id-short-welcome",
+            "id-long-extension",
+            "id-long-privacy",
+            "ms-short-welcome",
+            "ms-long-extension",
+            "ms-long-privacy",
+            "fil-short-welcome",
+            "sw-short-welcome",
+            "da-short-welcome",
+            "da-long-extension",
+            "nb-short-welcome",
+            "nb-long-extension",
+            "fi-short-welcome",
+            "fi-long-extension",
+            "et-short-welcome",
+            "lv-short-welcome",
+            "lt-short-welcome",
+            "sl-short-welcome",
+            "sl-long-extension",
+            "hr-short-welcome",
+            "hr-long-extension",
+            "ru-short-saved",
+            "uk-short-welcome",
+            "bg-short-welcome",
+            "sr-short-welcome",
+            "sr-long-extension",
+            "ar-short-welcome",
+            "ar-short-saved",
+            "ur-short-welcome",
+            "zh-hans-saved"
+          ],
+          "sameTargetSkipRate": 0.7386363636363636,
+          "duplicateTranslationRate": 0.26136363636363635,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 16,
+              "wrong": 0,
+              "pairs": 884,
+              "sameTargetSkipRate": 0.9411764705882353
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 1
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 17,
+              "wrong": 0,
+              "pairs": 1248,
+              "sameTargetSkipRate": 1
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 6,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 55,
+              "wrong": 0,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.8333333333333334
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.3333333333333333
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 18,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 54,
+              "wrong": 0,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.6067415730337079
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0.3611111111111111
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 0,
+          "expected": 67,
+          "skipped": 42,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "h-en-headline",
+            "h-en-error",
+            "h-de-headline",
+            "h-es-error",
+            "h-pt-headline",
+            "h-pt-error",
+            "h-it-headline",
+            "h-pl-forum",
+            "h-cs-forum",
+            "h-sk-forum",
+            "h-tr-forum",
+            "h-id-forum",
+            "h-ms-forum",
+            "h-da-forum",
+            "h-nb-forum",
+            "h-fi-forum",
+            "h-hr-forum",
+            "h-sl-forum",
+            "h-ru-headline",
+            "h-ru-error",
+            "h-uk-error",
+            "h-sr-forum",
+            "h-ar-forum",
+            "h-ar-error",
+            "h-zh-hant-forum"
+          ],
+          "sameTargetSkipRate": 0.6268656716417911,
+          "duplicateTranslationRate": 0.3731343283582089,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.8333333333333334
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 3,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 25,
+              "wrong": 0,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.6578947368421053
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 10,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.47619047619047616
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0.3333333333333333
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 0,
+          "expected": 43,
+          "skipped": 32,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "h2-fr-chat",
+            "h2-es-chat",
+            "h2-tr-chat",
+            "h2-id-recipe",
+            "h2-hu-weather",
+            "h2-uk-weather",
+            "h2-ar-sports",
+            "h2-zh-hans-update",
+            "h2-zh-hant-chat",
+            "h2-ja-update",
+            "h2-ko-update"
+          ],
+          "sameTargetSkipRate": 0.7441860465116279,
+          "duplicateTranslationRate": 0.2558139534883721,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0.5
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 12,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.8571428571428571
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 15,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.7142857142857143
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.7777777777777778
+            }
+          }
+        }
+      },
+      "timing": {
+        "calls": 1116,
+        "medianMs": 0.11437499999999545,
+        "p95Ms": 0.32179099999996197,
+        "maxMs": 1.2667500000000018
+      },
+      "cachedTiming": {
+        "calls": 1116,
+        "medianMs": 0.0018340000000307555,
+        "p95Ms": 0.25595799999996416,
+        "maxMs": 1.108082999999965
+      },
+      "heapAfterEvaluationBytes": 34929424
+    },
+    {
+      "name": "naive-franc-min-top1",
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 52,
+          "expected": 176,
+          "skipped": 132,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "en-short-saved",
+              "target": "de"
+            },
+            {
+              "id": "es-short-welcome",
+              "target": "pt"
+            },
+            {
+              "id": "pt-short-file",
+              "target": "it"
+            },
+            {
+              "id": "it-long-extension",
+              "target": "es"
+            },
+            {
+              "id": "sk-short-saved",
+              "target": "cs"
+            },
+            {
+              "id": "sk-long-extension",
+              "target": "hr"
+            },
+            {
+              "id": "sk-long-privacy",
+              "target": "cs"
+            },
+            {
+              "id": "ro-short-welcome",
+              "target": "de"
+            },
+            {
+              "id": "ms-short-welcome",
+              "target": "id"
+            },
+            {
+              "id": "ms-long-extension",
+              "target": "id"
+            },
+            {
+              "id": "ms-long-privacy",
+              "target": "id"
+            },
+            {
+              "id": "da-short-welcome",
+              "target": "es"
+            },
+            {
+              "id": "da-long-extension",
+              "target": "nl"
+            },
+            {
+              "id": "nb-short-welcome",
+              "target": "nl"
+            },
+            {
+              "id": "nb-long-extension",
+              "target": "nl"
+            },
+            {
+              "id": "fi-short-welcome",
+              "target": "nl"
+            },
+            {
+              "id": "fi-long-extension",
+              "target": "ms"
+            },
+            {
+              "id": "et-short-welcome",
+              "target": "nl"
+            },
+            {
+              "id": "et-long-extension",
+              "target": "fr"
+            },
+            {
+              "id": "lv-long-extension",
+              "target": "fr"
+            },
+            {
+              "id": "lt-short-welcome",
+              "target": "sw"
+            },
+            {
+              "id": "lt-long-extension",
+              "target": "pl"
+            },
+            {
+              "id": "sl-short-welcome",
+              "target": "hr"
+            },
+            {
+              "id": "sl-long-extension",
+              "target": "sr"
+            },
+            {
+              "id": "hr-long-extension",
+              "target": "sr"
+            },
+            {
+              "id": "ru-short-saved",
+              "target": "bg"
+            },
+            {
+              "id": "uk-short-welcome",
+              "target": "sr"
+            },
+            {
+              "id": "ur-short-welcome",
+              "target": "fa"
+            },
+            {
+              "id": "zh-hans-identifiers-formats",
+              "target": "fr"
+            },
+            {
+              "id": "zh-hans-identifiers-path",
+              "target": "fr"
+            },
+            {
+              "id": "zh-with-english-sentence",
+              "target": "en"
+            },
+            {
+              "id": "zh-with-uppercase-sentence",
+              "target": "en"
+            },
+            {
+              "id": "ja-with-english-sentence",
+              "target": "en"
+            },
+            {
+              "id": "en-with-french-sentence",
+              "target": "fr"
+            },
+            {
+              "id": "de-with-english-sentence",
+              "target": "de"
+            },
+            {
+              "id": "ru-with-english",
+              "target": "en"
+            },
+            {
+              "id": "ar-with-english",
+              "target": "en"
+            },
+            {
+              "id": "en-with-chinese",
+              "target": "en"
+            },
+            {
+              "id": "el-with-english",
+              "target": "el"
+            },
+            {
+              "id": "he-with-english",
+              "target": "de"
+            }
+          ],
+          "missedCases": [
+            "en-short-saved",
+            "es-short-welcome",
+            "pt-short-file",
+            "it-long-extension",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "sk-long-extension",
+            "sk-long-privacy",
+            "ro-short-welcome",
+            "hu-short-welcome",
+            "tr-short-welcome",
+            "ms-short-welcome",
+            "ms-long-extension",
+            "ms-long-privacy",
+            "da-short-welcome",
+            "da-long-extension",
+            "nb-short-welcome",
+            "nb-long-extension",
+            "fi-short-welcome",
+            "fi-long-extension",
+            "et-short-welcome",
+            "et-long-extension",
+            "lv-short-welcome",
+            "lv-long-extension",
+            "lt-short-welcome",
+            "lt-long-extension",
+            "sl-short-welcome",
+            "sl-long-extension",
+            "hr-short-welcome",
+            "hr-long-extension",
+            "ru-short-saved",
+            "uk-short-welcome",
+            "sr-short-welcome",
+            "he-short-welcome",
+            "he-short-saved",
+            "he-long-extension",
+            "ur-short-welcome",
+            "zh-hans-saved",
+            "zh-hans-identifiers-formats",
+            "zh-hans-identifiers-path",
+            "zh-neutral-feature",
+            "zh-neutral-greeting"
+          ],
+          "sameTargetSkipRate": 0.75,
+          "duplicateTranslationRate": 0.25,
+          "wrongSkipRate": 0.0047169811320754715,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 8,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 10,
+              "wrong": 2,
+              "pairs": 884,
+              "sameTargetSkipRate": 0.5882352941176471
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 1
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 15,
+              "wrong": 5,
+              "pairs": 1248,
+              "sameTargetSkipRate": 0.8823529411764706
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 6,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 52,
+              "wrong": 13,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.7878787878787878
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 10,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 0,
+              "wrong": 16,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 15,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 0.8333333333333334
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 61,
+              "wrong": 15,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.6853932584269663
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 17,
+              "wrong": 16,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0.4722222222222222
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 32,
+          "expected": 67,
+          "skipped": 51,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h-sk-forum",
+              "target": "pt"
+            },
+            {
+              "id": "h-tr-forum",
+              "target": "nl"
+            },
+            {
+              "id": "h-id-forum",
+              "target": "ms"
+            },
+            {
+              "id": "h-da-forum",
+              "target": "nl"
+            },
+            {
+              "id": "h-nb-forum",
+              "target": "nl"
+            },
+            {
+              "id": "h-hr-forum",
+              "target": "sr"
+            },
+            {
+              "id": "h-sl-forum",
+              "target": "sr"
+            },
+            {
+              "id": "h-ru-error",
+              "target": "bg"
+            },
+            {
+              "id": "h-uk-error",
+              "target": "bg"
+            },
+            {
+              "id": "h-zh-hans-tech",
+              "target": "en"
+            },
+            {
+              "id": "h-ja-tech",
+              "target": "en"
+            },
+            {
+              "id": "h-ko-tech",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-en-es",
+              "target": "es"
+            },
+            {
+              "id": "h-mixed-fr-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-pt-en",
+              "target": "pt"
+            },
+            {
+              "id": "h-mixed-ru-uk",
+              "target": "uk"
+            },
+            {
+              "id": "h-mixed-zh-en-sentence",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-zh-ja",
+              "target": "ja"
+            },
+            {
+              "id": "h-mixed-ko-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-ar-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h-mixed-hi-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-de-nl",
+              "target": "nl"
+            },
+            {
+              "id": "h-word-menu",
+              "target": "ms"
+            },
+            {
+              "id": "h-word-radio",
+              "target": "hr"
+            },
+            {
+              "id": "h-words-pizza-margherita",
+              "target": "sw"
+            },
+            {
+              "id": "h-name-person",
+              "target": "es"
+            },
+            {
+              "id": "h-code-line",
+              "target": "en"
+            },
+            {
+              "id": "h-latin-quote",
+              "target": "it"
+            },
+            {
+              "id": "h-catalan",
+              "target": "es"
+            },
+            {
+              "id": "h-galician",
+              "target": "es"
+            },
+            {
+              "id": "h-macedonian",
+              "target": "sr"
+            },
+            {
+              "id": "h-afrikaans",
+              "target": "nl"
+            }
+          ],
+          "missedCases": [
+            "h-sk-forum",
+            "h-tr-forum",
+            "h-id-forum",
+            "h-da-forum",
+            "h-nb-forum",
+            "h-fi-forum",
+            "h-hr-forum",
+            "h-sl-forum",
+            "h-ru-error",
+            "h-uk-error",
+            "h-sr-forum",
+            "h-he-forum",
+            "h-zh-hans-tech",
+            "h-zh-hant-forum",
+            "h-ja-tech",
+            "h-ko-tech"
+          ],
+          "sameTargetSkipRate": 0.7611940298507462,
+          "duplicateTranslationRate": 0.23880597014925375,
+          "wrongSkipRate": 0.006688963210702341,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 3,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 4,
+              "wrong": 1,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 4,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 2,
+              "wrong": 1,
+              "pairs": 156,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 28,
+              "wrong": 7,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.7368421052631579
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 10,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 5,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 19,
+              "wrong": 2,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.9047619047619048
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 7,
+              "wrong": 13,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0.4666666666666667
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 13,
+          "expected": 43,
+          "skipped": 39,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h2-id-recipe",
+              "target": "ms"
+            },
+            {
+              "id": "h2-mixed-es-en",
+              "target": "es"
+            },
+            {
+              "id": "h2-mixed-it-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h2-mixed-cs-sk",
+              "target": "hr"
+            },
+            {
+              "id": "h2-mixed-zh-en-quote",
+              "target": "en"
+            },
+            {
+              "id": "h2-mixed-ja-ko",
+              "target": "ja"
+            },
+            {
+              "id": "h2-mixed-ru-en-product",
+              "target": "en"
+            },
+            {
+              "id": "h2-mixed-he-ar",
+              "target": "ar"
+            },
+            {
+              "id": "h2-words-status",
+              "target": "en"
+            },
+            {
+              "id": "h2-brand-model",
+              "target": "it"
+            },
+            {
+              "id": "h2-identifier-path",
+              "target": "fr"
+            },
+            {
+              "id": "h2-occitan",
+              "target": "es"
+            },
+            {
+              "id": "h2-luxembourgish",
+              "target": "nl"
+            }
+          ],
+          "missedCases": [
+            "h2-id-recipe",
+            "h2-he-weather",
+            "h2-zh-hans-update",
+            "h2-zh-hant-chat"
+          ],
+          "sameTargetSkipRate": 0.9069767441860465,
+          "duplicateTranslationRate": 0.09302325581395354,
+          "wrongSkipRate": 0.004166666666666667,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0.5
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 3,
+              "wrong": 2,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.75
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 13,
+              "wrong": 1,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.9285714285714286
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 7,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 19,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.9047619047619048
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 8,
+              "wrong": 5,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.8888888888888888
+            }
+          }
+        }
+      },
+      "timing": {
+        "calls": 1116,
+        "medianMs": 0.051708999999959815,
+        "p95Ms": 0.16137500000002092,
+        "maxMs": 0.42266700000004676
+      }
+    },
+    {
+      "name": "unified-franc-full",
+      "importMs": 72.94016699999997,
+      "importHeapBytes": 8408368,
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 0,
+          "expected": 176,
+          "skipped": 122,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "en-short-saved",
+            "en-short-sign-in",
+            "de-short-login",
+            "es-short-welcome",
+            "es-short-saved",
+            "es-short-login",
+            "es-short-file",
+            "es-long-program",
+            "pt-short-saved",
+            "pt-short-file",
+            "pt-long-extension",
+            "it-short-welcome",
+            "it-short-saved",
+            "nl-short-welcome",
+            "cs-short-welcome",
+            "cs-short-saved",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "ro-short-welcome",
+            "ro-short-file",
+            "hu-short-welcome",
+            "tr-short-welcome",
+            "tr-short-login",
+            "id-short-welcome",
+            "id-long-extension",
+            "id-long-privacy",
+            "ms-short-welcome",
+            "ms-long-extension",
+            "ms-long-privacy",
+            "fil-short-welcome",
+            "sw-short-welcome",
+            "sv-short-welcome",
+            "da-short-welcome",
+            "da-long-extension",
+            "nb-short-welcome",
+            "nb-long-extension",
+            "fi-short-welcome",
+            "et-short-welcome",
+            "lv-short-welcome",
+            "sl-short-welcome",
+            "sl-long-extension",
+            "hr-short-welcome",
+            "hr-long-extension",
+            "ru-short-saved",
+            "ru-short-login",
+            "uk-short-welcome",
+            "bg-short-welcome",
+            "bg-long-extension",
+            "sr-short-welcome",
+            "sr-long-extension",
+            "ar-short-welcome",
+            "ar-short-saved",
+            "ur-short-welcome",
+            "zh-hans-saved"
+          ],
+          "sameTargetSkipRate": 0.6931818181818182,
+          "duplicateTranslationRate": 0.30681818181818177,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 16,
+              "wrong": 0,
+              "pairs": 884,
+              "sameTargetSkipRate": 0.9411764705882353
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 1
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 17,
+              "wrong": 0,
+              "pairs": 1248,
+              "sameTargetSkipRate": 1
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 6,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 54,
+              "wrong": 0,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.8181818181818182
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 10,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.47619047619047616
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 18,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 47,
+              "wrong": 0,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.5280898876404494
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 11,
+              "wrong": 0,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0.3055555555555556
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 0,
+          "expected": 67,
+          "skipped": 42,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "h-en-headline",
+            "h-en-error",
+            "h-de-headline",
+            "h-es-error",
+            "h-pt-headline",
+            "h-pt-error",
+            "h-it-headline",
+            "h-nl-forum",
+            "h-pl-forum",
+            "h-cs-forum",
+            "h-sk-forum",
+            "h-tr-forum",
+            "h-id-forum",
+            "h-ms-forum",
+            "h-da-forum",
+            "h-nb-forum",
+            "h-hr-forum",
+            "h-sl-forum",
+            "h-ru-headline",
+            "h-ru-error",
+            "h-uk-error",
+            "h-sr-forum",
+            "h-ar-forum",
+            "h-ar-error",
+            "h-zh-hant-forum"
+          ],
+          "sameTargetSkipRate": 0.6268656716417911,
+          "duplicateTranslationRate": 0.3731343283582089,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.8333333333333334
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 3,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 25,
+              "wrong": 0,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.6578947368421053
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 10,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.47619047619047616
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0.3333333333333333
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 0,
+          "expected": 43,
+          "skipped": 27,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [],
+          "missedCases": [
+            "h2-en-recipe",
+            "h2-en-chat",
+            "h2-fr-chat",
+            "h2-es-chat",
+            "h2-tr-chat",
+            "h2-id-recipe",
+            "h2-sv-weather",
+            "h2-hu-weather",
+            "h2-cs-legal",
+            "h2-uk-weather",
+            "h2-bg-sports",
+            "h2-ar-sports",
+            "h2-zh-hans-update",
+            "h2-zh-hant-chat",
+            "h2-ja-update",
+            "h2-ko-update"
+          ],
+          "sameTargetSkipRate": 0.627906976744186,
+          "duplicateTranslationRate": 0.37209302325581395,
+          "wrongSkipRate": 0,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0.5
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 9,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.6428571428571429
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.6190476190476191
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.4444444444444444
+            }
+          }
+        }
+      },
+      "timing": {
+        "calls": 1116,
+        "medianMs": 0.17104200000005676,
+        "p95Ms": 0.651834000000008,
+        "maxMs": 2.536209000000099
+      },
+      "cachedTiming": {
+        "calls": 1116,
+        "medianMs": 0.0017500000001291482,
+        "p95Ms": 0.5244580000000951,
+        "maxMs": 2.3304169999998976
+      },
+      "heapAfterEvaluationBytes": 34594632
+    },
+    {
+      "name": "naive-franc-full-top1",
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 31,
+          "expected": 176,
+          "skipped": 132,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "es-short-welcome",
+              "target": "pt"
+            },
+            {
+              "id": "it-long-extension",
+              "target": "es"
+            },
+            {
+              "id": "sk-short-saved",
+              "target": "cs"
+            },
+            {
+              "id": "ro-short-welcome",
+              "target": "de"
+            },
+            {
+              "id": "ms-short-welcome",
+              "target": "id"
+            },
+            {
+              "id": "ms-long-extension",
+              "target": "id"
+            },
+            {
+              "id": "ms-long-privacy",
+              "target": "id"
+            },
+            {
+              "id": "da-short-welcome",
+              "target": "nb"
+            },
+            {
+              "id": "sl-short-welcome",
+              "target": "hr"
+            },
+            {
+              "id": "sl-long-extension",
+              "target": "sr"
+            },
+            {
+              "id": "hr-long-extension",
+              "target": "sr"
+            },
+            {
+              "id": "ru-short-saved",
+              "target": "bg"
+            },
+            {
+              "id": "uk-short-welcome",
+              "target": "sr"
+            },
+            {
+              "id": "ur-short-welcome",
+              "target": "fa"
+            },
+            {
+              "id": "zh-hans-identifiers-formats",
+              "target": "fr"
+            },
+            {
+              "id": "zh-hans-identifiers-path",
+              "target": "fr"
+            },
+            {
+              "id": "zh-with-english-sentence",
+              "target": "en"
+            },
+            {
+              "id": "zh-with-uppercase-sentence",
+              "target": "nb"
+            },
+            {
+              "id": "ja-with-english-sentence",
+              "target": "en"
+            },
+            {
+              "id": "en-with-french-sentence",
+              "target": "fr"
+            },
+            {
+              "id": "de-with-english-sentence",
+              "target": "de"
+            },
+            {
+              "id": "ru-with-english",
+              "target": "en"
+            },
+            {
+              "id": "ar-with-english",
+              "target": "en"
+            },
+            {
+              "id": "en-with-chinese",
+              "target": "en"
+            },
+            {
+              "id": "el-with-english",
+              "target": "el"
+            },
+            {
+              "id": "he-with-english",
+              "target": "he"
+            },
+            {
+              "id": "word-settings",
+              "target": "ms"
+            },
+            {
+              "id": "word-parametres",
+              "target": "fr"
+            },
+            {
+              "id": "word-hotel",
+              "target": "hu"
+            },
+            {
+              "id": "word-moscow",
+              "target": "bg"
+            },
+            {
+              "id": "polytonic-greek",
+              "target": "el"
+            }
+          ],
+          "missedCases": [
+            "en-short-saved",
+            "en-short-sign-in",
+            "fr-short-file",
+            "de-short-login",
+            "es-short-welcome",
+            "es-short-saved",
+            "es-short-login",
+            "es-long-program",
+            "es-long-privacy",
+            "pt-short-file",
+            "it-short-welcome",
+            "it-long-extension",
+            "nl-short-welcome",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "ro-short-welcome",
+            "ro-short-file",
+            "hu-short-welcome",
+            "tr-short-welcome",
+            "ms-short-welcome",
+            "ms-long-extension",
+            "ms-long-privacy",
+            "fil-short-welcome",
+            "sv-short-welcome",
+            "da-short-welcome",
+            "nb-short-welcome",
+            "fi-short-welcome",
+            "et-short-welcome",
+            "sl-short-welcome",
+            "sl-long-extension",
+            "hr-short-welcome",
+            "hr-long-extension",
+            "ru-short-saved",
+            "uk-short-welcome",
+            "sr-short-welcome",
+            "sr-long-extension",
+            "ur-short-welcome",
+            "zh-hans-saved",
+            "zh-hans-identifiers-formats",
+            "zh-hans-identifiers-path",
+            "zh-neutral-feature",
+            "zh-neutral-greeting"
+          ],
+          "sameTargetSkipRate": 0.75,
+          "duplicateTranslationRate": 0.25,
+          "wrongSkipRate": 0.002812046444121916,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 4,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 10,
+              "wrong": 2,
+              "pairs": 884,
+              "sameTargetSkipRate": 0.5882352941176471
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 1
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 15,
+              "wrong": 4,
+              "pairs": 1248,
+              "sameTargetSkipRate": 0.8823529411764706
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 6,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 58,
+              "wrong": 5,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.8787878787878788
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 10,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 13,
+              "wrong": 4,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.6190476190476191
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 18,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 1
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 55,
+              "wrong": 9,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.6179775280898876
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 19,
+              "wrong": 11,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0.5277777777777778
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 15,
+          "expected": 67,
+          "skipped": 48,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h-id-forum",
+              "target": "ms"
+            },
+            {
+              "id": "h-hr-forum",
+              "target": "sr"
+            },
+            {
+              "id": "h-ru-error",
+              "target": "bg"
+            },
+            {
+              "id": "h-uk-error",
+              "target": "bg"
+            },
+            {
+              "id": "h-mixed-en-es",
+              "target": "es"
+            },
+            {
+              "id": "h-mixed-fr-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-pt-en",
+              "target": "pt"
+            },
+            {
+              "id": "h-mixed-ru-uk",
+              "target": "uk"
+            },
+            {
+              "id": "h-mixed-zh-ja",
+              "target": "ja"
+            },
+            {
+              "id": "h-mixed-ar-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h-mixed-de-nl",
+              "target": "nl"
+            },
+            {
+              "id": "h-word-menu",
+              "target": "ms"
+            },
+            {
+              "id": "h-words-pizza-margherita",
+              "target": "sw"
+            },
+            {
+              "id": "h-name-person",
+              "target": "es"
+            },
+            {
+              "id": "h-latin-quote",
+              "target": "sl"
+            }
+          ],
+          "missedCases": [
+            "h-en-headline",
+            "h-en-error",
+            "h-es-error",
+            "h-pt-headline",
+            "h-pt-error",
+            "h-nl-forum",
+            "h-cs-forum",
+            "h-sk-forum",
+            "h-tr-forum",
+            "h-id-forum",
+            "h-hr-forum",
+            "h-ru-error",
+            "h-uk-error",
+            "h-bg-forum",
+            "h-sr-forum",
+            "h-zh-hans-tech",
+            "h-zh-hant-forum",
+            "h-ja-tech",
+            "h-ko-tech"
+          ],
+          "sameTargetSkipRate": 0.7164179104477612,
+          "duplicateTranslationRate": 0.28358208955223885,
+          "wrongSkipRate": 0.0031354515050167225,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 30,
+              "wrong": 2,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.7894736842105263
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 7,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 14,
+              "wrong": 2,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 8,
+              "wrong": 5,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0.5333333333333333
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 11,
+          "expected": 43,
+          "skipped": 37,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h2-id-recipe",
+              "target": "ms"
+            },
+            {
+              "id": "h2-mixed-es-en",
+              "target": "es"
+            },
+            {
+              "id": "h2-mixed-it-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h2-mixed-cs-sk",
+              "target": "sk"
+            },
+            {
+              "id": "h2-mixed-zh-en-quote",
+              "target": "en"
+            },
+            {
+              "id": "h2-mixed-ja-ko",
+              "target": "ja"
+            },
+            {
+              "id": "h2-mixed-ru-en-product",
+              "target": "en"
+            },
+            {
+              "id": "h2-mixed-he-ar",
+              "target": "he"
+            },
+            {
+              "id": "h2-words-status",
+              "target": "et"
+            },
+            {
+              "id": "h2-brand-model",
+              "target": "it"
+            },
+            {
+              "id": "h2-identifier-path",
+              "target": "fr"
+            }
+          ],
+          "missedCases": [
+            "h2-en-recipe",
+            "h2-en-chat",
+            "h2-es-chat",
+            "h2-id-recipe",
+            "h2-zh-hans-update",
+            "h2-zh-hant-chat"
+          ],
+          "sameTargetSkipRate": 0.8604651162790697,
+          "duplicateTranslationRate": 0.13953488372093026,
+          "wrongSkipRate": 0.0035256410256410257,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0.5
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 3,
+              "wrong": 2,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.75
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 12,
+              "wrong": 1,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.8571428571428571
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 7,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 18,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.8571428571428571
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 8,
+              "wrong": 3,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.8888888888888888
+            }
+          }
+        }
+      },
+      "timing": {
+        "calls": 1116,
+        "medianMs": 0.1242090000000644,
+        "p95Ms": 0.408333999999968,
+        "maxMs": 1.0457910000000084
+      }
+    },
+    {
+      "name": "old-implementation",
+      "importMs": 24.95400000000018,
+      "importHeapBytes": -6965416,
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 7,
+          "expected": 176,
+          "skipped": 39,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "it-long-extension",
+              "target": "es"
+            },
+            {
+              "id": "et-long-extension",
+              "target": "fr"
+            },
+            {
+              "id": "lv-long-extension",
+              "target": "fr"
+            },
+            {
+              "id": "ko-with-simplified",
+              "target": "ko"
+            },
+            {
+              "id": "en-with-french-sentence",
+              "target": "fr"
+            },
+            {
+              "id": "ru-with-english",
+              "target": "en"
+            },
+            {
+              "id": "lorem-ipsum",
+              "target": "fr"
+            }
+          ],
+          "missedCases": [
+            "en-short-settings",
+            "en-short-saved",
+            "en-short-sign-in",
+            "en-short-file",
+            "en-short-learn",
+            "fr-short-welcome",
+            "fr-short-saved",
+            "fr-short-login",
+            "fr-short-file",
+            "de-short-welcome",
+            "de-short-saved",
+            "de-short-login",
+            "de-short-file",
+            "de-long-reported",
+            "de-long-extension",
+            "de-long-privacy",
+            "es-short-welcome",
+            "es-short-saved",
+            "es-short-login",
+            "es-short-file",
+            "pt-short-welcome",
+            "pt-short-saved",
+            "pt-short-file",
+            "pt-long-reported",
+            "pt-long-extension",
+            "pt-long-privacy",
+            "it-short-welcome",
+            "it-short-saved",
+            "it-short-file",
+            "it-long-reported",
+            "it-long-extension",
+            "it-long-privacy",
+            "nl-short-welcome",
+            "nl-short-file",
+            "nl-long-extension",
+            "nl-long-privacy",
+            "pl-short-welcome",
+            "pl-short-file",
+            "pl-long-extension",
+            "pl-long-privacy",
+            "cs-short-welcome",
+            "cs-short-saved",
+            "cs-long-extension",
+            "cs-long-privacy",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "sk-long-extension",
+            "sk-long-privacy",
+            "ro-short-welcome",
+            "ro-short-file",
+            "ro-long-extension",
+            "hu-short-welcome",
+            "hu-short-file",
+            "hu-long-extension",
+            "tr-short-welcome",
+            "tr-short-login",
+            "tr-long-extension",
+            "tr-long-privacy",
+            "vi-short-welcome",
+            "vi-short-saved",
+            "vi-long-extension",
+            "id-short-welcome",
+            "id-long-extension",
+            "id-long-privacy",
+            "ms-short-welcome",
+            "ms-long-extension",
+            "ms-long-privacy",
+            "fil-short-welcome",
+            "fil-long-extension",
+            "sw-short-welcome",
+            "sw-long-extension",
+            "sv-short-welcome",
+            "sv-long-extension",
+            "da-short-welcome",
+            "da-long-extension",
+            "nb-short-welcome",
+            "nb-long-extension",
+            "fi-short-welcome",
+            "fi-long-extension",
+            "et-short-welcome",
+            "et-long-extension",
+            "lv-short-welcome",
+            "lv-long-extension",
+            "lt-short-welcome",
+            "lt-long-extension",
+            "sl-short-welcome",
+            "sl-long-extension",
+            "hr-short-welcome",
+            "hr-long-extension",
+            "ru-short-welcome",
+            "ru-short-saved",
+            "ru-short-login",
+            "uk-short-welcome",
+            "uk-long-extension",
+            "uk-long-privacy",
+            "bg-short-welcome",
+            "bg-long-extension",
+            "sr-short-welcome",
+            "sr-long-extension",
+            "el-short-welcome",
+            "el-short-saved",
+            "el-long-extension",
+            "el-identifiers",
+            "he-short-welcome",
+            "he-short-saved",
+            "he-long-extension",
+            "ar-short-welcome",
+            "ar-short-saved",
+            "ar-long-extension",
+            "ar-long-privacy",
+            "ar-identifiers",
+            "fa-short-welcome",
+            "fa-long-extension",
+            "ur-short-welcome",
+            "ur-long-extension",
+            "hi-short-welcome",
+            "hi-long-extension",
+            "hi-identifiers",
+            "mr-short-welcome",
+            "mr-long-extension",
+            "ne-short-welcome",
+            "ne-long-extension",
+            "bn-short-welcome",
+            "bn-long-extension",
+            "ta-short-welcome",
+            "te-short-welcome",
+            "gu-short-welcome",
+            "kn-short-welcome",
+            "ml-short-welcome",
+            "pa-short-welcome",
+            "si-short-welcome",
+            "th-short-welcome",
+            "th-long-extension",
+            "zh-hans-saved",
+            "zh-hans-identifiers-path",
+            "ja-reported-model",
+            "ko-reported-model"
+          ],
+          "sameTargetSkipRate": 0.2215909090909091,
+          "duplicateTranslationRate": 0.7784090909090909,
+          "wrongSkipRate": 0.0006349782293178519,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 15,
+              "wrong": 0,
+              "pairs": 884,
+              "sameTargetSkipRate": 0.8823529411764706
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 0
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 11,
+              "wrong": 0,
+              "pairs": 1248,
+              "sameTargetSkipRate": 0.6470588235294118
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.8333333333333334
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.8
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 14,
+              "wrong": 3,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.21212121212121213
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 3,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 1
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.38461538461538464
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 0
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 10,
+              "wrong": 0,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.11235955056179775
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 6,
+          "expected": 67,
+          "skipped": 15,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h-mixed-en-es",
+              "target": "es"
+            },
+            {
+              "id": "h-mixed-fr-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-zh-ja",
+              "target": "ja"
+            },
+            {
+              "id": "h-mixed-ar-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h-catalan",
+              "target": "es"
+            },
+            {
+              "id": "h-galician",
+              "target": "es"
+            }
+          ],
+          "missedCases": [
+            "h-en-headline",
+            "h-en-error",
+            "h-en-short-question",
+            "h-fr-error",
+            "h-de-forum",
+            "h-de-headline",
+            "h-de-error",
+            "h-es-error",
+            "h-pt-forum",
+            "h-pt-headline",
+            "h-pt-error",
+            "h-it-forum",
+            "h-it-headline",
+            "h-it-error",
+            "h-nl-forum",
+            "h-pl-forum",
+            "h-cs-forum",
+            "h-sk-forum",
+            "h-ro-forum",
+            "h-hu-forum",
+            "h-tr-forum",
+            "h-vi-forum",
+            "h-id-forum",
+            "h-ms-forum",
+            "h-sv-forum",
+            "h-da-forum",
+            "h-nb-forum",
+            "h-fi-forum",
+            "h-hr-forum",
+            "h-sl-forum",
+            "h-ru-error",
+            "h-uk-forum",
+            "h-uk-error",
+            "h-bg-forum",
+            "h-sr-forum",
+            "h-el-forum",
+            "h-he-forum",
+            "h-ar-forum",
+            "h-ar-error",
+            "h-fa-forum",
+            "h-ur-forum",
+            "h-hi-forum",
+            "h-mr-forum",
+            "h-ne-forum",
+            "h-bn-forum",
+            "h-th-forum",
+            "h-ta-forum",
+            "h-zh-hans-tech",
+            "h-zh-hant-forum",
+            "h-ja-forum",
+            "h-ja-tech",
+            "h-ko-tech"
+          ],
+          "sameTargetSkipRate": 0.22388059701492538,
+          "duplicateTranslationRate": 0.7761194029850746,
+          "wrongSkipRate": 0.001254180602006689,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": 0.3333333333333333
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 5,
+              "wrong": 0,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.13157894736842105
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 4,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.3333333333333333
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 4,
+          "expected": 43,
+          "skipped": 8,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h2-mixed-es-en",
+              "target": "es"
+            },
+            {
+              "id": "h2-mixed-it-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h2-mixed-ru-en-product",
+              "target": "en"
+            },
+            {
+              "id": "h2-occitan",
+              "target": "es"
+            }
+          ],
+          "missedCases": [
+            "h2-en-weather",
+            "h2-en-chat",
+            "h2-fr-chat",
+            "h2-de-weather",
+            "h2-de-legal",
+            "h2-es-chat",
+            "h2-pt-sports",
+            "h2-pt-chat",
+            "h2-it-weather",
+            "h2-it-legal",
+            "h2-nl-recipe",
+            "h2-pl-weather",
+            "h2-tr-chat",
+            "h2-vi-weather",
+            "h2-id-recipe",
+            "h2-sv-weather",
+            "h2-ro-sports",
+            "h2-hu-weather",
+            "h2-cs-legal",
+            "h2-ru-chat",
+            "h2-uk-weather",
+            "h2-bg-sports",
+            "h2-el-chat",
+            "h2-he-weather",
+            "h2-ar-sports",
+            "h2-fa-chat",
+            "h2-ur-weather",
+            "h2-hi-recipe",
+            "h2-bn-weather",
+            "h2-th-chat",
+            "h2-zh-hans-update",
+            "h2-zh-hant-chat",
+            "h2-ja-recipe",
+            "h2-ja-update",
+            "h2-ko-update"
+          ],
+          "sameTargetSkipRate": 0.18604651162790697,
+          "duplicateTranslationRate": 0.813953488372093,
+          "wrongSkipRate": 0.001282051282051282,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 2,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0.5
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.2857142857142857
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 3,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 1,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 676,
+              "sameTargetSkipRate": 0
+            }
+          }
+        }
+      },
+      "timing": {
+        "calls": 1116,
+        "medianMs": 0.005290999999942869,
+        "p95Ms": 0.17862500000001091,
+        "maxMs": 0.3403750000002219
+      },
+      "cachedTiming": {
+        "calls": 1116,
+        "medianMs": 0.005499999999756255,
+        "p95Ms": 0.17820900000015172,
+        "maxMs": 0.4407499999997526
+      },
+      "heapAfterEvaluationBytes": 46302368,
+      "root": "<scratchpad>/old-2ac7289d"
+    },
+    {
+      "name": "chromium-cld3",
+      "rule": "isReliable && top language equals target",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0",
+      "languageDetectorApi": "undefined",
+      "wallMs": 67,
+      "corpora": {
+        "calibration": {
+          "pairs": 11024,
+          "wrong": 8,
+          "expected": 176,
+          "skipped": 95,
+          "emptyCases": 5,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "ur-short-welcome",
+              "target": "fa"
+            },
+            {
+              "id": "zh-with-english-sentence",
+              "target": "en"
+            },
+            {
+              "id": "en-with-french-sentence",
+              "target": "fr"
+            },
+            {
+              "id": "de-with-english-sentence",
+              "target": "de"
+            },
+            {
+              "id": "ru-with-english",
+              "target": "ru"
+            },
+            {
+              "id": "ar-with-english",
+              "target": "ar"
+            },
+            {
+              "id": "el-with-english",
+              "target": "el"
+            },
+            {
+              "id": "he-with-english",
+              "target": "he"
+            }
+          ],
+          "missedCases": [
+            "en-short-settings",
+            "en-short-saved",
+            "en-short-sign-in",
+            "en-short-file",
+            "en-short-learn",
+            "fr-short-welcome",
+            "fr-short-saved",
+            "fr-short-login",
+            "fr-short-file",
+            "de-short-welcome",
+            "de-short-saved",
+            "de-short-login",
+            "de-short-file",
+            "es-short-welcome",
+            "es-short-saved",
+            "es-short-login",
+            "es-short-file",
+            "pt-short-welcome",
+            "pt-short-saved",
+            "pt-short-file",
+            "it-short-welcome",
+            "it-short-saved",
+            "it-short-file",
+            "nl-short-welcome",
+            "nl-short-file",
+            "pl-short-welcome",
+            "pl-short-file",
+            "cs-short-welcome",
+            "cs-short-saved",
+            "sk-short-welcome",
+            "sk-short-saved",
+            "ro-short-welcome",
+            "ro-short-file",
+            "hu-short-welcome",
+            "hu-short-file",
+            "tr-short-welcome",
+            "tr-short-login",
+            "vi-short-saved",
+            "id-short-welcome",
+            "ms-short-welcome",
+            "fil-short-welcome",
+            "sw-short-welcome",
+            "sv-short-welcome",
+            "da-short-welcome",
+            "nb-short-welcome",
+            "fi-short-welcome",
+            "et-short-welcome",
+            "lv-short-welcome",
+            "lt-short-welcome",
+            "sl-short-welcome",
+            "hr-short-welcome",
+            "ru-short-saved",
+            "ru-identifiers",
+            "sr-short-welcome",
+            "he-short-welcome",
+            "he-short-saved",
+            "ar-short-welcome",
+            "ar-short-saved",
+            "fa-short-welcome",
+            "ur-short-welcome",
+            "zh-hans-short",
+            "zh-hans-saved",
+            "zh-hans-long",
+            "zh-hans-reported-a1",
+            "zh-hans-reported-a2",
+            "zh-hans-reported-a3",
+            "zh-hans-reported-a4",
+            "zh-hans-reported-b",
+            "zh-hans-identifiers-formats",
+            "zh-hans-identifiers-path",
+            "zh-hant-short",
+            "zh-hant-long",
+            "zh-hant-reported-b",
+            "zh-neutral-feature",
+            "zh-neutral-greeting",
+            "ja-short-welcome",
+            "ja-short-saved",
+            "ja-identifiers-api",
+            "ko-short-saved"
+          ],
+          "sameTargetSkipRate": 0.5397727272727273,
+          "duplicateTranslationRate": 0.4602272727272727,
+          "wrongSkipRate": 0.000725689404934688,
+          "byTag": {
+            "ambiguous": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "cantonese": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 17,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 884,
+              "sameTargetSkipRate": 0
+            },
+            "devanagari": {
+              "expected": 7,
+              "skipped": 7,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": 1
+            },
+            "embedded-sentence": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 2,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "gibberish": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "identifier": {
+              "expected": 17,
+              "skipped": 9,
+              "wrong": 1,
+              "pairs": 1248,
+              "sameTargetSkipRate": 0.5294117647058824
+            },
+            "japanese": {
+              "expected": 6,
+              "skipped": 3,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.5
+            },
+            "korean": {
+              "expected": 5,
+              "skipped": 4,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.8
+            },
+            "long": {
+              "expected": 66,
+              "skipped": 64,
+              "wrong": 0,
+              "pairs": 3432,
+              "sameTargetSkipRate": 0.9696969696969697
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 7,
+              "pairs": 728,
+              "sameTargetSkipRate": null
+            },
+            "mixed-variant": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "neutral": {
+              "expected": 4,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0
+            },
+            "no-franc-min-model": {
+              "expected": 21,
+              "skipped": 10,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.47619047619047616
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "rare": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "reported": {
+              "expected": 13,
+              "skipped": 6,
+              "wrong": 0,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.46153846153846156
+            },
+            "script-unique": {
+              "expected": 18,
+              "skipped": 16,
+              "wrong": 0,
+              "pairs": 936,
+              "sameTargetSkipRate": 0.8888888888888888
+            },
+            "script-unique-veto": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 89,
+              "skipped": 20,
+              "wrong": 1,
+              "pairs": 4524,
+              "sameTargetSkipRate": 0.2247191011235955
+            },
+            "similar": {
+              "expected": 36,
+              "skipped": 21,
+              "wrong": 1,
+              "pairs": 1872,
+              "sameTargetSkipRate": 0.5833333333333334
+            }
+          }
+        },
+        "holdout": {
+          "pairs": 4784,
+          "wrong": 9,
+          "expected": 67,
+          "skipped": 54,
+          "emptyCases": 2,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h-mixed-en-es",
+              "target": "es"
+            },
+            {
+              "id": "h-mixed-fr-en",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-pt-en",
+              "target": "pt"
+            },
+            {
+              "id": "h-mixed-ru-uk",
+              "target": "uk"
+            },
+            {
+              "id": "h-mixed-zh-en-sentence",
+              "target": "en"
+            },
+            {
+              "id": "h-mixed-zh-ja",
+              "target": "ja"
+            },
+            {
+              "id": "h-mixed-ar-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h-mixed-hi-en",
+              "target": "hi"
+            },
+            {
+              "id": "h-mixed-de-nl",
+              "target": "nl"
+            }
+          ],
+          "missedCases": [
+            "h-en-error",
+            "h-en-short-question",
+            "h-it-error",
+            "h-id-forum",
+            "h-zh-hans-forum",
+            "h-zh-hans-headline",
+            "h-zh-hans-tech",
+            "h-zh-hant-forum",
+            "h-zh-hant-headline",
+            "h-ja-headline",
+            "h-ja-tech",
+            "h-ko-tech",
+            "h-zh-hans-simplified-only-character"
+          ],
+          "sameTargetSkipRate": 0.8059701492537313,
+          "duplicateTranslationRate": 0.19402985074626866,
+          "wrongSkipRate": 0.0018812709030100335,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 6,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 260,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 3,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": 0.3333333333333333
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 38,
+              "skipped": 37,
+              "wrong": 0,
+              "pairs": 1976,
+              "sameTargetSkipRate": 0.9736842105263158
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 9,
+              "pairs": 520,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 364,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 14,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.6666666666666666
+            },
+            "similar": {
+              "expected": 15,
+              "skipped": 14,
+              "wrong": 2,
+              "pairs": 1144,
+              "sameTargetSkipRate": 0.9333333333333333
+            }
+          }
+        },
+        "holdout2": {
+          "pairs": 3120,
+          "wrong": 8,
+          "expected": 43,
+          "skipped": 34,
+          "emptyCases": 1,
+          "emptyMisses": 0,
+          "wrongExamples": [
+            {
+              "id": "h2-mixed-es-en",
+              "target": "es"
+            },
+            {
+              "id": "h2-mixed-it-fr",
+              "target": "fr"
+            },
+            {
+              "id": "h2-mixed-cs-sk",
+              "target": "sk"
+            },
+            {
+              "id": "h2-mixed-zh-en-quote",
+              "target": "en"
+            },
+            {
+              "id": "h2-mixed-ja-ko",
+              "target": "ja"
+            },
+            {
+              "id": "h2-mixed-ru-en-product",
+              "target": "ru"
+            },
+            {
+              "id": "h2-mixed-hi-ur",
+              "target": "hi"
+            },
+            {
+              "id": "h2-mixed-he-ar",
+              "target": "he"
+            }
+          ],
+          "missedCases": [
+            "h2-en-chat",
+            "h2-tr-chat",
+            "h2-id-recipe",
+            "h2-zh-hans-recipe",
+            "h2-zh-hans-update",
+            "h2-zh-hant-weather",
+            "h2-zh-hant-chat",
+            "h2-ja-update",
+            "h2-ko-update"
+          ],
+          "sameTargetSkipRate": 0.7906976744186046,
+          "duplicateTranslationRate": 0.2093023255813954,
+          "wrongSkipRate": 0.002564102564102564,
+          "byTag": {
+            "ambiguous-word": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 156,
+              "sameTargetSkipRate": null
+            },
+            "brand": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 52,
+              "sameTargetSkipRate": null
+            },
+            "chinese": {
+              "expected": 4,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 208,
+              "sameTargetSkipRate": 0
+            },
+            "identifier": {
+              "expected": 4,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 312,
+              "sameTargetSkipRate": 0.25
+            },
+            "japanese": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "korean": {
+              "expected": 2,
+              "skipped": 1,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": 0.5
+            },
+            "long": {
+              "expected": 14,
+              "skipped": 13,
+              "wrong": 0,
+              "pairs": 728,
+              "sameTargetSkipRate": 0.9285714285714286
+            },
+            "mixed": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 8,
+              "pairs": 416,
+              "sameTargetSkipRate": null
+            },
+            "outside-catalog": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "pure-han": {
+              "expected": 0,
+              "skipped": 0,
+              "wrong": 0,
+              "pairs": 104,
+              "sameTargetSkipRate": null
+            },
+            "short": {
+              "expected": 21,
+              "skipped": 18,
+              "wrong": 0,
+              "pairs": 1092,
+              "sameTargetSkipRate": 0.8571428571428571
+            },
+            "similar": {
+              "expected": 9,
+              "skipped": 8,
+              "wrong": 2,
+              "pairs": 676,
+              "sameTargetSkipRate": 0.8888888888888888
+            }
+          }
+        }
+      },
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 212,
+          "top": -990,
+          "width": 1280,
+          "height": 900
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 58606,
+          "name": "UserNotificationCenter"
+        },
+        "frontmostAfter": {
+          "pid": 58606,
+          "name": "UserNotificationCenter"
+        }
+      },
+      "timing": {
+        "calls": 372,
+        "medianMs": 0,
+        "p95Ms": 0.10000002384185791,
+        "maxMs": 1.1999999284744263
+      },
+      "rawSamples": {
+        "12345": {
+          "isReliable": false,
+          "languages": []
+        },
+        "Welcome to the settings page.": {
+          "isReliable": false,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Your changes have been saved.": {
+          "isReliable": false,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Please sign in to continue.": {
+          "isReliable": false,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "The file could not be opened.": {
+          "isReliable": false,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Click here to learn more about this feature.": {
+          "isReliable": false,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "This paragraph explains how the translation extension keeps ": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "We have updated our privacy policy to describe which setting": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "This is a deliberately long English paragraph with enough al": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Released GPT-6 Sol with improved reasoning and a smaller mod": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Fixed a crash in src/core/language/detect.ts when the parser": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        },
+        "Upgrade to v2.3.1 before installing Llama-3.1-70B-Instruct a": {
+          "isReliable": true,
+          "languages": [
+            {
+              "language": "en",
+              "percentage": 100
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "sizes": {
+    "franc-min": {
+      "raw": 116338,
+      "gzip": 52439,
+      "files": [
+        "node_modules/.pnpm/franc-min@6.2.0/node_modules/franc-min/index.js",
+        "node_modules/.pnpm/franc-min@6.2.0/node_modules/franc-min/data.js",
+        "node_modules/.pnpm/franc-min@6.2.0/node_modules/franc-min/expressions.js"
+      ]
+    },
+    "unified-language-core": {
+      "raw": 79742,
+      "gzip": 30441,
+      "files": [
+        "src/core/language/codes.ts",
+        "src/core/language/identify.ts",
+        "src/core/language/lexicon.ts",
+        "src/core/language/scripts.ts",
+        "src/core/language/statistical.ts",
+        "src/core/language/technicalTokens.ts",
+        "src/core/language/detect.ts",
+        "src/core/language/chinese.ts"
+      ]
+    },
+    "chinese-variant-data": {
+      "raw": 49643,
+      "gzip": 34245,
+      "files": [
+        "src/core/language/chineseVariants.ts"
+      ]
+    },
+    "franc": {
+      "raw": 252615,
+      "gzip": 116445,
+      "files": [
+        "../../../../..<scratchpad>/detector-eval/node_modules/franc/index.js",
+        "../../../../..<scratchpad>/detector-eval/node_modules/franc/data.js",
+        "../../../../..<scratchpad>/detector-eval/node_modules/franc/expressions.js"
+      ]
+    }
+  }
+}

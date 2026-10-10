@@ -1,0 +1,5 @@
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('heading', { name: /让阅读自然地流动|翻译功能已暂停/ }) to be visible[22m
+
+    at main (/Users/thinkstu/.codex/skills/fluentread-extension-ui-test/scripts/run-ui-test.cjs:533:68)

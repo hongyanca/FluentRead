@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "fixture": "controlled MANGA Plus reader fixture",
+  "ocr": "real production PaddleOCR",
+  "translation": "deterministic Google text transport",
+  "cases": [
+    "vertical navigation beyond nearby retention reuses cached bitmaps without another OCR request",
+    "horizontal left/right navigation reuses the same cached bitmaps with correct overlay geometry",
+    "native same-URL image load invalidates completion and performs exactly one fresh recognition",
+    "real OCR of a blank page stores a lightweight completion marker and leaves the original visible",
+    "original pause and resume reuse blank-page completion without rerunning OCR",
+    "blank-page completion survives navigation beyond the nearby window without a bitmap or extra OCR",
+    "target-language changes invalidate even the lightweight blank-page result"
+  ],
+  "operations": 5,
+  "expectedOperations": 5,
+  "cacheReturnDurationsMs": [
+    12.5,
+    65.19999980926514,
+    11.199999809265137,
+    10.599999904632568,
+    15.600000381469727,
+    20.699999809265137,
+    5,
+    4.900000095367432,
+    14.800000190734863,
+    6,
+    4.400000095367432,
+    13.400000095367432,
+    12.299999713897705,
+    13.400000095367432
+  ],
+  "minReturnMs": 4.400000095367432,
+  "medianReturnMs": 12.399999856948853,
+  "maxReturnMs": 65.19999980926514,
+  "modelDownloads": 0,
+  "extensionErrors": [],
+  "consoleErrors": [],
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "profileRemoved": true,
+  "implementationCommit": "0d8d0aa06a27588758bd4ae56fd8a440fc139a34",
+  "evidenceDirectory": "/Users/thinkstu/Desktop/copy/artifacts/manga-pipeline-performance-20261004/cache-navigation-delivery"
+}

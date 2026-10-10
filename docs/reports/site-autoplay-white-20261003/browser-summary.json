@@ -1,0 +1,261 @@
+{
+  "mode": "Codex background in-app browser; final static artifact",
+  "checks": [
+    {
+      "viewport": 320,
+      "home": "white; centered hero; three store cards; no horizontal overflow; compact input content fits",
+      "compactResult": {
+        "input": {
+          "content": 380,
+          "height": 380,
+          "output": true,
+          "running": "true",
+          "step": "4"
+        },
+        "offscreen": [
+          {
+            "demo": "brand-reader",
+            "running": "false",
+            "step": "0"
+          },
+          {
+            "demo": "grammar",
+            "running": "false",
+            "step": "0"
+          }
+        ]
+      }
+    },
+    {
+      "page": "selection guide",
+      "viewport": 1280,
+      "white": "body sidebar stage table are white",
+      "pauseResult": {
+        "changed": false,
+        "playing": "false",
+        "pointer": "0",
+        "running": "false",
+        "step": "1"
+      }
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "page": "/",
+      "playing": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "scrollWidth": 390,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        }
+      ],
+      "width": 390
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "page": "/en/",
+      "playing": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "scrollWidth": 768,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        }
+      ],
+      "width": 768
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "page": "/en/",
+      "playing": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "scrollWidth": 320,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        },
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 380,
+          "height": 380
+        }
+      ],
+      "width": 320
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "page": "/guide/image-translation",
+      "playing": [
+        "true"
+      ],
+      "scrollWidth": 320,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 290,
+          "height": 290
+        }
+      ],
+      "width": 320
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false
+      ],
+      "page": "/guide/document-translation",
+      "playing": [
+        "true"
+      ],
+      "scrollWidth": 320,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 346,
+          "height": 346
+        }
+      ],
+      "width": 320
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "details": [
+        false,
+        false
+      ],
+      "page": "/guide/input-translation",
+      "playing": [
+        "true"
+      ],
+      "scrollWidth": 320,
+      "stages": [
+        {
+          "background": "rgb(255, 255, 255)",
+          "content": 349,
+          "height": 349
+        }
+      ],
+      "width": 320
+    },
+    {
+      "page": "English input guide",
+      "width": 320,
+      "scrollWidth": 320,
+      "translatedStageHeight": 349,
+      "contentHeight": 349
+    },
+    {
+      "page": "Chinese selection guide",
+      "width": 320,
+      "translatedStageHeight": 350,
+      "contentHeight": 350
+    }
+  ],
+  "animation": [
+    {
+      "webpage": "Observed moving cursor at 78.45% of a curved SVG path, then both translations visible at step 3 without clicking",
+      "input": "Observed automatic translated state 4 at 320px with no stage overflow",
+      "offscreen": "Webpage and grammar running=false while input demonstration remained running=true",
+      "pause": "Selection guide playing=false, running=false, pointer phase 0 after pause",
+      "resultTiming": "Configured first webpage translation at 1200 ms and guide result at 1700 ms; these are timeline values, not live service timings"
+    }
+  ],
+  "resolved": [
+    "Homepage input stage grew beyond 300px; reserved 380px now fits original and translated states"
+  ],
+  "screenshots": [
+    "home-white.png",
+    "docs-white.png"
+  ],
+  "consoleErrors": []
+}

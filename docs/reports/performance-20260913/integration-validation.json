@@ -1,0 +1,17 @@
+{
+  "testedCommit": "658cb469dc656557c9c9794ca9d4eff8fc721130",
+  "baseCommit": "07d253b47b65315c9efd6e37a4cd43fcbc69d394",
+  "exitCodes": {
+    "compile": 0,
+    "chrome": 0,
+    "firefox": 0,
+    "userscript": 0,
+    "tests": 0,
+    "audit": 0
+  },
+  "targetedTestFiles": 12,
+  "targetedTestsPassed": 970,
+  "uiChecksPassed": 17,
+  "onnxRuntimeCasesPassed": 4,
+  "fullModelQualityRetested": false
+}

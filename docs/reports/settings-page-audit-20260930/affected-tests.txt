@@ -1,0 +1,15 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 99ms
+ ✓ tests/interfaceAppearance.test.ts (8 tests) 17ms
+ ✓ tests/vocabularyBookComponentLifecycle.test.ts (2 tests) 889ms
+   ✓ VocabularyBook mounted lifecycle > does not subscribe, register listeners, or list after unmounting before configReady 887ms
+ ✓ tests/uiI18nBundleLoading.test.ts (4 tests) 93ms
+ ✓ tests/inputTranslationConfig.test.ts (4 tests) 10ms
+ ✓ tests/vocabularyBookComponent.test.ts (4 tests) 2ms
+
+ Test Files  6 passed (6)
+      Tests  55 passed (55)
+   Start at  16:39:53
+   Duration  2.82s (transform 370ms, setup 0ms, collect 901ms, tests 1.11s, environment 1ms, prepare 212ms)

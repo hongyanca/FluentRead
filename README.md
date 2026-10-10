@@ -1,106 +1,119 @@
 <div align="center">
 
-<img src="./public/icon/128.png" alt="FluentRead logo" width="96" />
+<img src="./assets/brand/icon-512.png" alt="FluentRead" width="96" />
 
 # FluentRead
 
-### Make every webpage feel native to read.
+**Closer languages. A bigger world.**
 
-An open-source browser extension for bilingual webpages, instant selection translation, and flexible translation services.
+An open-source browser extension for bilingual translation.
 
-[![Latest version](https://img.shields.io/badge/version-0.0.31-6d5dfc?style=flat-square)](https://github.com/FluentRead/FluentRead/releases)
-[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-22a06b?style=flat-square)](./LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/FluentRead/FluentRead?style=flat-square)](https://github.com/FluentRead/FluentRead)
-
-<br />
-
-**[Install](#install)** · **[Explore features](#what-you-can-do)** · **[Read the docs](https://fluent.thinkstu.com/)** · **[简体中文](./misc/README_ZH.md)**
+[Install](#installation) · [Website](https://read.thinkstu.com/en/) · [User guide](https://read.thinkstu.com/en/guide/) · [Privacy policy](https://read.thinkstu.com/en/guide/privacy) · [简体中文](./misc/README_ZH.md) · [LINUX DO Community](https://linux.do) · [GPL-3.0](./LICENSE)
 
 </div>
 
-<p align="center">
-  <img src="./misc/screenshots/translation.png" alt="A webpage translated into a clean bilingual layout" width="920" />
-</p>
+FluentRead displays translations alongside the original webpage and provides selection translation, AI reading assistance, image and document translation, and bilingual video subtitles. Its reading card integrates a **browser adaptation of the DeepSeek Harness session core** for contextual explanations and follow-up questions.
 
-FluentRead brings translation into the reading flow. Keep the original text beside the translation, translate only the sentence you need, or translate the whole page without opening another tab. Choose a traditional translation engine, an AI provider, or the built-in free fallback, then tune the experience to your reading habits.
+<div align="center">
 
-## What you can do
+[![FluentRead introduction video](./docs/public/videos/fluentread-promo-en-poster.webp)](https://read.thinkstu.com/videos/fluentread-promo-en.mp4)
 
-| Read naturally | Stay in control |
+[▶ Watch the 56-second introduction](https://read.thinkstu.com/videos/fluentread-promo-en.mp4)
+
+For a closer look, [watch the full official introduction (4+ minutes, in Chinese on Bilibili)](https://www.bilibili.com/video/BV1qhHJ6uEiF/).
+
+</div>
+
+[![FluentRead bilingual webpage translation](./docs/public/screenshots/en/translation.webp)](./docs/public/screenshots/en/translation.webp)
+
+## Features
+
+| Feature | Description |
 | --- | --- |
-| **Bilingual pages** — Keep original text and translation together for study, research, and technical reading. | **Many translation services** — Use Microsoft Translator, Google Translate, DeepL, DeepLX, Chrome Translator, or AI providers such as OpenAI, DeepSeek, Gemini, Claude, Kimi, Ollama-compatible endpoints, and more. |
-| **Whole-page translation** — Use the floating ball, context menu, or a customizable shortcut. In Settings, choose progressive translation or translate all currently loaded content to the page bottom. | **Custom models and endpoints** — Configure compatible APIs, models, prompts, request bodies, proxies, and credentials from the settings page. |
-| **Selection translation** — Select text and get a focused translation card with copy and speech actions. | **Privacy controls** — Preferences and cache stay in extension-private storage. API credentials are session-only by default; cloud translation sends text to the selected provider. |
-| **Hover and gesture triggers** — Translate with a hover shortcut, double click, long press, middle click, or touch gestures. | **Reader-friendly controls** — Choose translation styles, themes, animation, cache behavior, concurrency, and separate shortcuts for page and selection translation. |
+| Webpage translation | Bilingual page translation, hover and selection translation, original-text restoration, and automatic translation rules. |
+| AI reading card | Meaning, sentence analysis, usage explanations, and practice, with paragraph context and follow-up questions. |
+| Learning center | Save words, phrases, and sentences with their original context for study and review. |
+| Image and area translation | Recognize text in webpage images or selected screen areas and display translations that can be copied. |
+| Document translation | Read PDF, ePub, DOCX, and other supported formats in two languages, edit translations, and export files. |
+| Video subtitles | Bilingual subtitles on YouTube and X; supported X videos can also use local AI transcription. |
+| Services and settings | Free translation services, DeepL, AI providers, and local Ollama models, with glossaries, translation styles, shortcuts, and menu layout settings. |
 
-### Also included
+See the [user guide](https://read.thinkstu.com/en/guide/) for instructions and supported formats. AI explanations require a configured AI service. Third-party pricing and availability depend on the provider.
 
-- **Free Translation**: a built-in fallback chain that tries Microsoft first, then DeepLX, then Google when a service returns an error or empty result.
-- **Image translation (Beta)**: local OCR for text in images, with downloadable language packs and a reversible translated overlay.
-- **Translation cache**: reuse recent results for the same service, model, language pair, and request settings.
-- **Explicit data handling**: review what each feature sends and stores in the [data and privacy guide](https://fluent.thinkstu.com/guide/privacy).
-- **Cross-browser support**: WXT build targets for Chromium browsers (Manifest V3) and Firefox (Manifest V2).
+## DeepSeek Harness
 
-## See it in action
+The reading card adapts the conversation-event and message organization components of the DeepSeek Harness session core for the browser. FluentRead connects these to the selected text, permitted paragraph context, model services, and local reading history. It supports different AI providers and models, with optional learning memories.
 
-### A small popup for everyday reading
+The adaptation is used for selection-based reading assistance. Full-page, hover, and regular selection translation use their respective translation pipelines. See the [integration map](./docs/reports/harness-embedding-map-20260905.md) for scope and upstream references, and the [third-party notice](./public/third-party-notices/deepseek-harness-MIT.txt) for its MIT license.
 
-The popup keeps the most-used controls close: enable or pause the extension, choose languages and a default service, open the full settings page, and clear the local translation cache.
+[Reading card guide](https://read.thinkstu.com/en/guide/deepseek-harness)
 
-<p align="center">
-  <img src="./misc/screenshots/popup.png" alt="FluentRead popup with language and translation controls" width="400" />
-</p>
+## Installation
 
-### Settings that scale with your workflow
+[Chrome](https://chromewebstore.google.com/detail/djnlaiohfaaifbibleebjggkghlmcpcj) · [Edge](https://microsoftedge.microsoft.com/addons/detail/kakgmllfpjldjhcnkghpplmlbnmcoflp) · [Firefox](https://addons.mozilla.org/en-US/firefox/addon/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/) · [Userscript](https://greasyfork.org/en/scripts/482986)
 
-Use focused settings pages for reading preferences, services and models, shortcuts, image translation, advanced behavior, and configuration backup.
+1. Install the extension and refresh the webpage.
+2. Open FluentRead and select a target language. The source language defaults to automatic detection and can also be selected manually.
+3. Choose “Translate page.” Enable selection translation and other tools in settings as needed.
 
-<p align="center">
-  <img src="./misc/screenshots/settings-general.png" alt="FluentRead general settings page" width="920" />
-</p>
+Store updates may arrive at different times. The userscript provides core webpage translation features. See the [installation guide](https://read.thinkstu.com/en/guide/getting-started) for browser and feature availability.
 
-<p align="center">
-  <img src="./misc/screenshots/settings-services.png" alt="FluentRead translation service catalog" width="920" />
-</p>
+## Local development
 
-## Install
+Requirements: Node.js 20 or later and pnpm 9.
 
-| Browser | Store |
-| --- | --- |
-| Chrome | [Chrome Web Store](https://chromewebstore.google.com/detail/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/djnlaiohfaaifbibleebjggkghlmcpcj?hl=en) · [CrxSoso mirror](https://www.crxsoso.com/webstore/detail/djnlaiohfaaifbibleebjggkghlmcpcj) |
-| Edge | [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/kakgmllfpjldjhcnkghpplmlbnmcoflp) |
-| Firefox | [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/%E6%B5%81%E7%95%85%E9%98%85%E8%AF%BB/) |
-
-For a local build, install dependencies with pnpm and load the generated `./.output/chrome-mv3` directory as an unpacked extension. See the [official documentation](https://fluent.thinkstu.com/) for setup and configuration details.
-
-An experimental userscript target for Via, Tampermonkey, and Violentmonkey can be generated with `pnpm build:userscript`. It produces the self-contained `./.output/userscript/fluent-read.user.js`; see the [userscript build guide](./docs/guide/userscript.md) for the supported feature matrix and browser-extension-only limitations.
-
-## Documentation and community
-
-- [Official documentation](https://fluent.thinkstu.com/) — features, setup, services, shortcuts, and FAQ.
-- [GitHub Discussions and Issues](https://github.com/FluentRead/FluentRead/issues) — report a problem or suggest an improvement.
-- [Bilibili introduction](https://www.bilibili.com/video/BV1ux4y1e73x/)
-- [DeepWiki architecture overview](https://deepwiki.com/FluentRead/FluentRead)
-
-## Development
-
-```bash
-pnpm install
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
-pnpm test:audit
-pnpm test:unit
-pnpm test:functional
-pnpm test:regression
-pnpm test:coverage
-pnpm compile
-pnpm build
-pnpm build:userscript
 ```
 
-Run `pnpm test:regression:all` for the deterministic one-command regression pipeline (test audit, all grouped tests, strict coverage, cross-browser/userscript builds, and docs). Isolated browser and live-network layers are explicit gates; see the [architecture](./docs/architecture.md) and [testing guide](./docs/testing.md) before contributing a feature.
+Use `pnpm build` to build the Chrome extension, `pnpm build:firefox` to build the Firefox extension, `pnpm zip:firefox` to generate its installation and review-source ZIPs, `pnpm zip:edge` to generate the Microsoft Edge Add-ons ZIP (the Chrome ZIP carries a manifest `key` that the Edge store rejects), `pnpm compile` for type checking, and `pnpm docs:build` to build the website. The review-source ZIP includes the extension build inputs; website assets, test evidence, and other distribution targets are omitted. See [architecture](./docs/architecture.md) and [testing](./docs/testing.md) for project conventions.
 
-FluentRead uses Vue 3, TypeScript, Element Plus, and WXT, targeting Chromium Manifest V3 and Firefox Manifest V2. The project is licensed under [GPL-3.0](./LICENSE).
+Run `pnpm storybook` to explore the real Vue components and interface themes locally. See the [design system guide](./docs/en/guide/design-system.md). Use `pnpm docs:build:site` to build the documentation with the component explorer.
 
-## Star history
+## Contributing
 
-[![Star History Chart](https://star-history.dera.page/svg?repos=FluentRead/FluentRead&type=Date)](https://star-history.dera.page/#FluentRead/FluentRead&Date)
+Report bugs and propose changes through [Issues](https://github.com/FluentRead/FluentRead/issues). Pull requests for code, documentation, interface translations, and [website adaptation](./docs/contributing/site-adaptation.md) are welcome.
+
+## Support
+
+FluentRead is an open-source project whose continued development is made possible by the generous support of its community. Voluntary contributions are welcome through either service.
+
+<table>
+<tr><th>WeChat Support</th><th>Ko-fi · International</th></tr>
+<tr>
+<td align="center"><a href="./misc/approve.jpg"><img src="./misc/approve.jpg" width="220" alt="Thinkstu’s WeChat support code" /></a><br />Scan with WeChat. Click the image to enlarge.</td>
+<td align="center"><a href="https://ko-fi.com/thinkstu"><strong>Support thinkstu on Ko-fi ↗</strong></a><br /><br />ko-fi.com/thinkstu</td>
+</tr>
+</table>
+
+## Acknowledgments
+
+FluentRead grows alongside a vibrant open-source community. We are grateful to the following projects and their contributors for their openness and generosity:
+
+- [Read Frog](https://github.com/mengxi-ream/read-frog)
+- [KISS Translator](https://github.com/fishjar/kiss-translator)
+- [Duo Translator](https://github.com/linuxscreen/duo-translator)
+- [InfoLens](https://github.com/dqy08/InfoLens) — Smart Highlighting is inspired by its surprisal heatmap idea (Apache-2.0)
+
+<!-- contributors:start -->
+<a href="https://github.com/FluentRead/FluentRead/graphs/contributors">
+  <table>
+    <tr>
+      <th>
+        <br>
+        <img src="https://avatars.githubusercontent.com/u/91378285?s=96&v=4" width="48" height="48" alt="Bistutu"><img src="https://avatars.githubusercontent.com/u/67351121?s=96&v=4" width="48" height="48" alt="WindChimeEcho"><img src="https://avatars.githubusercontent.com/u/15028142?s=96&v=4" width="48" height="48" alt="df123"><img src="https://avatars.githubusercontent.com/u/106456682?s=96&v=4" width="48" height="48" alt="RayySummers"><img src="https://avatars.githubusercontent.com/u/360470?s=96&v=4" width="48" height="48" alt="hewigovens"><img src="https://avatars.githubusercontent.com/u/10784701?s=96&v=4" width="48" height="48" alt="memwey"><img src="https://avatars.githubusercontent.com/u/6224049?s=96&v=4" width="48" height="48" alt="zhitiao"><img src="https://avatars.githubusercontent.com/u/27531296?s=96&v=4" width="48" height="48" alt="Meursau1T"><img src="https://avatars.githubusercontent.com/u/45133544?s=96&v=4" width="48" height="48" alt="520250"><img src="https://avatars.githubusercontent.com/u/104964583?s=96&v=4" width="48" height="48" alt="lemonteaau"><img src="https://avatars.githubusercontent.com/u/61247483?s=96&v=4" width="48" height="48" alt="Calcium-Ion"><img src="https://avatars.githubusercontent.com/u/555720?s=96&v=4" width="48" height="48" alt="pluwen"><img src="https://avatars.githubusercontent.com/u/30524126?s=96&v=4" width="48" height="48" alt="z0gSh1u"><img src="https://avatars.githubusercontent.com/u/78135443?s=96&v=4" width="48" height="48" alt="LIBai11"><img src="https://avatars.githubusercontent.com/u/3325888?s=96&v=4" width="48" height="48" alt="faintbear"><img src="https://avatars.githubusercontent.com/u/31530787?s=96&v=4" width="48" height="48" alt="damingsu"><img src="https://avatars.githubusercontent.com/u/86344183?s=96&v=4" width="48" height="48" alt="LinmonK"><img src="https://avatars.githubusercontent.com/u/113257654?s=96&v=4" width="48" height="48" alt="Alkacid"><img src="https://avatars.githubusercontent.com/u/10754850?s=96&v=4" width="48" height="48" alt="yolo2h"><img src="https://avatars.githubusercontent.com/u/253238660?s=96&v=4" width="48" height="48" alt="SyrupyTasty"><img src="https://avatars.githubusercontent.com/u/57394205?s=96&v=4" width="48" height="48" alt="NaCodermer"><img src="https://avatars.githubusercontent.com/u/57748455?s=96&v=4" width="48" height="48" alt="MrWangJustToDo"><img src="https://avatars.githubusercontent.com/u/19755727?s=96&v=4" width="48" height="48" alt="hu3rror"><img src="https://avatars.githubusercontent.com/u/73932916?s=96&v=4" width="48" height="48" alt="BalconyJH"><br>
+        <br>
+      </th>
+    </tr>
+  </table>
+</a>
+<!-- contributors:end -->
+
+Thank you to everyone who has contributed to FluentRead, including the many we couldn't name here, and to every user for embracing a product that is still far from perfect. We hope to keep building together with you, and to bring a little more good into the world.
+
+## License and privacy
+
+FluentRead is released under [GPL-3.0](./LICENSE). See [third-party notices](./public/third-party-notices/) for component attribution and licenses.
+
+Settings and learning records stay local by default; cloud translation uses your selected provider. Optional cloud configuration backup supports Google Drive and [WebDAV](https://read.thinkstu.com/en/guide/webdav), including service credentials while excluding wordbooks, conversations, and usage statistics. See the [privacy policy](https://read.thinkstu.com/en/guide/privacy) for permissions, encryption, and deletion details.

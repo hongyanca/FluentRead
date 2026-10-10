@@ -6,6 +6,11 @@ const mocks = vi.hoisted(() => ({
     send: vi.fn(),
 }));
 
+vi.mock('webextension-polyfill', () => ({default: {storage: {
+    session: {get: vi.fn(async () => ({})), set: vi.fn(async () => undefined), remove: vi.fn(async () => undefined)},
+    onChanged: {addListener: vi.fn(), removeListener: vi.fn()},
+}}}));
+
 vi.mock('@/src/services/config/store', () => ({config: mocks.config}));
 
 import defaultChromeTranslator, {
@@ -23,6 +28,7 @@ const chromeTranslator = createChromeTranslator({
 describe('Chrome translator 请求级语言回归', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        mocks.send.mockReset();
         Object.assign(mocks.config, {from: 'auto', to: 'zh-Hans'});
         mocks.createRequestId.mockReturnValue('chrome-request-1');
         mocks.send.mockImplementation(async (request: {requestId?: unknown}) => ({
@@ -32,9 +38,28 @@ describe('Chrome translator 请求级语言回归', () => {
         }));
     });
 
-    it('纯 payload builder 使用请求覆盖，空白覆盖才回退配置快照', () => {
+    it('纯 payload builder 保留标记正文与独立检测样本，并只在 auto 源语言下携带样本', () => {
+        const markedText = [
+            '___FLUENTREAD_test_0_BEGIN___',
+            'Bonjour le monde.',
+            '___FLUENTREAD_test_0_END___',
+        ].join('\n');
         expect(buildChromeOffscreenTranslationData({
-            origin: 'hello', sourceLanguage: ' en ', targetLanguage: ' ja ',
+            origin: markedText,
+            sourceLanguage: 'auto',
+            targetLanguage: 'zh-Hans',
+            sourceLanguageDetectionText: 'Bonjour le monde.',
+        }, {sourceLanguage: 'en', targetLanguage: 'ja'})).toEqual({
+            text: markedText,
+            from: 'auto',
+            to: 'zh-Hans',
+            sourceLanguageDetectionText: 'Bonjour le monde.',
+        });
+        expect(buildChromeOffscreenTranslationData({
+            origin: 'hello',
+            sourceLanguage: ' en ',
+            targetLanguage: ' ja ',
+            sourceLanguageDetectionText: 'Bonjour le monde.',
         }, {sourceLanguage: 'auto', targetLanguage: 'zh-Hans'})).toEqual({
             text: 'hello', from: 'en', to: 'ja',
         });
@@ -49,22 +74,33 @@ describe('Chrome translator 请求级语言回归', () => {
         expect(() => buildChromeOffscreenTranslationData({origin: '   '}, {
             sourceLanguage: 'auto', targetLanguage: 'zh-Hans',
         })).toThrow('翻译文本不能为空');
+        expect(() => buildChromeOffscreenTranslationData({
+            origin: 'hello',
+            sourceLanguageDetectionText: ['forged'],
+        }, {sourceLanguage: 'auto', targetLanguage: 'zh-Hans'})).toThrow('检测文本必须是字符串');
     });
 
-    it('真实 provider 发往 offscreen 的 data 与 broker 请求覆盖完全一致', async () => {
+    it('真实 provider 发往 offscreen 的标记正文和纯检测样本彼此独立，并为首次下载保留五分钟', async () => {
+        const markedText = '___FLUENTREAD_test_0_BEGIN___\nBonjour\n___FLUENTREAD_test_0_END___';
         await expect(chromeTranslator({
-            origin: 'hello',
-            sourceLanguage: 'en',
+            origin: markedText,
+            sourceLanguage: 'auto',
             targetLanguage: 'ja',
+            sourceLanguageDetectionText: 'Bonjour',
         })).resolves.toBe('翻译结果');
 
         expect(mocks.send).toHaveBeenCalledWith({
             type: 'CHROME_TRANSLATE_OFFSCREEN',
             requestId: 'chrome-request-1',
-            data: {text: 'hello', from: 'en', to: 'ja'},
+            data: {
+                text: markedText,
+                from: 'auto',
+                to: 'ja',
+                sourceLanguageDetectionText: 'Bonjour',
+            },
         }, {
             signal: undefined,
-            timeoutMs: 45_000,
+            timeoutMs: 300_000,
             cancelMessage: {
                 type: 'CANCEL_CHROME_TRANSLATE_OFFSCREEN',
                 requestId: 'chrome-request-1',
@@ -132,10 +168,46 @@ describe('Chrome translator 请求级语言回归', () => {
         await expect(chromeTranslator({origin: 'hello'})).rejects.toThrow('未知错误');
     });
 
+    it('收到待准备 pair 时写入 session 状态，取消请求不写入', async () => {
+        const set = vi.fn(async () => undefined);
+        const provider = createChromeTranslator({
+            capabilities: {chromeTranslation: true},
+            offscreenClient: {send: mocks.send},
+            createRequestId: mocks.createRequestId,
+            preparationStore: {set},
+        });
+        mocks.send.mockResolvedValueOnce({
+            success: false,
+            requestId: 'chrome-request-1',
+            errorCode: 'preparation-required',
+            errorName: 'ChromePreparationRequiredError',
+            sourceLanguage: 'en',
+            targetLanguage: 'zh',
+            error: 'prepare',
+        });
+        await expect(provider({origin: 'hello'})).rejects.toThrow('prepare');
+        expect(set).toHaveBeenCalledWith({sourceLanguage: 'en', targetLanguage: 'zh'});
+
+        set.mockClear();
+        const controller = new AbortController();
+        controller.abort();
+        mocks.send.mockClear();
+        await expect(provider({origin: 'hello', abortSignal: controller.signal})).rejects.toMatchObject({name: 'AbortError'});
+        expect(mocks.send).not.toHaveBeenCalled();
+        expect(set).not.toHaveBeenCalled();
+    });
+
     it('生产 requestId 使用浏览器安全随机 UUID', () => {
         const randomUUID = vi.fn(() => '00000000-0000-4000-8000-000000000001');
         vi.stubGlobal('crypto', {randomUUID});
         expect(createChromeTranslationRequestId()).toBe('00000000-0000-4000-8000-000000000001');
         expect(randomUUID).toHaveBeenCalledOnce();
     });
+});
+
+it('Chrome provider 请求级简繁体互译不被全局目标覆盖', async () => {
+    mocks.send.mockReset();
+    mocks.send.mockImplementation(async (request: {requestId?: unknown}) => ({success: true, result: '繁體譯文', requestId: request.requestId}));
+    await expect(chromeTranslator({origin: '简体中文', sourceLanguage: 'zh-Hans', targetLanguage: 'zh-Hant'})).resolves.toBe('繁體譯文');
+    expect(mocks.send).toHaveBeenLastCalledWith(expect.objectContaining({data: {text: '简体中文', from: 'zh-Hans', to: 'zh-Hant'}}), expect.any(Object));
 });

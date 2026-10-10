@@ -1,0 +1,703 @@
+{
+  "date": "2026-10-03",
+  "firstRun": {
+    "passed": true,
+    "frames": [
+      {
+        "phase": "startup",
+        "width": 320,
+        "height": 460,
+        "cardTransform": null,
+        "englishReady": null,
+        "textOnlyBrand": false,
+        "time": 80.59999990463257
+      },
+      {
+        "phase": "welcome",
+        "width": 320,
+        "height": 460,
+        "cardTransform": "none",
+        "englishReady": true,
+        "textOnlyBrand": false,
+        "time": 1381.9000000953674
+      }
+    ],
+    "fullEnglishRequests": 0,
+    "delayedConfigReads": 1,
+    "cases": [
+      {
+        "label": "welcome",
+        "geometry": {
+          "viewport": {
+            "width": 400,
+            "height": 130
+          },
+          "shell": {
+            "width": 320,
+            "height": 460,
+            "bottom": 460
+          },
+          "card": {
+            "top": 24,
+            "bottom": 442
+          },
+          "scrollHeight": 460,
+          "clientHeight": 460,
+          "horizontalOverflow": false,
+          "mainHidden": true
+        }
+      },
+      {
+        "label": "language",
+        "geometry": {
+          "viewport": {
+            "width": 400,
+            "height": 130
+          },
+          "shell": {
+            "width": 320,
+            "height": 461.171875,
+            "bottom": 131.171875
+          },
+          "card": {
+            "top": -306,
+            "bottom": 113.171875
+          },
+          "scrollHeight": 461,
+          "clientHeight": 461,
+          "horizontalOverflow": false,
+          "mainHidden": true
+        }
+      },
+      {
+        "label": "languages-280-light",
+        "geometry": {
+          "grid": {
+            "left": 41,
+            "right": 239
+          },
+          "options": [
+            {
+              "language": "zh-CN",
+              "text": "中文\nChinese\n✓",
+              "left": 41,
+              "right": 137.5,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "en-US",
+              "text": "英语\nEnglish\n✓",
+              "left": 142.5,
+              "right": 239,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "ja-JP",
+              "text": "日语\nJapanese\n✓",
+              "left": 41,
+              "right": 137.5,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "ko-KR",
+              "text": "韩语\nKorean\n✓",
+              "left": 142.5,
+              "right": 239,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "fr-FR",
+              "text": "法语\nFrench\n✓",
+              "left": 41,
+              "right": 137.5,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "ru-RU",
+              "text": "俄语\nRussian\n✓",
+              "left": 142.5,
+              "right": 239,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "es-ES",
+              "text": "西班牙语\nSpanish\n✓",
+              "left": 41,
+              "right": 239,
+              "top": 290.34375,
+              "bottom": 336.9921875,
+              "clipped": false
+            }
+          ],
+          "shellHeight": 460,
+          "internalOverflow": false,
+          "confirmVisible": true,
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "label": "languages-320-light",
+        "geometry": {
+          "grid": {
+            "left": 41,
+            "right": 279
+          },
+          "options": [
+            {
+              "language": "zh-CN",
+              "text": "中文\nChinese\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "en-US",
+              "text": "英语\nEnglish\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "ja-JP",
+              "text": "日语\nJapanese\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "ko-KR",
+              "text": "韩语\nKorean\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "fr-FR",
+              "text": "法语\nFrench\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "ru-RU",
+              "text": "俄语\nRussian\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "es-ES",
+              "text": "西班牙语\nSpanish\n✓",
+              "left": 41,
+              "right": 279,
+              "top": 290.34375,
+              "bottom": 336.9921875,
+              "clipped": false
+            }
+          ],
+          "shellHeight": 460,
+          "internalOverflow": false,
+          "confirmVisible": true,
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "label": "languages-360-light",
+        "geometry": {
+          "grid": {
+            "left": 41,
+            "right": 319
+          },
+          "options": [
+            {
+              "language": "zh-CN",
+              "text": "中文\nChinese\n✓",
+              "left": 41,
+              "right": 177.5,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "en-US",
+              "text": "英语\nEnglish\n✓",
+              "left": 182.5,
+              "right": 319,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "ja-JP",
+              "text": "日语\nJapanese\n✓",
+              "left": 41,
+              "right": 177.5,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "ko-KR",
+              "text": "韩语\nKorean\n✓",
+              "left": 182.5,
+              "right": 319,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "fr-FR",
+              "text": "法语\nFrench\n✓",
+              "left": 41,
+              "right": 177.5,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "ru-RU",
+              "text": "俄语\nRussian\n✓",
+              "left": 182.5,
+              "right": 319,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "es-ES",
+              "text": "西班牙语\nSpanish\n✓",
+              "left": 41,
+              "right": 319,
+              "top": 290.34375,
+              "bottom": 336.9921875,
+              "clipped": false
+            }
+          ],
+          "shellHeight": 460,
+          "internalOverflow": false,
+          "confirmVisible": true,
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "label": "languages-400-light",
+        "geometry": {
+          "grid": {
+            "left": 49,
+            "right": 351
+          },
+          "options": [
+            {
+              "language": "zh-CN",
+              "text": "中文\nChinese\n✓",
+              "left": 49,
+              "right": 196.5,
+              "top": 130.390625,
+              "bottom": 178.3359375,
+              "clipped": false
+            },
+            {
+              "language": "en-US",
+              "text": "英语\nEnglish\n✓",
+              "left": 203.5,
+              "right": 351,
+              "top": 130.390625,
+              "bottom": 178.3359375,
+              "clipped": false
+            },
+            {
+              "language": "ja-JP",
+              "text": "日语\nJapanese\n✓",
+              "left": 49,
+              "right": 196.5,
+              "top": 185.3359375,
+              "bottom": 233.28125,
+              "clipped": false
+            },
+            {
+              "language": "ko-KR",
+              "text": "韩语\nKorean\n✓",
+              "left": 203.5,
+              "right": 351,
+              "top": 185.3359375,
+              "bottom": 233.28125,
+              "clipped": false
+            },
+            {
+              "language": "fr-FR",
+              "text": "法语\nFrench\n✓",
+              "left": 49,
+              "right": 196.5,
+              "top": 240.28125,
+              "bottom": 288.2265625,
+              "clipped": false
+            },
+            {
+              "language": "ru-RU",
+              "text": "俄语\nRussian\n✓",
+              "left": 203.5,
+              "right": 351,
+              "top": 240.28125,
+              "bottom": 288.2265625,
+              "clipped": false
+            },
+            {
+              "language": "es-ES",
+              "text": "西班牙语\nSpanish\n✓",
+              "left": 49,
+              "right": 351,
+              "top": 295.2265625,
+              "bottom": 343.171875,
+              "clipped": false
+            }
+          ],
+          "shellHeight": 461.171875,
+          "internalOverflow": false,
+          "confirmVisible": true,
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "label": "languages-320-dark",
+        "geometry": {
+          "grid": {
+            "left": 41,
+            "right": 279
+          },
+          "options": [
+            {
+              "language": "zh-CN",
+              "text": "中文\nChinese\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "en-US",
+              "text": "英语\nEnglish\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 135.3984375,
+              "bottom": 182.046875,
+              "clipped": false
+            },
+            {
+              "language": "ja-JP",
+              "text": "日语\nJapanese\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "ko-KR",
+              "text": "韩语\nKorean\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 187.046875,
+              "bottom": 233.6953125,
+              "clipped": false
+            },
+            {
+              "language": "fr-FR",
+              "text": "法语\nFrench\n✓",
+              "left": 41,
+              "right": 157.5,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "ru-RU",
+              "text": "俄语\nRussian\n✓",
+              "left": 162.5,
+              "right": 279,
+              "top": 238.6953125,
+              "bottom": 285.34375,
+              "clipped": false
+            },
+            {
+              "language": "es-ES",
+              "text": "西班牙语\nSpanish\n✓",
+              "left": 41,
+              "right": 279,
+              "top": 290.34375,
+              "bottom": 336.9921875,
+              "clipped": false
+            }
+          ],
+          "shellHeight": 460,
+          "internalOverflow": false,
+          "confirmVisible": true,
+          "horizontalOverflow": false
+        }
+      },
+      {
+        "label": "main",
+        "geometry": {
+          "viewport": {
+            "width": 400,
+            "height": 130
+          },
+          "shell": {
+            "width": 380,
+            "height": 491.875,
+            "bottom": 161.875
+          },
+          "card": {
+            "top": -320,
+            "bottom": 157.875
+          },
+          "scrollHeight": 492,
+          "clientHeight": 492,
+          "horizontalOverflow": false,
+          "mainHidden": false
+        }
+      }
+    ],
+    "confirmedLanguage": "es-ES",
+    "confirmationPersisted": true,
+    "moduleFailureRetried": true,
+    "expectedInjectedModuleErrors": [
+      "Failed to load resource: net::ERR_FAILED"
+    ],
+    "errors": []
+  },
+  "staleHints": {
+    "passed": true,
+    "phases": [
+      {
+        "phase": "onboarding",
+        "index": 0,
+        "hint": [
+          {
+            "received": false,
+            "used": true
+          }
+        ],
+        "onboardingVisible": true
+      },
+      {
+        "phase": "onboarding",
+        "index": 1,
+        "hint": [
+          {
+            "received": false,
+            "used": true
+          }
+        ],
+        "onboardingVisible": true
+      },
+      {
+        "phase": "main",
+        "index": 0,
+        "hint": [
+          {
+            "received": true,
+            "used": false
+          }
+        ],
+        "onboardingVisible": false
+      },
+      {
+        "phase": "main",
+        "index": 1,
+        "hint": [
+          {
+            "received": true,
+            "used": false
+          }
+        ],
+        "onboardingVisible": false
+      }
+    ],
+    "errors": []
+  },
+  "startup": {
+    "passed": true,
+    "scope": "popup-startup-and-persistence",
+    "cases": [
+      {
+        "name": "dark-1",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 1488,
+          "width": 320,
+          "height": 393,
+          "skin": "emoji",
+          "dark": true,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "false",
+          "moduleOrder": "quickFeatures,translation,siteRule,footer",
+          "quickFeatureOrder": "document,hover,selection,appearance,image",
+          "visibleQuickFeatures": "document,hover,selection",
+          "popupHeight": "content",
+          "className": "popup-shell"
+        },
+        "flashObserved": false,
+        "injectedReadFailure": false
+      },
+      {
+        "name": "dark-2",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 1468,
+          "width": 320,
+          "height": 393,
+          "skin": "emoji",
+          "dark": true,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "false",
+          "moduleOrder": "quickFeatures,translation,siteRule,footer",
+          "quickFeatureOrder": "document,hover,selection,appearance,image",
+          "visibleQuickFeatures": "document,hover,selection",
+          "popupHeight": "content",
+          "className": "popup-shell"
+        },
+        "flashObserved": false,
+        "injectedReadFailure": false
+      },
+      {
+        "name": "auto-1",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 1449.7,
+          "width": 320,
+          "height": 393,
+          "skin": "emoji",
+          "dark": false,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "false",
+          "moduleOrder": "quickFeatures,translation,siteRule,footer",
+          "quickFeatureOrder": "document,hover,selection,appearance,image",
+          "visibleQuickFeatures": "document,hover,selection",
+          "popupHeight": "content",
+          "className": "popup-shell"
+        },
+        "flashObserved": false,
+        "injectedReadFailure": false
+      },
+      {
+        "name": "auto-2",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 1461.9,
+          "width": 320,
+          "height": 393,
+          "skin": "emoji",
+          "dark": false,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "false",
+          "moduleOrder": "quickFeatures,translation,siteRule,footer",
+          "quickFeatureOrder": "document,hover,selection,appearance,image",
+          "visibleQuickFeatures": "document,hover,selection",
+          "popupHeight": "content",
+          "className": "popup-shell"
+        },
+        "flashObserved": false,
+        "injectedReadFailure": false
+      },
+      {
+        "name": "auto-normal-no-delay",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 71.9,
+          "width": 320,
+          "height": 393,
+          "skin": "emoji",
+          "dark": false,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "false",
+          "moduleOrder": "quickFeatures,translation,siteRule,footer",
+          "quickFeatureOrder": "document,hover,selection,appearance,image",
+          "visibleQuickFeatures": "document,hover,selection",
+          "popupHeight": "content",
+          "className": "popup-shell"
+        },
+        "flashObserved": false,
+        "injectedReadFailure": false
+      },
+      {
+        "name": "auto-read-failure",
+        "firstFrame": {
+          "source": "mutation",
+          "atMs": 1438.2,
+          "width": 320,
+          "height": 460,
+          "skin": "default",
+          "dark": false,
+          "ready": true,
+          "configReady": "true",
+          "ariaBusy": "",
+          "moduleOrder": "",
+          "quickFeatureOrder": "",
+          "visibleQuickFeatures": "",
+          "popupHeight": "",
+          "className": "popup-shell language-onboarding-shell"
+        },
+        "flashObserved": true,
+        "injectedReadFailure": true
+      }
+    ],
+    "persistence": {
+      "noOpPagehide": {
+        "persistConfigRequests": 0,
+        "persistConfigModes": [],
+        "responses": 0,
+        "successes": 0,
+        "persistConfigBatchRequests": 0
+      },
+      "latestWriteWins": {
+        "initialValue": "zh-Hans",
+        "firstTarget": "en",
+        "finalTarget": "ja",
+        "persistedValue": "ja",
+        "persistConfigRequests": 1,
+        "persistConfigModes": [
+          "patch"
+        ],
+        "responses": 1,
+        "successes": 1,
+        "heldResponses": 1,
+        "persistConfigBatchRequests": 1,
+        "persistConfigBatchSizes": [
+          2
+        ],
+        "reopenedLabel": "日本語"
+      }
+    },
+    "errors": []
+  }
+}

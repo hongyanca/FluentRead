@@ -1,32 +1,23 @@
 /**
  * @file src/features/settings/background/openOptionsHandler.ts
  * 文件职责：处理来自页面通知和扩展 UI 的打开设置请求，在后台严格校验目标分区并将导航动作委托给可注入的 Options 页面适配器。
- * 主要内容：定义 openOptionsPage 消息、允许的 section ID 列表、请求响应与依赖契约，parseSection 拒绝未知值，createOpenOptionsPageHandler 返回类型化 handler。
+ * 主要内容：从设置导航注册表派生允许的分区 ID，校验服务编辑目标或学习中心子栏目，定义请求响应与可注入导航契约；服务直达不修改默认服务。
  * 模块边界：本文件不直接绑定 browser.runtime、不渲染设置页也不持久化配置；浏览器页面创建由 app 注入，分区展示与搜索逻辑属于 settings/model 和 Options composition root。
  */
-import {NAVIGATION_SECTION_ALIASES} from '@/src/features/settings/model/navigation';
+import {services} from '@/src/core/config/catalog';
+import {NAVIGATION_SECTION_ALIASES, NAVIGATION_SECTION_IDS, type NavigationSectionId} from '@/src/features/settings/model/navigation';
 
 export const OPEN_OPTIONS_PAGE_MESSAGE_TYPE = 'openOptionsPage' as const;
 
-export const OPTIONS_SECTION_IDS = [
-    'settings-general',
-    'settings-services',
-    'settings-translation',
-    'settings-image-translation',
-    'settings-video',
-    'settings-sites',
-    'settings-translation-center',
-    'settings-vocabulary',
-    'settings-advanced',
-    'settings-data',
-    'settings-about',
-] as const;
+export const OPTIONS_SECTION_IDS = NAVIGATION_SECTION_IDS;
 
-export type OptionsSectionId = typeof OPTIONS_SECTION_IDS[number];
+export type OptionsSectionId = NavigationSectionId;
 
 export interface OpenOptionsPageMessage {
     type: typeof OPEN_OPTIONS_PAGE_MESSAGE_TYPE;
     section?: unknown;
+    learningTab?: unknown;
+    service?: unknown;
 }
 
 export interface OpenOptionsPageResponse {
@@ -35,7 +26,7 @@ export interface OpenOptionsPageResponse {
 
 export interface OpenOptionsPageDependencies {
     readonly openDefaultPage: () => Promise<void>;
-    readonly openSection: (section: OptionsSectionId) => Promise<void>;
+    readonly openSection: (section: OptionsSectionId, destination?: string) => Promise<void>;
 }
 
 export interface OpenOptionsPageHandler {
@@ -65,10 +56,19 @@ export function createOpenOptionsPageHandler(
         type: OPEN_OPTIONS_PAGE_MESSAGE_TYPE,
         async handle(message) {
             const section = parseSection(message.section);
+            const learningTab = message.learningTab;
+            if (learningTab !== undefined && (section !== 'settings-vocabulary' || typeof learningTab !== 'string' || !['saved', 'history', 'memory'].includes(learningTab))) {
+                throw new TypeError('无效的学习栏目');
+            }
+            const service = message.service;
+            if (service !== undefined && (section !== 'settings-services' || typeof service !== 'string'
+                || !Object.values(services).some(value => value === service))) throw new TypeError('无效的翻译服务设置');
             if (section === undefined) {
                 await dependencies.openDefaultPage();
             } else {
-                await dependencies.openSection(section);
+                const destination = typeof learningTab === 'string' ? learningTab : service;
+                if (typeof destination === 'string') await dependencies.openSection(section, destination);
+                else await dependencies.openSection(section);
             }
             return {success: true};
         },

@@ -1,0 +1,73 @@
+{
+  "scope": "real Tesseract OCR + deterministic Google transport + production extension",
+  "success": true,
+  "baseline": {
+    "failure": "Cancel 操作条不能发生移除",
+    "samples": 13,
+    "rowRemovals": 11,
+    "rowOpacityRange": [
+      0.48,
+      0.990574
+    ]
+  },
+  "fixed": {
+    "samples": 12,
+    "rowRemovals": 0,
+    "distinctProgressStates": 7,
+    "hoverAlwaysRetained": true,
+    "focusAlwaysRetained": true,
+    "rowOpacity": [
+      1
+    ]
+  },
+  "channelRecovery": {
+    "operationIds": [
+      "image-fd1abdb8-a334-454e-9251-475293c3a3d6",
+      "image-30ed9dd1-15fb-422b-a25c-23fe25dbad8e"
+    ],
+    "bitmap": {
+      "bitmapCount": 1,
+      "complete": true,
+      "naturalWidth": 1400,
+      "sourcePreserved": true
+    },
+    "injectedClosure": true,
+    "progressSource": "real-runtime-operation"
+  },
+  "cases": [
+    "missing languages exposes preparation action",
+    "real language download, OCR, translation and replacement",
+    "restore and redisplay reuse result without requests or source mutation",
+    "scroll retains same decoded bitmap",
+    "DOM geometry matches source: contain-padding-border",
+    "DOM geometry matches source: cover-padding-border",
+    "DOM geometry matches source: none-padding-border",
+    "DOM geometry matches source: ancestor-clipping",
+    "DOM geometry matches source: ancestor-scroll-clipping",
+    "dynamic source change removes old translation",
+    "loading Cancel retains the same attached hovered focused row and button during progress",
+    "cancel never installs a late result",
+    "retry works after cancellation",
+    "injected offscreen channel closure retries once with a fresh request and installs a valid bitmap",
+    "transparent PNG hides original letters while translated bitmap remains visible",
+    "restoring transparent source releases only the extension opacity lease",
+    "host opacity change removes old replacement and preserves the host value",
+    "image removal cleans overlay"
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "profileRemoved": true,
+  "errors": [],
+  "cleanupErrors": []
+}

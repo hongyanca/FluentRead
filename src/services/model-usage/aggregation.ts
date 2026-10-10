@@ -1,7 +1,7 @@
 /**
  * @file src/services/model-usage/aggregation.ts
  * 文件职责：把本地大模型调用事件按本地日界线聚合成设置页可直接消费的统计快照。
- * 主要内容：规范化筛选条件，计算今日、七日和三十日汇总、缓存可计算请求的三段 Token 构成，生成逐小时或逐日时间线，并按服务与模型分组。
+ * 主要内容：规范化筛选条件，计算成功调用的输出速度与可计算样本数、今日、七日和三十日汇总、缓存可计算请求的三段 Token 构成，生成逐小时或逐日时间线，并按服务与模型分组。
  * 模块边界：本文件只执行确定性的内存计算，不访问 IndexedDB、浏览器 runtime、供应商响应或 Vue 组件。
  */
 
@@ -108,6 +108,8 @@ export function getModelUsageRangeStart(range: Range, now: number): number {
 
 export function emptyModelUsageTotals(): Totals {
     return {
+        outputTokensPerSecond: null,
+        speedReportedRequests: 0,
         requestCount: 0,
         successfulRequests: 0,
         failedRequests: 0,
@@ -141,12 +143,28 @@ export function emptyModelUsageTotals(): Totals {
     };
 }
 
+/** 输出速度包含首字等待与传输耗时；失败、缺失输出或无效耗时均不参与。 */
+export function requestOutputTokensPerSecond(event: ModelUsageEvent): number | null {
+    if (event.outcome !== 'success' || event.usageAvailability !== 'reported'
+        || typeof event.outputTokens !== 'number' || !Number.isSafeInteger(event.outputTokens)
+        || event.outputTokens < 0 || !Number.isFinite(event.durationMs) || event.durationMs <= 0) return null;
+    const speed = event.outputTokens / event.durationMs * 1_000;
+    return Number.isFinite(speed) ? speed : null;
+}
+
 export function aggregateModelUsageTotals(events: readonly AggregatableEvent[]): Totals {
     const totals = emptyModelUsageTotals();
     let totalDurationMs = 0;
+    let speedDurationMs = 0;
+    let speedOutputTokens = 0;
     let cacheCohortCachedInputTokens = 0;
     for (const event of events) {
         totals.requestCount += 1;
+        if (requestOutputTokensPerSecond(event) !== null) {
+            totals.speedReportedRequests += 1;
+            speedDurationMs += event.durationMs;
+            speedOutputTokens += event.outputTokens!;
+        }
         if (event.outcome === 'success') totals.successfulRequests += 1;
         else {
             totals.failedRequests += 1;
@@ -192,6 +210,7 @@ export function aggregateModelUsageTotals(events: readonly AggregatableEvent[]):
     totals.cacheCoverageRate = totals.reportedTokenRequests > 0
         ? totals.cacheReportedRequests / totals.reportedTokenRequests
         : null;
+    totals.outputTokensPerSecond = speedDurationMs > 0 ? speedOutputTokens / speedDurationMs * 1_000 : null;
     totals.averageDurationMs = totals.requestCount > 0 ? totalDurationMs / totals.requestCount : null;
     totals.averageTokensPerReportedRequest = totals.reportedTokenRequests > 0
         ? totals.totalTokens / totals.reportedTokenRequests

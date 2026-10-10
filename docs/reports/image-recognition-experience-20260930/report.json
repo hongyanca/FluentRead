@@ -1,0 +1,238 @@
+{
+  "date": "2026-09-30",
+  "productSourceCommit": "1d2bd35dfa1d3fefcadcd8524c09783b073146db",
+  "integratedMain": "51e7540e",
+  "browserCases": 51,
+  "screenshots": [
+    "languages.png",
+    "languages-downloading.png",
+    "languages-dark-narrow.png",
+    "popup-source-persisted.png",
+    "image-reader.png",
+    "area-dark-narrow.png"
+  ],
+  "runs": [
+    {
+      "scope": "production extension OCR settings, real language download and cache removal; real background queue observation",
+      "cases": [
+        "compact source-aware language list",
+        "real background download, visible queue and close-reopen",
+        "shared state across image and area settings",
+        "persisted source language is reflected in the popup",
+        "remove one package and update the other settings page",
+        "dark theme and 390px layout",
+        "English interface"
+      ],
+      "errors": [],
+      "success": true,
+      "profileRemoved": true,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "metrics": [
+        {
+          "width": 1352,
+          "sectionWidth": 1028,
+          "sectionHeight": 505.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62,
+            62,
+            62
+          ]
+        },
+        {
+          "width": 1352,
+          "sectionWidth": 1028,
+          "sectionHeight": 381.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        },
+        {
+          "width": 1352,
+          "sectionWidth": 1028,
+          "sectionHeight": 381.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        },
+        {
+          "width": 1352,
+          "sectionWidth": 1028,
+          "sectionHeight": 381.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        },
+        {
+          "width": 1352,
+          "sectionWidth": 1028,
+          "sectionHeight": 381.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        },
+        {
+          "width": 390,
+          "sectionWidth": 346,
+          "sectionHeight": 465.46875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        },
+        {
+          "width": 1360,
+          "sectionWidth": 1036,
+          "sectionHeight": 377.96875,
+          "overflow": false,
+          "rows": [
+            62,
+            62
+          ]
+        }
+      ],
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false
+      }
+    },
+    {
+      "scope": "real Tesseract OCR + deterministic Google transport + production extension",
+      "cases": [
+        "missing languages exposes preparation action",
+        "real language download, OCR, translation and replacement",
+        "independent viewport reader preserves recognized original alongside translation",
+        "restore and redisplay reuse result without requests or source mutation",
+        "scroll retains same decoded bitmap",
+        "second image hover survives unrelated live DOM updates",
+        "DOM geometry matches source: contain-padding-border",
+        "DOM geometry matches source: cover-padding-border",
+        "DOM geometry matches source: none-padding-border",
+        "DOM geometry matches source: ancestor-clipping",
+        "DOM geometry matches source: ancestor-scroll-clipping",
+        "dynamic source change removes old translation",
+        "loading Cancel retains the same attached hovered focused row and button during progress",
+        "cancel never installs a late result",
+        "retry works after cancellation",
+        "injected offscreen channel closure retries once with a fresh request and installs a valid bitmap",
+        "transparent PNG hides original letters while translated bitmap remains visible",
+        "restoring transparent source releases only the extension opacity lease",
+        "host opacity change removes old replacement and preserves the host value",
+        "image removal cleans overlay"
+      ],
+      "errors": [],
+      "success": true,
+      "profileRemoved": true,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false
+      }
+    },
+    {
+      "scope": "production extension, trusted screenshot gestures, real Tesseract, deterministic Google/OpenAI transports",
+      "cases": [
+        "synthetic shortcut ignored",
+        "editable input keeps Shift+Z",
+        "focused non-editable container still triggers",
+        "custom shortcut replaces the default one",
+        "open shadow input keeps Shift+Z",
+        "closed shadow input keeps Shift+Z",
+        "machine service name without model",
+        "trusted selection and OCR",
+        "same capture retry",
+        "source image and text review",
+        "escape clears result and next selection works",
+        "small English 14px",
+        "dark English 20px",
+        "AI structured entire-region translation",
+        "result metadata stays frozen until retry",
+        "invalid AI response exposes retry, no silent fallback",
+        "close cancels pending and no late result",
+        "post-cancel retry",
+        "switching tabs cancels the old operation",
+        "captured result survives page scroll",
+        "narrow dark result geometry",
+        "long model wraps in narrow dark panel",
+        "live motion settings retain static progress",
+        "disabled cleanup"
+      ],
+      "errors": [],
+      "success": true,
+      "profileRemoved": true,
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "ocrSamples": [
+        {
+          "name": "clear English 26px",
+          "source": "Welcome to FluentRead\nRead every word in your language\nKeep numbers 123 and names unchanged",
+          "cer": 0
+        },
+        {
+          "name": "small English 14px",
+          "source": "Welcome to FluentRead\nRead every word in your language\nKeep numbers 123 and names unchanged",
+          "cer": 0
+        },
+        {
+          "name": "dark English 20px",
+          "source": "Welcome to FluentRead\nRead every word in your language\nKeep numbers 123 and names unchanged",
+          "cer": 0
+        }
+      ],
+      "firstSelectionMs": 954,
+      "languagePreparationMs": 3146,
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false
+      }
+    }
+  ],
+  "verification": {
+    "focusedFunctionalTests": 335,
+    "focusedCoverageTests": 184,
+    "strictCoverage": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "typecheck": "passed",
+    "testAudit": "passed",
+    "builds": [
+      "Chrome MV3",
+      "Firefox MV2",
+      "userscript"
+    ],
+    "userscriptVerifier": "passed",
+    "knownBaselineFailures": [
+      "share-card: 7 modules missing strict coverage registration",
+      "video-subtitle/content/runtime.ts: 1909 nonempty lines exceeds baseline ceiling 1887"
+    ]
+  },
+  "limits": [
+    "Controlled text/image fixtures with real Tesseract OCR and real language downloads. Translation transports are deterministic fixtures.",
+    "No universal handwriting/complex-background accuracy claim; no live translation-provider quality measurement.",
+    "Firefox build verified; Firefox UI and real mobile devices not verified."
+  ]
+}

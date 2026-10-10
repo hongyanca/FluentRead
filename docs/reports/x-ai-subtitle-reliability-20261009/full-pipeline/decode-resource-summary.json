@@ -1,0 +1,155 @@
+{
+  "sourceSha256": "b50ebe9ccea57971a8aad363996f8b3d9168b1277dae8a288446c417c40963ff",
+  "evidence": "Real production controller and XHlsAudioReader; fake fetch/ReadableStream, AudioContext and explicit clock only; no browser, model or actual X/media acceptance",
+  "configuredFallbackLimitBytes": 50331648,
+  "cases": [
+    {
+      "name": "missing Content-Length body crosses the 48MiB guard",
+      "getAudioUsedActualXHlsAudioReader": true,
+      "getAudioReturnedNullBeforeDirectSourceFallback": true,
+      "contentLength": null,
+      "arrayBufferCalls": 0,
+      "consumedBytes": 0,
+      "streamChunks": 49,
+      "streamReachedEof": false,
+      "streamCancelCalls": 1,
+      "decodeCalls": 0,
+      "controllerPhaseAfterFixtureScanUnavailable": "error",
+      "finding": "Bounded stream rejects the first over-limit chunk and cancels before EOF; arrayBuffer is never used"
+    },
+    {
+      "name": "cancel while direct-source decodeAudioData is pending",
+      "immediatelyAfterCancel": {
+        "phase": "idle",
+        "fetchAborted": true,
+        "decoderState": "closed",
+        "closeCalls": 1,
+        "decodeDeadlineStillScheduled": false
+      },
+      "decoderClosedWithoutAdvancingClock": true,
+      "afterCancel": {
+        "phase": "idle",
+        "decoderState": "closed",
+        "closeCalls": 1,
+        "asrCalls": 0,
+        "errors": 0,
+        "completes": 0
+      },
+      "finding": "Cancel immediately settles the wait, closes the native context and clears both timers; no ASR or result publication"
+    },
+    {
+      "name": "non-ok HTTP response",
+      "fetchAbortedBeforeScanUserCancelOrFailureCleanup": true,
+      "responseBodyUsed": false,
+      "contextCalls": 0,
+      "timerCount": 0,
+      "scope": "Real production finally; native Response fixture is not bound to fake fetch signal, so body cancel is not asserted"
+    },
+    {
+      "name": "Content-Length over 48MiB",
+      "fetchAbortedBeforeScanUserCancelOrFailureCleanup": true,
+      "responseBodyUsed": false,
+      "contextCalls": 0,
+      "timerCount": 0,
+      "scope": "Real production finally; native Response fixture is not bound to fake fetch signal, so body cancel is not asserted"
+    }
+  ],
+  "priorFixedEvidencePath": "/private/tmp/fluentread-fullcapture-fallback-fixed-20261009/report.json",
+  "bundleSha256": "3f753fc4df90c0a2e85e31724bfc302c732cdd04e6b8960d52f9c6fdbb538478",
+  "fixedAssertionsPassed": true,
+  "baselineEvidencePath": "/private/tmp/fluentread-fullcapture-fallback-diagnosis-20261009/report.json",
+  "fixtureDifference": "Same 49MiB body and source URL; highWaterMark 0 avoids one chunk prefetch hiding the before-EOF cancellation signal",
+  "xFallbackChain": {
+    "evidence": "Real immutable production bundle; same-media X CDN URL; two fake Response streams; no network or browser",
+    "sourceSha256": "b50ebe9ccea57971a8aad363996f8b3d9168b1277dae8a288446c417c40963ff",
+    "url": "https://video.twimg.com/ext_tw_video/123/pu/vid/direct.mp4",
+    "fetchCalls": 2,
+    "responseStats": [
+      {
+        "producedChunks": 33,
+        "cancelCalls": 1,
+        "eof": false,
+        "arrayBufferCalls": 0,
+        "arrayBufferBytes": 0
+      },
+      {
+        "producedChunks": 49,
+        "cancelCalls": 1,
+        "eof": false,
+        "arrayBufferCalls": 0,
+        "arrayBufferBytes": 0
+      }
+    ],
+    "finding": "Both real X MP4 reader and subsequent fullCapture fallback cancel their oversized streams before EOF; fallback arrayBuffer is never used",
+    "fixedAssertionsPassed": true,
+    "baselineEvidencePath": "/private/tmp/fluentread-fullcapture-fallback-diagnosis-20261009/x-cdn-report.json",
+    "fixtureDifference": "Same X CDN URL and 49MiB payload; highWaterMark 0 avoids prefetch hiding before-EOF cancellation"
+  },
+  "baseline": {
+    "directFallback": {
+      "sourceSha256": "f766c8d083990270eac19f435e99afcc4a49ec676f07fcb3eb467d88e9bf64f2",
+      "evidence": "Real production controller and XHlsAudioReader; fake fetch/ReadableStream, AudioContext and explicit clock only; no browser, model or actual X/media acceptance",
+      "configuredFallbackLimitBytes": 50331648,
+      "cases": [
+        {
+          "name": "missing Content-Length body crosses the 48MiB guard",
+          "getAudioUsedActualXHlsAudioReader": true,
+          "getAudioReturnedNullBeforeDirectSourceFallback": true,
+          "contentLength": null,
+          "arrayBufferCalls": 1,
+          "consumedBytes": 51380224,
+          "streamChunks": 49,
+          "streamReachedEof": true,
+          "streamCancelCalls": 0,
+          "decodeCalls": 0,
+          "controllerPhaseAfterFixtureScanUnavailable": "error",
+          "finding": "All 49MiB consumed to EOF before size rejection; the nominal 48MiB bound is not applied while reading"
+        },
+        {
+          "name": "cancel while direct-source decodeAudioData is pending",
+          "immediatelyAfterCancel": {
+            "phase": "idle",
+            "fetchAborted": true,
+            "decoderState": "running",
+            "closeCalls": 0,
+            "decodeDeadlineStillScheduled": true
+          },
+          "decoderClosedOnlyAfterExplicitlyAdvancingScheduledDeadlineMs": 8000,
+          "afterDeadline": {
+            "phase": "idle",
+            "decoderState": "closed",
+            "closeCalls": 1,
+            "asrCalls": 0,
+            "errors": 0,
+            "completes": 0
+          },
+          "finding": "Cancel clears controller state and suppresses stale results, but does not settle the decode wait or close its local AudioContext immediately"
+        }
+      ],
+      "reproductionAssertionsPassed": true
+    },
+    "xFallbackChain": {
+      "evidence": "Real immutable production bundle; same-media X CDN URL; two fake Response streams; no network or browser",
+      "url": "https://video.twimg.com/ext_tw_video/123/pu/vid/direct.mp4",
+      "fetchCalls": 2,
+      "responseStats": [
+        {
+          "producedChunks": 34,
+          "cancelCalls": 1,
+          "eof": false,
+          "arrayBufferCalls": 0,
+          "arrayBufferBytes": 0
+        },
+        {
+          "producedChunks": 49,
+          "cancelCalls": 0,
+          "eof": true,
+          "arrayBufferCalls": 1,
+          "arrayBufferBytes": 51380224
+        }
+      ],
+      "finding": "The real 32MiB X MP4 reader cancels its oversize stream, but fullCapture subsequently downloads the same URL again and drains 49MiB before its 48MiB check",
+      "reproductionAssertionsPassed": true
+    }
+  }
+}

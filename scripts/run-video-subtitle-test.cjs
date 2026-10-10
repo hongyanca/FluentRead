@@ -195,19 +195,29 @@ async function main() {
       to: 'zh-Hans',
       service: 'deeplx',
       videoTranslationEnabled: true,
+      uiLanguage: 'zh-CN',
+      uiLanguageSetupCompleted: true,
       useCache: false,
     });
+    await popup.reload({ waitUntil: 'domcontentloaded' });
+    await popup.waitForSelector('[data-feature="video-subtitle"]', { timeout: 15000 });
+    await popup.waitForFunction(
+      () => !document.querySelector('[data-testid="ui-language-onboarding"]'),
+      null,
+      { timeout: 10000 },
+    );
     const popupConfig = await readExtensionConfig(popup);
     const popupState = await popup.evaluate((config) => ({
       featurePresent: Boolean(document.querySelector('[data-feature="video-subtitle"]')),
       featureCount: document.querySelectorAll('.feature-card').length,
       imageFeaturePresent: [...document.querySelectorAll('.feature-card')].some((node) => node.textContent?.includes('图片翻译')),
       floatingFeaturePresent: [...document.querySelectorAll('.feature-card')].some((node) => node.textContent?.includes('全文悬浮球')),
-      videoBetaLabel: document.querySelector('[data-feature="video-subtitle"] .beta-badge')?.textContent?.trim(),
+      betaMarkers: [...document.querySelectorAll('[data-feature="video-subtitle"] *')]
+        .filter((node) => /beta|测试版/iu.test(node.textContent || '')).length,
       popupHeight: document.body.scrollHeight,
       config,
     }), popupConfig);
-    if (popupState.featureCount !== 6 || !popupState.imageFeaturePresent || popupState.floatingFeaturePresent || popupState.videoBetaLabel !== 'Beta 测试' || popupState.config.videoService !== 'microsoft') {
+    if (popupState.featureCount !== 6 || !popupState.imageFeaturePresent || popupState.floatingFeaturePresent || popupState.betaMarkers !== 0 || popupState.config.videoService !== 'microsoft') {
       throw new Error(`Popup 快捷功能卡校验失败：数量=${popupState.featureCount}，图片翻译=${popupState.imageFeaturePresent}`);
     }
     await popup.locator('[data-feature="video-subtitle"]').click();
@@ -273,13 +283,15 @@ async function main() {
     const playerMenuState = await page.evaluate(() => ({
       title: document.querySelector('#fluent-read-video-subtitle-menu .fluent-read-video-menu-title')?.textContent?.replace(/\s+/g, ' ').trim(),
       modeCount: document.querySelectorAll('#fluent-read-video-subtitle-menu [data-mode]').length,
+      modes: [...document.querySelectorAll('#fluent-read-video-subtitle-menu [data-mode]')].map(node => node.getAttribute('data-mode')),
       downloadPresent: Boolean(document.querySelector('#fluent-read-video-subtitle-menu [data-action="download-subtitles"]')),
       bilingualSelected: document.querySelector('#fluent-read-video-subtitle-menu [data-mode="bilingual"]')?.getAttribute('aria-checked') === 'true',
       service: document.querySelector('#fluent-read-video-subtitle-menu [data-service-label]')?.textContent,
       brand: document.querySelector('#fluent-read-video-subtitle-menu .fluent-read-video-menu-brand')?.textContent,
-      beta: document.querySelector('#fluent-read-video-subtitle-menu .fluent-read-video-menu-beta')?.textContent,
+      betaMarkers: [...document.querySelectorAll('#fluent-read-video-subtitle-menu *')]
+        .filter((node) => /beta|测试版/iu.test(node.textContent || '')).length,
     }));
-    if (playerMenuState.modeCount !== 3 || !playerMenuState.downloadPresent || !playerMenuState.bilingualSelected || playerMenuState.service !== '微软翻译' || playerMenuState.brand !== 'FluentRead' || playerMenuState.beta !== 'Beta 测试') {
+    if (playerMenuState.modeCount !== 4 || JSON.stringify(playerMenuState.modes) !== JSON.stringify(['bilingual', 'translation-only', 'original-only', 'off']) || !playerMenuState.downloadPresent || !playerMenuState.bilingualSelected || playerMenuState.service !== '微软翻译' || playerMenuState.brand !== '流畅阅读' || playerMenuState.betaMarkers !== 0) {
       throw new Error(`播放器字幕翻译菜单校验失败：${JSON.stringify(playerMenuState)}`);
     }
     await page.screenshot({ path: path.join(artifactsDir, 'youtube-video-subtitle-menu.png'), fullPage: false });
@@ -348,7 +360,7 @@ async function main() {
     await page.waitForFunction(() => {
       const overlay = document.querySelector('#fluent-read-video-subtitle');
       return Boolean(overlay?.textContent?.match(/[\u3400-\u9fff]/));
-    }, { timeout: 45000 });
+    }, null, { timeout: 45000 });
     const first = await page.locator('#fluent-read-video-subtitle').textContent();
 
     await page.evaluate(() => {
@@ -397,22 +409,7 @@ async function main() {
     await page.locator('#fluent-read-video-subtitle-menu [data-mode="bilingual"]').click({ force: true });
     await page.waitForFunction(() => document.querySelector('#ytp-caption-window-container')?.getAttribute('data-fluent-read-video-display-mode') === 'bilingual', null, { timeout: 10000 });
 
-    await page.locator('#fluent-read-video-subtitle-menu [data-action="toggle-visible"]').click({ force: true });
-    await page.waitForFunction(() => document.querySelector('#ytp-caption-window-container')?.classList.contains('fluent-read-video-display-hidden')
-      && !document.querySelector('#fluent-read-video-subtitle')?.textContent?.trim(), null, { timeout: 10000 });
-    const subtitlesHiddenFromPlayer = await page.evaluate(() => ({
-      menuState: document.querySelector('#fluent-read-video-subtitle-menu [data-action="toggle-visible"]')?.getAttribute('aria-checked'),
-      hiddenClass: document.querySelector('#ytp-caption-window-container')?.classList.contains('fluent-read-video-display-hidden'),
-    }));
-    await page.locator('#fluent-read-video-subtitle-menu [data-action="toggle-visible"]').click({ force: true });
-    await page.waitForFunction(() => !document.querySelector('#ytp-caption-window-container')?.classList.contains('fluent-read-video-display-hidden')
-      && Boolean(document.querySelector('#fluent-read-video-subtitle')?.textContent?.match(/[\u3400-\u9fff]/)), null, { timeout: 45000 });
-    const subtitlesShownFromPlayer = await page.evaluate(() => ({
-      menuState: document.querySelector('#fluent-read-video-subtitle-menu [data-action="toggle-visible"]')?.getAttribute('aria-checked'),
-      hiddenClass: document.querySelector('#ytp-caption-window-container')?.classList.contains('fluent-read-video-display-hidden'),
-    }));
-
-    await page.locator('#fluent-read-video-subtitle-menu [data-action="toggle-translation"]').click({ force: true });
+    await page.locator('#fluent-read-video-subtitle-menu [data-mode="off"]').click({ force: true });
     await page.waitForFunction(() => {
       const button = document.querySelector('#fluent-read-video-subtitle-button');
       return button?.getAttribute('aria-pressed') === 'false'
@@ -420,11 +417,11 @@ async function main() {
     }, null, { timeout: 10000 });
     const disabledFromPlayer = await page.evaluate(() => ({
       buttonPressed: document.querySelector('#fluent-read-video-subtitle-button')?.getAttribute('aria-pressed'),
-      menuState: document.querySelector('#fluent-read-video-subtitle-menu [data-action="toggle-translation"]')?.getAttribute('aria-checked'),
+      menuState: document.querySelector('#fluent-read-video-subtitle-menu [data-mode="off"]')?.getAttribute('aria-checked') === 'true' ? 'off' : 'on',
       overlayText: document.querySelector('#fluent-read-video-subtitle')?.textContent || '',
     }));
 
-    await page.locator('#fluent-read-video-subtitle-menu [data-action="toggle-translation"]').click({ force: true });
+    await page.locator('#fluent-read-video-subtitle-menu [data-mode="bilingual"]').click({ force: true });
     await page.waitForFunction(() => document.querySelector('#fluent-read-video-subtitle-button')?.getAttribute('aria-pressed') === 'true', null, { timeout: 10000 });
     await page.evaluate(() => {
       let container = document.querySelector('#ytp-caption-window-container');
@@ -481,8 +478,6 @@ async function main() {
       secondTranslation: second,
       overlayCount,
       translationOnly,
-      subtitlesHiddenFromPlayer,
-      subtitlesShownFromPlayer,
       disabledFromPlayer,
       reenabledFromPlayer,
       extensionPageErrors,

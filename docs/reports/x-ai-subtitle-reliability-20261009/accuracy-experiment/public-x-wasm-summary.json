@@ -1,0 +1,370 @@
+{
+  "schemaVersion": 1,
+  "success": true,
+  "scope": "Local WASM observations on public X audio, no manual ground truth, WER/CER, quality or browser acceptance claim; no media or full public transcript included",
+  "backend": "wasm",
+  "libraries": {
+    "transformers": "3.8.1",
+    "onnxruntimeWeb": "1.23.2",
+    "onnxruntimeCommon": "1.23.2",
+    "defaultNativeOrtNotUsed": "1.21.0"
+  },
+  "threads": 1,
+  "sourceLanguage": "Actual first decoder language-token logits; not manual language verification",
+  "sources": [
+    {
+      "id": "personal-statement",
+      "sampleUrl": "https://twitter.com/CTVJLaidlaw/status/1600649710662213632/video/2",
+      "source": "public-yt-dlp-test-only",
+      "sourceReportSha256": "35bb674d042720c229386e6cf36251a6cf60b2a12ad8ee8c76d63607ba3a0860",
+      "sourceReportLocalPath": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/public-personal-statement-report.json",
+      "executedHarnessSha256": "dff41e5f788aff8f34ae12e4b40506bdbe0f96fbac17eae47a4648c77795ae50"
+    },
+    {
+      "id": "spoken-animation",
+      "sampleUrl": "https://twitter.com/DavidToons_/status/1578353380363501568",
+      "source": "public-yt-dlp-test-only",
+      "sourceReportSha256": "c963811781fe0534ec0fc0a1e9f94c3bf836f6a483187791394bfa1e2c40aa19",
+      "sourceReportLocalPath": "/private/tmp/fluentread-x-ai-node-wasm-q8-20261009/public-spoken-animation-report.json",
+      "executedHarnessSha256": "dff41e5f788aff8f34ae12e4b40506bdbe0f96fbac17eae47a4648c77795ae50"
+    }
+  ],
+  "limitations": [
+    "No human reference; text equality/difference and nonempty/nondegenerate are observations only",
+    "32k AAC mono and 128k AAC stereo have different channel mixing and RMS, so bitrate is not the sole variable",
+    "Language-token confidence below 0.8 on the short animation; cannot treat top language as independent ground truth",
+    "No browser audio acquisition or GPU validation"
+  ],
+  "runs": [
+    {
+      "sourceId": "personal-statement",
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "bitrate": 32000,
+      "sourceChannels": 1,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b41150dd2da23e33c6699d5d6234cd12b676bd8966fcce0261fab6e44a2074c9",
+      "pcmRms": 0.017009630899128457,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9873503598032831
+      },
+      "languageDetectionMs": 1248.5521669999998,
+      "inferenceMs": 2163.461291,
+      "maxNewTokens": 64,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 183,
+      "textWords": 33,
+      "textSha256": "2ed9aa04a2c1bfef31310d3729c0f69b068b53cd55f9d63eb2d30bde0ce38ee6"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b5602afe0ef4864d7eaf0d1df34b7f75e55ae8fa80d005f01484e1be5d6bff63",
+      "pcmRms": 0.012123699787049977,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9887449634518573
+      },
+      "languageDetectionMs": 1214.2391659999994,
+      "inferenceMs": 2124.6985000000004,
+      "maxNewTokens": 64,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 175,
+      "textWords": 31,
+      "textSha256": "e2956c98c2ba108ffc4b108d49c198ff49e55ca2c22aabd7fdea99c7924f2665"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "base",
+      "decoderDtype": "q4",
+      "bitrate": 32000,
+      "sourceChannels": 1,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b41150dd2da23e33c6699d5d6234cd12b676bd8966fcce0261fab6e44a2074c9",
+      "pcmRms": 0.017009630899128457,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9502085180924766
+      },
+      "languageDetectionMs": 2702.643,
+      "inferenceMs": 4296.827749999999,
+      "maxNewTokens": 84,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 169,
+      "textWords": 31,
+      "textSha256": "713a6c7b2a15b576b03d7b702206c1adb3a7a1668b8de969c9bb0f5624dc6aa7"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "base",
+      "decoderDtype": "q4",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b5602afe0ef4864d7eaf0d1df34b7f75e55ae8fa80d005f01484e1be5d6bff63",
+      "pcmRms": 0.012123699787049977,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9214995287145881
+      },
+      "languageDetectionMs": 2739.5045419999988,
+      "inferenceMs": 4281.953667000002,
+      "maxNewTokens": 84,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 169,
+      "textWords": 31,
+      "textSha256": "713a6c7b2a15b576b03d7b702206c1adb3a7a1668b8de969c9bb0f5624dc6aa7"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "bitrate": 32000,
+      "sourceChannels": 1,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b41150dd2da23e33c6699d5d6234cd12b676bd8966fcce0261fab6e44a2074c9",
+      "pcmRms": 0.017009630899128457,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9895841307156261
+      },
+      "languageDetectionMs": 1237.5845420000005,
+      "inferenceMs": 1704.934541999999,
+      "maxNewTokens": 64,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 174,
+      "textWords": 31,
+      "textSha256": "cf3b324bdfbec5950c3e75c52613c07402b8734302b2d88781bf82efc63eeb0e"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b5602afe0ef4864d7eaf0d1df34b7f75e55ae8fa80d005f01484e1be5d6bff63",
+      "pcmRms": 0.012123699787049977,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9911044379100246
+      },
+      "languageDetectionMs": 1270.4949579999993,
+      "inferenceMs": 1652.9734590000007,
+      "maxNewTokens": 64,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 172,
+      "textWords": 31,
+      "textSha256": "b6aca97818e85a9c700ff399deffef594337d04e86fdb8fb23f44b409bc772e6"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "base",
+      "decoderDtype": "q8",
+      "bitrate": 32000,
+      "sourceChannels": 1,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b41150dd2da23e33c6699d5d6234cd12b676bd8966fcce0261fab6e44a2074c9",
+      "pcmRms": 0.017009630899128457,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9430510929873578
+      },
+      "languageDetectionMs": 2688.2027080000007,
+      "inferenceMs": 3252.0284170000014,
+      "maxNewTokens": 84,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 169,
+      "textWords": 31,
+      "textSha256": "713a6c7b2a15b576b03d7b702206c1adb3a7a1668b8de969c9bb0f5624dc6aa7"
+    },
+    {
+      "sourceId": "personal-statement",
+      "model": "base",
+      "decoderDtype": "q8",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 12000
+      },
+      "pcmSha256": "b5602afe0ef4864d7eaf0d1df34b7f75e55ae8fa80d005f01484e1be5d6bff63",
+      "pcmRms": 0.012123699787049977,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.9080643216609233
+      },
+      "languageDetectionMs": 2692.5758750000023,
+      "inferenceMs": 3260.6498749999955,
+      "maxNewTokens": 84,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 169,
+      "textWords": 31,
+      "textSha256": "713a6c7b2a15b576b03d7b702206c1adb3a7a1668b8de969c9bb0f5624dc6aa7"
+    },
+    {
+      "sourceId": "spoken-animation",
+      "model": "tiny",
+      "decoderDtype": "q4",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 4458
+      },
+      "pcmSha256": "e2c41f8b0ad0a1d968c93a731b3450e00e30a24c2ce5440e499eb59ccf6d6c3e",
+      "pcmRms": 0.1606984053829889,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.7058608447300446
+      },
+      "languageDetectionMs": 1255.8375839999999,
+      "inferenceMs": 1401.5868340000002,
+      "maxNewTokens": 27,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 30,
+      "textWords": 5,
+      "textSha256": "a700daa94caf75c512784c693cc7f149b84147141e8f7bb1600c1376b245352b"
+    },
+    {
+      "sourceId": "spoken-animation",
+      "model": "base",
+      "decoderDtype": "q4",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 4458
+      },
+      "pcmSha256": "e2c41f8b0ad0a1d968c93a731b3450e00e30a24c2ce5440e499eb59ccf6d6c3e",
+      "pcmRms": 0.1606984053829889,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.7004894588844797
+      },
+      "languageDetectionMs": 2755.014333,
+      "inferenceMs": 3237.5052910000004,
+      "maxNewTokens": 32,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 32,
+      "textWords": 5,
+      "textSha256": "110f2d846714b2406116490fb040c9184b58476a695c7b9b02f2e4f65a550961"
+    },
+    {
+      "sourceId": "spoken-animation",
+      "model": "tiny",
+      "decoderDtype": "q8",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 4458
+      },
+      "pcmSha256": "e2c41f8b0ad0a1d968c93a731b3450e00e30a24c2ce5440e499eb59ccf6d6c3e",
+      "pcmRms": 0.1606984053829889,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.7341517386231354
+      },
+      "languageDetectionMs": 1259.4179590000003,
+      "inferenceMs": 1319.5131669999992,
+      "maxNewTokens": 27,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 30,
+      "textWords": 5,
+      "textSha256": "a700daa94caf75c512784c693cc7f149b84147141e8f7bb1600c1376b245352b"
+    },
+    {
+      "sourceId": "spoken-animation",
+      "model": "base",
+      "decoderDtype": "q8",
+      "bitrate": 128000,
+      "sourceChannels": 2,
+      "sourceRange": {
+        "startMs": 0,
+        "durationMs": 4458
+      },
+      "pcmSha256": "e2c41f8b0ad0a1d968c93a731b3450e00e30a24c2ce5440e499eb59ccf6d6c3e",
+      "pcmRms": 0.1606984053829889,
+      "detectedLanguage": {
+        "language": "en",
+        "confidence": 0.6321758023305952
+      },
+      "languageDetectionMs": 2684.964417000001,
+      "inferenceMs": 2817.9032079999997,
+      "maxNewTokens": 32,
+      "empty": false,
+      "degenerate": false,
+      "textCharacters": 30,
+      "textWords": 5,
+      "textSha256": "a3200670d665c9b2de1dcf39d5111e9585c9adc459dd74595e0d1d1b13e801b7"
+    }
+  ],
+  "automaticCaptionComparison": {
+    "sourceId": "spoken-animation",
+    "referenceSource": "actual-public-X-auto-generated-subtitles",
+    "languageCode": "en-US",
+    "manualGroundTruth": false,
+    "referenceManifestSha256": "84330257d9c704637b00f8c0d67a0ceacbe6d523bf1856dbe812179270d11f22",
+    "matches": [
+      {
+        "model": "tiny",
+        "decoderDtype": "q4",
+        "equalsAutoCaptionAfterCasePunctuationWhitespaceNormalization": false
+      },
+      {
+        "model": "base",
+        "decoderDtype": "q4",
+        "equalsAutoCaptionAfterCasePunctuationWhitespaceNormalization": false
+      },
+      {
+        "model": "tiny",
+        "decoderDtype": "q8",
+        "equalsAutoCaptionAfterCasePunctuationWhitespaceNormalization": false
+      },
+      {
+        "model": "base",
+        "decoderDtype": "q8",
+        "equalsAutoCaptionAfterCasePunctuationWhitespaceNormalization": false
+      }
+    ],
+    "meaning": "Agreement/disagreement with an independently retrieved automatic caption only, not WER gold or manual language confirmation"
+  }
+}

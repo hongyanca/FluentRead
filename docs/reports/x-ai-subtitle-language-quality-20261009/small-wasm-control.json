@@ -1,0 +1,220 @@
+{
+  "success": true,
+  "scope": "Staged real production Small Worker immediately before final timeout-policy refinement. Exact experiment source/bundle SHA preserved. Actual current production Worker/model/PCM16 decode/prepare/detection/reuse/stopping/generation/options in Node-hosted ORT Web WASM. Node self message dispatch emulated; only local model/WASM loading adapted. Not browser, WebGPU, extension, FullCapture, live X, or CPU native ORT acceptance.",
+  "sourceReport": {
+    "path": "/private/tmp/fluentread-small-production-wasm-20261009/production-15s/raw-report.json",
+    "sha256": "aaa22ccffc5fc4b64f27ec8373ab09d2a5b60a471c15945a35cdb7dead98c2e6"
+  },
+  "harnessSha256": "a8e3655166b3e9ea1a5847ec7c448a5f6941b86082c52e4a0b3decbbf67192f6",
+  "sources": {
+    "productionWorkerSha256": "3273adbf965e78e0f635340b54e0e05c9bb9e2a15a311b13b55b3237578c9847",
+    "stagedWorkerSourceSha256": "3273adbf965e78e0f635340b54e0e05c9bb9e2a15a311b13b55b3237578c9847",
+    "workerBundleSha256": "aa0f8435f6d2d08d87a79ddb2e148e21f4d0c41666a8b0449868cad2d0622439",
+    "dependencies": {
+      "src/features/video-subtitle/transcription.ts": "ae2cba5626bbea0c316b663b9f268fc7395b6118bd9609a14d18f2dc8bf9044b",
+      "src/features/video-subtitle/offscreen/transcriptionOptions.ts": "59420ac99ef1bf9ea69c49e4ace5a4da5ce5d7177748543136686bc0bbd76bc7",
+      "src/features/video-subtitle/offscreen/whisperEncoderReuse.ts": "dffe9e1c9fb3771224b3e4e22eca524acb519785de144d34337d774a76ddb1f8"
+    }
+  },
+  "backend": "wasm",
+  "threads": 1,
+  "libraryVersions": {
+    "transformers": "3.8.1",
+    "onnxruntimeWeb": "1.23.2"
+  },
+  "actualModelId": "onnx-community/whisper-small",
+  "dtypeMapping": {
+    "encoder_model": "fp32",
+    "decoder_model_merged": "q4"
+  },
+  "actualSessions": {
+    "model": {
+      "dtype": "fp32",
+      "device": "auto",
+      "executionProviders": [
+        "wasm"
+      ]
+    },
+    "decoder_model_merged": {
+      "dtype": "q4",
+      "device": "auto",
+      "executionProviders": [
+        "wasm"
+      ]
+    }
+  },
+  "modelCache": {
+    "path": "/private/tmp/fluentread-whisper-small-fp32-encoder-cache-20261009",
+    "manifestSha256": "c0612aa709a1feff55632383cbbd4209ee12bb6f922facded33c8a8872dfe3b3",
+    "sourceRevision": "36050c46d777d46dc4b5f43f6d90574fc38f8732",
+    "bytes": 588744805,
+    "files": [
+      {
+        "file": "small/config.json",
+        "bytes": 2227,
+        "sha256": "457854d452f17661e197d74aee12b8e74fb75ba30ebfaa7426d0d61ea1e08a18"
+      },
+      {
+        "file": "small/generation_config.json",
+        "bytes": 3893,
+        "sha256": "f538b28220c6a6d6f1af1458d4141cacb4ef4963df3de98a19490440c412ddf0"
+      },
+      {
+        "file": "small/preprocessor_config.json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "file": "small/tokenizer.json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "file": "small/tokenizer_config.json",
+        "bytes": 282683,
+        "sha256": "2a4c4281cf9f51ac6ccc406fdc711a087afe6530f671fa7b80953edc498275ce"
+      },
+      {
+        "file": "small/onnx/decoder_model_merged_q4.onnx",
+        "bytes": 233149327,
+        "sha256": "795c61b344576719c2b249cc9911c78b4cc552c8c6a5407be21a3380a0791b13"
+      },
+      {
+        "file": "small/onnx/encoder_model.onnx",
+        "bytes": 352825870,
+        "sha256": "b37cd6625dc36f9178ec7539a1876b9680ea26a910097e092be39dc766320c7b"
+      }
+    ]
+  },
+  "codec": {
+    "sourceSha256": "9ddaa492a8e1792accefa59983d43df036e3ce8cbf1f7479e9bb96bf482495f6",
+    "extractedSha256": "8ec9e37e1d0164152fec1b7146330fd1b299d8671ed0132a6bf40841bcaf9fa6"
+  },
+  "corpusManifestSha256": "b4054caf378a9da853a86fa3edc2a229cc082d760eaa85ab241d24724de0fa51",
+  "sessionOptions": {
+    "enableCpuMemArena": false,
+    "enableMemPattern": false,
+    "executionMode": "sequential",
+    "extra": null
+  },
+  "modelPrepareMs": 1691.8422919999998,
+  "modelDownloadBytes": 588744805,
+  "memory": {
+    "unit": "bytes except explicitly named maxRssKiB (Node process.resourceUsage maxRSS)",
+    "beforePrepare": {
+      "rssBytes": 210026496,
+      "maxRssKiB": 205104
+    },
+    "afterPrepare": {
+      "rssBytes": 2780954624,
+      "maxRssKiB": 2715776
+    },
+    "intervalSampledPeakRssBytes": 3035152384,
+    "maxProcessRssKiB": 3034592,
+    "afterDispose": {
+      "rssBytes": 2603188224,
+      "maxRssKiB": 3034592
+    },
+    "limitation": "Process RSS includes model/session/ORT/WASM allocations and staging overhead; download size is not RAM. WASM linear memory may remain resident after sessions dispose; process exited."
+  },
+  "originalWorkerGenerationDeadlineMs": 15000,
+  "finalProductTimeoutPolicy": {
+    "generationCooperativeMs": 60000,
+    "offscreenWorkerMs": 180000,
+    "firstWorkerAttemptMs": 90000,
+    "outerRequestMs": 200000,
+    "evidenceBoundary": "Chosen after these two CPU measurements. No additional model inference performed with the final timeout-helper revision; timed-loop unit tests validate model-specific criteria hookup, not 60-second browser interruption latency."
+  },
+  "actualSessionDisposed": true,
+  "runs": [
+    {
+      "sample": "hi_in_0000",
+      "durationMs": 9120,
+      "pcm16Bytes": 291840,
+      "sourceSha256": "38cf0e883d64ae257288bce89cf41a9c4a693b218c3381d5bd462d90bf7b7ed6",
+      "pcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "modelInputSha256": "22418dec2a935b34dece904936af6379f6fb08ec8b8b7fad22a4bf74cc1fdb00",
+      "referenceSha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+      "success": true,
+      "error": null,
+      "workerModel": "small",
+      "backend": "wasm",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4",
+      "legacyDtype": "q4",
+      "detectedLanguage": "hi",
+      "languageConfidence": 0.9452447760404622,
+      "languageDetectionMs": 14433.319541,
+      "encoderReuse": true,
+      "inferenceMs": 40018.449333,
+      "postDetectionMs": 25585.129791999996,
+      "rpcElapsedMs": 40020.285166,
+      "rtf": 4.387987865460526,
+      "sessionRunCounts": {
+        "encoder": 1,
+        "decoder": 114,
+        "processor": 2
+      },
+      "textSha256": "72ceffb6732845a22273459b197d84dafad3612b117ed1cc2630a60f49c194b8",
+      "rawScore": {
+        "errors": 14,
+        "referenceUnits": 24,
+        "actualUnits": 21,
+        "rate": 0.5833333333333334
+      },
+      "metric": "WER: lowercase; punctuation/symbols to spaces; whitespace units; marks retained; no claim of universal Hindi normalization",
+      "memory": {
+        "rssBytes": 2711502848,
+        "maxRssKiB": 3034592
+      }
+    },
+    {
+      "sample": "hi_in_0001",
+      "durationMs": 13800,
+      "pcm16Bytes": 441600,
+      "sourceSha256": "39f91e5112c883518169024a6853921d2f4bea402f1e6a3bd3c05d99f9a5fae9",
+      "pcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "modelInputSha256": "b7ce2daf298667a01d7f2a7dd07fbc9ba01352ce8c1333aa2738dedf8d893fd0",
+      "referenceSha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+      "success": true,
+      "error": null,
+      "workerModel": "small",
+      "backend": "wasm",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4",
+      "legacyDtype": "q4",
+      "detectedLanguage": "hi",
+      "languageConfidence": 0.6965893824561722,
+      "languageDetectionMs": 24690.275166999993,
+      "encoderReuse": true,
+      "inferenceMs": 76549.692334,
+      "postDetectionMs": 51859.417167000014,
+      "rpcElapsedMs": 76552.354084,
+      "rtf": 5.547079154637681,
+      "sessionRunCounts": {
+        "encoder": 1,
+        "decoder": 246,
+        "processor": 2
+      },
+      "textSha256": "b1c06f0d7f29de873a85c14ca3d1be191350a99a8ff469f3109002887c89608b",
+      "rawScore": {
+        "errors": 29,
+        "referenceUnits": 40,
+        "actualUnits": 47,
+        "rate": 0.725
+      },
+      "metric": "WER: lowercase; punctuation/symbols to spaces; whitespace units; marks retained; no claim of universal Hindi normalization",
+      "memory": {
+        "rssBytes": 2603024384,
+        "maxRssKiB": 3034592
+      }
+    }
+  ],
+  "limitations": [
+    "Only two fixed public Hindi clips, sequential warm Small session. No latency generalization to other devices or languages.",
+    "No browser/WebGPU/extension/live player/FullCapture acceptance. Local Node ORT Web WASM assets replace browser extension asyncify asset loading only.",
+    "Both original 15s generation timers were cleared with successful output despite more than 15s after detection. Event-loop progress differs for same-thread Node WASM; this is not proof of browser asyncify interruption latency. An independent offscreen main-thread hard Worker timeout remains necessary.",
+    "Shared encoding is proved by one actual encoder session.run per call. Mel processor still runs twice.",
+    "Hindi WER remains high; Small multilingual improvements elsewhere do not imply Hindi solved. No extra weights, samples, reference text, or audio included in compact."
+  ]
+}

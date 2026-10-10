@@ -52,6 +52,180 @@ afterEach(() => {
 });
 
 describe('Offscreen platform client', () => {
+    it('does not restart shared forced recovery for another caller that was also cancelled', async () => {
+        vi.useFakeTimers();
+        const firstController = new AbortController();
+        const secondController = new AbortController();
+        const query = deferred<unknown[]>();
+        const callbacks = new Map<string, (response: unknown) => void>();
+        let queries = 0;
+        let runtimeError: {message: string} | undefined;
+        const closeDocument = vi.fn(async () => undefined);
+        const createDocument = vi.fn(async () => undefined);
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: async () => ++queries === 3 ? query.promise : [{}],
+            get lastError() {return runtimeError;},
+            sendMessage(message, callback) {
+                const type = (message as {type: string}).type;
+                if (type === OFFSCREEN_READY_MESSAGE_TYPE) callback({success: true, ready: true});
+                else callbacks.set(type, callback);
+            },
+        };
+        const client = createOffscreenClient({getRuntime: () => runtime,
+            getOffscreen: () => ({closeDocument, createDocument})});
+        const first = client.send({type: 'FIRST'}, {signal: firstController.signal}).catch(error => error);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        const second = client.send({type: 'SECOND'}, {signal: secondController.signal}).catch(error => error);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(callbacks.size).toBe(2);
+        for (const type of ['FIRST', 'SECOND']) {
+            runtimeError = {message: 'Could not establish connection. Receiving end does not exist.'};
+            callbacks.get(type)!(undefined);
+            runtimeError = undefined;
+            for (let i = 0; i < 96; i++) await Promise.resolve();
+        }
+        expect(queries).toBe(3);
+        secondController.abort();
+        firstController.abort();
+        expect(await first).toMatchObject({name: 'AbortError'});
+        expect(await second).toMatchObject({name: 'AbortError'});
+        query.resolve([{}]);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(queries).toBe(3);
+        expect(closeDocument).not.toHaveBeenCalled();
+        expect(createDocument).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it.each([false, true])('does not retry a shared native AbortError without owner cancellation, forced=%s', async forced => {
+        vi.useFakeTimers();
+        const controller = new AbortController();
+        const query = deferred<unknown[]>();
+        let queries = 0;
+        let runtimeError: {message: string} | undefined;
+        const closeDocument = vi.fn(async () => undefined);
+        const createDocument = vi.fn(async () => undefined);
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: async () => ++queries === (forced ? 2 : 1) ? query.promise : [{}],
+            get lastError() {return runtimeError;},
+            sendMessage(message, callback) {
+                if ((message as {type: string}).type === OFFSCREEN_READY_MESSAGE_TYPE) {
+                    callback({success: true, ready: true});
+                    return;
+                }
+                runtimeError = {message: 'Could not establish connection. Receiving end does not exist.'};
+                callback(undefined);
+                runtimeError = undefined;
+            },
+        };
+        const client = createOffscreenClient({getRuntime: () => runtime,
+            getOffscreen: () => ({closeDocument, createDocument})});
+        const first = client.send({type: 'MISSING'}, {signal: controller.signal}).catch(error => error);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        const second = client.ensureDocument().catch(error => error);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        const nativeError = new Error('Native document operation aborted');
+        nativeError.name = 'AbortError';
+        query.reject(nativeError);
+        expect(await first).toBe(nativeError);
+        expect(await second).toBe(nativeError);
+        expect(controller.signal.aborted).toBe(false);
+        expect(queries).toBe(forced ? 2 : 1);
+        expect(closeDocument).not.toHaveBeenCalled();
+        expect(createDocument).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it('does not start a queued forced rebuild after its caller cancels behind a live ordinary probe', async () => {
+        vi.useFakeTimers();
+        const controller = new AbortController();
+        const ordinaryQuery = deferred<unknown[]>();
+        let queries = 0;
+        let runtimeError: {message: string} | undefined;
+        let missingCallback: ((response: unknown) => void) | undefined;
+        const closeDocument = vi.fn(async () => undefined);
+        const createDocument = vi.fn(async () => undefined);
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: async () => ++queries === 2 ? ordinaryQuery.promise : [{}],
+            get lastError() {return runtimeError;},
+            sendMessage(message, callback) {
+                if ((message as {type: string}).type === OFFSCREEN_READY_MESSAGE_TYPE) callback({success: true, ready: true});
+                else missingCallback = callback;
+            },
+        };
+        const client = createOffscreenClient({getRuntime: () => runtime,
+            getOffscreen: () => ({closeDocument, createDocument})});
+        const old = client.send({type: 'MISSING'}, {signal: controller.signal}).catch(error => error);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(missingCallback).toBeTypeOf('function');
+        const current = client.ensureDocument();
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        runtimeError = {message: 'Could not establish connection. Receiving end does not exist.'};
+        missingCallback!(undefined);
+        runtimeError = undefined;
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        controller.abort();
+        expect(await old).toMatchObject({name: 'AbortError'});
+        ordinaryQuery.resolve([{}]);
+        await expect(current).resolves.toBeUndefined();
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(queries).toBe(2);
+        expect(closeDocument).not.toHaveBeenCalled();
+        expect(createDocument).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
+    it('keeps a live caller usable when the request owning its shared forced preparation is cancelled', async () => {
+        vi.useFakeTimers();
+        const controller = new AbortController();
+        const query = deferred<unknown[]>();
+        let queries = 0;
+        let runtimeError: {message: string} | undefined;
+        const attempts: string[] = [];
+        const closeDocument = vi.fn(async () => undefined);
+        const createDocument = vi.fn(async () => undefined);
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: async () => ++queries === 2 ? query.promise : [{}],
+            get lastError() {return runtimeError;},
+            sendMessage(message, callback) {
+                const type = (message as {type: string}).type;
+                if (type === OFFSCREEN_READY_MESSAGE_TYPE) {
+                    callback({success: true, ready: true});
+                    return;
+                }
+                attempts.push(type);
+                if (type === 'CANCELLED_OWNER') {
+                    runtimeError = {message: 'Could not establish connection. Receiving end does not exist.'};
+                    callback(undefined);
+                    runtimeError = undefined;
+                    return;
+                }
+                callback({success: true});
+            },
+        };
+        const client = createOffscreenClient({getRuntime: () => runtime,
+            getOffscreen: () => ({closeDocument, createDocument})});
+        const old = client.send({type: 'CANCELLED_OWNER'}, {signal: controller.signal})
+            .then(response => ({response}), error => ({error}));
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(queries).toBe(2);
+        const current = client.send({type: 'LIVE_CALLER'})
+            .then(response => ({response}), error => ({error}));
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(queries).toBe(2);
+        controller.abort();
+        const oldResult = await old;
+        const currentResult = await current;
+        query.resolve([{}]);
+        for (let i = 0; i < 96; i++) await Promise.resolve();
+        expect(oldResult).toMatchObject({error: {name: 'AbortError'}});
+        expect(currentResult).toEqual({response: {success: true}});
+        expect(attempts).toEqual(['CANCELLED_OWNER', 'LIVE_CALLER']);
+        expect(closeDocument).not.toHaveBeenCalled();
+        expect(createDocument).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
+    });
+
     it('reports document presence without creating it', async () => {
         const missingOffscreen = createRuntime({contexts: [{}]});
         const missingClient = createOffscreenClient({
@@ -141,8 +315,8 @@ describe('Offscreen platform client', () => {
         expect(createDocument).toHaveBeenCalledOnce();
         expect(createDocument).toHaveBeenCalledWith({
             url: 'pages/offscreen.html',
-            reasons: ['DOM_SCRAPING', 'AUDIO_PLAYBACK'],
-            justification: 'FluentRead needs an extension-owned DOM for Translation API, OCR, and CSP-independent TTS playback',
+            reasons: ['DOM_SCRAPING', 'AUDIO_PLAYBACK', 'WORKERS'],
+            justification: 'FluentRead needs an extension-owned DOM for Translation API, OCR, local video transcription workers, and CSP-independent TTS playback',
         });
         creation.resolve();
         await expect(Promise.all([first, second])).resolves.toEqual([undefined, undefined]);
@@ -571,6 +745,58 @@ describe('Offscreen platform client', () => {
         expect(settled).toBe(false);
         longCallback?.({success: true, value: '完成'});
         await expect(compatible).resolves.toEqual({success: true, value: '完成'});
+    });
+
+    it('既有十分钟预算保持原边界，过大显式预算在十分钟加三十秒处截止', async () => {
+        vi.useFakeTimers();
+        let callback: ((response: unknown) => void) | undefined;
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: vi.fn(async () => [{}]),
+            sendMessage: vi.fn((message: unknown, respond: (response: unknown) => void) => {
+                if ((message as {type: string}).type === OFFSCREEN_READY_MESSAGE_TYPE) respond({success: true, ready: true});
+                else callback = respond;
+            }),
+        };
+        const client = createOffscreenClient({getRuntime: () => runtime, getOffscreen: () => ({createDocument: vi.fn()})});
+        const first = client.send({type: 'LARGE_MODEL_DOWNLOAD'}, {timeoutMs: 600_000});
+        let settled = false;
+        void first.then(() => { settled = true; }, () => { settled = true; });
+        await vi.advanceTimersByTimeAsync(599_999);
+        expect(settled).toBe(false);
+        callback?.({success: true});
+        await expect(first).resolves.toEqual({success: true});
+        const bounded = client.send({type: 'LARGE_MODEL_DOWNLOAD'}, {timeoutMs: Number.MAX_SAFE_INTEGER})
+            .then(() => null, error => error);
+        let boundedSettled = false;
+        void bounded.then(() => { boundedSettled = true; });
+        await vi.advanceTimersByTimeAsync(629_999);
+        expect(boundedSettled).toBe(false);
+        await vi.advanceTimersByTimeAsync(1);
+        await expect(bounded).resolves.toMatchObject({message: 'Offscreen 消息响应超时'});
+    });
+
+    it('十分钟模型下载结束后的错误回包仍能在显式三十秒收尾预算内返回', async () => {
+        vi.useFakeTimers();
+        let callback: ((response: unknown) => void) | undefined;
+        const runtime: OffscreenRuntimeApi = {
+            getContexts: vi.fn(async () => [{}]),
+            sendMessage: vi.fn((message: unknown, respond: (response: unknown) => void) => {
+                if ((message as {type: string}).type === OFFSCREEN_READY_MESSAGE_TYPE) respond({success: true, ready: true});
+                else callback = respond;
+            }),
+        };
+        const createDocument = vi.fn(async () => undefined);
+        const client = createOffscreenClient({getRuntime: () => runtime, getOffscreen: () => ({createDocument})});
+        let settled = false;
+        const request = client.send({type: 'VIDEO_AI_PREPARE', model: 'small', keepWarm: false}, {timeoutMs: 630_000})
+            .then(value => { settled = true; return value; }, error => { settled = true; return error; });
+        await vi.advanceTimersByTimeAsync(600_000);
+        expect(settled).toBe(false);
+        await vi.advanceTimersByTimeAsync(10_000);
+        callback?.({success: false, error: '模型下载超过总等待时限'});
+        await expect(request).resolves.toEqual({success: false, error: '模型下载超过总等待时限'});
+        expect(createDocument).not.toHaveBeenCalled();
+        expect(vi.getTimerCount()).toBe(0);
     });
 
     it('短预算 Chrome caller 不会缩短共享 prepare，后加入的长预算调用仍可成功', async () => {

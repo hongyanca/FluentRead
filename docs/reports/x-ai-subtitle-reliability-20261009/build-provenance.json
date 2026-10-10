@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9ce9d7b5b",
+  "versions": {
+    "baseline": {
+      "directory": "/private/tmp/FluentRead-x-ai-baseline-20261009/.output/chrome-mv3",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "6fdc72c4716e5b43c1bdbeeef8778f91ca686254b4935f4ef40bffff85625258",
+        "videoTranscriptionWorker.js": "792e3b0212e064cb21a235569f6811910d7c3cde91adb7844f0a604bd3617687",
+        "content-scripts/content.js": "be7ebfc685c668f3b6baf00bbfc1a6752a8c81b378d4028ad7e5847089dda69a",
+        "content-scripts/xVideoBridge.js": "bb6ebec208353fe0cad042148d65b100f960801603b406ea1a95cdb2fdbf7a4d"
+      }
+    },
+    "fixed": {
+      "directory": "/private/tmp/fluentread-x-ai-fixed-final-20261009/chrome-mv3",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "7a222e70f6e294681feff959856cb47cc0f7191a861e0f700dc01d4b1dfc6984",
+        "videoTranscriptionWorker.js": "80bee67c596eb5cab68b551139ed687069a0089a1bf12d297c7229c03e5f4334",
+        "content-scripts/content.js": "11ff3d60277b63ac55f8f48168b6e09689fef572324a6a911836abdd96ea2515",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      }
+    },
+    "refactoredFinal": {
+      "directory": "/private/tmp/fluentread-x-ai-refactored-final-20261009/chrome-mv3",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "f3883d787c567f937e5d350200b7a4195f1020d2c8f46042ba5a9ead5101d7e4",
+        "videoTranscriptionWorker.js": "80bee67c596eb5cab68b551139ed687069a0089a1bf12d297c7229c03e5f4334",
+        "content-scripts/content.js": "89154f46e4143389fa15695937d588b96489390e8bcca3b1736fa8ad6570b465",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      }
+    },
+    "quietSpeechAndWordPreservationFinal": {
+      "sourceCommit": "56aab82ae82a47ab009f05500bb140fbf7caea22",
+      "directory": "/private/tmp/fluentread-x-ai-followup-final-build-20261009/chrome-mv3",
+      "browserAcceptance": "Initial attempt blocked before product assertions; after service recovery, metadata MP4, hung master fallback and preview failure scenarios passed. ASR/translation mocked in these three scenarios; see merge-validation.md.",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "607478f85dd7d6870e40a3ca31579bc2262e976eaea8a4d40a4c1674acb3b03f",
+        "videoTranscriptionWorker.js": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+        "content-scripts/content.js": "5b1d4699f37722cd311ea5795345130a8c44fb73067f10f23a798c64121cfd5c",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      }
+    },
+    "mergedMainFinal": {
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "directory": "/private/tmp/fluentread-x-ai-merge-final-build-20261009/chrome-mv3",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "f3883d787c567f937e5d350200b7a4195f1020d2c8f46042ba5a9ead5101d7e4",
+        "videoTranscriptionWorker.js": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+        "content-scripts/content.js": "fa43cde96650eab98b36807fd3b1bb0991497b878278784d1f059735f004bcde",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      },
+      "browserAcceptance": "Metadata MP4 scenario passed; separate natural-English AAC/MP4→PCM16→actual Base WebGPU q4→complete subtitles run passed 12 checks and guarded close. UI translation controlled; independent actual Microsoft protocol request succeeded. See merge-validation.md."
+    }
+  }
+}

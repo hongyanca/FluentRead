@@ -1,14 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildServiceGroups,
+  buildServiceSections,
   cleanServiceLabel,
-  filterModels,
-  filterServiceGroups,
-  getSelectedModelLabel,
+  getServiceWebsite,
   searchServiceOptions,
-  splitModelOptions,
 } from '@/src/ui/view-model/serviceCatalog'
-import { customModelString, defaultModels, models, servicesType } from '@/src/core/config/catalog'
+import { customModelString, defaultModels, models, services, servicesType } from '@/src/core/config/catalog'
 import { Config, normalizeConfig } from '@/src/core/config/model'
 
 const options = [
@@ -16,11 +14,68 @@ const options = [
   { value: 'microsoft', label: '微软翻译' },
   { value: 'chromeTranslator', label: 'Chrome内置AI翻译⭐' },
   { value: 'ai', label: 'AI翻译', disabled: true },
-  { value: 'openai', label: 'OpenAI' },
-  { value: 'deepseek', label: 'DeepSeek️' },
+  { value: 'deepseek', label: 'DeepSeek️', catalogKind: 'provider' },
+  { value: 'openai', label: 'OpenAI', catalogKind: 'provider' },
+  { value: 'newapi', label: 'New API', catalogKind: 'platform' },
 ]
 
 describe('service catalog helpers', () => {
+  it('provides a public website or guide for every built-in service', () => {
+    for (const service of Object.values(services)) {
+      const website = getServiceWebsite(service)
+      expect(website, service).toBeDefined()
+      const url = new URL(website!.url)
+      expect(url.protocol).toBe('https:')
+      expect(`${url.username}${url.password}${url.search}${url.hash}`).toBe('')
+    }
+    expect(getServiceWebsite(services.huanYuanTranslation)).toEqual({
+      url: 'https://console.cloud.tencent.com/hunyuan', kind: 'website',
+    })
+    expect(getServiceWebsite(services.chromeTranslator)?.kind).toBe('documentation')
+    expect(getServiceWebsite(services.freeTranslation)?.kind).toBe('documentation')
+    expect(getServiceWebsite(services.myMemory)).toEqual({url: 'https://mymemory.translated.net/doc/spec.php', kind: 'documentation'})
+  })
+
+  it('keeps MiniMax websites aligned with the selected account region', () => {
+    expect(getServiceWebsite(services.minimax)?.url).toBe('https://platform.minimaxi.com/')
+    expect(getServiceWebsite(services.minimax, {minimaxRegion: 'global'})?.url)
+      .toBe('https://platform.minimax.io/login')
+    expect(getServiceWebsite(services.minimax, {minimaxRegion: 'unknown'})?.url)
+      .toBe('https://platform.minimaxi.com/')
+  })
+
+  it('opens configured service origins without leaking credentials or API parameters', () => {
+    for (const service of ['custom:personal', services.custom, services.newapi]) {
+      expect(getServiceWebsite(service, {endpoint: 'https://user:secret@example.com:8443/v1/private/chat?key=secret#token'}))
+        .toEqual({url: 'https://example.com:8443/', kind: 'website'})
+      expect(getServiceWebsite(service, {endpoint: ' http://localhost:11434/v1/chat/completions '}))
+        .toEqual({url: 'http://localhost:11434/', kind: 'website'})
+      expect(getServiceWebsite(service, {endpoint: 'http://[::1]:3000/v1'}))
+        .toEqual({url: 'http://[::1]:3000/', kind: 'website'})
+    }
+    expect(getServiceWebsite(services.openai, {endpoint: 'https://proxy.example.com/v1'})?.url)
+      .toBe('https://platform.openai.com/')
+  })
+
+  it('falls back to a setup guide for incomplete or non-web service addresses', () => {
+    for (const endpoint of ['', 'not a url', '/relative', '//example.com', 'javascript:alert(1)',
+      'data:text/html,hello', 'file:///tmp/config', 'ftp://example.com', 'blob:https://example.com/id']) {
+      for (const service of ['custom:personal', services.custom, services.newapi]) {
+        const link = getServiceWebsite(service, {endpoint})!
+        expect(link.kind).toBe('documentation')
+        expect(link.url).toBe(service === services.newapi
+          ? 'https://docs.newapi.pro/'
+          : 'https://fluent.thinkstu.com/config/translation-engines')
+      }
+    }
+  })
+
+  it('omits unknown services and group headings instead of manufacturing a destination', () => {
+    for (const service of ['unknown', 'machine', 'ai', '__proto__', 'constructor', '']) {
+      expect(getServiceWebsite(service)).toBeUndefined()
+    }
+  })
+
   it('preserves divider-based service grouping', () => {
     expect(buildServiceGroups(options)).toEqual([
       {
@@ -35,30 +90,77 @@ describe('service catalog helpers', () => {
         id: 'ai',
         label: 'AI翻译',
         items: [
-          { value: 'openai', label: 'OpenAI' },
-          { value: 'deepseek', label: 'DeepSeek' },
+          { value: 'deepseek', label: 'DeepSeek', catalogKind: 'provider' },
+          { value: 'openai', label: 'OpenAI', catalogKind: 'provider' },
+          { value: 'newapi', label: 'New API', catalogKind: 'platform' },
         ],
       },
     ])
   })
 
-  it('filters services without losing their category', () => {
-    const groups = buildServiceGroups(options)
-    expect(filterServiceGroups(groups, '   ')).toBe(groups)
-    expect(filterServiceGroups(groups, 'open')).toEqual([
-      { id: 'ai', label: 'AI翻译', items: [{ value: 'openai', label: 'OpenAI' }] },
+  it('nests AI services into ordered provider and platform groups', () => {
+    expect(buildServiceSections(options)).toEqual([
+      {
+        id: 'machine',
+        label: '机器翻译',
+        collapsible: true,
+        groups: [{
+          id: 'machine-services',
+          label: '',
+          itemKind: '机器翻译',
+          items: [
+            { value: 'microsoft', label: '微软翻译' },
+            { value: 'chromeTranslator', label: 'Chrome内置AI翻译' },
+          ],
+        }],
+      },
+      {
+        id: 'ai',
+        label: 'AI翻译',
+        collapsible: false,
+        groups: [
+          {
+            id: 'ai-providers',
+            label: '模型服务商',
+            itemKind: '模型服务商',
+            items: [
+              { value: 'deepseek', label: 'DeepSeek', catalogKind: 'provider' },
+              { value: 'openai', label: 'OpenAI', catalogKind: 'provider' },
+            ],
+          },
+          {
+            id: 'ai-platforms',
+            label: '聚合平台与接口',
+            itemKind: '聚合平台',
+            items: [{ value: 'newapi', label: 'New API', catalogKind: 'platform' }],
+          },
+        ],
+      },
     ])
-    expect(filterServiceGroups([
-      { id: 'ai', label: 'AI翻译', items: [{ value: 'openai', label: 'OpenAI', description: '通用服务' }] },
-    ], '通用')).toHaveLength(1)
   })
 
-  it('filters model identifiers case-insensitively', () => {
-    const modelOptions = ['gpt-5-mini', 'GPT-4o', '自定义模型']
-    expect(filterModels(modelOptions, ' ')).toBe(modelOptions)
-    expect(filterModels(modelOptions, 'gpt')).toEqual([
-      'gpt-5-mini',
-      'GPT-4o',
+  it('keeps unclassified AI services visible as model providers', () => {
+    const sections = buildServiceSections([
+      { value: 'ai', label: 'AI翻译', disabled: true },
+      { value: 'future-provider', label: '未来模型' },
+    ])
+
+    expect(sections[0]?.groups[0]?.items.map((item) => item.value)).toEqual(['future-provider'])
+  })
+
+  it('keeps services before the first divider in a non-collapsible fallback section', () => {
+    expect(buildServiceSections([{ value: 'standalone', label: '独立服务' }])).toEqual([
+      {
+        id: 'other',
+        label: '其他服务',
+        collapsible: false,
+        groups: [{
+          id: 'other-services',
+          label: '',
+          itemKind: '其他服务',
+          items: [{ value: 'standalone', label: '独立服务' }],
+        }],
+      },
     ])
   })
 
@@ -108,39 +210,24 @@ describe('service catalog helpers', () => {
     ])
   })
 
+  it('searches dynamic service metadata supplied by saved profiles', () => {
+    const dynamicOptions = [{
+      value: 'custom:1',
+      label: '公司网关',
+      description: 'https://gateway.example/v1/chat/completions',
+      searchTerms: ['private-translation-model'],
+    }]
+
+    expect(searchServiceOptions(dynamicOptions, 'gateway.example', new Map())).toEqual([
+      {...dynamicOptions[0], matchingModels: []},
+    ])
+    expect(searchServiceOptions(dynamicOptions, 'private-translation', new Map())).toEqual([
+      {...dynamicOptions[0], matchingModels: []},
+    ])
+  })
+
   it('removes decorative recommendation stars from labels', () => {
     expect(cleanServiceLabel('硅基流动⭐️')).toBe('硅基流动')
-  })
-
-  it('keeps common models short and promotes the current selection', () => {
-    const models = ['one', 'two', 'three', 'four', 'five', 'six']
-
-    expect(splitModelOptions(models, 'six')).toEqual({
-      common: ['one', 'two', 'three', 'six'],
-      more: ['four', 'five'],
-    })
-  })
-
-  it('keeps the custom model as the last option when it is selected', () => {
-    expect(splitModelOptions(['one', 'two', 'three', customModelString, 'four'], customModelString)).toEqual({
-      common: ['one', 'two', 'three', 'four'],
-      more: [customModelString],
-    })
-  })
-
-  it('does not create a more group for a short model list', () => {
-    expect(splitModelOptions(['one', 'two'], 'two')).toEqual({
-      common: ['one', 'two'],
-      more: [],
-    })
-  })
-
-  it('shows the effective model only for services that use model selection', () => {
-    expect(getSelectedModelLabel('microsoft', { microsoft: 'ignored' }, {})).toBe('')
-    expect(getSelectedModelLabel('openai', { openai: 'gpt-5-mini' }, {})).toBe('gpt-5-mini')
-    expect(getSelectedModelLabel('openai', { openai: customModelString }, { openai: 'local-model' })).toBe('local-model')
-    expect(getSelectedModelLabel('openai', { openai: customModelString }, {})).toBe(customModelString)
-    expect(getSelectedModelLabel('openai', {}, {})).toBe('未选择模型')
   })
 
   it('为所有需要模型的 AI 服务提供自定义模型入口', () => {
@@ -156,6 +243,10 @@ describe('service catalog helpers', () => {
     for (const service of servicesType.useModel) {
       const defaultModel = defaultModels.get(service)
       expect(defaultModel, `${service} 缺少默认模型`).toBeTruthy()
+      if (service === services.custom) {
+        expect(normalized.model[service], '未创建 profile 时不应保留静态自定义服务模型').toBeUndefined()
+        continue
+      }
       expect(normalized.model[service], `${service} 未选中默认模型`).toBe(defaultModel)
       expect(new Config().model[service], `${service} 的初始配置未选中默认模型`).toBe(defaultModel)
     }

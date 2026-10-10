@@ -120,6 +120,7 @@ function normalizeCoverageRules(value, legacySelectors = []) {
       ? (rule?.minInitial === undefined ? 1 : Number(rule.minInitial))
       : Number(rule.minSeen),
     trackDynamic: rule?.trackDynamic === true,
+    ...(rule?.minTextLength === undefined ? {} : {minTextLength: Number(rule.minTextLength)}),
     sourceIncludes: normalizeSelectorList(rule?.sourceIncludes),
   }));
 }
@@ -151,6 +152,9 @@ function validateCoverageRules(caseName, rules, options = {}) {
     }
     if (!Number.isInteger(rule.minSeen) || rule.minSeen < rule.minInitial) {
       errors.push(`${label} minSeen 必须是大于等于 minInitial 的整数`);
+    }
+    if (rule.minTextLength !== undefined && (!Number.isInteger(rule.minTextLength) || rule.minTextLength < 0)) {
+      errors.push(`${label} minTextLength 必须是非负整数`);
     }
     if (rule.kind === 'heading' && !/\bh[1-6]\b/iu.test(rule.selector)) {
       errors.push(`${label} heading 规则必须显式选择 h1-h6`);
@@ -185,6 +189,9 @@ function normalizeCaseConfig(caseName, caseConfig) {
 
   return {
     selector: caseConfig.hoverSelector || caseConfig.selector || requiredSelectors[0],
+    ...(typeof caseConfig.prepareScrollSelector === 'string' && caseConfig.prepareScrollSelector.trim()
+      ? {prepareScrollSelector: caseConfig.prepareScrollSelector.trim()} : {}),
+    ...(caseConfig.hoverSettleMs !== undefined ? {hoverSettleMs: caseConfig.hoverSettleMs} : {}),
     requiredSelectors,
     forbiddenSelectors,
     optionalForbiddenSelectors,
@@ -203,6 +210,14 @@ function normalizeCaseConfig(caseName, caseConfig) {
 
 function collectBaseCaseConfigErrors(caseName, caseConfig, normalized = normalizeCaseConfig(caseName, caseConfig)) {
   const errors = [];
+  if (caseConfig.prepareScrollSelector !== undefined &&
+      (typeof caseConfig.prepareScrollSelector !== 'string' || !caseConfig.prepareScrollSelector.trim())) {
+    errors.push(`${caseName} 的 prepareScrollSelector 必须是非空 selector`);
+  }
+  if (caseConfig.hoverSettleMs !== undefined && (!Number.isInteger(caseConfig.hoverSettleMs) ||
+      caseConfig.hoverSettleMs < 0 || caseConfig.hoverSettleMs > 5000)) {
+    errors.push(`${caseName} 的 hoverSettleMs 必须是 0-5000 的整数`);
+  }
   const configuredRequiredSelectors = caseConfig.requiredSelectors ||
     (caseConfig.selector ? [caseConfig.selector] : []);
   const rawRequiredSelectors = Array.isArray(configuredRequiredSelectors)
@@ -258,6 +273,10 @@ function collectBaseCaseConfigErrors(caseName, caseConfig, normalized = normaliz
     explicitRules: caseConfig.coverageRules,
   }));
   if (normalized.hoverTargets.length === 0) errors.push(`${caseName} 至少需要一个 hover target`);
+  if (caseConfig.skipUnscopedH1Coverage === true && !normalized.coverageRules.some((rule) =>
+    rule.kind === 'heading' && /\bh1\b/iu.test(rule.selector))) {
+    errors.push(`${caseName} 跳过全局 H1 时必须有明确的 H1 正文覆盖规则`);
+  }
   return errors;
 }
 

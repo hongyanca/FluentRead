@@ -1,26 +1,236 @@
 import fs from 'node:fs';
-import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+import {basename, dirname, resolve} from 'node:path';
+import {gzipSync} from 'node:zlib';
+import {runInNewContext} from 'node:vm';
 import vue from '@vitejs/plugin-vue';
 import ts from 'typescript';
-import {defineConfig, normalizePath, type Plugin} from 'vite';
+import {defineConfig, normalizePath, transformWithEsbuild, type Plugin} from 'vite';
 import {createUserscriptMetadata} from './metadata';
+import {createUserscriptCharacterDataCompressionPlugin} from './characterDataPlugin';
+import {UI_LANGUAGE_BUNDLES, zhCNMessages} from './languageBundles';
 
 const root = resolve(__dirname, '..');
 const packageJson = JSON.parse(fs.readFileSync(resolve(root, 'package.json'), 'utf8')) as {
     version: string;
     userscriptVersion: string;
 };
-const iconDataUrl = `data:image/png;base64,${fs.readFileSync(resolve(root, 'public/icon/128.png')).toString('base64')}`;
-const metadata = createUserscriptMetadata({version: packageJson.userscriptVersion, iconDataUrl});
+const iconDataUrl = `data:image/png;base64,${fs.readFileSync(resolve(root, 'public/icon/64.png')).toString('base64')}`;
+const approveDataUrl = `data:image/jpeg;base64,${fs.readFileSync(resolve(root, 'public/misc/approve.jpg')).toString('base64')}`;
+const bundleLibraries = process.env.FLUENTREAD_USERSCRIPT_STANDALONE === '1';
+const greasyForkSource = process.env.FLUENTREAD_USERSCRIPT_GREASYFORK_SOURCE === '1';
+const vendorUrl = process.env.FLUENTREAD_USERSCRIPT_VENDOR_URL;
+const dataUrl = process.env.FLUENTREAD_USERSCRIPT_DATA_URL;
+const allowedResourceUrl = (url: string | undefined) => Boolean(url && /^(?:https:\/\/|http:\/\/127\.0\.0\.1(?::\d+)?\/)/u.test(url));
+if (greasyForkSource && (!allowedResourceUrl(vendorUrl) || !allowedResourceUrl(dataUrl))) {
+    throw new Error('Greasy Fork source build requires vendor and data resource URLs');
+}
+const vendorGlobals: Record<string, string> = {
+    ai: 'FluentReadUserscriptVendor.ai',
+    '@ai-sdk/openai-compatible': 'FluentReadUserscriptVendor.openAICompatible',
+    'crypto-js/sha256': 'FluentReadUserscriptVendor.sha256',
+    'crypto-js/md5': 'FluentReadUserscriptVendor.md5',
+    'crypto-js/hmac-sha256': 'FluentReadUserscriptVendor.hmacSha256',
+    'crypto-js/aes': 'FluentReadUserscriptVendor.aes',
+    'crypto-js/enc-utf8': 'FluentReadUserscriptVendor.encUtf8',
+    'crypto-js/enc-base64': 'FluentReadUserscriptVendor.encBase64',
+    'crypto-js/mode-ecb': 'FluentReadUserscriptVendor.modeEcb',
+    'crypto-js/pad-pkcs7': 'FluentReadUserscriptVendor.padPkcs7',
+    'dexie/dist/dexie.min.js': 'FluentReadUserscriptVendor.Dexie',
+    'franc-min': 'FluentReadUserscriptVendor.francMin',
+};
+function installedVersion(name: string): string {
+    const manifest = JSON.parse(fs.readFileSync(resolve(root, 'node_modules', name, 'package.json'), 'utf8')) as {version: string};
+    return manifest.version;
+}
+
+// 脚本管理器在安装时缓存固定版本的通用库；仓库资源固定到已发布提交，更新资源时同步换提交。
+const userscriptResourceCommit = '184a3d74f61b9d2a8d47080787f7e0180b98414d';
+// 语言文件的内容哈希来自合并后的消息目录，固定到首次包含这些文件的提交。
+const userscriptLanguageResourceCommit = '93759ec4387415a6cd12864a2f825bf5abc7353e';
+const iconMetaUrl = greasyForkSource
+    ? `https://cdn.jsdelivr.net/gh/FluentRead/FluentRead@${userscriptResourceCommit}/public/icon/64.png`
+    : iconDataUrl;
+const uiRequires = [
+    `https://cdn.jsdelivr.net/npm/vue@${installedVersion('vue')}/dist/vue.global.prod.js`,
+    `https://cdn.jsdelivr.net/gh/FluentRead/FluentRead@${userscriptResourceCommit}/userscript/vueElementPlusBridge.v1.js`,
+    `https://cdn.jsdelivr.net/npm/element-plus@${installedVersion('element-plus')}/dist/index.full.min.js`,
+    `https://cdn.jsdelivr.net/npm/@element-plus/icons-vue@${installedVersion('@element-plus/icons-vue')}/dist/index.iife.min.js`,
+    `https://cdn.jsdelivr.net/npm/tldts@${installedVersion('tldts')}/dist/index.umd.min.js`,
+];
+const userscriptRequires = bundleLibraries
+    ? []
+    : [...uiRequires, 'https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako_inflate.min.js',
+        ...(greasyForkSource ? [vendorUrl!, dataUrl!] : [])];
+const metadata = createUserscriptMetadata({version: packageJson.userscriptVersion, iconDataUrl: iconMetaUrl, requires: userscriptRequires});
+// 界面词典只按 key 查询，稳定排序把相似 key 聚在一起，提高静态 JSON 压缩率；数组顺序保持原样。
+function serializeUiMessages(value: unknown): string {
+    return JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
+        ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) : item);
+}
+// 构建期复用已有 pako 编码中英界面词典，减少标准 gzip 数据；解压字节与运行时端口不变。
+const gzipUiMessages = createRequire(import.meta.url)('pako').gzip as
+    (data: Uint8Array, options: {level: number}) => Uint8Array;
+const compressedUiLanguageBundles = greasyForkSource ? {} : Object.fromEntries(Object.entries(UI_LANGUAGE_BUNDLES)
+    .filter(([language]) => language === 'en-US')
+    .map(([language, bundle]) => [
+    language,
+    Buffer.from(gzipUiMessages(Buffer.from(serializeUiMessages(bundle)), {level: 9})).toString('base64'),
+]));
+const remoteUiLanguageBundles = Object.fromEntries(Object.entries(UI_LANGUAGE_BUNDLES)
+    .filter(([language]) => language !== 'en-US')
+    .map(([language, bundle]) => {
+        const contents = JSON.stringify(bundle);
+        const digest = createHash('sha256').update(contents).digest('hex').slice(0, 16);
+        const fileName = `${language}.${digest}.json`;
+        const filePath = resolve(root, 'userscript/languages', fileName);
+        if (!fs.existsSync(filePath) || fs.readFileSync(filePath, 'utf8').trimEnd() !== contents) {
+            throw new Error(`Userscript language data missing or stale: ${fileName}; run pnpm generate:userscript-languages`);
+        }
+        return [language, fileName];
+    }));
+const unicodeNotice = `/*\n${fs.readFileSync(resolve(root, 'public/third-party-notices/unicode-17.0.0.txt'), 'utf8')}\n*/`;
+const serviceIconsNotice = `/*\n${fs.readFileSync(resolve(root, 'public/third-party-notices/lobe-icons-MIT.txt'), 'utf8')}\n*/`;
+const tinycolorNotice = `/*\n@ctrl/tinycolor 3.6.1 — MIT\n${fs.readFileSync(resolve(root, 'public/third-party-notices/tinycolor-MIT.txt'), 'utf8')}\n*/`;
 const browserShimPath = resolve(root, 'userscript/browser.ts');
 const projectRoot = `${normalizePath(root)}/`;
+const siteCatalogDir = resolve(root, 'src/core/site-adaptation/catalog');
+const siteCatalogFiles = new Set(['established.json', 'websites.json', 'profiles.json']
+    .map((name) => resolve(siteCatalogDir, name)));
+const siteCatalogData = Object.fromEntries([...siteCatalogFiles]
+    .map((sourcePath) => [basename(sourcePath, '.json'), JSON.parse(fs.readFileSync(sourcePath, 'utf8'))]));
+// 构建目录提供权威规则；固定资源中未变的规则复用，新增或更新的规则随消费者补齐。
+const pinnedSiteCatalogs = greasyForkSource
+    ? (runInNewContext(fs.readFileSync(resolve(root, 'userscript/resources/fluentread-data.v1.js'), 'utf8'), {}, {timeout: 1_000}) as {siteCatalogs: Record<string, unknown>}).siteCatalogs
+    : undefined;
+const compressedCatalogPrefix = '\0fluentread-userscript-site-catalog:';
+const externalChineseMessagesId = '\0fluentread-userscript-zh-cn.js';
+
+/** 只压缩站点规则与中文文案数据；产品逻辑仍留在可审查的 userscript 主文件中。 */
+export function createUserscriptCatalogCompressionPlugin(): Plugin {
+    return {
+        name: 'compress-userscript-site-catalog',
+        enforce: 'pre',
+        resolveId(source, importer) {
+            if (source === './messages/zh-CN'
+                && importer?.split('?')[0] === resolve(root, 'src/core/i18n/index.ts')) return externalChineseMessagesId;
+            if (!importer || !source.endsWith('.json')) return null;
+            const sourcePath = resolve(dirname(importer.split('?')[0]), source);
+            // 以 .js 结尾，避免 Vite 的 JSON 插件再次尝试解析虚拟模块源码。
+            return siteCatalogFiles.has(sourcePath) ? `${compressedCatalogPrefix}${sourcePath}.js` : null;
+        },
+        load(id) {
+            if (id === externalChineseMessagesId) {
+                if (greasyForkSource) return 'export const zhCNMessages = globalThis.__FLUENTREAD_USERSCRIPT_DATA__.zhCNMessages;';
+                // 文档翻译页面（含 PDF 阅读器）只存在于扩展里，油猴脚本不含该页面，它的文案不占用脚本体积。
+                const contents = serializeUiMessages(Object.fromEntries(Object.entries(zhCNMessages).filter(([key]) => !key.startsWith('document.'))) as typeof zhCNMessages);
+                const compressed = Buffer.from(gzipUiMessages(Buffer.from(contents), {level: 9})).toString('base64');
+                return [
+                    `/* Non-code Chinese UI messages; sha256 ${createHash('sha256').update(contents).digest('hex')}. */`,
+                    "import {inflateWithPako} from '@/userscript/pakoRuntime';",
+                    `const bytes = Uint8Array.from(atob(${JSON.stringify(compressed)}), (character) => character.charCodeAt(0));`,
+                    'export const zhCNMessages = JSON.parse(inflateWithPako(bytes));',
+                ].join('\n');
+            }
+            if (!id.startsWith(compressedCatalogPrefix)) return null;
+            const sourcePath = id.slice(compressedCatalogPrefix.length, -'.js'.length);
+            if (!siteCatalogFiles.has(sourcePath)) throw new Error(`Unexpected userscript site catalog: ${sourcePath}`);
+            if (greasyForkSource) {
+                const name = basename(sourcePath, '.json');
+                const current = siteCatalogData[name];
+                const pinned = pinnedSiteCatalogs?.[name];
+                if (!Array.isArray(current) || !Array.isArray(pinned)) {
+                    return `export default globalThis.__FLUENTREAD_USERSCRIPT_DATA__.siteCatalogs.${name};`;
+                }
+                const pinnedById = new Map(pinned.map((rule) => [rule.id, rule]));
+                const updates = current.filter((rule) => JSON.stringify(rule) !== JSON.stringify(pinnedById.get(rule.id)));
+                const order = current.map((rule) => rule.id);
+                if (!updates.length && JSON.stringify(order) === JSON.stringify(pinned.map((rule) => rule.id))) {
+                    return `export default globalThis.__FLUENTREAD_USERSCRIPT_DATA__.siteCatalogs.${name};`;
+                }
+                return [
+                    `const catalog = globalThis.__FLUENTREAD_USERSCRIPT_DATA__.siteCatalogs.${name};`,
+                    'const present = new Map(catalog.map((rule) => [rule.id, rule]));',
+                    `const updates = new Map(${JSON.stringify(updates)}.map((rule) => [rule.id, rule]));`,
+                    `export default ${JSON.stringify(order)}.map((id) => {`,
+                    '  const rule = updates.get(id) ?? present.get(id);',
+                    '  if (!rule) throw new Error("Missing pinned userscript site rule: " + id);',
+                    '  return rule;',
+                    '});',
+                ].join('\n');
+            }
+            const contents = JSON.stringify(JSON.parse(fs.readFileSync(sourcePath, 'utf8')));
+            const compressed = gzipSync(Buffer.from(contents), {level: 9}).toString('base64');
+            const digest = createHash('sha256').update(contents).digest('hex');
+            return [
+                `/* Non-code site rules: ${normalizePath(sourcePath).slice(projectRoot.length)}; sha256 ${digest}. */`,
+                "import {inflateWithPako} from '@/userscript/pakoRuntime';",
+                `const bytes = Uint8Array.from(atob(${JSON.stringify(compressed)}), (character) => character.charCodeAt(0));`,
+                'export default JSON.parse(inflateWithPako(bytes));',
+            ].join('\n');
+        },
+    };
+}
+
+// dexie 的官方入口以 Symbol.for('Dexie') 作为跨 realm 的单例注册表；该注册一旦进入油猴产物，
+// 与宿主页面的 Dexie 副本撞上不同版本就会在入口处抛错。用产物文本兜底，防止别名将来被改坏。
+const DEXIE_GLOBAL_REGISTRATION = /Symbol\s*\.\s*for\s*\(\s*(['"])Dexie\1\s*\)/u;
+
+export function findDexieGlobalRegistration(code: string): boolean {
+    return DEXIE_GLOBAL_REGISTRATION.test(code);
+}
 
 export const compatibilityPreludeStart = '/* FluentRead userscript compatibility prelude:start */';
 export const compatibilityPreludeEnd = '/* FluentRead userscript compatibility prelude:end */';
+export const executionGuardStart = '/* FluentRead userscript execution guard:start */';
+export const executionGuardEnd = '/* FluentRead userscript execution guard:end */';
+
+export function wrapUserscriptEntry(entryCode: string, bootstrapCode: string, thirdPartyNotices = ''): string {
+    return [
+        metadata,
+        unicodeNotice,
+        serviceIconsNotice,
+        ...(!bundleLibraries ? [tinycolorNotice] : []),
+        ...(thirdPartyNotices ? [thirdPartyNotices] : []),
+        executionGuardStart,
+        'if (!globalThis.__fluentReadUserscriptBootstrapped) {',
+        bootstrapCode,
+        entryCode,
+        '}',
+        executionGuardEnd,
+    ].join('\n');
+}
+
+function bundledLibraryNotices(moduleIds: readonly string[]): string {
+    const packageRoots = new Set<string>();
+    for (const id of moduleIds) {
+        if (id.startsWith('\0')) continue;
+        const match = /^(.*\/node_modules\/\.pnpm\/[^/]+\/node_modules\/)(@[^/]+\/[^/]+|[^/]+)/u.exec(id);
+        if (match) packageRoots.add(`${match[1]}${match[2]}`);
+    }
+    return [...packageRoots].sort().map((packageRoot) => {
+        const manifest = JSON.parse(fs.readFileSync(resolve(packageRoot, 'package.json'), 'utf8')) as {
+            name: string;
+            version: string;
+            license?: string;
+            repository?: string | {url?: string};
+        };
+        const licenseFile = fs.readdirSync(packageRoot).find((name) => /^LICEN[CS]E(?:[.-].*)?$/iu.test(name));
+        if (!manifest.license) throw new Error(`Missing bundled library license: ${manifest.name}`);
+        const repository = typeof manifest.repository === 'string'
+            ? manifest.repository
+            : manifest.repository?.url;
+        const licenseText = licenseFile
+            ? fs.readFileSync(resolve(packageRoot, licenseFile), 'utf8').trim()
+            : `License source: ${repository || `https://www.npmjs.com/package/${manifest.name}/v/${manifest.version}`}`;
+        if (licenseText.includes('*/')) throw new Error(`Unsafe bundled library license comment: ${manifest.name}`);
+        return `/*\n${manifest.name} ${manifest.version} — ${manifest.license}\n${licenseText}\n*/`;
+    }).join('\n');
+}
 
 // Via 等旧内核可能缺少共享核心使用的基础方法；在单文件入口最前方注入小型兼容层。
-const compatibilityPrelude = `${compatibilityPreludeStart}
-(function () {
+const compatibilityPrelude = `(function () {
     if (typeof Object.fromEntries !== 'function') {
         Object.defineProperty(Object, 'fromEntries', {
             configurable: true,
@@ -80,8 +290,7 @@ const compatibilityPrelude = `${compatibilityPreludeStart}
             }
         });
     }
-}());
-${compatibilityPreludeEnd}`;
+}());`;
 
 type BrowserGlobal = 'browser' | 'chrome';
 
@@ -89,9 +298,12 @@ type BrowserGlobal = 'browser' | 'chrome';
  * 借助 TypeScript 符号解析查找真正未绑定的 browser/chrome 标识符；属性名和类型引用
  * 不应触发注入，避免对普通业务对象产生误改写。
  */
-function findFreeBrowserGlobals(code: string, id: string): BrowserGlobal[] {
+export function findFreeBrowserGlobals(code: string, id: string): BrowserGlobal[] {
+    // 没有候选时不建立编译器 program；反斜杠保留 Unicode 转义标识符的完整解析路径。
+    if (!code.includes('browser') && !code.includes('chrome') && !code.includes('\\')) return [];
     const sourceFile = ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true);
     const options: ts.CompilerOptions = {
+        allowJs: true,
         module: ts.ModuleKind.ESNext,
         noLib: true,
         noResolve: true,
@@ -168,20 +380,54 @@ function bundleUserscriptCss(): Plugin {
         enforce: 'post',
         generateBundle: {
           order: 'post',
-          handler(_options, bundle) {
+          async handler(_options, bundle) {
             const cssEntries = Object.entries(bundle).filter(([, item]) => item.type === 'asset' && item.fileName.endsWith('.css'));
             const css = cssEntries.map(([, item]) => String(item.type === 'asset' ? item.source : '')).join('\n');
+            const compressedCss = greasyForkSource ? '' : gzipSync(Buffer.from(css, 'utf8'), {level: 9}).toString('base64');
             cssEntries.forEach(([fileName]) => delete bundle[fileName]);
+
+            if (greasyForkSource) {
+                // Greasy Fork 的源码文件保留产品逻辑，静态词条、站点规则和样式单独随固定版本缓存。
+                const data = {
+                    english: UI_LANGUAGE_BUNDLES['en-US'],
+                    zhCNMessages,
+                    siteCatalogs: siteCatalogData,
+                    css,
+                };
+                this.emitFile({
+                    type: 'asset',
+                    fileName: 'fluentread-data.v1.js',
+                    source: [
+                        '/* FluentRead non-code data: UI translations, site rules and CSS. */',
+                        `globalThis.__FLUENTREAD_USERSCRIPT_DATA__=${JSON.stringify(data)};`,
+                    ].join('\n'),
+                });
+            }
 
             const entry = Object.values(bundle).find((item) => item.type === 'chunk' && item.isEntry);
             if (!entry || entry.type !== 'chunk') throw new Error('Userscript entry chunk was not generated');
 
+            // 兼容层在 Vite 主产物之外拼接，也需压缩空白和局部变量；不改语法或许可声明。
+            const preludeCode = greasyForkSource ? compatibilityPrelude : (await transformWithEsbuild(
+                compatibilityPrelude, 'userscript-compatibility-prelude.js',
+                {target: 'es2018', minifyWhitespace: true, minifyIdentifiers: true, minifySyntax: false},
+            )).code;
             const bootstrap = [
-                compatibilityPrelude,
-                `globalThis.__FLUENTREAD_ICON_DATA__=${JSON.stringify(iconDataUrl)};`,
-                `globalThis.__fluentReadUserscriptCss=${JSON.stringify(css)};`,
+                `${compatibilityPreludeStart}\n${preludeCode}\n${compatibilityPreludeEnd}`,
+                `globalThis.__FLUENTREAD_ICON_DATA__=${JSON.stringify(iconMetaUrl)};`,
+                ...(bundleLibraries ? [`globalThis.__FLUENTREAD_APPROVE_DATA__=${JSON.stringify(approveDataUrl)};`] : []),
+                ...(greasyForkSource
+                    ? ['globalThis.__fluentReadUserscriptCss=globalThis.__FLUENTREAD_USERSCRIPT_DATA__.css;']
+                    : [`globalThis.__fluentReadUserscriptCssCompressed=${JSON.stringify(compressedCss)};`]),
             ].join('\n');
-            entry.code = `${metadata}${bootstrap}\n${entry.code}`;
+            // 入口内部的幂等标记只能在整个 IIFE 顶层求值后生效。脚本管理器若对同一
+            // 文档再次注入，必须在最外层跳过整个 bundle，否则内联模块会重复创建
+            // 配置 store、watch 和 preparation barrier，即使 bootstrap 最后选择返回。
+            entry.code = wrapUserscriptEntry(
+                entry.code,
+                bootstrap,
+                bundleLibraries ? bundledLibraryNotices(entry.moduleIds) : '',
+            );
 
             entry.code = entry.code.replace(/[\uFFFE\uFFFF]/gu, (character) => {
                 const codePoint = character.codePointAt(0)!.toString(16).toUpperCase().padStart(4, '0');
@@ -192,12 +438,22 @@ function bundleUserscriptCss(): Plugin {
             if (leakedGlobals.length > 0) {
                 throw new Error(`Userscript bundle contains unresolved extension globals: ${leakedGlobals.join(', ')}`);
             }
+
+            if (findDexieGlobalRegistration(entry.code)) {
+                throw new Error(
+                    'Userscript bundle registers globalThis[Symbol.for("Dexie")]; import dexie through userscript/dexie.ts '
+                    + 'so a host page carrying another Dexie version cannot abort the script (issue #524)',
+                );
+            }
           },
         },
         writeBundle(_options, bundle) {
-            const files = Object.values(bundle).map((item) => item.fileName);
-            if (files.length !== 1 || files[0] !== 'fluent-read.user.js') {
-                throw new Error(`Userscript build must emit one file, received: ${files.join(', ')}`);
+            const files = Object.values(bundle).map((item) => item.fileName).sort();
+            const expected = greasyForkSource
+                ? ['fluent-read.user.js', 'fluentread-data.v1.js']
+                : ['fluent-read.user.js'];
+            if (JSON.stringify(files) !== JSON.stringify(expected)) {
+                throw new Error(`Userscript build emitted unexpected files: ${files.join(', ')}`);
             }
         },
     };
@@ -219,12 +475,24 @@ function unwrapWxtEntrypoints(): Plugin {
 }
 
 export const userscriptAliases = [
+    ...(bundleLibraries ? [{find: '@/userscript/pakoRuntime', replacement: resolve(root, 'userscript/pakoBundled.ts')}] : []),
+    // dexie 官方 ESM 入口把自身注册到跨 realm 共享的 globalThis[Symbol.for('Dexie')]，版本不一致时会在
+    // 模块求值阶段直接抛错。脚本管理器（如 Safari 的 Userscripts）把脚本注入页面主 world，与宿主页面共享
+    // 该注册表，必须换成不注册全局符号的入口，否则整个 bundle 会在入口处中断（issue #524）。
+    {find: /^dexie$/u, replacement: resolve(root, 'userscript/dexie.ts')},
     {find: '@/src/platform/storage/credentialContext', replacement: resolve(root, 'userscript/credentialContext.ts')},
     {find: '@/src/platform/storage/configStorageRuntime', replacement: resolve(root, 'userscript/storage.ts')},
+    // 扩展从本地资源读取界面语言；userscript 内嵌英文，其他语言从仓库静态 JSON 按需加载。
+    {find: '@/src/platform/i18n/uiLanguageBundles', replacement: resolve(root, 'userscript/uiLanguageBundles.ts')},
+    {find: /^@\/src\/services\/translation\/context\/browser$/u, replacement: resolve(root, 'userscript/pageContext.ts')},
+    {find: /^@\/src\/services\/translation\/context$/u, replacement: resolve(root, 'userscript/pageTranslationContext.ts')},
     // app/content 只依赖 feature 公开契约；在此边界替换，才能保证扩展专属 runtime 不进入产物。
+    {find: '@/src/features/information-highlight/public', replacement: resolve(root, 'userscript/informationHighlight.ts')},
     {find: '@/src/features/area-translation/public', replacement: resolve(root, 'userscript/unsupportedCapabilities.ts')},
     {find: '@/src/features/image-translation/public', replacement: resolve(root, 'userscript/unsupportedCapabilities.ts')},
     {find: '@/src/features/video-subtitle/public', replacement: resolve(root, 'userscript/unsupportedCapabilities.ts')},
+    {find: '@/src/features/vocabulary/content/public', replacement: resolve(root, 'userscript/unsupportedCapabilities.ts')},
+    {find: '@/src/features/writing-assistant/public', replacement: resolve(root, 'userscript/writingAssistant.ts')},
     {find: /^\.\/chrome-translator$/u, replacement: resolve(root, 'userscript/chromeTranslator.ts')},
     {find: '@wxt-dev/storage', replacement: resolve(root, 'userscript/storage.ts')},
     {find: 'webextension-polyfill', replacement: resolve(root, 'userscript/browser.ts')},
@@ -235,7 +503,7 @@ export const userscriptAliases = [
 export default defineConfig({
     root,
     publicDir: false,
-    plugins: [unwrapWxtEntrypoints(), injectUserscriptBrowserShim(), vue(), bundleUserscriptCss()],
+    plugins: [unwrapWxtEntrypoints(), createUserscriptCatalogCompressionPlugin(), createUserscriptCharacterDataCompressionPlugin(root, !greasyForkSource), injectUserscriptBrowserShim(), vue(), bundleUserscriptCss()],
     resolve: {
         alias: userscriptAliases,
     },
@@ -243,12 +511,19 @@ export default defineConfig({
         'process.env.NODE_ENV': JSON.stringify('production'),
         'process.env.VUE_APP_VERSION': JSON.stringify(packageJson.version),
         'process.env.VUE_APP_USERSCRIPT_VERSION': JSON.stringify(packageJson.userscriptVersion),
+        'import.meta.env.BROWSER': JSON.stringify('userscript'),
+        'import.meta.env.MANIFEST_VERSION': '2',
+        __FLUENTREAD_USERSCRIPT_LANGUAGE_BUNDLES__: JSON.stringify(compressedUiLanguageBundles),
+        __FLUENTREAD_USERSCRIPT_REMOTE_LANGUAGES__: JSON.stringify(remoteUiLanguageBundles),
+        __FLUENTREAD_USERSCRIPT_RESOURCE_COMMIT__: JSON.stringify(userscriptLanguageResourceCommit),
+        __FLUENTREAD_FULL_OPTIONS__: JSON.stringify(bundleLibraries),
     },
     build: {
-        outDir: resolve(root, '.output/userscript'),
+        outDir: resolve(root, bundleLibraries ? '.output/userscript-standalone'
+            : greasyForkSource ? '.output/userscript-greasyfork' : '.output/userscript'),
         emptyOutDir: true,
         target: 'es2018',
-        minify: 'esbuild',
+        minify: greasyForkSource ? false : 'esbuild',
         sourcemap: false,
         cssCodeSplit: false,
         assetsInlineLimit: Number.MAX_SAFE_INTEGER,
@@ -259,9 +534,20 @@ export default defineConfig({
             fileName: () => 'fluent-read.user.js',
         },
         rollupOptions: {
+            external: bundleLibraries ? [] : [
+                'vue', 'element-plus', '@element-plus/icons-vue', 'tldts',
+                ...(greasyForkSource ? Object.keys(vendorGlobals) : []),
+            ],
             output: {
                 inlineDynamicImports: true,
                 entryFileNames: 'fluent-read.user.js',
+                globals: {
+                    vue: 'Vue',
+                    'element-plus': 'ElementPlus',
+                    '@element-plus/icons-vue': 'ElementPlusIconsVue',
+                    tldts: 'tldts',
+                    ...(greasyForkSource ? vendorGlobals : {}),
+                },
             },
         },
     },

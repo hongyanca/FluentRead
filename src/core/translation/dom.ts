@@ -1,10 +1,23 @@
 /**
  * @file src/core/translation/dom.ts
  *
- * 文件职责：封装翻译候选发现使用的 composed tree 遍历与不可覆盖安全守卫，识别扩展 DOM、脚本、表单及禁止翻译区域。
- * 主要内容：提供 Shadow DOM 父级与祖先遍历、硬裁剪标签、受保护文本元素、隐藏/可编辑/no-translate 判断，并限制祖先深度以避免异常页面结构拖垮扫描。 可核对的公开符号包括 maxComposedAncestorDepth、getComposedParent、isDocumentSurface、isExtensionElement、isExtensionElementSelf、isHardPruneTag、isProtectedTextElement、hasNoTranslateMarker。
+ * 文件职责：封装翻译候选发现使用的 composed tree 遍历与不可覆盖安全守卫，识别扩展 DOM、其他翻译器已接管的段落、脚本、表单、图标字体、代码及禁止翻译区域。
+ * 主要内容：提供抗表单命名属性遮蔽的标签读取、Shadow DOM 父级与祖先遍历、硬裁剪标签、按钮型 input 的可译标签属性判定、受保护文本元素（含 time 与 timer）、text/plain 顶层 pre、独立 tooltip 边界、隐藏/可编辑/no-translate 判断，并限制祖先深度以避免异常页面结构拖垮扫描；语言预检可单独读取行内 code 上下文，仍遵守其他保护及代码块祖先边界，默认翻译槽继续排除代码。 可核对的公开符号包括 maxComposedAncestorDepth、getComposedParent、isDocumentSurface、isExtensionElementSelf、getTranslatableControlValueAttribute、isHardPruneTag、isProtectedTextElement、isPlainTextDocumentPre、hasNoTranslateMarker、isDocumentSurfaceNoTranslateShell、isTopLevelApplicationShell。
  * 模块边界：本文件属于可独立测试的 core 候选领域；可以读取传入 DOM 以计算结果，但不访问配置存储、不调用 provider、不注册页面监听器，也不负责译文渲染或 feature 生命周期。
  */
+
+/** 表单命名控件可遮蔽 tagName；沿原型读取原生 getter，不能把输入节点当作字符串。 */
+export function getElementTagName(element: Element): string {
+    const name = element.tagName;
+    if (typeof name === 'string') return name.toLowerCase();
+    let prototype = Object.getPrototypeOf(element);
+    while (prototype) {
+        const getter = Object.getOwnPropertyDescriptor(prototype, 'tagName')?.get;
+        if (getter) return getter.call(element).toLowerCase();
+        prototype = Object.getPrototypeOf(prototype);
+    }
+    return '';
+}
 
 const extensionSelector = [
     '#fluent-read-floating-ball-container',
@@ -19,6 +32,10 @@ const extensionSelector = [
     '[data-fr-translation-owned="true"]',
 ].join(',');
 
+const foreignTranslationWrapperClass = 'immersive-translate-target-wrapper';
+// 只缓存选择器能力，不缓存 DOM 结论；旧 WebView 每个文档最多触发一次语法异常。
+const directChildHasSupport = new WeakMap<Document, boolean>();
+
 const hardPruneTags = new Set([
     'head', 'script', 'style', 'noscript', 'iframe', 'input', 'textarea',
     'select', 'option', 'math', 'svg', 'canvas', 'audio', 'video', 'object',
@@ -27,7 +44,7 @@ const hardPruneTags = new Set([
 
 const protectedTextTags = new Set([
     ...hardPruneTags,
-    'pre', 'code', 'kbd', 'samp', 'var',
+    'pre', 'code', 'kbd', 'samp', 'var', 'time',
 ]);
 
 /**
@@ -55,20 +72,75 @@ export function isDocumentSurface(element: Element): boolean {
     return element === owner?.documentElement || element === owner?.body;
 }
 
-export function isExtensionElement(element: Element): boolean {
-    return Boolean(element.matches(extensionSelector) || element.closest(extensionSelector));
-}
-
 export function isExtensionElementSelf(element: Element): boolean {
     return element.matches(extensionSelector);
 }
 
+/**
+ * 外部译文可能插在原文的直属 font wrapper 中。该父节点才是已被接管的
+ * 最小原文单元，不能沿 querySelector 把整篇文章或整个页面都视为已翻译。
+ * 不把它标为 FluentRead owned：只停止本插件在这里写入，清理时绝不删除对方 DOM。
+ * 原生 :has(> ...) 只匹配直属子节点；不能用 querySelector(':scope > ...') 或文档级
+ * class 集合替代：大型 diff 页面上前者仍会搜索子树，后者会因无关 DOM 写入失效。
+ * 旧 WebView 回退实时 class 集合再核对直属父级；Shadow DOM 和离线树同样实时生效。
+ */
+export function isForeignTranslationBoundary(element: Element): boolean {
+    if (element.classList.contains(foreignTranslationWrapperClass)) return true;
+    if (isDocumentSurface(element)) return false;
+    if (directChildHasSupport.get(element.ownerDocument) !== false) {
+        try {
+            return element.matches(`:has(> .${foreignTranslationWrapperClass})`);
+        } catch {
+            directChildHasSupport.set(element.ownerDocument, false);
+        }
+    }
+    const wrappers = element.getElementsByClassName(foreignTranslationWrapperClass);
+    for (let index = 0; index < wrappers.length; index += 1) {
+        if (wrappers[index]!.parentElement === element) return true;
+    }
+    return false;
+}
+
+const valueControlInputTypes = new Set(['button', 'reset', 'submit']);
+
+/**
+ * 按钮型 input 的可见文字来自 value 属性：浏览器按固定尺寸绘制标签，元素内没有任何可写入的
+ * Text 节点，因此它既不能走双语行，也不能走文本槽替换，只能改写属性本身。
+ *
+ * 产品安全边界：
+ * - text/search/password/email 等输入框的 value 是用户数据，任何情况下都不触碰。
+ * - 具名 submit 的 value 会随表单一起提交（Rails 的 `name="commit"` 是典型用法），
+ *   改写会把"评论"变成服务端无法识别的动作，因此只翻译不参与表单数据的按钮标签。
+ * - 空 value 由浏览器渲染本地化默认标签（提交/重置），写入译文反而制造不一致。
+ */
+export function getTranslatableControlValueAttribute(element: Element): 'value' | null {
+    if (getElementTagName(element) !== 'input') return null;
+    const type = (element.getAttribute('type') ?? '').trim().toLowerCase();
+    if (!valueControlInputTypes.has(type)) return null;
+    if (type === 'submit' && (element.getAttribute('name') ?? '').trim() !== '') return null;
+    return (element.getAttribute('value') ?? '').trim() === '' ? null : 'value';
+}
+
 export function isHardPruneTag(element: Element): boolean {
-    return hardPruneTags.has(element.tagName.toLowerCase());
+    // 按钮型 input 是页面上的操作入口，与 button 同属交互控件；其余表单元素继续整体裁剪。
+    if (getTranslatableControlValueAttribute(element)) return false;
+    return hardPruneTags.has(getElementTagName(element));
+}
+
+/** 纯文本文档由浏览器包装为顶层 pre；其内容是正文，不是 HTML 页面中的代码块。 */
+export function isPlainTextDocumentPre(element: Element): boolean {
+    if (getElementTagName(element) !== 'pre') return false;
+    const document = element.ownerDocument;
+    const contentType = document?.contentType?.split(';', 1)[0]?.trim().toLowerCase();
+    return contentType === 'text/plain' && element.parentElement === document?.body;
 }
 
 export function isProtectedTextElement(element: Element): boolean {
-    return protectedTextTags.has(element.tagName.toLowerCase());
+    // Scribble/Racket 文档使用 table.RktBlk 展示代码，而不是 pre/code。只保护
+    // 明确的代码表格；普通表格或正文上同名的 class 不能扩大成不翻译区域。
+    return element.getAttribute('role') === 'timer' ||
+        (getElementTagName(element) === 'table' && element.classList.contains('RktBlk')) ||
+        (protectedTextTags.has(getElementTagName(element)) && !isPlainTextDocumentPre(element));
 }
 
 export function hasNoTranslateMarker(element: Element): boolean {
@@ -77,22 +149,90 @@ export function hasNoTranslateMarker(element: Element): boolean {
         element.getAttribute('data-notranslate') === 'true';
 }
 
-export function hasHiddenMarker(element: Element): boolean {
+/**
+ * 文档根表面（<html>/<body>）上的 no-translate 标记通常是 Weglot 等多语言框架
+ * 为阻止浏览器自带翻译而设置的全局防护（典型如 <html translate="no">），并非页面
+ * 作者针对具体正文的保护意图。用户显式发起翻译时，这类根级标记若参与祖先链裁剪，
+ * 会导致整页任何文本节点上溯到根节点即被判 inherited-no-translate，从而整页失效。
+ * 因此把"文档根表面自身携带 no-translate 标记"识别为可放行的框架级外壳；真正的
+ * 局部保护（嵌套的 .notranslate / translate="no" 容器）不在此列，仍照常裁剪。
+ */
+export function isDocumentSurfaceNoTranslateShell(element: Element): boolean {
+    return isDocumentSurface(element) && hasNoTranslateMarker(element);
+}
+
+/**
+ * 显式翻译可有限穿过应用级 no-translate 外壳，但不能把这个例外扩大到局部区域。
+ * 直接挂在 body 下是刻意保守的边界：嵌套 no-translate 容器仍代表页面作者明确保护的内容。
+ */
+export function isTopLevelApplicationShell(element: Element): boolean {
+    const body = element.ownerDocument?.body;
+    return Boolean(
+        body &&
+        element.parentElement === body &&
+        hasNoTranslateMarker(element),
+    );
+}
+
+export interface TranslationTextProtectionOptions {
+    /** 只供候选语言预检读取无汉字的行内代码上下文；不得传入翻译槽、请求或渲染快照。 */
+    includeInlineCodeForLanguage?: boolean;
+    /** 已有翻译的精确来源槽；只穿过真实 host 的扩展标记和自有 translate=no，其他保护仍生效。 */
+    sourceTextSlotHosts?: ReadonlySet<Element>;
+    /** 仅显式选中/悬浮翻译允许穿过 body 直接子级的应用外壳。 */
+    allowTopLevelApplicationShell?: boolean;
+    /** 显式命中的元素自身仍是保护边界，不能因为它的 marker 被放行。 */
+    protectedElement?: Element;
+}
+
+/** 同一次样式读取同时识别不可见节点和以连字作为字形索引的图标，避免候选热路径重复查询样式。 */
+function getPresentationProtection(element: Element): 'hidden' | 'icon-font' | undefined {
     const htmlElement = element as HTMLElement;
-    if (htmlElement.hidden || htmlElement.inert || element.hasAttribute('inert')) return true;
-    if (element.getAttribute('aria-hidden') === 'true') return true;
-    if (element.classList.contains('sr-only') || element.classList.contains('visually-hidden')) return true;
+    if (htmlElement.hidden || htmlElement.inert || element.hasAttribute('inert')) return 'hidden';
+    if (element.getAttribute('aria-hidden') === 'true') return 'hidden';
+    if (element.classList.contains('sr-only') || element.classList.contains('visually-hidden')) return 'hidden';
 
     try {
         const style = element.ownerDocument?.defaultView?.getComputedStyle(element);
-        if (!style) return false;
-        return style.display === 'none' || style.visibility === 'hidden' || style.visibility === 'collapse';
+        if (!style) return undefined;
+        if (style.display === 'none' || style.visibility === 'hidden' || style.visibility === 'collapse') return 'hidden';
+        // 无障碍辅助文本常没有固定类名，而是绝对定位到 1px 裁剪盒。单独的 overflow
+        // 或 clip 不能代表隐藏（正文卡片也会截断）；只识别同时满足全部条件的辅助盒。
+        if ((style.position === 'absolute' || style.position === 'fixed') &&
+            (style.overflow === 'hidden' || style.overflow === 'clip' ||
+                (style.overflowX === 'hidden' && style.overflowY === 'hidden'))) {
+            const clip = style.clip?.replace(/[\s,]+/gu, ' ').trim();
+            const collapsedRect = /^rect\((0(?:px)?|1px) \1 \1 \1\)$/u.test(clip ?? '');
+            // width/height 是解析后的几何值，读取会强制布局。先排除没有辅助文本裁剪的
+            // 普通 absolute/fixed 容器，避免每次收集来源槽都重排整张大型页面。
+            if ((collapsedRect || style.clipPath?.replace(/\s+/gu, '') === 'inset(50%)') &&
+                /^(?:0(?:\.\d+)?|1(?:\.0+)?)px$/u.test(style.width) &&
+                /^(?:0(?:\.\d+)?|1(?:\.0+)?)px$/u.test(style.height)) return 'hidden';
+        }
+        // 只检查首选字体；正文把图标字体列为 fallback 时仍需翻译。字体家族而非文本内容
+        // 决定 settings 等词是字形索引，不能按单词或宽泛的 class 名裁剪正文。
+        const primaryFamily = (style.fontFamily || '').split(',')[0]!.trim()
+            .replace(/^(['"])(.*)\1$/, '$2').toLowerCase();
+        if (/^(?:google symbols|fontawesome|(?:material (?:icons|symbols)|font awesome)(?: .+)?)$/.test(primaryFamily)) {
+            return 'icon-font';
+        }
+        return undefined;
     } catch {
-        return false;
+        return undefined;
     }
 }
 
-function hasContentEditableMarker(element: Element): boolean {
+/** 图标连字属于宿主展示结构；译文骨架不能在丢失字体样式后将其当作普通文字显示。 */
+export function isIconFontElement(element: Element): boolean {
+    return getPresentationProtection(element) === 'icon-font';
+}
+
+/** 输出快照也必须依据实时可见性省略节点，不能依赖克隆后已经丢失的宿主样式。 */
+export function isHiddenTranslationElement(element: Element): boolean {
+    return getPresentationProtection(element) === 'hidden';
+}
+
+export function hasContentEditableMarker(element: Element): boolean {
     const attribute = element.getAttribute('contenteditable');
     return (attribute !== null && attribute.toLowerCase() !== 'false') ||
         (element as HTMLElement).isContentEditable;
@@ -104,7 +244,7 @@ function hasContentEditableMarker(element: Element): boolean {
  * 可能删除可见公式，只留下隐藏的 TeX 源脚本。
  */
 export function isMathRendererElement(element: Element): boolean {
-    const tagName = element.tagName.toLowerCase();
+    const tagName = getElementTagName(element);
     return tagName === 'mjx-container' ||
         element.classList.contains('MathJax_Display') ||
         element.classList.contains('MathJax') ||
@@ -119,13 +259,25 @@ export function isMathRendererElement(element: Element): boolean {
 export function isProtectedDescendantElement(
     element: Element,
     ignoreExtensionSelf = false,
+    options?: TranslationTextProtectionOptions,
 ): boolean {
-    return (!ignoreExtensionSelf && isExtensionElementSelf(element)) ||
-        isProtectedTextElement(element) ||
+    const ownSourceSlot = options?.sourceTextSlotHosts?.has(element) === true;
+    const ownNoTranslateMarker = ownSourceSlot &&
+        element.getAttribute('translate')?.toLowerCase() === 'no' &&
+        !element.classList.contains('notranslate') && element.getAttribute('data-notranslate') !== 'true';
+    return (!ignoreExtensionSelf && !ownSourceSlot && isExtensionElementSelf(element)) ||
+        isForeignTranslationBoundary(element) ||
+        (isProtectedTextElement(element) && !(options?.includeInlineCodeForLanguage === true
+            && getElementTagName(element) === 'code' && element.getAttribute('role') !== 'timer'
+            && !/\p{Script=Han}/u.test(element.textContent!))) ||
         isMathRendererElement(element) ||
-        hasNoTranslateMarker(element) ||
+        (hasNoTranslateMarker(element) && !ownNoTranslateMarker &&
+            !isDocumentSurfaceNoTranslateShell(element) &&
+            !(options?.allowTopLevelApplicationShell === true &&
+                element !== options.protectedElement &&
+                isTopLevelApplicationShell(element))) ||
         hasContentEditableMarker(element) ||
-        hasHiddenMarker(element);
+        getPresentationProtection(element) !== undefined;
 }
 
 export interface HardGuardResult {
@@ -135,11 +287,15 @@ export interface HardGuardResult {
 
 export function evaluateElementHardGuard(element: Element): HardGuardResult {
     if (isExtensionElementSelf(element)) return {prune: true, reason: 'fluentread-owned'};
-    if (isHardPruneTag(element)) return {prune: true, reason: `protected-tag:${element.tagName.toLowerCase()}`};
+    if (isForeignTranslationBoundary(element)) return {prune: true, reason: 'foreign-translation'};
+    if (isHardPruneTag(element)) return {prune: true, reason: `protected-tag:${getElementTagName(element)}`};
     if (isMathRendererElement(element)) return {prune: true, reason: 'math-renderer'};
-    if (hasNoTranslateMarker(element)) return {prune: true, reason: 'inherited-no-translate'};
+    if (hasNoTranslateMarker(element) && !isDocumentSurfaceNoTranslateShell(element)) {
+        return {prune: true, reason: 'inherited-no-translate'};
+    }
     if (hasContentEditableMarker(element)) return {prune: true, reason: 'contenteditable'};
-    if (hasHiddenMarker(element)) return {prune: true, reason: 'hidden'};
+    const presentationProtection = getPresentationProtection(element);
+    if (presentationProtection) return {prune: true, reason: presentationProtection};
     return {prune: false};
 }
 
@@ -220,19 +376,53 @@ export function findElementsAtPoint(root: Document | ShadowRoot, x: number, y: n
     return element ? [element] : [];
 }
 
-export function findNodeAtPoint(root: Document | ShadowRoot, x: number, y: number): Node | null {
+export interface TextPoint {
+    node: Node;
+    offset: number;
+}
+
+/** Preserve the caret offset when the browser exposes it; hover chunking uses the same hit test as hover resolution. */
+export function findTextPointAtPoint(root: Document | ShadowRoot, x: number, y: number): TextPoint | null {
     const document = root.nodeType === 9 ? root as Document : root.ownerDocument;
     try {
         const caretPosition = document?.caretPositionFromPoint?.(x, y);
-        if (caretPosition?.offsetNode && root.contains(caretPosition.offsetNode)) return caretPosition.offsetNode;
+        if (caretPosition?.offsetNode && root.contains(caretPosition.offsetNode)) {
+            return {node: caretPosition.offsetNode, offset: caretPosition.offset};
+        }
     } catch {
         // Firefox 风格的光标命中 API 是可选能力，也可能拒绝 Shadow Root。
     }
     try {
         const range = document?.caretRangeFromPoint?.(x, y);
-        if (range?.startContainer && root.contains(range.startContainer)) return range.startContainer;
+        if (range?.startContainer && root.contains(range.startContainer)) {
+            return {node: range.startContainer, offset: range.startOffset};
+        }
     } catch {
         // Chromium 风格的光标命中 API 同样是可选能力。
     }
     return null;
+}
+
+export function findNodeAtPoint(root: Document | ShadowRoot, x: number, y: number): Node | null {
+    return findTextPointAtPoint(root, x, y)?.node ?? null;
+}
+
+
+/** tooltip 是独立临时阅读面；不能参与外层按钮的来源或几何所有权。 */
+export function isTranslationTooltip(element: Element): boolean {
+    return element.getAttribute('role') === 'tooltip' ||
+        (element.classList.contains('tooltip') && Array.from(element.children)
+            .some(child => child.classList.contains('tooltip-inner')));
+}
+
+/** 相对于本次候选，排除嵌套 tooltip 的文本，仍允许 tooltip 自身独立翻译。 */
+export function isTextInNestedTranslationTooltip(node: Node, root: Element): boolean {
+    let current = node.parentElement;
+    let depth = 0;
+    while (current && current !== root) {
+        if (isTranslationTooltip(current)) return true;
+        if (++depth > maxComposedAncestorDepth) return true;
+        current = current.parentElement;
+    }
+    return false;
 }

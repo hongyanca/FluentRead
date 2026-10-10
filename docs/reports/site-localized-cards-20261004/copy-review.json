@@ -1,0 +1,243 @@
+{
+  "locales": [
+    "zh-CN",
+    "en-US",
+    "ja-JP",
+    "ko-KR",
+    "fr-FR",
+    "ru-RU",
+    "es-ES"
+  ],
+  "legacy": [
+    {
+      "previousChineseSource": "设置日常翻译的默认服务、目标语言和模式，再调整网页辅助与基本偏好。",
+      "localizedCopy": {
+        "zh-CN": "设置默认翻译服务、目标语言、显示模式和网页阅读偏好。",
+        "en-US": "Choose your default translation service, target language, display mode and webpage reading preferences.",
+        "ja-JP": "既定の翻訳サービス、翻訳先の言語、表示モード、ウェブページの読書設定を選びます。",
+        "ko-KR": "기본 번역 서비스, 대상 언어, 표시 방식과 웹페이지 읽기 환경을 설정하세요.",
+        "fr-FR": "Choisissez le service de traduction par défaut, la langue cible, le mode d’affichage et vos préférences de lecture.",
+        "ru-RU": "Выберите сервис перевода по умолчанию, целевой язык, режим отображения и настройки чтения веб-страниц.",
+        "es-ES": "Elige el servicio de traducción predeterminado, el idioma de destino, el modo de visualización y tus preferencias de lectura."
+      }
+    },
+    {
+      "previousChineseSource": "按机器翻译、云服务厂商、模型服务商和聚合平台分类，配置各服务的模型、连接参数与凭据。",
+      "localizedCopy": {
+        "zh-CN": "选择翻译服务，配置所需的模型、连接地址和凭据。",
+        "en-US": "Choose a translation provider and configure its model, connection URL and credentials.",
+        "ja-JP": "翻訳サービスを選び、必要なモデル、接続先 URL、認証情報を設定します。",
+        "ko-KR": "번역 서비스를 선택하고 필요한 모델, 연결 주소와 인증 정보를 설정하세요.",
+        "fr-FR": "Choisissez un fournisseur de traduction et configurez le modèle, l’adresse de connexion et les identifiants nécessaires.",
+        "ru-RU": "Выберите сервис перевода и настройте модель, адрес подключения и учётные данные.",
+        "es-ES": "Elige un proveedor de traducción y configura el modelo, la dirección de conexión y las credenciales necesarias."
+      }
+    },
+    {
+      "previousChineseSource": "先设置阅读辅助，再管理鼠标悬浮、输入框和全文翻译。",
+      "localizedCopy": {
+        "zh-CN": "设置双语阅读辅助，以及悬浮、输入框和全文翻译的触发方式。",
+        "en-US": "Configure bilingual reading aids and how hover, input-field and full-page translation are activated.",
+        "ja-JP": "二言語の読書補助と、ホバー・入力欄・ページ全体の翻訳の起動方法を設定します。",
+        "ko-KR": "이중 언어 읽기 도우미와 마우스 오버, 입력란, 전체 페이지 번역의 실행 방식을 설정하세요.",
+        "fr-FR": "Configurez les aides à la lecture bilingue et le déclenchement de la traduction au survol, dans les champs de saisie et sur toute la page.",
+        "ru-RU": "Настройте помощь при двуязычном чтении и способы запуска перевода при наведении, в полях ввода и на всей странице.",
+        "es-ES": "Configura las ayudas de lectura bilingüe y cómo activar la traducción al pasar el cursor, en campos de texto y en toda la página."
+      }
+    },
+    {
+      "previousChineseSource": "调整网页译文的样式与颜色，选择喜欢的界面风格和动画加载效果，并编排菜单栏中的模块和快捷功能。",
+      "localizedCopy": {
+        "zh-CN": "调整译文样式、界面风格、动画与加载效果，以及插件菜单的布局。",
+        "en-US": "Customize translation styles, the interface theme, animations, loading effects and the extension menu layout.",
+        "ja-JP": "訳文のスタイル、画面のテーマ、アニメーション、読み込み表示、拡張機能メニューの配置を調整します。",
+        "ko-KR": "번역문 스타일, 인터페이스 테마, 애니메이션, 로딩 효과와 확장 프로그램 메뉴 배치를 조정하세요.",
+        "fr-FR": "Personnalisez le style des traductions, le thème, les animations, les effets de chargement et la disposition du menu de l’extension.",
+        "ru-RU": "Настройте оформление перевода, тему интерфейса, анимации, индикаторы загрузки и расположение элементов меню расширения.",
+        "es-ES": "Personaliza el estilo de las traducciones, el tema, las animaciones, los efectos de carga y la distribución del menú de la extensión."
+      }
+    },
+    {
+      "previousChineseSource": "选中文字即看译文，也能通过卡片查词、理解词性和句法。",
+      "localizedCopy": {
+        "zh-CN": "选中文字查看译文，用卡片查词或理解句子结构。",
+        "en-US": "Translate selected text and use cards to look up words or explore sentence structure.",
+        "ja-JP": "選択したテキストを翻訳し、カードで単語の意味や文の構造を確認できます。",
+        "ko-KR": "선택한 텍스트를 번역하고 카드에서 단어 뜻이나 문장 구조를 확인하세요.",
+        "fr-FR": "Traduisez le texte sélectionné et utilisez les cartes pour consulter les mots ou comprendre la structure des phrases.",
+        "ru-RU": "Переводите выделенный текст и используйте карточки для поиска значений слов или разбора структуры предложений.",
+        "es-ES": "Traduce el texto seleccionado y usa las tarjetas para consultar palabras o entender la estructura de las frases."
+      }
+    },
+    {
+      "previousChineseSource": "在 YouTube/X 原生字幕下方显示译文，X 无字幕时可用本地 AI 生成，并独立选择视频翻译服务。",
+      "localizedCopy": {
+        "zh-CN": "设置视频与网页会议的双语字幕、翻译服务和显示样式。",
+        "en-US": "Configure bilingual captions, translation providers and caption styles for videos and web meetings.",
+        "ja-JP": "動画とウェブ会議の二言語字幕、翻訳サービス、字幕の表示スタイルを設定します。",
+        "ko-KR": "동영상과 웹 회의의 이중 언어 자막, 번역 서비스와 자막 표시 스타일을 설정하세요.",
+        "fr-FR": "Configurez les sous-titres bilingues, le service de traduction et leur apparence pour les vidéos et les réunions web.",
+        "ru-RU": "Настройте двуязычные субтитры, сервис перевода и оформление субтитров для видео и веб-встреч.",
+        "es-ES": "Configura los subtítulos bilingües, el servicio de traducción y su apariencia para vídeos y reuniones web."
+      }
+    },
+    {
+      "previousChineseSource": "设置 YouTube/X 字幕翻译服务、显示方式和字号。",
+      "localizedCopy": {
+        "zh-CN": "选择字幕翻译服务，调整字幕显示方式与字号。",
+        "en-US": "Choose a caption translation provider, display mode and font size.",
+        "ja-JP": "字幕の翻訳サービス、表示モード、文字サイズを選びます。",
+        "ko-KR": "자막 번역 서비스, 표시 방식과 글자 크기를 선택하세요.",
+        "fr-FR": "Choisissez le service de traduction des sous-titres, leur mode d’affichage et la taille du texte.",
+        "ru-RU": "Выберите сервис перевода субтитров, режим отображения и размер шрифта.",
+        "es-ES": "Elige el servicio de traducción de subtítulos, el modo de visualización y el tamaño de letra."
+      }
+    },
+    {
+      "previousChineseSource": "输入一句话，同时查看多个翻译服务的结果，并支持重复翻译。",
+      "localizedCopy": {
+        "zh-CN": "输入相同文本，对比不同翻译服务的结果，也可重新翻译。",
+        "en-US": "Compare how different services translate the same text, and rerun a translation when needed.",
+        "ja-JP": "同じテキストを複数のサービスで翻訳して比較し、必要に応じて翻訳し直せます。",
+        "ko-KR": "같은 텍스트를 여러 서비스로 번역해 비교하고 필요하면 다시 번역하세요.",
+        "fr-FR": "Comparez les traductions d’un même texte par plusieurs services et relancez une traduction si nécessaire.",
+        "ru-RU": "Сравните переводы одного текста в разных сервисах и при необходимости запустите перевод снова.",
+        "es-ES": "Compara las traducciones del mismo texto con distintos servicios y vuelve a traducir cuando lo necesites."
+      }
+    },
+    {
+      "previousChineseSource": "从收藏原句理解表达，练习自己的用法，再通过复习巩固。",
+      "localizedCopy": {
+        "zh-CN": "结合收藏的原句理解词语和表达，通过练习与复习巩固所学。",
+        "en-US": "Learn words and expressions in the context of saved sentences, then reinforce them through practice and review.",
+        "ja-JP": "保存した文の文脈から単語や表現を理解し、練習と復習で定着させます。",
+        "ko-KR": "저장한 문장의 맥락에서 단어와 표현을 이해하고 연습과 복습으로 익히세요.",
+        "fr-FR": "Apprenez les mots et expressions dans le contexte des phrases enregistrées, puis consolidez vos acquis par la pratique et la révision.",
+        "ru-RU": "Изучайте слова и выражения в контексте сохранённых предложений и закрепляйте их с помощью упражнений и повторения.",
+        "es-ES": "Aprende palabras y expresiones en el contexto de las frases guardadas y afianza lo aprendido con práctica y repaso."
+      }
+    },
+    {
+      "previousChineseSource": "了解插件版本、核心体验与项目入口。",
+      "localizedCopy": {
+        "zh-CN": "查看插件版本、项目主页和反馈渠道。",
+        "en-US": "Find the extension version, project website and feedback links.",
+        "ja-JP": "拡張機能のバージョン、プロジェクトのホームページ、フィードバック窓口を確認できます。",
+        "ko-KR": "확장 프로그램 버전, 프로젝트 홈페이지와 피드백 창구를 확인하세요.",
+        "fr-FR": "Consultez la version de l’extension, le site du projet et les liens pour envoyer vos commentaires.",
+        "ru-RU": "Посмотрите версию расширения, сайт проекта и ссылки для обратной связи.",
+        "es-ES": "Consulta la versión de la extensión, el sitio del proyecto y los enlaces para enviar comentarios."
+      }
+    },
+    {
+      "previousChineseSource": "把鼠标停在文本上，用轻量快捷键获取即时译文。",
+      "localizedCopy": {
+        "zh-CN": "将鼠标停在段落上，按快捷键查看译文。",
+        "en-US": "Hover over a paragraph and press the shortcut to see its translation.",
+        "ja-JP": "段落にカーソルを合わせ、ショートカットキーを押すと訳文が表示されます。",
+        "ko-KR": "문단에 마우스를 올리고 단축키를 눌러 번역문을 확인하세요.",
+        "fr-FR": "Placez le pointeur sur un paragraphe et appuyez sur le raccourci pour afficher sa traduction.",
+        "ru-RU": "Наведите курсор на абзац и нажмите сочетание клавиш, чтобы увидеть перевод.",
+        "es-ES": "Coloca el cursor sobre un párrafo y pulsa el atajo para ver la traducción."
+      }
+    },
+    {
+      "previousChineseSource": "停在划词图标上片刻后打开；移开即取消。",
+      "localizedCopy": {
+        "zh-CN": "将鼠标停在划词图标上，等待设定时间后打开译文；移开鼠标则取消。",
+        "en-US": "Hover over the selection icon for the configured delay to open the translation; move away to cancel.",
+        "ja-JP": "選択翻訳のアイコンにカーソルを合わせると、設定した待ち時間の後に訳文が開きます。カーソルを離すとキャンセルします。",
+        "ko-KR": "선택 번역 아이콘에 마우스를 올리면 설정한 대기 시간 후 번역문이 열립니다. 마우스를 옮기면 취소됩니다.",
+        "fr-FR": "Survolez l’icône de traduction pendant le délai défini pour ouvrir la traduction ; éloignez le pointeur pour annuler.",
+        "ru-RU": "Задержите курсор на значке перевода на заданное время, чтобы открыть перевод; отведите курсор для отмены.",
+        "es-ES": "Mantén el cursor sobre el icono durante el tiempo configurado para abrir la traducción; retíralo para cancelar."
+      }
+    },
+    {
+      "previousChineseSource": "选中文字，在原文旁查看译文。需要深入理解时，再切换到卡片。",
+      "localizedCopy": {
+        "zh-CN": "选中文字后查看译文，也可切换卡片模式查词或学习句子。",
+        "en-US": "View a translation of selected text, or switch to card mode to look up words and study sentences.",
+        "ja-JP": "選択したテキストの訳文を確認できます。カードモードに切り替えると、単語の意味や文の構造も学べます。",
+        "ko-KR": "선택한 텍스트의 번역을 확인하거나 카드 모드로 전환해 단어를 찾고 문장을 학습하세요.",
+        "fr-FR": "Consultez la traduction du texte sélectionné ou passez en mode carte pour chercher des mots et étudier les phrases.",
+        "ru-RU": "Посмотрите перевод выделенного текста или переключитесь в режим карточки для изучения слов и предложений.",
+        "es-ES": "Consulta la traducción del texto seleccionado o cambia al modo tarjeta para buscar palabras y estudiar frases."
+      }
+    },
+    {
+      "previousChineseSource": "保留读懂，其余按需要显示。只在打开卡片后出现。",
+      "localizedCopy": {
+        "zh-CN": "卡片始终显示“读懂”，其他学习动作可按需显示。",
+        "en-US": "Cards always include Understand; choose which other learning actions to show.",
+        "ja-JP": "カードには「理解する」が常に表示されます。他の学習アクションは必要に応じて選べます。",
+        "ko-KR": "카드에는 이해하기가 항상 표시되며 다른 학습 동작은 필요에 따라 선택할 수 있습니다.",
+        "fr-FR": "Les cartes affichent toujours Comprendre ; choisissez les autres actions d’apprentissage à afficher.",
+        "ru-RU": "Действие «Понять» всегда доступно в карточке; остальные учебные действия можно выбрать.",
+        "es-ES": "Las tarjetas siempre muestran Comprender; elige qué otras acciones de aprendizaje quieres mostrar."
+      }
+    },
+    {
+      "previousChineseSource": "开始学习时优先使用的动作；隐藏它时会恢复为读懂。",
+      "localizedCopy": {
+        "zh-CN": "选择默认学习动作；若隐藏该动作，默认恢复为“读懂”。",
+        "en-US": "Choose the default learning action; hiding it resets the default to Understand.",
+        "ja-JP": "既定の学習アクションを選びます。そのアクションを非表示にすると、「理解する」に戻ります。",
+        "ko-KR": "기본 학습 동작을 선택하세요. 해당 동작을 숨기면 기본값이 이해하기로 돌아갑니다.",
+        "fr-FR": "Choisissez l’action d’apprentissage par défaut ; si vous la masquez, Comprendre redevient l’action par défaut.",
+        "ru-RU": "Выберите учебное действие по умолчанию; если его скрыть, по умолчанию снова будет выбрано «Понять».",
+        "es-ES": "Elige la acción de aprendizaje predeterminada; si la ocultas, Comprender vuelve a ser la opción predeterminada."
+      }
+    },
+    {
+      "previousChineseSource": "卡片中的可选能力。点击读懂、词性与句法、用法或练习后才发送请求。",
+      "localizedCopy": {
+        "zh-CN": "点击卡片中的“读懂”“词性与句法”“用法”或“练习”时，才会向所选服务发送讲解请求。",
+        "en-US": "An explanation request is sent to your selected provider only when you choose Understand, Grammar, Usage or Practice in a card.",
+        "ja-JP": "カードで「理解する」「品詞と構文」「用法」「練習」を選んだときだけ、選択したサービスに解説を依頼します。",
+        "ko-KR": "카드에서 이해하기, 품사와 구문, 용법 또는 연습을 선택할 때만 선택한 서비스에 설명을 요청합니다.",
+        "fr-FR": "Une demande d’explication n’est envoyée au service choisi que lorsque vous sélectionnez Comprendre, Grammaire, Usage ou Exercice dans une carte.",
+        "ru-RU": "Запрос на объяснение отправляется выбранному сервису только при выборе в карточке действий «Понять», «Грамматика», «Употребление» или «Практика».",
+        "es-ES": "Solo se envía una solicitud de explicación al proveedor elegido cuando seleccionas Comprender, Gramática, Uso o Práctica en una tarjeta."
+      }
+    }
+  ],
+  "keyedHints": {
+    "popup.quickSettings.disabledHoverHint": {
+      "zh-CN": "默认悬浮快捷键已关闭，可在完整设置中选择快捷键重新启用。",
+      "en-US": "The default hover shortcut is off. Choose a shortcut in full settings to turn it back on.",
+      "ja-JP": "既定のホバー翻訳ショートカットは無効です。詳細設定でキーを選ぶと再び有効にできます。",
+      "ko-KR": "기본 마우스 오버 번역 단축키가 꺼져 있습니다. 전체 설정에서 단축키를 선택해 다시 켤 수 있습니다.",
+      "fr-FR": "Le raccourci de traduction au survol est désactivé. Choisissez un raccourci dans les paramètres complets pour le réactiver.",
+      "ru-RU": "Сочетание клавиш для перевода при наведении отключено. Выберите его в полных настройках, чтобы включить снова.",
+      "es-ES": "El atajo de traducción al pasar el cursor está desactivado. Elige un atajo en los ajustes completos para volver a activarlo."
+    },
+    "popup.quickSettings.videoEnableHint": {
+      "zh-CN": "翻译支持的视频与网页会议字幕",
+      "en-US": "Translate captions in supported videos and web meetings",
+      "ja-JP": "対応する動画とウェブ会議の字幕を翻訳",
+      "ko-KR": "지원되는 동영상 및 웹 회의의 자막 번역",
+      "fr-FR": "Traduire les sous-titres des vidéos et réunions web compatibles",
+      "ru-RU": "Перевод субтитров в поддерживаемых видео и веб-встречах",
+      "es-ES": "Traducir subtítulos de vídeos y reuniones web compatibles"
+    },
+    "popup.quickSettings.appearanceDescription": {
+      "zh-CN": "双语模式同时显示原文与译文；仅译文模式只显示翻译结果。",
+      "en-US": "Bilingual mode shows the original and translation together; translation-only mode shows just the translated text.",
+      "ja-JP": "二言語モードでは原文と訳文を両方表示し、訳文のみのモードでは翻訳結果だけを表示します。",
+      "ko-KR": "이중 언어 모드는 원문과 번역문을 함께 표시하고, 번역문 전용 모드는 번역 결과만 표시합니다.",
+      "fr-FR": "Le mode bilingue affiche le texte original et sa traduction ; l’autre mode affiche uniquement la traduction.",
+      "ru-RU": "Двуязычный режим показывает оригинал и перевод, а режим «Только перевод» — лишь переведённый текст.",
+      "es-ES": "El modo bilingüe muestra el original y la traducción; el modo de solo traducción muestra únicamente el texto traducido."
+    },
+    "popup.quickSettings.videoPlayerHint": {
+      "zh-CN": "通过播放器的字幕菜单显示、隐藏或下载字幕；部分 X 视频还支持在本机生成字幕。",
+      "en-US": "Use the player’s subtitle menu to show, hide or download captions. Some X videos also support on-device caption generation.",
+      "ja-JP": "プレーヤーの字幕メニューで字幕の表示・非表示やダウンロードができます。一部の X 動画では、端末上で字幕を生成することもできます。",
+      "ko-KR": "플레이어의 자막 메뉴에서 자막을 표시하거나 숨기고 다운로드할 수 있습니다. 일부 X 동영상은 기기에서 자막을 생성할 수도 있습니다.",
+      "fr-FR": "Utilisez le menu des sous-titres du lecteur pour les afficher, les masquer ou les télécharger. Certaines vidéos X permettent aussi de générer des sous-titres sur votre appareil.",
+      "ru-RU": "В меню субтитров плеера можно показать, скрыть или скачать субтитры. Для некоторых видео X также доступно создание субтитров на устройстве.",
+      "es-ES": "Usa el menú de subtítulos del reproductor para mostrarlos, ocultarlos o descargarlos. Algunos vídeos de X también permiten generar subtítulos en tu dispositivo."
+    }
+  }
+}

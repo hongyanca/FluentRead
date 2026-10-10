@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-04",
+  "implementationCommit": "74d723065a47332a002f4013cf20cb110baa24ba",
+  "base": "c6ceb445",
+  "branch": "codex/settings-i18n-20261004",
+  "results": {
+    "compile": "passed",
+    "testAudit": "passed: 462 files, 5898 case metadata",
+    "i18n": 56,
+    "settingsUiArchitecture": 33,
+    "vocabularyComponentsAndLifecycle": 8,
+    "sourceFileHeaders": 788,
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed",
+    "userscriptBuildAndVerifier": "passed",
+    "docsBuild": "passed",
+    "browserInitialScan": {
+      "views": 294,
+      "checks": 15,
+      "findings": 2,
+      "errors": 0
+    },
+    "browserRussianRecheck": {
+      "views": 2,
+      "checks": 3,
+      "findings": 0,
+      "errors": 0
+    },
+    "browserMangaRecheck": {
+      "views": 42,
+      "checks": 29,
+      "findings": 0,
+      "errors": 0
+    }
+  },
+  "sourceHeadersEvidence": "The sourceFileHeaders file passed all 788 cases during the earlier targeted run; one settings-copy expectation in that same run failed and was updated, and all 33 settings architecture cases passed in the final run.",
+  "notCovered": [
+    "full regression suite",
+    "Firefox runtime",
+    "real provider and OAuth accounts",
+    "remote userscript CDN resource download",
+    "external native-language review"
+  ],
+  "publicationAtInitialDelivery": "local commits only; not pushed, merged, or released",
+  "integration": {
+    "mainBase": "eac8e7de",
+    "languageResourceCommit": "775e6a648a112cd522427943f0b71b4abab49ccb",
+    "testFiles": 7,
+    "tests": 111,
+    "compile": "passed",
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed",
+    "userscriptBuildAndVerifier": "passed",
+    "browser": {
+      "views": 294,
+      "checks": 15,
+      "findings": 0,
+      "errors": 0
+    },
+    "docsBuild": "passed",
+    "docsTypecheck": "passed",
+    "docsCheck": "passed"
+  }
+}

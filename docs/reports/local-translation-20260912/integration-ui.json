@@ -1,0 +1,122 @@
+{
+  "defaultService": "freeTranslation",
+  "editingService": "localTranslation",
+  "cards": 3,
+  "phases": [
+    "idle",
+    "idle",
+    "idle"
+  ],
+  "modelPicker": 0,
+  "connectionButton": 0,
+  "layouts": [
+    {
+      "width": 1440,
+      "columns": "431px 431px",
+      "overflow": false,
+      "cards": [
+        {
+          "x": 529,
+          "y": 348.296875,
+          "width": 431,
+          "height": 235.1796875,
+          "overflow": false
+        },
+        {
+          "x": 972,
+          "y": 348.296875,
+          "width": 431,
+          "height": 235.1796875,
+          "overflow": false
+        },
+        {
+          "x": 529,
+          "y": 595.4765625,
+          "width": 431,
+          "height": 214.78125,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 820,
+      "columns": "316px",
+      "overflow": false,
+      "cards": [
+        {
+          "x": 467,
+          "y": 529.09375,
+          "width": 316,
+          "height": 235.1796875,
+          "overflow": false
+        },
+        {
+          "x": 467,
+          "y": 776.2734375,
+          "width": 316,
+          "height": 235.1796875,
+          "overflow": false
+        },
+        {
+          "x": 467,
+          "y": 1023.453125,
+          "width": 316,
+          "height": 235.1796875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "columns": "324px",
+      "overflow": false,
+      "cards": [
+        {
+          "x": 33,
+          "y": 811.34375,
+          "width": 324,
+          "height": 227.1796875,
+          "overflow": false
+        },
+        {
+          "x": 33,
+          "y": 1050.5234375,
+          "width": 324,
+          "height": 227.1796875,
+          "overflow": false
+        },
+        {
+          "x": 33,
+          "y": 1289.703125,
+          "width": 324,
+          "height": 227.1796875,
+          "overflow": false
+        }
+      ]
+    }
+  ],
+  "persistedModel": "fluentread/opus-ja-en",
+  "defaultAfterReload": "freeTranslation",
+  "licenseExpanded": true,
+  "errors": [],
+  "modelDownloadAttempted": false,
+  "session": {
+    "extensionId": "mfboakojjicojjdfgojjmbnojllffjno",
+    "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-local-v2-kEJece",
+    "launchMode": "playwright-headed",
+    "focusPolicy": "foreground-authorized",
+    "windowPlacement": {
+      "mode": "headed-centered",
+      "centered": true,
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "bounds": {
+        "left": 132,
+        "top": -1040,
+        "width": 1440,
+        "height": 1000
+      }
+    }
+  }
+}

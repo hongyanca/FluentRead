@@ -1,0 +1,41 @@
+{
+  "ok": false,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-global-toggle-edge-BJUf7w",
+  "artifactsDir": "/private/tmp/fr-global-toggle-baseline",
+  "checks": [],
+  "consoleErrors": [],
+  "screenshots": [],
+  "metrics": {},
+  "evidenceBoundary": "Local deterministic HTML/provider in an isolated Edge profile; no Firefox runtime or external provider claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "disabledResponse": "阅读应该轻松、自然。颜色和线条应当贴合你正在阅读的网页。",
+  "disabledProviderCalls": 1,
+  "error": "AssertionError [ERR_ASSERTION]: 全局关闭后后台仍调用翻译服务\n\n1 !== 0\n\n    at main (/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/scripts/testing/run-global-translation-toggle-test.cjs:131:12)"
+}

@@ -1,0 +1,103 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/architecture/sourceFileHeaders.test.ts" "tests/architecture/moduleBoundaries.test.ts" "tests/architecture/verificationOwnership.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/architecture/sourceFileHeaders.test.ts tests/architecture/moduleBoundaries.test.ts tests/architecture/verificationOwnership.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003
+
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 2 failed) 695ms
+   × repository verification ownership > 每个产品、构建和测试基础设施文件都有明确验证归属 5ms
+     → expected [ { …(2) } ] to deeply equal []
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 468ms
+     → expected [ Array(8) ] to deeply equal []
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 1 failed) 2700ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 998ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 731ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 390ms
+   × architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片 25ms
+     → expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 354ms
+ ✓ tests/architecture/sourceFileHeaders.test.ts (701 tests) 205ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片
+AssertionError: expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+
+- Expected
++ Received
+
+  Array [
++   "@/src/services/translation/errors",
+    "@/src/app/document-translation",
+  ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:372:35
+    370|             .filter((specifier) => specifier.startsWith('@/entrypoints…
+    371|
+    372|         expect(documentUiImports).toEqual(['@/src/app/document-transla…
+       |                                   ^
+    373|         expect(featureEntrypointImports).toEqual([]);
+    374|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > 每个产品、构建和测试基础设施文件都有明确验证归属
+AssertionError: expected [ { …(2) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "owners": Array [],
++     "path": "scripts/verify-brand-copy.mjs",
++   },
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:311:25
+    309|     it('每个产品、构建和测试基础设施文件都有明确验证归属', () => {
+    310|         const unowned = ownership.filter(({owners}) => owners.length =…
+    311|         expect(unowned).toEqual([]);
+       |                         ^
+    312|     });
+    313|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/core/i18n/messages/siteRules.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:320:27
+    318|             && !strictCoverage.has(path));
+    319|
+    320|         expect(uncovered).toEqual([]);
+       |                           ^
+    321|     });
+    322|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  3 failed | 720 passed (723)
+   Start at  02:36:46
+   Duration  4.62s (transform 57ms, setup 0ms, collect 557ms, tests 3.60s, environment 0ms, prepare 113ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

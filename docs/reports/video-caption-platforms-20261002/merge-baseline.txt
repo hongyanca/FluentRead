@@ -1,0 +1,185 @@
+> FluentRead-流畅阅读@0.0.35 test /private/tmp/FluentRead-caption-merge-baseline-20261002
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/configDiff.test.ts" "tests/architecture/verificationOwnership.test.ts" "tests/architecture/moduleBoundaries.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/configDiff.test.ts tests/architecture/verificationOwnership.test.ts tests/architecture/moduleBoundaries.test.ts
+
+ RUN  v2.1.9 /private/tmp/FluentRead-caption-merge-baseline-20261002
+
+ ❯ tests/configDiff.test.ts (43 tests | 1 failed) 31ms
+   × 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值 9ms
+     → expected [ Array(5) ] to deeply equal ArrayContaining{…}
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 2 failed) 740ms
+   × repository verification ownership > 每个产品、构建和测试基础设施文件都有明确验证归属 5ms
+     → expected [ { …(2) } ] to deeply equal []
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 527ms
+     → expected [ Array(8) ] to deeply equal []
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 2 failed) 2425ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 908ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 665ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 333ms
+   × architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片 24ms
+     → expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 312ms
+   × architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限 3ms
+     → expected [ { …(3) } ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/configDiff.test.ts > 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值
+AssertionError: expected [ Array(5) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ Array [
+    Object {
+      "after": "简约风格",
+      "before": "默认风格",
+      "key": "interfaceSkin",
+      "label": "界面皮肤",
+    },
+    Object {
+      "after": "快捷功能栏关闭、当前网站栏目开启、底部信息栏关闭",
+      "before": "快捷功能栏开启、当前网站栏目开启、底部信息栏开启",
+      "key": "interfaceVisibility",
+      "label": "界面栏目",
+    },
+    Object {
+      "after": "快捷功能栏 → 翻译控制 → 当前网站栏目 → 底部信息栏",
+      "before": "翻译控制 → 当前网站栏目 → 快捷功能栏 → 底部信息栏",
+      "key": "popupModuleOrder",
+      "label": "菜单栏布局顺序",
+    },
+    Object {
+-     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
+-     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
++     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、文档翻译：显示",
++     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、文档翻译：显示",
+      "key": "popupQuickFeatureVisibility",
+      "label": "快捷功能卡片",
+    },
+    Object {
+-     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译",
+-     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译 → 文档翻译",
++     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video",
++     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video → 文档翻译",
+      "key": "popupQuickFeatureOrder",
+      "label": "快捷功能顺序",
+    },
+  ]
+
+ ❯ tests/configDiff.test.ts:314:51
+    312|         });
+    313|
+    314|         expect(group(result, 'general')?.changes).toEqual(expect.array…
+       |                                                   ^
+    315|             {key: 'interfaceSkin', label: '界面皮肤', before: '默认风…
+    316|             {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片
+AssertionError: expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+
+- Expected
++ Received
+
+  Array [
++   "@/src/services/translation/errors",
+    "@/src/app/document-translation",
+  ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:372:35
+    370|             .filter((specifier) => specifier.startsWith('@/entrypoints…
+    371|
+    372|         expect(documentUiImports).toEqual(['@/src/app/document-transla…
+       |                                   ^
+    373|         expect(featureEntrypointImports).toEqual([]);
+    374|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "ceiling": 1887,
++     "lines": 1909,
++     "path": "src/features/video-subtitle/content/runtime.ts",
++   },
++ ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:430:24
+    428|             .filter(({lines, ceiling}) => lines > ceiling);
+    429|
+    430|         expect(growth).toEqual([]);
+       |                        ^
+    431|     });
+    432| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > 每个产品、构建和测试基础设施文件都有明确验证归属
+AssertionError: expected [ { …(2) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "owners": Array [],
++     "path": "scripts/verify-brand-copy.mjs",
++   },
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:309:25
+    307|     it('每个产品、构建和测试基础设施文件都有明确验证归属', () => {
+    308|         const unowned = ownership.filter(({owners}) => owners.length =…
+    309|         expect(unowned).toEqual([]);
+       |                         ^
+    310|     });
+    311|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(8) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/core/i18n/messages/siteRules.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:318:27
+    316|             && !strictCoverage.has(path));
+    317|
+    318|         expect(uncovered).toEqual([]);
+       |                           ^
+    319|     });
+    320|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+ Test Files  3 failed (3)
+      Tests  5 failed | 60 passed (65)
+   Start at  18:12:00
+   Duration  4.34s (transform 198ms, setup 0ms, collect 705ms, tests 3.20s, environment 0ms, prepare 110ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

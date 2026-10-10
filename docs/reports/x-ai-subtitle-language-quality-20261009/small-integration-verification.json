@@ -1,0 +1,87 @@
+{
+  "scope": "Small cache/download, availability/deletion, capture profiles and bounded preparation/transcription budgets",
+  "worktree": "/Users/thinkstu/Desktop/copy/FluentRead-x-subtitle-language-quality-20261009",
+  "baseCommit": "854ce15d5279b875c766efd15b208380c81e3371",
+  "sourceState": "uncommitted shared task worktree; hashes pin this scope at verification",
+  "productionSha256": {
+    "src/features/video-subtitle/offscreen/modelCache.ts": "9af5a6060635ad6d69d4f68412fec57a6df783165328e5ec4f3e8ee4edc7095a",
+    "src/features/video-subtitle/offscreen/transcription.ts": "b39bff818ff060f3f00826ec129c4e63ecab1b218d6c1e20c45b313874b596bb",
+    "src/features/video-subtitle/content/video-ai/audioWindow.ts": "e687a86dacbff364f02813e4e1944dc1528ea09f5cb511b62e396fc8870020b3",
+    "src/features/video-subtitle/content/video-ai/fullCapture.ts": "b38922ac6b974ef87041a34dd70c6ebe720d77e8e5e42e1295fdb17df496c77c",
+    "src/features/video-subtitle/content/video-ai/capture.ts": "0726ee74294996421a3c84879e95597970ef4cc7afbadf583ffe7b3518896357",
+    "src/features/video-subtitle/background/handlers.ts": "e4c7d551d771bf0184dfb7e485fb968d4929afe537725b1af2637dded1d17c16",
+    "src/platform/http/modelDownloads.ts": "272f49d7a9ae58044b66a5cc8b70eab243022f3519cbca21a3b7022b228ba012"
+  },
+  "centralTimeoutHelpersSha256": "94e1fcfe3c2b1fea7c9cd5dbfb3fbcdab54ab128b5a7b460e3dac448bd49ff0f",
+  "testSha256": {
+    "tests/modelDownloads.test.ts": "9c748dd75c610d74d42373ef86441003806ccba30c708281cbbdc3f3ece1a3fd",
+    "tests/videoAiModelCache.test.ts": "5e2c151f20fe02c3ce03c647b0de703588c23ae1eced42228ba3193a397c868c",
+    "tests/modelCacheRemoval.test.ts": "599f86fdd98a26de02a7fbf696184547fe97bbbd576d16f9e39aca74a7df49b0",
+    "tests/videoAiOffscreen.test.ts": "7eb143b5086a916356724932bc9713936dc50ddc5baf9a5051194d49c06d7bbc",
+    "tests/videoAiBackendCoverage.test.ts": "195b4e3dc4b7386bccd0bcac223372e2b8a7f9ff7f461a6b2b7069df48744d80",
+    "tests/videoAiBackground.test.ts": "799ab16c229474c4d1ceaed6892784c1e7512bd997ddfb9c12887d858212aa8a",
+    "tests/videoAiAlgorithmsCoverage.test.ts": "6e375b494cae1a6673f1a137f98b71b26499c1436bfcc01af361ac8e9ceb97ab",
+    "tests/videoAiFullCapture.test.ts": "5036aa191d9704ae904bd9934689e61eff5e190e206dd685f7ff9fa49657227e",
+    "tests/videoAiFullCaptureFailures.test.ts": "89556db0b25e70a7965a79408f6384b204d5b39f14f196ad36f8d9a3691ed799",
+    "tests/videoAiCapture.test.ts": "ed809554cbaf0822b60f5f03dc23e6f1d38d55f54270d3610d50bc0d874e2ebf",
+    "tests/videoAiStreaming.test.ts": "5b2ee6769c6c0fe81b5eeebe29cdda0efcf6cf73475f83e18bc4b83a69048265",
+    "tests/implementationAudit49D.test.ts": "3aa892756792f8c6f8a7c55ae6998a417921cf6575ee2e426d28e9a5ed945103"
+  },
+  "verification": {
+    "compile": {
+      "command": "pnpm compile",
+      "exitCode": 0
+    },
+    "testFiles": 12,
+    "passedTests": 328,
+    "coveragePercent": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "coveragePath": "/private/tmp/fluentread-small-capture-download-coverage-20261009/coverage-final.json",
+    "coverageSha256": "371cc4f545b095f3a098a78e7b295110e4e3dd9747315094278ba36825f649f4"
+  },
+  "small": {
+    "defaultFiles": 7,
+    "precision": {
+      "encoder": "fp32",
+      "decoder": "q4"
+    },
+    "prepareTimeoutMs": 600000,
+    "downloadTotalTimeoutMs": 600000,
+    "downloadPerSourceFileTimeoutMs": 300000,
+    "idleDownloadTimeoutMs": 20000,
+    "encoderExactFile": "onnx/encoder_model.onnx",
+    "encoderMaxBytes": 402653184,
+    "otherMaxBytes": 268435456,
+    "fullWindowMs": 14000,
+    "streamWindowMs": 8000,
+    "workerTimeoutMs": 180000,
+    "primaryWorkerTimeoutMs": 90000,
+    "requestTimeoutMs": 200000,
+    "streamEndPendingTimeoutMs": 200000,
+    "userStopCancelsImmediately": true
+  },
+  "budgetRegression": {
+    "counterexampleSourceState": "Intermediate Small integration patch before model-based request budgets; legacy capture pending-finalization 5000ms.",
+    "counterexampleCommand": "node scripts/testing/run-resource-safe.mjs -- pnpm exec vitest run tests/videoAiCapture.test.ts --testNamePattern 'Small 视频结束|Small 的长尾'",
+    "legacyFailedTests": 3,
+    "newCaptureCases": {
+      "completeAfterMs": 76551,
+      "deadlineMs": 200000,
+      "stopAfterMs": 5001
+    },
+    "finalSuiteCounts": {
+      "tests/videoAiOffscreen.test.ts": 35,
+      "tests/videoAiCapture.test.ts": 31,
+      "tests/videoAiBackground.test.ts": 17
+    }
+  },
+  "boundaries": [
+    "Model cache test bodies and Worker replies are controlled fixtures; no 590MB browser download or new CPU/GPU inference measured by this scope.",
+    "Final Small generation 60s/Worker 180s/request 200s policy is based on separate ASR-agent actual CPU observations; controlled clock tests prove wiring and cancellation, not slower-device completion.",
+    "Tiny/Base/invalid normalized-model budgets are unchanged."
+  ]
+}

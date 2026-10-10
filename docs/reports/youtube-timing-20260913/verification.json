@@ -1,0 +1,502 @@
+{
+  "baseCommit": "25ceead44da2406e011e3ff66bfc41ac4a7195c3",
+  "sourceDiffSha256": "d458200a175ea839d5a25b0c94cde9b16faa2505136c848d75cf985155274bc0",
+  "evidence": "Production extension with controlled video, caption DOM, and deterministic translations. Real browser input, playback, fullscreen and persistent storage. Not live-provider latency proof.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "youtube": {
+    "success": true,
+    "checks": [
+      {
+        "name": "Whole native cue uses one bilingual panel",
+        "pass": true,
+        "details": {
+          "time": 0.5,
+          "original": "Sea otters have strong teeth.",
+          "translation": "海獭有强有力的牙齿。",
+          "native": "Sea otters have strong teeth.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 366.046875,
+            "y": 492.953125,
+            "width": 307.8984375,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 673.9453125,
+            "bottom": 566,
+            "left": 366.046875
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Document fullscreen preserves an open, visible, clickable menu and full-height subtitle layer",
+        "pass": true,
+        "details": {
+          "root": "HTML",
+          "menuParent": "movie_player",
+          "layerParent": "movie_player",
+          "sameMenu": true,
+          "hidden": false,
+          "menuRect": {
+            "x": 1016,
+            "y": 495,
+            "width": 248,
+            "height": 281,
+            "top": 495,
+            "right": 1264,
+            "bottom": 776,
+            "left": 1016
+          },
+          "layerHeight": 816,
+          "hit": true
+        }
+      },
+      {
+        "name": "Fullscreen menu switches display mode",
+        "pass": true
+      },
+      {
+        "name": "Partial and whole captions share stable geometry",
+        "pass": true,
+        "details": {
+          "time": 0.5,
+          "original": "Sea otters have strong teeth.",
+          "translation": "海獭有强有力的牙齿。",
+          "native": "Sea otters",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 366.046875,
+            "y": 492.953125,
+            "width": 307.8984375,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 673.9453125,
+            "bottom": 566,
+            "left": 366.046875
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "A late native DOM update never reveals the next unrelated cue or retains its previous translation",
+        "pass": true,
+        "details": {
+          "time": 1.2,
+          "original": "",
+          "translation": "",
+          "native": "Sea otters have strong teeth.",
+          "nativeVisibility": "visible",
+          "panel": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "none"
+        }
+      },
+      {
+        "name": "A repeated sentence is allowed in its own later interval",
+        "pass": true
+      },
+      {
+        "name": "Expired cues disappear at their end, including a repeated sentence",
+        "pass": true,
+        "details": {
+          "time": 3.2,
+          "original": "",
+          "translation": "",
+          "native": "Sea otters have strong teeth.",
+          "nativeVisibility": "visible",
+          "panel": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "none"
+        }
+      },
+      {
+        "name": "A matching prefix does not borrow a future full sentence",
+        "pass": true,
+        "details": {
+          "time": 4,
+          "original": "",
+          "translation": "",
+          "native": "The same beginning",
+          "nativeVisibility": "visible",
+          "panel": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "none"
+        }
+      },
+      {
+        "name": "A delayed translation cannot overwrite a newer caption",
+        "pass": true,
+        "details": {
+          "time": 11.2,
+          "original": "The next caption is ready.",
+          "translation": "下一句字幕已就绪。",
+          "native": "The next caption is ready.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 382.09375,
+            "y": 492.953125,
+            "width": 275.8125,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 657.90625,
+            "bottom": 566,
+            "left": 382.09375
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Seeking immediately clears both extension lines",
+        "pass": true,
+        "details": {
+          "original": "",
+          "translation": ""
+        }
+      },
+      {
+        "name": "Seeking back restores the current cached cue",
+        "pass": true
+      },
+      {
+        "name": "Empty native captions clear the translation without a grace-period tail",
+        "pass": true,
+        "details": {
+          "time": 0.6,
+          "original": "",
+          "translation": "",
+          "native": "",
+          "nativeVisibility": "visible",
+          "panel": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "none"
+        }
+      },
+      {
+        "name": "Untracked native changes invalidate the previous translation before waiting for stability",
+        "pass": true,
+        "details": {
+          "time": 21,
+          "original": "Another native sentence.",
+          "translation": "",
+          "native": "Another native sentence.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 385.4140625,
+            "y": 525.9765625,
+            "width": 269.1640625,
+            "height": 40.0234375,
+            "top": 525.9765625,
+            "right": 654.578125,
+            "bottom": 566,
+            "left": 385.4140625
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Untracked captions dispatch within 220 ms instead of the former 360 ms stability wait",
+        "pass": true,
+        "details": {
+          "dispatchMs": 159
+        }
+      },
+      {
+        "name": "Rolling captions select the current prefix while the previous full cue still overlaps",
+        "pass": true,
+        "details": {
+          "time": 16.2,
+          "original": "I thought I'd try out this beer.",
+          "translation": "译文：I thought I'd try out this beer.",
+          "native": "They serve drinks. I thought",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 334.25,
+            "y": 492.953125,
+            "width": 371.4921875,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 705.7421875,
+            "bottom": 566,
+            "left": 334.25
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Clipped rolling history does not enter the displayed sentence or cause a fallback translation",
+        "pass": true,
+        "details": {
+          "time": 16.2,
+          "original": "I thought I'd try out this beer.",
+          "translation": "译文：I thought I'd try out this beer.",
+          "native": "Old clipped words.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 334.25,
+            "y": 492.953125,
+            "width": 371.4921875,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 705.7421875,
+            "bottom": 566,
+            "left": 334.25
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Continuous 40 ms word updates cannot keep postponing the first request",
+        "pass": true,
+        "details": {
+          "requests": [
+            {
+              "source": "Streaming captions keep adding new words",
+              "afterMs": 246
+            },
+            {
+              "source": "Streaming captions keep adding new words without waiting for a quiet gap.",
+              "afterMs": 497
+            }
+          ]
+        }
+      },
+      {
+        "name": "Cached untracked replay does not repeat a provider request",
+        "pass": true,
+        "details": {
+          "renderMs": 185
+        }
+      },
+      {
+        "name": "Player menu advances subtitles by 0.5 s without seeking or altering native text",
+        "pass": true,
+        "details": {
+          "time": 0.8,
+          "original": "They open the shell.",
+          "translation": "它们打开贝壳。",
+          "native": "Sea otters have strong teeth.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 275.484375,
+            "y": 492.953125,
+            "width": 221.0234375,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 496.5078125,
+            "bottom": 566,
+            "left": 275.484375
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Positive 0.5 s offset delays the whole bilingual cue",
+        "pass": true,
+        "details": {
+          "time": 1.2,
+          "original": "Sea otters have strong teeth.",
+          "translation": "海獭有强有力的牙齿。",
+          "native": "They open the shell.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 232.046875,
+            "y": 492.953125,
+            "width": 307.8984375,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 539.9453125,
+            "bottom": 566,
+            "left": 232.046875
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Manual timing also applies in original-only mode",
+        "pass": true,
+        "details": {
+          "time": 1.2,
+          "original": "Sea otters have strong teeth.",
+          "translation": "",
+          "native": "They open the shell.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 232.046875,
+            "y": 525.9765625,
+            "width": 307.8984375,
+            "height": 40.0234375,
+            "top": 525.9765625,
+            "right": 539.9453125,
+            "bottom": 566,
+            "left": 232.046875
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Adjusted subtitle clock respects gaps without leaking unadjusted native captions",
+        "pass": true,
+        "details": {
+          "time": 3.6,
+          "original": "",
+          "translation": "",
+          "native": "A native gap.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "none"
+        }
+      },
+      {
+        "name": "A newly opened playback page restores the saved offset",
+        "pass": true
+      },
+      {
+        "name": "Unavailable caption timing disables adjustment while leaving reset usable",
+        "pass": true
+      },
+      {
+        "name": "Repeated half-second clicks accumulate and synchronize to another playback page",
+        "pass": true
+      },
+      {
+        "name": "Reset restores native timing and synchronizes the saved zero offset",
+        "pass": true
+      },
+      {
+        "name": "Advancing subtitles follows the playing video clock before the native DOM changes",
+        "pass": true,
+        "details": {
+          "time": 0.569055,
+          "original": "They open the shell.",
+          "translation": "它们打开贝壳。",
+          "native": "Sea otters have strong teeth.",
+          "nativeVisibility": "hidden",
+          "panel": {
+            "x": 275.484375,
+            "y": 492.953125,
+            "width": 221.0234375,
+            "height": 73.046875,
+            "top": 492.953125,
+            "right": 496.5078125,
+            "bottom": 566,
+            "left": 275.484375
+          },
+          "layerParent": "movie_player",
+          "panelDisplay": "flex"
+        }
+      },
+      {
+        "name": "Original-only restores native captions",
+        "pass": true
+      },
+      {
+        "name": "Disabling removes menu, layer and native hiding",
+        "pass": true
+      }
+    ],
+    "errors": []
+  },
+  "x": {
+    "success": true,
+    "timingControls": {
+      "earlierMs": -500,
+      "laterMs": 500,
+      "reset": true,
+      "playbackPositionPreserved": true
+    },
+    "nativeRestored": "showing",
+    "asrCalls": 0,
+    "prepareCalls": 0,
+    "translationCalls": 6,
+    "errors": []
+  },
+  "knownBaselineFailure": {
+    "test": "tests/architecture/verificationOwnership.test.ts",
+    "unowned": [
+      "scripts/wasm/diagnostics.js",
+      "scripts/wasm/package-diagnostics.ts"
+    ],
+    "reproducedOnUnmodifiedMain": true
+  },
+  "liveVideo": {
+    "url": "https://www.youtube.com/watch?v=MP0tWdWZThg&t=311s",
+    "videoPlayed": true,
+    "timedtextStatus": 200,
+    "timedtextBytes": 0,
+    "endToEndSubtitleLatencyVerified": false
+  },
+  "productionSha256": {
+    "content-scripts/content.js": "759f2e690a94c5c972a8a19c0cf048e5d99d1fb7156b0ab4ff3bcb584ad22857",
+    "background.js": "2245514d914b1ac3e0e68eb1d863367382db71be0afe5f9f255cb4fd3f2be831",
+    "manifest.json": "7ff80751870835989f3e84736c41ab72f9f3b82d2ab1097d5fe312d8ec51c77d"
+  }
+}

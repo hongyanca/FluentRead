@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-09",
+  "timeZone": "Asia/Shanghai",
+  "authorization": "User explicitly allowed shared pasteboard recovery and instructed completion then merge in this chat.",
+  "clipboardContentsRead": false,
+  "target": "gui/501/com.apple.pboard",
+  "before": {
+    "pid": 28109,
+    "state": "running",
+    "runs": 2
+  },
+  "launchctlKickstart": {
+    "command": "/bin/launchctl kickstart -kp gui/501/com.apple.pboard",
+    "exitCode": 150,
+    "error": "Operation not permitted while System Integrity Protection is engaged",
+    "serviceRestarted": false
+  },
+  "authorizedAlternative": {
+    "command": "/bin/kill -TERM 28109",
+    "exitCode": 0,
+    "identityEvidence": "Immediate launchctl print target reported program /usr/libexec/pboard, PID28109, current user domain gui/501"
+  },
+  "after": {
+    "pid": 11515,
+    "state": "running",
+    "runs": 3,
+    "lastTerminatingSignal": 15
+  },
+  "limits": [
+    "Running daemon is not proof of responsiveness; browser acceptance reports must independently establish launch/product behavior.",
+    "No unrelated processes or browser profiles were signaled."
+  ]
+}

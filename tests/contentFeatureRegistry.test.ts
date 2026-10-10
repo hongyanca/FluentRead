@@ -25,6 +25,24 @@ function deferred<T>() {
 }
 
 describe('content feature registry', () => {
+    it('挂载等待期间失效的取消不记为功能错误，也不启动后续功能', async () => {
+        const controller = new AbortController();
+        let rejectMount!: (error: unknown) => void;
+        const onError = vi.fn();
+        const laterMount = vi.fn();
+        const registry = createContentFeatureRegistry([
+            {id: 'old-ui', isEnabled: () => true, mount: () => new Promise((_, reject) => { rejectMount = reject; })},
+            {id: 'next-ui', isEnabled: () => true, mount: laterMount},
+        ], {onError});
+        const mounting = registry.mountEnabled(runtime(() => true, controller.signal));
+        controller.abort();
+        rejectMount(new DOMException('扩展上下文已失效', 'AbortError'));
+        await expect(mounting).resolves.toEqual([
+            {id: 'old-ui', status: 'skipped'}, {id: 'next-ui', status: 'skipped'},
+        ]);
+        expect(onError).not.toHaveBeenCalled();
+        expect(laterMount).not.toHaveBeenCalled();
+    });
     it('unsupported message helpers unmount and answer explicitly without touching supported features', () => {
         const unmount = vi.fn();
         const sendResponse = vi.fn();
@@ -42,7 +60,7 @@ describe('content feature registry', () => {
         const mount = vi.fn();
         const feature = {id: 'area', requiredCapability: 'areaTranslation' as const, isEnabled, mount};
         const firefox = createContentFeatureRegistry([feature], {
-            capabilities: resolveBrowserCapabilities({browser: 'firefox', manifestVersion: 2}),
+            capabilities: resolveBrowserCapabilities({browser: 'firefox', manifestVersion: 3}),
         });
         await expect(firefox.mountEnabled(runtime())).resolves.toEqual([{id: 'area', status: 'skipped'}]);
         expect(isEnabled).not.toHaveBeenCalled();

@@ -1,0 +1,1892 @@
+{
+  "counts": {
+    "total": 235,
+    "explicitDomains": 141,
+    "dedicatedLiveSamples": 2,
+    "genericScope": 209,
+    "unresolvedName": 24,
+    "catalogDomains": 213
+  },
+  "sites": [
+    {
+      "index": 1,
+      "requestedName": "Pixiv",
+      "domainCandidate": "pixiv.net",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "专用适配；用户提供实页已验证",
+      "nextEvidence": "更多章节、设备和识别质量样本"
+    },
+    {
+      "index": 2,
+      "requestedName": "MANGA Plus by SHUEISHA",
+      "domainCandidate": "mangaplus.shueisha.co.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "专用适配；用户提供实页已验证",
+      "nextEvidence": "更多章节、设备和识别质量样本"
+    },
+    {
+      "index": 3,
+      "requestedName": "Zebrack by SHUEISHA",
+      "domainCandidate": "zebrack-comic.shueisha.co.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 4,
+      "requestedName": "MANGA Million by SHUEISHA",
+      "domainCandidate": "mangamillion.shueisha.co.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 5,
+      "requestedName": "COMIC FUZ",
+      "domainCandidate": "comic-fuz.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 6,
+      "requestedName": "MangaDex",
+      "domainCandidate": "mangadex.org",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 7,
+      "requestedName": "MangaDNA",
+      "domainCandidate": "mangadna.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 8,
+      "requestedName": "Yamibo",
+      "domainCandidate": "yamibo.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 9,
+      "requestedName": "ShonenJumpPlus",
+      "domainCandidate": "shonenjumpplus.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 10,
+      "requestedName": "Rimacomiplus",
+      "domainCandidate": "rimacomiplus.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 11,
+      "requestedName": "Heros Web",
+      "domainCandidate": "viewer.heros-web.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 12,
+      "requestedName": "Comic Days",
+      "domainCandidate": "comic-days.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 13,
+      "requestedName": "Comic Top",
+      "domainCandidate": "comic-top.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 14,
+      "requestedName": "ComicWalker",
+      "domainCandidate": "comic-walker.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 15,
+      "requestedName": "Web Ace",
+      "domainCandidate": "web-ace.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 16,
+      "requestedName": "Antbyw",
+      "domainCandidate": "antbyw.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 17,
+      "requestedName": "Jmanga",
+      "domainCandidate": "jmanga.org",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 18,
+      "requestedName": "Twitter Comic",
+      "domainCandidate": "twicomi.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 19,
+      "requestedName": "MangaZ",
+      "domainCandidate": "mangaz.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 20,
+      "requestedName": "PASH UP",
+      "domainCandidate": "pash-up.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 21,
+      "requestedName": "BOOK☆WALKER",
+      "domainCandidate": "bookwalker.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 22,
+      "requestedName": "COLAMANGA",
+      "domainCandidate": "colamanga.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 23,
+      "requestedName": "GANGAN ONLINE",
+      "domainCandidate": "ganganonline.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 24,
+      "requestedName": "Asura Scans",
+      "domainCandidate": "asuracomic.net",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 25,
+      "requestedName": "All Manga",
+      "domainCandidate": "allmanga.to",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 26,
+      "requestedName": "Manhwaclan",
+      "domainCandidate": "manhwaclan.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 27,
+      "requestedName": "CoroCoro",
+      "domainCandidate": "corocoro.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 28,
+      "requestedName": "tonarinoyj",
+      "domainCandidate": "tonarinoyj.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 29,
+      "requestedName": "Yymanhua",
+      "domainCandidate": "yymanhua.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 30,
+      "requestedName": "Manhwatop",
+      "domainCandidate": "manhwatop.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 31,
+      "requestedName": "Palcy",
+      "domainCandidate": "palcy.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 32,
+      "requestedName": "Comic-Trail",
+      "domainCandidate": "comic-trail.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 33,
+      "requestedName": "Templetoons",
+      "domainCandidate": "templetoons.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 34,
+      "requestedName": "Batocomic",
+      "domainCandidate": "batocomic.net",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 35,
+      "requestedName": "Comic-action",
+      "domainCandidate": "comic-action.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 36,
+      "requestedName": "腾讯动漫",
+      "domainCandidate": "ac.qq.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 37,
+      "requestedName": "Sololevelingmangafree",
+      "domainCandidate": "sololevelingmangafree.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 38,
+      "requestedName": "Syosetu",
+      "domainCandidate": "syosetu.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 39,
+      "requestedName": "Comick",
+      "domainCandidate": "comick.io / comick.dev / comick.fun",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 40,
+      "requestedName": "YoungAnimal",
+      "domainCandidate": "younganimal.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 41,
+      "requestedName": "Piccoma",
+      "domainCandidate": "piccoma.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 42,
+      "requestedName": "Hentaizap",
+      "domainCandidate": "hentaizap.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 43,
+      "requestedName": "Hanime1",
+      "domainCandidate": "hanimeone.me",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 44,
+      "requestedName": "Globalcomix",
+      "domainCandidate": "globalcomix.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 45,
+      "requestedName": "KL",
+      "domainCandidate": "klz9.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 46,
+      "requestedName": "comemh8",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 47,
+      "requestedName": "Mangaraw",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 48,
+      "requestedName": "Bilibili-Manga",
+      "domainCandidate": "manga.bilibili.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 49,
+      "requestedName": "Kaijimanga",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 50,
+      "requestedName": "Idmzj",
+      "domainCandidate": "idmzj.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 51,
+      "requestedName": "Manga4u",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 52,
+      "requestedName": "Animatebookstore",
+      "domainCandidate": "animatebookstore.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 53,
+      "requestedName": "GANMA",
+      "domainCandidate": "ganma.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 54,
+      "requestedName": "Mangafire",
+      "domainCandidate": "mangafire.to",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 55,
+      "requestedName": "Reaperscans",
+      "domainCandidate": "reaperscans.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 56,
+      "requestedName": "Manhuatop",
+      "domainCandidate": "manhuatop.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 57,
+      "requestedName": "Dlsite",
+      "domainCandidate": "dlsite.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 58,
+      "requestedName": "uzakichanmanga",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 59,
+      "requestedName": "Shonenmagazine",
+      "domainCandidate": "shonenmagazine.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 60,
+      "requestedName": "ComicNaver",
+      "domainCandidate": "comic.naver.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 61,
+      "requestedName": "comic-zenon",
+      "domainCandidate": "comic-zenon.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 62,
+      "requestedName": "Webtoons",
+      "domainCandidate": "webtoons.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 63,
+      "requestedName": "Lezhin Comics",
+      "domainCandidate": "lezhin.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 64,
+      "requestedName": "BeLTOON",
+      "domainCandidate": "beltoon.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 65,
+      "requestedName": "ManhwaClub",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 66,
+      "requestedName": "JinMangas",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 67,
+      "requestedName": "Atsumaru",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 68,
+      "requestedName": "Comic CMOA",
+      "domainCandidate": "cmoa.jp",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 69,
+      "requestedName": "Televi-Kun Super Hero Comics",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 70,
+      "requestedName": "KLMANGA",
+      "domainCandidate": "klz9.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 71,
+      "requestedName": "SoloLevelingFree",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 72,
+      "requestedName": "Rawkuma",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 73,
+      "requestedName": "Kakao",
+      "domainCandidate": "page.kakao.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 74,
+      "requestedName": "TopReadManga",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 75,
+      "requestedName": "Revenge of the Iron Blooded Swordhound",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 76,
+      "requestedName": "Poipiku",
+      "domainCandidate": "poipiku.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 77,
+      "requestedName": "Manhuaus",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 78,
+      "requestedName": "HMTTMH",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 79,
+      "requestedName": "Smoking Behind the Supermarket",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 80,
+      "requestedName": "Comic Growl",
+      "domainCandidate": "comic-growl.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 81,
+      "requestedName": "Jumptoon",
+      "domainCandidate": "jumptoon.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 82,
+      "requestedName": "Fenoxo",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 83,
+      "requestedName": "MangaFreak",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 84,
+      "requestedName": "ComicGardo",
+      "domainCandidate": "comic-gardo.com",
+      "source": "本轮核对品牌公开官网，仅确认域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 85,
+      "requestedName": "Booklive",
+      "domainCandidate": "booklive.jp",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 86,
+      "requestedName": "MrBlue",
+      "domainCandidate": "mrblue.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 87,
+      "requestedName": "MangaLove",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 88,
+      "requestedName": "rawdevart.art",
+      "domainCandidate": "rawdevart.art",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 89,
+      "requestedName": "manga-shinchan.com",
+      "domainCandidate": "manga-shinchan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 90,
+      "requestedName": "yaoimangaonline.com",
+      "domainCandidate": "yaoimangaonline.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 91,
+      "requestedName": "nhentaiyaoi",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 92,
+      "requestedName": "orchisasia",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 93,
+      "requestedName": "mangalib",
+      "domainCandidate": "mangalib.me",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 94,
+      "requestedName": "novelcrow",
+      "domainCandidate": "novelcrow.com",
+      "source": "名称映射候选，见报告来源说明",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 95,
+      "requestedName": "cn.twbzmg.com",
+      "domainCandidate": "cn.twbzmg.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 96,
+      "requestedName": "Nyx Scans",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 97,
+      "requestedName": "Qi Manga",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 98,
+      "requestedName": "MG Read",
+      "domainCandidate": null,
+      "source": "名称映射候选，见报告来源说明",
+      "status": "名称待确认域名；未作专用支持声明",
+      "nextEvidence": "明确域名与可访问章节，再检查图片/画布/分片类型"
+    },
+    {
+      "index": 99,
+      "requestedName": "뉴토끼대피소.com",
+      "domainCandidate": "뉴토끼대피소.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 100,
+      "requestedName": "블랙툰.co",
+      "domainCandidate": "블랙툰.co",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 101,
+      "requestedName": "happytoon01.com",
+      "domainCandidate": "happytoon01.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 102,
+      "requestedName": "twmanga.com",
+      "domainCandidate": "twmanga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 103,
+      "requestedName": "mgeko.cc",
+      "domainCandidate": "mgeko.cc",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 104,
+      "requestedName": "greentoon.net",
+      "domainCandidate": "greentoon.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 105,
+      "requestedName": "dynasty-scans.com",
+      "domainCandidate": "dynasty-scans.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 106,
+      "requestedName": "mangaoi.net",
+      "domainCandidate": "mangaoi.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 107,
+      "requestedName": "rawlazy.io",
+      "domainCandidate": "rawlazy.io",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 108,
+      "requestedName": "toptoon.com",
+      "domainCandidate": "toptoon.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 109,
+      "requestedName": "acgmhh.com",
+      "domainCandidate": "acgmhh.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 110,
+      "requestedName": "readcomicsonline.ru",
+      "domainCandidate": "readcomicsonline.ru",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 111,
+      "requestedName": "vortexscans.org",
+      "domainCandidate": "vortexscans.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 112,
+      "requestedName": "freeonlinehd.site",
+      "domainCandidate": "freeonlinehd.site",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 113,
+      "requestedName": "weebrook.com",
+      "domainCandidate": "weebrook.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 114,
+      "requestedName": "toonily.com",
+      "domainCandidate": "toonily.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 115,
+      "requestedName": "mangadistrict2.com",
+      "domainCandidate": "mangadistrict2.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 116,
+      "requestedName": "manhuaread.com",
+      "domainCandidate": "manhuaread.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 117,
+      "requestedName": "mangaread.org",
+      "domainCandidate": "mangaread.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 118,
+      "requestedName": "mangaforfree.net",
+      "domainCandidate": "mangaforfree.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 119,
+      "requestedName": "bakamh.com",
+      "domainCandidate": "bakamh.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 120,
+      "requestedName": "yakshascans.com",
+      "domainCandidate": "yakshascans.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 121,
+      "requestedName": "toonclash.com",
+      "domainCandidate": "toonclash.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 122,
+      "requestedName": "rawdex.net",
+      "domainCandidate": "rawdex.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 123,
+      "requestedName": "reset-scans.org",
+      "domainCandidate": "reset-scans.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 124,
+      "requestedName": "cultivationmanhua.com",
+      "domainCandidate": "cultivationmanhua.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 125,
+      "requestedName": "manhwaread.com",
+      "domainCandidate": "manhwaread.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 126,
+      "requestedName": "manhwabuddy.com",
+      "domainCandidate": "manhwabuddy.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 127,
+      "requestedName": "wto.to",
+      "domainCandidate": "wto.to",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 128,
+      "requestedName": "sukima.me",
+      "domainCandidate": "sukima.me",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 129,
+      "requestedName": "comix.to",
+      "domainCandidate": "comix.to",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 130,
+      "requestedName": "youngchampion.jp",
+      "domainCandidate": "youngchampion.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 131,
+      "requestedName": "manga-one.com",
+      "domainCandidate": "manga-one.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 132,
+      "requestedName": "book.dmm.com",
+      "domainCandidate": "book.dmm.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 133,
+      "requestedName": "newmanhwa.com",
+      "domainCandidate": "newmanhwa.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 134,
+      "requestedName": "fxfx302.com",
+      "domainCandidate": "fxfx302.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 135,
+      "requestedName": "comic-meteor.jp",
+      "domainCandidate": "comic-meteor.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 136,
+      "requestedName": "omegascans.org",
+      "domainCandidate": "omegascans.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 137,
+      "requestedName": "readallcomics.com",
+      "domainCandidate": "readallcomics.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 138,
+      "requestedName": "ranfren.neocities.org",
+      "domainCandidate": "ranfren.neocities.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 139,
+      "requestedName": "utoon.net",
+      "domainCandidate": "utoon.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 140,
+      "requestedName": "manhuapica.com",
+      "domainCandidate": "manhuapica.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 141,
+      "requestedName": "comic-ryu.jp",
+      "domainCandidate": "comic-ryu.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 142,
+      "requestedName": "ctccomic.com",
+      "domainCandidate": "ctccomic.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 143,
+      "requestedName": "nyaa.fan",
+      "domainCandidate": "nyaa.fan",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 144,
+      "requestedName": "mangago.me",
+      "domainCandidate": "mangago.me",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 145,
+      "requestedName": "rinkocomics.com",
+      "domainCandidate": "rinkocomics.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 146,
+      "requestedName": "roliascan.com",
+      "domainCandidate": "roliascan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 147,
+      "requestedName": "novelpia.com",
+      "domainCandidate": "novelpia.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 148,
+      "requestedName": "zerobywai.com",
+      "domainCandidate": "zerobywai.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 149,
+      "requestedName": "toongod.cc",
+      "domainCandidate": "toongod.cc",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 150,
+      "requestedName": "kingofshojo.com",
+      "domainCandidate": "kingofshojo.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 151,
+      "requestedName": "weebcentral.com",
+      "domainCandidate": "weebcentral.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 152,
+      "requestedName": "lrr.tvc-16.science",
+      "domainCandidate": "lrr.tvc-16.science",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 153,
+      "requestedName": "mangarawad.org",
+      "domainCandidate": "mangarawad.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 154,
+      "requestedName": "manga-park.com",
+      "domainCandidate": "manga-park.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 155,
+      "requestedName": "mangaflame.org",
+      "domainCandidate": "mangaflame.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 156,
+      "requestedName": "manhwa404.com",
+      "domainCandidate": "manhwa404.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 157,
+      "requestedName": "xmanga.org",
+      "domainCandidate": "xmanga.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 158,
+      "requestedName": "florascans.net",
+      "domainCandidate": "florascans.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 159,
+      "requestedName": "comic.mf-fleur.jp",
+      "domainCandidate": "comic.mf-fleur.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 160,
+      "requestedName": "komiic.com",
+      "domainCandidate": "komiic.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 161,
+      "requestedName": "manhwaus.org",
+      "domainCandidate": "manhwaus.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 162,
+      "requestedName": "tichct.org",
+      "domainCandidate": "tichct.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 163,
+      "requestedName": "manhuaplus.org",
+      "domainCandidate": "manhuaplus.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 164,
+      "requestedName": "manhuazhan.com",
+      "domainCandidate": "manhuazhan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 165,
+      "requestedName": "blossommanga.com",
+      "domainCandidate": "blossommanga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 166,
+      "requestedName": "w226.npdn.top",
+      "domainCandidate": "w226.npdn.top",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 167,
+      "requestedName": "komiku.com",
+      "domainCandidate": "komiku.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 168,
+      "requestedName": "webtoonraw.com",
+      "domainCandidate": "webtoonraw.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 169,
+      "requestedName": "kissmanga.in",
+      "domainCandidate": "kissmanga.in",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 170,
+      "requestedName": "02.ikiru.wtf",
+      "domainCandidate": "02.ikiru.wtf",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 171,
+      "requestedName": "mangahub.ru",
+      "domainCandidate": "mangahub.ru",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 172,
+      "requestedName": "ezmanga.org",
+      "domainCandidate": "ezmanga.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 173,
+      "requestedName": "magustoon.org",
+      "domainCandidate": "magustoon.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 174,
+      "requestedName": "violetscans.org",
+      "domainCandidate": "violetscans.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 175,
+      "requestedName": "publicdiplomacymagazine.com",
+      "domainCandidate": "publicdiplomacymagazine.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 176,
+      "requestedName": "raw1001.net",
+      "domainCandidate": "raw1001.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 177,
+      "requestedName": "mkissa.to",
+      "domainCandidate": "mkissa.to",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 178,
+      "requestedName": "iqiyi.com",
+      "domainCandidate": "iqiyi.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 179,
+      "requestedName": "jcomic.net",
+      "domainCandidate": "jcomic.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 180,
+      "requestedName": "tapas.io",
+      "domainCandidate": "tapas.io",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 181,
+      "requestedName": "kagane.to",
+      "domainCandidate": "kagane.to",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 182,
+      "requestedName": "soraraw.com",
+      "domainCandidate": "soraraw.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 183,
+      "requestedName": "gomuraw.biz",
+      "domainCandidate": "gomuraw.biz",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 184,
+      "requestedName": "webtoonscan.com",
+      "domainCandidate": "webtoonscan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 185,
+      "requestedName": "zipcomic.com",
+      "domainCandidate": "zipcomic.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 186,
+      "requestedName": "zerobywzz.com",
+      "domainCandidate": "zerobywzz.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 187,
+      "requestedName": "dokusho-ojikan.jp",
+      "domainCandidate": "dokusho-ojikan.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 188,
+      "requestedName": "bomtoon.com",
+      "domainCandidate": "bomtoon.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 189,
+      "requestedName": "copymanga.site",
+      "domainCandidate": "copymanga.site",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 190,
+      "requestedName": "readcomiconline.li",
+      "domainCandidate": "readcomiconline.li",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 191,
+      "requestedName": "championcross.jp",
+      "domainCandidate": "championcross.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 192,
+      "requestedName": "mechacomic.jp",
+      "domainCandidate": "mechacomic.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 193,
+      "requestedName": "kuragebunch.com",
+      "domainCandidate": "kuragebunch.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 194,
+      "requestedName": "ichicomi.com",
+      "domainCandidate": "ichicomi.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 195,
+      "requestedName": "rookie.shonenjump.com",
+      "domainCandidate": "rookie.shonenjump.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 196,
+      "requestedName": "manhwa-raw.com",
+      "domainCandidate": "manhwa-raw.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 197,
+      "requestedName": "s1.managall.com",
+      "domainCandidate": "s1.managall.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 198,
+      "requestedName": "manhwato.com",
+      "domainCandidate": "manhwato.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 199,
+      "requestedName": "kuaikanmanhua.com",
+      "domainCandidate": "kuaikanmanhua.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 200,
+      "requestedName": "mangapark.net",
+      "domainCandidate": "mangapark.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 201,
+      "requestedName": "mangasuika.com",
+      "domainCandidate": "mangasuika.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 202,
+      "requestedName": "firemanga.com",
+      "domainCandidate": "firemanga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 203,
+      "requestedName": "lmanga.com",
+      "domainCandidate": "lmanga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 204,
+      "requestedName": "manhwahub.net",
+      "domainCandidate": "manhwahub.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 205,
+      "requestedName": "manhuatop.org",
+      "domainCandidate": "manhuatop.org",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 206,
+      "requestedName": "aedexnox.vxviral.xyz",
+      "domainCandidate": "aedexnox.vxviral.xyz",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 207,
+      "requestedName": "manhuabika.com",
+      "domainCandidate": "manhuabika.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 208,
+      "requestedName": "rawotaku.com",
+      "domainCandidate": "rawotaku.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 209,
+      "requestedName": "pixiv.app",
+      "domainCandidate": "pixiv.app",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 210,
+      "requestedName": "speed-manga.com",
+      "domainCandidate": "speed-manga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 211,
+      "requestedName": "yomonga.com",
+      "domainCandidate": "yomonga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 212,
+      "requestedName": "global.manga-up.com",
+      "domainCandidate": "global.manga-up.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 213,
+      "requestedName": "mangaball.net",
+      "domainCandidate": "mangaball.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 214,
+      "requestedName": "yanmaga.jp",
+      "domainCandidate": "yanmaga.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 215,
+      "requestedName": "viewer.bookhodai.jp",
+      "domainCandidate": "viewer.bookhodai.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 216,
+      "requestedName": "play.comipo.app",
+      "domainCandidate": "play.comipo.app",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 217,
+      "requestedName": "arenascan.com",
+      "domainCandidate": "arenascan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 218,
+      "requestedName": "luvyaa.my.id",
+      "domainCandidate": "luvyaa.my.id",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 219,
+      "requestedName": "toondex.co",
+      "domainCandidate": "toondex.co",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 220,
+      "requestedName": "manwadd.cc",
+      "domainCandidate": "manwadd.cc",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 221,
+      "requestedName": "saucemanhwa.com",
+      "domainCandidate": "saucemanhwa.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 222,
+      "requestedName": "mangakoinu.com",
+      "domainCandidate": "mangakoinu.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 223,
+      "requestedName": "comicmanga.cc",
+      "domainCandidate": "comicmanga.cc",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 224,
+      "requestedName": "mangajikan.com",
+      "domainCandidate": "mangajikan.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 225,
+      "requestedName": "manhwaden.com",
+      "domainCandidate": "manhwaden.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 226,
+      "requestedName": "dvamh-vzwp7.top",
+      "domainCandidate": "dvamh-vzwp7.top",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 227,
+      "requestedName": "comic.pixiv.net",
+      "domainCandidate": "comic.pixiv.net",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 228,
+      "requestedName": "comico.jp",
+      "domainCandidate": "comico.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 229,
+      "requestedName": "manhwas.men",
+      "domainCandidate": "manhwas.men",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 230,
+      "requestedName": "ridibooks.com",
+      "domainCandidate": "ridibooks.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 231,
+      "requestedName": "sunday-webry.com",
+      "domainCandidate": "sunday-webry.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 232,
+      "requestedName": "ynjn.jp",
+      "domainCandidate": "ynjn.jp",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 233,
+      "requestedName": "mangayun.com",
+      "domainCandidate": "mangayun.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 234,
+      "requestedName": "manhwaweb.com",
+      "domainCandidate": "manhwaweb.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    },
+    {
+      "index": 235,
+      "requestedName": "a-i-manga.com",
+      "domainCandidate": "a-i-manga.com",
+      "source": "用户显式域名",
+      "status": "通用图片阅读器检测范围；未逐站实测",
+      "nextEvidence": "确认正文选择器、访问条件、页序和原图恢复"
+    }
+  ]
+}

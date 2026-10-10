@@ -1,0 +1,8 @@
+RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-video-caption-platforms-20261002
+
+ ✓ tests/videoCaptionPlatformRuntime.test.ts (15 tests) 64ms
+
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+   Start at  17:28:50
+   Duration  735ms (transform 305ms, setup 0ms, collect 494ms, tests 64ms, environment 0ms, prepare 37ms)

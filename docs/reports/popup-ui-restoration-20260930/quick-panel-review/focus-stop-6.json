@@ -1,0 +1,54 @@
+{
+  "ok": false,
+  "artifact": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3",
+  "cases": [],
+  "persistenceCases": [],
+  "quickClose": false,
+  "latestWriteWins": false,
+  "crossPageSync": false,
+  "consoleErrors": [],
+  "screenshots": [],
+  "layout": {},
+  "evidenceBoundary": "Real production extension in isolated Edge; active-tab lookup points to an actual local tab. Translation transport is a local deterministic provider. Failure UI uses named message-response fixtures. No live-provider or Firefox runtime claim.",
+  "manifest": {
+    "version": "0.0.35",
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 60721,
+      "name": "访达"
+    },
+    "frontmostAfter": {
+      "pid": 60721,
+      "name": "访达"
+    }
+  },
+  "lastSaveResponse": {
+    "success": true,
+    "revision": 2
+  },
+  "failure": {
+    "case": "launch",
+    "error": "Error: 测试 Edge 进程 7231 成为了前台应用；测试已停止\n    at newPageWithoutForeground (/Users/thinkstu/.codex/skills/fluentread-extension-ui-test/scripts/focus-safe-browser.cjs:514:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async open (/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/scripts/testing/run-popup-actions-service-ui-test.cjs:48:16)\n    at async main (/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/scripts/testing/run-popup-actions-service-ui-test.cjs:161:15)"
+  }
+}

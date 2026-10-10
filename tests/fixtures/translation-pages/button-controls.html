@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Fixed-height translation control regression</title>
+  <style>
+    body { margin: 40px; color: #1f2328; background: #fff; font: 16px/1.5 system-ui; }
+    main { max-width: 850px; }
+    .merge-box { border: 1px solid #1f883d; border-radius: 8px; overflow: hidden; }
+    .merge-status { padding: 24px; }
+    .merge-footer { display: flex; gap: 16px; align-items: center; padding: 16px; background: #f6f8fa; }
+    .button-group { display: inline-flex; flex-shrink: 0; }
+    button, [role="button"], [role="menuitem"] { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 12px; border: 1px solid #176f31; border-radius: 6px; background: #1f883d; color: #fff; font: 600 14px/20px system-ui; cursor: pointer; }
+    .button-content { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .button-label { display: grid; place-items: center; }
+    #merge-button { border-radius: 6px 0 0 6px; }
+    #merge-menu { border-radius: 0 6px 6px 0; }
+    .other-controls { display: flex; gap: 20px; align-items: center; padding-top: 28px; }
+    /* 与 GitHub 评论框底栏一致：一整排高度固定的操作项，任何第二行都会撑破版面。 */
+    .comment-form, .toolbar { display: flex; gap: 12px; align-items: center; padding-top: 24px; }
+    .comment-form > input, .toolbar > * { box-sizing: border-box; height: 32px; padding: 0 12px; white-space: nowrap;
+      display: inline-flex; align-items: center; border: 1px solid #d0d7de; border-radius: 6px; background: #f6f8fa;
+      color: #1f2328; font: 14px/20px system-ui; text-decoration: none; }
+    .toolbar > .btn { border-color: #176f31; background: #1f883d; color: #fff; }
+    .badge { padding-left: 6px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="merge-box">
+    <div class="merge-status">
+      <h2>No conflicts with base branch</h2>
+      <p>Merging can be performed automatically.</p>
+    </div>
+    <div class="merge-footer">
+      <div class="button-group">
+        <button id="merge-button" type="button"><span class="button-content" data-display="flex"><span class="button-label" data-display="grid">Merge pull request</span></span></button>
+        <button id="merge-menu" type="button" aria-label="Choose merge method"><span aria-hidden="true">▾</span></button>
+      </div>
+      <p>You can also merge this with the command line.</p>
+    </div>
+  </div>
+  <div class="other-controls">
+    <a id="save-button" href="#saved" role="button"><span class="button-content" data-display="flex"><span aria-hidden="true">✓</span><span class="button-label" data-display="grid">Save changes</span></span></a>
+    <div id="menu-action" tabindex="0" role="menuitem"><div class="button-content" data-display="flex">Open settings</div></div>
+    <button id="split-button" type="button">Review <span class="button-label" data-display="grid">changes</span><span class="badge notranslate" translate="no">23</span></button>
+  </div>
+  <p id="prose">Read the <a href="#guide">merge guide</a> before continuing.</p>
+  <form id="control-form" class="comment-form" action="/search">
+    <input id="submit-named" type="submit" name="commit" value="Search issues">
+    <input id="submit-anonymous" type="submit" value="Create issue">
+    <input id="button-input" type="button" value="Preview changes">
+    <input id="reset-input" type="reset" value="Reset form">
+    <input id="text-input" type="text" name="q" value="Private draft text">
+    <input id="empty-submit" type="submit">
+  </form>
+  <div id="toolbar" class="toolbar" data-display="flex">
+    <a id="button-link" class="btn btn-primary" href="#publish" data-display="inline-block">Publish release</a>
+    <a id="hint-link" class="Link--secondary" href="#markdown" data-display="inline">Markdown is supported</a>
+    <label id="upload-label" data-display="flex">Paste, drop, or click to add files</label>
+    <div id="custom-action" tabindex="0" data-display="inline-flex">Custom action</div>
+    <span id="preview-tab" role="tab" data-display="inline-block">Preview tab</span>
+    <span id="decorative" role="presentation" class="btn" data-display="inline">Decorative badge</span>
+    <div id="broken-focus" tabindex="not-a-number" data-display="inline-flex">Broken focus target</div>
+  </div>
+  <div id="focus-shell" tabindex="-1">
+    <p id="shell-prose">The workflow editor keeps its application controls separate from documentation.</p>
+  </div>
+  <details id="faq"><summary id="faq-question">How do I cancel my subscription?</summary><p id="faq-answer">Contact support from the billing page.</p></details>
+</main>
+<script>
+  for (const control of document.querySelectorAll('button, [role="button"], [role="menuitem"]')) {
+    control.dataset.clickCount = '0';
+    control.addEventListener('click', (event) => {
+      event.preventDefault();
+      control.dataset.clickCount = String(Number(control.dataset.clickCount) + 1);
+    });
+  }
+</script>
+</body>
+</html>

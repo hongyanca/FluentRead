@@ -1,0 +1,721 @@
+{
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-performance-lightweight-20260913/.output/chrome-mv3",
+  "version": "0.0.33",
+  "runs": 5,
+  "method": "Fresh temporary profile; first document then repeated new documents in one browser. Local files may be OS-cached. Timings are descriptive, not a cross-device guarantee.",
+  "samples": [
+    {
+      "readyMs": 228.19999992847443,
+      "longTasks": [
+        {
+          "start": 93.5,
+          "duration": 134
+        }
+      ],
+      "domContentLoadedMs": 76.29999995231628,
+      "nodes": 420,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-DIpNR6Y3.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "chunks/capabilities-BJp9wKRK.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "assets/popup-BW_2SzZq.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 952087,
+      "cssBytes": 161986,
+      "scriptMs": 34.696999999999996,
+      "taskMs": 268.49699999999996,
+      "heapBytes": 8882212,
+      "idleTaskMs": 61.155000000000015,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 154.60000002384186,
+      "longTasks": [
+        {
+          "start": 72.5,
+          "duration": 81
+        }
+      ],
+      "domContentLoadedMs": 33.10000002384186,
+      "nodes": 873,
+      "resources": [],
+      "kind": "options",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D8elKkg6.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/preload-helper-D7HrI6pR.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/options-Bh38XZFL.css",
+        "chunks/SettingsSections-CoxOS7kX.js",
+        "chunks/GlossaryLibrarySelect-BYY8bQeM.js",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "chunks/capabilities-BJp9wKRK.js",
+        "chunks/SegmentedControl-CzLhPIqG.js",
+        "assets/SegmentedControl-TjeJctMy.css",
+        "assets/SettingsSections-Cw7wVvKD.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 1041083,
+      "cssBytes": 252909,
+      "scriptMs": 16.694,
+      "taskMs": 158.948,
+      "heapBytes": 19613968,
+      "idleTaskMs": 1.6049999999999953,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 178.5,
+      "longTasks": [
+        {
+          "start": 13,
+          "duration": 142
+        }
+      ],
+      "domContentLoadedMs": 177,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:60788/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.600000023841858
+        }
+      ],
+      "kind": "content",
+      "iteration": 0,
+      "firstOpen": true,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "injectedScripts": [
+        "content-scripts/content.js",
+        "content-scripts/shadowBridge.js"
+      ],
+      "injectedScriptBytes": 2079002,
+      "scriptBytes": 2079002,
+      "cssBytes": 210478,
+      "scriptMs": 107.607,
+      "taskMs": 206.583,
+      "heapBytes": 8987892,
+      "idleTaskMs": 2.3190000000000155,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 79.70000004768372,
+      "longTasks": [],
+      "domContentLoadedMs": 33.800000071525574,
+      "nodes": 420,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-DIpNR6Y3.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "chunks/capabilities-BJp9wKRK.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "assets/popup-BW_2SzZq.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 952087,
+      "cssBytes": 161986,
+      "scriptMs": 14.142,
+      "taskMs": 125.68399999999998,
+      "heapBytes": 21874520,
+      "idleTaskMs": 96.507,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 126.09999990463257,
+      "longTasks": [
+        {
+          "start": 57.199999928474426,
+          "duration": 68
+        }
+      ],
+      "domContentLoadedMs": 31.699999928474426,
+      "nodes": 873,
+      "resources": [],
+      "kind": "options",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D8elKkg6.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/preload-helper-D7HrI6pR.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/options-Bh38XZFL.css",
+        "icon/128.png",
+        "chunks/SettingsSections-CoxOS7kX.js",
+        "chunks/GlossaryLibrarySelect-BYY8bQeM.js",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "chunks/capabilities-BJp9wKRK.js",
+        "chunks/SegmentedControl-CzLhPIqG.js",
+        "assets/SegmentedControl-TjeJctMy.css",
+        "assets/SettingsSections-Cw7wVvKD.css"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 1041083,
+      "cssBytes": 252909,
+      "scriptMs": 14.525,
+      "taskMs": 122.038,
+      "heapBytes": 29278708,
+      "idleTaskMs": 1.8550000000000093,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 171.20000004768372,
+      "longTasks": [
+        {
+          "start": 9.600000023841858,
+          "duration": 138
+        }
+      ],
+      "domContentLoadedMs": 169.60000002384186,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:60788/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.7000000476837158
+        }
+      ],
+      "kind": "content",
+      "iteration": 1,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "injectedScripts": [
+        "content-scripts/content.js",
+        "content-scripts/shadowBridge.js"
+      ],
+      "injectedScriptBytes": 2079002,
+      "scriptBytes": 2079002,
+      "cssBytes": 210478,
+      "scriptMs": 104.785,
+      "taskMs": 199.1,
+      "heapBytes": 9022644,
+      "idleTaskMs": 3.3239999999999936,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 81.5,
+      "longTasks": [],
+      "domContentLoadedMs": 33.5,
+      "nodes": 420,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-DIpNR6Y3.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "chunks/capabilities-BJp9wKRK.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "assets/popup-BW_2SzZq.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 952087,
+      "cssBytes": 161986,
+      "scriptMs": 13.051,
+      "taskMs": 143.846,
+      "heapBytes": 29062608,
+      "idleTaskMs": 83.702,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 156.29999995231628,
+      "longTasks": [
+        {
+          "start": 66.20000004768372,
+          "duration": 89
+        }
+      ],
+      "domContentLoadedMs": 33.5,
+      "nodes": 873,
+      "resources": [],
+      "kind": "options",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D8elKkg6.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/preload-helper-D7HrI6pR.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/options-Bh38XZFL.css",
+        "icon/128.png",
+        "chunks/SettingsSections-CoxOS7kX.js",
+        "chunks/GlossaryLibrarySelect-BYY8bQeM.js",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "chunks/capabilities-BJp9wKRK.js",
+        "chunks/SegmentedControl-CzLhPIqG.js",
+        "assets/SegmentedControl-TjeJctMy.css",
+        "assets/SettingsSections-Cw7wVvKD.css"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 1041083,
+      "cssBytes": 252909,
+      "scriptMs": 17.032,
+      "taskMs": 152.844,
+      "heapBytes": 12730576,
+      "idleTaskMs": 1.231999999999983,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 168.69999992847443,
+      "longTasks": [
+        {
+          "start": 8.399999976158142,
+          "duration": 137
+        }
+      ],
+      "domContentLoadedMs": 167.19999992847443,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:60788/favicon.ico",
+          "initiatorType": "other",
+          "duration": 2.399999976158142
+        }
+      ],
+      "kind": "content",
+      "iteration": 2,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "injectedScripts": [
+        "content-scripts/content.js",
+        "content-scripts/shadowBridge.js"
+      ],
+      "injectedScriptBytes": 2079002,
+      "scriptBytes": 2079002,
+      "cssBytes": 210478,
+      "scriptMs": 104.589,
+      "taskMs": 196.37199999999999,
+      "heapBytes": 9015672,
+      "idleTaskMs": 3.2540000000000067,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 82.39999997615814,
+      "longTasks": [],
+      "domContentLoadedMs": 38,
+      "nodes": 420,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-DIpNR6Y3.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "chunks/capabilities-BJp9wKRK.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "assets/popup-BW_2SzZq.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 952087,
+      "cssBytes": 161986,
+      "scriptMs": 16.008000000000003,
+      "taskMs": 137.43,
+      "heapBytes": 9459172,
+      "idleTaskMs": 95.04000000000002,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 146.5,
+      "longTasks": [
+        {
+          "start": 58.200000047683716,
+          "duration": 88
+        }
+      ],
+      "domContentLoadedMs": 33.60000002384186,
+      "nodes": 873,
+      "resources": [],
+      "kind": "options",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D8elKkg6.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/preload-helper-D7HrI6pR.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/options-Bh38XZFL.css",
+        "icon/128.png",
+        "chunks/SettingsSections-CoxOS7kX.js",
+        "chunks/GlossaryLibrarySelect-BYY8bQeM.js",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "chunks/capabilities-BJp9wKRK.js",
+        "chunks/SegmentedControl-CzLhPIqG.js",
+        "assets/SegmentedControl-TjeJctMy.css",
+        "assets/SettingsSections-Cw7wVvKD.css"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 1041083,
+      "cssBytes": 252909,
+      "scriptMs": 17.070999999999998,
+      "taskMs": 145.86499999999998,
+      "heapBytes": 15877956,
+      "idleTaskMs": 2.0840000000000023,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 168.90000009536743,
+      "longTasks": [
+        {
+          "start": 9,
+          "duration": 136
+        }
+      ],
+      "domContentLoadedMs": 167.5,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:60788/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.600000023841858
+        }
+      ],
+      "kind": "content",
+      "iteration": 3,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "injectedScripts": [
+        "content-scripts/content.js",
+        "content-scripts/shadowBridge.js"
+      ],
+      "injectedScriptBytes": 2079002,
+      "scriptBytes": 2079002,
+      "cssBytes": 210478,
+      "scriptMs": 104.759,
+      "taskMs": 196.116,
+      "heapBytes": 9006560,
+      "idleTaskMs": 2.444999999999975,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 90.10000002384186,
+      "longTasks": [],
+      "domContentLoadedMs": 34.60000002384186,
+      "nodes": 420,
+      "resources": [],
+      "kind": "popup",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "popup.html",
+        "chunks/popup-DIpNR6Y3.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "chunks/capabilities-BJp9wKRK.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "assets/popup-BW_2SzZq.css",
+        "icon/128.png"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 952087,
+      "cssBytes": 161986,
+      "scriptMs": 14.017,
+      "taskMs": 134.03300000000002,
+      "heapBytes": 19500064,
+      "idleTaskMs": 98.38,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 150.19999992847443,
+      "longTasks": [
+        {
+          "start": 62.799999952316284,
+          "duration": 87
+        }
+      ],
+      "domContentLoadedMs": 33.89999997615814,
+      "nodes": 873,
+      "resources": [],
+      "kind": "options",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "options.html",
+        "chunks/options-D8elKkg6.js",
+        "chunks/localTts-Bm5yJXg6.js",
+        "chunks/_plugin-vue_export-helper-PdTJqAPD.js",
+        "chunks/preload-helper-D7HrI6pR.js",
+        "chunks/interface-skins-E91LD5on.js",
+        "assets/_plugin-vue_export-helper-H15GffIL.css",
+        "assets/interface-skins-BDkqK5YF.css",
+        "assets/options-Bh38XZFL.css",
+        "icon/128.png",
+        "chunks/SettingsSections-CoxOS7kX.js",
+        "chunks/GlossaryLibrarySelect-BYY8bQeM.js",
+        "assets/GlossaryLibrarySelect-C9SHhXci.css",
+        "chunks/ServiceIcon-ePutkVNX.js",
+        "assets/ServiceIcon-DCag4A8p.css",
+        "chunks/capabilities-BJp9wKRK.js",
+        "chunks/SegmentedControl-CzLhPIqG.js",
+        "assets/SegmentedControl-TjeJctMy.css",
+        "assets/SettingsSections-Cw7wVvKD.css"
+      ],
+      "injectedScripts": [],
+      "injectedScriptBytes": 0,
+      "scriptBytes": 1041083,
+      "cssBytes": 252909,
+      "scriptMs": 16.68,
+      "taskMs": 147.49,
+      "heapBytes": 12003140,
+      "idleTaskMs": 1.363000000000003,
+      "idleScriptMs": 0
+    },
+    {
+      "readyMs": 169,
+      "longTasks": [
+        {
+          "start": 8.600000023841858,
+          "duration": 138
+        }
+      ],
+      "domContentLoadedMs": 167.80000007152557,
+      "nodes": 1008,
+      "resources": [
+        {
+          "name": "http://127.0.0.1:60788/favicon.ico",
+          "initiatorType": "other",
+          "duration": 1.600000023841858
+        }
+      ],
+      "kind": "content",
+      "iteration": 4,
+      "firstOpen": false,
+      "resourcePaths": [
+        "content-scripts/content.css",
+        "content-scripts/content.css"
+      ],
+      "injectedScripts": [
+        "content-scripts/content.js",
+        "content-scripts/shadowBridge.js"
+      ],
+      "injectedScriptBytes": 2079002,
+      "scriptBytes": 2079002,
+      "cssBytes": 210478,
+      "scriptMs": 105.10799999999999,
+      "taskMs": 196.919,
+      "heapBytes": 9016676,
+      "idleTaskMs": 3.333000000000003,
+      "idleScriptMs": 0
+    }
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 48863,
+      "name": "ChatGPT"
+    }
+  },
+  "summary": {
+    "popup": {
+      "readyMs": {
+        "first": 228.19999992847443,
+        "median": 82.39999997615814
+      },
+      "scriptMs": {
+        "first": 34.696999999999996,
+        "median": 14.142
+      },
+      "taskMs": {
+        "first": 268.49699999999996,
+        "median": 137.43
+      },
+      "heapBytes": {
+        "first": 8882212,
+        "median": 19500064
+      },
+      "nodes": {
+        "first": 420,
+        "median": 420
+      },
+      "scriptBytes": {
+        "first": 952087,
+        "median": 952087
+      },
+      "cssBytes": {
+        "first": 161986,
+        "median": 161986
+      },
+      "idleTaskMs": {
+        "first": 61.155000000000015,
+        "median": 95.04000000000002
+      }
+    },
+    "options": {
+      "readyMs": {
+        "first": 154.60000002384186,
+        "median": 150.19999992847443
+      },
+      "scriptMs": {
+        "first": 16.694,
+        "median": 16.694
+      },
+      "taskMs": {
+        "first": 158.948,
+        "median": 147.49
+      },
+      "heapBytes": {
+        "first": 19613968,
+        "median": 15877956
+      },
+      "nodes": {
+        "first": 873,
+        "median": 873
+      },
+      "scriptBytes": {
+        "first": 1041083,
+        "median": 1041083
+      },
+      "cssBytes": {
+        "first": 252909,
+        "median": 252909
+      },
+      "idleTaskMs": {
+        "first": 1.6049999999999953,
+        "median": 1.6049999999999953
+      }
+    },
+    "content": {
+      "readyMs": {
+        "first": 178.5,
+        "median": 169
+      },
+      "scriptMs": {
+        "first": 107.607,
+        "median": 104.785
+      },
+      "taskMs": {
+        "first": 206.583,
+        "median": 196.919
+      },
+      "heapBytes": {
+        "first": 8987892,
+        "median": 9015672
+      },
+      "nodes": {
+        "first": 1008,
+        "median": 1008
+      },
+      "scriptBytes": {
+        "first": 2079002,
+        "median": 2079002
+      },
+      "cssBytes": {
+        "first": 210478,
+        "median": 210478
+      },
+      "idleTaskMs": {
+        "first": 2.3190000000000155,
+        "median": 3.2540000000000067
+      }
+    }
+  },
+  "ok": true
+}

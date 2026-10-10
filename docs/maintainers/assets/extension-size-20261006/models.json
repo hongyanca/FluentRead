@@ -1,0 +1,429 @@
+{
+  "date": "2026-10-06",
+  "productionBaselineCommit": "4d3ebdc5",
+  "zip": {
+    "baselineBytes": 29718954,
+    "candidateBytes": 18374310,
+    "note": "Baseline is the existing main-checkout artifact; production unpacked baseline was rebuilt from 4d3ebdc5."
+  },
+  "models": {
+    "paddleAndLama": {
+      "ok": true,
+      "cases": [
+        {
+          "backend": "webgpu",
+          "ocrMs": 835.9000000953674,
+          "text": "Hello world",
+          "inpaintMs": 5785.699999809265,
+          "outputLength": 12288,
+          "finite": true
+        },
+        {
+          "backend": "wasm",
+          "ocrMs": 589,
+          "text": "Hello world",
+          "inpaintMs": 5869.799999713898,
+          "outputLength": 12288,
+          "finite": true
+        }
+      ],
+      "errors": [],
+      "evidence": "Actual Paddle/LaMa source ports bundled with the shared ONNX alias, and the unchanged production OPUS Worker. Fixed offline Paddle/LaMa files are hash checked; OPUS downloads are pinned and SHA-256 checked. Controlled samples are not broad quality or mainland-network proof.",
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 302,
+          "top": -940,
+          "width": 1100,
+          "height": 800
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        },
+        "frontmostAfter": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        }
+      }
+    },
+    "opus": {
+      "ok": true,
+      "cases": [
+        {
+          "model": "opus-en-zh",
+          "outputs": [
+            {
+              "requestId": 1,
+              "success": true,
+              "result": "这个世界好",
+              "backend": "wasm",
+              "elapsedMs": 1505.4000000953674
+            },
+            {
+              "requestId": 2,
+              "success": true,
+              "result": "这是本地翻译测试",
+              "backend": "wasm",
+              "elapsedMs": 84.69999980926514
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "evidence": "Actual Paddle/LaMa source ports bundled with the shared ONNX alias, and the unchanged production OPUS Worker. Fixed offline Paddle/LaMa files are hash checked; OPUS downloads are pinned and SHA-256 checked. Controlled samples are not broad quality or mainland-network proof.",
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 302,
+          "top": -940,
+          "width": 1100,
+          "height": 800
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        },
+        "frontmostAfter": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        }
+      }
+    },
+    "whisperQ8Fallback": {
+      "ok": true,
+      "cases": [
+        {
+          "name": "whisper-q4-failure",
+          "elapsedMs": 5717,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "model": "tiny",
+              "backend": "wasm",
+              "threads": 1,
+              "dtype": "q8"
+            },
+            "outputs": [
+              {
+                "requestId": 2,
+                "success": true,
+                "text": "Hello world, this is a local speech test.",
+                "segments": [
+                  {
+                    "startMs": 0,
+                    "endMs": 2667,
+                    "text": "Hello world, this is a local speech test."
+                  }
+                ],
+                "model": "tiny",
+                "backend": "wasm",
+                "inferenceMs": 1408.1000003814697,
+                "audioDurationMs": 2667,
+                "threads": 1,
+                "dtype": "q8"
+              }
+            ],
+            "cpuRebuilds": 0
+          },
+          "baselineRssBytes": 2009415680,
+          "peakRssBytes": 2806120448
+        }
+      ],
+      "errors": [],
+      "evidence": "Real production Kokoro FP32 and Whisper Tiny q4 workers; controlled synthesized speech, plus explicitly injected GPU initialization/device-loss faults. Does not cover live website audio capture.",
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 302,
+          "top": -940,
+          "width": 1100,
+          "height": 800
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        },
+        "frontmostAfter": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        }
+      }
+    },
+    "audioGpuCpuAndDeviceLoss": {
+      "ok": false,
+      "cases": [
+        {
+          "name": "tts-gpu",
+          "elapsedMs": 6373,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "backend": "webgpu"
+            },
+            "outputs": [
+              {
+                "backend": "webgpu",
+                "language": "en",
+                "audioBytes": 206444,
+                "samples": 103200,
+                "peak": 10607,
+                "samplingRate": 24000
+              },
+              {
+                "backend": "webgpu",
+                "language": "zh",
+                "audioBytes": 162044,
+                "samples": 81000,
+                "peak": 13531,
+                "samplingRate": 24000
+              }
+            ],
+            "cpuRebuilds": 0
+          },
+          "baselineRssBytes": 1236598784,
+          "peakRssBytes": 3043770368
+        },
+        {
+          "name": "whisper-gpu",
+          "elapsedMs": 1958,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "model": "tiny",
+              "backend": "webgpu",
+              "gpuInfo": "apple / common-3",
+              "dtype": "q4"
+            },
+            "outputs": [
+              {
+                "requestId": 2,
+                "success": true,
+                "text": "Hello world. This is a local speech test.",
+                "segments": [
+                  {
+                    "startMs": 0,
+                    "endMs": 4000,
+                    "text": "Hello world. This is a local speech test."
+                  }
+                ],
+                "model": "tiny",
+                "backend": "webgpu",
+                "gpuInfo": "apple / common-3",
+                "inferenceMs": 458.7999997138977,
+                "audioDurationMs": 4300,
+                "dtype": "q4"
+              }
+            ],
+            "cpuRebuilds": 0
+          },
+          "baselineRssBytes": 2259353600,
+          "peakRssBytes": 2448310272
+        },
+        {
+          "name": "tts-cpu",
+          "elapsedMs": 14578,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "backend": "wasm"
+            },
+            "outputs": [
+              {
+                "backend": "wasm",
+                "language": "en",
+                "audioBytes": 206444,
+                "samples": 103200,
+                "peak": 10743,
+                "samplingRate": 24000
+              },
+              {
+                "backend": "wasm",
+                "language": "zh",
+                "audioBytes": 162044,
+                "samples": 81000,
+                "peak": 13566,
+                "samplingRate": 24000
+              }
+            ],
+            "cpuRebuilds": 0
+          },
+          "baselineRssBytes": 1642119168,
+          "peakRssBytes": 3036348416
+        },
+        {
+          "name": "whisper-cpu",
+          "elapsedMs": 4144,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "model": "tiny",
+              "backend": "wasm",
+              "threads": 1,
+              "dtype": "q4"
+            },
+            "outputs": [
+              {
+                "requestId": 2,
+                "success": true,
+                "text": "Hello world. This is a local speech test.",
+                "segments": [
+                  {
+                    "startMs": 0,
+                    "endMs": 4000,
+                    "text": "Hello world. This is a local speech test."
+                  }
+                ],
+                "model": "tiny",
+                "backend": "wasm",
+                "inferenceMs": 1572.1999998092651,
+                "audioDurationMs": 4300,
+                "threads": 1,
+                "dtype": "q4"
+              }
+            ],
+            "cpuRebuilds": 0
+          },
+          "baselineRssBytes": 1688190976,
+          "peakRssBytes": 2687746048
+        },
+        {
+          "name": "tts-device-loss",
+          "elapsedMs": 16365,
+          "result": {
+            "prepared": {
+              "requestId": 1,
+              "success": true,
+              "backend": "webgpu",
+              "injectedDeviceLoss": 1
+            },
+            "outputs": [
+              {
+                "backend": "wasm",
+                "language": "en",
+                "audioBytes": 206444,
+                "samples": 103200,
+                "peak": 10667,
+                "samplingRate": 24000
+              },
+              {
+                "backend": "wasm",
+                "language": "zh",
+                "audioBytes": 162044,
+                "samples": 81000,
+                "peak": 13521,
+                "samplingRate": 24000
+              }
+            ],
+            "cpuRebuilds": 1
+          },
+          "baselineRssBytes": 1733312512,
+          "peakRssBytes": 3087613952
+        },
+        {
+          "name": "whisper-device-loss",
+          "elapsedMs": 5434,
+          "result": {
+            "prepared": {
+              "model": "tiny",
+              "backend": "webgpu",
+              "gpuInfo": "apple / common-3",
+              "dtype": "q4"
+            },
+            "outputs": [
+              {
+                "text": "Hello world. This is a local speech test.",
+                "segments": [
+                  {
+                    "startMs": 0,
+                    "endMs": 4000,
+                    "text": "Hello world. This is a local speech test."
+                  }
+                ],
+                "model": "tiny",
+                "backend": "wasm",
+                "decodeMs": 1.9000000953674316,
+                "inferenceMs": 1564,
+                "audioDurationMs": 4300,
+                "threads": 1,
+                "dtype": "q4"
+              }
+            ],
+            "cpuRebuilds": 1,
+            "injectedDeviceLoss": 1,
+            "ownerSourceHarness": true
+          },
+          "baselineRssBytes": 1779400704,
+          "peakRssBytes": 2705555456
+        }
+      ],
+      "errors": [],
+      "failure": "Error: 测试 Edge 进程 57700 成为了前台应用；测试已停止\n    at newPageWithoutForeground (/Users/thinkstu/.codex/skills/fluentread-browser-translation-test/scripts/focus-safe-browser.cjs:514:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /Users/thinkstu/Desktop/copy/FluentRead-bundle-size-performance-20261006/scripts/testing/run-local-audio-gpu-test.cjs:225:24",
+      "evidence": "Real production Kokoro FP32 and Whisper Tiny q4/q8 workers; controlled synthesized speech, plus explicitly injected GPU initialization/device-loss or q4 initialization faults. Does not cover live website audio capture.",
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 302,
+          "top": -940,
+          "width": 1100,
+          "height": 800
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        },
+        "frontmostAfter": {
+          "pid": 92773,
+          "name": "ChatGPT"
+        }
+      },
+      "focusCheck": "Six inference cases passed, but the final new-page focus guard failed; do not count the complete browser script as passing."
+    }
+  },
+  "timingScope": "Controlled current-build samples without baseline timing; these do not prove a general latency or process-memory reduction."
+}

@@ -1,0 +1,76 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-free-translation-routing/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-free-routing-86Eu30",
+  "evidenceBoundary": "Production extension with synthetic HTTP responses. This verifies scheduling and UI, not external provider performance.",
+  "screenshots": [
+    "translate-restore-retranslate.png",
+    "settings-desktop.png",
+    "settings-diagnostics.png",
+    "settings-narrow.png",
+    "settings-narrow-dark.png",
+    "failed-service-no-retries.png"
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "firstTranslationMs": 1730,
+  "hedgeCalls": [
+    {
+      "route": "transmart",
+      "at": 1790700476517,
+      "scenario": "slow",
+      "cancelled": true
+    },
+    {
+      "route": "microsoft",
+      "at": 1790700478019,
+      "scenario": "slow",
+      "cancelled": false
+    }
+  ],
+  "detailsCollapsedByDefault": true,
+  "settingsQuickClosePersistence": true,
+  "sequentialTranslationMs": 5178,
+  "latencyReductionPercent": 67,
+  "narrowOverflow": false,
+  "failureCalls": [
+    {
+      "route": "transmart",
+      "at": 1790700485386,
+      "scenario": "failure",
+      "cancelled": false
+    }
+  ],
+  "noRepeatedPool": true,
+  "pageErrors": []
+}

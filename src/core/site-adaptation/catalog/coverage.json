@@ -1,0 +1,1971 @@
+{
+  "schemaVersion": 1,
+  "method": "独立设计网站正文阅读规则。共享模板使用标准 HTML、ARIA、schema.org 和公开文档语义；专站规则使用最小内容边界。规则数量表示目录条目，不能等同于实站测试通过数量。",
+  "limitations": [
+    "semantic-fixture 表示已验证模板内容选择和保护边界，不表示对应网站当前 DOM 已在线验证。",
+    "site-fixture 表示已验证独立构造的专站 DOM 契约；需要登录的页面仍需用户实际页面验证。",
+    "规则只处理当前页面可访问的文字 DOM；不绕过登录、付费墙、验证码、跨源框架或封闭 Shadow DOM。",
+    "正文模板采用 augment 回退；focus 仅用于有专站或家族夹具的明确内容白名单。",
+    "SPA 重挂载、翻译恢复、取消和输入事件归属仍由运行时负责，不通过 JSON 执行脚本或注入页面 CSS。"
+  ],
+  "profiles": {
+    "documentation": {
+      "description": "用 main、article 和 role=main 中的段落、标题、列表描述文档正文，保留代码、参数、键盘提示和导航。",
+      "verification": "semantic-fixture"
+    },
+    "sphinx": {
+      "description": "使用公开文档常见的 document、role=main 容器，保留 API 签名、源码入口和侧栏。",
+      "verification": "semantic-fixture"
+    },
+    "markdown": {
+      "description": "按 Markdown 渲染后的阅读块选择内容；保护围栏代码、行内代码及高亮代码。",
+      "verification": "semantic-fixture"
+    },
+    "article": {
+      "description": "按 article 和 schema.org articleBody 选择文章段落，保留作者、日期及分享控件。",
+      "verification": "semantic-fixture"
+    },
+    "encyclopedia": {
+      "description": "保留百科正文中的段落和列表，保护编辑入口、数学表达式与引用编号。",
+      "verification": "semantic-fixture"
+    },
+    "research": {
+      "description": "支持论文正文及摘要语义块，保护公式、引文标识及文献条目。",
+      "verification": "semantic-fixture"
+    },
+    "discussion": {
+      "description": "选择讨论文章和富文本正文，保留用户、时间和操作工具栏。",
+      "verification": "semantic-fixture"
+    },
+    "questions": {
+      "description": "仅选择问题、回答和评论正文，保留投票、用户资料、标签、代码和工具栏。",
+      "verification": "semantic-fixture"
+    },
+    "conversation": {
+      "description": "补充主内容区的对话段落；保留模型选择、输入框、代码和会话导航。",
+      "verification": "semantic-fixture"
+    },
+    "product": {
+      "description": "补充商品描述和评论正文，保留价格、货币、SKU、评分、表单和购买控件。",
+      "verification": "semantic-fixture"
+    },
+    "message": {
+      "description": "由站点显式声明消息正文白名单，保留地址、时间、导航、输入与消息操作控件。",
+      "verification": "semantic-fixture"
+    },
+    "search": {
+      "description": "仅选择搜索结果标题和摘要，保留站点地址、作者、引文标识、搜索工具和账户控件。",
+      "verification": "semantic-fixture"
+    }
+  },
+  "rules": [
+    {
+      "id": "mdn",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "w3c",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "whatwg",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "tc39",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "web-dev",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "chrome-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "python-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "django-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "flask-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "fastapi-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "pydantic-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "numpy-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "pandas-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "scipy-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "pytorch-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "tensorflow-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "rust-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "go-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "kotlin-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "swift-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "ruby-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "php-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "java-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "microsoft-learn",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "apple-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "android-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "react-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "vue-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "svelte-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "angular-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "typescript-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nextjs-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "nuxt-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "vite-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "vitest-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "webpack-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nodejs-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "deno-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "bun-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "npm-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "pnpm-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider",
+      "metadataValidation": {
+        "method": "site-fixture",
+        "source": "当前公开页面DOM与本地候选引擎反例",
+        "test": "tests/siteAdaptationCatalog.test.ts",
+        "scope": "版本标记和移动目录保持原文，正文标题与两段内容保持独立候选"
+      }
+    },
+    {
+      "id": "yarn-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "git-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "postgresql-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "mysql-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "sqlite-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "mongodb-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "redis-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "docker-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "kubernetes-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "helm-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "terraform-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "ansible-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nginx-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "apache-httpd-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "cloudflare-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "aws-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "google-cloud-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "digitalocean-guides",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "vercel-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "netlify-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "supabase-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "prisma-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "drizzle-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "sqlalchemy-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "laravel-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "rails-guides",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "spring-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "quarkus-guides",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "elixir-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "zig-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "cmake-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "readthedocs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "sphinx",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "docusaurus-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "markdown",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "gitbook-docs",
+      "category": "documentation",
+      "verification": "semantic-fixture",
+      "fixture": "documentation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "reuters",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "apnews",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "bbc-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "guardian",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nytimes",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "washingtonpost",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "financial-times",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "economist",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wall-street-journal",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "bloomberg-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "cnbc-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "cnn-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "npr-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "aljazeera-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "dw-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "france24-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "scmp-news",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nikkei-asia",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "the-verge",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "arstechnica",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wired",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "techcrunch",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "venturebeat",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "the-register",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "engadget",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "the-conversation",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "scientific-american",
+      "category": "news",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wikipedia",
+      "category": "encyclopedia",
+      "verification": "site-fixture",
+      "fixture": "wikipedia",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "wikibooks",
+      "category": "encyclopedia",
+      "verification": "semantic-fixture",
+      "fixture": "encyclopedia",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wikivoyage",
+      "category": "encyclopedia",
+      "verification": "semantic-fixture",
+      "fixture": "encyclopedia",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wiktionary",
+      "category": "encyclopedia",
+      "verification": "semantic-fixture",
+      "fixture": "encyclopedia",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "britannica",
+      "category": "encyclopedia",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "arxiv",
+      "category": "research",
+      "verification": "site-fixture",
+      "fixture": "arxiv",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "ar5iv",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "pubmed",
+      "category": "research",
+      "verification": "site-fixture",
+      "fixture": "pubmed",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "pmc",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "nature",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "science-journal",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "sciencedirect",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "plos",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "frontiers",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "biorxiv",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "medrxiv",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "joss",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "elife",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "acm-library",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "springer",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "ieee-xplore",
+      "category": "research",
+      "verification": "semantic-fixture",
+      "fixture": "research",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "stackoverflow",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "questions",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "stackexchange",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "questions",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "askubuntu",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "questions",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "superuser",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "questions",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "serverfault",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "questions",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "dev-community",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "dev-community",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "medium",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "substack",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "discourse-meta",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "discussion",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "lobsters",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "discussion",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wordpress-blogs",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "tumblr-blogs",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "ghost-blog",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "article",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "product-hunt",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "discussion",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "goodreads",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "mastodon",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "mastodon",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "huggingface",
+      "category": "community",
+      "verification": "semantic-fixture",
+      "fixture": "markdown",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "chatgpt",
+      "category": "ai",
+      "verification": "site-fixture",
+      "fixture": "chatgpt",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "claude",
+      "category": "ai",
+      "verification": "site-fixture",
+      "fixture": "claude",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "gemini",
+      "category": "ai",
+      "verification": "site-fixture",
+      "fixture": "gemini",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "perplexity",
+      "category": "ai",
+      "verification": "semantic-fixture",
+      "fixture": "conversation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "deepseek",
+      "category": "ai",
+      "verification": "semantic-fixture",
+      "fixture": "conversation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "poe",
+      "category": "ai",
+      "verification": "semantic-fixture",
+      "fixture": "conversation",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "amazon-shopping",
+      "category": "commerce",
+      "verification": "site-fixture",
+      "fixture": "amazon-shopping",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "ebay-shopping",
+      "category": "commerce",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "etsy-shopping",
+      "category": "commerce",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "aliexpress-shopping",
+      "category": "commerce",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "shopify-stores",
+      "category": "commerce",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "steam-store",
+      "category": "commerce",
+      "verification": "site-fixture",
+      "fixture": "steam-store",
+      "liveVerification": "passed-2026-09-05-live-page-local-provider"
+    },
+    {
+      "id": "itch-games",
+      "category": "commerce",
+      "verification": "site-fixture",
+      "fixture": "itch-games",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "gog-store",
+      "category": "commerce",
+      "verification": "semantic-fixture",
+      "fixture": "product",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "gmail",
+      "category": "mail",
+      "verification": "site-fixture",
+      "fixture": "gmail",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "outlook-mail",
+      "category": "mail",
+      "verification": "site-fixture",
+      "fixture": "outlook-mail",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "proton-mail",
+      "category": "mail",
+      "verification": "site-fixture",
+      "fixture": "proton-mail",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "gitlab",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "gitlab",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "discord-messages",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "discord-messages",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "slack-messages",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "slack-messages",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "telegram-messages",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "telegram-messages",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "whatsapp-messages",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "whatsapp-messages",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "notion-published",
+      "category": "documentation",
+      "verification": "site-fixture",
+      "fixture": "notion-published",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "google-search",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "google-search",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "google-scholar",
+      "category": "research",
+      "verification": "site-fixture",
+      "fixture": "google-scholar",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "feedly-reader",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "feedly-reader",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "inoreader-reader",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "inoreader-reader",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "linkedin-articles",
+      "category": "community",
+      "verification": "site-fixture",
+      "fixture": "linkedin-articles",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "seekingalpha",
+      "category": "news",
+      "verification": "site-fixture",
+      "fixture": "seekingalpha",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "healthline",
+      "category": "news",
+      "verification": "site-fixture",
+      "fixture": "healthline",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "wiley-online",
+      "category": "research",
+      "verification": "site-fixture",
+      "fixture": "wiley-online",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "npm-packages",
+      "category": "documentation",
+      "verification": "site-fixture",
+      "fixture": "npm-packages",
+      "liveVerification": "not-performed"
+    },
+    {
+      "id": "pypi-packages",
+      "category": "documentation",
+      "verification": "site-fixture",
+      "fixture": "pypi-packages",
+      "liveVerification": "not-performed"
+    }
+  ],
+  "remainingCapabilities": [
+    {
+      "capability": "captions",
+      "status": "separate-runtime",
+      "reason": "字幕轨道、播放器状态、时间轴和网络响应需要视频模块管理，正文规则目录不声称支持这些能力。"
+    },
+    {
+      "capability": "image-text",
+      "status": "separate-runtime",
+      "reason": "图片与漫画文字需要 OCR、坐标和图层生命周期，不能把图片站域名登记为正文适配。"
+    },
+    {
+      "capability": "cross-origin-frames",
+      "status": "separate-runtime",
+      "reason": "OMG! Ubuntu 的 Disqus 评论与 Kaggle Notebook 正文使用受限 frame 运行时；其他跨源邮件或嵌入内容仍需各自的权限与通信边界，JSON 只能在可访问的文档内选择内容。"
+    },
+    {
+      "capability": "virtualized-layout",
+      "status": "runtime-responsibility",
+      "reason": "虚拟列表位置、动态重挂载、取消及恢复原文依赖翻译运行时，禁止用全局高度、定位或事件补丁代替。"
+    },
+    {
+      "capability": "closed-shadow-dom",
+      "status": "not-accessible",
+      "reason": "网页未开放的 Shadow DOM 无法由普通 CSS 选择器遍历。"
+    },
+    {
+      "capability": "automatic-live-verification",
+      "status": "not-performed",
+      "reason": "需要登录的站点和受网络限制的页面不能用本地夹具替代实站验证结论。"
+    },
+    {
+      "capability": "authenticated-current-dom",
+      "status": "fixture-only-until-browser-verified",
+      "reason": "邮件和协作应用的夹具验证了声明边界，并不证明当前登录态页面完全相同；私有页面需要用户实际会话的另行验证。"
+    },
+    {
+      "capability": "canvas-and-pdf-readers",
+      "status": "separate-runtime",
+      "reason": "画布、绘图白板、PDF及电子书阅读器需要可访问文本层或专门提取管线，普通网页选择器不能提供等价能力。"
+    },
+    {
+      "capability": "input-assistance",
+      "status": "separate-runtime",
+      "reason": "输入辅助涉及编辑器状态、用户激活与输入事件，不能通过正文JSON运行脚本、修改页面行为或套用阅读白名单。"
+    }
+  ],
+  "scopeAudit": {
+    "providedData": {
+      "description": "仅将提供的配置数据作为需求样本，提取能力类别和网站线索；没有移入其个人状态、服务配置、选择器、页面样式、脚本或历史合并格式。",
+      "entryCount": 774,
+      "entriesWithUrlScope": 750,
+      "entriesWithPageSignatures": 44,
+      "distinctTopLevelEntryFields": 176,
+      "entriesWithHistoricalVersionPatches": 39,
+      "entriesWithHistoricalMergeOperations": 634,
+      "duplicateIdentifierGroups": 2,
+      "capabilityCounts": {
+        "textBoundaries": 473,
+        "dynamicContent": 165,
+        "layoutAdjustments": 219,
+        "captions": 183,
+        "imageText": 156,
+        "editingAssistance": 16
+      },
+      "countInterpretation": "能力计数互相重叠。条目还包含内部页面、历史兼容补丁和多媒体能力，不能把774条当成774个独立正文网站。",
+      "excludedInternalOrLocalHostOccurrences": 37,
+      "standardHostHints": 1120,
+      "ambiguousHostHintsRequiringReview": 89
+    },
+    "catalogComparison": {
+      "catalogGroups": 181,
+      "uniqueHostPatterns": 208,
+      "profiles": 12,
+      "sourceHostHintsWithPossibleIntersection": 103,
+      "sourceTextBoundaryHostHints": 629,
+      "sourceTextBoundaryHintsWithPossibleIntersection": 91,
+      "sourceNonMediaTextHostHints": 445,
+      "sourceNonMediaTextHintsWithPossibleIntersection": 64,
+      "interpretation": "这些数字只比较显式主机线索及子域交集，不推断原运行时的匹配语义，也不计路径、选择器命中、当前DOM或字幕图片支持，因此不是完整适配率。新增文档站也不能用来抵消样本内尚未验证的网站。"
+    },
+    "genericHandling": {
+      "capabilities": [
+        "标准段落、语义标题、文章、列表和表格的内容识别",
+        "行内代码、数学公式、导航和输入控件保护",
+        "正文内语义提示框与页面侧栏区分",
+        "显示透明容器遍历、分段文本、翻译恢复与动态重挂载"
+      ],
+      "validation": [
+        "tests/translationCore.test.ts",
+        "tests/translationDocumentCorpus.test.ts",
+        "tests/bilingualRemount.test.ts"
+      ],
+      "examples": [
+        {
+          "sites": [
+            "Paul Graham",
+            "Gates Notes",
+            "Bear Blog",
+            "Feynman Lectures"
+          ],
+          "status": "generic-path-unverified",
+          "reason": "标准正文页面可走已有候选引擎；未逐站在线验证，未把它们计为已完成的专站规则。"
+        },
+        {
+          "sites": [
+            "普通博客",
+            "静态新闻页面",
+            "标准HTML论坛",
+            "未登记的文档网站"
+          ],
+          "status": "generic-path",
+          "reason": "不在目录中的网站继续使用通用识别。只有出现可复现的内容边界问题时才新增域名规则，避免为覆盖数字堆积无效配置。"
+        }
+      ]
+    },
+    "remainingTextGaps": [
+      {
+        "sites": [
+          "Facebook",
+          "Instagram",
+          "Quora",
+          "Bluesky",
+          "LinkedIn 信息流"
+        ],
+        "status": "unconfigured-current-dom",
+        "priority": "high",
+        "reason": "当前消息容器、用户元数据、折叠回复和虚拟列表形态尚无独立实站证据；LinkedIn目前只声明长文路径。"
+      },
+      {
+        "sites": [
+          "Readwise Reader",
+          "Google Chat",
+          "Google News",
+          "HoyoLab",
+          "微博",
+          "小红书"
+        ],
+        "status": "unconfigured-current-dom",
+        "priority": "high",
+        "reason": "阅读器与社交页面的当前正文白名单、导航、流式更新仍需单独核验，不能用通用段落夹具代表这些站点。"
+      },
+      {
+        "sites": [
+          "JSTOR",
+          "ResearchGate",
+          "ACS Publications",
+          "RSC Publishing"
+        ],
+        "status": "unconfigured-specialized-article",
+        "priority": "high",
+        "reason": "摘要、正文、公式、引文及访问限制需要当前页面证据；普通可访问段落仍有通用处理，但尚无专站适配结论。"
+      },
+      {
+        "sites": [
+          "GitHub Gist",
+          "GitHub Blog",
+          "Figma Community",
+          "Google Play",
+          "Steam Community"
+        ],
+        "status": "generic-path-unverified",
+        "priority": "medium",
+        "reason": "部分页面可走通用正文或Markdown识别，代码表格、作者资料、商品元数据或社区控件尚未建立逐站验证；GitHub主站和Steam商店不代表这些独立页面。"
+      },
+      {
+        "sites": [
+          "QQ邮箱",
+          "网易163/126邮箱",
+          "网易yeah邮箱"
+        ],
+        "status": "runtime-or-dom-review-needed",
+        "priority": "medium",
+        "reason": "QQ旧版阅读页和网易JS6阅读页已有独立frame运行时；仍需使用登录后的真实邮件核验正文结构与全部交互形态。"
+      },
+      {
+        "sites": [
+          "iCloud邮箱",
+          "Migadu邮箱"
+        ],
+        "status": "runtime-or-dom-review-needed",
+        "priority": "medium",
+        "reason": "尚未核验正文frame与消息边界，不能由其他邮箱的专用运行时推断支持。"
+      },
+      {
+        "sites": [
+          "Notion 数据库和编辑工作区",
+          "LinkedIn 信息流",
+          "其他自托管聊天客户端"
+        ],
+        "status": "outside-declared-paths",
+        "priority": "medium",
+        "reason": "当前只支持声明的公开正文或已知消息容器，不扩展到交互数据库、富文本编辑器和未知部署。"
+      }
+    ],
+    "completionBoundary": "已交付可扩展的正文规则架构、181组目录、12模板与47个域名夹具；没有声称全部提供数据中的网站或专项能力等价完成。未核验或未声明的范围需保留为明确后续工作。"
+  },
+  "publicHtmlProbe": {
+    "checkedAt": "2026-09-05T08:46:21.038374+00:00",
+    "method": "通过系统证书验证的只读HTTP请求获取公开HTML，再用无脚本DOM解析器核验正文定位。未执行网站脚本，不等同于真实浏览器翻译测试。",
+    "cases": [
+      {
+        "id": "mdn",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "d54ca0bd34b587084e3664a4c60f768b8a12ed94855c8f5e61b6b1341864980b"
+      },
+      {
+        "id": "python-docs",
+        "url": "https://docs.python.org/3/tutorial/introduction.html",
+        "selector": "[role=\"main\"] p",
+        "httpStatus": 200,
+        "snapshotSha256": "c3386190e7b92eaa6cf56210d76bf0ecf0e8fcc12ed657526f432b1da7178faa"
+      },
+      {
+        "id": "react-docs",
+        "url": "https://react.dev/learn/describing-the-ui",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "2b0fa161474b9671fb844d5e8d082b849f77f2b694153cd8542ed0f424eae6a3"
+      },
+      {
+        "id": "vue-docs",
+        "url": "https://vuejs.org/guide/introduction.html",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "7395dadb1051ee0e2ca363919b0284a0e71b15ba686aecd1cd9d114e28378e40"
+      },
+      {
+        "id": "fastapi-docs",
+        "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+        "selector": "main article p",
+        "httpStatus": 200,
+        "snapshotSha256": "ad821d6e4935a0fde2030f69f6071dbd932d055d2c57ee4bb2a4fa4283ed7681"
+      },
+      {
+        "id": "numpy-docs",
+        "url": "https://numpy.org/doc/stable/user/absolute_beginners.html",
+        "selector": "[role=\"main\"] p",
+        "httpStatus": 200,
+        "snapshotSha256": "de15999620ddf1922988bfc13bfe6785af25a6ad91c50dacc5af8fc292c68edb"
+      },
+      {
+        "id": "arxiv",
+        "url": "https://arxiv.org/abs/1706.03762",
+        "selector": "blockquote.abstract",
+        "httpStatus": 200,
+        "snapshotSha256": "29e42a996471db9c019f1122825cdac0e6d64c96767d9ee5c0b8891de6204bee"
+      },
+      {
+        "id": "ar5iv",
+        "url": "https://ar5iv.labs.arxiv.org/html/1706.03762",
+        "selector": ".ltx_para > p",
+        "httpStatus": 200,
+        "snapshotSha256": "0c54ea2f265d4f7a24111c8703d51acdcfc0ae8b0c559e36a98e21cf62ce4e19"
+      },
+      {
+        "id": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Machine_translation",
+        "selector": ".mw-parser-output p:not(.mw-empty-elt)",
+        "httpStatus": 200,
+        "snapshotSha256": "5dd5fce19809dd55927417f6aaa497da03c039797e48d1cb56d80c3de18cd326"
+      },
+      {
+        "id": "steam-store",
+        "url": "https://store.steampowered.com/app/570/Dota_2/?l=english",
+        "selector": ".game_description_snippet",
+        "httpStatus": 200,
+        "snapshotSha256": "77d9170bc18bcdd4cbf0f984b0c45f65dac67977602f36f05f968c134fb4d91c"
+      },
+      {
+        "id": "discourse-meta",
+        "url": "https://meta.discourse.org/t/discourse-new-user-guide/96331",
+        "selector": ".cooked p, .crawler-post .post p",
+        "httpStatus": 200,
+        "snapshotSha256": "bc3db81132b0699ccb8afaf2ad17184d4df3a0982c31b4037a51ca510b0bfc5e"
+      },
+      {
+        "id": "huggingface",
+        "url": "https://huggingface.co/openai-community/gpt2",
+        "selector": ".prose p",
+        "httpStatus": 200,
+        "snapshotSha256": "149013af196b864b51a5e121fc1c391da6c178b4c7cd2421de9275bf0bcb4e34"
+      },
+      {
+        "id": "rust-docs",
+        "url": "https://doc.rust-lang.org/book/ch01-01-installation.html",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "abbab8f00254044a8a2d19855f49edf9cd7e34edeaa10abac2a7b13de9c83411"
+      },
+      {
+        "id": "vite-docs",
+        "url": "https://vite.dev/guide/",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "066f1c54a90311aea358afbcd77e7153f580b288f99fe06751c069b69070431e"
+      },
+      {
+        "id": "vitest-docs",
+        "url": "https://vitest.dev/guide/",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "19f1d0227772376bca5ffbd65db848d062295ea5a5cdbfde687dad6c8299fc0b"
+      },
+      {
+        "id": "docker-docs",
+        "url": "https://docs.docker.com/get-started/docker-overview/",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "1a71fee761294b17ea0819748e032029783263d71e8478d33229aedc9400f1fc"
+      },
+      {
+        "id": "pnpm-docs",
+        "url": "https://pnpm.io/installation",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "b911559664bbc5d75cef446520fe8810bfe9a96bb628b2ae3978340e38af4dba"
+      },
+      {
+        "id": "nextjs-docs",
+        "url": "https://nextjs.org/docs/app/getting-started/installation",
+        "selector": "article .prose p",
+        "httpStatus": 200,
+        "snapshotSha256": "d340e93a8b1ec1ca802b40751d051ae615dc6ad986e7a6b7d61cc78763533966"
+      },
+      {
+        "id": "postgresql-docs",
+        "url": "https://www.postgresql.org/docs/current/tutorial-createdb.html",
+        "selector": "#docContent .sect1 p",
+        "httpStatus": 200,
+        "snapshotSha256": "aa4a84f0e3563b8a3d7e03eff288ff227a2bac0b2611e58bf241dd4757a61c4b"
+      },
+      {
+        "id": "go-docs",
+        "url": "https://go.dev/doc/effective_go",
+        "selector": "main p",
+        "httpStatus": 200,
+        "snapshotSha256": "31b3beeb4fea135b85070f0362a1373b5e67981b8d6adc4afbb7291e06cdac5f"
+      }
+    ],
+    "accessLimitations": [
+      {
+        "site": "Stack Overflow",
+        "result": "HTTP 403"
+      },
+      {
+        "site": "Cloudflare 文档",
+        "result": "HTTP 403"
+      },
+      {
+        "site": "PubMed",
+        "result": "HTTP 203且返回访问检查页"
+      }
+    ]
+  },
+  "browserVerification": {
+    "date": "2026-09-05",
+    "scope": "公开实际页面与本地确定性翻译响应，不评价远程供应商或译文质量",
+    "domainFixtures": 47,
+    "totalFixtureCasesIncludingEstablishedAndCustom": 56,
+    "liveSites": [
+      {
+        "id": "mdn",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "python-docs",
+        "url": "https://docs.python.org/3/tutorial/introduction.html",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "react-docs",
+        "url": "https://react.dev/learn/describing-the-ui",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "vue-docs",
+        "url": "https://vuejs.org/guide/introduction.html",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "fastapi-docs",
+        "url": "https://fastapi.tiangolo.com/tutorial/first-steps/",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "numpy-docs",
+        "url": "https://numpy.org/doc/stable/user/absolute_beginners.html",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "arxiv",
+        "url": "https://arxiv.org/abs/1706.03762",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "ar5iv",
+        "url": "https://ar5iv.labs.arxiv.org/html/1706.03762",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 0
+      },
+      {
+        "id": "steam-store",
+        "url": "https://store.steampowered.com/app/570/Dota_2/?l=english",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 0
+      },
+      {
+        "id": "discourse-meta",
+        "url": "https://meta.discourse.org/t/understanding-discourse-for-new-users/96331",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "huggingface",
+        "url": "https://huggingface.co/openai-community/gpt2",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "rust-docs",
+        "url": "https://doc.rust-lang.org/book/ch01-01-installation.html",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "vite-docs",
+        "url": "https://vite.dev/guide/",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "vitest-docs",
+        "url": "https://vitest.dev/guide/",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "docker-docs",
+        "url": "https://docs.docker.com/get-started/docker-overview/",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "pnpm-docs",
+        "url": "https://pnpm.io/installation",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 4
+      },
+      {
+        "id": "nextjs-docs",
+        "url": "https://nextjs.org/docs/app/getting-started/installation",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "postgresql-docs",
+        "url": "https://www.postgresql.org/docs/current/tutorial-createdb.html",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "go-docs",
+        "url": "https://go.dev/doc/effective_go",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      },
+      {
+        "id": "wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Machine_translation",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ],
+        "protectedAreas": 2
+      }
+    ],
+    "notes": [
+      "初次失败与复验分开保留，不把夹具当作实站。",
+      "最终矩阵19/20通过，Wikipedia第三次全文触发一次超时；同一URL单独完整复验通过，尚无可重复的失败根因。",
+      "pnpm在最后精确保护更新后又单独复验通过。",
+      "运行策略：临时Edge profile、第二屏后台正常尺寸窗口、无前台焦点抢占。"
+    ]
+  }
+}

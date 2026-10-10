@@ -1,14 +1,24 @@
 /**
  * @file src/features/full-page-translation/ui/translationIndicators.ts
  * 文件职责：创建全文翻译过程中插入原页面的加载指示器和失败重试提示，并将错误详情转换为页面通知或可操作的重试控件。
- * 主要内容：提供 insertLoadingSpinner 与 insertFailedTip，组装 FluentRead 专属 DOM、图标、动画和点击事件，调用错误文案映射，并把生成节点返回给调用方登记到 translation state。
+ * 主要内容：提供 insertLoadingSpinner 与 insertFailedTip，组装 FluentRead 专属 DOM、完整点击区和按宿主语义启用的键盘操作控件，隔离宿主链接导航，并使用内置或动态自定义服务名称生成错误文案。
  * 模块边界：本文件不发起翻译、不判断候选，也不持有 session；重试回调由 runtime 注入，节点生命周期由 state 管理，全局页面通知通过 page-notice 公共接口显示。
  */
 // 全文翻译节点中的加载与失败反馈。
-import {sendErrorMessage} from '@/src/features/page-notice/public';
+import {showPageNotice} from '@/src/features/page-notice/public';
 import {options} from '@/src/core/config/catalog';
+import {getCustomOpenAIProviderLabel} from '@/src/core/config/customOpenAI';
 import {config} from '@/src/services/config/store';
 import {getTranslationErrorMessage} from '@/src/features/full-page-translation/core/errorMessage';
+import {
+  clearTranslationFailedHost,
+  markTranslationFailedHost,
+} from '@/src/features/full-page-translation/core/hostMarkers';
+import {normalizeUiLanguage, translate} from '@/src/core/i18n';
+import {
+  createTranslationLoadingIndicator,
+  shouldAnimateTranslationLoading,
+} from '@/src/ui/translationLoadingIndicator';
 
 const icon = {
   retry: `<svg fill="none" viewBox="0 0 40 40" height="40" width="40" style="display: inline; align-items: center; justify-content: center; width: 1em; height: 1em; margin-left: 1em; pointer-events: none;">
@@ -19,40 +29,113 @@ const icon = {
 </svg>`,
 };
 
+const INTERACTIVE_HOST_SELECTOR = [
+  'a[href]',
+  'button',
+  'input',
+  'select',
+  'textarea',
+  'summary',
+  '[contenteditable]:not([contenteditable="false"])',
+  '[tabindex]:not([tabindex="-1"])',
+  '[role="button"]',
+  '[role="checkbox"]',
+  '[role="combobox"]',
+  '[role="link"]',
+  '[role="menuitem"]',
+  '[role="option"]',
+  '[role="radio"]',
+  '[role="switch"]',
+  '[role="tab"]',
+  '[role="treeitem"]',
+].join(',');
+
 // 插入失败提示并处理错误
 export function insertFailedTip(
   node: HTMLElement,
   errMsg: string,
   onRetry: () => void,
 ): HTMLElement {
+  const contextInvalidated = isExtensionContextInvalidated(errMsg);
+  const keyboardAccessible = node.closest(INTERACTIVE_HOST_SELECTOR) === null;
   // 创建包装元素
   const wrapper = document.createElement("span");
   wrapper.classList.add("fluent-read-retry-wrapper");
   wrapper.setAttribute("data-fr-translation-owned", "true");
+  wrapper.setAttribute("role", "group");
+  const language = normalizeUiLanguage(config.uiLanguage);
+  wrapper.setAttribute("aria-label", translate('content.translationFailedActions', language));
+  wrapper.addEventListener("click", blockHostLinkActivation);
+  wrapper.addEventListener("auxclick", blockHostLinkActivation);
 
   // 创建重试按钮
-  const retryBtn = document.createElement("span");
-  retryBtn.textContent = '重试';
-  retryBtn.classList.add("fluent-read-retry");
-  retryBtn.addEventListener("click", handleRetryClick(node, wrapper, onRetry));
+  const retryBtn = createActionElement(
+    translate('content.retry', language),
+    'fluent-read-retry',
+    icon.retry,
+    contextInvalidated
+      ? handleInvalidatedRetryClick(errMsg)
+      : handleRetryClick(node, wrapper, onRetry),
+    keyboardAccessible,
+  );
 
-  // 添加失败标记
-  node.classList.add("fluent-read-failure");
+  // 添加失败标记：只写 data 属性，宿主 class 保持原样，避免站点按 class 改变原文排版。
+  markTranslationFailedHost(node);
 
   // 创建错误信息提示按钮
-  const errorTip = document.createElement("span");
-  errorTip.textContent = '错误原因';
-  errorTip.classList.add("fluent-read-reason");
-  errorTip.addEventListener("click", handleErrorClick(errMsg));
-
-  // 创建图标元素
-  const retryElement = createIconElement(icon.retry);
-  const warnElement = createIconElement(icon.warn);
+  const errorTip = createActionElement(
+    translate('content.errorReason', language),
+    'fluent-read-reason',
+    icon.warn,
+    handleErrorClick(errMsg),
+    keyboardAccessible,
+  );
 
   // 将所有元素批量添加到 wrapper
-  wrapper.append(retryElement, retryBtn, warnElement, errorTip);
+  wrapper.append(retryBtn, errorTip);
   node.appendChild(wrapper);
   return wrapper;
+}
+
+function isExtensionContextInvalidated(message: string): boolean {
+  return message.toLowerCase().includes('extension context invalidated');
+}
+
+// 失败控件可能位于宿主 <a> 内；任何未命中具体按钮的点击也不能触发链接默认行为。
+function blockHostLinkActivation(event: Event): void {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+function createActionElement(
+  label: string,
+  className: string,
+  iconContent: string,
+  onClick: (event: MouseEvent) => void,
+  keyboardAccessible: boolean,
+): HTMLElement {
+  const action = document.createElement('span');
+  action.classList.add('fluent-read-failure-action', className);
+
+  const actionIcon = createIconElement(iconContent);
+  actionIcon.classList.add('fluent-read-action-icon');
+  const actionLabel = document.createElement('span');
+  actionLabel.classList.add('fluent-read-action-label');
+  actionLabel.textContent = label;
+  action.append(actionIcon, actionLabel);
+  action.addEventListener('click', onClick);
+  if (keyboardAccessible) {
+    action.setAttribute('role', 'button');
+    action.setAttribute('tabindex', '0');
+    action.setAttribute('aria-label', label);
+    action.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      event.stopPropagation();
+      action.click();
+    });
+  }
+  return action;
 }
 
 // 处理重试按钮点击事件
@@ -62,9 +145,17 @@ function handleRetryClick(node: HTMLElement, wrapper: HTMLElement, onRetry: () =
     event.stopPropagation();
 
     wrapper.remove(); // 移除错误提示元素，重新翻译
-    node.classList.remove("fluent-read-failure"); // 移除失败标记
+    clearTranslationFailedHost(node); // 移除失败标记
 
     onRetry();
+  };
+}
+
+function handleInvalidatedRetryClick(errMsg: string) {
+  return (event: MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    showPageNotice(resolveErrorMessage(errMsg), 'error');
   };
 }
 
@@ -75,14 +166,17 @@ function handleErrorClick(errMsg: string) {
     event.stopPropagation();
 
     const message = resolveErrorMessage(errMsg);
-    sendErrorMessage(message); // 发送错误提示
+    // 用户显式点击必须每次都有反馈；自动批量错误才使用节流通知。
+    showPageNotice(message, 'error');
   };
 }
 
 // 根据错误信息返回错误提示
 function resolveErrorMessage(errMsg: string): string {
   const service = options.services.find(({value}) => value === config.service);
-  return getTranslationErrorMessage(errMsg, service?.label || config.service);
+  const label = service?.label
+    || getCustomOpenAIProviderLabel(config.customOpenAIProviders, config.service);
+  return getTranslationErrorMessage(errMsg, label);
 }
 
 // 创建图标元素
@@ -97,15 +191,15 @@ export function insertLoadingSpinner(
   node: HTMLElement,
   isCache: boolean = false
 ): HTMLElement {
-  const spinner = document.createElement("span");
-  spinner.className = "fluent-read-loading";
-  spinner.setAttribute("data-fr-translation-owned", "true");
-  if (isCache) spinner.style.borderTop = "3px solid green"; // 存在缓存时改为绿色
-  
-  void Promise.resolve().then(() => {
-    if (!config.animations) spinner.classList.add('static');
+  const spinner = createTranslationLoadingIndicator(node.ownerDocument, {
+    style: config.translationLoadingStyle,
+    animated: shouldAnimateTranslationLoading(
+      config.animations !== false,
+      node.ownerDocument.defaultView,
+    ),
+    cacheHit: isCache,
   });
-  
+  spinner.setAttribute("data-fr-translation-owned", "true");
   node.appendChild(spinner);
   return spinner;
 }

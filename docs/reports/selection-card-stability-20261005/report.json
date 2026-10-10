@@ -1,0 +1,195 @@
+{
+  "providerEvidence": "Production extension in isolated Edge; translation and AI responses use deterministic local fixtures. Dictionary uses the real dictionary pipeline. No authenticated AI quality claim.",
+  "ok": true,
+  "cases": [
+    "learning tabs explain destinations and the empty list enables saving without AI reference",
+    "settings and popup use one card presentation",
+    "translation is the first default tab and opening it does not request AI",
+    "grammar switch and streaming preserve the opening anchor",
+    "usage tab preserves the same anchor",
+    "study notes save while AI reference is off and do not populate saved words",
+    "saved key points appear in Study notes and view opens that tab directly",
+    "saved original opens Words and sentences separately from study notes",
+    "return to translation preserves the anchor",
+    "completed grammar is reused without a second AI request",
+    "播放原文 start and stop keep position and height",
+    "播放译文 start and stop keep position and height",
+    "word pronunciation start and stop keep position and height",
+    "narrow viewport tab switch stays anchored and scrolls inside",
+    "close and reselect restore the translation tab and fresh geometry",
+    "English learning tabs and notes remain usable in a narrow viewport"
+  ],
+  "consoleErrors": [],
+  "translationRequests": 4,
+  "aiRequests": 3,
+  "geometry": [
+    {
+      "name": "grammar switch and streaming preserve the opening anchor",
+      "frames": 34,
+      "initial": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204,
+        "right": 468,
+        "bottom": 439
+      },
+      "final": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 520
+      }
+    },
+    {
+      "name": "usage tab preserves the same anchor",
+      "frames": 20,
+      "initial": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204,
+        "right": 468,
+        "bottom": 439
+      },
+      "final": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 520
+      }
+    },
+    {
+      "name": "return to translation preserves the anchor",
+      "frames": 18,
+      "initial": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204,
+        "right": 468,
+        "bottom": 439
+      },
+      "final": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204
+      }
+    },
+    {
+      "name": "播放原文 start and stop keep position and height",
+      "frames": 35,
+      "initial": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204,
+        "right": 468,
+        "bottom": 439
+      },
+      "final": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204
+      }
+    },
+    {
+      "name": "播放译文 start and stop keep position and height",
+      "frames": 36,
+      "initial": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204,
+        "right": 468,
+        "bottom": 439
+      },
+      "final": {
+        "left": 80,
+        "top": 235,
+        "width": 388,
+        "height": 204
+      }
+    },
+    {
+      "name": "word pronunciation start and stop keep position and height",
+      "frames": 31,
+      "initial": {
+        "left": 80,
+        "top": 360,
+        "width": 388,
+        "height": 504,
+        "right": 468,
+        "bottom": 864
+      },
+      "final": {
+        "left": 80,
+        "top": 360,
+        "width": 388,
+        "height": 504
+      }
+    },
+    {
+      "name": "narrow viewport tab switch stays anchored and scrolls inside",
+      "frames": 20,
+      "initial": {
+        "left": 12,
+        "top": 360,
+        "width": 366,
+        "height": 428,
+        "right": 378,
+        "bottom": 788
+      },
+      "final": {
+        "left": 12,
+        "top": 360,
+        "width": 366,
+        "height": 428
+      }
+    }
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "audio": {
+    "muted": true,
+    "listeningVerified": false,
+    "requests": 3
+  },
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "browserFrontmost": false
+  },
+  "screenshots": [
+    "translation-first.png",
+    "learning-memory-destination.png",
+    "learning-empty-guidance.png",
+    "learning-words-destination.png",
+    "learning-notes-english-narrow.png"
+  ],
+  "learningNavigation": {
+    "testedTabs": [
+      "saved",
+      "memory"
+    ],
+    "adapter": "precreated background tab; native tabs.update(active:false); runtime validation and options rendering are real",
+    "nativeTabCreation": false
+  },
+  "validation": {
+    "relatedTestFiles": 9,
+    "relatedTestsPassed": 219,
+    "i18nPassed": 54,
+    "i18nBaselineFailures": 3,
+    "typecheck": true,
+    "chromeBuild": true,
+    "firefoxBuild": true,
+    "userscriptBuild": true,
+    "userscriptVerifier": true,
+    "documentationBuild": true,
+    "testAudit": true
+  }
+}

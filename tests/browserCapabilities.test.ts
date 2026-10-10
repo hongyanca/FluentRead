@@ -2,7 +2,6 @@ import {describe, expect, it} from 'vitest';
 import {
     applyRuntimeBrowserConstraints,
     browserBuildTargetFromEnv,
-    browserBuildTargetFromImportMeta,
     browserCapabilityBuildMarker,
     browserCapabilities,
     readRuntimeUserAgent,
@@ -16,6 +15,7 @@ import {
     getTranslationServiceUnavailableMessage,
     isTranslationServiceAvailable,
     supportsTranslationBatch,
+    supportsNativeTranslationBatch,
 } from '@/src/services/translation/capabilities';
 
 describe('browser capability contract', () => {
@@ -25,11 +25,12 @@ describe('browser capability contract', () => {
             browser: 'chrome',
             manifestVersion: 3,
             offscreenDocument: true,
+            extensionDom: true,
             chromeTranslation: true,
             imageOcr: true,
             imageTranslation: true,
             areaTranslation: true,
-            selectionTtsOffscreen: true,
+            selectionTtsExtensionPlayback: true,
             selectionTtsPageFallback: true,
         });
         expect(Object.isFrozen(chrome)).toBe(true);
@@ -41,13 +42,12 @@ describe('browser capability contract', () => {
             imageOcr: true,
             imageTranslation: true,
             areaTranslation: true,
-            selectionTtsOffscreen: true,
+            selectionTtsExtensionPlayback: true,
         });
     });
 
-    it('conservatively disables extension-only capabilities for Firefox, Opera, MV2 and unknown targets', () => {
+    it('keeps unsupported Firefox MV3, Opera, Chromium MV2 and unknown targets disabled', () => {
         for (const target of [
-            {browser: 'firefox', manifestVersion: 2 as const},
             {browser: 'firefox', manifestVersion: 3 as const},
             {browser: 'opera', manifestVersion: 3 as const},
             {browser: 'chrome', manifestVersion: 2 as const},
@@ -59,10 +59,23 @@ describe('browser capability contract', () => {
                 imageOcr: false,
                 imageTranslation: false,
                 areaTranslation: false,
-                selectionTtsOffscreen: false,
+                selectionTtsExtensionPlayback: false,
                 selectionTtsPageFallback: true,
             });
         }
+    });
+
+    it('Firefox MV2 uses shared DOM features without claiming native Offscreen or Chrome Translator', () => {
+        expect(resolveBrowserCapabilities({browser: 'firefox', manifestVersion: 2})).toMatchObject({
+            offscreenDocument: false,
+            extensionDom: true,
+            chromeTranslation: false,
+            imageOcr: true,
+            imageTranslation: true,
+            areaTranslation: true,
+            selectionTtsExtensionPlayback: true,
+            selectionTtsPageFallback: true,
+        });
     });
 
     it('runtime-gates Chrome Translation when a Chrome build is loaded by Edge', () => {
@@ -88,6 +101,24 @@ describe('browser capability contract', () => {
         expect(readRuntimeUserAgent({navigator: {userAgent: 1}})).toBe('');
     });
 
+    it('restricts Firefox-shared DOM features when its package runs in Thunderbird', () => {
+        const firefox = resolveBrowserCapabilities({browser: 'firefox', manifestVersion: 2});
+        const thunderbird = applyRuntimeBrowserConstraints(
+            firefox,
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Thunderbird/140.0',
+        );
+        expect(thunderbird).toMatchObject({
+            browser: 'thunderbird',
+            manifestVersion: 2,
+            extensionDom: false,
+            imageOcr: false,
+            imageTranslation: false,
+            areaTranslation: false,
+            selectionTtsExtensionPlayback: false,
+        });
+        expect(applyRuntimeBrowserConstraints(firefox, 'Firefox/140.0')).toBe(firefox);
+    });
+
     it('derives safe defaults when WXT compile-time env fields are missing or invalid', () => {
         expect(browserBuildTargetFromEnv()).toEqual({browser: 'unknown', manifestVersion: 2});
         expect(browserBuildTargetFromEnv({BROWSER: ''})).toEqual({browser: 'unknown', manifestVersion: 2});
@@ -104,10 +135,7 @@ describe('browser capability contract', () => {
             BROWSER: 1,
             MANIFEST_VERSION: 4,
         } as unknown as Partial<ImportMetaEnv>)).toEqual({browser: 'unknown', manifestVersion: 2});
-        expect(browserBuildTargetFromImportMeta()).toEqual({browser: 'unknown', manifestVersion: 2});
-        expect(browserBuildTargetFromImportMeta({})).toEqual({browser: 'unknown', manifestVersion: 2});
-        expect(browserBuildTargetFromImportMeta({env: {BROWSER: 'chrome', MANIFEST_VERSION: 3}}))
-            .toEqual({browser: 'chrome', manifestVersion: 3});
+        expect(browserBuildTargetFromEnv()).toEqual({browser: 'unknown', manifestVersion: 2});
         expect(browserCapabilities).toMatchObject({
             browser: 'unknown',
             manifestVersion: 2,
@@ -123,6 +151,15 @@ describe('browser capability contract', () => {
 describe('translation service capability contract', () => {
     const chrome = resolveBrowserCapabilities({browser: 'chrome', manifestVersion: 3});
     const firefox = resolveBrowserCapabilities({browser: 'firefox', manifestVersion: 2});
+
+    it('keeps local models available only with an extension DOM runtime', () => {
+        expect(isTranslationServiceAvailable(services.localTranslation, chrome)).toBe(true);
+        expect(isTranslationServiceAvailable(services.localTranslation, firefox)).toBe(true);
+        const unavailable = {...chrome, extensionDom: false};
+        expect(isTranslationServiceAvailable(services.localTranslation, unavailable)).toBe(false);
+        expect(getTranslationServiceUnavailableMessage(services.localTranslation, unavailable))
+            .toContain('不支持扩展本地模型翻译');
+    });
 
     it('keeps normal providers available and gates only Chrome built-in translation', () => {
         expect(isTranslationServiceAvailable(services.microsoft, firefox)).toBe(true);
@@ -166,9 +203,23 @@ describe('translation service capability contract', () => {
         expect(supportsTranslationBatch(services.microsoft)).toBe(true);
         expect(supportsTranslationBatch(services.freeTranslation)).toBe(true);
         expect(supportsTranslationBatch(services.openai)).toBe(true);
-        expect(supportsTranslationBatch(services.google)).toBe(false);
+        expect(supportsTranslationBatch(services.google)).toBe(true);
+        expect(supportsTranslationBatch(services.deepL)).toBe(true);
+        expect(supportsTranslationBatch(services.azureTranslator)).toBe(true);
+        expect(supportsTranslationBatch(services.googleCloudTranslation)).toBe(true);
         expect(supportsTranslationBatch(services.deeplx)).toBe(false);
         expect(supportsTranslationBatch(services.chromeTranslator)).toBe(false);
         expect(supportsTranslationBatch(services.tongyi)).toBe(false);
+    });
+
+    it('自动合批只用于真正的原生多文本接口，与逐条数组和 AI 协议区分', () => {
+        for (const service of [services.google, services.microsoft, services.deepL,
+            services.azureTranslator, services.googleCloudTranslation]) {
+            expect(supportsNativeTranslationBatch(service)).toBe(true);
+        }
+        for (const service of [services.freeTranslation, services.bilibili, services.openai,
+            services.deeplx, services.chromeTranslator, services.tongyi, 'unknown']) {
+            expect(supportsNativeTranslationBatch(service)).toBe(false);
+        }
     });
 });

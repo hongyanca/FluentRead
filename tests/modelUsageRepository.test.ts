@@ -6,7 +6,7 @@ import {
     normalizeStoredModelUsageEvent,
     parseModelUsageTransferDocument,
 } from '@/src/platform/storage/modelUsageRepository';
-import type {ModelUsageEvent} from '@/src/services/model-usage/types';
+import {MODEL_USAGE_MAX_STORED_EVENTS, type ModelUsageEvent} from '@/src/services/model-usage/types';
 
 let databaseSequence = 0;
 const databases: FluentReadModelUsageDatabase[] = [];
@@ -45,6 +45,28 @@ afterEach(async () => {
 });
 
 describe('大模型用量 IndexedDB repository', () => {
+    it.each([1, MODEL_USAGE_MAX_STORED_EVENTS])('已有 %i 条时写入和裁剪仅访问索引，不读回完整事件', async (count) => {
+        const repository = createRepository('index-only-retention');
+        await repository.recordMany(Array.from({length: count}, (_, index) => usageEvent({
+            id: `retention-${String(index).padStart(4, '0')}`, startedAt: 1,
+        })));
+        let reads = 0;
+        const reading = (event: unknown) => {
+            if (event !== undefined) reads += 1;
+            return event;
+        };
+        repository.database.events.hook('reading', reading);
+        try {
+            await expect(repository.recordMany([usageEvent({id: 'retention-new', startedAt: 2})])).resolves.toBe(1);
+        } finally {
+            repository.database.events.hook('reading').unsubscribe(reading);
+        }
+        expect(reads).toBe(0);
+        expect(await repository.database.events.count()).toBe(Math.min(count + 1, MODEL_USAGE_MAX_STORED_EVENTS));
+        expect(await repository.database.events.get('retention-new')).toBeDefined();
+        expect(Boolean(await repository.database.events.get('retention-0000'))).toBe(count < MODEL_USAGE_MAX_STORED_EVENTS);
+    });
+
     it('批量写入只保留白名单字段，并以事件 id 幂等去重', async () => {
         const repository = createRepository('allowlist');
         const first = {
@@ -79,6 +101,29 @@ describe('大模型用量 IndexedDB repository', () => {
         expect(JSON.stringify(stored)).not.toContain('private.example');
         expect(JSON.stringify(stored)).not.toContain('sk-sensitive-sentinel');
         await expect(repository.recordMany([])).resolves.toBe(0);
+    });
+
+    it('最多保存按请求时间排序的最近 1000 条事件，并删除更早记录', async () => {
+        const repository = createRepository('retention');
+        const baseline = Array.from({length: MODEL_USAGE_MAX_STORED_EVENTS}, (_, index) => usageEvent({
+            id: `retained-${String(index).padStart(4, '0')}`,
+            startedAt: index,
+        }));
+
+        await expect(repository.recordMany(baseline)).resolves.toBe(MODEL_USAGE_MAX_STORED_EVENTS);
+        await expect(repository.database.events.count()).resolves.toBe(MODEL_USAGE_MAX_STORED_EVENTS);
+
+        await expect(repository.recordMany([
+            usageEvent({id: 'newer-1000', startedAt: MODEL_USAGE_MAX_STORED_EVENTS}),
+            usageEvent({id: 'newer-1001', startedAt: MODEL_USAGE_MAX_STORED_EVENTS + 1}),
+        ])).resolves.toBe(2);
+
+        const stored = await repository.database.events.orderBy('[startedAt+id]').toArray();
+        expect(stored).toHaveLength(MODEL_USAGE_MAX_STORED_EVENTS);
+        expect(stored.slice(0, 2).map((event) => event.id)).toEqual(['retained-0002', 'retained-0003']);
+        expect(stored.at(-1)?.id).toBe('newer-1001');
+        await expect(repository.database.events.get('retained-0000')).resolves.toBeUndefined();
+        await expect(repository.database.events.get('retained-0001')).resolves.toBeUndefined();
     });
 
     it('同批验证失败不留下半批事件，重复 id 的不同内容也不会覆盖旧记录', async () => {
@@ -207,6 +252,32 @@ describe('大模型用量 IndexedDB repository', () => {
             limit: 20,
         }, now);
         expect(timedOutConnection.items.map((item) => item.id)).toEqual(['request-other']);
+    });
+
+    it('可直接跳到任意页，固定时间排除新增调用，范围和场景筛选后重新分页', async () => {
+        const repository = createRepository('request-log-jump');
+        const now = new Date(2026, 7, 29, 16).getTime();
+        await repository.recordMany(Array.from({length: 63}, (_, index) => usageEvent({
+            id: `page-${index}`, startedAt: now - index * 1_000,
+            purpose: index % 2 ? 'writing' : 'reading',
+        })));
+        const last = await repository.getRequestLog({filter: {range: '30d'}, offset: 60, limit: 20, asOf: now}, now);
+        expect(last.items.map(item => item.id)).toEqual(['page-60', 'page-61', 'page-62']);
+        expect(last).toMatchObject({totalCount: 63, offset: 60, nextCursor: null});
+        await repository.recordMany([usageEvent({id: 'new-call', startedAt: now + 1_000})]);
+        const second = await repository.getRequestLog({filter: {range: '30d'}, offset: 20, limit: 20, asOf: now}, now + 2_000);
+        expect(second.items.map(item => item.id)).toEqual(Array.from({length: 20}, (_, index) => `page-${index + 20}`));
+        expect(second.totalCount).toBe(63);
+        const filtered = await repository.getRequestLog({filter: {range: '30d', purpose: 'reading'}, offset: 20, limit: 20, asOf: now}, now);
+        expect(filtered.items.map(item => item.id)).toEqual(Array.from({length: 12}, (_, index) => `page-${40 + index * 2}`));
+        const clamped = await repository.getRequestLog({filter: {range: '30d'}, offset: 999, limit: 20, asOf: now}, now);
+        expect(clamped.offset).toBe(60);
+        expect(clamped.items).toEqual(last.items);
+        for (const offset of [-1, 0.5, 1_000, NaN, null]) {
+            await expect(repository.getRequestLog({filter: {range: '30d'}, offset: offset as never}, now)).rejects.toThrow('offset');
+        }
+        await expect(repository.getRequestLog({filter: {range: '30d'}, offset: 0, cursor: {startedAt: now, id: 'x'}}, now)).rejects.toThrow('不能同时使用');
+        await expect(repository.getRequestLog({filter: {range: '30d'}, asOf: -1}, now)).rejects.toThrow('asOf');
     });
 
     it('请求日志使用默认页长，支持缓存未命中并拒绝非法筛选与游标', async () => {

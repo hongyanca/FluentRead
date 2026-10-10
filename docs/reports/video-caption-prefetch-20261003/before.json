@@ -1,0 +1,149 @@
+{
+  "success": false,
+  "providerDelayMs": 500,
+  "evidence": "Production extension; controlled YouTube/X caption tracks; real video; simulated provider",
+  "checks": [
+    {
+      "name": "A distinct upcoming sentence is prefetched beyond repeated rolling rows",
+      "pass": true,
+      "details": [
+        {
+          "source": "Repeated rolling sentence.",
+          "at": 1790965691376
+        },
+        {
+          "source": "The next distinct sentence is ready.",
+          "at": 1790965691377
+        }
+      ]
+    },
+    {
+      "name": "Cached original and translation first appear together",
+      "pass": false,
+      "details": {
+        "lagMs": 1.0999999046325684,
+        "samples": [
+          {
+            "at": 1790.6999998092651,
+            "original": "The next distinct sentence is ready.",
+            "translation": ""
+          },
+          {
+            "at": 1791.7999997138977,
+            "original": "The next distinct sentence is ready.",
+            "translation": "译文：The next distinct sentence is ready."
+          }
+        ]
+      }
+    },
+    {
+      "name": "Adding a native track primes upcoming captions immediately",
+      "pass": false,
+      "details": 1060
+    },
+    {
+      "name": "Native cached cue renders matching original and translation",
+      "pass": true
+    },
+    {
+      "name": "Native repeated entries do not consume the upcoming distinct sentence budget",
+      "pass": false,
+      "details": [
+        {
+          "source": "Repeated rolling sentence.",
+          "at": 1790965691376
+        },
+        {
+          "source": "The next distinct sentence is ready.",
+          "at": 1790965691377
+        },
+        {
+          "source": "Native upcoming cue should be translated early.",
+          "at": 1790965694516
+        },
+        {
+          "source": "Native repeated rolling sentence.",
+          "at": 1790965695170
+        }
+      ]
+    },
+    {
+      "name": "Native prefetched original and translation first appear together",
+      "pass": false,
+      "details": {
+        "lagMs": 510.19999980926514,
+        "samples": [
+          {
+            "at": 3578.4000000953674,
+            "original": "Native distinct sentence follows repeated rows.",
+            "translation": ""
+          },
+          {
+            "at": 3613.2000002861023,
+            "original": "Native distinct sentence follows repeated rows.",
+            "translation": ""
+          },
+          {
+            "at": 4088.5999999046326,
+            "original": "Native distinct sentence follows repeated rows.",
+            "translation": "译文：Native distinct sentence follows repeated rows."
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "subtitleLagMs": 1.0999999046325684,
+  "nativeTrackDispatchMs": 1060,
+  "nativeSubtitleLagMs": 510.19999980926514,
+  "requests": [
+    {
+      "source": "Repeated rolling sentence.",
+      "at": 1790965691376
+    },
+    {
+      "source": "The next distinct sentence is ready.",
+      "at": 1790965691377
+    },
+    {
+      "source": "Native upcoming cue should be translated early.",
+      "at": 1790965694516
+    },
+    {
+      "source": "Native repeated rolling sentence.",
+      "at": 1790965695170
+    },
+    {
+      "source": "Native distinct sentence follows repeated rows.",
+      "at": 1790965696780
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: [{\"name\":\"Cached original and translation first appear together\",\"pass\":false,\"details\":{\"lagMs\":1.0999999046325684,\"samples\":[{\"at\":1790.6999998092651,\"original\":\"The next distinct sentence is ready.\",\"translation\":\"\"},{\"at\":1791.7999997138977,\"original\":\"The next distinct sentence is ready.\",\"translation\":\"译文：The next distinct sentence is ready.\"}]}},{\"name\":\"Adding a native track primes upcoming captions immediately\",\"pass\":false,\"details\":1060},{\"name\":\"Native repeated entries do not consume the upcoming distinct sentence budget\",\"pass\":false,\"details\":[{\"source\":\"Repeated rolling sentence.\",\"at\":1790965691376},{\"source\":\"The next distinct sentence is ready.\",\"at\":1790965691377},{\"source\":\"Native upcoming cue should be translated early.\",\"at\":1790965694516},{\"source\":\"Native repeated rolling sentence.\",\"at\":1790965695170}]},{\"name\":\"Native prefetched original and translation first appear together\",\"pass\":false,\"details\":{\"lagMs\":510.19999980926514,\"samples\":[{\"at\":3578.4000000953674,\"original\":\"Native distinct sentence follows repeated rows.\",\"translation\":\"\"},{\"at\":3613.2000002861023,\"original\":\"Native distinct sentence follows repeated rows.\",\"translation\":\"\"},{\"at\":4088.5999999046326,\"original\":\"Native distinct sentence follows repeated rows.\",\"translation\":\"译文：Native distinct sentence follows repeated rows.\"}]}}]\n    at /Users/thinkstu/Desktop/copy/FluentRead-video-caption-prefetch-20261003/scripts/run-video-caption-prefetch-test.cjs:160:10"
+}

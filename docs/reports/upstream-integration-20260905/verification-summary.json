@@ -1,0 +1,1937 @@
+{
+  "schemaVersion": 1,
+  "verifiedDate": "2026-09-05",
+  "pullRequest": "https://github.com/FluentRead/FluentRead/pull/447",
+  "productionSourceCommit": "93cc473c4d46d73b731d8b40a43b4e2b5d56c942",
+  "integratedMainCommit": "e69bca319fb59dcbd0401d386dcb2d4311ebf94a",
+  "deterministic": {
+    "command": "VITEST_MAX_FORKS=2 VITEST_MIN_FORKS=1 pnpm test:regression:all",
+    "exitCode": 0,
+    "groups": {
+      "architecture": 772,
+      "unit": 2185,
+      "functional": 641,
+      "regression": 339
+    },
+    "totalPassed": 3937,
+    "strictCoverage": {
+      "passed": 3134,
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "scope": "configured strict coverage suite; overlaps grouped tests"
+    },
+    "buildChecks": [
+      "prepare",
+      "audit",
+      "compile",
+      "chrome",
+      "firefox",
+      "firefox-zip-manifest",
+      "userscript",
+      "userscript-validation",
+      "docs"
+    ],
+    "finalDocsBuild": {
+      "exitCode": 0,
+      "originalFailure": "Two links to reports/**, an intentionally excluded VitePress directory.",
+      "fix": "Use GitHub report URLs; do not disable dead-link checks.",
+      "log": "/private/tmp/fr-pr-integration-v3-final-docs-retry.log"
+    }
+  },
+  "artifact": {
+    "chromeFiles": 233,
+    "chromeTreeSha256": "e94a965fc08bccf79476fbd168bc78dc9b4ceb8ad19fcfa0a943b97100e286ab",
+    "userscriptSha256": "19c86578e17aa42145211510027c930be198863e60420100aa6d8c120c53f9ee",
+    "unchangedProductionInputs": 647
+  },
+  "requiredNetwork": {
+    "ok": true,
+    "sourceCommit": "93cc473c4d46d73b731d8b40a43b4e2b5d56c942",
+    "baseCommit": "e69bca319fb59dcbd0401d386dcb2d4311ebf94a",
+    "jobs": 62,
+    "pages": 31,
+    "passed": 62,
+    "originalInterruptionsRetained": [
+      {
+        "name": "ubuntu-apt-manpage",
+        "mode": "hover",
+        "tier": "required",
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "timeoutMs": 300000,
+        "durationMs": 16746,
+        "error": null
+      }
+    ],
+    "frozenArtifactVerifiedFiles": 233,
+    "cases": [
+      {
+        "case": "ubuntu-apt-manpage",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 37,
+        "retranslated": 37,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "ubuntu-apt-manpage",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "wikipedia-united-states",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "wikipedia-united-states",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 1444,
+        "retranslated": 1444,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "bambu-dual-nozzles",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "bambu-dual-nozzles",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 67,
+        "retranslated": 67,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "learnopengl-coordinate-systems",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": true,
+          "version": "2.6.1",
+          "errors": [
+            {
+              "id": "MathJax-Element-1-Frame",
+              "text": "[Math Processing Error]out=(x/wy/wz/w)"
+            },
+            {
+              "id": "MathJax-Element-2-Frame",
+              "text": "[Math Processing Error]Vclip=Mprojection⋅Mview⋅Mmodel⋅Vlocal"
+            }
+          ]
+        }
+      },
+      {
+        "case": "learnopengl-coordinate-systems",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 104,
+        "retranslated": 104,
+        "hostMathRendering": {
+          "detected": true,
+          "version": "2.6.1",
+          "errors": []
+        }
+      },
+      {
+        "case": "qt-qobject-threads",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "qt-qobject-threads",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 43,
+        "retranslated": 43,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "mkdocs-material-home",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "mkdocs-material-home",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 56,
+        "retranslated": 56,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "brown-pl-introduction",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "brown-pl-introduction",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 66,
+        "retranslated": 66,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "roadmap-frontend",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "roadmap-frontend",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 56,
+        "retranslated": 56,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "steam-changelog",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "steam-changelog",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 25,
+        "retranslated": 25,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "cachyos-features",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "cachyos-features",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 28,
+        "retranslated": 28,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "ar5iv-2106-03753",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "ar5iv-2106-03753",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 233,
+        "retranslated": 233,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "dart-language",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "dart-language",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 130,
+        "retranslated": 130,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "mdn-javascript-guide",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "mdn-javascript-guide",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 206,
+        "retranslated": 206,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "hacker-news-8863",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "hacker-news-8863",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 138,
+        "retranslated": 138,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-fluentread-pr",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-fluentread-pr",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 38,
+        "retranslated": 38,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-microsoft-repositories",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-microsoft-repositories",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 32,
+        "retranslated": 32,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-eugeny-issue-list",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "github-eugeny-issue-list",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 20,
+        "retranslated": 20,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "pubdev-provider",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "pubdev-provider",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 168,
+        "retranslated": 168,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "example-com",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "example-com",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 3,
+        "retranslated": 3,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "gnu-bash-manual",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "gnu-bash-manual",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 4,
+        "retranslated": 4,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "python-tutorial-introduction",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "python-tutorial-introduction",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 76,
+        "retranslated": 76,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "go-tutorial-getting-started",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "go-tutorial-getting-started",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 61,
+        "retranslated": 61,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "rust-book-getting-started",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "rust-book-getting-started",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 6,
+        "retranslated": 6,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "swift-basic-operators",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "swift-basic-operators",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 129,
+        "retranslated": 129,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "postgresql-tutorial",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "postgresql-tutorial",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 25,
+        "retranslated": 25,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "nginx-beginners-guide",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "nginx-beginners-guide",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 54,
+        "retranslated": 54,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "curl-http-scripting",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "curl-http-scripting",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 171,
+        "retranslated": 171,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "sqlite-select-language",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "sqlite-select-language",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 160,
+        "retranslated": 160,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "git-book-version-control",
+        "mode": "hover",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": null,
+        "retranslated": null,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      },
+      {
+        "case": "git-book-version-control",
+        "mode": "full",
+        "ok": true,
+        "focusPreserved": true,
+        "translated": 89,
+        "retranslated": 89,
+        "hostMathRendering": {
+          "detected": false,
+          "errors": []
+        }
+      }
+    ]
+  },
+  "standardBrowser": {
+    "sourceCommit": "93cc473c4d46d73b731d8b40a43b4e2b5d56c942",
+    "extensionTreeSha256": "e94a965fc08bccf79476fbd168bc78dc9b4ceb8ad19fcfa0a943b97100e286ab",
+    "userscriptSha256": "19c86578e17aa42145211510027c930be198863e60420100aa6d8c120c53f9ee",
+    "suitesPassed": 8,
+    "suiteCount": 8,
+    "screenshotsCount": 430,
+    "httpErrorsCountMeaning": "null 表示该 runner 未单独统计 HTTP 错误；不推断为零。",
+    "suites": [
+      {
+        "suite": "settings-center-ui",
+        "name": "settings-center-ui",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-settings-center-ui/report.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 369,
+        "scope": "真实扩展 Options/Popup：14 皮肤、15 加载动画、响应式、设置布局、备份恢复与持久化；持续精确 PID 前台监控。",
+        "assertionsCount": 48,
+        "persistenceCasesCount": 2,
+        "continuousFocusMonitorPassed": true,
+        "popupLifecycle": {
+          "isolatedPages": 1,
+          "fullNavigations": 14,
+          "appearanceReopenNavigations": 3,
+          "appearanceReopenMode": "blank-then-popup"
+        }
+      },
+      {
+        "suite": "selection-trigger",
+        "name": "selection-trigger",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-selection-trigger/report.json",
+        "caseCount": 37,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 10,
+        "scope": "真实扩展划词触发与快捷键冲突矩阵；本地确定性翻译服务。"
+      },
+      {
+        "suite": "full-page-translation",
+        "name": "full-page-translation",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-full-page-translation/report.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": 0,
+        "screenshotsCount": 10,
+        "scope": "真实扩展全文翻译/恢复/再次翻译、动态重挂、错误重试、悬浮球与加载动画隔离；本地确定性夹具。"
+      },
+      {
+        "suite": "video-subtitle-fixture",
+        "name": "video-subtitle-fixture",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-video-subtitle-fixture/report.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": 0,
+        "screenshotsCount": 6,
+        "scope": "真实扩展字幕注入、播放器重绘、渐进翻译、预取、服务选择和下载；本地播放器/服务夹具。"
+      },
+      {
+        "suite": "document-translation",
+        "name": "document-translation",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-document-translation/report.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 11,
+        "scope": "12 种文档解析与阅读布局；注入确定性校对译文后验证 PDF/EPUB/DOCX 实际导出；模型选择、Popup 入口及设置联动。此 runner 未向真实供应商请求全篇翻译。",
+        "formatsCount": 12,
+        "exportFormats": [
+          "PDF",
+          "EPUB",
+          "DOCX"
+        ]
+      },
+      {
+        "suite": "glossary",
+        "name": "glossary",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-glossary/report.json",
+        "caseCount": 9,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 15,
+        "scope": "内置词库预览/采用/删除、匹配请求、导入导出、悬浮/全文/文档、快速关闭及最新编辑持久化；本地 AI 夹具。"
+      },
+      {
+        "suite": "privacy-boundary",
+        "name": "privacy-boundary",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-privacy-boundary/privacy-boundary-evidence.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 6,
+        "scope": "隔离扩展配置/凭据存储与宿主 DOM/存储/Shadow UI 边界；合成凭据与本地页面。"
+      },
+      {
+        "suite": "userscript-smoke",
+        "name": "userscript-smoke",
+        "exitCode": 0,
+        "reportPath": "/private/tmp/fr-pr-integration-v3-userscript-smoke/evidence.json",
+        "caseCount": null,
+        "focusPreserved": true,
+        "consoleErrorsCount": 0,
+        "httpErrorsCount": null,
+        "unexpectedNetworkRequestsCount": null,
+        "screenshotsCount": 3,
+        "scope": "最终冻结 userscript 实际执行，GM API 确定性 shim；悬浮/全文切换、动态内容及 Shadow DOM、跨页计数与桥接清理。"
+      }
+    ]
+  },
+  "jsonDomainFixtures": {
+    "passed": 58,
+    "scope": "production-extension-domain-fixtures",
+    "provider": "microsoft-local-response",
+    "translationRequests": 373,
+    "consoleErrors": 0,
+    "externalRequests": 0,
+    "cases": [
+      {
+        "id": "github",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "x",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "reddit",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "hacker-news",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "youtube",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "gnu-manual",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "learnopengl",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "bilibili",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "ubuntu-manpage",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "x-chat",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "mdn",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "react-docs",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "python-docs",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "huggingface",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "reuters",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "bbc-news",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "arstechnica",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "wikipedia",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "arxiv",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "pubmed",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "nature",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "dev-community",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "lobsters",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "discourse-meta",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "stackoverflow",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "stackexchange",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "askubuntu",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "superuser",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "serverfault",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "perplexity",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "claude",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "gemini",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "etsy-shopping",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "amazon-shopping",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "steam-store",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "itch-games",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "mastodon",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "chatgpt",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "gmail",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "outlook-mail",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "proton-mail",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "gitlab",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "discord-messages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "slack-messages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "telegram-messages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "whatsapp-messages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "notion-published",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "google-search",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "google-scholar",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "feedly-reader",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "inoreader-reader",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "linkedin-articles",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "seekingalpha",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "healthline",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "wiley-online",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "npm-packages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "pypi-packages",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "custom-rule",
+        "hover": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "full": [
+          1,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "specialBrowser": {
+    "runs": [
+      {
+        "name": "harness-races-diagnostic",
+        "exitCode": 0,
+        "cases": 3,
+        "passed": 3,
+        "focusPreserved": true
+      },
+      {
+        "name": "harness-reading",
+        "exitCode": 0,
+        "cases": 32,
+        "passed": 32,
+        "focusPreserved": true
+      },
+      {
+        "name": "boundaries",
+        "exitCode": 0,
+        "cases": null,
+        "passed": true,
+        "focusPreserved": true
+      },
+      {
+        "name": "modal",
+        "exitCode": 0,
+        "cases": null,
+        "passed": true,
+        "focusPreserved": true
+      },
+      {
+        "name": "ime",
+        "exitCode": 0,
+        "cases": null,
+        "passed": true,
+        "focusPreserved": true
+      }
+    ],
+    "harnessCases": [
+      {
+        "id": "disabled-no-entry",
+        "status": "passed"
+      },
+      {
+        "id": "selection-toolbar-enabled-actions",
+        "status": "passed"
+      },
+      {
+        "id": "selection-entry-visible-no-request",
+        "status": "passed"
+      },
+      {
+        "id": "stream-partial-visible-while-busy",
+        "status": "passed"
+      },
+      {
+        "id": "stream-card-position-stable",
+        "status": "passed"
+      },
+      {
+        "id": "answer-markdown-hierarchy",
+        "status": "passed"
+      },
+      {
+        "id": "click-sends-request",
+        "status": "passed"
+      },
+      {
+        "id": "reading-record-list-return-preserves-answer",
+        "status": "passed"
+      },
+      {
+        "id": "close-reselect-restore-followup-history",
+        "status": "passed"
+      },
+      {
+        "id": "action-拆句",
+        "status": "passed"
+      },
+      {
+        "id": "action-用法",
+        "status": "passed"
+      },
+      {
+        "id": "action-练习",
+        "status": "passed"
+      },
+      {
+        "id": "followup-card-position-stable",
+        "status": "passed"
+      },
+      {
+        "id": "followup-submit-history",
+        "status": "passed"
+      },
+      {
+        "id": "cancel-delayed-result-does-not-overwrite",
+        "status": "passed"
+      },
+      {
+        "id": "switch-selection-staleness",
+        "status": "passed"
+      },
+      {
+        "id": "selection-only-no-paragraph",
+        "status": "passed"
+      },
+      {
+        "id": "settings-interactive-preview-four-actions",
+        "status": "passed"
+      },
+      {
+        "id": "settings-toolbar-actions-and-default-sync",
+        "status": "passed"
+      },
+      {
+        "id": "settings-page-and-persistence",
+        "status": "passed"
+      },
+      {
+        "id": "settings-narrow-390",
+        "status": "passed"
+      },
+      {
+        "id": "settings-dark",
+        "status": "passed"
+      },
+      {
+        "id": "settings-session-view-delete",
+        "status": "passed"
+      },
+      {
+        "id": "settings-session-clear-streaming-no-resurrection",
+        "status": "passed"
+      },
+      {
+        "id": "session-expiry-over-30-days",
+        "status": "passed"
+      },
+      {
+        "id": "settings-session-delete-then-pagination",
+        "status": "passed"
+      },
+      {
+        "id": "expand-sentence-sends-full-sentence",
+        "status": "passed"
+      },
+      {
+        "id": "harness-and-legacy-selection-entry",
+        "status": "passed"
+      },
+      {
+        "id": "reading-card-narrow-viewport-bounded",
+        "status": "passed"
+      },
+      {
+        "id": "settings-ui-modify-close-reopen",
+        "status": "passed"
+      },
+      {
+        "id": "settings-ui-continuous-latest-write-wins",
+        "status": "passed",
+        "executed": true
+      },
+      {
+        "id": "settings-ui-quick-close-pending-save",
+        "status": "passed",
+        "executed": true
+      }
+    ],
+    "scopeNotes": [
+      "boundaries and modal use equivalent structural fixtures in a real browser; they are not live-site proof",
+      "IME uses actual extension Options UI and browser CDP composition events",
+      "Harness uses real extension UI/runtime/backend storage with local model responses and only the first UI persist response held for deterministic race coverage",
+      "The original 30 Harness case IDs are preserved; 2 executed UI race cases increase the full total to 32",
+      "Read-only cleanup audit observed zero current-run profiles and zero current-run Edge processes; old resources left untouched"
+    ]
+  },
+  "excludedFromPassCounts": {
+    "quarantinePages": 8,
+    "quarantineJobs": 16,
+    "externalOrPagePrerequisite": [
+      "darklyrics",
+      "reddit",
+      "talkclassical",
+      "w3c",
+      "sciencedirect",
+      "kaggle"
+    ],
+    "productGap": [
+      "rfc4251-html-pre-prose-segmentation"
+    ],
+    "testModeGap": [
+      "appinn-same-language-no-op-layout"
+    ],
+    "retiredUnavailableSteamJobs": 2,
+    "quarantineEvidence": "historical diagnostic, not rerun as passing on this artifact"
+  },
+  "limitations": [
+    "No hosted GitHub CI checks are configured for this PR.",
+    "Firefox was built and packaged; no Firefox browser execution is claimed.",
+    "Domain fixture tests use local provider responses and are not live-site evidence.",
+    "Intermediate interruptions and failures are retained separately; only full valid runs of the frozen final artifact count as passing."
+  ]
+}

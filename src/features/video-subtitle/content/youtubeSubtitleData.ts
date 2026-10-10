@@ -54,8 +54,23 @@ function extractBalancedJson(source: string, start: number): string | null {
   return null;
 }
 
-/** 从 YouTube 页面初始化脚本中读取 captionTracks，不依赖页面私有全局变量。 */
-export function extractYoutubeCaptionTracks(root: ParentNode = document): YoutubeCaptionTrack[] {
+function timedTextVideoId(baseUrl: string): string {
+  try {
+    return new URL(baseUrl, 'https://www.youtube.com/').searchParams.get('v') || '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * 从 YouTube 页面初始化脚本中读取 captionTracks，不依赖页面私有全局变量。
+ * SPA 导航会保留旧视频的初始化脚本；传入 expectedVideoId 后必须继续扫描，
+ * 直到响应或 timedtext URL 能明确绑定到当前视频。
+ */
+export function extractYoutubeCaptionTracks(
+  root: ParentNode = document,
+  expectedVideoId = '',
+): YoutubeCaptionTrack[] {
   const scripts = Array.from(root.querySelectorAll('script'));
   for (const script of scripts) {
     const source = script.textContent || '';
@@ -68,15 +83,22 @@ export function extractYoutubeCaptionTracks(root: ParentNode = document): Youtub
 
     try {
       const response = JSON.parse(jsonSource) as {
+        videoDetails?: { videoId?: unknown };
         captions?: { playerCaptionsTracklistRenderer?: { captionTracks?: Array<Record<string, unknown>> } };
       };
       const tracks = response.captions?.playerCaptionsTracklistRenderer?.captionTracks;
       if (!Array.isArray(tracks)) continue;
 
-      return tracks.flatMap((track) => {
+      const responseVideoId = typeof response.videoDetails?.videoId === 'string'
+        ? response.videoDetails.videoId
+        : '';
+      if (expectedVideoId && responseVideoId && responseVideoId !== expectedVideoId) continue;
+
+      const parsedTracks = tracks.flatMap((track) => {
         const baseUrl = typeof track.baseUrl === 'string' ? track.baseUrl : '';
         const languageCode = typeof track.languageCode === 'string' ? track.languageCode : '';
         if (!baseUrl || !languageCode) return [];
+        if (expectedVideoId && !responseVideoId && timedTextVideoId(baseUrl) !== expectedVideoId) return [];
         const nameValue = track.name;
         const name = nameValue && typeof nameValue === 'object'
           ? (nameValue as { simpleText?: unknown }).simpleText
@@ -88,6 +110,7 @@ export function extractYoutubeCaptionTracks(root: ParentNode = document): Youtub
           name: typeof name === 'string' ? name : undefined,
         }];
       });
+      if (parsedTracks.length > 0) return parsedTracks;
     } catch {
       // YouTube 页面上的脚本可能被截断或包裹在其他数据中，继续尝试下一个脚本。
     }
@@ -110,6 +133,16 @@ export function chooseYoutubeCaptionTrack(
   const human = tracks.find((track) => track.kind !== 'asr');
   // tracks 非空且只分为人工轨/ASR；没有人工轨时第一条必然是 ASR。
   return human || tracks[0]!;
+}
+
+/** 从当前 YouTube 地址选择对应初始化脚本中的字幕轨，避免 SPA 导航复用旧视频轨道。 */
+export function chooseYoutubeCaptionTrackForLocation(
+  root: ParentNode,
+  location: Pick<Location, 'hostname' | 'pathname' | 'search'>,
+  preferredLanguage?: string,
+): YoutubeCaptionTrack | null {
+  const videoId = getYoutubeVideoId(location);
+  return videoId ? chooseYoutubeCaptionTrack(extractYoutubeCaptionTracks(root, videoId), preferredLanguage) : null;
 }
 
 /** 按 YouTube 当前 timedtext 接口约定补充 JSON3 参数；若需要 POT，调用方可再追加。 */

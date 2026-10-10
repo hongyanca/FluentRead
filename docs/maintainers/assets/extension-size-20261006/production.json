@@ -1,0 +1,120 @@
+{
+  "directory": ".output/chrome-mv3",
+  "files": 392,
+  "totalBytes": 60230685,
+  "bytesByExtension": {
+    ".wasm": 34895939,
+    ".js": 16091320,
+    ".mjs": 1467158,
+    ".json": 3987259,
+    ".txt": 395745,
+    ".css": 1229416,
+    ".ttf": 573724,
+    ".jpg": 91256,
+    ".bcmap": 1165667,
+    ".pfb": 200615,
+    ".png": 114632,
+    "(none)": 8041,
+    ".html": 6452,
+    ".md": 3461
+  },
+  "bytesByDirectory": {
+    "fluent-read-ai": 32229594,
+    "fluent-read-ocr": 3111335,
+    "content-scripts": 6614963,
+    "(root)": 5412653,
+    "assets": 2269454,
+    "chunks": 4921389,
+    "i18n": 3160085,
+    "third-party-notices": 355922,
+    "pdfjs": 1948047,
+    "misc": 91256,
+    "icon": 114632,
+    "fluent-read-manga": 1355
+  },
+  "largestFiles": [
+    {
+      "path": "fluent-read-ai/ort-wasm-simd-threaded.asyncify.wasm",
+      "bytes": 23567050
+    },
+    {
+      "path": "fluent-read-ai/wllama.wasm",
+      "bytes": 8457512
+    },
+    {
+      "path": "fluent-read-ocr/core/tesseract-core-simd-lstm.wasm",
+      "bytes": 2871377
+    },
+    {
+      "path": "content-scripts/content.js",
+      "bytes": 2501945
+    },
+    {
+      "path": "background.js",
+      "bytes": 2089978
+    },
+    {
+      "path": "localTtsWorker.js",
+      "bytes": 2044214
+    },
+    {
+      "path": "content-scripts/neteaseMailFrame.js",
+      "bytes": 1956677
+    },
+    {
+      "path": "content-scripts/supportedFrame.js",
+      "bytes": 1765910
+    },
+    {
+      "path": "assets/pdf.worker.min-rsCePomN.mjs",
+      "bytes": 1417586
+    },
+    {
+      "path": "ecdict-core.json",
+      "bytes": 823996
+    },
+    {
+      "path": "chunks/index.full-DB4DpN3_.js",
+      "bytes": 728840
+    },
+    {
+      "path": "chunks/i18n-C1d2NXg6.js",
+      "bytes": 669701
+    },
+    {
+      "path": "i18n/ru-RU.json",
+      "bytes": 662754
+    },
+    {
+      "path": "i18n/ja-JP.json",
+      "bytes": 537191
+    },
+    {
+      "path": "i18n/ko-KR.json",
+      "bytes": 507041
+    }
+  ],
+  "duplicates": [
+    {
+      "paths": [
+        "content-scripts/neteaseMailFrame.css",
+        "content-scripts/supportedFrame.css"
+      ],
+      "bytesEach": 96250,
+      "duplicateBytes": 96250
+    },
+    {
+      "paths": [
+        "third-party-notices/ppu-ocv-MIT.txt",
+        "third-party-notices/ppu-paddle-ocr-MIT.txt"
+      ],
+      "bytesEach": 1080,
+      "duplicateBytes": 1080
+    }
+  ],
+  "comparison": {
+    "baselineBytes": 107920609,
+    "savedBytes": 47689924,
+    "savedPercent": 44.19
+  }
+}

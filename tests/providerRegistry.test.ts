@@ -1,5 +1,10 @@
 import {describe, expect, it, vi} from 'vitest';
 
+vi.mock('webextension-polyfill', () => ({default: {storage: {
+    session: {get: vi.fn(async () => ({})), set: vi.fn(async () => undefined), remove: vi.fn(async () => undefined)},
+    onChanged: {addListener: vi.fn(), removeListener: vi.fn()},
+}}}));
+
 // 注册表测试只需核对适配器身份，避免在 Node 环境启动 WXT 存储监听。
 vi.mock('@/src/services/config/store', () => ({config: {}}));
 import {services} from '@/src/core/config/catalog';
@@ -14,11 +19,15 @@ describe('translation provider registry', () => {
         expect(Object.keys(translationProviderRegistry).sort()).toEqual(Object.values(services).sort());
     });
 
-    it('AI SDK 服务共享统一 transport，Azure 继续保留专用前置校验', () => {
+    it('AI SDK 服务共享统一 transport，Azure 与豆包保留专用前置分流', () => {
+        // Azure 先校验 endpoint/key，豆包先按生效模型区分 chat/completions 与 Responses 协议。
+        const preRouted = [services.azureOpenai, services.doubao];
         for (const service of AI_SDK_SERVICE_IDS) {
-            if (service === services.azureOpenai) continue;
+            if (preRouted.includes(service)) continue;
             expect(translationProviderRegistry[service]).toBe(translateWithOpenAICompatibleAiSdk);
         }
-        expect(translationProviderRegistry[services.azureOpenai]).not.toBe(translateWithOpenAICompatibleAiSdk);
+        for (const service of preRouted) {
+            expect(translationProviderRegistry[service]).not.toBe(translateWithOpenAICompatibleAiSdk);
+        }
     });
 });

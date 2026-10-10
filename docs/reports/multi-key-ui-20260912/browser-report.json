@@ -1,0 +1,129 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "providerEvidence": "local-http-401-fixture",
+  "cases": [
+    "check-all-lives-inside-key-panel-no-hero-duplicate",
+    "empty-row-add-focuses-existing-row-without-adding",
+    "duplicate-row-skipped-without-duplicate-request",
+    "translation-broker-fails-A-then-uses-B-or-C",
+    "error-details-expand-collapse-with-keyboard",
+    "sequential-401-and-success-per-key-without-fallback",
+    "independent-single-key-retest",
+    "remove-first-key-keeps-other-keys",
+    "stop-prevents-later-key-checks",
+    "edit-during-check-clears-stale-row-results",
+    "ten-filled-key-list-plus-empty-row",
+    "dark-narrow-no-horizontal-overflow",
+    "reopen-persistence",
+    "advanced-anonymous-key-policy-remains-editable",
+    "empty-key-list-disables-check-and-delete-is-advanced-only",
+    "paired-cloud-credentials-remain-a-single-pair",
+    "single-key-cloud-services-support-key-lists"
+  ],
+  "requests": [
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture-rotation"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-C",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-D",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-A",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "fixture-B",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    },
+    {
+      "key": "",
+      "path": "/v1/chat/completions",
+      "model": "fixture"
+    }
+  ],
+  "screenshots": [
+    "api-keys-empty-initial.png",
+    "api-keys-error-expanded.png",
+    "api-keys-panel.png",
+    "api-keys-results.png",
+    "api-keys-light.png",
+    "api-keys-ten.png",
+    "api-keys-dark.png",
+    "api-keys-820.png",
+    "api-keys-narrow.png"
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "status": "passed",
+  "runtimeCommit": "b6813e5be2a89d55acdac4761d8768082b12585a",
+  "requestEvidenceNote": "Synthetic local HTTP fixtures only. Request bodies and host application identity omitted."
+}

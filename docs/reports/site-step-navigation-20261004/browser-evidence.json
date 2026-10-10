@@ -1,0 +1,594 @@
+{
+  "date": "2026-10-04",
+  "scope": "Website walkthrough step navigation only; isolated headless Edge, no extension or user profile",
+  "sourceFiles": {
+    "docs/.vitepress/theme/BrandReader.vue": "bb16550d7cd8378e35f9d48e6d4083fc2379c31dfba4cc46995a01f1390917af",
+    "docs/.vitepress/theme/BrowserGuide.vue": "c74c586ad0a94b7150b78059429fa3f4cde44d6e910f171db508eb895f1ac43a",
+    "docs/.vitepress/theme/DemoSteps.vue": "798f614131dc7c1682342f6d8d203008c85404065825cd209d8cb95059063a61",
+    "docs/.vitepress/theme/DocumentDemo.vue": "ec5b88c94bf5592dcbe6f36a9f5dc363b95ff000d965ccb707c0f62716636624",
+    "docs/.vitepress/theme/FeatureDemo.vue": "d338391f4bbc67b0020944e4f8a4d9b7503421a721e89235dffdc719e9021e20",
+    "docs/.vitepress/theme/GrammarDemo.vue": "b95277db5e70e6217e8a40a278da6502835d3949f11f8227494cc575cbec282d",
+    "docs/.vitepress/theme/GuideVisual.vue": "af2e80dc8f78d4f1ce8638229be0114c78513bbfb5211a8e583e70c40e542de2",
+    "docs/.vitepress/theme/SettingsGuide.vue": "5a1c4717ad691c6f05c748a0e783c1c04b2a4d97dc88037f188e9d9926ef28ec",
+    "docs/.vitepress/theme/useDemoPlayback.ts": "8a3c3158a8de58b2bf2679a556d0c780a8f21f7f0ee392e1232b53fc6fe60d5e"
+  },
+  "cases": [
+    {
+      "name": "browser-hover",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-selection",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-pin",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-first-translation",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-chrome-local",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-video",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-image",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-webpage",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-privacy",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-webpage",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-chrome-local",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-pin",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-hover",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-first-translation",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-selection",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-image",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-video",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-privacy",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-pin",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-webpage",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-chrome-local",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-first-translation",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-hover",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-selection",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-video",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-image",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-privacy",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-first-translation",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-pin",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-webpage",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-chrome-local",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-hover",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-selection",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-video",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-image",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-privacy",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 320,
+      "en": false,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "grammar",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-compare",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-selection",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "feature-document",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "browser-install",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "generic-sync",
+      "width": 320,
+      "en": true,
+      "mode": "reduced-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-provider",
+      "width": 1440,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-provider",
+      "width": 320,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-provider",
+      "width": 1440,
+      "en": false,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "brand-reader",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    },
+    {
+      "name": "settings-provider",
+      "width": 320,
+      "en": true,
+      "mode": "default-motion",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "rerun": "The initial run exposed missing default autoplay in BrandReader and used a nonexistent provider-guide route. BrandReader was fixed, the test route was corrected to /config/translation-engines, and all eight affected desktop/mobile locale cases passed against the rebuilt site."
+}

@@ -1,0 +1,37 @@
+{
+  "url": "https://example.com/",
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "neighbors": [
+    0,
+    0,
+    0
+  ],
+  "restoredDomMatches": true,
+  "outputs": [
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "此域用于文档示例中, 无需许可。 避免在业务中使用。",
+      "links": []
+    },
+    {
+      "count": 0,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "",
+      "links": []
+    },
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "此域用于文档示例中, 无需许可。 避免在业务中使用。",
+      "links": []
+    }
+  ]
+}

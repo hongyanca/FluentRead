@@ -1,0 +1,219 @@
+{
+  "extension": {
+    "ok": true,
+    "caseCoverage": [
+      "后台 Edge 没有成为前台应用",
+      "服务展开后显示明确搜索提示，并且只有一个输入框",
+      "展开时服务图标变成搜索图标",
+      "服务菜单包含机器翻译和 AI 翻译两个真实分组",
+      "服务菜单与选择框宽度对齐",
+      "筛选输入不产生重复焦点框",
+      "搜索无结果有中文反馈",
+      "Escape 先清空查询且保留菜单",
+      "搜索 DeepSeek 只显示匹配服务",
+      "方向键和 Enter 选择服务",
+      "点击外部关闭菜单",
+      "服务选择关闭页面后仍保存",
+      "语言选择关闭页面后仍保存",
+      "专属界面语言菜单类名与共享类名同时保留",
+      "default/light/1440 菜单完整位于视口",
+      "1440 设置页没有横向溢出",
+      "default/light 搜索输入没有重复焦点框",
+      "default/light/820 菜单完整位于视口",
+      "820 设置页没有横向溢出",
+      "default/light 搜索输入没有重复焦点框",
+      "default/light/390 菜单完整位于视口",
+      "390 设置页没有横向溢出",
+      "default/light 搜索输入没有重复焦点框",
+      "default/dark/1440 菜单完整位于视口",
+      "1440 设置页没有横向溢出",
+      "default/dark 搜索输入没有重复焦点框",
+      "sakura/dark/1440 菜单完整位于视口",
+      "1440 设置页没有横向溢出",
+      "sakura/dark 搜索输入没有重复焦点框",
+      "模型用量菜单保留专属类名",
+      "没有服务记录时模型用量菜单仍保持可读宽度",
+      "allow-create 模型输入仍然可用",
+      "模型菜单使用易点击的整行选项",
+      "Popup 服务菜单保留唯一搜索框",
+      "暂停插件后语言选择框禁用",
+      "真实多选保存两个音色",
+      "多选标签可以移除",
+      "文档菜单仍挂载到文档应用内部",
+      "窄选择框的长语言列表保持可读宽度",
+      "本轮选择器回归没有 console/page 错误"
+    ],
+    "responsive": [
+      {
+        "skin": "default",
+        "theme": "light",
+        "left": 999,
+        "right": 1361,
+        "top": 460,
+        "bottom": 782,
+        "width": 1440,
+        "height": 900,
+        "background": "rgb(255, 255, 255)"
+      },
+      {
+        "skin": "default",
+        "theme": "light",
+        "left": 505,
+        "right": 771,
+        "top": 534,
+        "bottom": 856,
+        "width": 820,
+        "height": 900,
+        "background": "rgb(255, 255, 255)"
+      },
+      {
+        "skin": "default",
+        "theme": "light",
+        "left": 35,
+        "right": 357,
+        "top": 456,
+        "bottom": 778,
+        "width": 390,
+        "height": 900,
+        "background": "rgb(255, 255, 255)"
+      },
+      {
+        "skin": "default",
+        "theme": "dark",
+        "left": 999,
+        "right": 1361,
+        "top": 460,
+        "bottom": 782,
+        "width": 1440,
+        "height": 900,
+        "background": "rgb(37, 40, 48)"
+      },
+      {
+        "skin": "sakura",
+        "theme": "dark",
+        "left": 999,
+        "right": 1361,
+        "top": 460,
+        "bottom": 782,
+        "width": 1440,
+        "height": 900,
+        "background": "rgb(64, 35, 53)"
+      }
+    ],
+    "persistenceCases": [
+      {
+        "close": "page.close",
+        "reopenedService": "deepseek",
+        "reopenedLanguage": "fr",
+        "visibleLanguage": "Français / French / 法语"
+      }
+    ],
+    "multiSelect": {
+      "selected": 2,
+      "remainingAfterRemoval": 1
+    },
+    "consoleErrors": [],
+    "manifest": {
+      "popup": "popup.html",
+      "options": "options.html"
+    },
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground"
+  },
+  "userscriptSelects": {
+    "settingsSecurity": {
+      "closedShadow": true,
+      "lightDomText": ""
+    },
+    "settingsSelectState": {
+      "visibleSelectCount": 12,
+      "nativeSelectCount": 0,
+      "menuInsideShadow": true,
+      "menuInsideBackdrop": true,
+      "menuOutsideScrollArea": true,
+      "menuInsideViewport": true,
+      "inputCount": 1,
+      "triggerLabelWhileOpen": "搜索翻译服务"
+    },
+    "settingsDraftState": {
+      "canceledServicePreserved": true,
+      "savedDisplay": 0,
+      "savedStyle": 1,
+      "reopenedDisplay": "仅译文模式"
+    },
+    "search": "DeepSeek",
+    "keyboardSelection": true,
+    "darkMenuColor": "rgb(48, 50, 60)",
+    "narrowBounds": {
+      "left": 34,
+      "right": 358,
+      "top": 467,
+      "bottom": 789,
+      "width": 390,
+      "height": 844
+    },
+    "consoleErrors": [],
+    "transport": "local fixture with deterministic GM shim; no live provider or userscript manager certification"
+  },
+  "userscriptSmoke": {
+    "transport": "legacy GM_xmlhttpRequest deterministic browser shim",
+    "hoverCounts": [
+      1,
+      0,
+      1
+    ],
+    "fullPageCounts": [
+      [
+        1,
+        1
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "finalState": {
+      "url": "http://127.0.0.1:62969/fixture",
+      "injected": true,
+      "floatingBall": true,
+      "settings": false,
+      "target": 1,
+      "adjacent": 1,
+      "heading": 1,
+      "nav": 0,
+      "dynamic": 1,
+      "shadow": 1,
+      "dynamicShadow": 1,
+      "targetTranslation": "译文：FluentRead keeps the original paragraph and adds a safe bilingual translation."
+    },
+    "pageGlobalsPreserved": {
+      "browser": true,
+      "chrome": true
+    },
+    "settingsSecurity": {
+      "closedShadow": true,
+      "lightDomText": ""
+    },
+    "unsupportedHosts": {
+      "area": false,
+      "image": false,
+      "video": false
+    },
+    "bridgeCleanup": {
+      "before": {
+        "shadow": 1,
+        "route": 2
+      },
+      "after": {
+        "shadow": 1,
+        "route": 2
+      },
+      "prototypeRestored": true
+    },
+    "consoleErrors": []
+  }
+}

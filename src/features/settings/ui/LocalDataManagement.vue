@@ -6,16 +6,13 @@
 -->
 <template>
   <div class="local-data-management">
-    <SettingsGroup
-      title="完整备份"
-      description="一份备份包含设置、单词本和模型用量。"
-    >
+    <SettingsGroup :title="t('settings.backup.localTitle')">
       <div class="transfer-row featured-transfer">
         <div class="transfer-identity">
-          <span class="transfer-icon" aria-hidden="true">⇅</span>
+          <span class="transfer-icon" aria-hidden="true"><UiIcon name="history" /></span>
           <div class="transfer-copy">
-            <strong>设置与本机记录</strong>
-            <small>更换浏览器或重装扩展前，导出一份文件即可恢复。</small>
+            <strong>{{ t('settings.backup.fileTitle') }}</strong>
+            <small>{{ t('settings.backup.fileDescription') }}</small>
           </div>
         </div>
         <div class="transfer-actions">
@@ -23,7 +20,6 @@
           <el-button type="primary" :disabled="busy" @click="openRestoreSource($event)"><Upload />从备份恢复</el-button>
         </div>
       </div>
-      <p class="transfer-warning">备份包含 API Key 和其他私密设置，文件不加密，请只保存在可信位置。翻译缓存不会进入备份。</p>
     </SettingsGroup>
 
     <input
@@ -47,13 +43,13 @@
       <div class="restore-file-choice">
         <div>
           <strong>选择备份文件</strong>
-          <small>支持 FluentRead 完整备份，也会自动识别旧版 JSON 文件。</small>
+          <small>{{ t('settings.backup.restoreHint') }}</small>
         </div>
         <el-button type="primary" :disabled="busy" @click="chooseImport($event)">选择文件</el-button>
       </div>
       <details class="legacy-paste">
         <summary>粘贴旧版配置 JSON</summary>
-        <p>如果你以前使用“导出配置”复制了 JSON，可以直接粘贴在这里。</p>
+        <p>如果你以前使用“导出配置”复制了 JSON，可以直接粘贴在这里</p>
         <el-input
           v-model="pastedJson"
           type="textarea"
@@ -131,7 +127,7 @@
               </article>
             </section>
           </div>
-          <p v-else class="config-same">普通设置和凭据与当前状态相同。</p>
+          <p v-else class="config-same">普通设置和凭据与当前状态相同</p>
         </section>
 
         <p class="import-boundary">
@@ -147,6 +143,7 @@
 </template>
 
 <script setup lang="ts">
+import UiIcon from '@/src/ui/components/UiIcon.vue'
 import {computed, nextTick, ref, shallowRef, useTemplateRef} from 'vue';
 import {Download, Upload} from '@element-plus/icons-vue';
 import {ElMessage, ElMessageBox} from 'element-plus';
@@ -157,8 +154,10 @@ import {prepareConfigForExport, prepareConfigForImport} from '@/src/core/config/
 import {
   createFluentReadDataBackup,
   parseLocalDataImport,
+  resolveBackupConfigCredentialMode,
   summarizeLocalDataImport,
   type LocalDataImport,
+  usesExactCredentialReplacement,
 } from '@/src/features/settings/model/dataBackup';
 import {buildCredentialPreviewChanges} from '@/src/features/settings/model/credentialPreview';
 import {
@@ -170,10 +169,12 @@ import {
   vocabularyImportNeedsConfirmation,
 } from '@/src/features/vocabulary/public';
 import type {ModelUsageImportResult, ModelUsageTransferDocument} from '@/src/services/model-usage/types';
-import {requestConfigSave} from '@/src/services/config';
+import {prepareHydratedConfigForExport, requestConfigSave} from '@/src/services/config';
 import {toRestorableConfig} from '@/src/services/config/history';
 import SettingsGroup from './components/SettingsGroup.vue';
+import {useUiI18n} from '@/src/ui/i18n';
 
+const {t} = useUiI18n();
 const props = defineProps<{config: Config}>();
 const importInput = useTemplateRef<HTMLInputElement>('data-import-input');
 const busy = ref(false);
@@ -188,12 +189,16 @@ let importTrigger: HTMLElement | null = null;
 let restoreActionTrigger: HTMLElement | null = null;
 
 const importSummary = computed(() => pendingImport.value ? summarizeLocalDataImport(pendingImport.value) : null);
-const importedConfig = computed(() => {
-  const target = pendingImport.value;
-  if (target?.kind === 'complete') return prepareConfigForImport(target.backup.config, props.config);
-  if (target?.kind === 'config') return prepareConfigForImport(target.config, props.config);
+function prepareImportedConfig(target: LocalDataImport | null, current: Config): Config | null {
+  if (target?.kind === 'complete') {
+    return prepareConfigForImport(target.backup.config, current, {
+      credentialMode: resolveBackupConfigCredentialMode(target.backup),
+    });
+  }
+  if (target?.kind === 'config') return prepareConfigForImport(target.config, current);
   return null;
-});
+}
+const importedConfig = computed(() => prepareImportedConfig(pendingImport.value, props.config));
 const configPreviewDiff = computed(() => buildConfigDiff(
   toRestorableConfig(props.config),
   toRestorableConfig(importedConfig.value),
@@ -209,10 +214,10 @@ const importKindLabel = computed(() => ({
   config: '旧版配置文件',
 })[pendingImport.value?.kind || 'complete']);
 const importBoundary = computed(() => {
-  if (pendingImport.value?.kind === 'vocabulary') return '只恢复单词本，当前设置和模型用量保持不变。';
-  if (pendingImport.value?.kind === 'model-usage') return '只恢复模型用量，当前设置和单词本保持不变。';
-  if (pendingImport.value?.kind === 'config') return '只恢复设置，单词本和模型用量保持不变。';
-  return '设置将更新；单词本和用量记录会合并，已有记录不会重复。若有内容未恢复，会明确提示。';
+  if (pendingImport.value?.kind === 'vocabulary') return '只恢复单词本，当前设置和模型用量保持不变';
+  if (pendingImport.value?.kind === 'model-usage') return '只恢复模型用量，当前设置和单词本保持不变';
+  if (pendingImport.value?.kind === 'config') return '只恢复设置，单词本和模型用量保持不变';
+  return '导入会更新设置、合并单词本和用量记录，已有记录不会重复；未恢复的内容会另行提示';
 });
 
 async function requestVocabulary<T>(request: VocabularyBookRequest): Promise<T> {
@@ -252,12 +257,13 @@ async function exportCompleteBackup(event?: MouseEvent): Promise<void> {
   if (includePrivateContext === null) return;
   busy.value = true;
   try {
-    const [vocabulary, modelUsage] = await Promise.all([
+    const [configSnapshot, vocabulary, modelUsage] = await Promise.all([
+      prepareHydratedConfigForExport(),
       vocabularyExport(includePrivateContext),
       modelUsageExport(),
     ]);
     const backup = createFluentReadDataBackup({
-      config: prepareConfigForExport(props.config),
+      config: configSnapshot,
       vocabulary,
       modelUsage,
     });
@@ -274,7 +280,7 @@ async function exportCompleteBackup(event?: MouseEvent): Promise<void> {
 async function chooseBackupContext(): Promise<boolean | null> {
   try {
     await ElMessageBox.confirm(
-      '备份默认不包含单词收藏的网页片段、页面标题和来源网址。这些内容可能包含浏览隐私。',
+      '网页片段、页面标题和来源网址可能包含浏览隐私，默认不纳入单词收藏的备份',
       '是否包含单词上下文？',
       {
         confirmButtonText: '不包含并导出',
@@ -394,9 +400,13 @@ async function applyPendingImport(): Promise<void> {
       if (JSON.stringify(prepareConfigForExport(props.config)) !== configBaseFingerprint) {
         throw new Error('设置在导入期间已被其他页面修改，本次未覆盖；请重新预览后再导入设置');
       }
-      const sourceConfig = target.kind === 'complete' ? target.backup.config : target.config;
-      const targetConfig = prepareConfigForImport(sourceConfig, props.config);
-      await requestConfigSave(targetConfig, sendRuntimeMessage);
+      const targetConfig = prepareImportedConfig(target, props.config);
+      if (!targetConfig) throw new Error('备份中不包含可恢复的设置');
+      await requestConfigSave(targetConfig, sendRuntimeMessage, {
+        credentialIntent: target.kind === 'complete' && usesExactCredentialReplacement(target.backup)
+          ? 'exact'
+          : 'changed-fields',
+      });
       return `设置已应用（${confirmedConfigChangeCount} 项需确认）`;
     });
   }
@@ -469,16 +479,15 @@ function formatFileSize(size: number): string {
 <style scoped>
 .local-data-management { width: 100%; }
 .transfer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 15px 16px; }
-.featured-transfer { background: linear-gradient(135deg, var(--surface), var(--brand-soft)); }
+.featured-transfer { background: var(--surface); }
 .transfer-identity { display: flex; min-width: 0; align-items: center; gap: 12px; }
 .transfer-icon { display: grid; flex: none; width: 36px; height: 36px; place-items: center; border-radius: 11px; color: var(--brand-strong); background: var(--brand-soft); font-size: 16px; font-weight: 800; }
 .transfer-copy { display: flex; min-width: 0; flex-direction: column; gap: 4px; }
 .transfer-copy strong { color: var(--ink); font-size: 12.5px; }
-.transfer-copy small, .transfer-warning, .import-boundary { color: var(--muted); font-size: 10.5px; line-height: 1.55; }
+.transfer-copy small, .import-boundary { color: var(--muted); font-size: 10.5px; line-height: 1.55; }
 .transfer-actions { display: flex; flex: none; align-items: center; flex-wrap: wrap; gap: 7px; }
 .transfer-actions :deep(.el-button) { margin-left: 0; }
 .transfer-actions :deep(svg) { width: 14px; margin-right: 5px; }
-.transfer-warning { margin: 0; padding: 0 16px 14px; }
 .restore-file-choice { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface-soft); }
 .restore-file-choice > div { display: flex; min-width: 0; flex-direction: column; gap: 4px; }
 .restore-file-choice strong { color: var(--ink); font-size: 12px; }

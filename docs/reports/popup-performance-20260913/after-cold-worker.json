@@ -1,0 +1,225 @@
+{
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-performance-20260913/.output/chrome-mv3",
+  "samples": [
+    {
+      "readyMs": 193,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 195.10000002384186,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.028627,
+        "RecalcStyleDuration": 0.002559,
+        "ScriptDuration": 0.027127,
+        "TaskDuration": 0.137359,
+        "JSHeapUsedSize": 7369788
+      },
+      "index": 0
+    },
+    {
+      "readyMs": 89.30000007152557,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 93.10000002384186,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.002472,
+        "RecalcStyleDuration": 0.001982,
+        "ScriptDuration": 0.023776,
+        "TaskDuration": 0.100281,
+        "JSHeapUsedSize": 12658492
+      },
+      "index": 1
+    },
+    {
+      "readyMs": 47.89999997615814,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 50.10000002384186,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001901,
+        "RecalcStyleDuration": 0.001852,
+        "ScriptDuration": 0.013617,
+        "TaskDuration": 0.047647,
+        "JSHeapUsedSize": 20003352
+      },
+      "index": 2
+    },
+    {
+      "readyMs": 46.10000002384186,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 46.90000009536743,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.00181,
+        "RecalcStyleDuration": 0.001874,
+        "ScriptDuration": 0.012149,
+        "TaskDuration": 0.047613,
+        "JSHeapUsedSize": 19192720
+      },
+      "index": 3
+    },
+    {
+      "readyMs": 46.10000002384186,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 47,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001958,
+        "RecalcStyleDuration": 0.001863,
+        "ScriptDuration": 0.012313,
+        "TaskDuration": 0.046264,
+        "JSHeapUsedSize": 24454208
+      },
+      "index": 4
+    },
+    {
+      "readyMs": 46.10000002384186,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 47.10000002384186,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.002056,
+        "RecalcStyleDuration": 0.001884,
+        "ScriptDuration": 0.013965,
+        "TaskDuration": 0.047305,
+        "JSHeapUsedSize": 28250044
+      },
+      "index": 5
+    },
+    {
+      "readyMs": 44.700000047683716,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 47.700000047683716,
+      "domNodes": 167,
+      "hiddenOptions": 0,
+      "width": 360,
+      "height": 478,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001874,
+        "RecalcStyleDuration": 0.00194,
+        "ScriptDuration": 0.011615,
+        "TaskDuration": 0.04686,
+        "JSHeapUsedSize": 28001692
+      },
+      "index": 6
+    }
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    }
+  },
+  "manifestEntrypoint": "popup.html",
+  "coldWorkerStopped": true,
+  "initialScripts": [
+    {
+      "file": "/chunks/popup-DEakdMWF.js",
+      "bytes": 1044
+    },
+    {
+      "file": "/chunks/i18n-Cxm5Woag.js",
+      "bytes": 523306
+    },
+    {
+      "file": "/chunks/_commonjs-dynamic-modules-Dw5-P7-C.js",
+      "bytes": 168543
+    },
+    {
+      "file": "/chunks/PopupApp-wt5N8eu5.js",
+      "bytes": 50419
+    },
+    {
+      "file": "/chunks/_plugin-vue_export-helper-C8W6xReh.js",
+      "bytes": 116000
+    },
+    {
+      "file": "/chunks/interfaceAppearance-Bku-1b2b.js",
+      "bytes": 17034
+    },
+    {
+      "file": "/chunks/serviceCatalog-DrYJLh0R.js",
+      "bytes": 50773
+    },
+    {
+      "file": "/chunks/capabilities-DMYnczBv.js",
+      "bytes": 1810
+    }
+  ],
+  "initialScriptBytes": 928929,
+  "languageMenus": {
+    "search": true,
+    "keyboardSelection": true,
+    "escape": true,
+    "closedOptions": 0,
+    "crossPageSync": true,
+    "languageRoundTrip": true,
+    "reopened": true
+  },
+  "median": {
+    "readyMs": 46.10000002384186,
+    "frameMs": 47.700000047683716,
+    "scriptMs": 13.617
+  },
+  "ok": true
+}

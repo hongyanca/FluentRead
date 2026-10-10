@@ -1,0 +1,95 @@
+{
+  "testAudit": {
+    "files": 235,
+    "declaredCases": 2973,
+    "passed": true
+  },
+  "fullVitest": {
+    "files": 235,
+    "tests": 4410,
+    "passed": true,
+    "maxWorkers": 2,
+    "minWorkers": 1,
+    "testTimeoutMs": 15000
+  },
+  "lastUiOnlyPatch": {
+    "files": 3,
+    "tests": 55,
+    "passed": true,
+    "beforeMainIntegration": true
+  },
+  "coverage": {
+    "testFiles": 186,
+    "tests": 3550,
+    "percent": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "passedChecks": [
+    "pnpm compile",
+    "pnpm build",
+    "pnpm build:firefox",
+    "pnpm verify:extension-manifests",
+    "pnpm test:userscript",
+    "pnpm docs:build",
+    "git diff --check"
+  ],
+  "legacyFullUi": {
+    "passed": false,
+    "reason": "External legacy skill expects accessible combobox 默认目标语言, but unchanged origin/main locale labels it 语言."
+  },
+  "initialBase": "262d2a18dc2d5b25f2a22f2fd26531c130101c79",
+  "base": "ebd3aef50a6d64373bd89b43803ae08c7d46dd7a",
+  "browserBeforeMainIntegration": {
+    "uniquePassed": 49,
+    "singleFullRunPassed": false,
+    "fullPassed": 48,
+    "memorySubsetPassed": 10,
+    "sameSourceAndChromeDigests": true,
+    "consoleErrors": 0,
+    "httpErrors": 0,
+    "allFinalPngsReviewed": true,
+    "audioListeningVerified": false,
+    "firefoxUiVerified": false,
+    "base": "262d2a18dc2d5b25f2a22f2fd26531c130101c79"
+  },
+  "integratedBrowser": {
+    "passed": true,
+    "cases": 4,
+    "sourceDigest": "191fe35922cd9e4fbf585c1d457c481d4094b169719fb8b47d873e684a1713d8",
+    "extensionDigest": "6cec3e1273f997841be26e75e8af7e095af0911ca51b3b4716678fe897349cc9",
+    "sourceFilesVerified": 441,
+    "consoleErrors": 0,
+    "httpErrors": 0,
+    "browserFrontmost": false,
+    "allPngsReviewed": true,
+    "audioListeningVerified": false,
+    "base": "166253cef1ee51f7daf6203384ded641761c7991"
+  },
+  "sourceCommit": "5a033d67d83409515313f48c1231852e85b6815d",
+  "lastMandarinSpeechPatch": {
+    "focusedFiles": 4,
+    "focusedTests": 171,
+    "changedProductionFilesCoveragePercent": 100,
+    "compilePassed": true
+  },
+  "executionNote": "Final bounded worker count and 15-second scheduling timeout; business assertions and performance thresholds unchanged. Earlier 5-second cold-compilation/large ZIP fixture timeouts were retried.",
+  "deliveryBrowser": {
+    "passed": true,
+    "cases": 4,
+    "sourceCommit": "5a033d67d83409515313f48c1231852e85b6815d",
+    "base": "ebd3aef50a6d64373bd89b43803ae08c7d46dd7a",
+    "sourceDigest": "656b10e86bab4a3398f1c31cbf204a8d278fce9146fb82c0092278475a58f33c",
+    "extensionDigest": "dac2b8c3cad5ed49d4134c4f4397bfa2cd69c49624508a3208a202ed56a22ecc",
+    "sourceFilesVerified": 449,
+    "consoleErrors": 0,
+    "httpErrors": 0,
+    "browserFrontmost": false,
+    "allPngsReviewed": true,
+    "audioListeningVerified": false,
+    "firefoxUiVerified": false
+  }
+}

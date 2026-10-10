@@ -15,7 +15,8 @@ outside the directory import `public.ts`; WXT treats a directory-level
 ## Pipeline
 
 1. `dom.ts` applies non-overridable safety guards and composed-tree helpers.
-2. `registry.ts` selects typed site adapters for the current URL.
+2. `registry.ts` compiles the shared site-adaptation JSON catalog into typed
+   adapters for the current URL; custom rules use the same compiler.
 3. `engine.ts` resolves adapter decisions and generic layout boundaries.
 4. `text.ts` extracts readable source text and rejects identifiers/target text.
 5. `serialization.ts` prepares safe rich-text input for providers.
@@ -33,13 +34,48 @@ adapter targets and cannot be reopened. Adapters are sorted by priority, while
 registration order is stable for ties. Invalid selectors only invalidate that
 match and never abort the page scan.
 
+An adapter may set `genericCandidatePolicy` to `targets-only` when a site has a
+large application shell and a stable content allowlist. This disables generic
+block and inline-run fallbacks for that matched site while preserving explicit
+`force-target` decisions for both hover and full-page translation.
+
+Use `keepOriginal` for protected content that must survive rich-text handling,
+and `omitFromTranslation` for metadata that must also be absent from the bilingual
+copy. The original page node remains untouched in both cases. Icon-font glyphs
+are excluded from provider input and bilingual copies based on their live primary
+font family; ordinary prose with an icon font only in its fallback list is kept.
+Scribble/Racket code tables marked `table.RktBlk` are protected as code, while
+ordinary tables and prose remain eligible. Code blocks remain protected, except
+for the browser's direct body `pre` in a `text/plain` document, where that element
+is the readable document itself.
+Ubuntu HTML manpages preserve command signatures and command labels using the
+manual's section structure. Literal command and argument markup stays original
+inside translated explanations; these rules apply only to Ubuntu's manpage URLs.
+The JSON compiler maps `omit` to metadata omission and `literalLabels` to a
+conservative command-label predicate. Both remain editable through ordinary
+same-ID custom replacement; no parallel site-specific TypeScript registry is kept.
+
 Every accepted candidate includes a reason and optional adapter id. This keeps
 hover/full equality and adapter precedence directly testable without starting a
 browser. Open Shadow DOM is traversed through the same policy.
 
+Buttons and elements with `role=button` or `role=menuitem` own their internal
+labels, including labels styled as flex or grid boxes. They use the control text
+slot path in both display modes, keeping a single visible label within the
+original button height and preserving icons, click handlers and restoration.
+Internal layout wrappers must not become bilingual paragraphs. Ordinary buttons
+remain one control; clickable cards containing separate nested controls split
+only their own labels into control targets or text runs, leaving nested buttons
+with independent ownership.
+A mutation scan starting at an internal label resolves back to the control;
+protected subtrees still retain their original exclusion boundaries.
+
 ## Verification contract
 
-`tests/translationCore.test.ts` covers generic and adapter decisions. The real
+`tests/translationCore.test.ts` covers generic and adapter decisions;
+`tests/translationControlOwnership.test.ts` covers nested control labels and
+the reusable `tests/fixtures/translation-pages/button-controls.html` fixture.
+The real
 site contract lives in `tests/browser-translation-cases.json` and is executed by
 `scripts/run-site-translation-test.cjs` or
 `scripts/run-site-translation-matrix.cjs`. A required case must pass both hover

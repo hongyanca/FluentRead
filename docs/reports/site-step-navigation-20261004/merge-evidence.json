@@ -1,0 +1,413 @@
+{
+  "date": "2026-10-04",
+  "integrationRevision": "63e99f4b9d0ab10614031e9ec52b71e4b2fddf56",
+  "productLayout": {
+    "cases": [
+      {
+        "locale": "zh-CN",
+        "width": 1280,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 171.5,
+            "text": "自动检测",
+            "title": "自动检测"
+          },
+          {
+            "height": 40,
+            "y": 171.5,
+            "text": "简体中文",
+            "title": "简体中文 / Simplified Chinese"
+          }
+        ]
+      },
+      {
+        "locale": "zh-CN",
+        "width": 900,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 159.5,
+            "text": "自动检测",
+            "title": "自动检测"
+          },
+          {
+            "height": 40,
+            "y": 159.5,
+            "text": "简体中文",
+            "title": "简体中文 / Simplified Chinese"
+          }
+        ]
+      },
+      {
+        "locale": "zh-CN",
+        "width": 390,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 250.5,
+            "text": "自动检测",
+            "title": "自动检测"
+          },
+          {
+            "height": 40,
+            "y": 250.5,
+            "text": "简体中文",
+            "title": "简体中文 / Simplified Chinese"
+          }
+        ]
+      },
+      {
+        "locale": "en-US",
+        "width": 1280,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 169.5,
+            "text": "Auto-detect",
+            "title": "Auto-detect"
+          },
+          {
+            "height": 40,
+            "y": 169.5,
+            "text": "Simplified Chinese",
+            "title": "Simplified Chinese"
+          }
+        ]
+      },
+      {
+        "locale": "en-US",
+        "width": 900,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 157.5,
+            "text": "Auto-detect",
+            "title": "Auto-detect"
+          },
+          {
+            "height": 40,
+            "y": 157.5,
+            "text": "Simplified Chinese",
+            "title": "Simplified Chinese"
+          }
+        ]
+      },
+      {
+        "locale": "en-US",
+        "width": 390,
+        "boxes": [
+          {
+            "height": 40,
+            "y": 292,
+            "text": "Auto-detect",
+            "title": "Auto-detect"
+          },
+          {
+            "height": 40,
+            "y": 292,
+            "text": "Simplified Chinese",
+            "title": "Simplified Chinese"
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "windowPlacement": {
+      "mode": "background-visible-no-focus",
+      "visible": true,
+      "hidden": false,
+      "centered": true,
+      "windowState": "normal",
+      "bounds": {
+        "left": 1121,
+        "top": -990,
+        "width": 1280,
+        "height": 900
+      },
+      "displayTarget": "secondary",
+      "source": "macos-nsscreen",
+      "screenIndex": 1,
+      "browserFrontmost": false,
+      "frontmostBefore": {
+        "pid": 76304,
+        "name": "微信"
+      },
+      "frontmostAfter": {
+        "pid": 76304,
+        "name": "微信"
+      }
+    }
+  },
+  "settingsGuides": {
+    "cases": [
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "learning",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "rules",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "glossary",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "stats",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "settings",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "appearance",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "provider",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "backup",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 1440,
+        "kind": "compare",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "learning",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "glossary",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "settings",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "rules",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "stats",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "appearance",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "backup",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "compare",
+        "steps": 3
+      },
+      {
+        "en": false,
+        "width": 320,
+        "kind": "provider",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "rules",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "glossary",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "learning",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "settings",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "stats",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "provider",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "backup",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "compare",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 1440,
+        "kind": "appearance",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "stats",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "glossary",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "learning",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "rules",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "settings",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "provider",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "compare",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "appearance",
+        "steps": 3
+      },
+      {
+        "en": true,
+        "width": 320,
+        "kind": "backup",
+        "steps": 3
+      }
+    ],
+    "errors": [],
+    "failures": []
+  },
+  "websiteLayout": {
+    "errors": [],
+    "failures": [],
+    "cases": [
+      "Buttons, responsive layout and branding zh/",
+      "Buttons, responsive layout and branding zh/guide/getting-started",
+      "Buttons, responsive layout and branding zh/docs/",
+      "Buttons, responsive layout and branding en/",
+      "Buttons, responsive layout and branding en/guide/getting-started",
+      "Buttons, responsive layout and branding en/docs/"
+    ]
+  },
+  "installationSteps": {
+    "scope": "Website walkthrough step navigation only; isolated headless Edge, no extension or user profile",
+    "cases": [
+      {
+        "name": "browser-install",
+        "width": 1440,
+        "en": true,
+        "mode": "default-motion",
+        "passed": true
+      },
+      {
+        "name": "browser-install",
+        "width": 320,
+        "en": true,
+        "mode": "default-motion",
+        "passed": true
+      },
+      {
+        "name": "browser-install",
+        "width": 320,
+        "en": false,
+        "mode": "default-motion",
+        "passed": true
+      },
+      {
+        "name": "browser-install",
+        "width": 1440,
+        "en": false,
+        "mode": "default-motion",
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "failures": []
+  }
+}

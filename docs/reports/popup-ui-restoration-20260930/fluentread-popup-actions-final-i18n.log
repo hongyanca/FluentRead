@@ -1,0 +1,126 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930
+
+ ❯ tests/i18n.test.ts (52 tests | 4 failed) 2303ms
+   × 界面 i18n 契约 > 只把显式登记的旧 UI 文案翻译为当前界面语言 6ms
+     → expected '显示悬停、划词、图片、视频和文档等快捷入口。' not to be '显示悬停、划词、图片、视频和文档等快捷入口。' // Object.is equality
+   × i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 866ms
+     → expected [ …(15) ] to deeply equal []
+   × 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 608ms
+     → expected [ Array(4) ] to deeply equal []
+   × 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 569ms
+     → expected [ '服务与学习偏好', '暂停插件', …(14) ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/i18n.test.ts > 界面 i18n 契约 > 只把显式登记的旧 UI 文案翻译为当前界面语言
+AssertionError: expected '显示悬停、划词、图片、视频和文档等快捷入口。' not to be '显示悬停、划词、图片、视频和文档等快捷入口。' // Object.is equality
+ ❯ tests/i18n.test.ts:842:59
+    840|     for (const language of ['en-US', 'ja-JP', 'ko-KR', 'fr-FR', 'ru-RU…
+    841|       for (const source of interfaceAppearanceCopy) {
+    842|         expect(translateLegacyText(source, language)).not.toBe(source);
+       |                                                           ^
+    843|       }
+    844|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/i18n.test.ts > i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果
+AssertionError: expected [ …(15) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "en-US src/features/settings/model/navigation.ts: 网页图片、圈选区域与 OCR",
++   "ko-KR src/features/settings/model/navigation.ts: 网页图片、圈选区域与 OCR",
++   "fr-FR src/features/settings/model/navigation.ts: 网页图片、圈选区域与 OCR",
++   "ru-RU src/features/settings/model/navigation.ts: 网页图片、圈选区域与 OCR",
++   "es-ES src/features/settings/model/navigation.ts: 网页图片、圈选区域与 OCR",
++   "en-US src/features/settings/model/navigation.ts: 管理网页图片、圈选区域和共享的本地 OCR 语言包。",
++   "ko-KR src/features/settings/model/navigation.ts: 管理网页图片、圈选区域和共享的本地 OCR 语言包。",
++   "fr-FR src/features/settings/model/navigation.ts: 管理网页图片、圈选区域和共享的本地 OCR 语言包。",
++   "ru-RU src/features/settings/model/navigation.ts: 管理网页图片、圈选区域和共享的本地 OCR 语言包。",
++   "es-ES src/features/settings/model/navigation.ts: 管理网页图片、圈选区域和共享的本地 OCR 语言包。",
++   "en-US src/features/settings/model/navigation.ts: 图片翻译、圈选翻译、区域翻译、截图、识图、视觉、Shift+Z、OCR、语言包、中文、英文、日文、下载",
++   "ko-KR src/features/settings/model/navigation.ts: 图片翻译、圈选翻译、区域翻译、截图、识图、视觉、Shift+Z、OCR、语言包、中文、英文、日文、下载",
++   "fr-FR src/features/settings/model/navigation.ts: 图片翻译、圈选翻译、区域翻译、截图、识图、视觉、Shift+Z、OCR、语言包、中文、英文、日文、下载",
++   "ru-RU src/features/settings/model/navigation.ts: 图片翻译、圈选翻译、区域翻译、截图、识图、视觉、Shift+Z、OCR、语言包、中文、英文、日文、下载",
++   "es-ES src/features/settings/model/navigation.ts: 图片翻译、圈选翻译、区域翻译、截图、识图、视觉、Shift+Z、OCR、语言包、中文、英文、日文、下载",
++ ]
+
+ ❯ tests/i18n.test.ts:881:21
+    879|     }
+    880|     expect(audit.files.length).toBeGreaterThan(50);
+    881|     expect(missing).toEqual([]);
+       |                     ^
+    882|   });
+    883|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/i18n.test.ts > 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化
+AssertionError: expected [ Array(4) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "恢复当前邮件",
++   "翻译当前邮件",
++   "正在翻译当前邮件",
++   "已恢复邮件原文",
++ ]
+
+ ❯ tests/i18n.test.ts:993:70
+    991|     const sources = getRuntimeFeedbackSources();
+    992|     expect(new Set(sources).size).toBe(sources.length);
+    993|     expect(sources.filter((source) => !sourceText.includes(source))).t…
+       |                                                                      ^
+    994|     for (const locale of locales) {
+    995|       const catalog = createRuntimeFeedbackLegacyText(locale);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/i18n.test.ts > 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文
+AssertionError: expected [ '服务与学习偏好', '暂停插件', …(14) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "服务与学习偏好",
++   "暂停插件",
++   "打开视频字幕设置，当前已开启",
++   "打开视频字幕设置，点击开启字幕翻译",
++   "搜索翻译服务或模型",
++   "更多翻译服务",
++   "清空服务搜索",
++   "翻译选中区域",
++   "已恢复网页原文",
++   "正在翻译当前网页",
++   "更多服务",
++   "匹配服务",
++   "匹配的翻译服务",
++   "启用或关闭视频字幕翻译",
++   "悬停图片显示翻译入口",
++   "翻译图片或无法直接选中的页面文字",
++ ]
+
+ ❯ tests/i18n.test.ts:1045:70
+    1043|     const sources = getLegacyCorrectionSources();
+    1044|     expect(new Set(sources).size).toBe(sources.length);
+    1045|     expect(sources.filter((source) => !sourceText.includes(source))).t…
+       |                                                                      ^
+    1046|     for (const locale of ['en-US', 'ja-JP', 'ko-KR', 'fr-FR', 'ru-RU',…
+    1047|       const catalog = createLegacyCorrectionText(locale);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 48 passed (52)
+   Start at  23:09:21
+   Duration  3.80s (transform 851ms, setup 0ms, collect 1.30s, tests 2.30s, environment 0ms, prepare 37ms)

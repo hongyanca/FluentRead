@@ -94,6 +94,15 @@ describe('binary document low-level contracts', () => {
         expect(median([4, 2])).toBe(3);
     });
 
+    it('缩放、反转和旋转视口保持 PDF 文本坐标', () => {
+        const scaled = pdfTextAtoms([pdfItem({transform: [1, 0, 0, 10, 70, 20]})],
+            {body: {ascent: 0.8}}, {width: 500, height: 500, transform: [2, 0, 0, -2, 5, 400]});
+        expect(scaled[0]).toMatchObject({x: 145, y: 344, height: 20});
+        const rotated = pdfTextAtoms([pdfItem({transform: [0, -1, 10, 0, 20, 30]})],
+            {body: {ascent: 0.8}}, {width: 500, height: 500, transform: [0, 1, -1, 0, 200, 0]});
+        expect(rotated[0]).toMatchObject({x: 170, y: 12, height: 10});
+    });
+
     it('将 PDF.js 文本项过滤并转换为页面原子', () => {
         const viewport = {width: 100, height: 100, transform: [1, 0, 0, 1, 0, 0]};
         const atoms = pdfTextAtoms([
@@ -193,7 +202,7 @@ describe('binary document low-level contracts', () => {
 
         expect(renderDocxPart(document, part, [], 'translated')).toContain('One');
         expect(renderDocxPart(document, part, ['译文'], 'bilingual')).toContain('E83B6B');
-        expect(renderDocxPart({...document, segments: []}, part, [], 'translated')).toContain('<w:t></w:t>');
+        expect(renderDocxPart({...document, segments: []}, part, [], 'translated')).toBe(part.source);
         expect(renderDocxPart(document, part, ['译文'], 'translated')).toContain('Keep');
     });
 
@@ -308,7 +317,7 @@ describe('binary document low-level contracts', () => {
         await expect(createDocumentDownload(document, [], 'translated'))
             .rejects.toThrow('未提供 PDF 页面渲染器');
         const raster = vi.fn(async (input) => {
-            expect(input.translations).toEqual(['Source']);
+            expect(input.translations).toEqual(['']);
             return Uint8Array.from(Buffer.from(
                 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9ZlY4AAAAASUVORK5CYII=',
                 'base64',

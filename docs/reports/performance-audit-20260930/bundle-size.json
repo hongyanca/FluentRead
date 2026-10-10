@@ -1,0 +1,82 @@
+{
+  "directory": "/Users/thinkstu/Desktop/copy/FluentRead-performance-size-audit-20260929/.output/chrome-mv3",
+  "files": 362,
+  "totalBytes": 80514636,
+  "largestFiles": [
+    {
+      "path": "fluent-read-ai/tts-ort-wasm-simd-threaded.asyncify.wasm",
+      "bytes": 23567050
+    },
+    {
+      "path": "fluent-read-ai/ort-wasm-simd-threaded.jsep.wasm",
+      "bytes": 21596019
+    },
+    {
+      "path": "fluent-read-ai/wllama.wasm",
+      "bytes": 8457512
+    },
+    {
+      "path": "fluent-read-ocr/core/tesseract-core-simd-lstm.wasm",
+      "bytes": 2871377
+    },
+    {
+      "path": "content-scripts/content.js",
+      "bytes": 2212818
+    },
+    {
+      "path": "localTtsWorker.js",
+      "bytes": 2175146
+    },
+    {
+      "path": "background.js",
+      "bytes": 1857892
+    },
+    {
+      "path": "content-scripts/neteaseMailFrame.js",
+      "bytes": 1848240
+    },
+    {
+      "path": "content-scripts/supportedFrame.js",
+      "bytes": 1673128
+    },
+    {
+      "path": "assets/pdf.worker.min-rsCePomN.mjs",
+      "bytes": 1417586
+    },
+    {
+      "path": "localTranslationWorker.js",
+      "bytes": 1261156
+    },
+    {
+      "path": "videoTranscriptionWorker.js",
+      "bytes": 883651
+    },
+    {
+      "path": "ecdict-core.json",
+      "bytes": 823996
+    },
+    {
+      "path": "chunks/index.full-DR4C7ncP.js",
+      "bytes": 728840
+    },
+    {
+      "path": "chunks/i18n-DgQVM_tK.js",
+      "bytes": 562862
+    }
+  ],
+  "duplicates": [
+    {
+      "paths": [
+        "content-scripts/neteaseMailFrame.css",
+        "content-scripts/supportedFrame.css"
+      ],
+      "bytesEach": 78629,
+      "duplicateBytes": 78629
+    }
+  ],
+  "comparison": {
+    "baselineBytes": 81507626,
+    "savedBytes": 992990,
+    "savedPercent": 1.218
+  }
+}

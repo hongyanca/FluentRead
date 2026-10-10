@@ -1,0 +1,82 @@
+{
+  "status": "passed",
+  "cases": [
+    "pause during cold model initialization preserves one bounded warm worker for immediate resume",
+    "rapidly passing three untranslated pages starts only the page where reading stops",
+    "returning to a completed page displays its bitmap during the scroll gate without new OCR",
+    "scrolling then pausing before settle cancels pending work and keeps every host image original",
+    "settled far jump cancels a distant held page and starts the current page before its late response"
+  ],
+  "fastPassOperations": 1,
+  "cachedReturnMs": 2.3000001907348633,
+  "pauseStage": "initializing",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 1458,
+      "name": "uTools"
+    },
+    "frontmostAfter": {
+      "pid": 1458,
+      "name": "uTools"
+    }
+  },
+  "profileRemoved": true,
+  "modelRequests": [],
+  "initializationResidency": {
+    "created": 1,
+    "terminated": 0
+  },
+  "scope": "Production Chrome MV3 extension in isolated Edge131; real PaddleOCR from SHA-256 validated offline imports, controlled Google text transport; prefetch0",
+  "baseline": {
+    "commit": "9ce9d7b5b",
+    "fastPassOperations": 2,
+    "coldInitializationCreated": 2,
+    "coldInitializationTerminated": 1
+  },
+  "existingScrollStability": {
+    "status": "passed",
+    "cases": [
+      "completed current page remains readable with cache disabled",
+      "next page in progress does not block returning to the translated page",
+      "repeated fast forward/back scrolling reuses the same result without extra OCR",
+      "pause restores original host sources and styles; late completion cannot revive translations",
+      "resume restores the completed visible result without another recognition request",
+      "scrolling away before the first result finishes preserves its task and result for return",
+      "returning from outside the two-page retention window restores a cached bitmap during another request",
+      "changing a retained source invalidates its translation and keeps the new original readable",
+      "chapter change cancels the old request and ignores its late provider result"
+    ],
+    "profileRemoved": true
+  },
+  "prefetch": {
+    "status": "passed",
+    "cases": [
+      "reader detects real image pages and default upcoming-page option",
+      "current page is shown before upcoming preparation finishes",
+      "bounded upcoming pages prepared with real OCR",
+      "prepared upcoming translation follows the image into view",
+      "original pause restores all prepared host images",
+      "upcoming-page setting persists and allows current-page-only mode",
+      "no model downloads during prepared local reading"
+    ],
+    "profileRemoved": true
+  },
+  "browserCasesPassed": 21
+}

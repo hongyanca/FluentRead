@@ -1,0 +1,62 @@
+[
+  {
+    "index": 0,
+    "rawFrancMin": "cmn",
+    "fluentRead": {
+      "status": "identified",
+      "languages": [
+        "zh-Hans"
+      ],
+      "bestGuess": "zh-Hans",
+      "method": "chinese"
+    }
+  },
+  {
+    "index": 1,
+    "rawFrancMin": "nld",
+    "fluentRead": {
+      "status": "identified",
+      "languages": [
+        "zh-Hans"
+      ],
+      "bestGuess": "zh-Hans",
+      "method": "chinese"
+    }
+  },
+  {
+    "index": 2,
+    "rawFrancMin": "cmn",
+    "fluentRead": {
+      "status": "identified",
+      "languages": [
+        "zh-Hans"
+      ],
+      "bestGuess": "zh-Hans",
+      "method": "chinese"
+    }
+  },
+  {
+    "index": 3,
+    "rawFrancMin": "cmn",
+    "fluentRead": {
+      "status": "identified",
+      "languages": [
+        "zh-Hans"
+      ],
+      "bestGuess": "zh-Hans",
+      "method": "chinese"
+    }
+  },
+  {
+    "index": 4,
+    "rawFrancMin": "cmn",
+    "fluentRead": {
+      "status": "identified",
+      "languages": [
+        "zh-Hans"
+      ],
+      "bestGuess": "zh-Hans",
+      "method": "chinese"
+    }
+  }
+]

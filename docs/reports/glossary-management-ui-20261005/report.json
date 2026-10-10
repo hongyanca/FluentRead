@@ -1,0 +1,248 @@
+{
+  "ok": true,
+  "suite": "ui",
+  "scope": "glossary direct actions, stable settings disclosure, multi-library order/drafts, import/export, persistence and responsive themes",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "cases": [
+    "direct create/import/preview controls; empty and populated settings remain discoverable",
+    "keyboard and repeated disclosure cycles stay stable across 12 frames; dialogs retain settings state",
+    "multi-library drafts, priority changes, import/export and cancelled deletion",
+    "reload and immediate-close persistence; 1440/1024/820/390px, dark and English layouts"
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "documentOverflow": 0,
+      "glossaryOverflow": 0
+    },
+    {
+      "width": 1024,
+      "documentOverflow": 0,
+      "glossaryOverflow": 0
+    },
+    {
+      "width": 820,
+      "documentOverflow": 0,
+      "glossaryOverflow": 0
+    },
+    {
+      "width": 390,
+      "documentOverflow": 0,
+      "glossaryOverflow": 0
+    }
+  ],
+  "consoleErrors": [],
+  "persistenceCases": [
+    "new/rename/entry/import/order persist after reload"
+  ],
+  "quickClose": {
+    "immediatelyClosedAfterChange": true,
+    "reopenedValueMatches": true
+  },
+  "artifact": "production chrome-mv3",
+  "screenshots": [
+    "desktop.png",
+    "narrow-settings.png"
+  ],
+  "disclosureSamples": [
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": true,
+      "frameCount": 12,
+      "expandedStates": [
+        "true"
+      ],
+      "heightChange": 0.0,
+      "widthChange": 0
+    },
+    {
+      "expectedExpanded": false,
+      "frameCount": 12,
+      "expandedStates": [
+        "false"
+      ],
+      "heightChange": 0,
+      "widthChange": 0
+    }
+  ]
+}

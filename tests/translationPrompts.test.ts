@@ -111,10 +111,78 @@ describe('translation prompt safety', () => {
             '页面摘要：无关材料。',
         )).toBe(false);
     });
+
+    it('识别长源文本未膨胀时被上下文连续片段替换的回显', () => {
+        const origin = 'Please translate this paragraph into Chinese while preserving the author\'s meaning and neutral tone.';
+        const pageContext = 'Page summary: The article compares coastal restoration methods, explains why native wetlands reduce storm damage, and lists the monitoring schedule for the next three years.';
+        const translation = '请将这段文字翻译成中文并保持原意。 The article compares coastal restoration methods, explains why native wetlands reduce storm damage.';
+
+        expect(translation.length).toBeLessThan(origin.length * 2.5);
+        expect(isLikelyPageContextLeak(origin, translation, pageContext)).toBe(true);
+        expect(isDefinitePageContextLeak(origin, translation, pageContext)).toBe(false);
+    });
+
+    it('识别中文和非 ASCII 语言的长连续上下文片段', () => {
+        const chineseContext = '页面摘要：本文介绍城市雨洪管理方案，比较绿色屋顶、透水铺装与湿地恢复对峰值流量的影响。';
+        const chineseTranslation = '本文讨论城市雨洪管理方案，比较绿色屋顶、透水铺装与湿地恢复对峰值流量的影响。';
+        const greekContext = 'Περίληψη σελίδας: το άρθρο συγκρίνει αποκατάσταση υγροτόπων και πράσινες υποδομές για τη μείωση πλημμυρών.';
+        const greekTranslation = 'Η μετάφραση είναι σύντομη. το άρθρο συγκρίνει αποκατάσταση υγροτόπων και πράσινες υποδομές.';
+
+        expect(isLikelyPageContextLeak('Translate this sentence.', chineseTranslation, chineseContext)).toBe(true);
+        expect(isLikelyPageContextLeak('Translate this sentence.', greekTranslation, greekContext)).toBe(true);
+    });
+
+    it('扣除原文本已有片段并放过专名或正常引用', () => {
+        const pageContext = 'The guide explains how SoundSource routes audio through the macOS volume HUD and why SoundSource is named throughout the release notes.';
+
+        expect(isLikelyPageContextLeak(
+            'SoundSource routes audio through the macOS volume HUD.',
+            'SoundSource routes audio through the macOS volume HUD.',
+            pageContext,
+        )).toBe(false);
+        expect(isLikelyPageContextLeak(
+            'Translate SoundSource for the user.',
+            'SoundSource remains the product name.',
+            pageContext,
+        )).toBe(false);
+    });
+
+    it('在超过 300 字符的结果中识别占大部分的局部上下文复制', () => {
+        const origin = 'The researchers explain how seasonal weather affects regional transport and the preparation of temporary railway services. '.repeat(4);
+        const copied = 'The report compares coastal restoration methods, explains why native wetlands reduce storm damage, describes the monitoring schedule for the next three years, and records the limits of the available evidence.';
+        const translation = `请翻译这份报告并保留结构。 ${copied} ${copied.slice(35)} 结论仍需谨慎。`;
+
+        expect(translation.length).toBeGreaterThan(300);
+        expect(isLikelyPageContextLeak(origin, translation, `Page summary: ${copied}`)).toBe(true);
+        expect(isDefinitePageContextLeak(origin, translation, `Page summary: ${copied}`)).toBe(false);
+    });
+
+    it('放过只占少数的较长正常引用', () => {
+        const pageContext = 'The guide explains how SoundSource routes audio through the macOS volume HUD and why the release notes mention this behavior.';
+        const normalResult = `这是一段很长的正常译文，说明设置步骤、兼容性和用户操作建议。 SoundSource routes audio through the macOS volume HUD。其余内容与页面上下文无关。`;
+
+        expect(isLikelyPageContextLeak('The troubleshooting section explains the setup steps, compatibility concerns and actions that users can take to resolve the audio problem.', normalResult, pageContext)).toBe(false);
+    });
+
+    it('放过短 CJK 术语', () => {
+        expect(isLikelyPageContextLeak(
+            'Translate the product name.',
+            '海鸥项目',
+            '页面摘要：本文介绍海鸥项目的预算、发布日期和风险控制方案。',
+        )).toBe(false);
+    });
+
+    it('原文尾部已有片段且超出比较预算时不误判', () => {
+        const sourceTail = 'The release notes repeat this exact sentence near the end for archival compatibility.';
+        const origin = `${'x'.repeat(9000)} ${sourceTail}`;
+        const pageContext = `Page summary: ${sourceTail}`;
+
+        expect(isLikelyPageContextLeak(origin, sourceTail, pageContext)).toBe(false);
+    });
 });
 
 describe('translation slot packet safety', () => {
-    it('拒绝在预检后被改写为空值的槽位标记', () => {
+    it('只读取一次槽位标记快照，忽略 getter 随后的空值', () => {
         const starts = [''];
         let startReads = 0;
         Object.defineProperty(starts, 0, {
@@ -124,7 +192,8 @@ describe('translation slot packet safety', () => {
         expect(parseTranslationSlots(
             {payload: '', starts, ends: ['END']},
             'STARTEND',
-        )).toBeNull();
+        )).toEqual(['']);
+        expect(startReads).toBe(1);
 
         const ends = [''];
         let endReads = 0;
@@ -135,7 +204,10 @@ describe('translation slot packet safety', () => {
         expect(parseTranslationSlots(
             {payload: '', starts: ['START'], ends},
             'STARTEND',
-        )).toBeNull();
+        )).toEqual(['']);
+        expect(endReads).toBe(1);
+        expect(parseTranslationSlots({payload: '', starts: [''], ends: ['END']}, 'STARTEND')).toBeNull();
+        expect(parseTranslationSlots({payload: '', starts: ['START'], ends: ['']}, 'STARTEND')).toBeNull();
     });
 
     it('拒绝仅在起始标记内出现结束标记的数据包', () => {
@@ -145,7 +217,7 @@ describe('translation slot packet safety', () => {
         )).toBeNull();
     });
 
-    it('拒绝在预检后暴露出嵌套起始标记的数据包', () => {
+    it('按初始标记快照保留正文中的其他字面标记', () => {
         const starts = [''];
         let reads = 0;
         Object.defineProperty(starts, 0, {
@@ -156,6 +228,7 @@ describe('translation slot packet safety', () => {
         expect(parseTranslationSlots(
             {payload: '', starts, ends: ['END']},
             'START_UNIQUE translated START nested END',
-        )).toBeNull();
+        )).toEqual([' translated START nested ']);
+        expect(reads).toBe(1);
     });
 });

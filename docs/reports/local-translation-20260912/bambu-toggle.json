@@ -1,0 +1,45 @@
+{
+  "url": "https://wiki.bambulab.com/en/software/bambu-studio/manual/dual-nozzles-slicing-filament-grouping",
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "neighbors": [
+    0,
+    0,
+    0
+  ],
+  "restoredDomMatches": true,
+  "outputs": [
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "当在单喷嘴(热门)打印机上打印时,在不同的丝状之间切换时,必须使用一定量的新材料冲洗热端中的残余物质,以避免在打印过程中混合颜色。 冲洗值因材料不同而异,具体值可在班布工作室的丝状页上查看。 您可以引用wiki 来学习更多: 改变环境期间减少废物",
+      "links": [
+        "/en/software/bambu-studio/reduce-wasting-during-filament-change",
+        "/en/software/bambu-studio/reduce-wasting-during-filament-change"
+      ]
+    },
+    {
+      "count": 0,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "",
+      "links": [
+        "/en/software/bambu-studio/reduce-wasting-during-filament-change"
+      ]
+    },
+    {
+      "count": 1,
+      "neighbor": 0,
+      "retries": 0,
+      "translation": "当在单喷嘴(热门)打印机上打印时,在不同的丝状之间切换时,必须使用一定量的新材料冲洗热端中的残余物质,以避免在打印过程中混合颜色。 冲洗值因材料不同而异,具体值可在班布工作室的丝状页上查看。 您可以引用wiki 来学习更多: 改变环境期间减少废物",
+      "links": [
+        "/en/software/bambu-studio/reduce-wasting-during-filament-change",
+        "/en/software/bambu-studio/reduce-wasting-during-filament-change"
+      ]
+    }
+  ]
+}

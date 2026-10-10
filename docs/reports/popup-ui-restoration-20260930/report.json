@@ -1,0 +1,477 @@
+{
+  "ok": true,
+  "artifact": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3",
+  "cases": [
+    "restored main actions, site controls, version, donation and footer; white canvas; no heading/clipping",
+    "open-source capsule opens the declared GitHub URL in a new tab (navigation fixture)",
+    "actual content translate -> reopen with accurate state -> restore -> translate -> restore",
+    "local button closes popup and starts actual picker; clicking one area translates it only",
+    "page action response fixture failed: error notice, no false success",
+    "page action response fixture disabled: error notice, no false success",
+    "page action response fixture undefined: error notice, no false success",
+    "page action response fixture no-receiver: error notice, no false success",
+    "10 assignments, inheritance, independent override, custom model search, empty results, AI-only, current-more visibility, local icons and keyboard navigation",
+    "selection setting text is horizontal, button below; real API opens dedicated options",
+    "skin and layout previews have horizontal provider icons, restored action row, desktop/narrow no overflow"
+  ],
+  "persistenceCases": [
+    {
+      "name": "site-rules-reopen-and-quick-close",
+      "passed": true
+    },
+    {
+      "name": "service-two-writes-quick-close",
+      "passed": true
+    },
+    {
+      "name": "selection-presentation-quick-close",
+      "passed": true
+    }
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "crossPageSync": true,
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-light.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/donation.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/donation-bottom.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/page-translated.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-translated.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/section-picker.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/site-disabled.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/services-overview.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/services-overview-bottom.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/service-picker-common.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/service-model-search.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/service-picker-more.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/services-reopened.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/selection-drawer.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/selection-drawer-bottom.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/selection-reopened.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/settings-interface.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/skin-preview.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/layout-preview.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/settings-layout-390.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-dark.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/selection-dark.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/services-dark.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-minimal.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/service-picker-minimal.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-compact.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-ocean.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-english.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/services-english.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/popup-paused.png",
+    "/private/tmp/fluentread-popup-actions-service-ui-final/options-cross-page.png"
+  ],
+  "layout": {
+    "default-light": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "siteControlsHeight": 38,
+    "serviceFrame": {
+      "border": "1px",
+      "radius": "10px",
+      "background": "rgb(247, 248, 251)"
+    },
+    "selectionRow": {
+      "textWidth": 270,
+      "textBottom": 193.75079345703125,
+      "buttonTop": 203.75079345703125,
+      "rowHeight": 107.5
+    },
+    "skinPreview": {
+      "direction": "row",
+      "icons": [
+        {
+          "x": 537.0703125,
+          "y": 829.1328125,
+          "width": 25
+        },
+        {
+          "x": 565.0703125,
+          "y": 829.1328125,
+          "width": 25
+        }
+      ],
+      "cardHeight": 37
+    },
+    "dark": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "minimal": {
+      "width": 330,
+      "height": 428,
+      "scrollHeight": 428,
+      "clientHeight": 428,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 428,
+      "viewportHeight": 428,
+      "duplicateIds": []
+    },
+    "compact": {
+      "width": 320,
+      "height": 390,
+      "scrollHeight": 390,
+      "clientHeight": 390,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 386,
+      "viewportHeight": 390,
+      "duplicateIds": []
+    },
+    "ocean": {
+      "width": 340,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "english": {
+      "width": 340,
+      "height": 486.875,
+      "scrollHeight": 487,
+      "clientHeight": 487,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 482.875,
+      "viewportHeight": 487,
+      "duplicateIds": []
+    },
+    "paused": {
+      "width": 340,
+      "height": 450,
+      "scrollHeight": 450,
+      "clientHeight": 450,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 446,
+      "viewportHeight": 450,
+      "duplicateIds": []
+    }
+  },
+  "evidenceBoundary": "Real production extension in isolated Edge; active-tab lookup points to an actual local tab. Translation transport is a local deterministic provider. Failure UI uses named message-response fixtures. No live-provider or Firefox runtime claim.",
+  "manifest": {
+    "version": "0.0.35",
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 89270,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 89270,
+      "name": "ChatGPT"
+    }
+  },
+  "lastSaveResponse": {
+    "success": true,
+    "revision": 74
+  },
+  "serviceSelectionCases": [
+    {
+      "id": "freeTranslation",
+      "passed": true
+    },
+    {
+      "id": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "google",
+      "passed": true
+    },
+    {
+      "id": "deepL",
+      "passed": true
+    },
+    {
+      "id": "deepseek",
+      "passed": true
+    },
+    {
+      "id": "tongyi",
+      "passed": true
+    },
+    {
+      "id": "openai",
+      "passed": true
+    },
+    {
+      "id": "gemini",
+      "passed": true
+    },
+    {
+      "id": "myMemory",
+      "passed": true
+    },
+    {
+      "id": "deeplx",
+      "passed": true
+    },
+    {
+      "id": "xiaoniu",
+      "passed": true
+    },
+    {
+      "id": "youdao",
+      "passed": true
+    },
+    {
+      "id": "localTranslation",
+      "passed": true
+    },
+    {
+      "id": "tencent",
+      "passed": true
+    },
+    {
+      "id": "googleCloudTranslation",
+      "passed": true
+    },
+    {
+      "id": "azureTranslator",
+      "passed": true
+    },
+    {
+      "id": "aliyunTranslation",
+      "passed": true
+    },
+    {
+      "id": "baiduTranslation",
+      "passed": true
+    },
+    {
+      "id": "volcTranslation",
+      "passed": true
+    },
+    {
+      "id": "doubao",
+      "passed": true
+    },
+    {
+      "id": "moonshot",
+      "passed": true
+    },
+    {
+      "id": "zhipu",
+      "passed": true
+    },
+    {
+      "id": "huanYuan",
+      "passed": true
+    },
+    {
+      "id": "huanYuanTranslation",
+      "passed": true
+    },
+    {
+      "id": "yiyan",
+      "passed": true
+    },
+    {
+      "id": "minimax",
+      "passed": true
+    },
+    {
+      "id": "mimo",
+      "passed": true
+    },
+    {
+      "id": "jieyue",
+      "passed": true
+    },
+    {
+      "id": "claude",
+      "passed": true
+    },
+    {
+      "id": "grok",
+      "passed": true
+    },
+    {
+      "id": "siliconCloud",
+      "passed": true
+    },
+    {
+      "id": "newapi",
+      "passed": true
+    },
+    {
+      "id": "infini",
+      "passed": true
+    },
+    {
+      "id": "openrouter",
+      "passed": true
+    },
+    {
+      "id": "groq",
+      "passed": true
+    },
+    {
+      "id": "azureOpenai",
+      "passed": true
+    },
+    {
+      "id": "mistral",
+      "passed": true
+    },
+    {
+      "id": "cohere",
+      "passed": true
+    },
+    {
+      "id": "cerebras",
+      "passed": true
+    },
+    {
+      "id": "togetherai",
+      "passed": true
+    },
+    {
+      "id": "fireworks",
+      "passed": true
+    },
+    {
+      "id": "deepinfra",
+      "passed": true
+    },
+    {
+      "id": "perplexity",
+      "passed": true
+    },
+    {
+      "id": "ollama",
+      "passed": true
+    },
+    {
+      "id": "custom:popup-fixture",
+      "passed": true
+    }
+  ],
+  "featureSelectionCases": [
+    {
+      "id": "hover",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "selection",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "input",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "video",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "document",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "image",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "area",
+      "selectedService": "microsoft",
+      "passed": true
+    },
+    {
+      "id": "reading",
+      "selectedService": "custom:popup-fixture",
+      "passed": true
+    },
+    {
+      "id": "writing",
+      "selectedService": "custom:popup-fixture",
+      "passed": true
+    }
+  ],
+  "providerRequests": [
+    {
+      "source": "Popup actions fixture",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Reading should feel calm and effortless. Colors and lines should follow the page you are reading.",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Popup actions fixture",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Reading should feel calm and effortless. Colors and lines should follow the page you are reading.",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Reading should feel calm and effortless. Colors and lines should follow the page you are reading.",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Popup actions fixture",
+      "model": "popup-fixture-model"
+    },
+    {
+      "source": "Reading should feel calm and effortless. Colors and lines should follow the page you are reading.",
+      "model": "popup-fixture-model"
+    }
+  ],
+  "finalConfig": {
+    "service": "microsoft",
+    "selectionTranslationService": "microsoft",
+    "revision": 75
+  }
+}

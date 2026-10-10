@@ -1,0 +1,22 @@
+{
+  "compile": "passed",
+  "affectedTests": {
+    "files": 6,
+    "cases": 55,
+    "result": "passed"
+  },
+  "testAudit": "passed (classification only)",
+  "chromeBuild": "passed",
+  "firefoxBuild": "passed (runtime not exercised)",
+  "userscriptBuild": "passed",
+  "userscriptVerifier": "passed",
+  "docsBuild": "passed",
+  "browser": {
+    "runtime": "isolated production Edge",
+    "pages": 16,
+    "narrowViewport": 390,
+    "numericFields": 12,
+    "consoleErrors": 0
+  },
+  "productionManifestSha256": "ff7d37a39309999cf774e2d4e73d2914184a1d598f49860e8f7c22ae9805dd69"
+}

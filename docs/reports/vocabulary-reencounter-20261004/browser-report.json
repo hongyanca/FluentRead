@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "id": "default-off-with-existing-saved-entries",
+      "status": "passed"
+    },
+    {
+      "id": "setting-label-follows-cross-page-interface-language",
+      "status": "passed"
+    },
+    {
+      "id": "inline-matching-protected-content-original-text-and-geometry",
+      "status": "passed"
+    },
+    {
+      "id": "click-current-and-saved-sentence-without-model-or-host-event-interference",
+      "status": "passed"
+    },
+    {
+      "id": "keyboard-entry-and-escape-without-model-request",
+      "status": "passed"
+    },
+    {
+      "id": "unapproved-sentence-context-disables-explanation",
+      "status": "passed"
+    },
+    {
+      "id": "explicit-current-context-only-and-unchanged-review-data",
+      "status": "passed"
+    },
+    {
+      "id": "dark-and-mobile-clamped-layout",
+      "status": "passed"
+    },
+    {
+      "id": "close-cancels-delayed-stream-without-resurrection",
+      "status": "passed"
+    },
+    {
+      "id": "model-failure-and-explicit-retry",
+      "status": "passed"
+    },
+    {
+      "id": "translate-restore-retranslate-excludes-translations-and-preserves-review-data",
+      "status": "passed"
+    },
+    {
+      "id": "dynamic-text-stale-card-and-late-shadow-root",
+      "status": "passed"
+    },
+    {
+      "id": "scroll-discovers-later-reading",
+      "status": "passed"
+    },
+    {
+      "id": "visit-pause-keeps-global-preference",
+      "status": "passed"
+    },
+    {
+      "id": "cross-page-delete-removes-all-corresponding-marks",
+      "status": "passed"
+    },
+    {
+      "id": "master-toggle-and-site-disable-clear-and-restore",
+      "status": "passed"
+    },
+    {
+      "id": "permanent-disable-persists-across-reload",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [
+    "new-and-saved-sentences.png",
+    "current-context-explanation.png",
+    "comparison-dark.png",
+    "comparison-mobile.png"
+  ],
+  "consoleErrors": [],
+  "evidenceBoundary": "Production extension and real Edge with local HTML and synthetic model responses; no live model or Firefox runtime quality claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  }
+}

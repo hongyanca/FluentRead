@@ -2,7 +2,7 @@
  * @file src/core/site-rules/domain.ts
  *
  * 文件职责：实现站点规则所需的域名规范化、eTLD+1 匹配和自动翻译决策，统一处理 URL、主机名与配置列表。
- * 主要内容：基于 tldts 解析基础域，清洗始终翻译和禁用站点列表，计算当前页自动翻译状态与上下文菜单展示，同时拒绝非 HTTP 或无效域名输入。 可核对的公开符号包括 AutoTranslatePageConfig、FullPageContextMenuPresentation、getSiteBaseDomain、normalizeSiteDomains、normalizeAlwaysTranslateDomains、normalizeDisabledExtensionDomains、isAlwaysTranslateSite、isExtensionDisabledOnSite。
+ * 主要内容：基于 tldts 解析基础域，清洗始终翻译和禁用站点列表，计算当前页自动翻译状态，同时拒绝非 HTTP 或无效域名输入。 可核对的公开符号包括 AutoTranslatePageConfig、getSiteBaseDomain、normalizeSiteDomains、normalizeAlwaysTranslateDomains、normalizeDisabledExtensionDomains、isAlwaysTranslateSite、isExtensionDisabledOnSite。
  * 模块边界：本文件属于 core 领域层，只定义规则、类型与纯转换；不直接读写浏览器存储、不发起网络请求、不挂载 Vue/WXT 入口，持久化、协议调用和界面编排分别由 services、providers 与 features 承担。
  */
 
@@ -25,10 +25,6 @@ export interface AutoTranslatePageConfig {
     disabledExtensionDomains?: readonly string[];
 }
 
-export interface FullPageContextMenuPresentation {
-    enabled: boolean;
-    title: string;
-}
 
 function parseSiteUrl(input: string | URL): URL | null {
     if (input instanceof URL) {
@@ -122,10 +118,18 @@ export function normalizeDisabledExtensionDomains(value: unknown): string[] {
     return normalizeSiteDomains(value);
 }
 
+export function normalizeFloatingBallDisabledDomains(value: unknown): string[] {
+    return normalizeSiteDomains(value);
+}
+
 function isSiteInDomainList(input: string | URL, domains: unknown): boolean {
     const currentDomain = getSiteBaseDomain(input);
-    if (!currentDomain) return false;
-    return normalizeSiteDomains(domains).includes(currentDomain);
+    if (!currentDomain || !Array.isArray(domains)) return false;
+    // 匹配只需要存在性；命中后不再解析其余条目，也不建立无用途的去重名单。
+    for (const item of domains) {
+        if (typeof item === 'string' && getSiteBaseDomain(item) === currentDomain) return true;
+    }
+    return false;
 }
 
 export function isAlwaysTranslateSite(
@@ -142,6 +146,14 @@ export function isExtensionDisabledOnSite(
     return isSiteInDomainList(input, domains);
 }
 
+/** 悬浮球按网站名单隐藏；扩展其余能力仍然可用。 */
+export function isFloatingBallDisabledOnSite(
+    input: string | URL,
+    domains: unknown,
+): boolean {
+    return isSiteInDomainList(input, domains);
+}
+
 export function shouldAutoTranslatePage(
     input: string | URL,
     config: AutoTranslatePageConfig,
@@ -152,18 +164,4 @@ export function shouldAutoTranslatePage(
     // 就应生效。HTTP(S) 与可注册域名限制只属于新增的网站名单。
     if (config.autoTranslate === true) return true;
     return isAlwaysTranslateSite(input, config.alwaysTranslateDomains);
-}
-
-/** 让右键菜单的可用性与当前站点生命周期状态保持一致。 */
-export function getFullPageContextMenuPresentation(
-    isTranslated: boolean,
-    isSiteDisabled: boolean,
-): FullPageContextMenuPresentation {
-    if (isSiteDisabled) {
-        return {enabled: false, title: '流畅阅读（当前网站已禁用）'};
-    }
-    return {
-        enabled: true,
-        title: isTranslated ? '流畅阅读取消翻译' : '流畅阅读翻译',
-    };
 }

@@ -1,0 +1,27 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/i18n.test.ts" "tests/settingsUiArchitecture.test.ts" "tests/vocabularyBookComponent.test.ts" "tests/vocabularyBookComponentLifecycle.test.ts" "tests/vocabularyStudyLifecycle.test.ts" "tests/freeTranslationSettings.test.ts" "tests/googleDrivePreview.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/i18n.test.ts tests/settingsUiArchitecture.test.ts tests/vocabularyBookComponent.test.ts tests/vocabularyBookComponentLifecycle.test.ts tests/vocabularyStudyLifecycle.test.ts tests/freeTranslationSettings.test.ts tests/googleDrivePreview.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 108ms
+ ✓ tests/i18n.test.ts (56 tests) 2828ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 973ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 761ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 740ms
+ ✓ tests/freeTranslationSettings.test.ts (10 tests) 979ms
+   ✓ free translation settings compiled component > 已开启服务的开关旁展示未检查、逐项结果与失败原因，停用服务隐藏状态 528ms
+ ✓ tests/vocabularyBookComponentLifecycle.test.ts (2 tests) 965ms
+   ✓ VocabularyBook mounted lifecycle > does not subscribe, register listeners, or list after unmounting before configReady 963ms
+ ✓ tests/vocabularyStudyLifecycle.test.ts (2 tests) 477ms
+   ✓ saved sentence explanation lifecycle > generates only on demand and preserves reading while saving a separate note 372ms
+ ✓ tests/googleDrivePreview.test.ts (4 tests) 3ms
+ ✓ tests/vocabularyBookComponent.test.ts (4 tests) 3ms
+
+ Test Files  7 passed (7)
+      Tests  111 passed (111)
+   Start at  15:46:37
+   Duration  9.04s (transform 1.22s, setup 0ms, collect 2.54s, tests 5.36s, environment 2ms, prepare 277ms)
+

@@ -1,12 +1,495 @@
 import {describe, expect, it} from 'vitest';
 
-import {buildConfigDiff} from '@/src/core/config/diff';
+import {buildConfigDiff,configDiffFieldLabel} from '@/src/core/config/diff';
+import {getMultilingualTargetLanguageLabel} from '@/src/core/config/catalog';
+import {createApiKeyRequirementKey} from '@/src/core/config/validation';
 
 function group(result: ReturnType<typeof buildConfigDiff>, id: string) {
     return result.groups.find((item) => item.id === id);
 }
 
 describe('配置差异预览', () => {
+    it('原生合批偏好按服务展示开启和关闭，不暴露配置字段名', () => {
+        expect(configDiffFieldLabel('nativeBatchTranslationEnabled')).toBe('原生翻译合批');
+        const result = buildConfigDiff(
+            {nativeBatchTranslationEnabled: {google: true, microsoft: false}},
+            {nativeBatchTranslationEnabled: {google: false, microsoft: true}},
+        );
+        expect(group(result, 'translationServices')?.changes).toEqual([
+            {key: 'nativeBatchTranslationEnabled.google', label: '谷歌翻译开启合并', before: '开启', after: '关闭'},
+            {key: 'nativeBatchTranslationEnabled.microsoft', label: '微软翻译开启合并', before: '关闭', after: '开启'},
+        ]);
+    });
+    it('图片识别方式在历史中使用与设置相同的可读名称', () => {
+        expect(group(buildConfigDiff({imageTranslationOcrEngine: 'tesseract'}, {imageTranslationOcrEngine: 'paddle'}), 'imageTranslation')?.changes).toEqual([
+            {key: 'imageTranslationOcrEngine', label: '图片识别方式', before: 'Tesseract（轻量模型）', after: 'PaddleOCR（标准模型）'},
+        ]);
+    });
+    it('云备份只能获得已知设置名称；词库选择和功能偏好保持可辨认摘要', () => {
+        expect(configDiffFieldLabel('hotkey')).toBe('鼠标悬浮快捷键');
+        expect(configDiffFieldLabel('private-fixture-key')).toBeUndefined();
+        const before={documentGlossaryIds:null,videoGlossaryIds:[],selectionTranslatorPresentation:'card',freeTranslationOrder:['google'],freeTranslationMode:'sequential',freeTranslationTimeoutMs:1000,freeTranslationCooldownMs:5000,bilingualSentenceHighlightProfiles:[{name:'一'},'旧样式'],glossaryLibraries:[{entries:[]},{}]};
+        const after={documentGlossaryIds:['one'],videoGlossaryIds:'legacy',selectionTranslatorPresentation:'plain',freeTranslationOrder:'legacy',freeTranslationMode:'auto',freeTranslationTimeoutMs:3000,freeTranslationCooldownMs:8000,bilingualSentenceHighlightProfiles:'legacy',glossaryLibraries:'legacy'};
+        const result=buildConfigDiff(before,after);
+        expect(result.changeCount).toBe(9);
+        const preview=JSON.stringify(result.groups);
+        expect(preview).toContain('跟随全局词库');expect(preview).toContain('不使用术语库');expect(preview).toContain('指定 1 套词库');
+        for (const glossaryIds of [null,[],['one'],'legacy']) expect(buildConfigDiff({quickTranslationProfiles:[]},{quickTranslationProfiles:[{action:'hover',hotkey:'Alt',glossaryIds}]}).changeCount).toBe(1);
+    });
+    it('漫画预译窗口以用户可理解名称显示，零页可以撤销恢复', () => {
+        const changes=group(buildConfigDiff({imageTranslationMangaPrefetchPages:3},{imageTranslationMangaPrefetchPages:0}),'imageTranslation')?.changes;
+        expect(changes).toEqual([{key:'imageTranslationMangaPrefetchPages',label:'提前翻译后续页面',before:'3',after:'0'}]);
+    });
+    it('翻译中心布局在历史中以阅读方式展示', () => {
+        expect(group(buildConfigDiff({translationCenterLayout: 'list'}, {translationCenterLayout: 'grid'}), 'tools')?.changes).toEqual([
+            {key: 'translationCenterLayout', label: '翻译中心结果布局', before: '列表阅读', after: '并排对比'},
+        ]);
+    });
+    it('双向划词开关使用对用户可见的启停状态', () => {
+        const changes = group(buildConfigDiff(
+            {selectionTranslatorBidirectional: false},
+            {selectionTranslatorBidirectional: true},
+        ), 'translation')?.changes;
+        expect(changes).toEqual([{key: 'selectionTranslatorBidirectional', label: '中英双向划词', before: '开启', after: '关闭'}]);
+    });
+    it('悬浮球拖动后的高度在配置历史中以比例显示', () => {
+        expect(group(buildConfigDiff(
+            {floatingBallVerticalPosition: null},
+            {floatingBallVerticalPosition: 0.25},
+        ), 'translation')?.changes).toEqual([{
+            key: 'floatingBallVerticalPosition', label: '悬浮球高度', before: '居中', after: '25%',
+        }]);
+    });
+
+    it('字幕校时记录保留正负偏移和毫秒单位', () => {
+        const changes = group(buildConfigDiff({videoSubtitleOffsetMs: -500}, {videoSubtitleOffsetMs: 1000}), 'videoSubtitles')?.changes;
+        expect(changes).toEqual([{key: 'videoSubtitleOffsetMs', label: '字幕时间偏移', before: '-500ms', after: '1000ms'}]);
+    });
+
+    it('不翻译的语言以可读语言名预览，清空或非法旧值显示为无', () => {
+        const changes = group(buildConfigDiff({excludedLanguages: []}, {excludedLanguages: ['ja', 'zh-Hant']}), 'translation')?.changes;
+        expect(changes).toHaveLength(1);
+        expect(changes?.[0]).toMatchObject({key: 'excludedLanguages', label: '不翻译的语言', before: '无'});
+        expect(changes?.[0].after.split('、')).toHaveLength(2);
+        expect(changes?.[0].after).not.toMatch(/\bja\b|zh-Hant/u);
+        const legacy = group(buildConfigDiff({excludedLanguages: 'ja'}, {excludedLanguages: ['ja']}), 'translation')?.changes;
+        expect(legacy?.[0]).toMatchObject({key: 'excludedLanguages', before: '无'});
+        expect(legacy?.[0].after).toBe(changes?.[0].after.split('、')[0]);
+    });
+
+    it('常用服务的添加与删除记录为独立偏好，缺失旧值也能预览', () => {
+        const changes = group(buildConfigDiff({favoriteServices: []}, {favoriteServices: ['openai']}), 'translationServices')?.changes;
+        expect(changes).toEqual([{key: 'favoriteServices', label: '常用翻译服务', before: '无', after: 'OpenAI'}]);
+        expect(group(buildConfigDiff({}, {favoriteServices: ['openai']}), 'translationServices')?.changes[0].after).toBe('OpenAI');
+    });
+
+    it('术语库内容变化但规模相同时会标记内容已更新', () => {
+        const result = buildConfigDiff(
+            {glossaryLibraries: [{name: '产品词库', entries: [{source: 'API', target: '接口'}]}]},
+            {glossaryLibraries: [{name: '产品词库', entries: [{source: 'SDK', target: '开发包'}]}]},
+        );
+        expect(group(result, 'translation')?.changes).toEqual([{
+            key: 'glossaryLibraries',
+            label: '术语库内容',
+            before: '1 套词库，1 条术语',
+            after: '1 套词库，1 条术语（内容已更新）',
+        }]);
+    });
+
+    it('高级设置识别范围以开启关闭预览，撤销时方向可读', () => {
+        expect(group(buildConfigDiff({translationScope: 'content'}, {translationScope: 'all'}), 'advanced')?.changes).toEqual([
+            {key: 'translationScope', label: '识别全部节点', before: '关闭', after: '开启'},
+        ]);
+        expect(group(buildConfigDiff({translationScope: 'all'}, {translationScope: 'content'}), 'advanced')?.changes).toEqual([
+            {key: 'translationScope', label: '识别全部节点', before: '开启', after: '关闭'},
+        ]);
+    });
+
+    it('悬浮球进阶设置以用户可见文案预览，禁用名单归入网站规则', () => {
+        const result = buildConfigDiff({
+            floatingBallToolsDisplay: 'hover',
+            floatingBallHoverDelay: 0,
+            floatingBallClickAction: 'translate',
+            floatingBallCompact: false,
+            floatingBallSettingsEntryVisible: true,
+            floatingBallCollapsedOpacity: 52,
+        }, {
+            floatingBallToolsDisplay: 'always',
+            floatingBallHoverDelay: 500,
+            floatingBallClickAction: 'none',
+            floatingBallCompact: true,
+            floatingBallSettingsEntryVisible: false,
+            floatingBallCollapsedOpacity: 20,
+        });
+
+        expect(group(result, 'general')?.changes).toEqual([
+            {key: 'floatingBallToolsDisplay', label: '悬浮球按钮显示方式', before: '悬停时显示', after: '始终显示'},
+            {key: 'floatingBallHoverDelay', label: '悬浮球展开延迟', before: '0 ms', after: '500 ms'},
+            {key: 'floatingBallClickAction', label: '悬浮球点击行为', before: '翻译/显示原文', after: '仅拖动'},
+            {key: 'floatingBallCompact', label: '缩小悬浮球', before: '关闭', after: '开启'},
+            {key: 'floatingBallSettingsEntryVisible', label: '悬浮球设置入口', before: '开启', after: '关闭'},
+            {key: 'floatingBallCollapsedOpacity', label: '悬浮球收起不透明度', before: '52%', after: '20%'},
+        ]);
+
+        const domains = buildConfigDiff({floatingBallDisabledDomains: []}, {floatingBallDisabledDomains: ['example.com']});
+        expect(group(domains, 'siteRules')?.changes).toEqual([
+            {key: 'floatingBallDisabledDomains', label: '禁用悬浮球网站', before: '无', after: 'example.com'},
+        ]);
+    });
+
+    it('段落处理与侧边栏设置在高级分组预览为可读文案', () => {
+        const result = buildConfigDiff({
+            sidebarTranslationEnabled: false,
+            minTranslationTextLength: 2,
+            eagerTranslationCharacters: 4999,
+            longParagraphLineBreakEnabled: false,
+            translationBeforeOriginal: false,
+        }, {
+            sidebarTranslationEnabled: true,
+            minTranslationTextLength: 6,
+            eagerTranslationCharacters: 0,
+            longParagraphLineBreakEnabled: true,
+            translationBeforeOriginal: true,
+        });
+
+        expect(group(result, 'advanced')?.changes).toEqual([
+            {key: 'sidebarTranslationEnabled', label: '侧边栏翻译', before: '关闭', after: '开启'},
+            {key: 'minTranslationTextLength', label: '翻译段落最少字符数', before: '2 字符', after: '6 字符'},
+            {key: 'eagerTranslationCharacters', label: '免滚动预翻译字符数', before: '4999 字符', after: '0 字符'},
+            {key: 'longParagraphLineBreakEnabled', label: '长段落自动换行', before: '关闭', after: '开启'},
+            {key: 'translationBeforeOriginal', label: '译文在原文之前', before: '关闭', after: '开启'},
+        ]);
+    });
+
+    it('语言配置差异明确标出简体与繁体名称', () => {
+        const result = buildConfigDiff({from: 'zh-Hans', to: 'zh-Hans', inputBoxTranslationTarget: 'zh-Hans',
+            translationCenterSourceLanguage: 'zh-Hans', translationCenterTargetLanguage: 'zh-Hans'},
+        {from: 'zh-Hant', to: 'zh-Hant', inputBoxTranslationTarget: 'zh-Hant',
+            translationCenterSourceLanguage: 'zh-Hant', translationCenterTargetLanguage: 'zh-Hant'});
+        const languageChanges = result.groups.flatMap(item => item.changes);
+        expect(languageChanges).toHaveLength(5);
+        expect(languageChanges.every(item => item.before === '简体中文' && item.after === '繁體中文')).toBe(true);
+    });
+
+    it('用完整 API 套餐名称预览 DeepL Free 与 Pro 的切换', () => {
+        const result = buildConfigDiff({deeplApiPlan: 'free'}, {deeplApiPlan: 'pro'});
+
+        expect(group(result, 'translationServices')?.changes).toEqual([
+            {key: 'deeplApiPlan', label: 'DeepL API 套餐', before: 'API Free（免费）', after: 'API Pro（付费）'},
+        ]);
+    });
+
+    it('为新增目标语言选项提供跨语言可识别的标签，并保留未知值回退', () => {
+        expect(getMultilingualTargetLanguageLabel('de', 'Deutsch')).toBe('Deutsch / German / 德语');
+        expect(getMultilingualTargetLanguageLabel('pt', 'Português')).toBe('Português / Portuguese / 葡萄牙语');
+        expect(getMultilingualTargetLanguageLabel('it', 'Italiano')).toBe('Italiano / Italian / 意大利语');
+        expect(getMultilingualTargetLanguageLabel('ja', '日本語', 'en-US')).toBe('Japanese');
+        expect(getMultilingualTargetLanguageLabel('ja', '日本語', 'es-ES')).toBe('Japonés / Japanese / 日本語');
+        expect(getMultilingualTargetLanguageLabel('ja', '日本語', 'de-DE')).toBe('日本語 / Japanese / 日语');
+        expect(getMultilingualTargetLanguageLabel('unknown', '自定义语言')).toBe('自定义语言');
+    });
+
+    it('格式化界面语言选择，包括西班牙语', () => {
+        const result = buildConfigDiff({uiLanguage: 'zh-CN'}, {uiLanguage: 'es-ES'});
+
+        expect(group(result, 'general')?.changes).toEqual([
+            {key: 'uiLanguage', label: '界面语言', before: '中文', after: 'Español'},
+        ]);
+    });
+
+    it('用用户可见名称预览段落加载样式变化', () => {
+        const result = buildConfigDiff(
+            {translationLoadingStyle: 'minimal'},
+            {translationLoadingStyle: 'sparkle'},
+        );
+
+        expect(group(result, 'advanced')?.changes).toContainEqual({
+            key: 'translationLoadingStyle',
+            label: '段落加载样式',
+            before: '简洁',
+            after: '星光',
+        });
+    });
+
+    it('预览双语逐句高亮开关', () => {
+        const result = buildConfigDiff({bilingualSentenceHighlightEnabled: false}, {
+            bilingualSentenceHighlightEnabled: true,
+        });
+
+        expect(group(result, 'translation')?.changes).toEqual(expect.arrayContaining([expect.objectContaining({
+            key: 'bilingualSentenceHighlightEnabled',
+            label: '双语逐句高亮',
+            before: '关闭',
+            after: '开启',
+        })]));
+    });
+
+    it('逐句高亮外观作为阅读辅助设置参与差异预览', () => {
+        const result = buildConfigDiff({bilingualSentenceHighlightStyle: 'rose'}, {bilingualSentenceHighlightStyle: 'mint'});
+        expect(group(result, 'translation')?.changes).toContainEqual({key: 'bilingualSentenceHighlightStyle', label: '逐句高亮样式', before: '柔光粉', after: '薄荷清风'});
+    });
+
+    it('逐句高亮 CSS 和命名快照使用可读的配置差异', () => {
+        const profile = {id: 'night', name: '夜间阅读', style: 'slate', appearance: {customCss: 'color: navy;'}};
+        const added = buildConfigDiff({bilingualSentenceHighlightProfiles: [], activeSentenceHighlightProfileId: '', bilingualSentenceHighlightAppearance: {customCss: ''}}, {
+            bilingualSentenceHighlightProfiles: [profile], activeSentenceHighlightProfileId: 'night', bilingualSentenceHighlightAppearance: {customCss: 'color: navy;\ntext-decoration: underline;'},
+        });
+        expect(group(added, 'translation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'bilingualSentenceHighlightProfiles', label: '已保存的逐句高亮样式', before: '无', after: '夜间阅读'},
+            {key: 'activeSentenceHighlightProfileId', label: '当前逐句高亮配置', before: '未选择', after: '已选择保存的配置'},
+            {key: 'bilingualSentenceHighlightAppearance.customCss', label: 'CSS', before: '跟随预设', after: 'color: navy; text-decoration: underline;'},
+        ]));
+        const updated = buildConfigDiff({bilingualSentenceHighlightProfiles: [profile], activeSentenceHighlightProfileId: 'night'}, {
+            bilingualSentenceHighlightProfiles: [{...profile, appearance: {customCss: 'color: red;'}}], activeSentenceHighlightProfileId: 'another',
+        });
+        expect(group(updated, 'translation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'bilingualSentenceHighlightProfiles', label: '已保存的逐句高亮样式', before: '夜间阅读', after: '夜间阅读（内容已更新）'},
+            {key: 'activeSentenceHighlightProfileId', label: '当前逐句高亮配置', before: '已选择保存的配置', after: '已选择保存的配置（内容已更新）'},
+        ]));
+    });
+
+    it('逐项预览译文外观微调，默认颜色与百分比使用可读文案', () => {
+        const defaults = {textColor: '', backgroundColor: '', lineColor: '', fillColor: '', fontScale: 100, fontWeight: 'default', fontFamily: 'default', opacity: 100, customCss: ''};
+        const result = buildConfigDiff({style: 1, translationAppearance: defaults}, {
+            style: 24,
+            translationAppearance: {...defaults, lineColor: '#ef4776', fontScale: 115, fontWeight: 'semibold', fontFamily: 'serif', opacity: 80},
+        });
+
+        expect(group(result, 'general')?.changes).toEqual(expect.arrayContaining([
+            {key: 'style', label: '译文样式', before: '加粗显示', after: '双下划线'},
+            {key: 'translationAppearance.lineColor', label: '线条颜色', before: '默认', after: '#ef4776'},
+            {key: 'translationAppearance.fontScale', label: '译文字号', before: '100%', after: '115%'},
+            {key: 'translationAppearance.fontWeight', label: '译文字重', before: '默认', after: '中粗'},
+            {key: 'translationAppearance.fontFamily', label: '译文字体', before: '默认', after: '衬线'},
+            {key: 'translationAppearance.opacity', label: '译文不透明度', before: '100%', after: '80%'},
+        ]));
+        const reverted = buildConfigDiff({translationAppearance: {fontWeight: 'bold', fontFamily: 'mono', textColor: '#1d4ed8'}}, {
+            translationAppearance: {fontWeight: 'normal', fontFamily: 'sans', textColor: '', unknownField: true},
+        });
+        expect(group(reverted, 'general')?.changes).toEqual(expect.arrayContaining([
+            {key: 'translationAppearance.fontWeight', label: '译文字重', before: '加粗', after: '常规'},
+            {key: 'translationAppearance.fontFamily', label: '译文字体', before: '等宽', after: '无衬线'},
+            {key: 'translationAppearance.textColor', label: '译文颜色', before: '#1d4ed8', after: '默认'},
+            {key: 'translationAppearance.unknownField', label: 'unknownField', before: '未设置', after: '开启'},
+        ]));
+    });
+
+    it('显示圈选的独立翻译方式和服务变更', () => {
+        const result = buildConfigDiff({areaTranslationMode: 'standard', areaTranslationService: ''}, {
+            areaTranslationMode: 'ai', areaTranslationService: 'microsoft',
+        });
+        expect(group(result, 'areaTranslation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'areaTranslationMode', label: '圈选翻译方式', before: '标准翻译', after: 'AI 上下文增强'},
+            {key: 'areaTranslationService', label: '圈选翻译服务', before: '跟随当前服务', after: '微软翻译'},
+        ]));
+    });
+
+    it('显示圈选快捷键的预设切换与自定义录制', () => {
+        const preset = buildConfigDiff({selectionAreaHotkey: 'Shift+Z'}, {selectionAreaHotkey: 'Alt+X'});
+        expect(group(preset, 'areaTranslation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'selectionAreaHotkey', label: '圈选快捷键', before: 'Shift+Z', after: 'Alt+X'},
+        ]));
+        const custom = buildConfigDiff({selectionAreaHotkey: 'Shift+Z', customSelectionAreaHotkey: ''}, {
+            selectionAreaHotkey: 'custom', customSelectionAreaHotkey: 'Alt+K',
+        });
+        expect(group(custom, 'areaTranslation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'selectionAreaHotkey', label: '圈选快捷键', before: 'Shift+Z', after: '自定义快捷键'},
+            {key: 'customSelectionAreaHotkey', label: '自定义圈选快捷键', before: '未设置', after: 'Alt+K'},
+        ]));
+    });
+
+    it('显示段落复制的开关、快捷键与复制内容口径', () => {
+        const changed = buildConfigDiff(
+            {paragraphCopyEnabled: true, paragraphCopyHotkey: 'Alt+C', paragraphCopyContent: 'auto'},
+            {paragraphCopyEnabled: false, paragraphCopyHotkey: 'Shift+D', paragraphCopyContent: 'bilingual'},
+        );
+        expect(group(changed, 'translation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'paragraphCopyEnabled', label: '段落复制', before: '开启', after: '关闭'},
+            {key: 'paragraphCopyHotkey', label: '段落复制快捷键', before: 'Alt+C', after: 'Shift+D'},
+            {key: 'paragraphCopyContent', label: '段落复制内容', before: '跟随页面显示', after: '原文和译文'},
+        ]));
+        const custom = buildConfigDiff({paragraphCopyHotkey: 'Alt+C', customParagraphCopyHotkey: ''}, {
+            paragraphCopyHotkey: 'custom', customParagraphCopyHotkey: 'Alt+J',
+        });
+        expect(group(custom, 'translation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'paragraphCopyHotkey', label: '段落复制快捷键', before: 'Alt+C', after: '自定义快捷键'},
+            {key: 'customParagraphCopyHotkey', label: '自定义段落复制快捷键', before: '未设置', after: 'Alt+J'},
+        ]));
+    });
+
+    it('显示局部翻译快捷键的开关与组合', () => {
+        const changed = buildConfigDiff(
+            {sectionTranslationHotkeyEnabled: false, sectionTranslationHotkey: 'Alt+R', customSectionTranslationHotkey: ''},
+            {sectionTranslationHotkeyEnabled: true, sectionTranslationHotkey: 'custom', customSectionTranslationHotkey: 'Alt+J'},
+        );
+        expect(group(changed, 'translation')?.changes).toEqual(expect.arrayContaining([
+            {key: 'sectionTranslationHotkeyEnabled', label: '局部翻译快捷键', before: '关闭', after: '开启'},
+            {key: 'sectionTranslationHotkey', label: '局部翻译快捷键组合', before: 'Alt+R', after: '自定义快捷键'},
+            {key: 'customSectionTranslationHotkey', label: '自定义局部翻译快捷键', before: '未设置', after: 'Alt+J'},
+        ]));
+    });
+
+    it('显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值', () => {
+        const result = buildConfigDiff({
+            interfaceSkin: 'default',
+            interfaceVisibility: {
+                popupQuickFeatures: true,
+                popupSiteRule: true,
+                popupFooter: true,
+            },
+            popupModuleOrder: ['translation', 'siteRule', 'quickFeatures', 'footer'],
+            popupQuickFeatureVisibility: {
+                hover: true,
+                selection: true,
+                appearance: true,
+                image: true,
+                video: true,
+                document: true,
+            },
+            popupQuickFeatureOrder: ['hover', 'selection', 'appearance', 'image', 'video', 'document'],
+        }, {
+            interfaceSkin: 'minimal',
+            interfaceVisibility: {
+                popupQuickFeatures: false,
+                popupSiteRule: true,
+                popupFooter: false,
+            },
+            popupModuleOrder: ['quickFeatures', 'translation', 'siteRule', 'footer'],
+            popupQuickFeatureVisibility: {
+                hover: true,
+                selection: true,
+                appearance: true,
+                image: false,
+                video: true,
+                document: true,
+            },
+            popupQuickFeatureOrder: ['document', 'hover', 'selection', 'appearance', 'image', 'video'],
+        });
+
+        expect(group(result, 'general')?.changes).toEqual(expect.arrayContaining([
+            {key: 'interfaceSkin', label: '界面皮肤', before: '默认风格', after: '简约风格'},
+            {
+                key: 'interfaceVisibility',
+                label: '界面栏目',
+                before: '快捷功能栏开启、当前网站栏目开启、底部信息栏开启',
+                after: '快捷功能栏关闭、当前网站栏目开启、底部信息栏关闭',
+            },
+            {
+                key: 'popupModuleOrder',
+                label: '菜单栏布局顺序',
+                before: '翻译控制 → 当前网站栏目 → 快捷功能栏 → 底部信息栏',
+                after: '快捷功能栏 → 翻译控制 → 当前网站栏目 → 底部信息栏',
+            },
+            {
+                key: 'popupQuickFeatureVisibility',
+                label: '快捷功能卡片',
+                before: '鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、文档翻译：显示',
+                after: '鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、文档翻译：显示',
+            },
+            {
+                key: 'popupQuickFeatureOrder',
+                label: '快捷功能顺序',
+                before: '鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video → 文档翻译',
+                after: '文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video',
+            },
+        ]));
+
+        const fontResult = buildConfigDiff(
+            {interfaceFont: 'inter'},
+            {interfaceFont: 'noto-sans-sc'},
+        );
+        expect(group(fontResult, 'general')?.changes).toContainEqual({
+            key: 'interfaceFont',
+            label: '界面字体',
+            before: 'Inter · 推荐',
+            after: 'Noto Sans SC · 中文',
+        });
+
+        const paletteResult = buildConfigDiff(
+            {interfaceSkin: 'yuebai'},
+            {interfaceSkin: 'xiangse'},
+        );
+        expect(group(paletteResult, 'general')?.changes).toContainEqual({
+            key: 'interfaceSkin',
+            label: '界面皮肤',
+            before: '月白',
+            after: '缃色',
+        });
+
+        const malformed = buildConfigDiff(
+            {interfaceVisibility: true},
+            {interfaceVisibility: false},
+        );
+        expect(group(malformed, 'general')?.changes[0]).toMatchObject({
+            key: 'interfaceVisibility',
+            before: '开启',
+            after: '关闭',
+        });
+
+        const malformedOrder = buildConfigDiff(
+            {popupModuleOrder: false},
+            {popupModuleOrder: []},
+        );
+        expect(group(malformedOrder, 'general')?.changes[0]).toMatchObject({
+            key: 'popupModuleOrder',
+            before: '关闭',
+            after: '无',
+        });
+
+        const futureOrder = buildConfigDiff(
+            {popupModuleOrder: [42, 'futureModule']},
+            {popupModuleOrder: ['translation']},
+        );
+        expect(group(futureOrder, 'general')?.changes[0]).toMatchObject({
+            key: 'popupModuleOrder',
+            before: '42 → futureModule',
+            after: '翻译控制',
+        });
+
+        const malformedQuickFeatureVisibility = buildConfigDiff(
+            {popupQuickFeatureVisibility: true},
+            {popupQuickFeatureVisibility: false},
+        );
+        expect(group(malformedQuickFeatureVisibility, 'general')?.changes[0]).toMatchObject({
+            key: 'popupQuickFeatureVisibility',
+            before: '开启',
+            after: '关闭',
+        });
+
+        const malformedQuickFeatureOrder = buildConfigDiff(
+            {popupQuickFeatureOrder: false},
+            {popupQuickFeatureOrder: []},
+        );
+        expect(group(malformedQuickFeatureOrder, 'general')?.changes[0]).toMatchObject({
+            key: 'popupQuickFeatureOrder',
+            before: '关闭',
+            after: '无',
+        });
+
+        const futureQuickFeatureOrder = buildConfigDiff(
+            {popupQuickFeatureOrder: [42, 'futureFeature']},
+            {popupQuickFeatureOrder: ['hover']},
+        );
+        expect(group(futureQuickFeatureOrder, 'general')?.changes[0]).toMatchObject({
+            key: 'popupQuickFeatureOrder',
+            before: '42 → futureFeature',
+            after: '鼠标悬停翻译',
+        });
+    });
+
+    it('缓存上限在配置历史中显示中文标签与单位', () => {
+        const result = buildConfigDiff(
+            {translationCacheMaxBytes: 5242880, translationCacheMaxEntries: 2000},
+            {translationCacheMaxBytes: 1048576, translationCacheMaxEntries: 100},
+        );
+        expect(result.groups).toEqual([{
+            id: 'advanced', label: '高级', changes: [
+                {key: 'translationCacheMaxBytes', label: '翻译缓存容量上限', before: '5242880 B', after: '1048576 B'},
+                {key: 'translationCacheMaxEntries', label: '翻译缓存条数上限', before: '2000 条', after: '100 条'},
+            ],
+        }]);
+    });
+
     it('按设置页稳定分组并把常用枚举、开关、数组和数字格式化为可读文本', () => {
         const result = buildConfigDiff({
             on: true,
@@ -36,7 +519,7 @@ describe('配置差异预览', () => {
             'general',
             'translation',
             'siteRules',
-            'imageAndArea',
+            'imageTranslation',
             'videoSubtitles',
             'advanced',
             'tools',
@@ -56,7 +539,7 @@ describe('配置差异预览', () => {
         expect(group(result, 'siteRules')?.changes[0]).toMatchObject({
             before: 'example.com', after: 'example.com、openai.com',
         });
-        expect(group(result, 'imageAndArea')?.changes[0]).toMatchObject({before: '关闭', after: '开启'});
+        expect(group(result, 'imageTranslation')?.changes[0]).toMatchObject({before: '关闭', after: '开启'});
         expect(group(result, 'videoSubtitles')?.changes[0]).toMatchObject({before: '100%', after: '140%'});
         expect(group(result, 'advanced')?.changes[0]).toMatchObject({before: '开启', after: '关闭'});
         expect(group(result, 'tools')?.changes[0]).toMatchObject({
@@ -65,6 +548,117 @@ describe('配置差异预览', () => {
         expect(group(result, 'other')?.changes[0]).toMatchObject({
             key: 'futureSetting', label: 'future setting', before: '关闭', after: 'mode：compact；enabled：开启',
         });
+    });
+
+    it('把多个快捷翻译方案展示为可辨认的动作、热键和服务摘要', () => {
+        const result = buildConfigDiff({quickTranslationProfiles: []}, {
+            quickTranslationProfiles: [
+                {
+                    id: 'hover', enabled: true, action: 'hover', hotkey: 'Ctrl+T',
+                    service: 'openai', model: 'gpt-5.6-luna', targetLanguage: 'ja',
+                    displayMode: 'bilingual', fullPageMode: 'inherit',
+                },
+                {
+                    id: 'page', enabled: false, action: 'full-page', hotkey: 'Ctrl+Y',
+                    service: '', model: '', targetLanguage: '',
+                    displayMode: 'translation-only', fullPageMode: 'all',
+                },
+            ],
+        });
+
+        expect(result.changeCount).toBe(1);
+        const change = group(result, 'translation')?.changes[0];
+        expect(change).toMatchObject({
+            key: 'quickTranslationProfiles',
+            label: '快捷翻译方案',
+            before: '无',
+        });
+        expect(change?.after).toContain('悬停 Ctrl+T：OpenAI · gpt-5.6-luna，日本語，双语');
+        expect(change?.after).toContain('全文 Ctrl+Y（已停用）：默认服务，默认语言，仅译文');
+    });
+
+    it('全文方案只改变翻译范围时，diff 仍能直接说明改了什么', () => {
+        const profile = {
+            id: 'page', enabled: true, action: 'full-page', hotkey: 'Ctrl+Y',
+            service: '', model: '', targetLanguage: '', displayMode: 'inherit',
+        };
+        const result = buildConfigDiff(
+            {quickTranslationProfiles: [{...profile, fullPageMode: 'viewport'}]},
+            {quickTranslationProfiles: [{...profile, fullPageMode: 'all'}]},
+        );
+        const change = group(result, 'translation')?.changes[0];
+
+        expect(change?.before).toContain('按阅读进度');
+        expect(change?.after).toContain('立即翻译到网页底部');
+        expect(change?.before).not.toBe(change?.after);
+    });
+
+    it('第 5 至 8 个快捷方案的变化也会出现在历史差异中', () => {
+        const profiles = Array.from({length: 8}, (_, index) => ({
+            id: `quick-${index + 1}`, enabled: true, action: 'hover',
+            hotkey: `Ctrl+${String.fromCharCode(65 + index)}`, service: 'openai',
+            model: `model-${index + 1}`, targetLanguage: '', displayMode: 'inherit',
+            fullPageMode: 'inherit',
+        }));
+        const result = buildConfigDiff(
+            {quickTranslationProfiles: profiles},
+            {quickTranslationProfiles: profiles.map((profile, index) => index === 7
+                ? {...profile, model: 'changed-eighth-model'} : profile)},
+        );
+        const change = group(result, 'translation')?.changes[0];
+
+        expect(change?.before).toContain('model-8');
+        expect(change?.after).toContain('changed-eighth-model');
+        expect(change?.before).not.toBe(change?.after);
+    });
+
+    it('畸形或未完成的快捷方案差异仍可读且不遗漏默认范围', () => {
+        const result = buildConfigDiff({quickTranslationProfiles: []}, {
+            quickTranslationProfiles: [null, {
+                action: 'full-page', hotkey: '', service: '', model: '', targetLanguage: '',
+                displayMode: 'inherit', fullPageMode: 'inherit',
+            }],
+        });
+        const after = group(result, 'translation')?.changes[0]?.after || '';
+
+        expect(after).toContain('未设置');
+        expect(after).toContain('默认范围');
+    });
+
+    it('把任务调度的不限速和退避参数格式化为可读差异', () => {
+        const result = buildConfigDiff({
+            translationRequestsPerSecond: 0,
+            translationRequestsPerMinute: 2,
+            translationMaxRetries: 0,
+            translationBackoffBaseMs: 1000,
+            translationBackoffMaxMs: 30000,
+            apiKeyRecoveryMs: 60_000,
+        }, {
+            translationRequestsPerSecond: 4,
+            translationRequestsPerMinute: 0,
+            translationMaxRetries: 3,
+            translationBackoffBaseMs: 2000,
+            translationBackoffMaxMs: 60000,
+            apiKeyRecoveryMs: 300_000,
+        });
+
+        expect(group(result, 'advanced')?.changes).toEqual(expect.arrayContaining([
+            {key: 'translationRequestsPerSecond', label: '每秒最多请求数', before: '不限速', after: '4 次'},
+            {key: 'translationRequestsPerMinute', label: '每分钟最多请求数', before: '2 次', after: '不限速'},
+            {key: 'translationMaxRetries', label: '失败后最多重试', before: '0 次', after: '3 次'},
+            {key: 'translationBackoffBaseMs', label: '退避初始间隔', before: '1000 ms', after: '2000 ms'},
+            {key: 'translationBackoffMaxMs', label: '退避最大间隔', before: '30000 ms', after: '60000 ms'},
+            {key: 'apiKeyRecoveryMs', label: '失败 Key 冷却时间', before: '1 分钟', after: '5 分钟'},
+        ]));
+
+        // 历史配置可能把冷却时间存成字符串；格式化不能把非数值当毫秒换算。
+        const legacy = buildConfigDiff(
+            {apiKeyRecoveryMs: '60000' as unknown as number},
+            {apiKeyRecoveryMs: '300000' as unknown as number},
+        );
+        expect(group(legacy, 'advanced')?.changes).toEqual(expect.arrayContaining([
+            {key: 'apiKeyRecoveryMs', label: '失败 Key 冷却时间', before: '60000', after: '300000'},
+        ]));
     });
 
     it('展开服务对象映射，只报告真正变化的服务项且忽略对象键顺序', () => {
@@ -89,6 +683,118 @@ describe('配置差异预览', () => {
 
         expect(buildConfigDiff({model: 'legacy'}, {model: {openai: 'gpt-5'}}).changeCount).toBe(1);
         expect(buildConfigDiff({model: {openai: 'gpt-5'}}, {model: 'legacy'}).changeCount).toBe(1);
+    });
+
+    it('把无碰撞 API Key 校验键显示为可读的服务和模型标签', () => {
+        const key = createApiKeyRequirementKey('custom:1', 'vendor:model/latest');
+        const result = buildConfigDiff(
+            {requireApiKey: {[key]: true}},
+            {requireApiKey: {[key]: false}},
+        );
+
+        expect(group(result, 'translationServices')?.changes[0]).toEqual({
+            key: `requireApiKey.${key}`,
+            label: '自定义服务 1 · vendor:model/latest API Key 校验',
+            before: '开启',
+            after: '关闭',
+        });
+        expect(group(result, 'translationServices')?.changes[0]?.label).not.toContain('v2:[');
+
+        const defaultModelKey = createApiKeyRequirementKey('openai', '');
+        const defaultModelResult = buildConfigDiff(
+            {requireApiKey: {[defaultModelKey]: true}},
+            {requireApiKey: {[defaultModelKey]: false}},
+        );
+        expect(group(defaultModelResult, 'translationServices')?.changes[0]?.label)
+            .toBe('OpenAI · 默认模型 API Key 校验');
+    });
+
+    it('逐服务显示已保存自定义模型列表，而不是暴露原始对象', () => {
+        const result = buildConfigDiff(
+            {customModels: {grok: ['private-a']}},
+            {customModels: {grok: ['private-a', 'private-b']}},
+        );
+
+        expect(group(result, 'translationServices')?.changes[0]).toEqual({
+            key: 'customModels.grok',
+            label: 'Grok (X.AI)自定义模型列表',
+            before: 'private-a',
+            after: 'private-a、private-b',
+        });
+    });
+
+    it('按服务显示模型 Thinking 变化并保留具体模型', () => {
+        const result = buildConfigDiff(
+            {modelThinking: {openai: {'gpt-5.6-luna': false}}},
+            {modelThinking: {openai: {'gpt-5.6-luna': true}}},
+        );
+
+        expect(group(result, 'translationServices')?.changes[0]).toEqual({
+            key: 'modelThinking.openai',
+            label: 'OpenAI模型 Thinking',
+            before: 'gpt-5.6-luna：关闭',
+            after: 'gpt-5.6-luna：开启',
+        });
+    });
+
+    it('让自定义服务端点和模型变化在导入预览中可辨认且不泄露地址凭据', () => {
+        const result = buildConfigDiff({
+            service: 'custom:team',
+            customOpenAIProviders: [{
+                id: 'custom:team',
+                name: '团队网关',
+                endpoint: 'https://old.example/v1',
+                models: ['model-a'],
+            }],
+        }, {
+            service: 'custom:next',
+            customOpenAIProviders: [
+                {
+                    id: 'custom:team',
+                    name: '团队网关',
+                    endpoint: 'https://user:password@new.example/v1?token=secret',
+                    models: ['model-b', 'model-c'],
+                },
+                'legacy-invalid-item',
+            ],
+        });
+
+        expect(group(result, 'general')?.changes[0]).toMatchObject({
+            before: '自定义服务 team',
+            after: '自定义服务 next',
+        });
+        const profiles = group(result, 'translationServices')?.changes[0];
+        expect(profiles?.before).toContain('https://old.example/v1');
+        expect(profiles?.before).toContain('model-a');
+        expect(profiles?.after).toContain('敏感内容已隐藏');
+        expect(profiles?.after).toContain('model-b、model-c');
+        expect(profiles?.after).toContain('legacy-invalid-item');
+        expect(JSON.stringify(result)).not.toContain('password@new.example');
+        expect(JSON.stringify(result)).not.toContain('token=secret');
+    });
+
+    it('兼容 legacy、空列表和畸形自定义 profile 的可读预览', () => {
+        const result = buildConfigDiff({
+            service: 'custom',
+            customOpenAIProviders: [],
+        }, {
+            service: 42,
+            customOpenAIProviders: [{
+                id: 'custom:unnamed',
+                name: '',
+                endpoint: '',
+                models: 'legacy-model-shape',
+            }],
+        });
+
+        expect(group(result, 'general')?.changes[0]).toMatchObject({
+            before: '自定义接口',
+            after: '42',
+        });
+        expect(group(result, 'translationServices')?.changes[0]).toMatchObject({
+            before: '无',
+            after: '未命名服务（接口：未设置；模型：无）',
+        });
     });
 
     it('完全剔除凭据字段、疑似凭据字段和非用户配置元数据', () => {
@@ -343,6 +1049,7 @@ describe('配置差异预览', () => {
             customSelectionTranslatorHotkey: 'Meta+S',
             selectionTranslatorDelay: 450,
             selectionTtsVoices: ['a', 'b', 'c', 'd', 'e'],
+            selectionTtsMode: 'local-first',
             inputBoxTranslationTrigger: 'triple_space',
             inputBoxTranslationTarget: 'de',
             autoTranslate: true,
@@ -387,6 +1094,7 @@ describe('配置差异预览', () => {
         expect(group(result, 'translation')?.changes).toEqual(expect.arrayContaining([
             expect.objectContaining({key: 'mouseHoverTranslationDelay', after: 'fast'}),
             expect.objectContaining({key: 'selectionTtsVoices', after: '5 项：a、b、c、d 等'}),
+            expect.objectContaining({key: 'selectionTtsMode', after: '本地优先'}),
         ]));
         expect(group(result, 'other')?.changes).toEqual(expect.arrayContaining([
             expect.objectContaining({key: 'manyValues', after: expect.stringContaining('5 项：')}),
@@ -394,5 +1102,79 @@ describe('配置差异预览', () => {
             expect.objectContaining({key: 'invalidNumber', after: '未设置'}),
             expect.objectContaining({key: '---', label: '---', after: expect.stringContaining('循环引用')}),
         ]));
+    });
+
+    it('双语输出顺序在配置历史中显示用户可读名称', () => {
+        expect(group(buildConfigDiff({inputBoxTranslationOutputMode: 'append'}, {inputBoxTranslationOutputMode: 'prepend'}), 'translation')?.changes).toEqual([
+            {key: 'inputBoxTranslationOutputMode', label: '输入框翻译输出方式', before: '原文在前，译文在后', after: '译文在前，原文在后'},
+        ]);
+        expect(group(buildConfigDiff({inputBoxTranslationOutputMode: 'replace'}, {inputBoxTranslationOutputMode: 'append'}), 'translation')?.changes[0].before).toBe('替换原文');
+    });
+
+    it('输入框翻译独立配置在历史差异中显示间隔、服务、模型和提示词摘要', () => {
+        const result = buildConfigDiff({
+            inputBoxTranslationInterval: 1000,
+            inputBoxTranslationService: 'microsoft',
+            inputBoxTranslationModel: '',
+            inputBoxTranslationPrompt: '',
+            inputBoxTranslationSystemPrompt: '',
+        }, {
+            inputBoxTranslationInterval: 1500,
+            inputBoxTranslationService: 'deepseek',
+            inputBoxTranslationModel: 'deepseek-chat',
+            inputBoxTranslationPrompt: 'Translate {{origin}} into {{to}}.',
+            inputBoxTranslationSystemPrompt: 'Return only the translation.',
+        });
+
+        expect(group(result, 'translation')?.changes).toEqual([
+            {key: 'inputBoxTranslationInterval', label: '输入框翻译触发间隔', before: '1000 ms', after: '1500 ms'},
+            {key: 'inputBoxTranslationService', label: '输入框翻译服务', before: '微软翻译', after: 'DeepSeek'},
+            {key: 'inputBoxTranslationModel', label: '输入框翻译模型', before: '未设置', after: 'deepseek-chat'},
+            {key: 'inputBoxTranslationPrompt', label: '输入框翻译提示词', before: '未设置', after: '已配置（33 字符）'},
+            {key: 'inputBoxTranslationSystemPrompt', label: '输入框翻译系统提示词', before: '未设置', after: '已配置（28 字符）'},
+        ]);
+        // 旧版历史记录没有专用模型字段，升级后的第一次编辑也必须可预览。
+        expect(group(buildConfigDiff({}, {inputBoxTranslationModel: 'input-model'}), 'translation')?.changes).toEqual([
+            {key: 'inputBoxTranslationModel', label: '输入框翻译模型', before: '未设置', after: 'input-model'},
+        ]);
+    });
+});
+
+
+it('previews area recognition choices, user prompt edits, and per-model capability overrides', () => {
+    const result = buildConfigDiff(
+        {areaRecognitionMode:'ocr',areaVisionPrompt:'original',modelVision:{}},
+        {areaRecognitionMode:'prefer-vision',areaVisionPrompt:'keep line breaks',modelVision:{openai:{'private-model':true}}},
+    );
+    expect(group(result,'areaTranslation')?.changes).toEqual(expect.arrayContaining([
+        expect.objectContaining({key:'areaRecognitionMode',before:'本地 OCR',after:'优先模型识图'}),
+        expect.objectContaining({key:'areaVisionPrompt',before:'已配置（8 字符）',after:'已配置（16 字符）'}),
+    ]));
+    expect(group(result,'translationServices')?.changes[0]).toMatchObject({key:'modelVision',after:expect.stringContaining('private-model')});
+    expect(group(buildConfigDiff({areaRecognitionMode:'prefer-vision'}, {areaRecognitionMode:'ocr'}),'areaTranslation')?.changes[0].after).toBe('本地 OCR');
+});
+
+it('previews per-service API key rotation switches', () => {
+    expect(group(buildConfigDiff({apiKeyRotationEnabled: {}}, {apiKeyRotationEnabled: {openai: true}}), 'translationServices')?.changes)
+        .toEqual([{key: 'apiKeyRotationEnabled', label: '自动轮换', before: '无', after: 'OpenAI：开启'}]);
+});
+
+
+describe('逐句高亮自定义外观差异', () => {
+    it('按字段展示颜色、透明度、线型与粗细，并识别回到预设', () => {
+        const before = {bilingualSentenceHighlightAppearance: {backgroundColor: '', backgroundOpacity: null, lineStyle: 'default', lineThickness: null}};
+        const after = {bilingualSentenceHighlightAppearance: {backgroundColor: '#123456', backgroundOpacity: 34, lineStyle: 'dashed', lineThickness: 3}};
+        expect(group(buildConfigDiff(before, after), 'translation')?.changes).toEqual([
+            {key: 'bilingualSentenceHighlightAppearance.backgroundColor', label: '高亮底色', before: '跟随预设', after: '#123456'},
+            {key: 'bilingualSentenceHighlightAppearance.backgroundOpacity', label: '底色不透明度', before: '跟随预设', after: '34%'},
+            {key: 'bilingualSentenceHighlightAppearance.lineStyle', label: '下划线形态', before: '跟随预设', after: '虚线'},
+            {key: 'bilingualSentenceHighlightAppearance.lineThickness', label: '线条粗细', before: '跟随预设', after: '3px'},
+        ]);
+        expect(group(buildConfigDiff(after, before), 'translation')?.changes.every(item => item.after === '跟随预设')).toBe(true);
+        expect(group(buildConfigDiff({}, {bilingualSentenceHighlightAppearance: {lineColor: '#abcdef', lineOpacity: 0, unknown: true}}), 'translation')?.changes).toEqual([
+            {key: 'bilingualSentenceHighlightAppearance.lineColor', label: '下划线颜色', before: '跟随预设', after: '#abcdef'},
+            {key: 'bilingualSentenceHighlightAppearance.lineOpacity', label: '下划线不透明度', before: '跟随预设', after: '0%'},
+            {key: 'bilingualSentenceHighlightAppearance.unknown', label: 'unknown', before: '跟随预设', after: '开启'},
+        ]);
     });
 });

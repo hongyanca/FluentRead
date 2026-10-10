@@ -11,12 +11,13 @@ import {method, tongyiTokenPlanUrl, urls} from "@/src/core/config/constants";
 import {tongyiMsgTemplate} from '@/src/services/translation/templates';
 import {config} from "@/src/services/config/store";
 import {appendOptionalBearer} from './auth';
-import {createHttpStatusError, readJsonResponse} from '@/src/platform/http/errors';
-import {runtimeFetch} from '@/src/platform/http/runtime';
+import {createHttpStatusError, createImageInputHttpError, readJsonResponse} from '@/src/platform/http/errors';
+import {abortErrorFromSignal, runtimeFetch} from '@/src/platform/http/runtime';
 import {
     getTranslationProviderConfig,
     reportTranslationModelUsage,
     reportTranslationModelUsageFailure,
+    getTranslationImageInput,
     type TranslationProviderRequest,
 } from '@/src/services/translation/requestSnapshot';
 import {normalizeOpenAICompatibleUsage} from './usage';
@@ -25,6 +26,7 @@ import {normalizeOpenAICompatibleUsage} from './usage';
 async function tongyi(message: TranslationProviderRequest<string>) {
     const current = getTranslationProviderConfig(message, config);
     const service = message.serviceOverride || services.tongyi;
+    if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
     // 构建请求头
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -33,12 +35,12 @@ async function tongyi(message: TranslationProviderRequest<string>) {
     // 判断是否使用代理
     const selectedModel = message.modelOverride || current.model[service];
     const configuredModel = resolveConfiguredModel(selectedModel, current.customModel[service]);
-    const officialUrl = selectedModel === currentModelIds.tongyiTokenPlan
+    const officialUrl = configuredModel === currentModelIds.tongyiTokenPlan
         ? tongyiTokenPlanUrl
         : urls[services.tongyi];
     const url: string = current.proxy[service] || officialUrl;
 
-    const body = tongyiMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current);
+    const body = tongyiMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current, message.thinkingOverride, message.sourceLanguage, getTranslationImageInput(message));
     const startedAt = Date.now();
     let attemptReported = false;
     try {
@@ -51,13 +53,17 @@ async function tongyi(message: TranslationProviderRequest<string>) {
         if (!resp.ok) {
             reportTranslationModelUsageFailure(message, undefined, startedAt, configuredModel, resp.status);
             attemptReported = true;
-            throw createHttpStatusError(resp, '翻译失败');
+            throw getTranslationImageInput(message) ? await createImageInputHttpError(resp, '翻译失败') : createHttpStatusError(resp, '翻译失败');
         }
         const result = await readJsonResponse<any>(resp, '通义千问返回的不是有效 JSON');
+        if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
         const actualModel = typeof result?.model === 'string' && result.model.trim()
             ? result.model
             : configuredModel;
-        const translatedText = result.choices[0].message.content;
+        const translatedText = result?.choices?.[0]?.message?.content;
+        if (typeof translatedText !== 'string' || !translatedText.trim()) {
+            throw new Error('通义千问返回数据格式异常：缺少文本内容');
+        }
         reportTranslationModelUsage(message, {
             ...normalizeOpenAICompatibleUsage(result?.usage, actualModel),
             startedAt,

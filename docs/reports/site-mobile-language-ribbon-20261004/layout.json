@@ -1,0 +1,903 @@
+[
+  {
+    "label": "before-zh-390",
+    "actions": {
+      "height": 48.5,
+      "width": 350,
+      "x": 20,
+      "y": 460.984375
+    },
+    "featureTop": 573.484375,
+    "heading": {
+      "height": 90.390625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 505.484375,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 350,
+      "x": 20,
+      "y": 346.390625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 390
+  },
+  {
+    "label": "before-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "after-zh-390",
+    "actions": {
+      "height": 48.5,
+      "width": 350,
+      "x": 20,
+      "y": 460.984375
+    },
+    "featureTop": 573.484375,
+    "heading": {
+      "height": 90.390625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 505.484375,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 84.59375,
+      "width": 350,
+      "x": 20,
+      "y": 346.390625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 390
+  },
+  {
+    "label": "ribbon-zh-320",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "1",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 280,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "ribbon-zh-430",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "1",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 360,
+      "x": 35,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "ribbon-zh-640",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "1",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 360,
+      "x": 140,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "ribbon-zh-760",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "1",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 360,
+      "x": 200,
+      "y": 98
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "after-zh-1280",
+    "actions": {
+      "height": 56,
+      "width": 780,
+      "x": 250,
+      "y": 437.3515625
+    },
+    "featureTop": 650,
+    "heading": {
+      "height": 156.15625,
+      "width": 780,
+      "x": 250,
+      "y": 162
+    },
+    "hero": {
+      "height": 570,
+      "width": 1280,
+      "x": 0,
+      "y": 80
+    },
+    "icon": {
+      "display": "none",
+      "height": 0,
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "intro": {
+      "height": 61.1953125,
+      "width": 780,
+      "x": 250,
+      "y": 346.15625
+    },
+    "overflow": 0,
+    "title": "让语言更近，让世界更大。",
+    "width": 1280
+  },
+  {
+    "label": "animation-start",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "1",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "0",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 350,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "after-en-390",
+    "actions": {
+      "height": 106.5,
+      "width": 350,
+      "x": 20,
+      "y": 512.03125
+    },
+    "featureTop": 682.53125,
+    "heading": {
+      "height": 85.640625,
+      "width": 350,
+      "x": 20,
+      "y": 228
+    },
+    "hero": {
+      "height": 614.53125,
+      "width": 390,
+      "x": 0,
+      "y": 68
+    },
+    "icon": {
+      "display": "block",
+      "height": 64,
+      "width": 64,
+      "x": 163,
+      "y": 140
+    },
+    "intro": {
+      "height": 140.390625,
+      "width": 350,
+      "x": 20,
+      "y": 341.640625
+    },
+    "overflow": 0,
+    "title": "Closer languages. A bigger world.",
+    "width": 390
+  },
+  {
+    "label": "ribbon-en-390",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "1",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "0",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 350,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "ribbon-en-320",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "1",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "0",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 280,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "animation-second-sample",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "1",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "0",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 280,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  },
+  {
+    "label": "animation-later-sample",
+    "decorationHidden": true,
+    "groups": [
+      {
+        "opacity": "0",
+        "text": "Hello你好BonjourHola"
+      },
+      {
+        "opacity": "0",
+        "text": "こんにちは안녕하세요"
+      },
+      {
+        "opacity": "1",
+        "text": "HalloOláПриветمرحبا"
+      }
+    ],
+    "hiddenScatter": true,
+    "overflow": 0,
+    "ribbon": {
+      "display": "block",
+      "height": 30,
+      "width": 280,
+      "x": 20,
+      "y": 86
+    },
+    "greetings": [
+      {
+        "text": "Hello",
+        "lang": "en",
+        "dir": null
+      },
+      {
+        "text": "你好",
+        "lang": "zh-CN",
+        "dir": null
+      },
+      {
+        "text": "Bonjour",
+        "lang": "fr",
+        "dir": null
+      },
+      {
+        "text": "Hola",
+        "lang": "es",
+        "dir": null
+      },
+      {
+        "text": "こんにちは",
+        "lang": "ja",
+        "dir": null
+      },
+      {
+        "text": "안녕하세요",
+        "lang": "ko",
+        "dir": null
+      },
+      {
+        "text": "Hallo",
+        "lang": "de",
+        "dir": null
+      },
+      {
+        "text": "Olá",
+        "lang": "pt",
+        "dir": null
+      },
+      {
+        "text": "Привет",
+        "lang": "ru",
+        "dir": null
+      },
+      {
+        "text": "مرحبا",
+        "lang": "ar",
+        "dir": "rtl"
+      }
+    ]
+  }
+]

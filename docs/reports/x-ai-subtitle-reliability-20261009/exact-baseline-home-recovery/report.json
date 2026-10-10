@@ -1,0 +1,242 @@
+{
+  "success": true,
+  "url": "https://x.com/home",
+  "expiredMaster": true,
+  "videoOnlyInit": "generated H.264",
+  "evidence": "Production extension; two real MSE videos; late video-only playlist; real HLS recovery and PCM decode; simulated Base ASR and Microsoft translation",
+  "checks": [
+    {
+      "name": "Unreadable MSE audio gives a concise optional retry hint",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Poster enrichment of the same blob video retains its own failure",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Switching to video B clears video A error and restores the generate action",
+      "pass": true,
+      "details": {
+        "label": "生成 AI 字幕",
+        "detail": "",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Home identifies and reloads B HLS among two resource groups",
+      "pass": true,
+      "details": [
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s"
+      ]
+    },
+    {
+      "name": "Late video-only playlists do not trigger downloads of picture fragments",
+      "pass": true,
+      "details": [
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s"
+      ]
+    },
+    {
+      "name": "A failed master falls through the video-only initialization to valid audio",
+      "pass": true,
+      "details": [
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s"
+      ]
+    },
+    {
+      "name": "Home generates matching bilingual captions without opening a post",
+      "pass": true,
+      "details": {
+        "label": "关闭 AI 字幕",
+        "detail": "已就绪",
+        "original": "Home audio recovered for video B.",
+        "translation": "译文：Home audio recovered for video B."
+      }
+    },
+    {
+      "name": "Base empty transcription suggests speech and language checks",
+      "pass": true,
+      "details": {
+        "label": "重试生成 AI 字幕",
+        "detail": "本地 AI 没有识别出可读字幕，请确认视频有清晰人声并检查视频原语言后重试",
+        "original": "",
+        "translation": ""
+      }
+    },
+    {
+      "name": "Configured Base is used without another model download",
+      "pass": true
+    },
+    {
+      "name": "No unhandled browser errors",
+      "pass": true,
+      "details": []
+    },
+    {
+      "name": "Test browser stays in the background",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "mediaRequests": [
+    "https://video.twimg.com/ext_tw_video/999/pu/mse.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio.m3u8",
+    "https://video.twimg.com/ext_tw_video/222/pu/pl/audio.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/master.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/picture.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s"
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 1458,
+      "name": "uTools"
+    },
+    "frontmostAfter": {
+      "pid": 1458,
+      "name": "uTools"
+    }
+  },
+  "videoA": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoAEnriched": {
+    "label": "重试生成 AI 字幕",
+    "detail": "暂时无法生成 AI 字幕，可尝试打开帖子或刷新页面后重试",
+    "original": "",
+    "translation": ""
+  },
+  "videoBInitial": {
+    "label": "生成 AI 字幕",
+    "detail": "",
+    "original": "",
+    "translation": ""
+  },
+  "videoB": {
+    "label": "关闭 AI 字幕",
+    "detail": "已就绪",
+    "original": "Home audio recovered for video B.",
+    "translation": "译文：Home audio recovered for video B."
+  },
+  "recoveryRequests": [
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/preferred-audio.m3u8",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/picture-init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/init.mp4",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio0.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio1.m4s",
+    "https://video.twimg.com/ext_tw_video/111/pu/pl/audio2.m4s"
+  ],
+  "emptyBase": {
+    "label": "重试生成 AI 字幕",
+    "detail": "本地 AI 没有识别出可读字幕，请确认视频有清晰人声并检查视频原语言后重试",
+    "original": "",
+    "translation": ""
+  },
+  "rpcCalls": [
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    },
+    {
+      "type": "fluentReadGetLocalVideoModelState"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    },
+    {
+      "type": "fluentReadPrepareLocalVideoModel",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadTranscribeLocalVideoAudio",
+      "model": "base"
+    },
+    {
+      "type": "fluentReadCancelLocalVideoTranscription"
+    }
+  ]
+}

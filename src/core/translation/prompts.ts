@@ -2,7 +2,7 @@
  * @file src/core/translation/prompts.ts
  *
  * 文件职责：生成页面摘要提示词、识别上下文回显并清理大模型输出中的推理标记，集中维护翻译上下文的提示协议。
- * 主要内容：buildPageSummaryPrompt 把不可信页面材料包在 webpage_context 中，buildPageSummarySystemPrompt 约束两至三句摘要，isLikelyPageContextLeak 用强弱信号触发重译，isDefinitePageContextLeak 仅识别可用于最终拒绝的明确回显，stripTranslationReasoning 清理 think 标签。 可核对的公开符号包括 buildPageSummaryPrompt、buildPageSummarySystemPrompt、isDefinitePageContextLeak、isLikelyPageContextLeak、stripTranslationReasoning。
+ * 主要内容：buildPageSummaryPrompt 把不可信页面材料包在 webpage_context 中，buildPageSummarySystemPrompt 约束两至三句摘要，isLikelyPageContextLeak 用标记、膨胀和有界连续片段信号触发一次重译，isDefinitePageContextLeak 仅识别可用于最终拒绝的明确回显，stripTranslationReasoning 清理 think 标签。 可核对的公开符号包括 buildPageSummaryPrompt、buildPageSummarySystemPrompt、isDefinitePageContextLeak、isLikelyPageContextLeak、stripTranslationReasoning。
  * 模块边界：本文件属于可独立测试的 core 候选领域；可以读取传入 DOM 以计算结果，但不访问配置存储、不调用 provider、不注册页面监听器，也不负责译文渲染或 feature 生命周期。
  */
 
@@ -53,11 +53,54 @@ function containsContextOnlyCjkFragment(context: string, origin: string, result:
     const resultCjk = cjkOnly(result);
     const fragmentLength = 8;
     if (contextCjk.length < fragmentLength || resultCjk.length < fragmentLength) return false;
+    // 固定宽度片段只建立一次，避免每个上下文片段都重扫原文和译文。
+    const contextFragments = new Set<string>();
     for (let index = 0; index <= contextCjk.length - fragmentLength; index += 1) {
-        const fragment = contextCjk.slice(index, index + fragmentLength);
-        if (!originCjk.includes(fragment) && resultCjk.includes(fragment)) return true;
+        contextFragments.add(contextCjk.slice(index, index + fragmentLength));
+    }
+    for (let index = 0; index <= originCjk.length - fragmentLength; index += 1) {
+        contextFragments.delete(originCjk.slice(index, index + fragmentLength));
+    }
+    if (!contextFragments.size) return false;
+    for (let index = 0; index <= resultCjk.length - fragmentLength; index += 1) {
+        if (contextFragments.has(resultCjk.slice(index, index + fragmentLength))) return true;
     }
     return false;
+}
+
+/** 连续长片段占据大部分译文时触发软重试；不把局部引用当作最终拒绝依据。 */
+function containsPredominantContextCopy(context: string, origin: string, result: string): boolean {
+    // 预算内建立固定长度片段集合，线性扫描覆盖区间；超预算跳过新信号，
+    // 不截断原文，以免把原文尾部本已有的内容误认成上下文独有内容。
+    const maxCharacters = 8_192;
+    if (context.length > maxCharacters || origin.length > maxCharacters || result.length > maxCharacters) return false;
+    const mostlyCjk = cjkOnly(result).length >= result.length / 2;
+    const width = mostlyCjk ? 12 : 24;
+    const minimumRun = mostlyCjk ? 24 : 48;
+    if (result.length < minimumRun || context.length < minimumRun) return false;
+
+    const sourceFragments = new Set<string>();
+    for (let index = 0; index <= origin.length - width; index += 1) {
+        sourceFragments.add(origin.slice(index, index + width));
+    }
+    const referenceFragments = new Set<string>();
+    for (let index = 0; index <= context.length - width; index += 1) {
+        const fragment = context.slice(index, index + width);
+        if (!sourceFragments.has(fragment)) referenceFragments.add(fragment);
+    }
+
+    let covered = 0;
+    let longestRun = 0;
+    let runStart = 0;
+    let runEnd = 0;
+    for (let index = 0; index <= result.length - width; index += 1) {
+        if (!referenceFragments.has(result.slice(index, index + width))) continue;
+        if (index > runEnd) runStart = index;
+        covered += Math.min(width, index + width - runEnd);
+        runEnd = index + width;
+        longestRun = Math.max(longestRun, runEnd - runStart);
+    }
+    return longestRun >= minimumRun && covered >= result.length * 0.65;
 }
 
 /**
@@ -65,7 +108,8 @@ function containsContextOnlyCjkFragment(context: string, origin: string, result:
  *
  * 明确的 XML/提示词标记是强信号；对被模型翻译掉标签说明文字的情况，再用
  * “译文异常膨胀 + 多个原文未出现的上下文专有词”组合判断，避免短专名、代码或
- * 本就包含页面术语的合法译文被误判。
+ * 本就包含页面术语的合法译文被误判。长段被上下文替换且未膨胀时，再检测
+ * 原文没有的连续片段是否覆盖了大部分译文；该信号只用于一次无上下文重译。
  */
 export function isLikelyPageContextLeak(origin: string, result: string, pageContext: string): boolean {
     const normalizedContext = normalizeLeakComparable(pageContext);
@@ -83,8 +127,9 @@ export function isLikelyPageContextLeak(origin: string, result: string, pageCont
 
     const cjkResultExpandedBeyondSource = normalizedResult.length
         >= Math.max(normalizedOrigin.length * 2, normalizedOrigin.length + 12);
-    return cjkResultExpandedBeyondSource
-        && containsContextOnlyCjkFragment(pageContext, origin, result);
+    if (cjkResultExpandedBeyondSource && containsContextOnlyCjkFragment(pageContext, origin, result)) return true;
+
+    return containsPredominantContextCopy(normalizedContext, normalizedOrigin, normalizedResult);
 }
 
 /** 仅识别协议边界或完整长上下文复制，可用于无上下文重译后的最终拒绝。 */

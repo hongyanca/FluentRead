@@ -2,13 +2,20 @@
  * @file src/providers/translation/ai-sdk/endpoints.ts
  *
  * 文件职责：解析使用 Vercel AI SDK 的 OpenAI 兼容服务端点，统一 common、custom、New API、Azure、MiniMax 与 MiMo 的路由差异。
- * 主要内容：声明 transport profile、服务 ID 和 endpoint 配置类型，规范化 chat completions 地址，并由 resolveOpenAICompatibleEndpoint 返回 baseURL、route 与兼容参数。 可核对的公开符号包括 AiSdkEndpointRoute、AI_SDK_TRANSPORT_PROFILE、AiSdkEndpointConfig、OpenAICompatibleEndpointResolution、ResolvedOpenAICompatibleEndpoint、AI_SDK_COMMON_SERVICE_IDS、AI_SDK_SERVICE_IDS、parseChatCompletionsEndpoint。
+ * 主要内容：声明 transport profile、服务 ID 和 endpoint 配置类型，补全自定义服务的根地址和版本 Base URL，保留完整或非标准接口，并由 resolveOpenAICompatibleEndpoint 返回 baseURL、route 与兼容参数。
  * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
  */
 
 import {getMimoEndpoint, MINIMAX_ENDPOINTS, urls} from '@/src/core/config/constants';
 import {config as runtimeConfig} from '@/src/services/config/store';
-import {services} from '@/src/core/config/catalog';
+import {referenceAiPlatformServices, services} from '@/src/core/config/catalog';
+import {normalizeAzureEndpoint} from '@/src/core/config/azure';
+import {
+    getCustomOpenAIProvider,
+    isCustomOpenAIProviderId,
+    LEGACY_CUSTOM_OPENAI_PROVIDER_ID,
+    type CustomOpenAIProvider,
+} from '@/src/core/config/customOpenAI';
 
 export type AiSdkEndpointRoute = 'common' | 'custom' | 'newapi' | 'azure';
 
@@ -17,6 +24,7 @@ export const AI_SDK_TRANSPORT_PROFILE = 'vercel-ai-sdk-openai-compatible-v1' as 
 export interface AiSdkEndpointConfig {
     proxy?: Record<string, string | undefined>;
     custom?: string;
+    customOpenAIProviders?: readonly CustomOpenAIProvider[];
     newApiUrl?: string;
     azureOpenaiEndpoint?: string;
     minimaxBillingPlan?: string;
@@ -57,7 +65,8 @@ export const AI_SDK_COMMON_SERVICE_IDS = Object.freeze([
     services.siliconCloud,
     services.openrouter,
     services.grok,
-    services.localLlama,
+    // OpenAI 兼容平台使用标准 chat/completions，直接复用通用路由。
+    ...referenceAiPlatformServices,
 ]);
 
 export const AI_SDK_SERVICE_IDS = Object.freeze([
@@ -90,6 +99,15 @@ function parseAbsoluteEndpoint(rawEndpoint: string | undefined, label: string): 
 
 function withoutTrailingSlash(value: string): string {
     return value.endsWith('/') ? value.slice(0, -1) : value;
+}
+
+/** 只补全明确的 Base URL；其余路径仍视为用户指定的完整接口，不推测供应商路由。 */
+function normalizeCustomEndpoint(rawEndpoint: string, label: string): string {
+    const url = parseAbsoluteEndpoint(rawEndpoint, label);
+    const path = url.pathname.replace(/\/+$/, '');
+    if (!path) url.pathname = '/v1/chat/completions';
+    else if (/\/v\d+$/.test(path)) url.pathname = `${path}/chat/completions`;
+    return url.toString();
 }
 
 /**
@@ -151,7 +169,7 @@ export function normalizeNewApiEndpoint(rawEndpoint: string): string {
 
 export function getAiSdkEndpointRoute(service: string): AiSdkEndpointRoute | null {
     if (commonServices.has(service)) return 'common';
-    if (service === services.custom) return 'custom';
+    if (isCustomOpenAIProviderId(service)) return 'custom';
     if (service === services.newapi) return 'newapi';
     if (service === services.azureOpenai) return 'azure';
     return null;
@@ -191,13 +209,19 @@ export function resolveOpenAICompatibleEndpoint(
             endpoint = resolveCommonEndpoint(service, config);
             break;
         case 'custom':
-            endpoint = config.proxy?.[service]?.trim() || config.custom || '';
+            endpoint = config.proxy?.[service]?.trim()
+                || normalizeCustomEndpoint(
+                    getCustomOpenAIProvider(config.customOpenAIProviders, service)?.endpoint
+                    || (service === LEGACY_CUSTOM_OPENAI_PROVIDER_ID ? config.custom : '')
+                    || '',
+                    `${service} 接口地址`,
+                );
             break;
         case 'newapi':
             endpoint = normalizeNewApiEndpoint(config.newApiUrl || '');
             break;
         case 'azure':
-            endpoint = config.azureOpenaiEndpoint || '';
+            endpoint = normalizeAzureEndpoint(config.azureOpenaiEndpoint || '');
             break;
     }
 

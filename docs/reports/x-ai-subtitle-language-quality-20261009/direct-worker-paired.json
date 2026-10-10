@@ -1,0 +1,3251 @@
+{
+  "scope": "real native WebGPU production Worker RPC; independent clips; no live X capture/translation acceptance",
+  "sameCorpusSHA": true,
+  "sampleCount": 39,
+  "languages": 13,
+  "samplesPerLanguage": 3,
+  "casesPerVersion": 156,
+  "versions": {
+    "baseline": {
+      "success": true,
+      "allCasesSucceeded": true,
+      "completedCases": 156,
+      "failureCounts": {
+        "cases": 0,
+        "byStage": {}
+      },
+      "rawReportSha256": "b08983fe422c72e45d4f527fa7e81994634a11f3f04b19c8bf4c28cb0bdb23bb",
+      "scriptSha256": "14e2844ff1e4312fbe628fca3ae6cf96d2430ccff6fe0e520b8aab2a308b8ef1",
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "extensionWorkerSha256": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+      "browserVersion": "154.0.8037.99",
+      "gpuCapability": {
+        "available": true,
+        "isFallbackAdapter": null,
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": ""
+      },
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "windowState": "normal",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "visible": true
+      },
+      "guardedCloseSucceeded": true,
+      "unexpectedModelNetwork": [],
+      "cacheSeed": {
+        "entries": 14,
+        "bytes": 243648304,
+        "manifestSha256": "81a3ccda4c3020698e76b4f9a104b15ceee7497b06e602597a946ee304bb6d86",
+        "wallMs": 553,
+        "transport": "loopback-http-response-to-extension-cache",
+        "preflight": {
+          "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+          "bytes": 339,
+          "passed": true
+        }
+      },
+      "rpcCounts": {
+        "fluentReadPrepareLocalVideoModel": 4,
+        "fluentReadGetLocalVideoModelState": 2,
+        "fluentReadCancelLocalVideoTranscription": 158,
+        "fluentReadTranscribeLocalVideoAudio": 156
+      },
+      "modelPrepare": [
+        {
+          "model": "tiny",
+          "prepareMs": 36,
+          "prepared": {
+            "success": true,
+            "model": "tiny",
+            "models": [
+              "tiny"
+            ],
+            "dtype": "q4"
+          },
+          "sessionPrepare": {
+            "wallMs": 1037,
+            "success": true,
+            "model": "tiny",
+            "models": [
+              "tiny"
+            ],
+            "backend": "webgpu",
+            "dtype": "q4",
+            "gpuInfo": "apple / metal-3"
+          },
+          "registeredModelState": {
+            "success": true,
+            "models": [
+              "tiny"
+            ],
+            "available": {
+              "tiny": true,
+              "base": false
+            }
+          }
+        },
+        {
+          "model": "base",
+          "prepareMs": 11,
+          "prepared": {
+            "success": true,
+            "model": "base",
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "dtype": "q4"
+          },
+          "sessionPrepare": {
+            "wallMs": 1521,
+            "success": true,
+            "model": "base",
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "backend": "webgpu",
+            "dtype": "q4",
+            "gpuInfo": "apple / metal-3"
+          },
+          "registeredModelState": {
+            "success": true,
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "available": {
+              "tiny": true,
+              "base": true
+            }
+          }
+        }
+      ]
+    },
+    "candidate-q4": {
+      "success": true,
+      "allCasesSucceeded": true,
+      "completedCases": 156,
+      "failureCounts": {
+        "cases": 0,
+        "byStage": {}
+      },
+      "rawReportSha256": "ae781c4d5fba708b6d7294cad5e8b95db2d753854fb433b75fad956002817bbe",
+      "scriptSha256": "14e2844ff1e4312fbe628fca3ae6cf96d2430ccff6fe0e520b8aab2a308b8ef1",
+      "sourceCommit": null,
+      "extensionWorkerSha256": "3dbf6b7488dca1bb1bbd4f58e60025e328bffa8475989df524f4400b38fe5a42",
+      "browserVersion": "154.0.8037.99",
+      "gpuCapability": {
+        "available": true,
+        "isFallbackAdapter": null,
+        "vendor": "apple",
+        "architecture": "metal-3",
+        "device": "",
+        "description": ""
+      },
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "windowState": "normal",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "visible": true
+      },
+      "guardedCloseSucceeded": true,
+      "unexpectedModelNetwork": [],
+      "cacheSeed": {
+        "entries": 16,
+        "bytes": 328060860,
+        "manifestSha256": "6ca310a944a2ce546abcc014bda1eedc9baac4f41e01d09e4c645f71016d42f2",
+        "wallMs": 611,
+        "transport": "loopback-http-response-to-extension-cache",
+        "preflight": {
+          "url": "https://modelscope.cn/models/onnx-community/whisper-tiny/resolve/master/preprocessor_config.json",
+          "bytes": 339,
+          "passed": true
+        }
+      },
+      "rpcCounts": {
+        "fluentReadPrepareLocalVideoModel": 4,
+        "fluentReadGetLocalVideoModelState": 2,
+        "fluentReadCancelLocalVideoTranscription": 158,
+        "fluentReadTranscribeLocalVideoAudio": 156
+      },
+      "modelPrepare": [
+        {
+          "model": "tiny",
+          "prepareMs": 35,
+          "prepared": {
+            "success": true,
+            "model": "tiny",
+            "models": [
+              "tiny"
+            ],
+            "dtype": "q4"
+          },
+          "sessionPrepare": {
+            "wallMs": 1225,
+            "success": true,
+            "model": "tiny",
+            "models": [
+              "tiny"
+            ],
+            "backend": "webgpu",
+            "dtype": "q4",
+            "gpuInfo": "apple / metal-3"
+          },
+          "registeredModelState": {
+            "success": true,
+            "models": [
+              "tiny"
+            ],
+            "available": {
+              "tiny": true,
+              "base": false
+            }
+          }
+        },
+        {
+          "model": "base",
+          "prepareMs": 5,
+          "prepared": {
+            "success": true,
+            "model": "base",
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "dtype": "q4"
+          },
+          "sessionPrepare": {
+            "wallMs": 1265,
+            "success": true,
+            "model": "base",
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "backend": "webgpu",
+            "dtype": "q4",
+            "gpuInfo": "apple / metal-3"
+          },
+          "registeredModelState": {
+            "success": true,
+            "models": [
+              "tiny",
+              "base"
+            ],
+            "available": {
+              "tiny": true,
+              "base": true
+            }
+          }
+        }
+      ],
+      "sourceProvenance": {
+        "base": "854ce15d5279b875c766efd15b208380c81e3371",
+        "workingTree": "/Users/thinkstu/Desktop/copy/FluentRead-x-subtitle-language-quality-20261009",
+        "productionSourceSnapshot": {
+          "src/features/video-subtitle/content/runtime.ts": "1238c8a68884618af2fa9531e37299d193f052e9055dd8f1b50072516bd4d4cf",
+          "src/features/video-subtitle/content/video-ai/capture.ts": "97a102c632b302f8f4513b190fa314c2a9a34a1e3f4eb8ba155c43185ebde23f",
+          "src/features/video-subtitle/content/video-ai/fullCapture.ts": "9383174dbefabd4a452e04f8a4a27df995b75f6e49bdd73d5cd15635c0797eaa",
+          "src/features/video-subtitle/offscreen/transcription.ts": "a995fd8e79911de71e0280f05ac342d24eb61e7cb09e0f245918b28d4f27c6dc",
+          "src/features/video-subtitle/offscreen/transcription.worker.ts": "dc2782ef88838f75de5fe90c7970205ecb5f17c649e3a5017d95a775c5b42e5c",
+          "src/features/video-subtitle/offscreen/whisperEncoderReuse.ts": "0fbe2dd3228eab3cb5f8b253e4ff3b0fb82f1bf6da062b2612b551a14711f9ef",
+          "src/features/video-subtitle/transcription.ts": "a54a7c2735710cf6a38f59ab68e4ee515f1a0db63fb2af4f8284bf4603c7e6cc"
+        },
+        "artifactSHA256": {
+          "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+          "background.js": "c297863c00305a07f99a09c97d25e4c2d7188820b24e08f8dbcbc97f12ef3204",
+          "videoTranscriptionWorker.js": "3dbf6b7488dca1bb1bbd4f58e60025e328bffa8475989df524f4400b38fe5a42",
+          "content-scripts/content.js": "901198569b9089bae69b34ccd104089558dcd399852e2987db30b1529253ee82",
+          "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+        },
+        "state": "built from uncommitted task source; source SHA is authoritative; never overwrite this directory"
+      }
+    }
+  },
+  "pairedStrata": [
+    {
+      "model": "tiny",
+      "mode": "explicit",
+      "fitsProductionWindow": true,
+      "n": 13,
+      "baselineWallMedianMs": 751,
+      "candidateWallMedianMs": 788,
+      "sumWallChangePct": 1.1318681318681412,
+      "sameTextHashes": 13,
+      "sameScores": 13,
+      "detectedCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "model": "tiny",
+      "mode": "explicit",
+      "fitsProductionWindow": false,
+      "n": 26,
+      "baselineWallMedianMs": 808.0,
+      "candidateWallMedianMs": 809.5,
+      "sumWallChangePct": 0.15411288769022757,
+      "sameTextHashes": 26,
+      "sameScores": 26,
+      "detectedCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "model": "tiny",
+      "mode": "auto",
+      "fitsProductionWindow": true,
+      "n": 13,
+      "baselineWallMedianMs": 900,
+      "candidateWallMedianMs": 887,
+      "sumWallChangePct": -3.356429407000805,
+      "sameTextHashes": 13,
+      "sameScores": 13,
+      "detectedCorrect": 13,
+      "encoderReuse": 13
+    },
+    {
+      "model": "tiny",
+      "mode": "auto",
+      "fitsProductionWindow": false,
+      "n": 26,
+      "baselineWallMedianMs": 907.5,
+      "candidateWallMedianMs": 895.5,
+      "sumWallChangePct": -1.6641757886658337,
+      "sameTextHashes": 26,
+      "sameScores": 26,
+      "detectedCorrect": 26,
+      "encoderReuse": 26
+    },
+    {
+      "model": "base",
+      "mode": "explicit",
+      "fitsProductionWindow": true,
+      "n": 30,
+      "baselineWallMedianMs": 937.5,
+      "candidateWallMedianMs": 860.0,
+      "sumWallChangePct": -3.815164244886715,
+      "sameTextHashes": 30,
+      "sameScores": 30,
+      "detectedCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "model": "base",
+      "mode": "explicit",
+      "fitsProductionWindow": false,
+      "n": 9,
+      "baselineWallMedianMs": 1457,
+      "candidateWallMedianMs": 1355,
+      "sumWallChangePct": -4.5361667347772805,
+      "sameTextHashes": 9,
+      "sameScores": 9,
+      "detectedCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "model": "base",
+      "mode": "auto",
+      "fitsProductionWindow": true,
+      "n": 30,
+      "baselineWallMedianMs": 1100.5,
+      "candidateWallMedianMs": 1008.0,
+      "sumWallChangePct": -8.267067208576307,
+      "sameTextHashes": 30,
+      "sameScores": 30,
+      "detectedCorrect": 30,
+      "encoderReuse": 30
+    },
+    {
+      "model": "base",
+      "mode": "auto",
+      "fitsProductionWindow": false,
+      "n": 9,
+      "baselineWallMedianMs": 1567,
+      "candidateWallMedianMs": 1491,
+      "sumWallChangePct": -7.07491952004683,
+      "sameTextHashes": 9,
+      "sameScores": 9,
+      "detectedCorrect": 9,
+      "encoderReuse": 9
+    }
+  ],
+  "qualityChanged": false,
+  "limitations": [
+    "One serial run per version on this device; CPU/build activity and shader/cache state can affect wall time.",
+    "26/39 Tiny samples exceed its 10s production window; 9/39 Base samples exceed its 14s window.",
+    "Baseline has no detectedLanguage response metadata; detection accuracy is unknown, not zero.",
+    "Independent clips cannot establish same-stream monolingual cost or language-switch recovery.",
+    "All 156 output text SHA and raw scores are equal. This establishes no broad accuracy improvement.",
+    "Natural audio/references/transcripts remain temporary; public source and reference SHA are recorded."
+  ],
+  "corpusManifestSha256": "b4054caf378a9da853a86fa3edc2a229cc082d760eaa85ab241d24724de0fa51",
+  "sources": [
+    {
+      "id": "cmn_hans_cn_0000",
+      "explicitLanguages": [
+        "zh"
+      ],
+      "language": "zh",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "cmn_hans_cn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/cmn_hans_cn/cmn_hans_cn_0000.wav",
+        "referenceFile": "cmn_hans_cn/cmn_hans_cn.trans.txt",
+        "referenceFileSha256": "bd4047f9ef167e97f4d33d90b814149d0ba2324b1ce2c625acf1f0e3769c4ce1"
+      },
+      "sourceSha256": "5214e16584b6498ddbd22f321738c0f62b19117ab1880b21e405fba983986b6a",
+      "sourceBytes": 332204,
+      "pcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+      "inputPcm16Sha256": "94dd4b417a421f4558ad96f4228b75d522e4efde2284a8ef15f205d9d0ebc9d3",
+      "referenceSha256": "0e786003da5706c45f5abc7217b34c6134714d84aed33774dd8c76e5ae1f25a2",
+      "audioSeconds": 10.38,
+      "spokenAudioSeconds": 10.38,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "cmn_hans_cn_0001",
+      "explicitLanguages": [
+        "zh"
+      ],
+      "language": "zh",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "cmn_hans_cn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/cmn_hans_cn/cmn_hans_cn_0001.wav",
+        "referenceFile": "cmn_hans_cn/cmn_hans_cn.trans.txt",
+        "referenceFileSha256": "bd4047f9ef167e97f4d33d90b814149d0ba2324b1ce2c625acf1f0e3769c4ce1"
+      },
+      "sourceSha256": "d2ff70aa3a9b965bd2cab664852f2b5eb90d02dca4ed9066686d926152ade514",
+      "sourceBytes": 265004,
+      "pcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+      "inputPcm16Sha256": "a37f754ac57fd197664423fcb540d6c50bdfce276ce739da404fd3c8e6864850",
+      "referenceSha256": "ab4e43207a974ad02955fd6b4ec1a3627ead29ed449a017ef4c8b0a7121d0805",
+      "audioSeconds": 8.28,
+      "spokenAudioSeconds": 8.28,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "cmn_hans_cn_0002",
+      "explicitLanguages": [
+        "zh"
+      ],
+      "language": "zh",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "cmn_hans_cn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/cmn_hans_cn/cmn_hans_cn_0002.wav",
+        "referenceFile": "cmn_hans_cn/cmn_hans_cn.trans.txt",
+        "referenceFileSha256": "bd4047f9ef167e97f4d33d90b814149d0ba2324b1ce2c625acf1f0e3769c4ce1"
+      },
+      "sourceSha256": "a50269a834d0efd270df29173bbe5f53a1a17184fe3998dabb1a73cbd223fd6a",
+      "sourceBytes": 443564,
+      "pcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+      "inputPcm16Sha256": "f88d5896ab2cf38d7f8cde8c353d518d467701110d5d17559ae5be7470064f46",
+      "referenceSha256": "d7fc2e33b42a8ed48c3c589adb341d5c22e6d81581249569ec38d023a9bda781",
+      "audioSeconds": 13.86,
+      "spokenAudioSeconds": 13.86,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "en_us_0000",
+      "explicitLanguages": [
+        "en"
+      ],
+      "language": "en",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "en_us",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/en_us/en_us_0000.wav",
+        "referenceFile": "en_us/en_us.trans.txt",
+        "referenceFileSha256": "fcd41997fbec03a8f0c068bf8e914dbf89c31406cfed19af2f21d8dca5b78388"
+      },
+      "sourceSha256": "7835bd6ffb54ce38a2a9bcde3905ba424faed94d50a474f21a9cbe9209b869df",
+      "sourceBytes": 337964,
+      "pcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+      "inputPcm16Sha256": "3f4a596a69474e5e9336fc22f87bfa9a876b9f145da56f641bfd8b26d5f74029",
+      "referenceSha256": "94ac868ffec4f7c70ed84e34efdb3d7e5a728d7efcbe9342dda4342e32583365",
+      "audioSeconds": 10.56,
+      "spokenAudioSeconds": 10.56,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "en_us_0001",
+      "explicitLanguages": [
+        "en"
+      ],
+      "language": "en",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "en_us",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/en_us/en_us_0001.wav",
+        "referenceFile": "en_us/en_us.trans.txt",
+        "referenceFileSha256": "fcd41997fbec03a8f0c068bf8e914dbf89c31406cfed19af2f21d8dca5b78388"
+      },
+      "sourceSha256": "ffd32e9953ffb14bed7f4e3a2d037ea7ac7de1ba5ad25d4c0f678fd06b24aab0",
+      "sourceBytes": 280364,
+      "pcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+      "inputPcm16Sha256": "a3d142b2c02b4ff308e6c4357afce9b0223544d3a7159429577df983edf5e70b",
+      "referenceSha256": "78c17c59439ff7b484261f19ff7d1d49f854910035fe3b0b922297037ae285ee",
+      "audioSeconds": 8.76,
+      "spokenAudioSeconds": 8.76,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "en_us_0002",
+      "explicitLanguages": [
+        "en"
+      ],
+      "language": "en",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "en_us",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/en_us/en_us_0002.wav",
+        "referenceFile": "en_us/en_us.trans.txt",
+        "referenceFileSha256": "fcd41997fbec03a8f0c068bf8e914dbf89c31406cfed19af2f21d8dca5b78388"
+      },
+      "sourceSha256": "b722d537c7eac36e3438f45e609676732ce4526b415d829347485a61030d6922",
+      "sourceBytes": 366764,
+      "pcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+      "inputPcm16Sha256": "ca3b794392a03cf69a2852259eda7f5aa003e062fdaf09da748262c8de32a566",
+      "referenceSha256": "a132e2716cc6e5a3377e67e97fef5c1a09b0bf08fa3fdb15b1ae9e9532e13bb5",
+      "audioSeconds": 11.46,
+      "spokenAudioSeconds": 11.46,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ja_jp_0000",
+      "explicitLanguages": [
+        "ja"
+      ],
+      "language": "ja",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ja_jp",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ja_jp/ja_jp_0000.wav",
+        "referenceFile": "ja_jp/ja_jp.trans.txt",
+        "referenceFileSha256": "1239781e1c86e907017c99c7a7a4d6000fc06dcc4ed5b70d7a200eefb8771c21"
+      },
+      "sourceSha256": "26b6cd491b5d52cf05d89207cb88499cdaba89749aebc29c8f216e834e3d9071",
+      "sourceBytes": 334124,
+      "pcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+      "inputPcm16Sha256": "7eafd8517298b7ad9d096362fd1931ff533081f1986a5af6061651a13fd0122c",
+      "referenceSha256": "70c3a8715f553e7239c54ffdfa2b49df3621cb4c5aa0677f4e41e56c6d4e8be6",
+      "audioSeconds": 10.44,
+      "spokenAudioSeconds": 10.44,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ja_jp_0001",
+      "explicitLanguages": [
+        "ja"
+      ],
+      "language": "ja",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ja_jp",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ja_jp/ja_jp_0001.wav",
+        "referenceFile": "ja_jp/ja_jp.trans.txt",
+        "referenceFileSha256": "1239781e1c86e907017c99c7a7a4d6000fc06dcc4ed5b70d7a200eefb8771c21"
+      },
+      "sourceSha256": "258fe8b9954d74c44bcfeb93317fff647f0a0f9135c472f4af32f6db5b02281e",
+      "sourceBytes": 455084,
+      "pcm16Sha256": "ccd5258a1e0d8ec801e9bde70ff13fb74af51ae9dc7e63a6badaaa85ca9af0ac",
+      "inputPcm16Sha256": "ccd5258a1e0d8ec801e9bde70ff13fb74af51ae9dc7e63a6badaaa85ca9af0ac",
+      "referenceSha256": "4173a093cc86b7c7fa669900b37caf60b9f3d4ce67d8d224bb17ab6add0f4918",
+      "audioSeconds": 14.22,
+      "spokenAudioSeconds": 14.22,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ja_jp_0002",
+      "explicitLanguages": [
+        "ja"
+      ],
+      "language": "ja",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ja_jp",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ja_jp/ja_jp_0002.wav",
+        "referenceFile": "ja_jp/ja_jp.trans.txt",
+        "referenceFileSha256": "1239781e1c86e907017c99c7a7a4d6000fc06dcc4ed5b70d7a200eefb8771c21"
+      },
+      "sourceSha256": "bc4947522ebee189fa5f375e24b5f4cb84a66f264a39bfff241c5bfee01b0a34",
+      "sourceBytes": 410924,
+      "pcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+      "inputPcm16Sha256": "adfeeccea3f5bc5f8f464cca671d1d5d5dbca130221ebdd13cab7f073400376b",
+      "referenceSha256": "353039b58aa925c905d896924284c132dcda6f65815e6d3422fa123cd433b97b",
+      "audioSeconds": 12.84,
+      "spokenAudioSeconds": 12.84,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ko_kr_0000",
+      "explicitLanguages": [
+        "ko"
+      ],
+      "language": "ko",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ko_kr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ko_kr/ko_kr_0000.wav",
+        "referenceFile": "ko_kr/ko_kr.trans.txt",
+        "referenceFileSha256": "f1c39fda9be4842925d9bd93f716a08926b6819c1885d9ed8cee72e20a49f167"
+      },
+      "sourceSha256": "b1f6cf6dde1647ea71e564d0e3efd4bbeb573674dec13f977625fd94ca1b5147",
+      "sourceBytes": 399404,
+      "pcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+      "inputPcm16Sha256": "e2fd3af56b6062da0553c1749daed4726446b443527749adfb262f94171616ce",
+      "referenceSha256": "163400060ed39f4b7a96d3523b7bd7326fe382d02a46d3ee5fd80580b0463638",
+      "audioSeconds": 12.48,
+      "spokenAudioSeconds": 12.48,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ko_kr_0001",
+      "explicitLanguages": [
+        "ko"
+      ],
+      "language": "ko",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ko_kr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ko_kr/ko_kr_0001.wav",
+        "referenceFile": "ko_kr/ko_kr.trans.txt",
+        "referenceFileSha256": "f1c39fda9be4842925d9bd93f716a08926b6819c1885d9ed8cee72e20a49f167"
+      },
+      "sourceSha256": "9091ffb54f07c9977083bbfbbc9407fe42f9db77d3b04bdaa8325b8baf1bdf05",
+      "sourceBytes": 345644,
+      "pcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+      "inputPcm16Sha256": "baebe96e56feabafbde4093de3c02c7026f59d4b4b9984f47141352ec7ad5c58",
+      "referenceSha256": "22eb7ed0c6b053685659320f511ca0d02276cf3c121cf11e95732eb97b8f7f92",
+      "audioSeconds": 10.8,
+      "spokenAudioSeconds": 10.8,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ko_kr_0002",
+      "explicitLanguages": [
+        "ko"
+      ],
+      "language": "ko",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ko_kr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ko_kr/ko_kr_0002.wav",
+        "referenceFile": "ko_kr/ko_kr.trans.txt",
+        "referenceFileSha256": "f1c39fda9be4842925d9bd93f716a08926b6819c1885d9ed8cee72e20a49f167"
+      },
+      "sourceSha256": "f79d1ca3ab8e991a52d0f98a887240abe0679cb765a1ff0d92ff64a98e9a43a5",
+      "sourceBytes": 286124,
+      "pcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+      "inputPcm16Sha256": "055ba06e53dfaef6f553f5c043617bf91e56cc193cd1fb065613bf8bf311b482",
+      "referenceSha256": "732e5fbfbb0471a11d7fe9c8bbb3538e6310fc81f4d08c8392de892cdd4dbf9d",
+      "audioSeconds": 8.94,
+      "spokenAudioSeconds": 8.94,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "es_419_0000",
+      "explicitLanguages": [
+        "es"
+      ],
+      "language": "es",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "es_419",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/es_419/es_419_0000.wav",
+        "referenceFile": "es_419/es_419.trans.txt",
+        "referenceFileSha256": "c53b59b32cfef72fe78ba8d3db7d35ed865ab42dfd92d05d7f1412f776c6fedc"
+      },
+      "sourceSha256": "518e4998d7fc4cb32bf9cb6c479b4cfe632bc68c6a2db376eeff98b68fea2bd1",
+      "sourceBytes": 410924,
+      "pcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+      "inputPcm16Sha256": "fcbe5a8ea2fb7e46f53eba03a1715209972dab76006943ba18c9e168481f75a2",
+      "referenceSha256": "b76d911c9d600bafe831fd283e7c55dfc36be588211521ace07970a897644bf4",
+      "audioSeconds": 12.84,
+      "spokenAudioSeconds": 12.84,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "es_419_0001",
+      "explicitLanguages": [
+        "es"
+      ],
+      "language": "es",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "es_419",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/es_419/es_419_0001.wav",
+        "referenceFile": "es_419/es_419.trans.txt",
+        "referenceFileSha256": "c53b59b32cfef72fe78ba8d3db7d35ed865ab42dfd92d05d7f1412f776c6fedc"
+      },
+      "sourceSha256": "2c87d0b144fb5cd37b91058c4e7cbb92a2e423216c56f1f4cd7a39189bbd5e63",
+      "sourceBytes": 683564,
+      "pcm16Sha256": "ee6bc09607ac40605a5b6104ec8800234f89287398d4dc0cbb5831e961019ad6",
+      "inputPcm16Sha256": "ee6bc09607ac40605a5b6104ec8800234f89287398d4dc0cbb5831e961019ad6",
+      "referenceSha256": "7aeddf7e522afb5bca2e2390a5bcd542c915bad758847cd32c25e0ef1d97a369",
+      "audioSeconds": 21.36,
+      "spokenAudioSeconds": 21.36,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "es_419_0002",
+      "explicitLanguages": [
+        "es"
+      ],
+      "language": "es",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "es_419",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/es_419/es_419_0002.wav",
+        "referenceFile": "es_419/es_419.trans.txt",
+        "referenceFileSha256": "c53b59b32cfef72fe78ba8d3db7d35ed865ab42dfd92d05d7f1412f776c6fedc"
+      },
+      "sourceSha256": "24624100418fb70f3947df1912c4b64c6a7ae67a84936c98e3eb9e0162055a6f",
+      "sourceBytes": 311084,
+      "pcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+      "inputPcm16Sha256": "964d5794fa0db45577ffb729159c8cdad3891686a66fec2f7d7e6e791ff61866",
+      "referenceSha256": "d9f660c647f16d94db089fea4710b3a3520cf9f1401020485c213c8df37fddf2",
+      "audioSeconds": 9.72,
+      "spokenAudioSeconds": 9.72,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "fr_fr_0000",
+      "explicitLanguages": [
+        "fr"
+      ],
+      "language": "fr",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "fr_fr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/fr_fr/fr_fr_0000.wav",
+        "referenceFile": "fr_fr/fr_fr.trans.txt",
+        "referenceFileSha256": "4d912f300b5bfdad999ec2d9cad1c7c57c1696f7853ac809991078da90ae0fea"
+      },
+      "sourceSha256": "f3bcc73d77ba26bb9c312383cc1a56a84a2c3a8eaa93ff321783c2353c6f9790",
+      "sourceBytes": 326444,
+      "pcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+      "inputPcm16Sha256": "ef339658f25dda13906a9961c44bcc284cdae73cb3865846b0ed71d0b5bd89c1",
+      "referenceSha256": "bb5c63974d229c750d09f355f558952970b534b7851b5a71f598ac7a3e209700",
+      "audioSeconds": 10.2,
+      "spokenAudioSeconds": 10.2,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "fr_fr_0001",
+      "explicitLanguages": [
+        "fr"
+      ],
+      "language": "fr",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "fr_fr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/fr_fr/fr_fr_0001.wav",
+        "referenceFile": "fr_fr/fr_fr.trans.txt",
+        "referenceFileSha256": "4d912f300b5bfdad999ec2d9cad1c7c57c1696f7853ac809991078da90ae0fea"
+      },
+      "sourceSha256": "f1d3ef454b67e638388c6406c57ff7ec9768d2ab4c5d8e8356c630024e1543a5",
+      "sourceBytes": 748844,
+      "pcm16Sha256": "95770c063d420ff1ddf4dddc34b25e87e2ed5347bf4d4aa799a15ab46abea4e6",
+      "inputPcm16Sha256": "95770c063d420ff1ddf4dddc34b25e87e2ed5347bf4d4aa799a15ab46abea4e6",
+      "referenceSha256": "3f6d1fdfb25ddae35bdd1e8ef09fdc940c58618064caaa6d02b68420dbc2532f",
+      "audioSeconds": 23.4,
+      "spokenAudioSeconds": 23.4,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "fr_fr_0002",
+      "explicitLanguages": [
+        "fr"
+      ],
+      "language": "fr",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "fr_fr",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/fr_fr/fr_fr_0002.wav",
+        "referenceFile": "fr_fr/fr_fr.trans.txt",
+        "referenceFileSha256": "4d912f300b5bfdad999ec2d9cad1c7c57c1696f7853ac809991078da90ae0fea"
+      },
+      "sourceSha256": "aecaf5d68bee13052e2c9f48702e2c4c66cc3b3a359c181e4f730058d1ca23bb",
+      "sourceBytes": 265004,
+      "pcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+      "inputPcm16Sha256": "0c702a44ff91401c364dd6dd7a96cbfa8ebefa384805fab1c5c4675e5cdbaab4",
+      "referenceSha256": "8a361f289ecf31a8156fc4521bbdaa110cb92d0b11d867478c55c676c1479c4e",
+      "audioSeconds": 8.28,
+      "spokenAudioSeconds": 8.28,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "de_de_0000",
+      "explicitLanguages": [
+        "de"
+      ],
+      "language": "de",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "de_de",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/de_de/de_de_0000.wav",
+        "referenceFile": "de_de/de_de.trans.txt",
+        "referenceFileSha256": "989cf2fbf21d1066d63b47fa012ec72b21741e460adaa9f007a5347fe74c02e0"
+      },
+      "sourceSha256": "7131c007c5c5c7b72c2fae333c9bccf5e2c02a4abb32b740f314e58b1488f149",
+      "sourceBytes": 574124,
+      "pcm16Sha256": "a75ddf6443726c7304b8f62a5dce475b43284ee03cc147921bc9c517a12a24ea",
+      "inputPcm16Sha256": "a75ddf6443726c7304b8f62a5dce475b43284ee03cc147921bc9c517a12a24ea",
+      "referenceSha256": "4237bd708880e23cb963ae50f79921d14662fdbe2feb835e3de260fe599c8840",
+      "audioSeconds": 17.94,
+      "spokenAudioSeconds": 17.94,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "de_de_0001",
+      "explicitLanguages": [
+        "de"
+      ],
+      "language": "de",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "de_de",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/de_de/de_de_0001.wav",
+        "referenceFile": "de_de/de_de.trans.txt",
+        "referenceFileSha256": "989cf2fbf21d1066d63b47fa012ec72b21741e460adaa9f007a5347fe74c02e0"
+      },
+      "sourceSha256": "5ced4640ec223bd9f59601722534acbb2f47087c71167529c513741a86cdae01",
+      "sourceBytes": 357164,
+      "pcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+      "inputPcm16Sha256": "30cb53174f39db4237ad656a3f02cb9f251e289da4d853fa9c5f78d7688b799f",
+      "referenceSha256": "ff0bf75d8a640b871a5f629ca6694f8eaea1b693d08405912955e10cddbaca54",
+      "audioSeconds": 11.16,
+      "spokenAudioSeconds": 11.16,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "de_de_0002",
+      "explicitLanguages": [
+        "de"
+      ],
+      "language": "de",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "de_de",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/de_de/de_de_0002.wav",
+        "referenceFile": "de_de/de_de.trans.txt",
+        "referenceFileSha256": "989cf2fbf21d1066d63b47fa012ec72b21741e460adaa9f007a5347fe74c02e0"
+      },
+      "sourceSha256": "d0859482db2b8461ba8726bce55e00f54760b3aae48aba674e67c893804d8d51",
+      "sourceBytes": 397484,
+      "pcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+      "inputPcm16Sha256": "8d8b6125c6b0664205867c4aada743ec07404a3ef99ffff403c7764bcb40fce2",
+      "referenceSha256": "1f7a001acfe67a17419b922f3d087ad04bf240299a1520584a210f30956d4434",
+      "audioSeconds": 12.42,
+      "spokenAudioSeconds": 12.42,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ar_eg_0000",
+      "explicitLanguages": [
+        "ar"
+      ],
+      "language": "ar",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ar_eg",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ar_eg/ar_eg_0000.wav",
+        "referenceFile": "ar_eg/ar_eg.trans.txt",
+        "referenceFileSha256": "ba47b62d265b028b8f1356218e86cf1ceba3b2fda16c9a3736de71db069be36c"
+      },
+      "sourceSha256": "9cf74b20120bc58d2474e875fcd55dcf2abda9bc8715d91fbdd6fbd90582e158",
+      "sourceBytes": 261164,
+      "pcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+      "inputPcm16Sha256": "0db1431a4eb9219ba9ed8465c396fc522c53afc1b16857de386527ef64ab00f1",
+      "referenceSha256": "ddbb180d071b3292e528e81a131aa79b80cdef27950740fbb33540740934a740",
+      "audioSeconds": 8.16,
+      "spokenAudioSeconds": 8.16,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ar_eg_0001",
+      "explicitLanguages": [
+        "ar"
+      ],
+      "language": "ar",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ar_eg",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ar_eg/ar_eg_0001.wav",
+        "referenceFile": "ar_eg/ar_eg.trans.txt",
+        "referenceFileSha256": "ba47b62d265b028b8f1356218e86cf1ceba3b2fda16c9a3736de71db069be36c"
+      },
+      "sourceSha256": "91e807fa7a1841c2efdea8d1c797b23141c8382407dbef95a1273d61c5d65a8e",
+      "sourceBytes": 453164,
+      "pcm16Sha256": "0c60e50e31939598d10a9fdd6a912d8b2771b4d11e67d3eaefeb9cc19bba07f3",
+      "inputPcm16Sha256": "0c60e50e31939598d10a9fdd6a912d8b2771b4d11e67d3eaefeb9cc19bba07f3",
+      "referenceSha256": "d48ac6d5a80ae2a3a4b3213d54df2f04c26e06c526cdebc47ace44ed1e38f2af",
+      "audioSeconds": 14.16,
+      "spokenAudioSeconds": 14.16,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ar_eg_0002",
+      "explicitLanguages": [
+        "ar"
+      ],
+      "language": "ar",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ar_eg",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ar_eg/ar_eg_0002.wav",
+        "referenceFile": "ar_eg/ar_eg.trans.txt",
+        "referenceFileSha256": "ba47b62d265b028b8f1356218e86cf1ceba3b2fda16c9a3736de71db069be36c"
+      },
+      "sourceSha256": "8e9c5977fe9ca1631946faea206c0ae664b1a8cafe4527dcac755b176bab1aef",
+      "sourceBytes": 512684,
+      "pcm16Sha256": "38f0f6076a02fb560cc2c04ab5877574d8b47f213c4e4ab4b0baf9e7eb06fca2",
+      "inputPcm16Sha256": "38f0f6076a02fb560cc2c04ab5877574d8b47f213c4e4ab4b0baf9e7eb06fca2",
+      "referenceSha256": "70831a1f06b4ebe6debe1a10ebef14cc5591327b0cfba378f214ab334dc65ce3",
+      "audioSeconds": 16.02,
+      "spokenAudioSeconds": 16.02,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "hi_in_0000",
+      "explicitLanguages": [
+        "hi"
+      ],
+      "language": "hi",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "hi_in",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/hi_in/hi_in_0000.wav",
+        "referenceFile": "hi_in/hi_in.trans.txt",
+        "referenceFileSha256": "11eea71070b83b41501119abe92dd46cdd2d59019b7d0b4434ef60b533a710dd"
+      },
+      "sourceSha256": "38cf0e883d64ae257288bce89cf41a9c4a693b218c3381d5bd462d90bf7b7ed6",
+      "sourceBytes": 291884,
+      "pcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "inputPcm16Sha256": "fa633b9b096f2e62c5c0adf5584ebd85db52435be916898d9e2c1e984ab480c7",
+      "referenceSha256": "121762e001e94e3db4c53ee252f44f328ea6dffe538646b9fb225c3394187bde",
+      "audioSeconds": 9.12,
+      "spokenAudioSeconds": 9.12,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "hi_in_0001",
+      "explicitLanguages": [
+        "hi"
+      ],
+      "language": "hi",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "hi_in",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/hi_in/hi_in_0001.wav",
+        "referenceFile": "hi_in/hi_in.trans.txt",
+        "referenceFileSha256": "11eea71070b83b41501119abe92dd46cdd2d59019b7d0b4434ef60b533a710dd"
+      },
+      "sourceSha256": "39f91e5112c883518169024a6853921d2f4bea402f1e6a3bd3c05d99f9a5fae9",
+      "sourceBytes": 441644,
+      "pcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "inputPcm16Sha256": "2ec6bf93df213ed0c58a5ad592f95521aafdb199bab93a427560776c4e151698",
+      "referenceSha256": "d7c49e1c1e7812cbc533e9d77ddc62060b4f907d1f672d319f10897511030ea6",
+      "audioSeconds": 13.8,
+      "spokenAudioSeconds": 13.8,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "hi_in_0002",
+      "explicitLanguages": [
+        "hi"
+      ],
+      "language": "hi",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "hi_in",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/hi_in/hi_in_0002.wav",
+        "referenceFile": "hi_in/hi_in.trans.txt",
+        "referenceFileSha256": "11eea71070b83b41501119abe92dd46cdd2d59019b7d0b4434ef60b533a710dd"
+      },
+      "sourceSha256": "3423fa5ade955d770be244a88158ae875d0b30d84b5fda63a682aa2042ccccf3",
+      "sourceBytes": 480044,
+      "pcm16Sha256": "59ac6ede1b7799e702c310afcbe0c3055a560282d3a04700319fba8d36c0bff1",
+      "inputPcm16Sha256": "59ac6ede1b7799e702c310afcbe0c3055a560282d3a04700319fba8d36c0bff1",
+      "referenceSha256": "30ebf88efbad4ad9a96eb7e1a106e1b0ba5da9d5eff541635066f6de6921ffac",
+      "audioSeconds": 15,
+      "spokenAudioSeconds": 15,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ru_ru_0000",
+      "explicitLanguages": [
+        "ru"
+      ],
+      "language": "ru",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ru_ru",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ru_ru/ru_ru_0000.wav",
+        "referenceFile": "ru_ru/ru_ru.trans.txt",
+        "referenceFileSha256": "8251b0d504460d61b67d3a5db1648fb08e70902722dcb49a5ec945b770d17b63"
+      },
+      "sourceSha256": "a866d2e5611280fcf4996e34bd36f8d0b247862376abf21fc7159997dba2e88f",
+      "sourceBytes": 541484,
+      "pcm16Sha256": "28c597b60fff84134f7712c942331022a2b683610e3cf7088f455858ae25a534",
+      "inputPcm16Sha256": "28c597b60fff84134f7712c942331022a2b683610e3cf7088f455858ae25a534",
+      "referenceSha256": "8ea2cc5114e213681522b3ba14d2c850381228f6abbcd749648d99f83247b6ad",
+      "audioSeconds": 16.92,
+      "spokenAudioSeconds": 16.92,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ru_ru_0001",
+      "explicitLanguages": [
+        "ru"
+      ],
+      "language": "ru",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ru_ru",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ru_ru/ru_ru_0001.wav",
+        "referenceFile": "ru_ru/ru_ru.trans.txt",
+        "referenceFileSha256": "8251b0d504460d61b67d3a5db1648fb08e70902722dcb49a5ec945b770d17b63"
+      },
+      "sourceSha256": "af973f8eb0b51ea2086755c83c992f038aa1675e3a8c5416d169a7acf5e23db1",
+      "sourceBytes": 368684,
+      "pcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+      "inputPcm16Sha256": "53fc5ed90513f2221e6b1e5de1bdadc2a6feeaad1dfbb232566d5c4823a61d0d",
+      "referenceSha256": "ac43e389ba638e44f17407ec990fdddc1ae84d1ea6898c4525b7bb37480d1a2c",
+      "audioSeconds": 11.52,
+      "spokenAudioSeconds": 11.52,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "ru_ru_0002",
+      "explicitLanguages": [
+        "ru"
+      ],
+      "language": "ru",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "ru_ru",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/ru_ru/ru_ru_0002.wav",
+        "referenceFile": "ru_ru/ru_ru.trans.txt",
+        "referenceFileSha256": "8251b0d504460d61b67d3a5db1648fb08e70902722dcb49a5ec945b770d17b63"
+      },
+      "sourceSha256": "2151ecf5905e9dc9985f92980066ad9d567d62528765fdb20b8073aec7aabb7d",
+      "sourceBytes": 276524,
+      "pcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+      "inputPcm16Sha256": "467e106a952931935dc9c128436324856013fd80741d5bbb9bd71ee2a0c11743",
+      "referenceSha256": "beb70f2f31a2666eee1419fcadc1a714f9231bcd9b304375ad8a607b56d2ec43",
+      "audioSeconds": 8.64,
+      "spokenAudioSeconds": 8.64,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "vi_vn_0000",
+      "explicitLanguages": [
+        "vi"
+      ],
+      "language": "vi",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "vi_vn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/vi_vn/vi_vn_0000.wav",
+        "referenceFile": "vi_vn/vi_vn.trans.txt",
+        "referenceFileSha256": "53fe7ca19ad2b272665cf8ba44792d965ab58bb2195533ca234e2dfd573e88c3"
+      },
+      "sourceSha256": "9d9c264ca04985173f1649031b0686c023b5d323cc7e00f15ea5b3bc20e15f35",
+      "sourceBytes": 362924,
+      "pcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+      "inputPcm16Sha256": "3306fb335273ffde339435fd79c82fda7fdd301b697d8a040c425e0e27af3083",
+      "referenceSha256": "fac515f496e5dda38c63e22096707cfb52f07ebf640e01eb4fb50e5712e69f1a",
+      "audioSeconds": 11.34,
+      "spokenAudioSeconds": 11.34,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "vi_vn_0001",
+      "explicitLanguages": [
+        "vi"
+      ],
+      "language": "vi",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "vi_vn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/vi_vn/vi_vn_0001.wav",
+        "referenceFile": "vi_vn/vi_vn.trans.txt",
+        "referenceFileSha256": "53fe7ca19ad2b272665cf8ba44792d965ab58bb2195533ca234e2dfd573e88c3"
+      },
+      "sourceSha256": "129ba462512692ae7b4aff4f75d8451ccb656e2bd094fcdbe95effe9bffd8d4f",
+      "sourceBytes": 232364,
+      "pcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+      "inputPcm16Sha256": "27842a9602e0e985857620e18a9a8066200a05a83d3d7b92c2ccfabbfbeb56b5",
+      "referenceSha256": "71e9506329c4a164dc3b701343d1d7558fdf668984054832b25625c4d54c8701",
+      "audioSeconds": 7.26,
+      "spokenAudioSeconds": 7.26,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "vi_vn_0002",
+      "explicitLanguages": [
+        "vi"
+      ],
+      "language": "vi",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "vi_vn",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/vi_vn/vi_vn_0002.wav",
+        "referenceFile": "vi_vn/vi_vn.trans.txt",
+        "referenceFileSha256": "53fe7ca19ad2b272665cf8ba44792d965ab58bb2195533ca234e2dfd573e88c3"
+      },
+      "sourceSha256": "517e76f0c00c006c728d5007acf829bb13b935a068503ca0ff26ddecab37125a",
+      "sourceBytes": 320684,
+      "pcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+      "inputPcm16Sha256": "d715d56b8b15a118e98951a843a4b4767be45a9cf111ada7220b6072bca03c18",
+      "referenceSha256": "9ce7c76fc54fcd44cc1a3f91d160a21a8f8aa05988e3d9688e4f70efbf6cb597",
+      "audioSeconds": 10.02,
+      "spokenAudioSeconds": 10.02,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "th_th_0000",
+      "explicitLanguages": [
+        "th"
+      ],
+      "language": "th",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "th_th",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/th_th/th_th_0000.wav",
+        "referenceFile": "th_th/th_th.trans.txt",
+        "referenceFileSha256": "87251f997b6869e719f5677aaf42b744cd20e8103b923ded26b1c7527efa26d8"
+      },
+      "sourceSha256": "7cc0db92065212b3b78175b91e0408f63e14f03f3e089b89bfc7c7b87f93c002",
+      "sourceBytes": 282284,
+      "pcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+      "inputPcm16Sha256": "423a17d9d6bfe0fb3b2a9602e468734166e3870588acc0873882b1bc1bffa62b",
+      "referenceSha256": "1b43d7066947c9afdc46eaa7ddf21461bb0b911a3de1087db99faeff660b02c5",
+      "audioSeconds": 8.82,
+      "spokenAudioSeconds": 8.82,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "th_th_0001",
+      "explicitLanguages": [
+        "th"
+      ],
+      "language": "th",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "th_th",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/th_th/th_th_0001.wav",
+        "referenceFile": "th_th/th_th.trans.txt",
+        "referenceFileSha256": "87251f997b6869e719f5677aaf42b744cd20e8103b923ded26b1c7527efa26d8"
+      },
+      "sourceSha256": "486b0f5ff08fc5d9a1008797a72ebde845f0f54332290a0ec2beaef34c41c213",
+      "sourceBytes": 230444,
+      "pcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+      "inputPcm16Sha256": "54e527f36922cdbe5298eab700004fe47ff550b0965125139eaf92d8185f5562",
+      "referenceSha256": "87b1c22fc92ea93959ec317f2947393c1974040d32376ec92b79686a6ae25f9b",
+      "audioSeconds": 7.2,
+      "spokenAudioSeconds": 7.2,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "th_th_0002",
+      "explicitLanguages": [
+        "th"
+      ],
+      "language": "th",
+      "metric": "cer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "th_th",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/th_th/th_th_0002.wav",
+        "referenceFile": "th_th/th_th.trans.txt",
+        "referenceFileSha256": "87251f997b6869e719f5677aaf42b744cd20e8103b923ded26b1c7527efa26d8"
+      },
+      "sourceSha256": "ee2c3d00fad8d2909f3531af24c505087b7d49a2f452cca21d09d438a5e76e52",
+      "sourceBytes": 305324,
+      "pcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+      "inputPcm16Sha256": "5bd079a260f13d4755155d3749e5e9e166efd5f17b0a346effa1e849b4d6d4cb",
+      "referenceSha256": "4c2e25af290c9e6678e355173c20c0a79751a434f2de70f012b90aafa8b23420",
+      "audioSeconds": 9.54,
+      "spokenAudioSeconds": 9.54,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "pt_br_0000",
+      "explicitLanguages": [
+        "pt"
+      ],
+      "language": "pt",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "pt_br",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/pt_br/pt_br_0000.wav",
+        "referenceFile": "pt_br/pt_br.trans.txt",
+        "referenceFileSha256": "ffd0857e671c7a88141ceb2fd565015b60bebb13d06dbf2f122e552ad1ad9985"
+      },
+      "sourceSha256": "9d0d4278dfcc2720f453cbe180138997e89f93e20baa4c1cf0b16c35a321d16f",
+      "sourceBytes": 568364,
+      "pcm16Sha256": "e575d5954efe5e252792238aa1120f8506fbf1b39e4fff96fa74ec96a767de7d",
+      "inputPcm16Sha256": "e575d5954efe5e252792238aa1120f8506fbf1b39e4fff96fa74ec96a767de7d",
+      "referenceSha256": "06c6457a7da5cd8b5473a60ff1dcf8f84facdff90dd4e9c98c7d681705794ef9",
+      "audioSeconds": 17.76,
+      "spokenAudioSeconds": 17.76,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "pt_br_0001",
+      "explicitLanguages": [
+        "pt"
+      ],
+      "language": "pt",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "pt_br",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/pt_br/pt_br_0001.wav",
+        "referenceFile": "pt_br/pt_br.trans.txt",
+        "referenceFileSha256": "ffd0857e671c7a88141ceb2fd565015b60bebb13d06dbf2f122e552ad1ad9985"
+      },
+      "sourceSha256": "5e2fa6de350d1440cccc7b2d8124bed3b821eae53e470728f96194f4eed80435",
+      "sourceBytes": 435884,
+      "pcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+      "inputPcm16Sha256": "b536625c24218dfa5dd1fe6752d05ec76d8c839d1475dfcd80b09f0dddc4a333",
+      "referenceSha256": "da1d3c5c4c882a2617ee2cd3ea4d429021225329e4c85df6e49694df7f58b4d6",
+      "audioSeconds": 13.62,
+      "spokenAudioSeconds": 13.62,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    },
+    {
+      "id": "pt_br_0002",
+      "explicitLanguages": [
+        "pt"
+      ],
+      "language": "pt",
+      "metric": "wer",
+      "source": {
+        "dataset": "FluidInference/fleurs-full",
+        "upstream": "google/fleurs",
+        "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+        "split": "test",
+        "locale": "pt_br",
+        "license": "CC-BY-4.0",
+        "url": "https://huggingface.co/datasets/FluidInference/fleurs-full/blob/1cca811bb8ea4d370345f108f00518167040282c/pt_br/pt_br_0002.wav",
+        "referenceFile": "pt_br/pt_br.trans.txt",
+        "referenceFileSha256": "ffd0857e671c7a88141ceb2fd565015b60bebb13d06dbf2f122e552ad1ad9985"
+      },
+      "sourceSha256": "4561a9806e8c3c010255cc5bc85d34426dfca7eb2459a08fa9cc3c56b825ba46",
+      "sourceBytes": 268844,
+      "pcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+      "inputPcm16Sha256": "bd2d0b13bb5158e8e4b93c5ef436e4ca62afe8421679cd0e30fc1d693b37b0f8",
+      "referenceSha256": "93e1e302d3988012b046b7963a33e0da93a51453acd41b3c1c0ad743299fb52f",
+      "audioSeconds": 8.4,
+      "spokenAudioSeconds": 8.4,
+      "models": [
+        "tiny",
+        "base"
+      ],
+      "natural": true,
+      "repeat": 1
+    }
+  ],
+  "perLanguage": [
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 51,
+      "referenceUnits": 69,
+      "rate": 0.7391304347826086,
+      "medianWallMs": 930,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 22,
+      "referenceUnits": 62,
+      "rate": 0.3548387096774194,
+      "medianWallMs": 632,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 12,
+      "referenceUnits": 73,
+      "rate": 0.1643835616438356,
+      "medianWallMs": 475,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 19,
+      "referenceUnits": 102,
+      "rate": 0.18627450980392157,
+      "medianWallMs": 813,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 65,
+      "referenceUnits": 109,
+      "rate": 0.5963302752293578,
+      "medianWallMs": 830,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 115,
+      "referenceUnits": 93,
+      "rate": 1.2365591397849462,
+      "medianWallMs": 904,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 136,
+      "referenceUnits": 162,
+      "rate": 0.8395061728395061,
+      "medianWallMs": 857,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 91,
+      "referenceUnits": 127,
+      "rate": 0.7165354330708661,
+      "medianWallMs": 803,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 56,
+      "referenceUnits": 75,
+      "rate": 0.7466666666666667,
+      "medianWallMs": 840,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 45,
+      "rate": 0.24444444444444444,
+      "medianWallMs": 698,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 279,
+      "referenceUnits": 355,
+      "rate": 0.7859154929577464,
+      "medianWallMs": 751,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 139,
+      "referenceUnits": 209,
+      "rate": 0.6650717703349283,
+      "medianWallMs": 569,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 568,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 22,
+        "referenceUnits": 81,
+        "rate": 0.2716049382716049
+      }
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 51,
+      "referenceUnits": 69,
+      "rate": 0.7391304347826086,
+      "medianWallMs": 1124,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 22,
+      "referenceUnits": 62,
+      "rate": 0.3548387096774194,
+      "medianWallMs": 795,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 12,
+      "referenceUnits": 73,
+      "rate": 0.1643835616438356,
+      "medianWallMs": 681,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 19,
+      "referenceUnits": 102,
+      "rate": 0.18627450980392157,
+      "medianWallMs": 887,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 65,
+      "referenceUnits": 109,
+      "rate": 0.5963302752293578,
+      "medianWallMs": 925,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 115,
+      "referenceUnits": 93,
+      "rate": 1.2365591397849462,
+      "medianWallMs": 1103,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 136,
+      "referenceUnits": 162,
+      "rate": 0.8395061728395061,
+      "medianWallMs": 995,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 91,
+      "referenceUnits": 127,
+      "rate": 0.7165354330708661,
+      "medianWallMs": 872,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 56,
+      "referenceUnits": 75,
+      "rate": 0.7466666666666667,
+      "medianWallMs": 980,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 45,
+      "rate": 0.24444444444444444,
+      "medianWallMs": 785,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 279,
+      "referenceUnits": 355,
+      "rate": 0.7859154929577464,
+      "medianWallMs": 1017,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 139,
+      "referenceUnits": 209,
+      "rate": 0.6650717703349283,
+      "medianWallMs": 881,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 647,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 22,
+        "referenceUnits": 81,
+        "rate": 0.2716049382716049
+      }
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 30,
+      "referenceUnits": 69,
+      "rate": 0.43478260869565216,
+      "medianWallMs": 1457,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 14,
+      "referenceUnits": 62,
+      "rate": 0.22580645161290322,
+      "medianWallMs": 794,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 8,
+      "referenceUnits": 73,
+      "rate": 0.1095890410958904,
+      "medianWallMs": 616,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 102,
+      "rate": 0.10784313725490197,
+      "medianWallMs": 994,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 32,
+      "referenceUnits": 109,
+      "rate": 0.29357798165137616,
+      "medianWallMs": 1246,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 94,
+      "referenceUnits": 93,
+      "rate": 1.010752688172043,
+      "medianWallMs": 1436,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 61,
+      "referenceUnits": 162,
+      "rate": 0.3765432098765432,
+      "medianWallMs": 1069,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 30,
+      "referenceUnits": 127,
+      "rate": 0.23622047244094488,
+      "medianWallMs": 931,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 18,
+      "referenceUnits": 75,
+      "rate": 0.24,
+      "medianWallMs": 1138,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 6,
+      "referenceUnits": 45,
+      "rate": 0.13333333333333333,
+      "medianWallMs": 961,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 256,
+      "referenceUnits": 355,
+      "rate": 0.7211267605633803,
+      "medianWallMs": 1137,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 55,
+      "referenceUnits": 209,
+      "rate": 0.2631578947368421,
+      "medianWallMs": 825,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "explicit",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 832,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 11,
+        "referenceUnits": 81,
+        "rate": 0.13580246913580246
+      }
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 30,
+      "referenceUnits": 69,
+      "rate": 0.43478260869565216,
+      "medianWallMs": 1657,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 14,
+      "referenceUnits": 62,
+      "rate": 0.22580645161290322,
+      "medianWallMs": 986,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 8,
+      "referenceUnits": 73,
+      "rate": 0.1095890410958904,
+      "medianWallMs": 811,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 102,
+      "rate": 0.10784313725490197,
+      "medianWallMs": 1163,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 32,
+      "referenceUnits": 109,
+      "rate": 0.29357798165137616,
+      "medianWallMs": 1438,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 94,
+      "referenceUnits": 93,
+      "rate": 1.010752688172043,
+      "medianWallMs": 1583,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 61,
+      "referenceUnits": 162,
+      "rate": 0.3765432098765432,
+      "medianWallMs": 1158,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 30,
+      "referenceUnits": 127,
+      "rate": 0.23622047244094488,
+      "medianWallMs": 1087,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 18,
+      "referenceUnits": 75,
+      "rate": 0.24,
+      "medianWallMs": 1304,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 6,
+      "referenceUnits": 45,
+      "rate": 0.13333333333333333,
+      "medianWallMs": 1072,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 256,
+      "referenceUnits": 355,
+      "rate": 0.7211267605633803,
+      "medianWallMs": 1357,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 55,
+      "referenceUnits": 209,
+      "rate": 0.2631578947368421,
+      "medianWallMs": 1058,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "baseline",
+      "model": "base",
+      "mode": "auto",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 892,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 11,
+        "referenceUnits": 81,
+        "rate": 0.13580246913580246
+      }
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 51,
+      "referenceUnits": 69,
+      "rate": 0.7391304347826086,
+      "medianWallMs": 969,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 22,
+      "referenceUnits": 62,
+      "rate": 0.3548387096774194,
+      "medianWallMs": 651,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 12,
+      "referenceUnits": 73,
+      "rate": 0.1643835616438356,
+      "medianWallMs": 469,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 19,
+      "referenceUnits": 102,
+      "rate": 0.18627450980392157,
+      "medianWallMs": 839,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 65,
+      "referenceUnits": 109,
+      "rate": 0.5963302752293578,
+      "medianWallMs": 791,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 115,
+      "referenceUnits": 93,
+      "rate": 1.2365591397849462,
+      "medianWallMs": 929,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 136,
+      "referenceUnits": 162,
+      "rate": 0.8395061728395061,
+      "medianWallMs": 870,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 91,
+      "referenceUnits": 127,
+      "rate": 0.7165354330708661,
+      "medianWallMs": 780,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 56,
+      "referenceUnits": 75,
+      "rate": 0.7466666666666667,
+      "medianWallMs": 857,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 45,
+      "rate": 0.24444444444444444,
+      "medianWallMs": 695,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 279,
+      "referenceUnits": 355,
+      "rate": 0.7859154929577464,
+      "medianWallMs": 819,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 139,
+      "referenceUnits": 209,
+      "rate": 0.6650717703349283,
+      "medianWallMs": 609,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "explicit",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 554,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 22,
+        "referenceUnits": 81,
+        "rate": 0.2716049382716049
+      }
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 51,
+      "referenceUnits": 69,
+      "rate": 0.7391304347826086,
+      "medianWallMs": 1080,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 22,
+      "referenceUnits": 62,
+      "rate": 0.3548387096774194,
+      "medianWallMs": 747,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 12,
+      "referenceUnits": 73,
+      "rate": 0.1643835616438356,
+      "medianWallMs": 701,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 19,
+      "referenceUnits": 102,
+      "rate": 0.18627450980392157,
+      "medianWallMs": 893,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 65,
+      "referenceUnits": 109,
+      "rate": 0.5963302752293578,
+      "medianWallMs": 900,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 115,
+      "referenceUnits": 93,
+      "rate": 1.2365591397849462,
+      "medianWallMs": 1022,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 136,
+      "referenceUnits": 162,
+      "rate": 0.8395061728395061,
+      "medianWallMs": 1018,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 91,
+      "referenceUnits": 127,
+      "rate": 0.7165354330708661,
+      "medianWallMs": 898,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 56,
+      "referenceUnits": 75,
+      "rate": 0.7466666666666667,
+      "medianWallMs": 953,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 45,
+      "rate": 0.24444444444444444,
+      "medianWallMs": 783,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 279,
+      "referenceUnits": 355,
+      "rate": 0.7859154929577464,
+      "medianWallMs": 941,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 139,
+      "referenceUnits": 209,
+      "rate": 0.6650717703349283,
+      "medianWallMs": 796,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "tiny",
+      "mode": "auto",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 651,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 22,
+        "referenceUnits": 81,
+        "rate": 0.2716049382716049
+      }
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 30,
+      "referenceUnits": 69,
+      "rate": 0.43478260869565216,
+      "medianWallMs": 1464,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 14,
+      "referenceUnits": 62,
+      "rate": 0.22580645161290322,
+      "medianWallMs": 763,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 8,
+      "referenceUnits": 73,
+      "rate": 0.1095890410958904,
+      "medianWallMs": 651,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 102,
+      "rate": 0.10784313725490197,
+      "medianWallMs": 1033,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 32,
+      "referenceUnits": 109,
+      "rate": 0.29357798165137616,
+      "medianWallMs": 1198,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 94,
+      "referenceUnits": 93,
+      "rate": 1.010752688172043,
+      "medianWallMs": 1360,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 61,
+      "referenceUnits": 162,
+      "rate": 0.3765432098765432,
+      "medianWallMs": 1005,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 30,
+      "referenceUnits": 127,
+      "rate": 0.23622047244094488,
+      "medianWallMs": 896,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 18,
+      "referenceUnits": 75,
+      "rate": 0.24,
+      "medianWallMs": 1101,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 6,
+      "referenceUnits": 45,
+      "rate": 0.13333333333333333,
+      "medianWallMs": 863,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 256,
+      "referenceUnits": 355,
+      "rate": 0.7211267605633803,
+      "medianWallMs": 1186,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 55,
+      "referenceUnits": 209,
+      "rate": 0.2631578947368421,
+      "medianWallMs": 850,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "explicit",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 680,
+      "detectionKnown": 0,
+      "detectionCorrect": 0,
+      "encoderReuse": 0,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 11,
+        "referenceUnits": 81,
+        "rate": 0.13580246913580246
+      }
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "ar",
+      "n": 3,
+      "metric": "wer",
+      "errors": 30,
+      "referenceUnits": 69,
+      "rate": 0.43478260869565216,
+      "medianWallMs": 1491,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "de",
+      "n": 3,
+      "metric": "wer",
+      "errors": 14,
+      "referenceUnits": 62,
+      "rate": 0.22580645161290322,
+      "medianWallMs": 917,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "en",
+      "n": 3,
+      "metric": "wer",
+      "errors": 8,
+      "referenceUnits": 73,
+      "rate": 0.1095890410958904,
+      "medianWallMs": 801,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "es",
+      "n": 3,
+      "metric": "wer",
+      "errors": 11,
+      "referenceUnits": 102,
+      "rate": 0.10784313725490197,
+      "medianWallMs": 1086,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "fr",
+      "n": 3,
+      "metric": "wer",
+      "errors": 32,
+      "referenceUnits": 109,
+      "rate": 0.29357798165137616,
+      "medianWallMs": 1283,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "hi",
+      "n": 3,
+      "metric": "wer",
+      "errors": 94,
+      "referenceUnits": 93,
+      "rate": 1.010752688172043,
+      "medianWallMs": 1516,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "ja",
+      "n": 3,
+      "metric": "cer",
+      "errors": 61,
+      "referenceUnits": 162,
+      "rate": 0.3765432098765432,
+      "medianWallMs": 1104,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "ko",
+      "n": 3,
+      "metric": "cer",
+      "errors": 30,
+      "referenceUnits": 127,
+      "rate": 0.23622047244094488,
+      "medianWallMs": 1003,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "pt",
+      "n": 3,
+      "metric": "wer",
+      "errors": 18,
+      "referenceUnits": 75,
+      "rate": 0.24,
+      "medianWallMs": 1184,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "ru",
+      "n": 3,
+      "metric": "wer",
+      "errors": 6,
+      "referenceUnits": 45,
+      "rate": 0.13333333333333333,
+      "medianWallMs": 933,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "th",
+      "n": 3,
+      "metric": "cer",
+      "errors": 256,
+      "referenceUnits": 355,
+      "rate": 0.7211267605633803,
+      "medianWallMs": 1237,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "vi",
+      "n": 3,
+      "metric": "cer",
+      "errors": 55,
+      "referenceUnits": 209,
+      "rate": 0.2631578947368421,
+      "medianWallMs": 931,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3
+    },
+    {
+      "version": "candidate-q4",
+      "model": "base",
+      "mode": "auto",
+      "language": "zh",
+      "n": 3,
+      "metric": "cer",
+      "errors": 29,
+      "referenceUnits": 81,
+      "rate": 0.35802469135802467,
+      "medianWallMs": 827,
+      "detectionKnown": 3,
+      "detectionCorrect": 3,
+      "encoderReuse": 3,
+      "normalizedScore": {
+        "transform": "ICU Traditional-Simplified (evaluation only)",
+        "errors": 11,
+        "referenceUnits": 81,
+        "rate": 0.13580246913580246
+      }
+    }
+  ]
+}

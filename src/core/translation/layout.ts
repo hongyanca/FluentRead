@@ -2,13 +2,17 @@
  * @file src/core/translation/layout.ts
  *
  * 文件职责：判定页面元素的语义块、内联关系和可重组边界，为候选引擎选择合理翻译粒度并保护页面布局。
- * 主要内容：识别 heading、block、inline、结构标签、嵌入式 aside 和 reparent 边界，限制直接子节点探测数量，并提供候选目标及内联 run 相关的布局函数。 可核对的公开符号包括 isSemanticHeadingElement、getElementDisplay、isBlockBoundary、isStructuralContainer、hasStructuralAncestor、isTranslationControlElement、hasDirectReadableText、hasReadableBlockChild。
+ * 主要内容：按统一的按钮语义（原生 button、按钮型 input、ARIA 控件角色、按钮类名）与呈标签形态的交互外壳区分正文与控件；识别 heading、block、inline、纯文本正文 pre、结构标签、嵌入式 aside、可选放开的侧边栏区域和 reparent 边界，保持交互控件对内部标签的翻译所有权，并在 tooltip 边界停止向外归属，限制直接子节点探测数量，并提供候选目标及内联 run 相关的布局函数。 可核对的公开符号包括 isSemanticHeadingElement、getElementDisplay、isBlockBoundary、isStructuralContainer、hasStructuralAncestor、isTranslationControlElement、findTranslationControlOwner、hasDirectReadableText、hasReadableBlockChild。
  * 模块边界：本文件属于可独立测试的 core 候选领域；可以读取传入 DOM 以计算结果，但不访问配置存储、不调用 provider、不注册页面监听器，也不负责译文渲染或 feature 生命周期。
  */
 
 import {
     getComposedParent,
+    getElementTagName,
+    getTranslatableControlValueAttribute,
+    isTranslationTooltip,
     isDocumentSurface,
+    isPlainTextDocumentPre,
     isProtectedTextElement,
     maxComposedAncestorDepth,
 } from './dom';
@@ -16,6 +20,8 @@ import {
     hasMeaningfulTranslationTextInNodes,
 } from './text';
 import type {TranslationTextProtectionCache} from './text';
+import type {TranslationTextProtectionOptions} from './dom';
+import type {TranslationCandidateKind, TranslationScope} from './types';
 
 // 这些上限把同步布局分类限制为有界工作；超限时按保守边界处理，避免大型页面阻塞主线程。
 const maxDirectRunNodes = 2048;
@@ -58,7 +64,7 @@ const embeddedAsideClassTokens = new Set([
  * 因此结构祖先不能屏蔽标题本身；硬守卫与站点裁剪决策仍具有更高优先级。
  */
 export function isSemanticHeadingElement(element: Element): boolean {
-    return semanticHeadingTags.has(element.tagName.toLowerCase());
+    return semanticHeadingTags.has(getElementTagName(element));
 }
 
 export function getElementDisplay(element: Element): string {
@@ -71,7 +77,8 @@ export function getElementDisplay(element: Element): string {
 }
 
 export function isBlockBoundary(element: Element): boolean {
-    const tag = element.tagName.toLowerCase();
+    const tag = getElementTagName(element);
+    if (isPlainTextDocumentPre(element)) return true;
     if (semanticReparentBoundaryTags.has(tag)) return true;
     const display = getElementDisplay(element);
     if (display) {
@@ -104,13 +111,13 @@ function hasComposedAncestor(
 
 function hasArticleAncestor(element: Element): boolean {
     return hasComposedAncestor(element, (ancestor) =>
-        ancestor.tagName.toLowerCase() === 'article' ||
+        getElementTagName(ancestor) === 'article' ||
         ancestor.getAttribute('role')?.trim().toLowerCase() === 'article');
 }
 
 function hasMainAncestor(element: Element): boolean {
     return hasComposedAncestor(element, (ancestor) =>
-        ancestor.tagName.toLowerCase() === 'main' ||
+        getElementTagName(ancestor) === 'main' ||
         ancestor.getAttribute('role')?.trim().toLowerCase() === 'main');
 }
 
@@ -122,9 +129,28 @@ function isEmbeddedContentAside(element: Element): boolean {
         embeddedAsideClassTokens.has(token.toLowerCase()));
 }
 
-export function isStructuralContainer(element: Element): boolean {
-    const tag = element.tagName.toLowerCase();
+/** 侧边栏翻译开启后，aside 与 nav 不再被当作只读页面框架。 */
+export interface StructuralRegionOptions {
+    includeSidebarRegions?: boolean;
+}
+
+/** An enabled nav/aside owns its descendants even when nested in a header or footer shell. */
+export function isIncludedSidebarRegion(
+    element: Element,
+    regionOptions?: StructuralRegionOptions,
+): boolean {
+    return regionOptions?.includeSidebarRegions === true &&
+        ['aside', 'nav'].includes(getElementTagName(element));
+}
+
+export function isStructuralContainer(
+    element: Element,
+    regionOptions?: StructuralRegionOptions,
+): boolean {
+    const tag = getElementTagName(element);
     if (!structuralTags.has(tag)) return false;
+    // 用户显式要求翻译侧边栏时，只放开侧栏与导航；header/footer 仍是页面框架。
+    if (regionOptions?.includeSidebarRegions && (tag === 'aside' || tag === 'nav')) return false;
     // 导航即使挂在文章内容内，仍属于页面框架控件。
     if (tag === 'nav') return true;
     // article 拥有其相关 aside；文档引擎也会在没有 article 的 <main> 下输出 note/callout
@@ -135,46 +161,211 @@ export function isStructuralContainer(element: Element): boolean {
     return true;
 }
 
-export function hasStructuralAncestor(element: Element): boolean {
+export function hasStructuralAncestor(
+    element: Element,
+    regionOptions?: StructuralRegionOptions,
+): boolean {
+    if (isIncludedSidebarRegion(element, regionOptions)) return false;
     let current: Element | null = getComposedParent(element);
     let depth = 0;
     while (current && !isDocumentSurface(current)) {
         depth += 1;
         // 对恶意超深子树保守按结构区域处理；全文发现也会通过同一硬深度守卫裁剪它。
         if (depth > maxComposedAncestorDepth) return true;
-        if (isStructuralContainer(current)) return true;
+        if (isIncludedSidebarRegion(current, regionOptions)) return false;
+        if (isStructuralContainer(current, regionOptions)) return true;
         current = getComposedParent(current);
     }
     return false;
 }
 
+/**
+ * 明确的按钮语义：原生 button、按钮型 input，以及 ARIA 明确声明为操作控件的角色。
+ * 这些元素的文字是操作名而不是正文，宿主样式通常把它们钉在固定高度的一行里，
+ * 因此无论识别范围是正文还是全部节点，都必须整体归属为控件并采用替换式译文。
+ */
+const nativeControlTags = new Set(['button']);
+
+const nativeControlRoles = new Set([
+    'button', 'menuitem', 'menuitemcheckbox', 'menuitemradio',
+    'tab', 'switch', 'option', 'treeitem', 'radio', 'checkbox',
+]);
+
+/**
+ * Bootstrap、Primer、Tailwind 生态统一用 `btn`/`button` 这两个精确 class token 标记
+ * 按钮化的链接与容器（如 GitHub 的 `a.btn.btn-primary`）。token 是全等匹配，
+ * 因此 `btn-group`、`button-label` 等包装类不会被误判；这类元素也从不出现在正文行内，
+ * 可以安全地充当控件所有权边界。
+ */
+const buttonClassTokens = new Set(['btn', 'button']);
+
+function hasButtonClassToken(element: Element): boolean {
+    return Array.from(element.classList)
+        .some((token) => buttonClassTokens.has(token.toLowerCase()));
+}
+
 export function isTranslationControlElement(element: Element): boolean {
-    const tag = element.tagName.toLowerCase();
-    if (tag === 'button') return true;
-    const role = element.getAttribute('role')?.toLowerCase();
-    return role === 'button' || role === 'menuitem';
+    const tag = getElementTagName(element);
+    if (nativeControlTags.has(tag)) return true;
+    if (getTranslatableControlValueAttribute(element)) return true;
+    const role = element.getAttribute('role')?.trim().toLowerCase();
+    if (role) return nativeControlRoles.has(role);
+    return hasButtonClassToken(element);
+}
+
+const allScopeControlRoles = new Set([
+    'button', 'link', 'menuitem', 'menuitemcheckbox', 'menuitemradio',
+    'tab', 'treeitem', 'option', 'checkbox', 'radio', 'switch',
+]);
+const allScopeControlTags = new Set(['a', 'button', 'label', 'summary', 'legend']);
+const allScopeProseTags = new Set([
+    'article', 'p', 'blockquote', 'address', 'figcaption', 'li', 'dt', 'dd', 'td', 'th',
+]);
+const allScopeUIRoles = new Set([
+    'navigation', 'menu', 'menubar', 'tablist', 'tree', 'toolbar', 'listbox',
+]);
+
+function isAllScopeControl(element: Element): boolean {
+    return allScopeControlTags.has(getElementTagName(element)) ||
+        allScopeControlRoles.has(element.getAttribute('role')?.trim().toLowerCase() ?? '');
+}
+
+/**
+ * 交互外壳：链接、表单标签、折叠摘要以及被作者手动设为可 Tab 聚焦的容器。
+ * 它们既可能是工具栏里的操作标签，也可能是 FAQ 问句这类正文，因此不能像原生按钮那样
+ * 无条件替换，必须再通过"标签形态"判定。`tabindex="-1"` 只用于程序化聚焦（模态、跳转锚点），
+ * 不代表可操作，排除后可避免把整段内容区当成控件。
+ */
+function hasFocusableTabIndex(element: Element): boolean {
+    const value = element.getAttribute('tabindex');
+    if (value === null) return false;
+    const index = Number.parseInt(value.trim(), 10);
+    return Number.isFinite(index) && index >= 0;
+}
+
+function isInteractiveSurface(element: Element): boolean {
+    return isAllScopeControl(element) || hasFocusableTabIndex(element);
+}
+
+// 控件标签是操作名，不是句子。超出该长度或带句末标点的文本按正文处理，保留双语对照。
+const maxControlLabelLength = 64;
+const sentenceEndingPattern = /[.!?。！？；;]$/u;
+
+/**
+ * 正文里的链接、FAQ 折叠标题等交互外壳仍然是要读的内容，双语对照有价值；
+ * 工具栏里的短标签则和按钮一样受固定尺寸约束，插入第二行会撑破宿主布局。
+ * 以"无可读块级子节点 + 标签形态文本"区分两者，避免把整段正文误判成控件。
+ */
+function isControlLabelSurface(
+    element: Element,
+    shouldStayOriginal?: (element: Element) => boolean,
+    protectionCache?: TranslationTextProtectionCache,
+    protectionOptions?: TranslationTextProtectionOptions,
+): boolean {
+    if (hasReadableBlockChild(element, shouldStayOriginal, protectionCache, protectionOptions)) return false;
+    // Element 的 textContent 恒为字符串（仅 Document/Doctype 为 null）。
+    const text = element.textContent!.replace(/[\s\u3000]+/gu, ' ').trim();
+    return text.length > 0 && text.length <= maxControlLabelLength && !sentenceEndingPattern.test(text);
+}
+
+/** 全部节点仍把完整段落/标题交给正文渲染；导航列表和应用标签使用原位文本槽。 */
+export function getAllScopeCandidateKind(element: Element): TranslationCandidateKind {
+    if (isSemanticHeadingElement(element)) return 'content';
+    if (isStructuralContainer(element) ||
+        allScopeUIRoles.has(element.getAttribute('role')?.trim().toLowerCase() ?? '')) return 'control';
+    if (!allScopeProseTags.has(getElementTagName(element)) &&
+        element.getAttribute('role')?.trim().toLowerCase() !== 'article' &&
+        !hasArticleAncestor(element)) return 'control';
+    return hasComposedAncestor(element, (ancestor) =>
+        isStructuralContainer(ancestor) ||
+        isAllScopeControl(ancestor) ||
+        allScopeUIRoles.has(ancestor.getAttribute('role')?.trim().toLowerCase() ?? ''))
+        ? 'control'
+        : 'content';
+}
+
+/**
+ * 内联强调和链接沿用最近正文/控件的文本所有权，避免扩大范围后把现有段落细分成嵌套
+ * 译文。普通应用 div/span 不形成该语义边界，因此独立标签仍可作为原位控件发现。
+ */
+function hasAllScopeSemanticOwner(element: Element): boolean {
+    let crossedUIBoundary = false;
+    return hasComposedAncestor(element, (ancestor) => {
+        crossedUIBoundary = crossedUIBoundary || isStructuralContainer(ancestor) ||
+            allScopeUIRoles.has(ancestor.getAttribute('role')?.trim().toLowerCase() ?? '');
+        return !crossedUIBoundary &&
+            (isAllScopeControl(ancestor) || getAllScopeCandidateKind(ancestor) === 'content');
+    });
+}
+
+/**
+ * 控件内的 flex/grid 标签属于同一个交互语义单元，不能因为生成块盒就成为双语段落。
+ * 使用 composed 祖先也能覆盖开放 Shadow DOM 中的标签；保持与核心硬守卫相同的深度上限。
+ */
+export function findTranslationControlOwner(element: Element): Element | null {
+    let current: Element | null = element;
+    let depth = 0;
+    while (current && !isDocumentSurface(current)) {
+        if (depth > maxComposedAncestorDepth) return null;
+        if (isTranslationTooltip(current)) return null;
+        if (isTranslationControlElement(current)) return current;
+        current = getComposedParent(current);
+        depth += 1;
+    }
+    return null;
+}
+
+/**
+ * 可点击卡片或菜单项可能包含独立操作按钮；这些边界不能被外层控件整块吞并。
+ * 扫描超限时同样选择拆分标签，避免对异常宽深控件执行无界探测。
+ */
+function hasNestedTranslationControl(element: Element): boolean {
+    const pending: Element[] = [element];
+    let visited = 0;
+    while (pending.length > 0) {
+        const current = pending.pop()!;
+        if (current !== element && isTranslationControlElement(current)) return true;
+        visited += 1;
+        const children = current.children;
+        const shadowChildren = current.shadowRoot?.children;
+        if (visited + pending.length + children.length + (shadowChildren?.length ?? 0) > maxDirectRunNodes) return true;
+        pending.push(...Array.from(children), ...Array.from(shadowChildren ?? []));
+    }
+    return false;
 }
 
 export function hasDirectReadableText(
     element: Element,
     shouldStayOriginal?: (element: Element) => boolean,
     protectionCache?: TranslationTextProtectionCache,
+    protectionOptions?: TranslationTextProtectionOptions,
 ): boolean {
     if (element.childNodes.length > maxDirectRunNodes) return false;
     const inlineNodes = Array.from(element.childNodes).filter((child) =>
         child.nodeType === 3 || (child.nodeType === 1 && !isBlockBoundary(child as Element)));
-    return hasMeaningfulTranslationTextInNodes(inlineNodes, shouldStayOriginal, protectionCache);
+    return hasMeaningfulTranslationTextInNodes(
+        inlineNodes,
+        shouldStayOriginal,
+        protectionCache,
+        protectionOptions,
+    );
 }
 
 export function hasReadableBlockChild(
     element: Element,
     shouldStayOriginal?: (element: Element) => boolean,
     protectionCache?: TranslationTextProtectionCache,
+    protectionOptions?: TranslationTextProtectionOptions,
 ): boolean {
     if (element.children.length > maxBlockChildrenToProbe) return true;
     return Array.from(element.children).some((child) => {
         if (!isBlockBoundary(child)) return false;
-        return hasMeaningfulTranslationTextInNodes([child], shouldStayOriginal, protectionCache);
+        return hasMeaningfulTranslationTextInNodes(
+            [child],
+            shouldStayOriginal,
+            protectionCache,
+            protectionOptions,
+        );
     });
 }
 
@@ -188,22 +379,34 @@ export function getDirectInlineRuns(
     skipStructuralAncestorCheck = false,
     isAdditionalBarrier?: (element: Element) => boolean,
     protectionCache?: TranslationTextProtectionCache,
+    protectionOptions?: TranslationTextProtectionOptions,
+    scope: TranslationScope = 'content',
 ): ChildNode[][] {
-    if (isDocumentSurface(element) || isStructuralContainer(element) ||
-        (!skipStructuralAncestorCheck && hasStructuralAncestor(element))) return [];
-    if (shouldStayOriginal?.(element) || isProtectedTextElement(element) || !isBlockBoundary(element)) return [];
+    if (scope === 'content' && (isDocumentSurface(element) || isStructuralContainer(element) ||
+        (!skipStructuralAncestorCheck && hasStructuralAncestor(element)))) return [];
+    if (shouldStayOriginal?.(element) || isProtectedTextElement(element) ||
+        (scope === 'content' && !isBlockBoundary(element))) return [];
+    // 控件只能走保留宿主标签/图标的实时文本槽路径，不能拆出会增加第二行的内联段落。
+    const controlOwner = findTranslationControlOwner(element);
+    if (controlOwner && !hasNestedTranslationControl(controlOwner)) return [];
     if (element.childNodes.length > maxDirectRunNodes) return [];
-    if (!hasDirectReadableText(element, shouldStayOriginal, protectionCache)) return [];
-    const hasBlockBarrier = hasReadableBlockChild(element, shouldStayOriginal, protectionCache);
+    if (!hasDirectReadableText(element, shouldStayOriginal, protectionCache, protectionOptions)) return [];
+    const hasBlockBarrier = hasReadableBlockChild(element, shouldStayOriginal, protectionCache, protectionOptions);
     const hasAdditionalBarrier = !hasBlockBarrier && isAdditionalBarrier &&
         Array.from(element.children).some((child) => isAdditionalBarrier(child));
-    if (!hasBlockBarrier && !hasAdditionalBarrier) return [];
+    if (!hasBlockBarrier && !hasAdditionalBarrier &&
+        !(scope === 'all' && isDocumentSurface(element))) return [];
 
     const runs: ChildNode[][] = [];
     let current: ChildNode[] = [];
     const flush = () => {
         if (current.length > 0 &&
-            hasMeaningfulTranslationTextInNodes(current, shouldStayOriginal, protectionCache)) {
+            hasMeaningfulTranslationTextInNodes(
+                current,
+                shouldStayOriginal,
+                protectionCache,
+                protectionOptions,
+            )) {
             runs.push(current);
         }
         current = [];
@@ -234,23 +437,59 @@ export function classifyGenericCandidate(
     shouldStayOriginal?: (element: Element) => boolean,
     skipStructuralAncestorCheck = false,
     protectionCache?: TranslationTextProtectionCache,
+    protectionOptions?: TranslationTextProtectionOptions,
+    scope: TranslationScope = 'content',
+    regionOptions?: StructuralRegionOptions,
 ): GenericClassification | null {
     const semanticHeading = isSemanticHeadingElement(element);
-    if (isDocumentSurface(element) || isStructuralContainer(element) ||
-        (!skipStructuralAncestorCheck && hasStructuralAncestor(element) && !semanticHeading)) {
+    if (isDocumentSurface(element) || (scope === 'content' && (isStructuralContainer(element, regionOptions) ||
+        (!skipStructuralAncestorCheck && hasStructuralAncestor(element, regionOptions) && !semanticHeading)))) {
         return null;
     }
-    if (shouldStayOriginal?.(element) || isProtectedTextElement(element)) return null;
+    if (shouldStayOriginal?.(element)) return null;
 
-    if (isTranslationControlElement(element)) {
-        if (!hasMeaningfulTranslationTextInNodes([element], shouldStayOriginal, protectionCache)) return null;
+    // 按钮型 input 的标签写在 value 属性里，元素内部没有任何 Text 节点，因此必须先于
+    // 表单文本保护判定，交由控件属性渲染路径处理。
+    if (getTranslatableControlValueAttribute(element)) {
+        return {kind: 'control', reason: 'generic-control-value'};
+    }
+    if (isProtectedTextElement(element)) return null;
+
+    // 全部节点范围保持既有的"整页即界面"判定；正文范围只放开呈标签形态的交互外壳，
+    // 让同一排工具栏里的按钮、链接和表单标签得到一致的替换式译文。
+    const interactiveControl = (scope === 'all' && isAllScopeControl(element)) ||
+        (isInteractiveSurface(element) &&
+            isControlLabelSurface(element, shouldStayOriginal, protectionCache, protectionOptions));
+    if (isTranslationControlElement(element) ||
+        (interactiveControl && !hasAllScopeSemanticOwner(element))) {
+        // 内层按钮保留独立候选，避免外层控件吞并独立操作。
+        if (hasNestedTranslationControl(element)) return null;
+        if (!hasMeaningfulTranslationTextInNodes(
+            [element],
+            shouldStayOriginal,
+            protectionCache,
+            protectionOptions,
+        )) return null;
         return {kind: 'control', reason: 'generic-control'};
     }
 
-    if (!isBlockBoundary(element)) return null;
-    if (!hasMeaningfulTranslationTextInNodes([element], shouldStayOriginal, protectionCache)) return null;
+    const block = isBlockBoundary(element);
+    if (!block && (scope === 'content' || hasAllScopeSemanticOwner(element))) return null;
+    // GitHub Primer 等组件用 display:flex 的 span 排版按钮标签。后序发现必须等到
+    // 控件本身再选 control，否则标签会抢先成为 content 并在固定高度按钮里插入双语行。
+    const controlOwner = findTranslationControlOwner(element);
+    if (controlOwner && !hasNestedTranslationControl(controlOwner)) return null;
+    if (!hasMeaningfulTranslationTextInNodes(
+        [element],
+        shouldStayOriginal,
+        protectionCache,
+        protectionOptions,
+    )) return null;
     // 含可读块级子节点的容器是结构边界，不是回退目标。若悬浮时选中它，实际命中位于
     // header/aside 子节点时可能误翻译整个应用外壳。
-    if (hasReadableBlockChild(element, shouldStayOriginal, protectionCache)) return null;
-    return {kind: 'content', reason: 'generic-readable-block'};
+    if (hasReadableBlockChild(element, shouldStayOriginal, protectionCache, protectionOptions)) return null;
+    return {
+        kind: controlOwner ? 'control' : scope === 'all' ? getAllScopeCandidateKind(element) : 'content',
+        reason: controlOwner ? 'generic-control-label' : block ? 'generic-readable-block' : 'generic-readable-label',
+    };
 }

@@ -1,0 +1,103 @@
+tests
+ ✓ tests/auth.test.ts (3 tests) 12ms
+ ✓ tests/credentialStorageContext.test.ts (8 tests) 2ms
+
+ Test Files  314 passed (314)
+      Tests  6273 passed (6273)
+   Start at  17:46:57
+   Duration  70.89s (transform 5.30s, setup 0ms, collect 28.30s, tests 68.47s, environment 39ms, prepare 12.73s)
+
+
+compile
+
+> FluentRead-流畅阅读@0.0.32 compile /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> vue-tsc --noEmit
+
+
+
+audit
+
+> FluentRead-流畅阅读@0.0.32 test:audit /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> node scripts/testing/audit-test-suite.mjs
+
+{
+  "status": "ok",
+  "groups": {
+    "architecture": 28,
+    "unit": 200,
+    "functional": 65,
+    "regression": 21
+  },
+  "files": 314,
+  "cases": 4151
+}
+
+
+build
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LICENSE_FOXIT                     1.55 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LICENSE_LIBERATION                4.41 kB
+  ├─ .output/chrome-mv3/third-party-notices/ai-sdk-adapters-Apache-2.0.txt     703 B
+  ├─ .output/chrome-mv3/third-party-notices/deepseek-harness-MIT.txt           1.64 kB
+  ├─ .output/chrome-mv3/third-party-notices/dsh-agent-memory-MIT.txt           1.55 kB
+  └─ .output/chrome-mv3/third-party-notices/unicode-17.0.0.txt                 2 kB
+Σ Total size: 55.7 MB
+✔ Finished in 21.6 s
+
+firefox
+  ├─ .output/firefox-mv2/pdfjs/standard_fonts/LICENSE_FOXIT                     1.55 kB
+  ├─ .output/firefox-mv2/pdfjs/standard_fonts/LICENSE_LIBERATION                4.41 kB
+  ├─ .output/firefox-mv2/third-party-notices/ai-sdk-adapters-Apache-2.0.txt     703 B
+  ├─ .output/firefox-mv2/third-party-notices/deepseek-harness-MIT.txt           1.64 kB
+  ├─ .output/firefox-mv2/third-party-notices/dsh-agent-memory-MIT.txt           1.55 kB
+  └─ .output/firefox-mv2/third-party-notices/unicode-17.0.0.txt                 2 kB
+Σ Total size: 55.7 MB
+✔ Finished in 23.6 s
+
+manifests
+
+> FluentRead-流畅阅读@0.0.32 verify:extension-manifests /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> node scripts/testing/verify-extension-manifests.mjs
+
+{
+  "status": "ok",
+  "chrome": {
+    "manifestVersion": 3,
+    "offscreenPermission": true,
+    "runtimeCapabilityMarker": "__FLUENTREAD_BROWSER_CAPABILITY_BUILD__:chrome:mv3__",
+    "artifacts": [
+      "chunks/offscreen-DiX0VfZw.js",
+      "offscreen.html"
+    ],
+    "ocrAssets": 4
+  },
+  "firefox": {
+    "manifestVersion": 2,
+    "offscreenPermission": false,
+    "runtimeCapabilityMarker": "__FLUENTREAD_BROWSER_CAPABILITY_BUILD__:firefox:mv2__",
+    "artifacts": [
+      "chunks/offscreen-DiX0VfZw.js",
+      "offscreen.html"
+    ],
+    "ocrAssets": 4,
+    "geckoId": "{3096bd53-3bda-4556-b076-ebf47442a5c1}",
+    "strictMinVersion": "140.0",
+    "dataCollectionPermissions": [
+      "websiteContent",
+      "authenticationInfo",
+      "personalCommunications"
+    ],
+    "archives": [],
+    "archiveOcrAssets": 0
+  }
+}
+
+
+userscript
+vite v5.4.19 building for production...
+transforming...
+✓ 1892 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/userscript/fluent-read.user.js  3,932.40 kB │ gzip: 1,452.77 kB
+✓ built in 7.15s
+Verified .output/userscript/fluent-read.user.js (4,713,969 bytes)

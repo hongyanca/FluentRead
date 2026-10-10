@@ -9,6 +9,12 @@ import {
     isEncryptedConfigPayload,
 } from '@/src/platform/storage/configEncryption';
 
+function flipLastByte(encoded: string): string {
+    const bytes = Uint8Array.from(atob(encoded), character => character.charCodeAt(0));
+    bytes[bytes.length - 1] ^= 1;
+    return btoa(String.fromCharCode(...bytes));
+}
+
 describe('配置 AES-GCM 加密', () => {
     it('使用指定对称密钥往返完整 Unicode 配置，同时只暴露密文 envelope', async () => {
         const value = {
@@ -50,11 +56,11 @@ describe('配置 AES-GCM 加密', () => {
         );
         const tamperedCiphertext = {
             ...encrypted,
-            ciphertext: `${encrypted.ciphertext.slice(0, -2)}AA`,
+            ciphertext: flipLastByte(encrypted.ciphertext),
         };
         const tamperedIv = {
             ...encrypted,
-            iv: `${encrypted.iv.slice(0, -2)}AA`,
+            iv: flipLastByte(encrypted.iv),
         };
 
         await expect(decryptConfigValue(
@@ -81,6 +87,27 @@ describe('配置 AES-GCM 加密', () => {
             FLUENTREAD_CONFIG_ENCRYPTION_KEY,
             'FluentReadConfiguration\0local:config',
         )).rejects.toThrow('配置密文校验失败');
+    });
+
+    it('IV 编码以 AA 结尾时，相同编码仍能解密，单比特修改必须拒绝', async () => {
+        const runtime = {
+            crypto: {
+                subtle: globalThis.crypto.subtle,
+                getRandomValues: (bytes: Uint8Array) => bytes.fill(0),
+            },
+            encoder: new TextEncoder(),
+            decoder: new TextDecoder(),
+        } as unknown as Parameters<typeof encryptConfigValue>[1];
+        const value = {secret: 'value'};
+        const encrypted = await encryptConfigValue(value, runtime);
+        const unchanged = {...encrypted, iv: `${encrypted.iv.slice(0, -2)}AA`};
+        expect(unchanged.iv).toBe(encrypted.iv);
+        await expect(decryptConfigValue(unchanged, runtime)).resolves.toEqual(value);
+
+        const tampered = {...encrypted, iv: flipLastByte(encrypted.iv)};
+        expect(tampered.iv).not.toBe(encrypted.iv);
+        expect(atob(tampered.iv).length).toBe(atob(encrypted.iv).length);
+        await expect(decryptConfigValue(tampered, runtime)).rejects.toThrow('配置密文校验失败');
     });
 
     it('拒绝未知格式、空字段、旧版本和解密后非 JSON 内容', async () => {

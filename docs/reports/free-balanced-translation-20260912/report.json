@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "cases": [
+    "13 providers; default nine; Microsoft first; no editable weights",
+    "mode, enablement and order survive reload",
+    "layout 1440: {\"width\":874,\"scroll\":874,\"body\":1440,\"bodyScroll\":1440}",
+    "layout 820: {\"width\":316,\"scroll\":316,\"body\":820,\"bodyScroll\":820}",
+    "layout 390: {\"width\":324,\"scroll\":324,\"body\":390,\"bodyScroll\":390}"
+  ],
+  "providerChecks": [
+    {
+      "provider": "youdaoFree",
+      "status": "连接正常\n已完成真实翻译请求（144 ms）。",
+      "success": true
+    },
+    {
+      "provider": "icibaFree",
+      "status": "连接正常\n已完成真实翻译请求（197 ms）。",
+      "success": true
+    }
+  ],
+  "toggleCounts": [
+    1,
+    0,
+    1
+  ],
+  "liveParagraph": {
+    "url": "https://example.com/",
+    "translation": "本领域内容适用于文档示例，无需获得授权；请勿将其用于实际操作场景。"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "browserFrontmost": false
+  },
+  "build": "production Chrome MV3, merged with main at 8ac04042",
+  "screenshots": [
+    "free-settings-1440.png",
+    "free-settings-dark.png",
+    "live-youdaoFree.png",
+    "live-icibaFree.png",
+    "example-translate-restore-retranslate.png"
+  ]
+}

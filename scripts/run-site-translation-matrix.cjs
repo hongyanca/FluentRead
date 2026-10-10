@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-// 顺序运行真实站点矩阵。默认只运行 required case，并对每个 case 依次执行
-// hover/full；每个子进程仍由 run-site-translation-test.cjs 创建独立 profile。
+// 最大 2 个 job 有界并发运行真实站点矩阵，按原 jobs 序列输出结果。
+// 每个子进程仍由 run-site-translation-test.cjs 创建独立 profile。
 
 const path = require('node:path');
 const {spawn} = require('node:child_process');
@@ -13,6 +13,7 @@ const {
 } = require('./site-translation/case-config.cjs');
 
 const CASE_RUNNER = path.join(__dirname, 'run-site-translation-test.cjs');
+const MAX_CONCURRENT_JOBS = 2;
 
 function parseArgs(argv) {
   const args = {
@@ -160,23 +161,27 @@ function validateMatrix(caseConfigs = CASES) {
     errors.push(`required 矩阵至少需要 ${MATRIX_REQUIREMENTS.dynamicCoverageRules} 个动态节点覆盖契约`);
   }
 
-  const pr4038 = caseConfigs['github-immersive-pr-4038'];
-  const pr4038Rules = normalizedByName.get('github-immersive-pr-4038')?.coverageRules || [];
+  const pr4038 = caseConfigs['github-project-pr'];
+  const pr4038Rules = normalizedByName.get('github-project-pr')?.coverageRules || [];
   if (!pr4038 || (pr4038.tier || 'required') !== 'required') {
-    errors.push('缺少 required 的 github-immersive-pr-4038 回归页');
+    errors.push('缺少 required 的 github-project-pr 回归页');
   } else if (!pr4038Rules.some((rule) => rule.kind === 'heading' && /\bh1\b/iu.test(rule.selector)) ||
       !pr4038Rules.some((rule) => rule.kind === 'content') ||
       !pr4038Rules.some((rule) => rule.kind === 'list')) {
-    errors.push('github-immersive-pr-4038 必须分别覆盖 H1、正文和列表，不能只验证单个 selector');
+    errors.push('github-project-pr 必须分别覆盖 H1、正文和列表，不能只验证单个 selector');
   }
-  const pr4038HoverSelectors = (pr4038?.hoverTargets || []).map((target) => target.selector);
-  if (JSON.stringify(pr4038HoverSelectors) !== JSON.stringify([
-    'main h1',
-    '.markdown-body h2',
-    '.markdown-body p',
-    '.markdown-body li',
-  ])) {
-    errors.push('github-immersive-pr-4038 的 hover 必须分别验证 H1、首个 H2、首个 P 和首个 LI');
+  const pr4038HoverTargets = pr4038?.hoverTargets || [];
+  const requiredPrTargets = [
+    ['pr-title-h1', /\bh1\b/iu],
+    ['body-heading-h2', /\bh2\b/iu],
+    ['body-paragraph', /\bp\b/iu],
+    ['body-list-item', /\bli\b/iu],
+  ];
+  if (pr4038HoverTargets.length !== requiredPrTargets.length || requiredPrTargets.some(([name, tag], index) => {
+    const target = pr4038HoverTargets[index];
+    return target?.name !== name || !tag.test(target.selector) || !target.sourceIncludes?.length;
+  })) {
+    errors.push('github-project-pr 的 hover 必须分别验证 H1、首个 H2、首个 P 和首个 LI');
   }
   if (!pr4038?.forbiddenMustExistSelectors?.includes("button[aria-haspopup='dialog'][aria-label*='search' i]") ||
       !pr4038?.interactionScenarios?.some((scenario) =>
@@ -184,8 +189,8 @@ function validateMatrix(caseConfigs = CASES) {
         scenario.dialogSelector === "[role='dialog'][aria-modal='true']" &&
         scenario.comboboxSelector === "[role='combobox']" &&
         scenario.listboxSelector === "[role='listbox']" && scenario.inputText === 'issues' &&
-        scenario.closeAttempts === 2)) {
-    errors.push('github-immersive-pr-4038 必须验证真实 Search trigger、输入、dialog、combobox 和 listbox');
+        scenario.closeAttempts === 3)) {
+    errors.push('github-project-pr 必须验证真实 Search trigger、输入、dialog、combobox 和 listbox');
   }
 
   if (errors.length > 0) throw new Error(`站点矩阵配置无效：\n- ${errors.join('\n- ')}`);
@@ -202,7 +207,7 @@ function selectedEntries(args, entries) {
   return entries.filter(([, config]) => args.includeQuarantine || config.tier !== 'quarantine');
 }
 
-function childArgs(args, name, mode) {
+function childArgs(args, name, mode, attempt = 1) {
   const values = [
     CASE_RUNNER,
     '--case', name,
@@ -215,15 +220,19 @@ function childArgs(args, name, mode) {
   if (args.timeout) values.push('--timeout', args.timeout);
   if (args.focusSafeHelper) values.push('--focus-safe-helper', args.focusSafeHelper);
   if (args.allowNetwork) values.push('--allow-network');
-  if (args.artifactsDir) values.push('--artifacts-dir', path.join(path.resolve(args.artifactsDir), name, mode));
+  if (args.artifactsDir) values.push('--artifacts-dir', path.join(path.resolve(args.artifactsDir), name, mode,
+    ...(attempt > 1 ? [`attempt-${attempt}`] : [])));
   return values;
 }
 
 function computeJobTimeoutMs(pageTimeout, mode, override) {
   if (override !== undefined) return Number(override);
   const normalizedPageTimeout = Number(pageTimeout) || 60000;
+  // 全文包含翻译、完整恢复、再次翻译两轮。每轮允许有进展的队列使用
+  // 3 倍阶段预算，另留两次页面等待和长页滚动预算；不能用旧单轮预算
+  // 在第二轮仍持续完成时杀掉进程。单阶段无进展与绝对上限仍由 runner 执行。
   return mode === 'full'
-    ? Math.max(12 * 60 * 1000, normalizedPageTimeout * 3 + 5 * 60 * 1000)
+    ? Math.max(30 * 60 * 1000, normalizedPageTimeout * 8 + 5 * 60 * 1000)
     : Math.max(5 * 60 * 1000, normalizedPageTimeout * 2);
 }
 
@@ -250,12 +259,20 @@ function runChildWithWatchdog(command, values, options = {}) {
   const spawnImpl = options.spawnImpl || spawn;
   const killGroup = options.killProcessGroupImpl || killProcessGroup;
   const startedAt = Date.now();
+  const abortSignal = options.signal;
+  if (abortSignal?.aborted) {
+    return Promise.resolve({ok: false, timedOut: false, aborted: true, notStarted: true});
+  }
   return new Promise((resolve) => {
     let settled = false;
     let timedOut = false;
+    let aborted = false;
     let timeoutTimer;
     let killTimer;
-    let finalTimer;
+    let terminating = false;
+    let exited = false;
+    let closed = false;
+    let childError = null;
     let killSent = false;
     let deferredClose = null;
     const child = spawnImpl(command, values, {
@@ -267,19 +284,23 @@ function runChildWithWatchdog(command, values, options = {}) {
       settled = true;
       clearTimeout(timeoutTimer);
       clearTimeout(killTimer);
-      clearTimeout(finalTimer);
+      abortSignal?.removeEventListener('abort', onAbort);
       resolve({
-        ok: !timedOut && !error && exitCode === 0,
+        ok: !timedOut && !aborted && !error && exitCode === 0,
         exitCode,
         signal: signal || null,
         timedOut,
+        aborted,
         timeoutMs,
         durationMs: Date.now() - startedAt,
-        error: error?.message || null,
+        error: error ? error.message || String(error) : null,
       });
     };
     const recordExit = (exitCode, signal, error) => {
-      if (!timedOut) {
+      closed = true;
+      clearTimeout(timeoutTimer);
+      abortSignal?.removeEventListener('abort', onAbort);
+      if (!terminating) {
         finish(exitCode, signal, error);
         return;
       }
@@ -289,22 +310,102 @@ function runChildWithWatchdog(command, values, options = {}) {
       deferredClose = {exitCode, signal, error};
       if (killSent) finish(exitCode, signal, error);
     };
-    child.once('error', (error) => recordExit(null, null, error));
-    child.once('close', (exitCode, signal) => recordExit(exitCode, signal, null));
-    timeoutTimer = setTimeout(() => {
-      timedOut = true;
-      killGroup(child, 'SIGTERM');
+    const sendSignal = (signal) => {
+      try {
+        killGroup(child, signal);
+      } catch (error) {
+        childError ||= error;
+      }
+    };
+    const terminate = (fromTimeout) => {
+      if (settled) return;
+      if (fromTimeout) timedOut = true;
+      else aborted = true;
+      clearTimeout(timeoutTimer);
+      // 只接管本次 spawn 返回且仍存活的直接 child；已经开始的进程组
+      // 清理仍保留原 SIGKILL，即使 TERM 后直接 runner 先于后代关闭。
+      if (terminating || closed || exited || !child.pid || child.exitCode != null || child.signalCode != null) return;
+      terminating = true;
       killTimer = setTimeout(() => {
         killSent = true;
-        killGroup(child, 'SIGKILL');
+        sendSignal('SIGKILL');
         if (deferredClose) {
-          finish(deferredClose.exitCode, deferredClose.signal, deferredClose.error);
-          return;
+          finish(deferredClose.exitCode, deferredClose.signal, childError || deferredClose.error);
         }
-        finalTimer = setTimeout(() => finish(null, 'WATCHDOG', null), killGraceMs);
+        // SIGKILL 不是退出凭证：必须等待真实 close，不合成 WATCHDOG exit。
       }, killGraceMs);
-    }, timeoutMs);
+      sendSignal('SIGTERM');
+    };
+    const onAbort = () => terminate(false);
+    child.once('error', (error) => { childError ||= error; });
+    child.once('exit', () => {
+      exited = true;
+      clearTimeout(timeoutTimer);
+    });
+    child.once('close', (exitCode, signal) => recordExit(exitCode, signal, childError));
+    timeoutTimer = setTimeout(() => terminate(true), timeoutMs);
+    abortSignal?.addEventListener('abort', onAbort, {once: true});
+    // 信号可能在 spawn 过程中到达；监听安装后补查，不能漏掉已启动 child。
+    if (abortSignal?.aborted) onAbort();
   });
+}
+
+/** 网络/宿主初始化可能偶发失败；重试必须是全新浏览器且再次跑完整契约。 */
+async function runJobAttempts(runAttempt, maxAttempts, options = {}) {
+  const attempts = [];
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    if (options.signal?.aborted) break;
+    let result;
+    try {
+      result = await runAttempt(attempt);
+    } catch (error) {
+      result = {ok: false, timedOut: false, error: error?.message || String(error)};
+    }
+    attempts.push(result);
+    if (result.ok || result.timedOut || result.aborted) break;
+  }
+  if (attempts.length === 0) return {ok: false, timedOut: false, aborted: true, notStarted: true, attempts};
+  return {...attempts[attempts.length - 1], attempts};
+}
+
+/** 两个固定 worker；单 job 失败不能丢弃 required 尾部，父信号则停止领取并 join 在途 job。 */
+async function runJobsWithBoundedConcurrency(jobs, runJob, options = {}) {
+  const controller = new AbortController();
+  const signalSource = options.signalSource || process;
+  const results = new Array(jobs.length);
+  let nextIndex = 0;
+  let abortSignal = null;
+  const interrupt = (signal) => {
+    if (controller.signal.aborted) return;
+    abortSignal = signal;
+    controller.abort(signal);
+  };
+  const onSigint = () => interrupt('SIGINT');
+  const onSigterm = () => interrupt('SIGTERM');
+  signalSource.on('SIGINT', onSigint);
+  signalSource.on('SIGTERM', onSigterm);
+  try {
+    const worker = async () => {
+      while (!controller.signal.aborted && nextIndex < jobs.length) {
+        const index = nextIndex++;
+        const job = jobs[index];
+        try {
+          results[index] = {...job, ...await runJob(job, controller.signal)};
+        } catch (error) {
+          results[index] = {...job, ok: false, timedOut: false, error: error?.message || String(error)};
+        }
+      }
+    };
+    await Promise.all(Array.from({length: Math.min(MAX_CONCURRENT_JOBS, jobs.length)}, () => worker()));
+    // 保留取消时未执行的尾部，不能将部分运行包装成完整门禁。
+    for (let index = nextIndex; index < jobs.length; index += 1) {
+      results[index] = {...jobs[index], ok: false, timedOut: false, aborted: true, notStarted: true, attempts: []};
+    }
+    return {results, aborted: controller.signal.aborted, abortSignal};
+  } finally {
+    signalSource.removeListener('SIGINT', onSigint);
+    signalSource.removeListener('SIGTERM', onSigterm);
+  }
 }
 
 async function main() {
@@ -334,30 +435,40 @@ async function main() {
   const jobs = entries.flatMap(([name, config]) => requestedModes
     .filter((mode) => (config.modes || ['hover', 'full']).includes(mode))
     .map((mode) => ({name, mode, tier: config.tier || 'required'})));
-  const results = [];
-
-  for (const job of jobs) {
+  const {results, aborted, abortSignal} = await runJobsWithBoundedConcurrency(jobs, async (job, signal) => {
     process.stdout.write(`\n=== ${job.name} / ${job.mode} / ${job.tier} ===\n`);
     const timeoutMs = computeJobTimeoutMs(args.timeout, job.mode, args.jobTimeout);
-    const child = await runChildWithWatchdog(process.execPath, childArgs(args, job.name, job.mode), {timeoutMs});
+    const child = await runJobAttempts((attempt) => {
+      if (attempt > 1) {
+        process.stdout.write(`[site-translation-matrix] ${job.name}/${job.mode} 第 ${attempt} 次完整复测\n`);
+      }
+      return runChildWithWatchdog(process.execPath, childArgs(args, job.name, job.mode, attempt), {timeoutMs, signal});
+    }, job.tier === 'required' ? 2 : 1, {signal});
     if (child.timedOut) {
       process.stderr.write(`[site-translation-matrix] ${job.name}/${job.mode} 总 watchdog 超时 ` +
-        `(${timeoutMs}ms)，已终止隔离浏览器进程组\n`);
+        `(${timeoutMs}ms)，隔离 runner 已收到真实 close\n`);
     }
-    results.push({...job, ...child});
-  }
+    return child;
+  });
 
   const requiredFailures = results.filter((result) => !result.ok && result.tier === 'required');
   const quarantineFailures = results.filter((result) => !result.ok && result.tier === 'quarantine');
   process.stdout.write(`${JSON.stringify({
-    ok: requiredFailures.length === 0 && (!args.failOnQuarantine || quarantineFailures.length === 0),
+    ok: !aborted && requiredFailures.length === 0 && (!args.failOnQuarantine || quarantineFailures.length === 0),
+    maxConcurrentJobs: MAX_CONCURRENT_JOBS,
+    aborted,
+    abortSignal,
     jobs: results.length,
     passed: results.filter((result) => result.ok).length,
+    recoveredFailures: results.filter((result) => result.ok && result.attempts?.length > 1)
+      .map((result) => ({name: result.name, mode: result.mode, attempts: result.attempts})),
     requiredFailures,
     quarantineFailures,
     timeoutFailures: results.filter((result) => result.timedOut),
+    notStartedJobs: results.filter((result) => result.notStarted),
+    results,
   }, null, 2)}\n`);
-  if (requiredFailures.length > 0 || (args.failOnQuarantine && quarantineFailures.length > 0)) {
+  if (aborted || requiredFailures.length > 0 || (args.failOnQuarantine && quarantineFailures.length > 0)) {
     process.exitCode = 1;
   }
 }
@@ -369,4 +480,7 @@ if (require.main === module) {
   });
 }
 
-module.exports = {MATRIX_REQUIREMENTS, computeJobTimeoutMs, runChildWithWatchdog, validateMatrix};
+module.exports = {
+  MATRIX_REQUIREMENTS, MAX_CONCURRENT_JOBS, computeJobTimeoutMs,
+  runChildWithWatchdog, runJobAttempts, runJobsWithBoundedConcurrency, validateMatrix,
+};

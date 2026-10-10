@@ -60,13 +60,36 @@ describe('full regression runner', () => {
             'vitest-unit',
             'vitest-functional',
             'vitest-regression',
+            'agent-bridge',
+            'focus-safe-browser-lifecycle',
             'chrome-build',
             'firefox-build',
+            'firefox-zip',
             'extension-manifest-verifier',
             'userscript-build',
             'userscript-verifier',
+            'docs-typecheck',
+            'storybook-typecheck',
             'docs-build',
+            'storybook-build',
+            'storybook-verifier',
+            'docs-verifier',
         ]);
+        const firefoxZip = plan.steps.find((step: {id: string}) => step.id === 'firefox-zip');
+        expect(plan.steps.find((step: {id: string}) => step.id === 'agent-bridge')).toMatchObject({
+            command: 'node', args: ['--test', 'tests/agentBridge.test.mjs'],
+        });
+        expect(plan.steps.find((step: {id: string}) => step.id === 'focus-safe-browser-lifecycle')).toMatchObject({
+            phase: 'local', command: 'node', args: ['--test', 'tests/focusSafeBrowserOrdinaryLifecycle.test.mjs'],
+        });
+        const manifestVerifier = plan.steps.find(
+            (step: {id: string}) => step.id === 'extension-manifest-verifier',
+        );
+        expect(firefoxZip).toMatchObject({command: 'pnpm', args: ['zip:firefox']});
+        expect(manifestVerifier).toMatchObject({
+            command: 'node',
+            args: ['scripts/testing/verify-extension-manifests.mjs', '--require-firefox-archives'],
+        });
         expect(plan.steps.some((step: {phase: string}) => step.phase === 'browser' || step.phase === 'network')).toBe(false);
     });
 
@@ -84,7 +107,23 @@ describe('full regression runner', () => {
         const plan = dryRun(['--browser', ...BROWSER_ARGS]);
         const browserSteps = plan.steps.filter((step: {phase: string}) => step.phase === 'browser');
 
-        expect(browserSteps).toHaveLength(7);
+        expect(browserSteps).toHaveLength(14);
+        expect(browserSteps.map((step: {id: string}) => step.id)).toEqual([
+            'popup-first-run-height',
+            'selection-trigger',
+            'full-page-translation',
+            'translation-mutation',
+            'fixed-height-translation',
+            'github-spacing',
+            'github-nested-list',
+            'github-task-list',
+            'video-subtitle-fixture',
+            'document-translation',
+            'settings-center-ui',
+            'glossary',
+            'privacy-boundary',
+            'userscript-smoke',
+        ]);
         for (const step of browserSteps) {
             expect(step.gates).toEqual(['--browser']);
             expect(step.args).toContain('--focus-safe-helper');
@@ -94,9 +133,15 @@ describe('full regression runner', () => {
             expect(step.artifactsDir).toBe(`/tmp/fluentread-regression-artifacts/${step.id}`);
             expect(step.focusPolicy).toBe('launchservices-no-foreground');
             expect(step.windowPlacement.state).toBe('normal');
+            expect(step.launchMode).toBe('macos-background-cdp');
+            expect(step.windowPlacement.mode).toBe('background-visible-no-focus');
         }
 
         const userscriptSmoke = browserSteps.find((step: {id: string}) => step.id === 'userscript-smoke');
+        const fullPageTranslation = browserSteps.find((step: {id: string}) => step.id === 'full-page-translation');
+        expect(fullPageTranslation).toBeDefined();
+        expect(fullPageTranslation!.args).toContain('--verify-floating-ui');
+        expect(fullPageTranslation!.args).toContain('--verify-loading-style-isolation');
         expect(userscriptSmoke).toBeDefined();
         expect(userscriptSmoke!.args).toContain('--artifact');
         expect(userscriptSmoke!.args).toContain(resolve(PROJECT_ROOT, '.output/userscript/fluent-read.user.js'));
@@ -106,6 +151,37 @@ describe('full regression runner', () => {
         expect(stepIds.indexOf('userscript-verifier')).toBeLessThan(stepIds.indexOf('userscript-smoke'));
 
         expect(plan.steps.some((step: {phase: string}) => step.phase === 'network')).toBe(false);
+    });
+
+    it('keeps glossary background-only with supported arguments and its own artifact directory', () => {
+        const plan = dryRun(['--browser', '--headed', '--timeout', '45000', ...BROWSER_ARGS]);
+        const glossary = plan.steps.find((step: {id: string}) => step.id === 'glossary');
+
+        expect(glossary).toMatchObject({
+            phase: 'browser',
+            command: 'node',
+            gates: ['--browser'],
+            artifactsDir: '/tmp/fluentread-regression-artifacts/glossary',
+            launchMode: 'macos-background-cdp',
+            focusPolicy: 'launchservices-no-foreground',
+            windowPlacement: {state: 'normal', mode: 'background-visible-no-focus'},
+            args: [
+                'scripts/run-glossary-test.cjs',
+                '--playwright-root', '/tmp/fluentread-playwright-runtime',
+                '--browser-path', '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+                '--artifacts-dir', '/tmp/fluentread-regression-artifacts/glossary',
+                '--extension-dir', resolve(PROJECT_ROOT, '.output/chrome-mv3'),
+                '--background',
+                '--focus-safe-helper', resolve(PROJECT_ROOT, 'scripts/focus-safe-browser.cjs'),
+            ],
+        });
+        expect(glossary.args).not.toContain('--timeout');
+        expect(glossary.args).not.toContain('--headed');
+        const fullPage = plan.steps.find((step: {id: string}) => step.id === 'full-page-translation');
+        expect(fullPage.args).toContain('--timeout');
+        expect(fullPage.args).toContain('45000');
+        expect(plan.steps.findIndex((step: {id: string}) => step.id === 'chrome-build'))
+            .toBeLessThan(plan.steps.findIndex((step: {id: string}) => step.id === 'glossary'));
     });
 
     it('runs the site matrix only behind network plus allow-network gates', () => {
@@ -138,9 +214,16 @@ describe('full regression runner', () => {
         ]);
         expect(headedSteps.every((step: {focusPolicy: string}) => step.focusPolicy === 'foreground-authorized')).toBe(true);
         expect(backgroundSteps.map((step: {id: string}) => step.id)).toEqual([
+            'popup-first-run-height',
+            'translation-mutation',
+            'fixed-height-translation',
+            'github-spacing',
+            'github-nested-list',
+            'github-task-list',
             'video-subtitle-fixture',
             'document-translation',
             'settings-center-ui',
+            'glossary',
         ]);
         expect(backgroundSteps.every((step: {args: string[]}) => step.args.includes('--focus-safe-helper'))).toBe(true);
     });

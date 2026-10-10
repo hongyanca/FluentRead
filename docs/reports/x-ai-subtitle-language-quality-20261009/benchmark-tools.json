@@ -1,0 +1,95 @@
+{
+  "scope": "Node/tool validation and registered canonical cache readiness; no browser or ASR executed",
+  "browserLaunched": false,
+  "onnxExecuted": false,
+  "productionSourceEditedByThisToolTask": false,
+  "tools": {
+    "scripts/run-video-ai-recognition-benchmark.cjs": "8aa9a4f87934d2b69268526121026bd664a075c2d84665b0a79f6e412776dd1a",
+    "scripts/testing/model-cache-transfer.cjs": "eb2b4e46fd19c71b0736e22587278fec1d31145d0ea18f6869cd82ea21ecffdc",
+    "scripts/testing/video-ai-corpus.cjs": "9e72eaae2b84c89f2312c875f0727f9794a840f629beb7fa4d6666b49c14a070",
+    "scripts/testing/video-ai-benchmark-smoke.cjs": "af72f3f96ca8ef35016733f812c750f743fcc2d8dcb2ec546259bd108bf9496b",
+    "tests/videoAiBenchmarkTools.test.ts": "acead84ec676eb6d761ec86c12e05f71ad09073b9652ca2e078e5209fd0dbf0a"
+  },
+  "vitest": {
+    "file": "tests/videoAiBenchmarkTools.test.ts",
+    "passed": 7,
+    "failed": 0,
+    "durationMs": 575
+  },
+  "hermeticHttpSmoke": {
+    "success": true,
+    "checks": [
+      "preverify-length-sha",
+      "loopback-real-http-extension-origin-cors",
+      "wrong-origin-denied",
+      "wrong-token-denied",
+      "unregistered-route-denied",
+      "large-response-stream-abort",
+      "seed-8MiB-no-CDP-base64-small-metadata",
+      "HTTP-export-roundtrip-sha",
+      "abort-closes-owned-sockets-cleans-partial-upload",
+      "canonical-small-loopback-seed-with-small-metadata",
+      "canonical-small-HTTP-export-no-content-length-roundtrip-sha-source",
+      "small-352MiB-declared-upload-bounded-abort-cleanup",
+      "small-base-alias-source-rejected",
+      "tampered-model-rejected",
+      "corpus-explicit-auto-independent-modes-and-en-en-ja-session",
+      "CER-and-WER-independent-metrics",
+      "explicit-small-model-corpus-selection"
+    ],
+    "maxEvaluateArgumentBytes": 506,
+    "transferredBytes": 8388632
+  },
+  "canonicalSmallCache": {
+    "directory": "/private/tmp/fluentread-whisper-small-fp32-q4-canonical-cache-20261009",
+    "manifestSha256": "baa8563ad1ef4ff999f613c16684afe2e709a9622b37baf5eb111e75e12ea471",
+    "fileCount": 7,
+    "totalBytes": 588744805,
+    "actualModelId": "onnx-community/whisper-small",
+    "sourceRevision": "36050c46d777d46dc4b5f43f6d90574fc38f8732",
+    "requestedDtypeMapping": {
+      "encoder_model": "fp32",
+      "decoder_model_merged": "q4"
+    },
+    "encoder": {
+      "bytes": 352825870,
+      "sha256": "b37cd6625dc36f9178ec7539a1876b9680ea26a910097e092be39dc766320c7b",
+      "sourceUrl": "https://huggingface.co/onnx-community/whisper-small/resolve/36050c46d777d46dc4b5f43f6d90574fc38f8732/onnx/encoder_model.onnx"
+    },
+    "allFileLengthsAndSha256Validated": true,
+    "canonicalRuntimeScope": "https://modelscope.cn/models/onnx-community/whisper-small/resolve/master/",
+    "cacheDownloadRegistryManuallySeeded": false
+  },
+  "corpusPreflight": {
+    "success": true,
+    "scope": "Input manifest, model file identities and case planning only; no browser or ASR executed",
+    "browserLaunched": false,
+    "allCasesSucceeded": null,
+    "manifestSha256": "b4054caf378a9da853a86fa3edc2a229cc082d760eaa85ab241d24724de0fa51",
+    "samples": 39,
+    "models": [
+      "small"
+    ],
+    "languages": [
+      "auto"
+    ],
+    "plannedCases": 39,
+    "completedInferenceCases": 0,
+    "cacheManifestSha256": "baa8563ad1ef4ff999f613c16684afe2e709a9622b37baf5eb111e75e12ea471"
+  },
+  "limits": {
+    "ordinaryRegisteredFilesBytes": 268435456,
+    "onlySmallFp32EncoderBytes": 402653184,
+    "largePutSmokeDeclaredBytes": 352825870,
+    "largePutSmokeSentBeforeCancellationBytes": 65536,
+    "entireLargeFileTransferredInSmoke": false
+  },
+  "metadataContract": {
+    "smallModel": "small",
+    "encoderDtype": "fp32",
+    "decoderDtype": "q4",
+    "missingModuleMetadata": "null, never inferred from legacy dtype",
+    "legacyDtypeMeaning": "decoder shorthand only"
+  },
+  "rawEvidenceDirectory": "/private/tmp/fluentread-benchmark-small-tools-final-20261009"
+}

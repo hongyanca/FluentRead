@@ -1,0 +1,96 @@
+{
+  "source": "/Users/thinkstu/Desktop/copy/FluentRead-performance-lightweight-20260913/.output/chrome-mv3",
+  "prototype": false,
+  "cases": [
+    {
+      "label": "opus-whisper",
+      "backend": "wasm",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 21596019,
+      "digest": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39",
+      "decompressedMs": 57.89999997615814,
+      "totalMs": 327.2999999523163
+    },
+    {
+      "label": "opus-whisper",
+      "backend": "webgpu",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 21596019,
+      "digest": "c46655e8a94afc45338d4cb2b840475f88e5012d524509916e505079c00bfa39",
+      "decompressedMs": 42.800000071525574,
+      "totalMs": 311.60000002384186
+    },
+    {
+      "label": "kokoro",
+      "backend": "wasm",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 23567050,
+      "digest": "e0c0c6d3e73d43b8a249972f8358f845b08cc16fec3c80efafdf8bed40366786",
+      "decompressedMs": 49.10000002384186,
+      "totalMs": 364.1999999284744
+    },
+    {
+      "label": "kokoro",
+      "backend": "webgpu",
+      "ok": true,
+      "output": [
+        42
+      ],
+      "reusedOutput": [
+        -7
+      ],
+      "binaryBytes": 23567050,
+      "digest": "e0c0c6d3e73d43b8a249972f8358f845b08cc16fec3c80efafdf8bed40366786",
+      "decompressedMs": 49.300000071525574,
+      "totalMs": 372.7000000476837
+    }
+  ],
+  "errors": [],
+  "evidence": "Real ONNX Identity session in an owned extension Worker; this does not claim full translation, speech synthesis or transcription quality.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 302,
+      "top": -940,
+      "width": 1100,
+      "height": 800
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 19699,
+      "name": "Google Chrome"
+    }
+  },
+  "ok": true
+}

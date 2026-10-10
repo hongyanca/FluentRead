@@ -1,0 +1,2461 @@
+{
+  "ok": true,
+  "artifact": "production",
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3",
+  "browserPath": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "cases": [
+    "light: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "dark: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "minimal: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "compact: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "ocean: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "english: intrinsic popup width, primary switches visible and all panel controls reachable",
+    "language still searchable without icon; default/custom hover restore; selection mode restore; region keycaps and ring; real More settings navigation"
+  ],
+  "persistenceCases": [
+    {
+      "name": "default hover disable and reenable restore Control after immediate close",
+      "passed": true
+    },
+    {
+      "name": "custom hover shortcut restored without resetting eight independent profiles",
+      "passed": true
+    },
+    {
+      "name": "two mode writes, presentation and master off/on preserve final translation-only preference",
+      "passed": true
+    },
+    {
+      "name": "two independent image switches then immediate close-reopen",
+      "passed": true
+    }
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "crossPageSync": false,
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-light.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-light.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-light.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-light.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-dark.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-dark.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-dark.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-dark.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-minimal.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-minimal.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-minimal.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-minimal.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-compact.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-compact.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-compact.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-compact.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-ocean.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-ocean.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-ocean.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-ocean.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-english.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-english.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-english.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-english.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-popup-auto.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-disabled.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-reenabled.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-hover-profiles.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-reopened.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-disabled.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-selection-reenabled.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-reopened.png",
+    "/private/tmp/fluentread-popup-merge-chrome-final/density-image-custom-hotkey.png"
+  ],
+  "layout": {
+    "light": {
+      "width": 320,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "hover-light": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 154.703125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 263,
+        "bottom": 287
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 170.703125,
+          "bottom": 200.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 263,
+          "bottom": 287,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "选择快捷键",
+          "top": 328.5,
+          "bottom": 357.5,
+          "left": 114.3359375,
+          "right": 172.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-light": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-light": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 97,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 157,
+        "bottom": 225
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 113,
+          "bottom": 143,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 157,
+          "bottom": 225,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 233,
+          "bottom": 301,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "dark": {
+      "width": 320,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "hover-dark": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 154.703125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 263,
+        "bottom": 287
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 170.703125,
+          "bottom": 200.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 263,
+          "bottom": 287,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "选择快捷键",
+          "top": 328.5,
+          "bottom": 357.5,
+          "left": 114.3359375,
+          "right": 172.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-dark": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-dark": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 97,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 157,
+        "bottom": 225
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 113,
+          "bottom": 143,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 157,
+          "bottom": 225,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 233,
+          "bottom": 301,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "minimal": {
+      "width": 310,
+      "height": 428,
+      "scrollHeight": 428,
+      "clientHeight": 428,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 428,
+      "viewportHeight": 428,
+      "duplicateIds": []
+    },
+    "hover-minimal": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 145.703125,
+      "bodyBottom": 414,
+      "bodyRight": 294,
+      "closeButtonRight": 286,
+      "scrollbarPadding": 8,
+      "viewportWidth": 310,
+      "viewportHeight": 428,
+      "primary": {
+        "top": 254,
+        "bottom": 278
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 161.703125,
+          "bottom": 191.703125,
+          "left": 256,
+          "right": 286
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 254,
+          "bottom": 278,
+          "left": 233,
+          "right": 273
+        },
+        {
+          "name": "选择快捷键",
+          "top": 319.5,
+          "bottom": 348.5,
+          "left": 109.3359375,
+          "right": 167.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 378,
+          "bottom": 414,
+          "left": 16,
+          "right": 286
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-minimal": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 98.203125,
+      "bodyBottom": 414,
+      "bodyRight": 294,
+      "closeButtonRight": 286,
+      "scrollbarPadding": 8,
+      "viewportWidth": 310,
+      "viewportHeight": 428,
+      "primary": {
+        "top": 190,
+        "bottom": 214
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 114.203125,
+          "bottom": 144.203125,
+          "left": 256,
+          "right": 286
+        },
+        {
+          "name": "划词翻译",
+          "top": 190,
+          "bottom": 214,
+          "left": 233,
+          "right": 273
+        },
+        {
+          "name": "双语显示",
+          "top": 261,
+          "bottom": 297,
+          "left": 16,
+          "right": 148
+        },
+        {
+          "name": "仅译文",
+          "top": 261,
+          "bottom": 297,
+          "left": 154,
+          "right": 286
+        },
+        {
+          "name": "普通翻译",
+          "top": 328,
+          "bottom": 364,
+          "left": 16,
+          "right": 148
+        },
+        {
+          "name": "卡片模式",
+          "top": 328,
+          "bottom": 364,
+          "left": 154,
+          "right": 286
+        },
+        {
+          "name": "更多设置↗",
+          "top": 378,
+          "bottom": 414,
+          "left": 16,
+          "right": 286
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-minimal": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 88,
+      "bodyBottom": 414,
+      "bodyRight": 294,
+      "closeButtonRight": 286,
+      "scrollbarPadding": 8,
+      "viewportWidth": 310,
+      "viewportHeight": 428,
+      "primary": {
+        "top": 148,
+        "bottom": 216
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 104,
+          "bottom": 134,
+          "left": 256,
+          "right": 286
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 148,
+          "bottom": 216,
+          "left": 16,
+          "right": 286
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 224,
+          "bottom": 292,
+          "left": 16,
+          "right": 286
+        },
+        {
+          "name": "更多设置↗",
+          "top": 378,
+          "bottom": 414,
+          "left": 16,
+          "right": 286
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "compact": {
+      "width": 300,
+      "height": 390,
+      "scrollHeight": 390,
+      "clientHeight": 390,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 386,
+      "viewportHeight": 390,
+      "duplicateIds": []
+    },
+    "hover-compact": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 107.703125,
+      "bodyBottom": 376,
+      "bodyRight": 284,
+      "closeButtonRight": 276,
+      "scrollbarPadding": 8,
+      "viewportWidth": 300,
+      "viewportHeight": 390,
+      "primary": {
+        "top": 216,
+        "bottom": 240
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.703125,
+          "bottom": 153.703125,
+          "left": 246,
+          "right": 276
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 216,
+          "bottom": 240,
+          "left": 223,
+          "right": 263
+        },
+        {
+          "name": "选择快捷键",
+          "top": 281.5,
+          "bottom": 310.5,
+          "left": 104.3359375,
+          "right": 162.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 340,
+          "bottom": 376,
+          "left": 16,
+          "right": 276
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-compact": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 60.203125,
+      "bodyBottom": 376,
+      "bodyRight": 284,
+      "closeButtonRight": 276,
+      "scrollbarPadding": 8,
+      "viewportWidth": 300,
+      "viewportHeight": 390,
+      "primary": {
+        "top": 152,
+        "bottom": 176
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 76.203125,
+          "bottom": 106.203125,
+          "left": 246,
+          "right": 276
+        },
+        {
+          "name": "划词翻译",
+          "top": 152,
+          "bottom": 176,
+          "left": 223,
+          "right": 263
+        },
+        {
+          "name": "双语显示",
+          "top": 223,
+          "bottom": 259,
+          "left": 16,
+          "right": 143
+        },
+        {
+          "name": "仅译文",
+          "top": 223,
+          "bottom": 259,
+          "left": 149,
+          "right": 276
+        },
+        {
+          "name": "普通翻译",
+          "top": 290,
+          "bottom": 326,
+          "left": 16,
+          "right": 143
+        },
+        {
+          "name": "卡片模式",
+          "top": 290,
+          "bottom": 326,
+          "left": 149,
+          "right": 276
+        },
+        {
+          "name": "更多设置↗",
+          "top": 340,
+          "bottom": 376,
+          "left": 16,
+          "right": 276
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-compact": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 50,
+      "bodyBottom": 376,
+      "bodyRight": 284,
+      "closeButtonRight": 276,
+      "scrollbarPadding": 8,
+      "viewportWidth": 300,
+      "viewportHeight": 390,
+      "primary": {
+        "top": 110,
+        "bottom": 178
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 66,
+          "bottom": 96,
+          "left": 246,
+          "right": 276
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 110,
+          "bottom": 178,
+          "left": 16,
+          "right": 276
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 186,
+          "bottom": 254,
+          "left": 16,
+          "right": 276
+        },
+        {
+          "name": "更多设置↗",
+          "top": 340,
+          "bottom": 376,
+          "left": 16,
+          "right": 276
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "ocean": {
+      "width": 320,
+      "height": 437,
+      "scrollHeight": 437,
+      "clientHeight": 437,
+      "horizontalOverflow": false,
+      "background": "rgba(0, 0, 0, 0)",
+      "footerBottom": 433,
+      "viewportHeight": 437,
+      "duplicateIds": []
+    },
+    "hover-ocean": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 154.703125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 263,
+        "bottom": 287
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 170.703125,
+          "bottom": 200.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 263,
+          "bottom": 287,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "选择快捷键",
+          "top": 328.5,
+          "bottom": 357.5,
+          "left": 114.3359375,
+          "right": 172.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-ocean": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-ocean": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 97,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 157,
+        "bottom": 225
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 113,
+          "bottom": 143,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 157,
+          "bottom": 225,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 233,
+          "bottom": 301,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "english": {
+      "width": 320,
+      "height": 497.875,
+      "scrollHeight": 498,
+      "clientHeight": 498,
+      "horizontalOverflow": false,
+      "background": "rgb(255, 255, 255)",
+      "footerBottom": 493.875,
+      "viewportHeight": 498,
+      "duplicateIds": []
+    },
+    "hover-english": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 215.703125,
+      "bodyBottom": 484,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 498,
+      "primary": {
+        "top": 324,
+        "bottom": 348
+      },
+      "controls": [
+        {
+          "name": "Close",
+          "top": 231.703125,
+          "bottom": 261.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "Default hover shortcut",
+          "top": 324,
+          "bottom": 348,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "Choose shortcut",
+          "top": 389.5,
+          "bottom": 418.5,
+          "left": 84.7734375,
+          "right": 143.328125
+        },
+        {
+          "name": "More settings↗",
+          "top": 448,
+          "bottom": 484,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-english": {
+      "clientHeight": 352,
+      "scrollHeight": 352,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 373.59375,
+      "bodyTop": 132.40625,
+      "bodyBottom": 484,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 498,
+      "primary": {
+        "top": 265,
+        "bottom": 289
+      },
+      "controls": [
+        {
+          "name": "Close",
+          "top": 148.40625,
+          "bottom": 178.40625,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "Selection translation",
+          "top": 265,
+          "bottom": 289,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "Bilingual",
+          "top": 333.5,
+          "bottom": 369.5,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "Translation only",
+          "top": 333.5,
+          "bottom": 369.5,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "Simple translation",
+          "top": 398,
+          "bottom": 434,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "Card mode",
+          "top": 398,
+          "bottom": 434,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "More settings↗",
+          "top": 448,
+          "bottom": 484,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-english": {
+      "clientHeight": 341,
+      "scrollHeight": 341,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 362.5,
+      "bodyTop": 143.5,
+      "bodyBottom": 484,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 498,
+      "primary": {
+        "top": 203.5,
+        "bottom": 271.5
+      },
+      "controls": [
+        {
+          "name": "Close",
+          "top": 159.5,
+          "bottom": 189.5,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "Turn image translation on or off",
+          "top": 203.5,
+          "bottom": 271.5,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "Turn area translation on or off",
+          "top": 279.5,
+          "bottom": 355.5,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "More settings↗",
+          "top": 448,
+          "bottom": 484,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "hover-disabled": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 154.703125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 263,
+        "bottom": 287
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 170.703125,
+          "bottom": 200.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 263,
+          "bottom": 287,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "选择快捷键",
+          "top": 328.5,
+          "bottom": 357.5,
+          "left": 114.3359375,
+          "right": 172.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "hover-reenabled": {
+      "clientHeight": 268,
+      "scrollHeight": 268,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 290.296875,
+      "bodyTop": 154.703125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 263,
+        "bottom": 287
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 170.703125,
+          "bottom": 200.703125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 263,
+          "bottom": 287,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "选择快捷键",
+          "top": 328.5,
+          "bottom": 357.5,
+          "left": 114.3359375,
+          "right": 172.890625
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "hover-eight-profiles": {
+      "clientHeight": 360,
+      "scrollHeight": 458,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 382,
+      "bodyTop": 16,
+      "bodyBottom": 376,
+      "bodyRight": 284,
+      "closeButtonRight": 276,
+      "scrollbarPadding": 8,
+      "viewportWidth": 300,
+      "viewportHeight": 390,
+      "primary": {
+        "top": 130.34375,
+        "bottom": 154.34375
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 32,
+          "bottom": 62,
+          "left": 246,
+          "right": 276
+        },
+        {
+          "name": "默认悬浮快捷键",
+          "top": 130.34375,
+          "bottom": 154.34375,
+          "left": 223,
+          "right": 263
+        },
+        {
+          "name": "选择快捷键",
+          "top": 197.640625,
+          "bottom": 226.640625,
+          "left": 97.2890625,
+          "right": 220.9296875
+        },
+        {
+          "name": "更多设置↗",
+          "top": 438.390625,
+          "bottom": 474.390625,
+          "left": 16,
+          "right": 276
+        }
+      ],
+      "wheelScrollTop": 98.5
+    },
+    "selection-trigger-dot": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-icon": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-hover": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-direct": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-contextMenu": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-Control": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-Alt": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-Shift": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-trigger-custom": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-mode-双语显示": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-mode-仅译文": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-reopened": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-disabled": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "selection-reenabled": {
+      "clientHeight": 316,
+      "scrollHeight": 316,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 337.796875,
+      "bodyTop": 107.203125,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 199,
+        "bottom": 223
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 123.203125,
+          "bottom": 153.203125,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "划词翻译",
+          "top": 199,
+          "bottom": 223,
+          "left": 243,
+          "right": 283
+        },
+        {
+          "name": "双语显示",
+          "top": 270,
+          "bottom": 306,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "仅译文",
+          "top": 270,
+          "bottom": 306,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "普通翻译",
+          "top": 337,
+          "bottom": 373,
+          "left": 16,
+          "right": 153
+        },
+        {
+          "name": "卡片模式",
+          "top": 337,
+          "bottom": 373,
+          "left": 159,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-reopened": {
+      "clientHeight": 326,
+      "scrollHeight": 326,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 348,
+      "bodyTop": 97,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 157,
+        "bottom": 225
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 113,
+          "bottom": 143,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 157,
+          "bottom": 225,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 233,
+          "bottom": 301,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    },
+    "image-custom-hotkey": {
+      "clientHeight": 347,
+      "scrollHeight": 347,
+      "scrollTop": 0,
+      "overflowY": "auto",
+      "horizontalOverflow": false,
+      "drawerHeight": 368.5,
+      "bodyTop": 76.5,
+      "bodyBottom": 423,
+      "bodyRight": 304,
+      "closeButtonRight": 296,
+      "scrollbarPadding": 8,
+      "viewportWidth": 320,
+      "viewportHeight": 437,
+      "primary": {
+        "top": 136.5,
+        "bottom": 204.5
+      },
+      "controls": [
+        {
+          "name": "关闭",
+          "top": 92.5,
+          "bottom": 122.5,
+          "left": 266,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭图片翻译",
+          "top": 136.5,
+          "bottom": 204.5,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "启用或关闭圈选翻译",
+          "top": 212.5,
+          "bottom": 291,
+          "left": 16,
+          "right": 296
+        },
+        {
+          "name": "更多设置↗",
+          "top": 387,
+          "bottom": 423,
+          "left": 16,
+          "right": 296
+        }
+      ],
+      "wheelScrollTop": 0
+    }
+  },
+  "evidenceBoundary": "Production popup and hover/selection/image quick panels in an isolated Chromium browser; measured at intrinsic toolbar-sized viewport. Internal vertical scrolling is allowed; controls must remain reachable. No live-provider, native toolbar or Firefox runtime claim.",
+  "manifest": {
+    "version": "0.0.35",
+    "popup": "popup.html",
+    "options": "options.html"
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 620,
+      "name": "loginwindow"
+    },
+    "frontmostAfter": {
+      "pid": 620,
+      "name": "loginwindow"
+    }
+  },
+  "focusMonitor": {
+    "samples": 61,
+    "violations": []
+  },
+  "extensionLoad": {
+    "method": "Extensions.loadUnpacked",
+    "id": "bbhdmcmciinifdiecamcmadphofgekmc"
+  },
+  "loadedManifest": {
+    "name": "FluentRead-流畅阅读",
+    "version": "0.0.35",
+    "popup": "popup.html"
+  },
+  "lastSaveResponse": {
+    "success": true,
+    "revision": 32
+  },
+  "capturedAt": "2026-10-01T01:30:13.985Z"
+}

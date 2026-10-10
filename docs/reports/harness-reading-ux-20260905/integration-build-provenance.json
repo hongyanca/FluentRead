@@ -1,0 +1,16 @@
+{
+  "gitBase": "a70f27e1f3256c2988619147f5f996a0397d4bab",
+  "testedSourceCommit": "0a0bad0bf7b8cebf086e82934ae08d93b9c8f3e5",
+  "testedExtension": "/Users/thinkstu/Desktop/copy/FluentRead-harness-reading-ux-20260905/.output/chrome-mv3",
+  "sha256": {
+    ".output/chrome-mv3/manifest.json": "3dfef0e7564ad879b435cc34ae4136a251c42597f75257ba22560360103e6e47",
+    ".output/chrome-mv3/background.js": "2118e0bd20c15f2c966feb98180f119c3259070d9fa0870ae1f594e1faf9025c",
+    ".output/chrome-mv3/options.html": "96b8098d3b2ff6a76d1fdaaf1a1f559d5085ffcca62cd105c5a228c866ac8a6d",
+    ".output/chrome-mv3/content-scripts/content.css": "313e363183496f3ad4b79fb73555e9574aba0f16bdf0bc4fdcd57939ce33d467",
+    ".output/chrome-mv3/content-scripts/content.js": "6318c14b7c6970fd1aece07846542570486ca097d7f6413460cbf01725efb18b",
+    ".output/chrome-mv3/content-scripts/qqMailFrame.css": "313e363183496f3ad4b79fb73555e9574aba0f16bdf0bc4fdcd57939ce33d467",
+    ".output/chrome-mv3/content-scripts/qqMailFrame.js": "36e15a3f485fa3cad49771da2013fc55942c6789c6179ed32510a7d7b65c8a4a",
+    ".output/chrome-mv3/content-scripts/shadowBridge.js": "5c8f97b5e594abdf077063c5f21b27587ac1ebaebc49403f6602e9457e25919f",
+    ".output/chrome-mv3/content-scripts/youtubeBridge.js": "ba9427e280e26a7f25c8170c5db8a9d3c50b9d756313a6b9a9d62f9346b51707"
+  }
+}

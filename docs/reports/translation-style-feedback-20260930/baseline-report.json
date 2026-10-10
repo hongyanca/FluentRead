@@ -1,0 +1,67 @@
+{
+  "ok": false,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-translation-style-edge-6aETp5",
+  "artifactsDir": "/private/tmp/fr-style-audit-baseline",
+  "checks": [
+    "general links to interface; translation style is the first interface group",
+    "29 preset cards across four categories update preview and persisted style",
+    "swatches, color names, RGB, invalid input, exact percentage, sliders, segmented controls and custom picker persist appearance"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fr-style-audit-baseline/01-desktop-light-default.png",
+    "/private/tmp/fr-style-audit-baseline/02-category-文字.png",
+    "/private/tmp/fr-style-audit-baseline/02-category-线条.png",
+    "/private/tmp/fr-style-audit-baseline/02-category-标记.png",
+    "/private/tmp/fr-style-audit-baseline/02-category-卡片.png",
+    "/private/tmp/fr-style-audit-baseline/03-desktop-custom-appearance.png"
+  ],
+  "metrics": {
+    "categoryCounts": {
+      "文字": 8,
+      "线条": 10,
+      "标记": 7,
+      "卡片": 4
+    },
+    "previewStyle": {
+      "color": "rgb(29, 78, 216)",
+      "backgroundColor": "rgb(255, 248, 204)",
+      "decorationColor": "rgb(239, 71, 118)",
+      "fontSize": "15.21px",
+      "fontWeight": "700",
+      "opacity": "0.8",
+      "fontFamily": "\"Iowan Old Style\", \"Palatino Linotype\", Georgia, \"Times New Roman\", serif",
+      "parentFontSize": "13px"
+    }
+  },
+  "evidenceBoundary": "Local deterministic HTML/provider in an isolated Edge profile; no Firefox runtime or external provider claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "error": "locator.evaluate: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.translation-style-saved-card').filter({ hasText: 'CSS 阅读' }).locator('.fluent-read-bilingual-content')\u001b[22m\n\n    at main (/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/scripts/testing/run-translation-style-ui-test.cjs:227:83)"
+}

@@ -1,0 +1,112 @@
+import {describe, expect, it, vi} from 'vitest';
+import {groupMangaText, groupMangaOcrLines, type MangaOcrItem} from '@/src/features/image-translation/services/mangaRegions';
+import {drawMangaTranslations} from '@/src/features/image-translation/services/mangaRendering';
+import {layoutImageTranslationText} from '@/src/features/image-translation/services/rendering';
+
+const item = (text: string, x = 20, y = 20, width = 80, height = 20, confidence = 0.99): MangaOcrItem =>
+    ({text, box: {x, y, width, height}, confidence});
+
+describe('漫画整段识别与噪声边界', () => {
+    it('俄语和韩语通用 OCR 补足修补字号，合并连续对白，原框与原文不被修改', () => {
+        const lines = [
+            {text: '  Что-то\n ', bbox: {x0: 20, y0: 20, x1: 100, y1: 40}},
+            {text: 'забыл', bbox: {x0: 20, y0: 44, x1: 100, y1: 64}},
+            {text: 'Другой', bbox: {x0: 220, y0: 20, x1: 300, y1: 40}},
+        ];
+        const original = structuredClone(lines), regions = groupMangaOcrLines(lines, ' RU_ru ', 400, 300);
+        expect(regions.map(region => region.text)).toEqual(['Другой', 'Что-то забыл']);
+        expect(regions[1]).toMatchObject({fontSize: 20, bbox: {x0: 20, y0: 20, x1: 100, y1: 64}, sourceBoxes: [lines[0].bbox, lines[1].bbox]});
+        expect(lines).toEqual(original);regions[1].sourceBoxes![0].x0 = 0;expect(lines).toEqual(original);
+        expect(groupMangaOcrLines([{text: '시작했다고?', bbox: lines[0].bbox}], 'ko-KR', 400, 300)[0].fontSize).toBe(20);
+    });
+    it('通用漫画识别拒绝无效尺寸、越界框和短异文噪声，保留合法单字、长英文与竖排字号', () => {
+        const box = {x0: 20, y0: 20, x1: 100, y1: 40};
+        for (const [width, height] of [[0, 20], [20, NaN], [10.5, 20]]) expect(groupMangaOcrLines([], 'ru', width, height)).toEqual([]);
+        const noisy = ['', '--', 'a!', 'N', 'ㅁ2', 'ㅋㅋ'].map(text => ({text, bbox: box}));
+        expect(groupMangaOcrLines(noisy, 'ko', 400, 300)).toEqual([]);
+        expect(groupMangaOcrLines([{text: 'Я', bbox: box}], 'ru', 400, 300)[0].text).toBe('Я');
+        expect(groupMangaOcrLines([{text: 'HELLO', bbox: box}], 'ko', 400, 300)[0].text).toBe('HELLO');
+        expect(groupMangaOcrLines([{text: '通用', bbox: {x0: -5, y0: -5, x1: 10, y1: 60}, vertical: true}], 'auto', 400, 300)[0]).toMatchObject({fontSize: 10, vertical: true});
+        for (const bbox of [{...box, x0: NaN}, {...box, x0: 401}, {...box, y0: 301}, {...box, x1: 0}]) expect(groupMangaOcrLines([{text: 'слово', bbox}], 'ru', 400, 300)).toEqual([]);
+    });
+    it('日文页排除绘画上误识别的短拉丁片段，保留日文对白和完整拉丁词', () => {
+        const fragments=[item('A'),item('HU'),item('B ou'),item('Q')];
+        expect(groupMangaText(fragments,'ja',400,400)).toEqual([]);
+        expect(groupMangaText([item('やった'),item('口',220,100,20,20),item('HELLO',100,200)],'jpn',400,400).map(r=>r.text)).toEqual(['やった','口','HELLO']);
+    });
+    it('将同一旁白的多行整句合并，旁边和远处的气泡保持独立', () => {
+        const result = groupMangaText([item('THIS', 60, 20, 40), item('STORY', 20, 43, 120),
+            item('CONTINUES.', 30, 67, 100), item('Another bubble', 180, 44, 100), item('Next panel', 20, 220)], 'en', 400, 500);
+        expect(result.map(line => line.text)).toEqual(['THIS STORY CONTINUES.', 'Another bubble', 'Next panel']);
+        expect(result[0].bbox).toEqual({x0: 20, y0: 20, x1: 140, y1: 87});
+    });
+    it('同一行分词按从左到右排序，并按行合并完整对白', () => {
+        const result = groupMangaText([item('world', 82, 19, 50), item('Hello', 20, 20, 55), item('again', 50, 44)], 'en', 300, 200);
+        expect(result[0].text).toBe('Hello world again');
+    });
+    it('不同字号标题和正文、横排和竖排不被合并', () => {
+        const result = groupMangaText([item('TITLE', 20, 20, 100, 50), item('body', 20, 65, 80, 20),
+            item('縦書き', 100, 20, 15, 80)], 'auto', 300, 300);
+        expect(result).toHaveLength(3);
+    });
+    it('竖排按右到左、同列从上到下合段，保留高置信度小气泡单字', () => {
+        const result = groupMangaText([item('左列', 100, 20, 20, 70), item('右列', 124, 20, 20, 70),
+            item('続き', 124, 97, 20, 70), item('啊', 220, 200, 20, 20)], 'ja', 400, 400);
+        expect(result[0]).toMatchObject({text: '右列続き左列', vertical: true});
+        expect(result[1].text).toBe('啊');
+    });
+    it('过滤低置信度、符号、数字和英文漫画里的错误汉字，不丢掉合法 I/A 短句', () => {
+        const bad = [item('noise', 20, 20, 80, 20, 0.64), item('nan', 20, 20, 80, 20, NaN),
+            item(''), item('=='), item('3 3'), item('才', 200, 200, 100, 200), item('noise才'), item('j')];
+        expect(groupMangaText(bad, 'en', 500, 500)).toEqual([]);
+        expect(groupMangaText([item('I'), item('A', 200, 200)], 'en', 500, 500).map(line => line.text)).toEqual(['I', 'A']);
+        expect(groupMangaText([item('才', 20, 20, 150, 200), item('啊', 20, 20, 20, 20, 0.85)], 'auto', 500, 500)).toEqual([]);
+    });
+    it('拒绝坏坐标、无效尺寸、图外框，夹紧可用区域且规范化空白', () => {
+        for (const [width, height] of [[0, 20], [20, Infinity], [10.5, 20]]) expect(groupMangaText([item('text')], 'en', width, height)).toEqual([]);
+        expect(groupMangaText([item('bad', NaN), item('bad', 20, 20, 0), item('bad', 20, 20, 10, -1),
+            item('outside', 600), item('outside', 20, 600), item('outside', -120, 20)], 'en', 500, 500)).toEqual([]);
+        expect(groupMangaText([item('  Hello\n world  ', -5, -5, 100, 30)], 'en', 80, 20)[0])
+            .toMatchObject({text: 'Hello world', bbox: {x0: 0, y0: 0, x1: 80, y1: 20}});
+    });
+    it('同高区域按右到左保留漫画阅读顺序', () => {
+        expect(groupMangaText([item('left'), item('right', 200)], 'en', 400, 300).map(line => line.text)).toEqual(['right', 'left']);
+    });
+    it('连接跨行断词，保留口吃前缀和完整单词',()=>{
+        expect(groupMangaText([item('UNDER-',20,20),item('STOOD...',20,44)],'en',400,300)[0].text).toBe('UNDERSTOOD...');
+        expect(groupMangaText([item('A-ABSO-',20,20),item('LUTELY NOT!',20,44)],'en',400,300)[0].text).toBe('A-ABSOLUTELY NOT!');
+    });
+});
+
+describe('漫画字号和安全绘制', () => {
+    it('短译文限制为统一字号，长译文继续完整换行', () => {
+        const measure = (text: string, size: number) => Array.from(text).length * size;
+        expect(layoutImageTranslationText('你好', 300, 500, measure, 26).fontSize).toBe(26);
+        const text = '完整译文'.repeat(30), layout = layoutImageTranslationText(text, 60, 60, measure, 26);
+        expect(layout.lines.join('')).toBe(text); expect(layout.fontSize).toBeLessThan(26);
+    });
+    it('均匀气泡保持原色，复杂区域使用可读底色并恢复 Canvas 状态', () => {
+        const width = 100, height = 100;
+        const pixels = new Uint8ClampedArray(width * height * 4).fill(255);
+        const context = {save: vi.fn(), restore: vi.fn(), fillRect: vi.fn(), fillStyle: '', font: '',
+            beginPath: vi.fn(), rect: vi.fn(), clip: vi.fn(), measureText: vi.fn(() => ({width: 1})), strokeText: vi.fn(), fillText: vi.fn()};
+        drawMangaTranslations(context as any, pixels, width, height, [{text:'译文',fontSize:20,bbox:{x0:20,y0:20,x1:80,y1:60}}]);
+        expect(context.fillRect).toHaveBeenCalledWith(20,20,60,40); expect(context.fillStyle).toBe('#111111');
+        for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+            const offset = (y * width + x) * 4; pixels[offset] = (x+y)%2 ? 0 : 255;
+        }
+        drawMangaTranslations(context as any, pixels, width, height, [{text:'译文',fontSize:20,bbox:{x0:20,y0:20,x1:80,y1:60}}]);
+        expect(context.save).toHaveBeenCalledTimes(2); expect(context.restore).toHaveBeenCalledTimes(2);
+        expect(context.fillRect).toHaveBeenCalledTimes(2);
+        drawMangaTranslations(context as any,pixels,width,height,[{text:'译文',fontSize:20,bbox:{x0:20,y0:20,x1:80,y1:60}}],true);
+        expect(context.fillRect).toHaveBeenCalledTimes(2); // 已修补画面不再铺白底。
+    });
+    it('无效像素预算和区域不进入绘图，贴边小区域仍可读', () => {
+        const context = {save:vi.fn(),restore:vi.fn(),fillRect:vi.fn(),measureText:vi.fn(()=>({width:1})),beginPath:vi.fn(),rect:vi.fn(),clip:vi.fn(),strokeText:vi.fn(),fillText:vi.fn()};
+        for (const [width,height] of [[0,10],[10,NaN],[10,10]]) drawMangaTranslations(context as any,new Uint8ClampedArray(4),width,height,[]);
+        const p=new Uint8ClampedArray(4*4*4);
+        drawMangaTranslations(context as any,p,4,4,[{text:'x',fontSize:10,bbox:{x0:5,y0:0,x1:8,y1:2}},
+            {text:'x',fontSize:10,bbox:{x0:0,y0:5,x1:2,y1:8}}, {text:'x',fontSize:10,bbox:{x0:-1,y0:-1,x1:2,y1:2}}]);
+        expect(context.fillRect).toHaveBeenCalledOnce();
+    });
+});

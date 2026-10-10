@@ -1,4 +1,9 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
+import {createHash, webcrypto} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {canCacheOptionalEcdict, downloadFullEcdict, readCachedFullEcdict} from '@/src/features/selection-translation/services/ecdictAsset';
+import {setRuntimeFetch} from '@/src/platform/http/runtime';
 import {
     clearWordDictionaryCache,
     createDefaultWordDictionaryProviders,
@@ -47,9 +52,141 @@ function card(
 
 afterEach(() => {
     clearWordDictionaryCache();
+    setRuntimeFetch();
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+});
+
+function optionalDictionaryCache() {
+    const stored = new Map<string, Response>();
+    const cache = {
+        match: async (key: string) => stored.get(key)?.clone(),
+        put: async (key: string, value: Response) => { stored.set(key, value.clone()); },
+        delete: async (key: string) => stored.delete(key),
+    };
+    vi.stubGlobal('caches', {open: async () => cache});
+    vi.stubGlobal('crypto', webcrypto);
+    return {stored, cache};
+}
+
+const fullEcdictBytes = () => new Uint8Array(readFileSync(resolve(process.cwd(), 'assets/optional/ecdict-core-full.json')));
+
+describe('optional full ECDICT asset', () => {
+    it('does not download into a host page without an extension runtime', async () => {
+        optionalDictionaryCache();
+        const requested: string[] = [];
+        setRuntimeFetch(async input => {
+            requested.push(String(input));
+            return new Response(fullEcdictBytes());
+        });
+        expect(await provider(createDefaultWordDictionaryProviders(), 'ecdict-local').lookup('puma')).toBeNull();
+        expect(requested).toEqual([]);
+    });
+
+    it('does not start an optional download when persistent cache support is unavailable', async () => {
+        vi.stubGlobal('caches', undefined);
+        expect(canCacheOptionalEcdict()).toBe(false);
+        expect(await readCachedFullEcdict()).toBeNull();
+        await expect(downloadFullEcdict()).rejects.toThrow('cache unavailable');
+    });
+
+    it('validates the fixed asset, falls back to a second source and reuses the cached copy', async () => {
+        const {stored} = optionalDictionaryCache();
+        const bytes = fullEcdictBytes();
+        const requested: string[] = [];
+        setRuntimeFetch(async input => {
+            requested.push(String(input));
+            return new Response(requested.length === 1 ? new Uint8Array([1, 2, 3]) : bytes);
+        });
+
+        const rows = await downloadFullEcdict();
+        expect(rows).toHaveLength(20_000);
+        expect(rows.at(-1)?.[0]).toBe('bis');
+        expect(requested).toHaveLength(2);
+        expect(requested.every(url => !url.includes('puma') && url.includes('ecdict-core.json'))).toBe(true);
+        expect(stored.size).toBe(1);
+        expect((await readCachedFullEcdict())?.at(-1)?.[0]).toBe('bis');
+    });
+
+    it('rejects a tampered cache entry and an oversized download before accepting a valid source', async () => {
+        const {stored} = optionalDictionaryCache();
+        const bytes = fullEcdictBytes();
+        stored.set('https://fluentread.app/__optional_assets__/ecdict/b0f0768e6730dfd07b895527ff56169f4d44904c58532b4cdd750aa97374071a.json',
+            new Response(new Uint8Array(bytes.length)));
+        expect(await readCachedFullEcdict()).toBeNull();
+        expect(stored.size).toBe(0);
+
+        let attempts = 0;
+        setRuntimeFetch(async () => new Response(++attempts === 1 ? new Uint8Array(bytes.length + 1) : bytes));
+        expect(await downloadFullEcdict()).toHaveLength(20_000);
+        expect(attempts).toBe(2);
+    });
+
+    it('serves uncommon words after background download while keeping the first lookup nonblocking', async () => {
+        const {stored} = optionalDictionaryCache();
+        vi.stubGlobal('browser', {runtime: {getURL: () => 'moz-extension://fixture/ecdict-core.json'}});
+        const core = new Uint8Array(readFileSync(resolve(process.cwd(), 'public/ecdict-core.json')));
+        const full = fullEcdictBytes();
+        const requested: string[] = [];
+        setRuntimeFetch(async input => {
+            requested.push(String(input));
+            return new Response(String(input).startsWith('moz-extension:') ? core : full);
+        });
+        const local = provider(createDefaultWordDictionaryProviders(), 'ecdict-local');
+
+        expect(await local.lookup('puma')).toBeNull();
+        await vi.waitFor(() => expect(stored.size).toBe(1));
+        await vi.waitFor(async () => expect((await local.lookup('puma'))?.word).toBe('puma'));
+        expect(requested.filter(url => url.startsWith('moz-extension:'))).toHaveLength(1);
+        expect(requested.filter(url => url.startsWith('https:'))).toHaveLength(1);
+
+        const reopened = provider(createDefaultWordDictionaryProviders(), 'ecdict-local');
+        expect((await reopened.lookup('puma'))?.word).toBe('puma');
+        expect(requested.filter(url => url.startsWith('https:'))).toHaveLength(1);
+    });
+
+    it('waits for connectivity and deduplicates an in-flight optional download', async () => {
+        optionalDictionaryCache();
+        vi.stubGlobal('browser', {runtime: {getURL: () => 'moz-extension://fixture/ecdict-core.json'}});
+        vi.stubGlobal('navigator', {onLine: false});
+        const core = new Uint8Array(readFileSync(resolve(process.cwd(), 'public/ecdict-core.json')));
+        const full = fullEcdictBytes();
+        const pending: Array<(response: Response) => void> = [];
+        setRuntimeFetch(async input => String(input).startsWith('moz-extension:')
+            ? new Response(core)
+            : new Promise<Response>(resolve => { pending.push(resolve); }));
+        const local = provider(createDefaultWordDictionaryProviders(), 'ecdict-local');
+
+        expect(await local.lookup('puma')).toBeNull();
+        expect(pending).toHaveLength(0);
+        vi.stubGlobal('navigator', {onLine: true});
+        expect(await local.lookup('puma')).toBeNull();
+        expect(await local.lookup('bis')).toBeNull();
+        expect(pending).toHaveLength(1);
+        pending[0](new Response(full));
+        await vi.waitFor(async () => expect((await local.lookup('bis'))?.word).toBe('bis'));
+        expect(pending).toHaveLength(1);
+    });
+
+    it('backs off after all fixed asset mirrors fail', async () => {
+        optionalDictionaryCache();
+        vi.stubGlobal('browser', {runtime: {getURL: () => 'moz-extension://fixture/ecdict-core.json'}});
+        const core = new Uint8Array(readFileSync(resolve(process.cwd(), 'public/ecdict-core.json')));
+        let remoteRequests = 0;
+        setRuntimeFetch(async input => {
+            if (String(input).startsWith('moz-extension:')) return new Response(core);
+            remoteRequests += 1;
+            return new Response('', {status: 503});
+        });
+        const local = provider(createDefaultWordDictionaryProviders(), 'ecdict-local');
+
+        expect(await local.lookup('puma')).toBeNull();
+        await vi.waitFor(() => expect(remoteRequests).toBe(3));
+        await new Promise(resolve => setTimeout(resolve, 0));
+        expect(await local.lookup('bis')).toBeNull();
+        expect(remoteRequests).toBe(3);
+    });
 });
 
 describe('word dictionary Unicode and untrusted payload boundaries', () => {
@@ -175,6 +312,12 @@ describe('word dictionary Unicode and untrusted payload boundaries', () => {
         expect(initial.meanings[0]?.definitions).toHaveLength(6);
     });
 
+    it('attaches a later Chinese gloss to an untranslated English sense', () => {
+        const base = card('pair');
+        const merged = mergeWordCardData(base, card('pair', 'youdao-web', {definition: '中文释义'}));
+        expect(merged.meanings[0].definitions).toEqual([{definition: 'an English definition', translatedDefinition: '中文释义'}]);
+    });
+
     it('selects at most two unlabelled pronunciations and handles a single regional row', () => {
         expect(selectPronunciations([{text: 'a'}, {text: 'b'}, {text: 'c'}])).toEqual([{text: 'a'}, {text: 'b'}]);
         expect(selectPronunciations([
@@ -267,10 +410,22 @@ describe('word dictionary defensive provider parsing', () => {
 });
 
 describe('word dictionary provider network adapters', () => {
+    it('ships the first 3,000 frequency-ranked entries and preserves the full optional asset', () => {
+        const core = JSON.parse(readFileSync(resolve(process.cwd(), 'public/ecdict-core.json'), 'utf8')) as string[][];
+        const rows = JSON.parse(readFileSync(resolve(process.cwd(), 'assets/optional/ecdict-core-full.json'), 'utf8')) as string[][];
+        expect(core).toHaveLength(3_000);
+        expect(rows).toHaveLength(20_000);
+        expect(core).toEqual(rows.slice(0, 3_000));
+        expect(rows.every(row => row.length === 4 && row.every(value => typeof value === 'string'))).toBe(true);
+        const originalShape = rows.map(([w, p, d, t]) => ({w, p, d, t, pos: ''}));
+        expect(createHash('sha256').update(JSON.stringify(originalShape)).digest('hex'))
+            .toBe('e50fd32d4a859b184fd5bae15d0278e6bf2b621acbe5c854bf460817668c8822');
+    });
+
     it('loads and memoizes the browser-local ECDICT index while filtering malformed rows', async () => {
         const getURL = vi.fn(() => 'moz-extension://fixture/ecdict-core.json');
         vi.stubGlobal('browser', {runtime: {getURL}});
-        const fetchMock = vi.fn(async () => response([null, {}, {w: ''}, {w: 'Local', p: 'ləʊkəl', d: 'adj. local', t: 'adj. 本地'}]));
+        const fetchMock = vi.fn(async () => response([null, {}, {w: ''}, ['broken'], ['Local', 'ləʊkəl', 'adj. local', 'adj. 本地']]));
         vi.stubGlobal('fetch', fetchMock);
         const local = provider(createDefaultWordDictionaryProviders(), 'ecdict-local');
 
@@ -411,7 +566,7 @@ describe('word dictionary lookup orchestration', () => {
         expect(eagerLookup).toHaveBeenCalledTimes(3);
     });
 
-    it('isolates provider failures and waits for all completeness conditions before stopping', async () => {
+    it('isolates local failures and returns local definitions without waiting for pronunciation or online backups', async () => {
         const warning = vi.fn();
         const neverReached = vi.fn(async () => card('word'));
         const dictionary = createWordDictionaryLookup({
@@ -430,7 +585,7 @@ describe('word dictionary lookup orchestration', () => {
         });
 
         const result = await dictionary.lookup('word');
-        expect(result?.sources.map((source) => source.id)).toEqual(['ecdict-local', 'youdao-web', 'free-dictionary', 'datamuse']);
+        expect(result?.sources.map((source) => source.id)).toEqual(['ecdict-local']);
         expect(warning).toHaveBeenCalledOnce();
         expect(neverReached).not.toHaveBeenCalled();
     });
@@ -442,7 +597,7 @@ describe('word dictionary lookup orchestration', () => {
 
         expect(await dictionary.lookup('two words')).toBeNull();
         expect(providerLookup).not.toHaveBeenCalled();
-        expect(await dictionary.lookup('valid')).toBeNull();
+        await expect(dictionary.lookup('valid')).rejects.toThrow('词典查询暂时不可用');
         expect(warning).toHaveBeenCalledOnce();
     });
 
@@ -451,9 +606,100 @@ describe('word dictionary lookup orchestration', () => {
         vi.stubGlobal('fetch', fetchMock);
         expect(await lookupWord('edgecache')).not.toBeNull();
         expect(await lookupWord('edgecache')).not.toBeNull();
-        expect(fetchMock).toHaveBeenCalledTimes(1);
+        expect(fetchMock).toHaveBeenCalledTimes(5);
         clearWordDictionaryCache();
         expect(await lookupWord('edgecache')).not.toBeNull();
-        expect(fetchMock).toHaveBeenCalledTimes(2);
+        expect(fetchMock).toHaveBeenCalledTimes(10);
+    });
+
+    it('returns a fast online definition and aborts a slower source instead of waiting for it', async () => {
+        let slowSignal: AbortSignal | undefined;
+        const slow = vi.fn((_word: string, signal?: AbortSignal) => {
+            slowSignal = signal;
+            return new Promise<WordCardData | null>((_resolve, reject) => {
+                signal?.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')), {once: true});
+            });
+        });
+        const fast = vi.fn(async () => card('uncommon'));
+        const dictionary = createWordDictionaryLookup({providers: [
+            {id: 'youdao-web', lookup: slow}, {id: 'free-dictionary', lookup: fast},
+        ]});
+        expect((await dictionary.lookup('uncommon'))?.meanings).toHaveLength(1);
+        expect(slow).toHaveBeenCalledOnce();
+        expect(fast).toHaveBeenCalledOnce();
+        expect(slowSignal?.aborted).toBe(true);
+    });
+
+    it('bounds a hanging lookup at 2.5 seconds and does not cache the outage as a missing word', async () => {
+        vi.useFakeTimers();
+        const lookup = vi.fn<WordDictionaryProvider['lookup']>()
+            .mockImplementationOnce(() => new Promise(() => {}))
+            .mockResolvedValueOnce(card('recover'));
+        const dictionary = createWordDictionaryLookup({providers: [{id: 'free-dictionary', lookup}]});
+        const pending = dictionary.lookup('recover');
+        const rejected = expect(pending).rejects.toThrow('词典查询暂时不可用');
+        await vi.advanceTimersByTimeAsync(2_499);
+        expect(lookup.mock.calls[0][1]?.aborted).toBe(false);
+        await vi.advanceTimersByTimeAsync(1);
+        await rejected;
+        expect(lookup.mock.calls[0][1]?.aborted).toBe(true);
+        expect(await dictionary.lookup('recover')).not.toBeNull();
+        expect(lookup).toHaveBeenCalledTimes(2);
+    });
+
+    it('keeps a partial pronunciation if other sources time out and ignores their late response', async () => {
+        vi.useFakeTimers();
+        let release!: (data: WordCardData) => void;
+        const dictionary = createWordDictionaryLookup({providers: [
+            {id: 'youdao-web', lookup: async () => card('partial', 'youdao-web', {definition: ''})},
+            {id: 'free-dictionary', lookup: () => new Promise(resolve => { release = resolve; })},
+        ]});
+        const pending = dictionary.lookup('partial');
+        await vi.advanceTimersByTimeAsync(2_500);
+        const result = await pending;
+        expect(result?.phonetics).toHaveLength(1);
+        expect(result?.meanings).toEqual([]);
+        release(card('partial'));
+        await Promise.resolve();
+        expect(result?.meanings).toEqual([]);
+    });
+
+    it('ends a stuck local lookup without starting online requests after its deadline', async () => {
+        vi.useFakeTimers();
+        let release!: (data: null) => void;
+        const online = vi.fn(async () => card('stuck'));
+        const dictionary = createWordDictionaryLookup({providers: [
+            {id: 'ecdict-local', lookup: () => new Promise(resolve => { release = resolve; })},
+            {id: 'free-dictionary', lookup: online},
+        ]});
+        const rejected = expect(dictionary.lookup('stuck')).rejects.toThrow('词典查询暂时不可用');
+        await vi.advanceTimersByTimeAsync(2_500);
+        await rejected;
+        release(null);
+        await Promise.resolve();
+        await Promise.resolve();
+        expect(online).not.toHaveBeenCalled();
+    });
+
+    it('treats dictionary 404s as clean misses, without warnings or repeated requests for the same word', async () => {
+        const warn = vi.fn();
+        const fetchMock = vi.fn(async () => response({}, false, 404));
+        vi.stubGlobal('fetch', fetchMock);
+        const dictionary = createWordDictionaryLookup({warn});
+        expect(await dictionary.lookup('zzqmissing')).toBeNull();
+        expect(await dictionary.lookup('zzqmissing')).toBeNull();
+        expect(fetchMock).toHaveBeenCalledTimes(5);
+        expect(warn).not.toHaveBeenCalled();
+    });
+
+    it('does not retain negative results when any source failed and succeeds after recovery', async () => {
+        const lookup = vi.fn<WordDictionaryProvider['lookup']>()
+            .mockRejectedValueOnce(new Error('offline'))
+            .mockResolvedValueOnce(card('recovered'));
+        const dictionary = createWordDictionaryLookup({warn: vi.fn(), providers: [
+            {id: 'youdao-web', lookup}, {id: 'free-dictionary', lookup: async () => null},
+        ]});
+        await expect(dictionary.lookup('recovered')).rejects.toThrow('词典查询暂时不可用');
+        expect(await dictionary.lookup('recovered')).not.toBeNull();
     });
 });

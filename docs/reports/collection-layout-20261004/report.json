@@ -1,0 +1,94 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-sentence-listening-20261004/.output/chrome-mv3",
+  "artifactsDir": "/private/tmp/fluentread-sentence-merge-browser",
+  "checks": [
+    "highlight toolbar plays original source from the translation side and stops its browser fallback",
+    "translation-side hover saves the exact original and translation, enables saving, preserves host DOM and geometry",
+    "sentence list, manual explanation and reopening persistence",
+    "quick copy original and bilingual",
+    "existing TTS backend failure routes to browser speech with exact original; stop releases ownership",
+    "on-demand short explanation uses grounded sentence prompt and saves separately from translation",
+    "actual downloaded JSON round trips original, translation, explanation, sentence identity and review records",
+    "malformed import preserves existing collection and gives retryable feedback",
+    "pointer exit and restore remove sentence actions; narrow layout stays within viewport",
+    "rows show only content, play, copy and more; keyboard Escape closes menu and note editor mounts only on demand",
+    "mastery and relearn remain available in row menu; status filter changes actual list and resets",
+    "delete from compact row menu and toast undo preserve the saved content",
+    "compact saving switch persists on reload and disabling preserves existing collection",
+    "1440, 820 and 390px layouts retain full sentence translation, allocate full width to content and avoid overflow; dark layout captured"
+  ],
+  "consoleErrors": [],
+  "screenshots": [
+    "/private/tmp/fluentread-sentence-merge-browser/highlight-save.png",
+    "/private/tmp/fluentread-sentence-merge-browser/sentence-listening-study.png",
+    "/private/tmp/fluentread-sentence-merge-browser/saved-sentences.png",
+    "/private/tmp/fluentread-sentence-merge-browser/saved-sentences-mobile.png",
+    "/private/tmp/fluentread-sentence-merge-browser/collection-layout-1440.png",
+    "/private/tmp/fluentread-sentence-merge-browser/collection-layout-820.png",
+    "/private/tmp/fluentread-sentence-merge-browser/collection-layout-390.png",
+    "/private/tmp/fluentread-sentence-merge-browser/collection-layout-dark.png"
+  ],
+  "evidenceBoundary": "Real production extension and storage; local deterministic translation/explanation; synthetic browser voice validates text and stop lifecycle, not audible voice quality or Firefox runtime.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1041,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "layout": [
+    {
+      "width": 1440,
+      "rowWidth": 1078,
+      "sourceWidth": 922,
+      "translationWidth": 1034,
+      "firstContentOffset": 137,
+      "longTranslationCharacters": 139
+    },
+    {
+      "width": 820,
+      "rowWidth": 570,
+      "sourceWidth": 414,
+      "translationWidth": 526,
+      "firstContentOffset": 137,
+      "longTranslationCharacters": 139
+    },
+    {
+      "width": 390,
+      "rowWidth": 360,
+      "sourceWidth": 332,
+      "translationWidth": 332,
+      "firstContentOffset": 200,
+      "longTranslationCharacters": 139
+    }
+  ],
+  "requests": [
+    {
+      "kind": "translation"
+    },
+    {
+      "kind": "explanation"
+    }
+  ]
+}

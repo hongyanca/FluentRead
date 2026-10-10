@@ -1,0 +1,139 @@
+{
+  "ok": true,
+  "cases": [
+    {
+      "name": "local definition renders before auxiliary translation without online lookup"
+    },
+    {
+      "name": "slow online lookup ends within budget and keeps ordinary translation",
+      "elapsedMs": 2860,
+      "loading": {
+        "height": 22,
+        "text": "译文已显示，正在补充词典…"
+      }
+    },
+    {
+      "name": "timeout is not cached as a missing word; retry accepts fast source and aborts slow source"
+    },
+    {
+      "name": "missing word gives spelling hint and repeat lookup uses negative cache"
+    },
+    {
+      "name": "late lookup cannot overwrite new selection or reopen a closed card"
+    },
+    {
+      "name": "grammar chips show only localized parts of speech in Chinese and English; narrow dark layout fits",
+      "fit": {
+        "left": 12,
+        "right": 378,
+        "viewport": 390
+      }
+    }
+  ],
+  "screenshots": [
+    "local-result-before-support.png",
+    "compact-waiting.png",
+    "dictionary-timeout.png",
+    "word-not-found.png",
+    "grammar-chinese.png",
+    "grammar-english.png",
+    "grammar-chinese-dark-390.png"
+  ],
+  "consoleErrors": [],
+  "translationRequests": 9,
+  "evidence": "Production extension in isolated Edge. Real local dictionary; deterministic online dictionary, translation and AI fixtures. No live provider quality claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1041,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 65472,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 65472,
+      "name": "ChatGPT"
+    }
+  },
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-selection-word-feedback-20261003/.output/chrome-mv3",
+  "foregroundAfter": {
+    "pid": 65472,
+    "name": "ChatGPT"
+  },
+  "baseCommit": "554711ce",
+  "branch": "codex/selection-word-feedback-20261003",
+  "referenceProjectsUsed": false,
+  "validation": {
+    "relatedTests": {
+      "passed": 209,
+      "fullRegression": false,
+      "suites": [
+        "wordDictionary",
+        "wordDictionaryEdge",
+        "selectionTranslatorCore",
+        "selectionTranslatorLifecycle",
+        "readingAssistantPresentation",
+        "i18n",
+        "backgroundFeatureHandlers (dictionary cases only)"
+      ]
+    },
+    "coverage": {
+      "files": [
+        "src/features/selection-translation/services/wordDictionary.ts",
+        "src/features/selection-translation/background/wordLookupHandler.ts"
+      ],
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "architecture": {
+      "passed": 739,
+      "scope": [
+        "sourceFileHeaders",
+        "providerBoundaries"
+      ]
+    },
+    "compile": "passed",
+    "chromeProductionBuild": "passed",
+    "firefoxBuild": "passed",
+    "userscriptBuildAndVerifier": "passed",
+    "docsBuild": "passed",
+    "testAudit": "passed",
+    "browser": {
+      "casesPassed": 6,
+      "consoleErrors": 0,
+      "localDictionary": "real bundled data",
+      "onlineProviders": "deterministic fixtures",
+      "firefoxRuntime": "not tested"
+    },
+    "baselineFailures": {
+      "reproducedOnUnmodifiedCommit": "554711ce",
+      "cases": [
+        "backgroundFeatureHandlers: input translation default service expectation",
+        "backgroundFeatureHandlers: settings-area-translation route alias expectation",
+        "moduleBoundaries: document UI imports expectation",
+        "moduleBoundaries: content runtime complexity ceiling"
+      ]
+    }
+  },
+  "cleanup": {
+    "isolatedBrowserClosed": true,
+    "temporaryProfileRemoved": true,
+    "everydayBrowserProfileUsed": false
+  }
+}

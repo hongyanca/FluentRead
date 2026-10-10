@@ -1,0 +1,908 @@
+
+> FluentRead-流畅阅读@0.0.35 build /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930
+> node scripts/testing/run-resource-safe.mjs -- wxt build
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: wxt build
+
+WXT 0.20.18
+ℹ Building chrome-mv3 for production with Vite 5.4.19
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/background.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/background.ts
+ * 文件职责：声明 FluentRead 的 WXT 后台入口，并把 service worker 生命周期委托给后台应用组合根。
+ * 主要内容：配置 Safari 非持久后台行为，调用 startBackgroundApp 组装消息路由、菜单、缓存与维护任务；配置存储会根据 MV3 worker 或 MV2 background page 身份选择后台数据库端口。
+ * 模块边界：本文件只保存 WXT 元数据和唯一启动委托，不直接注册业务 handler、访问存储或调用翻译服务。
+ */
+import {startBackgroundApp} from '@/src/app/background/runtime';
+export default defineBackground({
+    persistent: {
+        safari: false,
+    },
+    main: startBackgroundApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineBackground({
+ persistent: {
+     safari: false,
+ },
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTranslationWorker.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/localTranslationWorker.ts
+ * 文件职责：声明本地翻译 Worker 的独立 WXT 产物。
+ */
+import {startLocalTranslationWorkerApp} from '@/src/app/offscreen/localTranslationWorker';
+
+export default defineUnlistedScript(startLocalTranslationWorkerApp);
+
+---
+⚙ Transformed:
+---
+/**
+ * @file entrypoints/localTranslationWorker.ts
+ * 文件职责：声明本地翻译 Worker 的独立 WXT 产物。
+ */
+import {startLocalTranslationWorkerApp} from '@/src/app/offscreen/localTranslationWorker';
+
+export default defineUnlistedScript(startLocalTranslationWorkerApp);
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/content.ts
+ * 文件职责：声明注入所有网页的 WXT 内容脚本入口，并把页面功能生命周期交给内容应用组合根。
+ * 主要内容：在 document_start 注入并等待基础 DOM 可挂载后调用 startContentApp，统一启动翻译、悬浮与交互功能。
+ * 模块边界：入口不读取配置、不操作页面 DOM，也不直接挂载 feature；激活、清理和错误隔离均由 src/app/content 管理。
+ */
+import {startContentApp} from '@/src/app/content/runtime';
+export default defineContentScript({
+    matches: ['<all_urls>'],
+    runAt: 'document_start',
+    cssInjectionMode: 'ui',
+    main: startContentApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: ['<all_urls>'],
+ runAt: 'document_start',
+ cssInjectionMode: 'ui',
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/neteaseMailFrame.content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/neteaseMailFrame.content.ts
+ * 文件职责：只在网易免费邮箱页面及其 about:blank 正文子文档声明内容脚本。
+ * 主要内容：为 163、126 和 yeah 邮箱启用 frame 注入，运行时再核验阅读页与正文边界。
+ * 模块边界：不扩大通用入口的注入范围，也不在登录或写信页面直接挂载翻译功能。
+ */
+import {startNeteaseMailFrameApp} from '@/src/app/content/qqMailFrameRuntime';
+export default defineContentScript({
+    matches: ['https://*.mail.163.com/*', 'https://*.mail.126.com/*', 'https://*.mail.yeah.net/*'],
+    allFrames: true,
+    matchAboutBlank: true,
+    runAt: 'document_end',
+    cssInjectionMode: 'ui',
+    main: startNeteaseMailFrameApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: ['https://*.mail.163.com/*', 'https://*.mail.126.com/*', 'https://*.mail.yeah.net/*'],
+ allFrames: true,
+ matchAboutBlank: true,
+ runAt: 'document_end',
+ cssInjectionMode: 'ui',
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTtsWorker.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/localTtsWorker.ts
+ * 文件职责：声明本地 TTS Worker 的独立 WXT 产物。
+ */
+import {startLocalTtsWorkerApp} from '@/src/app/offscreen/localTtsWorker';
+
+export default defineUnlistedScript(startLocalTtsWorkerApp);
+
+---
+⚙ Transformed:
+---
+/**
+ * @file entrypoints/localTtsWorker.ts
+ * 文件职责：声明本地 TTS Worker 的独立 WXT 产物。
+ */
+import {startLocalTtsWorkerApp} from '@/src/app/offscreen/localTtsWorker';
+
+export default defineUnlistedScript(startLocalTtsWorkerApp);
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/supportedFrame.content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/supportedFrame.content.ts
+ * 文件职责：在旧 QQ 邮件阅读页、Disqus 评论及 Kaggle 笔记本正文共用受限子 frame 入口。
+ * 主要内容：合并注入条件相同的内容脚本，由各运行时再次核验页面与顶层来源。
+ * 模块边界：网易邮箱需匹配 about:blank 子 frame，仍使用独立入口；通用内容入口仍只在顶层运行。
+ */
+import {startEmbeddedFrameApp} from '@/src/app/content/embeddedFrameRuntime';
+import {startQqMailFrameApp} from '@/src/app/content/qqMailFrameRuntime';
+
+export default defineContentScript({
+    matches: [
+        'https://disqus.com/embed/comments/*',
+        'https://www.kaggleusercontent.com/kf/*/__results__.html*',
+        'https://mail.qq.com/cgi-bin/readmail*',
+    ],
+    allFrames: true,
+    runAt: 'document_end',
+    cssInjectionMode: 'ui',
+    main: ctx => window.location.hostname === 'mail.qq.com'
+        ? startQqMailFrameApp(ctx) : startEmbeddedFrameApp(ctx),
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: [
+     'https://disqus.com/embed/comments/*',
+     'https://www.kaggleusercontent.com/kf/*/__results__.html*',
+     'https://mail.qq.com/cgi-bin/readmail*',
+ ],
+
+ allFrames: true,
+ runAt: 'document_end',
+ cssInjectionMode: 'ui',
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/shadowBridge.content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/shadowBridge.content.ts
+ * 文件职责：在网页 MAIN world 注入 Shadow DOM 路由桥，观察不会穿过隔离世界的页面导航变化。
+ * 主要内容：从 document_start 调用 startShadowBridgeApp，并限定为无全局包装的主世界内容脚本。
+ * 模块边界：只发布版本化导航信号，不暴露扩展配置或特权 API；可信校验和生命周期在 src/app/content/shadowBridge 中实现。
+ */
+import {startShadowBridgeApp} from '@/src/app/content/shadowBridge';
+
+export default defineContentScript({
+    matches: ['<all_urls>'],
+    runAt: 'document_start',
+    world: 'MAIN',
+    globalName: false,
+    main: startShadowBridgeApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: ['<all_urls>'],
+ runAt: 'document_start',
+ world: 'MAIN',
+ globalName: false,
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/videoTranscriptionWorker.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/videoTranscriptionWorker.ts
+ * 文件职责：声明本地字幕模型的独立 WXT Worker 产物。
+ * 主要内容：将离屏应用组合根注册为 unlisted script，供 Offscreen 按 URL 创建 Worker。
+ * 模块边界：只负责构建入口元数据，模型推理和 Worker 消息归视频 feature 管理。
+ */
+import {startVideoTranscriptionWorkerApp} from '@/src/app/offscreen/videoTranscriptionWorker';
+export default defineUnlistedScript(startVideoTranscriptionWorkerApp);
+
+---
+⚙ Transformed:
+---
+/**
+ * @file entrypoints/videoTranscriptionWorker.ts
+ * 文件职责：声明本地字幕模型的独立 WXT Worker 产物。
+ * 主要内容：将离屏应用组合根注册为 unlisted script，供 Offscreen 按 URL 创建 Worker。
+ * 模块边界：只负责构建入口元数据，模型推理和 Worker 消息归视频 feature 管理。
+ */
+import {startVideoTranscriptionWorkerApp} from '@/src/app/offscreen/videoTranscriptionWorker';
+export default defineUnlistedScript(startVideoTranscriptionWorkerApp);
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/xVideoBridge.content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/xVideoBridge.content.ts
+ * 文件职责：在 X/Twitter MAIN world 启动字幕资源桥。
+ * 主要内容：声明站点匹配与 document_start 注入，委托应用组合根。
+ * 模块边界：入口不修改宿主 API，具体桥接与清理由视频 feature 统一负责。
+ */
+import {startXVideoBridgeApp} from '@/src/app/content/xVideoBridge';
+export default defineContentScript({
+  matches: ['*://*.x.com/*', '*://x.com/*', '*://*.twitter.com/*', '*://twitter.com/*'],
+  runAt: 'document_start', world: 'MAIN', globalName: false,
+  main: startXVideoBridgeApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: ['*://*.x.com/*', '*://x.com/*', '*://*.twitter.com/*', '*://twitter.com/*'],
+ runAt: 'document_start',
+ world: 'MAIN',
+ globalName: false,
+});
+---
+⚙ vite-node transformed entrypoint /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/youtubeBridge.content.ts
+⚙ Original:
+---
+/**
+ * @file entrypoints/youtubeBridge.content.ts
+ * 文件职责：在全部 YouTube 页面 MAIN world 预注入 timedtext 网络桥，确保首页/搜索页经 SPA 导航到播放页后仍能获取原生字幕响应。
+ * 主要内容：匹配 youtube.com 的裸域和子域全路径，从 document_start 调用 startYoutubeTimedTextBridgeApp，并关闭 WXT 全局包装。
+ * 模块边界：桥只覆盖顶层 YouTube SPA，不宣称支持 youtube-nocookie embed iframe；消费端仍需复验视频所有权和消息上限。
+ */
+import {startYoutubeTimedTextBridgeApp} from '@/src/app/content/youtubeTimedTextBridge';
+
+export default defineContentScript({
+  matches: ['*://*.youtube.com/*', '*://youtube.com/*'],
+  runAt: 'document_start',
+  world: 'MAIN',
+  globalName: false,
+  main: startYoutubeTimedTextBridgeApp,
+});
+
+---
+⚙ Transformed:
+---
+export default defineContentScript({
+ matches: ['*://*.youtube.com/*', '*://youtube.com/*'],
+ runAt: 'document_start',
+ world: 'MAIN',
+ globalName: false,
+});
+---
+⚙ All entrypoints: [ { type: 'background',
+    name: 'background',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/background.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { persistent: undefined },
+    skipped: false },
+  { type: 'content-script',
+    name: 'content',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-page',
+    name: 'document',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/document/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { title: 'FluentRead-流畅阅读 · 文档翻译', openInTab: true },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'localTranslationWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTranslationWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startLocalTranslationWorker] },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'localTtsWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTtsWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startLocalTtsWorker] },
+    skipped: false },
+  { type: 'content-script',
+    name: 'neteaseMailFrame',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/neteaseMailFrame.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options:
+     { matches: [Array],
+       allFrames: true,
+       matchAboutBlank: true,
+       runAt: 'document_end',
+       cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-page',
+    name: 'offscreen',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/offscreen/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { title: 'FluentRead Background DOM Runtime', include: [Array] },
+    skipped: false },
+  { type: 'options',
+    name: 'options',
+    options: { title: 'FluentRead-流畅阅读 · 设置', openInTab: true },
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/options/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    skipped: false },
+  { type: 'popup',
+    name: 'popup',
+    options:
+     { defaultTitle: 'FluentRead-流畅阅读', mv2Key: 'browser_action', themeIcons: undefined },
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/popup/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    skipped: false },
+  { type: 'content-script',
+    name: 'shadowBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/shadowBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false },
+  { type: 'content-script',
+    name: 'supportedFrame',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/supportedFrame.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options:
+     { matches: [Array], allFrames: true, runAt: 'document_end', cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'videoTranscriptionWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/videoTranscriptionWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startVideoTranscriptionWorker] },
+    skipped: false },
+  { type: 'content-script',
+    name: 'xVideoBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/xVideoBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false },
+  { type: 'content-script',
+    name: 'youtubeBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/youtubeBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false } ]
+⚙ Detected entrypoints: [ { type: 'background',
+    name: 'background',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/background.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { persistent: undefined },
+    skipped: false },
+  { type: 'content-script',
+    name: 'content',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-page',
+    name: 'document',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/document/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { title: 'FluentRead-流畅阅读 · 文档翻译', openInTab: true },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'localTranslationWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTranslationWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startLocalTranslationWorker] },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'localTtsWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/localTtsWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startLocalTtsWorker] },
+    skipped: false },
+  { type: 'content-script',
+    name: 'neteaseMailFrame',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/neteaseMailFrame.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options:
+     { matches: [Array],
+       allFrames: true,
+       matchAboutBlank: true,
+       runAt: 'document_end',
+       cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-page',
+    name: 'offscreen',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/offscreen/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { title: 'FluentRead Background DOM Runtime', include: [Array] },
+    skipped: false },
+  { type: 'options',
+    name: 'options',
+    options: { title: 'FluentRead-流畅阅读 · 设置', openInTab: true },
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/options/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    skipped: false },
+  { type: 'popup',
+    name: 'popup',
+    options:
+     { defaultTitle: 'FluentRead-流畅阅读', mv2Key: 'browser_action', themeIcons: undefined },
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/popup/index.html',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    skipped: false },
+  { type: 'content-script',
+    name: 'shadowBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/shadowBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false },
+  { type: 'content-script',
+    name: 'supportedFrame',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/supportedFrame.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options:
+     { matches: [Array], allFrames: true, runAt: 'document_end', cssInjectionMode: 'ui' },
+    skipped: false },
+  { type: 'unlisted-script',
+    name: 'videoTranscriptionWorker',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/videoTranscriptionWorker.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3',
+    options: { main: [Function: startVideoTranscriptionWorker] },
+    skipped: false },
+  { type: 'content-script',
+    name: 'xVideoBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/xVideoBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false },
+  { type: 'content-script',
+    name: 'youtubeBridge',
+    inputPath:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/entrypoints/youtubeBridge.content.ts',
+    outputDir:
+     '/Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930/.output/chrome-mv3/content-scripts',
+    options: { matches: [Array], runAt: 'document_start', world: 'MAIN', globalName: false },
+    skipped: false } ]
+(node:22195) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+- Preparing...
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✔ Built extension in 25.7 s
+  ├─ .output/chrome-mv3/manifest.json                                            2.61 kB
+  ├─ .output/chrome-mv3/document.html                                            1.62 kB
+  ├─ .output/chrome-mv3/offscreen.html                                           1.23 kB
+  ├─ .output/chrome-mv3/options.html                                             1.62 kB
+  ├─ .output/chrome-mv3/popup.html                                               1.39 kB
+  ├─ .output/chrome-mv3/background.js                                            1.89 MB
+  ├─ .output/chrome-mv3/chunks/_commonjs-dynamic-modules-TDtrdbi3.js             239 B
+  ├─ .output/chrome-mv3/chunks/_virtual_wxt-plugins-BRxGdlD1.js                  15.41 kB
+  ├─ .output/chrome-mv3/chunks/128-rof0LK9z.js                                   40 B
+  ├─ .output/chrome-mv3/chunks/AreaTranslationSettings-DDXrFQFo.js               10.45 kB
+  ├─ .output/chrome-mv3/chunks/capabilities-C6WtUhhL.js                          688 B
+  ├─ .output/chrome-mv3/chunks/capabilities-D0yc718e.js                          117.87 kB
+  ├─ .output/chrome-mv3/chunks/client-8uMQYN_d.js                                14.53 kB
+  ├─ .output/chrome-mv3/chunks/compiler-OTWSp29_.js                              100.43 kB
+  ├─ .output/chrome-mv3/chunks/ConfigManagement-DXM-Dvc_.js                      50.32 kB
+  ├─ .output/chrome-mv3/chunks/ContextMenuSettings-BQVCRMMS.js                   5.97 kB
+  ├─ .output/chrome-mv3/chunks/core-QS6Jyc7F.js                                  1.61 kB
+  ├─ .output/chrome-mv3/chunks/CustomHotkeyInput-BIcUtGkm.js                     7.61 kB
+  ├─ .output/chrome-mv3/chunks/CustomOpenAIProviderDialog-BO2Z17yi.js            4.09 kB
+  ├─ .output/chrome-mv3/chunks/document-RWe9ZSm_.js                              90.41 kB
+  ├─ .output/chrome-mv3/chunks/el-overlay-BW9S-W-D.js                            6.41 kB
+  ├─ .output/chrome-mv3/chunks/featureServices-vvTouUCH.js                       44.82 kB
+  ├─ .output/chrome-mv3/chunks/FloatingBallSettings-0cXRYuMt.js                  10.89 kB
+  ├─ .output/chrome-mv3/chunks/GlossaryLibrarySelect-CC9WZWQh.js                 2.21 kB
+  ├─ .output/chrome-mv3/chunks/i18n-DAuc5jal.js                                  582.86 kB
+  ├─ .output/chrome-mv3/chunks/ImageOcrSettings-D5U9-sy1.js                      11.75 kB
+  ├─ .output/chrome-mv3/chunks/index-BgT8mn2z.js                                 19.05 kB
+  ├─ .output/chrome-mv3/chunks/index-CY3H0r1R.js                                 436 kB
+  ├─ .output/chrome-mv3/chunks/index-Dnk6T5WF.js                                 10.7 kB
+  ├─ .output/chrome-mv3/chunks/index-JDtHSwW0.js                                 4.82 kB
+  ├─ .output/chrome-mv3/chunks/index.full-BJoYNTDq.js                            728.84 kB
+  ├─ .output/chrome-mv3/chunks/InputTranslationSettings-CyDm6PDj.js              12.15 kB
+  ├─ .output/chrome-mv3/chunks/interfaceAppearance-DPDGmXfX.js                   14.07 kB
+  ├─ .output/chrome-mv3/chunks/InterfaceSettings-qNfTS0TM.js                     73.47 kB
+  ├─ .output/chrome-mv3/chunks/jszip.min-VqJAhOCM.js                             96.97 kB
+  ├─ .output/chrome-mv3/chunks/LearningCenter-DuNrAp8H.js                        48 kB
+  ├─ .output/chrome-mv3/chunks/learningModel-alyu4-wC.js                         2.44 kB
+  ├─ .output/chrome-mv3/chunks/localTranslationSupport-DXWQbPZk.js               131 B
+  ├─ .output/chrome-mv3/chunks/LocalTtsSettings-CY9H9qYy.js                      6.14 kB
+  ├─ .output/chrome-mv3/chunks/offscreen-DpTZcVsb.js                             86.65 kB
+  ├─ .output/chrome-mv3/chunks/options-ZbCWqwB1.js                               79.94 kB
+  ├─ .output/chrome-mv3/chunks/ParagraphCopySettings-BeD9yGGl.js                 6.4 kB
+  ├─ .output/chrome-mv3/chunks/ParagraphHandlingSettings-C6iZDFQT.js             2.86 kB
+  ├─ .output/chrome-mv3/chunks/pdf-DVqZvFDv.js                                   408.18 kB
+  ├─ .output/chrome-mv3/chunks/popup-BCrtTVtq.js                                 1.01 kB
+  ├─ .output/chrome-mv3/chunks/PopupApp-D9aCsRfs.js                              45.05 kB
+  ├─ .output/chrome-mv3/chunks/PopupDrawer-Bss6q8jC.js                           3.54 kB
+  ├─ .output/chrome-mv3/chunks/PopupServices-CpiSoKoK.js                         8.53 kB
+  ├─ .output/chrome-mv3/chunks/progress-B0xLUGJ6.js                              2.27 kB
+  ├─ .output/chrome-mv3/chunks/PromptTemplateEditor-hESFaLD5.js                  3.87 kB
+  ├─ .output/chrome-mv3/chunks/protocol-KDiP4bB9.js                              1.04 kB
+  ├─ .output/chrome-mv3/chunks/public-CnDRHHZl.js                                52.39 kB
+  ├─ .output/chrome-mv3/chunks/public-D4kIC4-N.js                                22.26 kB
+  ├─ .output/chrome-mv3/chunks/public-DTUDlDWk.js                                41.98 kB
+  ├─ .output/chrome-mv3/chunks/public-el0E9joh.js                                36.02 kB
+  ├─ .output/chrome-mv3/chunks/public-rggsPFNM.js                                44.52 kB
+  ├─ .output/chrome-mv3/chunks/QuickTranslationProfiles-Dux2E175.js              16.76 kB
+  ├─ .output/chrome-mv3/chunks/ReadingAnswer-Ehui2QdC.js                         9.39 kB
+  ├─ .output/chrome-mv3/chunks/remoteImage-CKgjpl5W.js                           2.58 kB
+  ├─ .output/chrome-mv3/chunks/SectionTranslationSettings-h58ruxwQ.js            6.2 kB
+  ├─ .output/chrome-mv3/chunks/SegmentedControl-FA0Pr2gi.js                      2.52 kB
+  ├─ .output/chrome-mv3/chunks/SelectionSettings-ClGkqaJH.js                     14.3 kB
+  ├─ .output/chrome-mv3/chunks/serviceCatalog-N7XuDQLx.js                        7.01 kB
+  ├─ .output/chrome-mv3/chunks/ServiceCatalog-ZZ2ZIYp-.js                        16.56 kB
+  ├─ .output/chrome-mv3/chunks/ServiceConfiguration-BrPxC0ax.js                  98.81 kB
+  ├─ .output/chrome-mv3/chunks/SettingsSections-DurSgUZE.js                      82.54 kB
+  ├─ .output/chrome-mv3/chunks/sha2-BsatFpqL.js                                  206.51 kB
+  ├─ .output/chrome-mv3/chunks/siteAdaptationEditor-OXviN1kB.js                  4.97 kB
+  ├─ .output/chrome-mv3/chunks/SiteAdaptationSettings-BdPH2gWl.js                24.73 kB
+  ├─ .output/chrome-mv3/chunks/sitePreferences-DEoiVK8d.js                       1.34 kB
+  ├─ .output/chrome-mv3/chunks/SitePreferencesSettings-CrxUHnoz.js               7.92 kB
+  ├─ .output/chrome-mv3/chunks/SiteRulePreview-_mdT_hJY.js                       5.46 kB
+  ├─ .output/chrome-mv3/chunks/transcription-D34ma5yO.js                         1.33 kB
+  ├─ .output/chrome-mv3/chunks/transformers.web-l9fJZyRW.js                      856.85 kB
+  ├─ .output/chrome-mv3/chunks/TranslationCacheSettings-D-0cBLqS.js              7.16 kB
+  ├─ .output/chrome-mv3/chunks/types-CN7jBpgI.js                                 85 B
+  ├─ .output/chrome-mv3/chunks/VideoLocalModelSettings-BrxGV5tY.js               7.85 kB
+  ├─ .output/chrome-mv3/chunks/VideoSubtitleAppearanceSettings-BrBzoRpK.js       7.08 kB
+  ├─ .output/chrome-mv3/chunks/webgpu-DytTlEIG.js                                710 B
+  ├─ .output/chrome-mv3/chunks/WritingSettings-CDxqgF4h.js                       15.14 kB
+  ├─ .output/chrome-mv3/content-scripts/content.js                               2.28 MB
+  ├─ .output/chrome-mv3/content-scripts/neteaseMailFrame.js                      1.88 MB
+  ├─ .output/chrome-mv3/content-scripts/shadowBridge.js                          3.35 kB
+  ├─ .output/chrome-mv3/content-scripts/supportedFrame.js                        1.69 MB
+  ├─ .output/chrome-mv3/content-scripts/xVideoBridge.js                          5.1 kB
+  ├─ .output/chrome-mv3/content-scripts/youtubeBridge.js                         4.43 kB
+  ├─ .output/chrome-mv3/fluent-read-ai/wllama.worker.js                          155.46 kB
+  ├─ .output/chrome-mv3/fluent-read-ocr/core/tesseract-core-simd-lstm.wasm.js    127.93 kB
+  ├─ .output/chrome-mv3/fluent-read-ocr/worker/worker.min.js                     111.16 kB
+  ├─ .output/chrome-mv3/localTranslationWorker.js                                388.44 kB
+  ├─ .output/chrome-mv3/localTtsWorker.js                                        2.16 MB
+  ├─ .output/chrome-mv3/videoTranscriptionWorker.js                              10.62 kB
+  ├─ .output/chrome-mv3/assets/AreaTranslationSettings-rKa2YTH7.css              1.16 kB
+  ├─ .output/chrome-mv3/assets/capabilities-B-KanDJu.css                         22.4 kB
+  ├─ .output/chrome-mv3/assets/ConfigManagement-TylvTf6f.css                     11.25 kB
+  ├─ .output/chrome-mv3/assets/ContextMenuSettings-cvJkCzTx.css                  875 B
+  ├─ .output/chrome-mv3/assets/core-B-7KH3Lz.css                                 18.71 kB
+  ├─ .output/chrome-mv3/assets/CustomHotkeyInput-9xZWRXAo.css                    7.05 kB
+  ├─ .output/chrome-mv3/assets/CustomOpenAIProviderDialog-BZ4-Udza.css           1.47 kB
+  ├─ .output/chrome-mv3/assets/document-DVueCJEh.css                             38.72 kB
+  ├─ .output/chrome-mv3/assets/el-overlay-CUAhHdWP.css                           184 B
+  ├─ .output/chrome-mv3/assets/featureServices-DCag4A8p.css                      4.06 kB
+  ├─ .output/chrome-mv3/assets/FloatingBallSettings-CZQTBXnK.css                 5.49 kB
+  ├─ .output/chrome-mv3/assets/GlossaryLibrarySelect-C9SHhXci.css                1.45 kB
+  ├─ .output/chrome-mv3/assets/i18n-CMRK1q-d.css                                 8.39 kB
+  ├─ .output/chrome-mv3/assets/ImageOcrSettings-CpX_Pkk3.css                     6.09 kB
+  ├─ .output/chrome-mv3/assets/InputTranslationSettings-BVaQI3XF.css             4.5 kB
+  ├─ .output/chrome-mv3/assets/interface-skins-CyZK9o4Z.css                      63.78 kB
+  ├─ .output/chrome-mv3/assets/interfaceAppearance-GMdOGxk_.css                  745 B
+  ├─ .output/chrome-mv3/assets/InterfaceSettings-CU9wloI9.css                    67.23 kB
+  ├─ .output/chrome-mv3/assets/LearningCenter-Mk6xi7wP.css                       23.66 kB
+  ├─ .output/chrome-mv3/assets/LocalTtsSettings-BON8pXhh.css                     2.79 kB
+  ├─ .output/chrome-mv3/assets/options-Cb8J7Kam.css                              140.58 kB
+  ├─ .output/chrome-mv3/assets/ParagraphCopySettings-BGuiYro3.css                443 B
+  ├─ .output/chrome-mv3/assets/ParagraphHandlingSettings-BktGI2xk.css            250 B
+  ├─ .output/chrome-mv3/assets/popup-DKuSertt.css                                42.16 kB
+  ├─ .output/chrome-mv3/assets/PopupApp-BHQLwCfT.css                             10.67 kB
+  ├─ .output/chrome-mv3/assets/PopupDrawer-CpuVa63I.css                          2.16 kB
+  ├─ .output/chrome-mv3/assets/PopupServices-ufZPsK8C.css                        4.73 kB
+  ├─ .output/chrome-mv3/assets/PromptTemplateEditor-Dg1tg03u.css                 3.7 kB
+  ├─ .output/chrome-mv3/assets/public-0lFEMdFb.css                               41.75 kB
+  ├─ .output/chrome-mv3/assets/public-B_7yUll2.css                               16.55 kB
+  ├─ .output/chrome-mv3/assets/public-CKnN1_AV.css                               14.63 kB
+  ├─ .output/chrome-mv3/assets/public-IF2xpgDk.css                               28.35 kB
+  ├─ .output/chrome-mv3/assets/QuickTranslationProfiles-DMfEMCE4.css             6.04 kB
+  ├─ .output/chrome-mv3/assets/SectionTranslationSettings-VO0G3uIR.css           634 B
+  ├─ .output/chrome-mv3/assets/SegmentedControl-Vpz5DEUf.css                     3.21 kB
+  ├─ .output/chrome-mv3/assets/SelectionSettings-CtknWDmL.css                    8.34 kB
+  ├─ .output/chrome-mv3/assets/ServiceCatalog-DWXio3qI.css                       17.98 kB
+  ├─ .output/chrome-mv3/assets/ServiceConfiguration-D9lNcRtF.css                 39.46 kB
+  ├─ .output/chrome-mv3/assets/SettingsSections-B7R2w-Zc.css                     20.89 kB
+  ├─ .output/chrome-mv3/assets/SiteAdaptationSettings-Dz3jppwf.css               7.32 kB
+  ├─ .output/chrome-mv3/assets/SitePreferencesSettings-B6n65mGo.css              5.39 kB
+  ├─ .output/chrome-mv3/assets/SiteRulePreview-Dncj2e8j.css                      5.37 kB
+  ├─ .output/chrome-mv3/assets/TranslationCacheSettings-DLbZVlJB.css             2.61 kB
+  ├─ .output/chrome-mv3/assets/VideoLocalModelSettings-C99fpe92.css              5.89 kB
+  ├─ .output/chrome-mv3/assets/VideoSubtitleAppearanceSettings-BBJF5uh1.css      5.37 kB
+  ├─ .output/chrome-mv3/assets/WritingSettings-DU7O1d4Z.css                      20.27 kB
+  ├─ .output/chrome-mv3/content-scripts/content.css                              126.41 kB
+  ├─ .output/chrome-mv3/content-scripts/neteaseMailFrame.css                     94.65 kB
+  ├─ .output/chrome-mv3/content-scripts/supportedFrame.css                       94.65 kB
+  ├─ .output/chrome-mv3/assets/pdf.worker.min-rsCePomN.mjs                       1.42 MB
+  ├─ .output/chrome-mv3/ecdict-core.json                                         824 kB
+  ├─ .output/chrome-mv3/ecdict-core.LICENSE.md                                   1.72 kB
+  ├─ .output/chrome-mv3/fluent-read-ai/ort-wasm-simd-threaded.jsep.mjs           46.19 kB
+  ├─ .output/chrome-mv3/fluent-read-ai/ort-wasm-simd-threaded.jsep.wasm          21.6 MB
+  ├─ .output/chrome-mv3/fluent-read-ai/tts-ort-wasm-simd-threaded.asyncify.mjs   49.09 kB
+  ├─ .output/chrome-mv3/fluent-read-ai/tts-ort-wasm-simd-threaded.asyncify.wasm  23.57 MB
+  ├─ .output/chrome-mv3/fluent-read-ai/wllama.wasm                               8.46 MB
+  ├─ .output/chrome-mv3/fluent-read-ocr/core/tesseract-core-simd-lstm.wasm       2.87 MB
+  ├─ .output/chrome-mv3/fluent-read-ocr/NOTICE.md                                387 B
+  ├─ .output/chrome-mv3/i18n/en-US.json                                          377.78 kB
+  ├─ .output/chrome-mv3/i18n/es-ES.json                                          413.29 kB
+  ├─ .output/chrome-mv3/i18n/fr-FR.json                                          423.6 kB
+  ├─ .output/chrome-mv3/i18n/ja-JP.json                                          449.3 kB
+  ├─ .output/chrome-mv3/i18n/ko-KR.json                                          423.43 kB
+  ├─ .output/chrome-mv3/i18n/ru-RU.json                                          550.89 kB
+  ├─ .output/chrome-mv3/icon/128.png                                             16.43 kB
+  ├─ .output/chrome-mv3/icon/16.png                                              1.96 kB
+  ├─ .output/chrome-mv3/icon/32.png                                              3.34 kB
+  ├─ .output/chrome-mv3/icon/48.png                                              4.69 kB
+  ├─ .output/chrome-mv3/icon/64.png                                              6.33 kB
+  ├─ .output/chrome-mv3/icon/toolbar/error-128.png                               14.86 kB
+  ├─ .output/chrome-mv3/icon/toolbar/error-16.png                                952 B
+  ├─ .output/chrome-mv3/icon/toolbar/error-32.png                                2.3 kB
+  ├─ .output/chrome-mv3/icon/toolbar/error-48.png                                3.68 kB
+  ├─ .output/chrome-mv3/icon/toolbar/error-64.png                                5.26 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translated-128.png                          15.18 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translated-16.png                           892 B
+  ├─ .output/chrome-mv3/icon/toolbar/translated-32.png                           2.33 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translated-48.png                           3.76 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translated-64.png                           5.38 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translating-128.png                         15.07 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translating-16.png                          951 B
+  ├─ .output/chrome-mv3/icon/toolbar/translating-32.png                          2.31 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translating-48.png                          3.69 kB
+  ├─ .output/chrome-mv3/icon/toolbar/translating-64.png                          5.27 kB
+  ├─ .output/chrome-mv3/interface-font-licenses.txt                              39.82 kB
+  ├─ .output/chrome-mv3/misc/approve.jpg                                         91.26 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-EUC-H.bcmap                               2.4 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-EUC-V.bcmap                               173 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-H.bcmap                                   2.38 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-RKSJ-H.bcmap                              2.4 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-RKSJ-V.bcmap                              173 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78-V.bcmap                                   169 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78ms-RKSJ-H.bcmap                            2.65 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/78ms-RKSJ-V.bcmap                            290 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/83pv-RKSJ-H.bcmap                            905 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90ms-RKSJ-H.bcmap                            721 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90ms-RKSJ-V.bcmap                            290 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90msp-RKSJ-H.bcmap                           715 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90msp-RKSJ-V.bcmap                           291 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90pv-RKSJ-H.bcmap                            982 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/90pv-RKSJ-V.bcmap                            260 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Add-H.bcmap                                  2.42 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Add-RKSJ-H.bcmap                             2.41 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Add-RKSJ-V.bcmap                             287 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Add-V.bcmap                                  282 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-0.bcmap                           317 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-1.bcmap                           371 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-2.bcmap                           376 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-3.bcmap                           401 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-4.bcmap                           405 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-5.bcmap                           406 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-6.bcmap                           406 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-CNS1-UCS2.bcmap                        41.19 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-0.bcmap                            217 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-1.bcmap                            250 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-2.bcmap                            465 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-3.bcmap                            470 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-4.bcmap                            601 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-5.bcmap                            625 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-GB1-UCS2.bcmap                         33.97 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-0.bcmap                         225 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-1.bcmap                         226 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-2.bcmap                         233 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-3.bcmap                         242 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-4.bcmap                         337 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-5.bcmap                         430 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-6.bcmap                         485 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Japan1-UCS2.bcmap                      40.95 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Korea1-0.bcmap                         241 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Korea1-1.bcmap                         386 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Korea1-2.bcmap                         391 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Adobe-Korea1-UCS2.bcmap                      23.29 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/B5-H.bcmap                                   1.09 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/B5-V.bcmap                                   142 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/B5pc-H.bcmap                                 1.1 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/B5pc-V.bcmap                                 144 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS-EUC-H.bcmap                              1.78 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS-EUC-V.bcmap                              1.92 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS1-H.bcmap                                 706 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS1-V.bcmap                                 143 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS2-H.bcmap                                 504 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/CNS2-V.bcmap                                 93 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETen-B5-H.bcmap                              1.13 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETen-B5-V.bcmap                              158 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETenms-B5-H.bcmap                            101 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETenms-B5-V.bcmap                            172 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETHK-B5-H.bcmap                              4.43 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/ETHK-B5-V.bcmap                              158 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/EUC-H.bcmap                                  578 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/EUC-V.bcmap                                  170 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Ext-H.bcmap                                  2.54 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Ext-RKSJ-H.bcmap                             2.54 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Ext-RKSJ-V.bcmap                             218 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Ext-V.bcmap                                  215 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GB-EUC-H.bcmap                               549 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GB-EUC-V.bcmap                               179 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GB-H.bcmap                                   528 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GB-V.bcmap                                   175 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBK-EUC-H.bcmap                              14.69 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBK-EUC-V.bcmap                              180 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBK2K-H.bcmap                                19.66 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBK2K-V.bcmap                                219 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBKp-EUC-H.bcmap                             14.69 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBKp-EUC-V.bcmap                             181 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBpc-EUC-H.bcmap                             557 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBpc-EUC-V.bcmap                             181 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBT-EUC-H.bcmap                              7.29 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBT-EUC-V.bcmap                              180 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBT-H.bcmap                                  7.27 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBT-V.bcmap                                  176 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBTpc-EUC-H.bcmap                            7.3 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/GBTpc-EUC-V.bcmap                            182 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/H.bcmap                                      553 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Hankaku.bcmap                                132 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Hiragana.bcmap                               124 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKdla-B5-H.bcmap                             2.65 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKdla-B5-V.bcmap                             148 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKdlb-B5-H.bcmap                             2.41 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKdlb-B5-V.bcmap                             148 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKgccs-B5-H.bcmap                            2.29 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKgccs-B5-V.bcmap                            149 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKm314-B5-H.bcmap                            1.77 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKm314-B5-V.bcmap                            149 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKm471-B5-H.bcmap                            2.17 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKm471-B5-V.bcmap                            149 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKscs-B5-H.bcmap                             4.44 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/HKscs-B5-V.bcmap                             159 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Katakana.bcmap                               100 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-EUC-H.bcmap                              1.85 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-EUC-V.bcmap                              164 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-H.bcmap                                  1.83 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-Johab-H.bcmap                            16.79 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-Johab-V.bcmap                            166 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSC-V.bcmap                                  160 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCms-UHC-H.bcmap                            2.79 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCms-UHC-HW-H.bcmap                         2.79 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCms-UHC-HW-V.bcmap                         169 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCms-UHC-V.bcmap                            166 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCpc-EUC-H.bcmap                            2.02 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/KSCpc-EUC-V.bcmap                            166 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/LICENSE                                      2.08 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/NWP-H.bcmap                                  2.77 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/NWP-V.bcmap                                  252 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/RKSJ-H.bcmap                                 534 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/RKSJ-V.bcmap                                 170 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/Roman.bcmap                                  96 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UCS2-H.bcmap                          48.28 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UCS2-V.bcmap                          156 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF16-H.bcmap                         50.42 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF16-V.bcmap                         156 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF32-H.bcmap                         52.68 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF32-V.bcmap                         160 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF8-H.bcmap                          53.63 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniCNS-UTF8-V.bcmap                          157 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UCS2-H.bcmap                           43.37 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UCS2-V.bcmap                           193 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF16-H.bcmap                          44.09 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF16-V.bcmap                          178 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF32-H.bcmap                          45.74 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF32-V.bcmap                          182 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF8-H.bcmap                           46.84 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniGB-UTF8-V.bcmap                           181 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UCS2-H.bcmap                          25.44 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UCS2-HW-H.bcmap                       119 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UCS2-HW-V.bcmap                       680 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UCS2-V.bcmap                          664 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF16-H.bcmap                         39.44 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF16-V.bcmap                         643 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF32-H.bcmap                         40.54 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF32-V.bcmap                         677 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF8-H.bcmap                          41.7 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS-UTF8-V.bcmap                          678 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF16-H.bcmap                     39.53 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF16-V.bcmap                     647 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF32-H.bcmap                     40.63 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF32-V.bcmap                     681 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF8-H.bcmap                      41.78 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJIS2004-UTF8-V.bcmap                      682 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISPro-UCS2-HW-V.bcmap                    705 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISPro-UCS2-V.bcmap                       689 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISPro-UTF8-V.bcmap                       726 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISX0213-UTF32-H.bcmap                    40.52 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISX0213-UTF32-V.bcmap                    684 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISX02132004-UTF32-H.bcmap                40.61 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniJISX02132004-UTF32-V.bcmap                688 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UCS2-H.bcmap                           25.78 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UCS2-V.bcmap                           178 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF16-H.bcmap                          26.33 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF16-V.bcmap                          164 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF32-H.bcmap                          26.45 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF32-V.bcmap                          168 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF8-H.bcmap                           27.79 kB
+  ├─ .output/chrome-mv3/pdfjs/cmaps/UniKS-UTF8-V.bcmap                           169 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/V.bcmap                                      166 B
+  ├─ .output/chrome-mv3/pdfjs/cmaps/WP-Symbol.bcmap                              179 B
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitDingbats.pfb                   29.51 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitFixed.pfb                      17.6 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitFixedBold.pfb                  18.06 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitFixedBoldItalic.pfb            19.15 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitFixedItalic.pfb                18.75 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitSerif.pfb                      19.47 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitSerifBold.pfb                  19.4 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitSerifBoldItalic.pfb            20.73 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitSerifItalic.pfb                21.23 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/FoxitSymbol.pfb                     16.73 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LiberationSans-Bold.ttf             137.05 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LiberationSans-BoldItalic.ttf       135.12 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LiberationSans-Italic.ttf           162.04 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LiberationSans-Regular.ttf          139.51 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LICENSE_FOXIT                       1.55 kB
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LICENSE_LIBERATION                  4.41 kB
+  ├─ .output/chrome-mv3/third-party-notices/ai-sdk-adapters-Apache-2.0.txt       703 B
+  ├─ .output/chrome-mv3/third-party-notices/deepseek-harness-MIT.txt             1.64 kB
+  ├─ .output/chrome-mv3/third-party-notices/dsh-agent-memory-MIT.txt             1.55 kB
+  ├─ .output/chrome-mv3/third-party-notices/lobe-icons-MIT.txt                   1.23 kB
+  ├─ .output/chrome-mv3/third-party-notices/noble-hashes-MIT.txt                 1.11 kB
+  ├─ .output/chrome-mv3/third-party-notices/tinycolor-MIT.txt                    1.07 kB
+  ├─ .output/chrome-mv3/third-party-notices/unicode-17.0.0.txt                   2 kB
+  └─ .output/chrome-mv3/third-party-notices/wllama-MIT.txt                       1.07 kB
+Σ Total size: 80.23 MB
+✔ Finished in 26.3 s

@@ -1,8 +1,8 @@
 /**
  * @file src/ui/styles/tokens.css
  * 文件职责：声明扩展页面共享的基础视觉语义变量，为 Popup、Options、文档页和可复用组件提供一致的品牌、文字、边框与表面颜色。
- * 主要内容：在 :root 定义 fr-color-brand、brand-strong、brand-soft、ink、muted、line、surface 等 token，并保留旧短变量名到新命名空间的兼容别名。
- * 模块边界：这里只提供原子颜色值和迁移别名，不包含具体组件选择器、暗色主题策略或页面布局；各 app 页面在自己的 CSS 中消费并按场景覆盖。
+ * 主要内容：在 :root 定义 fr-color-brand、brand-strong、brand-soft、ink、muted、line、surface 等 token，统一选择菜单圆角和亮暗阴影，并保留旧短变量名到新命名空间的兼容别名。
+ * 模块边界：这里只提供原子颜色值和迁移别名，仅为反馈语义色提供亮暗值，不包含具体组件选择器或页面布局；各 app 页面在自己的 CSS 中消费并按场景覆盖。
  */
 /* 跨扩展页面共享的视觉语义。旧变量名保留为别名，迁移不改变现有主题表现。 */
 :root {
@@ -14,6 +14,8 @@
   --fr-color-line: #e5e8ef;
   --fr-color-surface: #fff;
   --fr-color-surface-soft: #f7f8fb;
+  --fr-menu-radius: 14px;
+  --fr-menu-shadow: 0 8px 28px rgba(27, 36, 57, .12), 0 2px 6px rgba(27, 36, 57, .04);
 
   --brand: var(--fr-color-brand);
   --brand-strong: var(--fr-color-brand-strong);
@@ -23,4 +25,27 @@
   --line: var(--fr-color-line);
   --surface: var(--fr-color-surface);
   --surface-soft: var(--fr-color-surface-soft);
+}
+
+/* 反馈色用于状态与提示，不把成功、警告或错误混作品牌强调。 */
+:root {
+  --fr-success: #267260;
+  --fr-success-soft: #eaf8f4;
+  --fr-warning: #94651c;
+  --fr-warning-soft: #fff5df;
+  --fr-danger: #b1435e;
+  --fr-danger-soft: #fff0f3;
+  --fr-info: #306ba3;
+  --fr-info-soft: #eaf3ff;
+}
+:root.dark {
+  --fr-menu-shadow: 0 10px 32px rgba(0, 0, 0, .28);
+  --fr-success: #9edcc8;
+  --fr-success-soft: #1c342d;
+  --fr-warning: #e7c17e;
+  --fr-warning-soft: #392f1f;
+  --fr-danger: #f1a7bc;
+  --fr-danger-soft: #3c222b;
+  --fr-info: #a6c9ee;
+  --fr-info-soft: #243346;
 }

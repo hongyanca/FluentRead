@@ -1,0 +1,80 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "paragraphs": 1500,
+  "evidence": "Production extension and real browser; local deterministic Microsoft transport, no live provider claims",
+  "consoleErrors": [],
+  "phases": [
+    {
+      "name": "translate",
+      "elapsedMs": 41220.700000047684,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 87,
+      "p95HeartbeatGapMs": 54.299999952316284,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 94
+    },
+    {
+      "name": "scroll-translated",
+      "elapsedMs": 1362.3999998569489,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 24.600000143051147,
+      "p95HeartbeatGapMs": 21.09999990463257,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 12
+    },
+    {
+      "name": "restore",
+      "elapsedMs": 480.60000014305115,
+      "longTasks": [
+        {
+          "start": 44730,
+          "duration": 249
+        }
+      ],
+      "maxHeartbeatGapMs": 278.30000019073486,
+      "p95HeartbeatGapMs": 278.30000019073486,
+      "totalBlockingMs": 199,
+      "wrappers": 0,
+      "chineseWrappers": 0,
+      "hostClicks": 1
+    },
+    {
+      "name": "retranslate-cached",
+      "elapsedMs": 46532.200000047684,
+      "longTasks": [],
+      "maxHeartbeatGapMs": 145.29999995231628,
+      "p95HeartbeatGapMs": 52.60000014305115,
+      "totalBlockingMs": 0,
+      "wrappers": 1500,
+      "chineseWrappers": 0,
+      "hostClicks": 122
+    }
+  ],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "cpuRate": 4,
+  "metrics": {
+    "ScriptDuration": 14.941837000000001,
+    "LayoutDuration": 6.66805,
+    "RecalcStyleDuration": 0.31089,
+    "TaskDuration": 40.886857,
+    "LayoutCount": 1500,
+    "RecalcStyleCount": 1689
+  },
+  "requests": 1501,
+  "items": 1501,
+  "submittedChinese": [],
+  "ok": true
+}

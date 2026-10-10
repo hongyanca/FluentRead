@@ -1,0 +1,2 @@
+Extracted file result; see validation.json for combined-run context.
+ ✓ tests/architecture/sourceFileHeaders.test.ts (788 tests) 224ms

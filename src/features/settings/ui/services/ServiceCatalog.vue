@@ -1,8 +1,8 @@
 <!--
  * @file src/features/settings/ui/services/ServiceCatalog.vue
- * 文件职责：实现翻译服务目录与筛选选择界面，把内置、AI 和自定义服务按分组、搜索条件与浏览器能力呈现为可切换的卡片列表。
- * 主要内容：组件接收当前服务和配置，使用 ServiceIcon、catalog 元数据及能力过滤计算可见选项，支持关键词搜索、分组计数、选择事件和自定义模型入口。
- * 模块边界：目录只决定“选择哪个服务”，不编辑凭据、不测试连接也不保存配置；详细表单归 ServiceConfiguration.vue，服务定义来自 core/config，外层 SettingsSections 处理持久化。
+ * 文件职责：以服务目录和清晰分层的配置工作区呈现翻译服务，窄屏按需展开目录，保持配置与默认使用分离。
+ * 主要内容：侧栏展示全部内置及自定义服务，分组可单独收起，选中服务或回到本页时展开正在配置的服务所在分组；顶部分组导航点击后展开并滚动到对应分组，并随目录滚动同步高亮；搜索过滤目录时展开全部匹配分组，此时点击分组导航会清空搜索并回到完整目录；自定义按钮直接打开创建表单；右侧集中展示服务名称及接口性质徽章、模型、官网帮助和连接配置；目录搜索文本按需缓存，目录几何按帧合并并缓存分组位置，滚动只读取当前位置，活跃上下文限定操作并取消过期焦点、滚动与帧回调。
+ * 模块边界：目录提供“配置服务”和“自定义服务”入口，标题栏在检查连接左侧提供显式设为默认操作，通过独立事件交给外层 SettingsSections 持久化，不编辑凭据、不测试连接也不保存配置；分组收起状态只保存在本次页面会话，不写入配置，停用或切换上下文时取消目录帧并重建分组尺寸及字体观察，卸载时清理观察器与监听；详细表单归 ServiceConfiguration.vue，服务定义来自 core/config。
  -->
 <template>
   <section
@@ -11,125 +11,168 @@
     :data-default-service="defaultService"
     :data-editing-service="service"
   >
+    <nav v-if="directoryGroups.length > 1" class="service-group-navigation" :aria-label="t('options.categories')">
+      <button
+        v-for="group in directoryGroups"
+        :key="group.id"
+        type="button"
+        :data-service-group-link="group.id"
+        :aria-current="activeGroup === group.id ? 'location' : undefined"
+        :disabled="!active"
+        :onClick="actions.revealGroup.bind(null, group.id)"
+      >{{ group.label }}</button>
+    </nav>
     <div class="catalog-layout">
-      <aside class="service-rail" aria-label="翻译服务列表">
-        <label class="catalog-search">
-          <span aria-hidden="true">⌕</span>
-          <input v-model.trim="serviceQuery" type="search" placeholder="搜索翻译服务" />
-        </label>
-
-        <div v-if="filteredGroups.length" class="service-groups">
-          <section v-for="group in filteredGroups" :key="group.id" class="service-group">
-            <div class="group-heading">
-              <strong>{{ group.label }}</strong>
-              <span>{{ group.items.length }} 项</span>
-            </div>
-            <button
-              v-for="item in group.items"
-              :key="item.value"
-              type="button"
-              class="service-item"
-              :data-service-value="item.value"
-              :class="{ active: service === item.value }"
-              :aria-pressed="service === item.value"
-              @click="$emit('update:service', item.value)"
-            >
-              <ServiceIcon :service="item.value" :label="item.label" />
-              <span class="service-copy">
-                <strong>{{ item.label }}</strong>
-                <small>{{ group.id === 'machine' ? '机器翻译' : 'AI 翻译' }}</small>
-              </span>
-              <span
-                v-if="defaultService === item.value"
-                class="current-dot"
-                title="默认翻译服务"
-              ></span>
-            </button>
-          </section>
+      <aside class="service-rail" :class="{ 'is-expanded': directoryOpen }" :aria-label="t('settings.services.library.shortlist')">
+        <button ref="directoryToggle" type="button" class="mobile-directory-toggle" :disabled="!active" :aria-expanded="directoryOpen" :aria-controls="directoryId" :onClick="actions.toggleDirectory">
+          <ServiceIcon :service="isCustomOpenAIProviderId(service) ? 'custom' : service" :label="selectedService?.label" size="small" />
+          <span class="mobile-directory-name">{{ selectedService?.label }}</span><small>{{ t('settings.organization.chooseService') }}</small>
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+        </button>
+        <div :id="directoryId" class="service-directory-content">
+        <div class="rail-heading">
+          <div>
+            <strong>{{ t('settings.services.library.shortlist') }}</strong>
+            <span class="service-count">{{ allServices.length }}</span>
+          </div>
+          <el-tooltip :content="t('settings.services.library.addHelp')" placement="bottom" :show-after="250" :trigger="['hover', 'focus']">
+          <button ref="addButton" type="button" class="service-add-button" data-testid="custom-service-add" :disabled="!active" :aria-label="t('settings.services.library.add')" :onClick="actions.addService">
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14" /></svg>
+            <span>{{ t('settings.services.library.add') }}</span>
+          </button>
+          </el-tooltip>
         </div>
-        <p v-else class="catalog-empty">没有匹配的翻译服务</p>
+        <label class="catalog-search">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" /></svg>
+          <input :value="serviceQuery" :disabled="!active" :onInput="actions.updateQuery" type="search" :aria-label="t('settings.services.library.search')" :placeholder="t('settings.services.library.search')" />
+        </label>
+        <div ref="groupsElement" class="service-groups" :onScrollPassive="actions.syncActiveGroup" :onWheelPassive="actions.releasePinnedGroup" :onTouchstartPassive="actions.releasePinnedGroup" :onPointerdown="actions.releasePinnedGroup" :onKeydown="actions.releasePinnedGroup" :onFocusin="actions.releasePinnedGroup">
+          <section v-for="group in visibleDirectoryGroups" :key="group.id" :data-service-section="group.id" class="directory-section" :class="{ 'is-collapsed': !isGroupOpen(group.id) }">
+            <h4>
+              <button type="button" class="directory-section-toggle" :aria-expanded="isGroupOpen(group.id)" :aria-controls="`${directoryId}-${group.id}`" :disabled="!active || searching" :onClick="actions.toggleGroup.bind(null, group.id)">
+                <span>{{ group.label }}</span><small>{{ group.items.length }}</small>
+                <svg v-if="!searching" class="directory-section-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 4 4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+            </h4>
+            <div v-show="isGroupOpen(group.id)" :id="`${directoryId}-${group.id}`" class="directory-items">
+              <ServiceCatalogItem v-for="item in group.items" :key="item.value" :item="item" compact
+                :selected="service === item.value" :is-default="defaultService === item.value"
+                :is-configured="configuredSet.has(item.value)" :is-favorite="favoriteSet.has(item.value)"
+                :onSelect="actions.selectService" />
+            </div>
+          </section>
+          <p v-if="!visibleDirectoryGroups.length" class="catalog-empty" role="status">{{ t('settings.services.library.empty') }}</p>
+        </div>
+        </div>
       </aside>
 
       <section class="service-detail" aria-label="当前翻译服务详情">
         <div class="detail-hero">
-          <ServiceIcon :service="service" :label="selectedService?.label" size="large" />
-          <div>
+          <ServiceIcon :service="isCustomOpenAIProviderId(service) ? 'custom' : service" :label="selectedService?.label" size="large" />
+          <div class="detail-heading">
             <div class="detail-title-row">
               <h4>{{ selectedService?.label || '尚未配置服务' }}</h4>
-              <span class="active-badge">{{ service === defaultService ? '当前默认' : '正在配置' }}</span>
-            </div>
-            <p v-if="selectedService?.description">{{ selectedService.description }}</p>
-          </div>
-        </div>
-
-        <div v-if="showModel" class="model-section">
-          <div class="model-heading">
-            <div>
-              <span>模型列表</span>
-              <strong>{{ selectedModelLabel || '尚未选择模型' }}</strong>
-            </div>
-            <label v-if="modelOptions.length > commonModelCount" class="model-search">
-              <span aria-hidden="true">⌕</span>
-              <input v-model.trim="modelQuery" type="search" placeholder="搜索模型" />
-            </label>
-          </div>
-
-          <div v-if="displayedModels.length" class="model-list">
-            <div class="model-list-heading">
-              <strong>{{ modelQuery ? '搜索结果' : moreModelsOpen ? '全部模型' : '常用模型' }}</strong>
-              <span>{{ displayedModels.length }}</span>
-            </div>
-            <div
-              id="model-options"
-              class="model-grid"
-              :class="{ expanded: moreModelsOpen || modelQuery }"
-              role="listbox"
-              aria-label="可用模型"
-            >
-              <button
-                v-for="model in displayedModels"
-                :key="model"
-                type="button"
-                class="model-item"
-                :class="{ active: selectedModel === model, custom: model === customModelLabel }"
-                role="option"
-                :aria-selected="selectedModel === model"
-                @click="$emit('update:model', model)"
+              <ServiceNatureBadge :service="service" />
+              <span v-if="service === defaultService" class="active-badge">{{ t('settings.services.library.default') }}</span>
+              <span v-else class="editing-badge">{{ t('settings.services.library.viewing') }}</span>
+              <a
+                v-if="website"
+                class="service-website-link"
+                data-testid="service-website-link"
+                :href="website.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                :title="website.url"
+                :aria-label="t('settings.services.openExternal', { service: selectedService?.label || service, action: t(`settings.services.${website.kind}`) })"
               >
-                <ServiceIcon :service="model === customModelLabel ? 'custom' : service" :label="model" size="model" />
-                <span>
-                  <strong>{{ model }}</strong>
-                  <small>{{ model === customModelLabel ? '填写服务商支持的模型标识' : '使用此模型进行翻译' }}</small>
-                </span>
-                <span v-if="selectedModel === model" class="checkmark">✓</span>
-              </button>
+                {{ t(`settings.services.${website.kind}`) }}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 3h7v7M21 3 10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" />
+                </svg>
+              </a>
             </div>
-
-            <button
-              v-if="!modelQuery && moreModels.length"
-              type="button"
-              class="more-models-toggle"
-              :aria-expanded="moreModelsOpen"
-              aria-controls="model-options"
-              @click="moreModelsOpen = !moreModelsOpen"
-            >
-              <span>
-                <strong>更多模型</strong>
-                <small>{{ moreModels.length }} 个较少使用的模型</small>
-              </span>
-              <b>{{ moreModelsOpen ? '收起' : '展开' }} <i aria-hidden="true">⌄</i></b>
-            </button>
           </div>
-          <p v-else class="catalog-empty">没有匹配的模型</p>
+          <div class="hero-service-actions">
+            <button
+              type="button"
+              class="service-default-button"
+              data-set-default-service-button
+              :disabled="!active || service === defaultService || !selectedService || selectedService.disabled"
+              :onClick="actions.setDefaultService"
+            >
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6" /></svg>
+              {{ t(service === defaultService ? 'settings.services.library.default' : 'settings.services.library.setDefault') }}
+            </button>
+            <div ref="connectionActionTarget" class="hero-connection-action" />
+          </div>
         </div>
 
-        <div v-else class="no-model-panel">
-          <span aria-hidden="true">✓</span>
-          <div><strong>此服务无需模型配置</strong><p>机器翻译直接使用自身引擎。</p></div>
+        <p v-if="selectedService?.description && !credentialGuide && service !== 'freeTranslation' && !isCustomOpenAIProviderId(service)" class="service-description">{{ selectedService.description }}</p>
+
+        <details
+          v-if="credentialGuide"
+          :key="service"
+          class="credential-guide"
+          data-testid="service-credential-guide"
+          aria-label="免费额度与开通步骤"
+        >
+          <summary class="credential-guide-summary">
+            <span class="credential-guide-summary-copy">
+              <span class="credential-guide-badge">{{ t('settings.organization.guide') }}</span>
+              <strong>{{ credentialGuide.freeQuota }}</strong>
+            </span>
+            <svg class="credential-guide-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </summary>
+          <div class="credential-guide-body">
+            <small>免费额度与超额处理以厂商控制台和当前套餐为准</small>
+            <ol class="credential-guide-steps">
+              <li v-for="(step, index) in credentialGuide.steps" :key="index">{{ step }}</li>
+            </ol>
+            <div class="credential-guide-links">
+              <a
+                class="credential-guide-link is-primary"
+                data-testid="service-credential-console"
+                :href="credentialGuide.consoleUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                :title="credentialGuide.consoleUrl"
+              >
+                {{ credentialGuide.consoleLabel }}
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 3h7v7M21 3 10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" />
+                </svg>
+              </a>
+              <a
+                class="credential-guide-link"
+                data-testid="service-credential-docs"
+                :href="credentialGuide.docsUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                :title="credentialGuide.docsUrl"
+              >{{ credentialGuide.docsLabel }}</a>
+            </div>
+          </div>
+        </details>
+
+        <div v-if="showModel && service !== 'localTranslation'" class="model-section">
+          <div class="model-heading">
+            <strong>模型</strong>
+          </div>
+          <ModelPicker :active="active" :context="props.context" :context-key="service"
+            :options="modelOptions"
+            :selected-model="selectedModel"
+            :maximum-models="maximumModels"
+            :maximum-model-length="maximumModelLength"
+            :custom-model-count="customModelCount"
+            :allow-custom-models="allowCustomModels"
+            :onSelect="actions.selectModel"
+            :onAdd="actions.addModel"
+            :onRemove="actions.removeModel"
+          />
         </div>
 
-        <div class="service-configuration-slot" aria-label="当前服务配置">
-          <slot name="configuration" />
+        <div class="service-configuration-slot" :class="{'local-model-configuration': service === 'localTranslation'}" aria-label="当前服务配置">
+          <slot name="configuration" :connection-action-target="connectionActionTarget" />
         </div>
 
       </section>
@@ -138,174 +181,451 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
 import ServiceIcon from '@/src/ui/components/ServiceIcon.vue'
-import { customModelString } from '@/src/core/config/catalog'
+import ServiceNatureBadge from './ServiceNatureBadge.vue'
+import { useUiI18n } from '@/src/ui/i18n'
+import { isCustomOpenAIProviderId } from '@/src/core/config/customOpenAI'
 import {
-  buildServiceGroups,
-  filterModels,
-  filterServiceGroups,
-  getSelectedModelLabel,
-  splitModelOptions,
+  buildServiceSections,
+  type ServiceCredentialGuide,
   type ServiceOption,
+  type ServiceWebsite,
 } from '@/src/ui/view-model/serviceCatalog'
+import ModelPicker from './ModelPicker.vue'
+import ServiceCatalogItem from './ServiceCatalogItem.vue'
+import {useSettingsActionContext} from '../../model/useSettingsActionContext'
 
-const props = defineProps<{
+interface ModelPickerOption {
+  value: string
+  label?: string
+  removable?: boolean
+}
+
+const props = withDefaults(defineProps<{
+  active?: boolean
+  context?: unknown
   service: string
   defaultService: string
+  website?: ServiceWebsite
+  credentialGuide?: ServiceCredentialGuide
   selectedModel?: string
   services: ServiceOption[]
-  modelOptions: string[]
-  customModels: Record<string, string>
+  favoriteServices: string[]
+  configuredServices: string[]
+  modelOptions: ModelPickerOption[]
   showModel: boolean
-}>()
+  maximumModels: number
+  maximumModelLength: number
+  customModelCount: number
+  allowCustomModels: boolean
+}>(), {active: true})
 
-defineEmits<{
+const emit = defineEmits<{
   'update:service': [value: string]
+  'update:default-service': [value: string]
   'update:model': [value: string]
+  'add:service': []
+  'add:model': [value: string]
+  'remove:model': [value: string]
 }>()
 
+const { t } = useUiI18n()
+const {active, capture} = useSettingsActionContext(() => props.active, () => [props.context, props.service])
 const serviceQuery = ref('')
-const modelQuery = ref('')
-const moreModelsOpen = ref(false)
-const commonModelCount = 4
-const customModelLabel = customModelString
-
-const groups = computed(() => buildServiceGroups(props.services))
-const filteredGroups = computed(() => filterServiceGroups(groups.value, serviceQuery.value))
-const filteredModels = computed(() => filterModels(props.modelOptions, modelQuery.value))
-const modelGroups = computed(() => splitModelOptions(props.modelOptions, props.selectedModel, commonModelCount))
-const moreModels = computed(() => modelGroups.value.more)
-const selectedModelLabel = computed(() => getSelectedModelLabel(
-  props.service,
-  {[props.service]: props.selectedModel || ''},
-  props.customModels,
-))
-const displayedModels = computed(() => modelQuery.value
-  ? filteredModels.value
-  : moreModelsOpen.value ? [...modelGroups.value.common, ...moreModels.value] : modelGroups.value.common)
-const selectedService = computed(() => groups.value.flatMap((group) => group.items).find((item) => item.value === props.service))
-
-watch(() => props.service, () => {
-  modelQuery.value = ''
-  moreModelsOpen.value = false
+const directoryOpen = ref(false)
+const directoryToggle = ref<HTMLButtonElement | null>(null)
+const directoryId = useId()
+const addButton = ref<HTMLButtonElement | null>(null)
+const connectionActionTarget = ref<HTMLElement | null>(null)
+const configuredSet = computed(() => new Set(props.configuredServices))
+const favoriteSet = computed(() => new Set(props.favoriteServices))
+const customServices = computed(() => props.services.filter((item) => isCustomOpenAIProviderId(item.value)))
+const builtInServices = computed(() => props.services.filter((item) => !isCustomOpenAIProviderId(item.value)))
+const sections = computed(() => buildServiceSections(builtInServices.value))
+const directoryGroups = computed(() => [
+  ...sections.value.flatMap(section => section.groups.map(group => ({ ...group, label: group.label || section.label }))),
+  ...(customServices.value.length ? [{ id: 'custom', label: t('settings.services.library.custom'), items: customServices.value }] : []),
+])
+const allServices = computed(() => directoryGroups.value.flatMap(group => group.items))
+// 延迟建立索引，空搜索不读取或规范化逐项文本；连续输入复用同一目录索引。
+const directorySearchText = computed(() => new Map(allServices.value.map(item => [item,
+  [item.label, item.value, item.description, ...(item.searchTerms || [])].join(' ').normalize('NFKC').toLocaleLowerCase(),
+])))
+const visibleDirectoryGroups = computed(() => {
+  const keyword = serviceQuery.value.trim().normalize('NFKC').toLocaleLowerCase()
+  if (!keyword) return directoryGroups.value
+  return directoryGroups.value
+    .map(group => ({ ...group, items: group.items.filter(item => directorySearchText.value.get(item)!.includes(keyword)) }))
+    .filter(group => group.items.length)
 })
+const selectedService = computed(() => allServices.value.find(item => item.value === props.service))
+const searching = computed(() => Boolean(serviceQuery.value.trim()))
+const groupsElement = ref<HTMLElement | null>(null)
+const collapsedGroups = ref<ReadonlySet<string>>(new Set())
+const activeGroup = ref('')
+// 末尾的短分组无法滚到目录顶部；点击导航后保持指向目标，直到用户自己操作目录。
+let pinnedGroup = ''
 
-watch(modelQuery, () => {
-  moreModelsOpen.value = false
+// 搜索时展开全部匹配分组，避免结果藏在已收起的分组里。
+function isGroupOpen(id: string): boolean {
+  return searching.value || !collapsedGroups.value.has(id)
+}
+function setGroupOpen(id: string, open: boolean): void {
+  if (collapsedGroups.value.has(id) === !open) return
+  const next = new Set(collapsedGroups.value)
+  if (open) next.delete(id)
+  else next.add(id)
+  collapsedGroups.value = next
+}
+function toggleGroup(id: string): void {
+  if (!active.value || searching.value || !directoryGroups.value.some(group => group.id === id)) return
+  setGroupOpen(id, !isGroupOpen(id))
+}
+function expandGroupOf(service: string): void {
+  if (!active.value) return
+  const group = directoryGroups.value.find(candidate => candidate.items.some(item => item.value === service))
+  if (group) setGroupOpen(group.id, true)
+}
+interface DirectoryLayout {
+  scroller: HTMLElement
+  groups: {id: string; top: number}[]
+  viewportHeight: number
+  scrollHeight: number
+}
+let directoryLayout: DirectoryLayout | undefined
+let directoryLayoutDirty = true
+let directoryFrame: number | undefined
+let directoryFrameRevision = 0
+let pendingGroupReveal: {id: string; current: () => boolean} | undefined
+let directoryVisible = false
+let directoryObserver: ResizeObserver | undefined
+let observedSections = new Set<HTMLElement>()
+let stopFontObserver: (() => void) | undefined
+
+function releasePinnedGroup(): void {
+  pinnedGroup = ''
+  pendingGroupReveal = undefined
+  // 用户接管时可能已在滚动边界，仍要按当前位置恢复高亮，不依赖下一次 scroll。
+  scheduleDirectoryFrame()
+}
+// 所有布局读取都在同一帧完成；滚动事件仅排队，复用结构/尺寸变化时缓存的相对位置。
+function scheduleDirectoryFrame(refreshLayout = false): void {
+  const current = capture(), scroller = groupsElement.value
+  if (!current() || !scroller) return
+  directoryLayoutDirty ||= refreshLayout
+  if (directoryFrame !== undefined) return
+  const revision = ++directoryFrameRevision
+  directoryFrame = requestAnimationFrame(() => {
+    // 取消后浏览器仍可能交付旧回调；不能清掉新上下文已经排队的帧。
+    if (revision !== directoryFrameRevision) return
+    directoryFrame = undefined
+    if (!current() || groupsElement.value !== scroller || !directoryObserver) return
+    updateDirectoryFrame(scroller, current)
+  })
+}
+function updateDirectoryFrame(scroller: HTMLElement, current: () => boolean): void {
+  const scrollTop = scroller.scrollTop
+  if (directoryLayoutDirty || directoryLayout?.scroller !== scroller) {
+    directoryLayoutDirty = false
+    const visible = scroller.getClientRects().length > 0
+    const becameVisible = visible && !directoryVisible
+    directoryVisible = visible
+    if (!visible) {
+      directoryLayout = {scroller, groups: [], viewportHeight: 0, scrollHeight: 0}
+      pendingGroupReveal = undefined
+      return
+    }
+    if (becameVisible) {
+      const previous = collapsedGroups.value
+      expandGroupOf(props.service)
+      if (previous !== collapsedGroups.value) {
+        // 展开先交给 Vue 更新 v-show，再在下一帧读取新高度。
+        directoryLayout = undefined
+        void nextTick(() => {if (current()) scheduleDirectoryFrame(true)})
+        return
+      }
+    }
+    const elements = [...scroller.querySelectorAll<HTMLElement>('[data-service-section]')]
+    const scrollerTop = scroller.getBoundingClientRect().top
+    directoryLayout = {
+      scroller,
+      groups: elements.map(element => ({id: element.dataset.serviceSection || '', top: scrollTop + element.getBoundingClientRect().top - scrollerTop})),
+      viewportHeight: scroller.clientHeight,
+      scrollHeight: scroller.scrollHeight,
+    }
+    // 固定高度容器不会因内部字体/行数改变而缩放，分组本身也必须观察。
+    const next = new Set(elements)
+    observedSections.forEach(element => {if (!next.has(element)) directoryObserver?.unobserve(element)})
+    next.forEach(element => {if (!observedSections.has(element)) directoryObserver?.observe(element)})
+    observedSections = next
+  }
+  const layout = directoryLayout
+  if (!directoryVisible || !layout) return
+  const reveal = pendingGroupReveal
+  pendingGroupReveal = undefined
+  if (reveal?.current()) {
+    const target = layout.groups.find(group => group.id === reveal.id)
+    if (target) scroller.scrollTo({
+      top: target.top,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    })
+  }
+  if (layout.groups.some(group => group.id === pinnedGroup)) {
+    activeGroup.value = pinnedGroup
+    return
+  }
+  let selected = layout.groups[0]?.id || ''
+  if (scrollTop > 0 && scrollTop + layout.viewportHeight >= layout.scrollHeight - 2) {
+    selected = layout.groups.at(-1)?.id || ''
+  } else {
+    layout.groups.forEach(group => {if (group.top <= scrollTop + 8) selected = group.id})
+  }
+  activeGroup.value = selected
+}
+function syncActiveGroup(): void {
+  scheduleDirectoryFrame()
+}
+async function revealGroup(id: string) {
+  const current = capture()
+  if (!current() || !directoryGroups.value.some(group => group.id === id)) return
+  // 导航始终列出全部分组；搜索中点击即回到完整目录。
+  serviceQuery.value = ''
+  setGroupOpen(id, true)
+  pinnedGroup = id
+  activeGroup.value = id
+  await nextTick()
+  if (!current() || pinnedGroup !== id) return
+  pendingGroupReveal = {id, current}
+  scheduleDirectoryFrame(true)
+}
+// 同步执行，保证 revealGroup 清空搜索后设置的目标不会被随后的回调清掉。
+watch(serviceQuery, releasePinnedGroup, {flush: 'sync'})
+// post 时模板的搜索/v-show 已更新，只把本帧布局标为失效，避免重复 nextTick 测量。
+function scheduleActiveGroupSync(): void {
+  scheduleDirectoryFrame(true)
+}
+watch([visibleDirectoryGroups, collapsedGroups, directoryOpen], scheduleActiveGroupSync, {flush: 'post'})
+function stopDirectoryObserver(): void {
+  directoryFrameRevision += 1
+  if (directoryFrame !== undefined) cancelAnimationFrame(directoryFrame)
+  directoryFrame = undefined
+  directoryLayout = undefined
+  directoryLayoutDirty = true
+  pendingGroupReveal = undefined
+  const previous = directoryObserver
+  directoryObserver = undefined
+  directoryVisible = false
+  observedSections = new Set()
+  previous?.disconnect()
+  stopFontObserver?.()
+  stopFontObserver = undefined
+}
+function refreshDirectoryObserver(): void {
+  stopDirectoryObserver()
+  const current = capture(), scroller = groupsElement.value
+  if (!current() || !scroller) return
+  expandGroupOf(props.service)
+  const refresh = () => {
+    if (current() && directoryObserver === observer) scheduleDirectoryFrame(true)
+  }
+  const observer = new ResizeObserver(refresh)
+  directoryObserver = observer
+  observer.observe(scroller)
+  // 字体加载完成可能改变条目换行；复用相同帧队列并拒绝旧页面的迟到事件。
+  const fonts = typeof document === 'undefined' ? undefined : document.fonts
+  fonts?.addEventListener('loadingdone', refresh)
+  stopFontObserver = () => fonts?.removeEventListener('loadingdone', refresh)
+  scheduleDirectoryFrame(true)
+}
+onMounted(refreshDirectoryObserver)
+watch(() => [active.value, props.context, props.service], refreshDirectoryObserver, {flush: 'post'})
+onBeforeUnmount(stopDirectoryObserver)
+
+let pendingConfigurationReset: {current: () => boolean; restoreFocus: boolean} | undefined
+function resetConfigurationScroll(restoreDirectoryFocus: boolean): void {
+  if (pendingConfigurationReset?.current()) {
+    pendingConfigurationReset.restoreFocus ||= restoreDirectoryFocus
+    return
+  }
+  const pending = {current: capture(), restoreFocus: restoreDirectoryFocus}
+  pendingConfigurationReset = pending
+  // 同服务事件可能没有待渲染变更；再等一轮，让父层本批 active/context 更新先提交。
+  void nextTick().then(() => nextTick(() => {
+    if (pendingConfigurationReset !== pending) return
+    pendingConfigurationReset = undefined
+    if (!pending.current()) return
+    if (pending.restoreFocus) directoryToggle.value?.focus({preventScroll: true})
+    // 窄屏滚动区是整个工作区，桌面滚动区是详情；两者都从配置入口开始。
+    const workspace = addButton.value?.closest<HTMLElement>('.catalog-layout')
+    workspace?.scrollTo({top: 0, behavior: 'instant'})
+    workspace?.querySelector<HTMLElement>('.service-detail')?.scrollTo({top: 0, behavior: 'instant'})
+  }))
+}
+// 重新进入缓存页才回到关键字段；活跃时替换配置属于表单编辑，应保留阅读位置。
+watch(active, (enabled, previous) => {
+  if (enabled && !previous) resetConfigurationScroll(false)
+}, {flush: 'post'})
+function selectService(service: string): void {
+  if (!active.value || !allServices.value.some(item => item.value === service && !item.disabled)) return
+  expandGroupOf(service)
+  if (service === props.service) {
+    const restoreFocus = directoryOpen.value
+    directoryOpen.value = false
+    resetConfigurationScroll(restoreFocus)
+    return
+  }
+  emit('update:service', service)
+}
+function setDefaultService(): void {
+  if (!active.value || props.service === props.defaultService || !selectedService.value || selectedService.value.disabled) return
+  emit('update:default-service', props.service)
+}
+const actions = computed(() => {
+  const current = capture()
+  return {
+    selectService: (value: string) => {if (current()) selectService(value)},
+    setDefaultService: () => {if (current()) setDefaultService()},
+    revealGroup: (id: string) => {if (current()) return revealGroup(id)},
+    toggleGroup: (id: string) => {if (current()) toggleGroup(id)},
+    syncActiveGroup: () => {if (current()) syncActiveGroup()},
+    releasePinnedGroup: () => {if (current()) releasePinnedGroup()},
+    toggleDirectory: () => {if (current()) directoryOpen.value = !directoryOpen.value},
+    updateQuery: (event: Event) => {const value = (event.currentTarget as HTMLInputElement | null)?.value;if (current() && typeof value === 'string') serviceQuery.value = value},
+    addService: () => {if (current()) emit('add:service')},
+    selectModel: (value: string) => {if (current()) emit('update:model', value)},
+    addModel: (value: string) => {if (current()) emit('add:model', value)},
+    removeModel: (value: string) => {if (current()) emit('remove:model', value)},
+  }
 })
+watch(() => [active.value, props.context], () => {directoryOpen.value = false;serviceQuery.value = '';pinnedGroup = ''}, {flush: 'sync'})
+// 外部跳转和新建服务沿用同一编辑工作区，并从表单顶部开始。
+watch(() => props.service, (service) => {
+  expandGroupOf(service)
+  const restoreDirectoryFocus = directoryOpen.value
+  directoryOpen.value = false
+  resetConfigurationScroll(restoreDirectoryFocus)
+}, {flush: 'sync'})
 
 </script>
 
 <style scoped>
-.service-catalog { display: flex; height: clamp(520px, calc(100vh - 270px), 760px); min-height: 520px; margin: 2px 0 20px; border: 1px solid #e4e7ef; border-radius: 20px; overflow: hidden; background: #fff; flex-direction: column; }
-.catalog-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); min-height: 0; flex: 1; overflow: hidden; }
-.service-rail { min-height: 0; padding: 16px 12px 18px; border-right: 1px solid #eceef3; background: #fafbfc; overflow-y: auto; }
-.catalog-search, .model-search { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 11px; border: 1px solid #dfe3eb; border-radius: 11px; background: #fff; }
-.catalog-search span, .model-search span { color: #8991a2; font-size: 16px; }
-.catalog-search input, .model-search input { width: 100%; min-width: 0; border: 0; outline: 0; color: #172033; background: transparent; font-size: 13px; }
-.service-groups { display: grid; gap: 18px; margin-top: 17px; }
-.group-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; padding: 8px 9px; border-bottom: 1px solid #e5e8ef; color: #667187; background: #f3f5f9; }
-.group-heading strong { color: #46526a; font-size: 12px; letter-spacing: .05em; }
-.group-heading span { font-size: 10px; }
-.service-group { min-width: 0; }
-.service-item { display: grid; grid-template-columns: 40px minmax(0, 1fr) 8px; align-items: center; gap: 10px; width: 100%; padding: 10px; border: 1px solid transparent; border-radius: 12px; color: #172033; background: transparent; text-align: left; cursor: pointer; transition: 150ms ease; }
-.service-item:hover { border-color: #e2e5ec; background: #fff; transform: translateX(2px); }
-.service-item.active { border-color: #f3c4d1; background: #fff0f4; box-shadow: 0 7px 18px rgba(214, 50, 96, .08); }
-.service-copy { display: flex; min-width: 0; flex-direction: column; }
-.service-copy strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
-.service-copy small { margin-top: 3px; color: #9097a7; font-size: 10px; }
-.current-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4776; box-shadow: 0 0 0 4px rgba(239, 71, 118, .12); }
-.service-detail { display: flex; min-width: 0; min-height: 0; margin: 14px; padding: 22px; border: 1px solid #e4e7ef; border-radius: 16px; background: #fff; flex-direction: column; overflow: hidden; }
-.service-detail > .detail-hero,
-.service-detail > .model-section,
-.service-detail > .no-model-panel,
-.service-detail > .service-configuration-slot { width: min(100%, 1080px); }
-.detail-hero { display: flex; align-items: flex-start; gap: 13px; padding-bottom: 20px; border-bottom: 1px solid #eceef3; }
-.detail-hero > div:last-child { min-width: 0; }
-.detail-title-row { display: flex; align-items: center; gap: 9px; }
-.detail-title-row h4 { margin: 1px 0 5px; color: #172033; font-size: 22px; }
-.active-badge { padding: 4px 8px; border-radius: 999px; color: #bd2853; background: #ffe9ef; font-size: 10px; font-weight: 800; }
-.detail-hero p { margin: 0; color: #737c8f; font-size: 13px; line-height: 1.6; }
-.model-section { display: flex; min-height: 0; margin-top: 20px; flex: 0 0 auto; flex-direction: column; }
-.model-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 12px; }
-.model-heading > div { display: flex; min-width: 0; flex-direction: column; }
-.model-heading span { color: #81899a; font-size: 11px; font-weight: 750; }
-.model-heading strong { overflow: hidden; margin-top: 3px; color: #172033; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
-.model-search { width: 168px; height: 34px; }
-.model-list { display: flex; min-height: 0; flex: 1; flex-direction: column; }
-.model-list-heading { display: flex; align-items: center; justify-content: space-between; margin: 0 2px 8px; color: #81899a; flex: 0 0 auto; }
-.model-list-heading strong { font-size: 12px; }
-.model-list-heading span { font-size: 11px; }
-.model-grid { display: grid; min-height: 0; max-height: 246px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; align-content: start; overflow-y: auto; padding: 1px 4px 4px 1px; }
-.model-grid.expanded { max-height: none; overflow-y: visible; }
-.model-item { display: grid; grid-template-columns: 30px minmax(0, 1fr) 16px; align-items: center; gap: 9px; min-width: 0; padding: 10px; border: 1px solid #e4e7ee; border-radius: 12px; color: #172033; background: #fff; text-align: left; cursor: pointer; transition: 150ms ease; }
-.model-item:hover { border-color: #f0a9bc; transform: translateY(-1px); }
-.model-item.active { border-color: #ef4776; background: #fff4f7; box-shadow: 0 7px 16px rgba(214, 50, 96, .08); }
-.model-item > span:nth-child(2) { display: flex; min-width: 0; flex-direction: column; }
-.model-item strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
-.model-item small { overflow: hidden; margin-top: 3px; color: #9299a8; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
-.checkmark { color: #da315f; font-size: 12px; font-weight: 900; }
-.more-models-toggle { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-top: 10px; padding: 11px 12px; border: 1px solid #e4e7ee; border-radius: 12px; color: #172033; background: #fafbfc; text-align: left; cursor: pointer; }
-.more-models-toggle:hover { border-color: #f0a9bc; background: #fff8fa; }
-.more-models-toggle > span { display: flex; flex-direction: column; }
-.more-models-toggle strong { font-size: 10px; }
-.more-models-toggle small { margin-top: 2px; color: #9299a8; font-size: 8px; }
-.more-models-toggle b { color: #c72a56; font-size: 9px; font-weight: 750; white-space: nowrap; }
-.more-models-toggle i { display: inline-block; margin-left: 3px; font-style: normal; transition: transform 150ms ease; }
-.more-models-toggle[aria-expanded="true"] i { transform: rotate(180deg); }
-.no-model-panel { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 18px; border: 1px solid #d9eee5; border-radius: 14px; background: #f2faf6; }
-.no-model-panel > span { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: #fff; background: #28aa79; font-size: 14px; }
-.no-model-panel strong { color: #185d46; font-size: 15px; }
-.no-model-panel p { margin: 4px 0 0; color: #628074; font-size: 12px; }
-.service-configuration-slot { min-height: 0; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eceef3; overflow-y: auto; flex: 1; }
-.catalog-empty { margin: 20px 8px; color: #9299a8; font-size: 10px; text-align: center; }
-:global(:root.dark) .service-catalog,
-:global(:root.dark) .catalog-search,
-:global(:root.dark) .model-search,
-:global(:root.dark) .service-detail,
-:global(:root.dark) .model-item { border-color: var(--line); background: var(--surface); }
-:global(:root.dark) .service-rail,
-:global(:root.dark) .group-heading,
-:global(:root.dark) .more-models-toggle { border-color: var(--line); background: var(--surface-soft); }
-:global(:root.dark) .service-item,
-:global(:root.dark) .catalog-search input,
-:global(:root.dark) .model-search input,
-:global(:root.dark) .group-heading strong,
-:global(:root.dark) .detail-title-row h4,
-:global(:root.dark) .model-heading strong,
-:global(:root.dark) .model-item,
-:global(:root.dark) .more-models-toggle { color: var(--ink); }
-:global(:root.dark) .service-copy small,
-:global(:root.dark) .detail-hero p,
-:global(:root.dark) .model-heading span,
-:global(:root.dark) .model-list-heading,
-:global(:root.dark) .model-item small,
-:global(:root.dark) .more-models-toggle small { color: var(--muted); }
-:global(:root.dark) .detail-hero,
-:global(:root.dark) .service-configuration-slot { border-color: var(--line); }
-:global(:root.dark) .service-item:hover { border-color: var(--line); background: var(--surface); }
-:global(:root.dark) .service-item.active,
-:global(:root.dark) .model-item.active { border-color: rgba(255, 138, 171, .48); background: var(--brand-soft); }
-:global(:root.dark) .more-models-toggle:hover { border-color: rgba(255, 138, 171, .48); background: var(--brand-soft); }
-:global(:root.dark) .no-model-panel { border-color: #31594d; background: #1c342d; }
-:global(:root.dark) .no-model-panel strong { color: #a8e8d5; }
-:global(:root.dark) .no-model-panel p { color: #8fc5b5; }
-@media (max-width: 900px) {
-  .catalog-layout { grid-template-columns: 220px minmax(0, 1fr); }
-  .model-grid { grid-template-columns: 1fr; }
+.service-catalog { display: flex; flex-direction: column; height: min(650px, 70dvh); min-height: 0; color: var(--ink, #172033); background: var(--surface, #fff); }
+.service-group-navigation { display: flex; flex: none; gap: 20px; min-width: 0; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; overscroll-behavior-x: contain; }
+.service-group-navigation button { flex: none; padding: 10px 2px 12px; border: 0; border-bottom: 2px solid transparent; color: var(--muted); background: transparent; font: inherit; font-size: 13px; font-weight: 600; line-height: 1.4; white-space: nowrap; cursor: pointer; }
+.service-group-navigation button:hover { color: var(--ink); }
+.service-group-navigation button[aria-current] { border-bottom-color: var(--brand); color: var(--brand-strong); font-weight: 650; }
+.service-group-navigation button:focus-visible { outline-offset: -3px; border-radius: 4px; }
+.catalog-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 0; flex: 1; overflow: hidden; }
+.service-rail { display: flex; flex-direction: column; min-height: 0; padding: 12px 10px; border-right: 1px solid var(--line, #e4e7ef); background: var(--surface-soft, #fafbfc); }
+.rail-heading { flex-shrink: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 0 6px 10px; }
+.rail-heading > div { display: flex; flex: none; align-items: baseline; gap: 5px; min-width: 0; }
+.rail-heading strong { color: var(--ink, #172033); font-size: 13px; font-weight: 700; }
+.service-add-button { display: inline-flex; align-items: center; justify-content: center; gap: 4px; min-height: 34px; padding: 7px 11px; border: 1.5px solid color-mix(in srgb, var(--brand) 65%, var(--line)); border-radius: 10px; color: var(--brand-strong); background: var(--surface); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: border-color .15s, background .15s, box-shadow .15s; }
+.service-add-button:hover, .service-add-button:focus-visible { border-color: var(--brand); background: var(--brand-soft); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 10%, transparent); }
+
+.service-count { margin-left: 4px; font-variant-numeric: tabular-nums; }
+.service-groups { overflow-y: auto; min-height: 0; flex: 1; margin-top: 12px; overscroll-behavior: contain; }
+.directory-items { display: grid; gap: 1px; }
+.service-detail { display: flex; flex-direction: column; min-width: 0; min-height: 0; margin: 0; padding: 20px; overflow-y: auto; overflow-x: hidden; scrollbar-gutter: stable; border: 0; border-radius: 0; background: var(--surface); overscroll-behavior: contain; }
+.detail-hero { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.detail-hero > :deep(.service-icon) { margin-top: 2px; }
+.detail-heading { flex: 1 1 160px; min-width: 0; }
+.hero-service-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; max-width: 100%; margin-left: auto; }
+.hero-connection-action { flex: none; }
+.service-default-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; max-width: 100%; min-height: 36px; padding: 7px 12px; border: 1px solid var(--brand-border, #f3c0ce); border-radius: 9px; color: var(--brand-strong, #bd2853); background: var(--surface, #fff); font-size: 12px; font-weight: 600; cursor: pointer; }
+.service-default-button > svg { flex: none; }
+.service-default-button:hover:not(:disabled) { border-color: var(--brand); background: var(--brand-soft); }
+.service-default-button:disabled { border-color: var(--line); color: var(--muted); cursor: default; }
+.detail-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; }
+.detail-title-row h4 { margin: 0; font-size: 20px; line-height: 1.4; overflow-wrap: anywhere; }
+.detail-hero p { margin: 5px 0 0; color: var(--muted, #737c8f); font-size: 12px; line-height: 1.6; }
+.active-badge { padding: 4px 8px; border-radius: 999px; color: var(--brand-strong); background: var(--brand-soft); font-size: 10px; font-weight: 600; white-space: nowrap; }
+.editing-badge { color: var(--muted, #737c8f); font-size: 11px; white-space: nowrap; }
+.service-description { max-width: 760px; margin: 0 0 12px; color: var(--muted, #737c8f); font-size: 12px; line-height: 1.65; }
+.service-website-link { display: inline-flex; align-items: center; gap: 4px; color: var(--brand-strong); font-size: 12px; font-weight: 550; text-decoration: none; }
+.service-website-link:hover { color: var(--brand-strong, #bd2853); text-decoration: underline; }
+.model-section { display: grid; grid-template-columns: 140px minmax(0, 1fr); align-items: center; gap: 16px; padding: 0 0 12px; margin: 0 0 12px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; flex-shrink: 0; }
+.model-section > :deep(.model-picker) { width: 100%; max-width: 640px; justify-self: start; }
+.model-heading strong { font-size: 13px; font-weight: 550; }
+.service-configuration-slot { flex-shrink: 0; padding-bottom: 12px; }
+.catalog-search { flex-shrink: 0; display: flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 10px; border: 1px solid var(--line, #dfe3eb); border-radius: 8px; color: var(--muted, #737c8f); background: var(--surface, #fff); }
+.catalog-search:focus-within { border-color: var(--brand-strong, #bd2853); }
+.catalog-search input { width: 100%; min-width: 0; padding: 9px 0; border: 0; outline: none; color: var(--ink, #172033); background: transparent; font-size: 13px; }
+.directory-section + .directory-section { margin-top: 12px; }
+.directory-section.is-collapsed + .directory-section { margin-top: 8px; }
+.directory-section h4 { margin: 0 0 6px; }
+.directory-section.is-collapsed h4 { margin-bottom: 0; }
+.directory-section-toggle { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 10px; border: 0; border-bottom: 1px solid var(--line); border-radius: 8px 8px 0 0; background: color-mix(in srgb, var(--line) 22%, transparent); color: var(--ink); font: inherit; font-size: 12px; font-weight: 600; text-align: left; cursor: pointer; }
+.directory-section-toggle:disabled { cursor: default; }
+.directory-section-toggle:focus-visible { outline-offset: -2px; }
+.directory-section-toggle:not(:disabled):hover { background: color-mix(in srgb, var(--line) 40%, transparent); }
+.directory-section-toggle > span { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.directory-section-toggle small { color: var(--muted); font-size: 11px; font-weight: 400; font-variant-numeric: tabular-nums; }
+.directory-section-chevron { flex: none; width: 14px; height: 14px; color: var(--muted); transition: transform 150ms ease; }
+.directory-section-toggle[aria-expanded="true"] .directory-section-chevron { transform: rotate(90deg); }
+.directory-section.is-collapsed .directory-section-toggle { border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { .directory-section-chevron { transition: none; } }
+.catalog-empty { padding: 32px 0; color: var(--muted, #737c8f); text-align: center; font-size: 13px; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--brand-strong, #bd2853); outline-offset: 2px; }
+.credential-guide { margin: 0 0 12px; border: 0; border-radius: 10px; background: var(--surface-soft, #fff8fa); }
+.credential-guide-summary { display: flex; align-items: center; gap: 9px; min-height: 40px; padding: 10px 12px; cursor: pointer; list-style: none; }
+.credential-guide-summary::-webkit-details-marker { display: none; }
+.credential-guide-summary-copy { display: flex; min-width: 0; align-items: center; gap: 8px; }
+.credential-guide-summary-copy strong { min-width: 0; overflow-wrap: anywhere; color: #172033; font-size: 13px; }
+.credential-guide-summary-action { margin-left: auto; color: var(--brand-strong, #bd2853); font-size: 11px; white-space: nowrap; }
+.credential-guide-chevron { margin-left: auto; width: 16px; height: 16px; flex: none; color: var(--muted, #8991a2); transition: transform 150ms ease; }
+.credential-guide[open] .credential-guide-chevron { transform: rotate(180deg); }
+.credential-guide-body { display: grid; gap: 12px; padding: 14px 16px 16px; border-top: 1px solid var(--line); }
+.credential-guide-body > small { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.credential-guide-badge { flex-shrink: 0; padding: 3px 8px; border-radius: 999px; color: var(--brand-strong); background: var(--brand-soft); font-size: 11px; font-weight: 600; letter-spacing: .04em; }
+.credential-guide-steps { display: grid; gap: 6px; margin: 0; padding-left: 20px; color: var(--ink); font-size: 12px; line-height: 1.6; }
+.credential-guide-steps li::marker { color: #c72a56; font-weight: 800; }
+.credential-guide-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.credential-guide-link { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 4px 12px; border: 1px solid #e2e5ec; border-radius: 9px; color: #46526a; background: #fff; font-size: 12px; font-weight: 650; text-decoration: none; transition: 150ms ease; }
+.credential-guide-link:hover { border-color: #f3c4d1; color: var(--brand-strong, #bd2853); background: var(--brand-soft, #fff0f4); }
+.credential-guide-link.is-primary { border-color: var(--brand-border, #f3c0ce); color: var(--brand-strong); background: var(--brand-soft); }
+.credential-guide-link.is-primary:hover { color: #fff; background: var(--brand-strong, #bd2853); filter: brightness(.92); box-shadow: 0 6px 16px rgba(214, 50, 96, .18); }
+.credential-guide-link:focus-visible { outline: 2px solid var(--brand-strong, #bd2853); outline-offset: 2px; }
+
+:global(:root.dark .credential-guide) { border-color: var(--line); background: var(--surface-soft); }
+:global(:root.dark .credential-guide-summary-copy strong), :global(:root.dark .credential-guide-steps) { color: var(--ink); }
+:global(:root.dark .credential-guide-body) { border-color: var(--line); }
+:global(:root.dark .credential-guide-link) { border-color: var(--line); color: var(--ink); background: var(--surface); }
+:global(:root.dark .credential-guide-link.is-primary) { color: var(--brand-strong); background: var(--brand-soft); }
+@media (max-width: 1100px) {
+  .catalog-layout { grid-template-columns: 200px minmax(0, 1fr); }
+  .service-detail { padding: 16px; }
+  .model-section { grid-template-columns: 1fr; gap: 8px; }
 }
 @media (max-width: 700px) {
   .service-catalog { height: auto; min-height: 0; }
-  .catalog-layout { display: block; flex: 0 0 auto; }
-  .service-rail { border-right: 0; border-bottom: 1px solid #eceef3; }
-  .service-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .service-detail { padding: 18px; }
-  .model-heading { align-items: stretch; flex-direction: column; }
-  .model-search { width: 100%; }
-  .service-detail { min-height: 520px; margin: 0; padding: 18px; border: 0; border-radius: 0; overflow: visible; }
-  .detail-hero { flex-wrap: wrap; }
-  .model-grid { max-height: 400px; }
-  .service-configuration-slot { max-height: none; overflow: visible; }
+  .service-group-navigation { display: none; }
+  .catalog-layout { display: block; }
+  .service-rail { border-right: 0; border-bottom: 1px solid var(--line, #e4e7ef); padding: 10px 12px; }
+  .rail-heading { margin-bottom: 6px; }
+  .service-groups { min-height: 80px; }
+  .directory-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .service-detail { margin: 0; padding: 14px; border: 0; border-radius: 0; overflow: visible; }
+  .detail-hero { flex-wrap: wrap; gap: 10px; }
+  .detail-title-row h4 { font-size: 18px; }
+  .model-section { grid-template-columns: 1fr; gap: 7px; }
+
+}
+@media (min-width: 701px) and (max-width: 1250px) { .model-section { grid-template-columns: 1fr; gap: 8px; } }
+@media (max-width: 700px) { .credential-guide-summary-copy { align-items: flex-start; flex-direction: column; gap: 6px; } }
+.service-directory-content { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.mobile-directory-toggle { display: none; }
+@media (max-width: 700px) {
+  .mobile-directory-toggle { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; padding: 6px 2px; border: 0; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+  .mobile-directory-name { min-width: 0; flex: 1; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+  .mobile-directory-toggle > small { color: var(--brand-strong); font-size: 12px; }
+  .mobile-directory-toggle > svg { flex: none; width: 16px; height: 16px; }
+  .mobile-directory-toggle[aria-expanded="true"] > svg { transform: rotate(180deg); }
+  .service-rail:not(.is-expanded) .service-directory-content { display: none; }
+  .service-rail.is-expanded .service-directory-content { height: 280px; max-height: 40dvh; padding-top: 12px; flex: none; }
+  .service-groups { max-height: 240px; }
+  .hero-service-actions { margin-left: 0; }
+  .detail-hero { margin-bottom: 12px; padding-bottom: 12px; }
 }
 </style>

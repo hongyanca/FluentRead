@@ -1,0 +1,14 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930
+
+ ✓ tests/popupFeatureVisibility.test.ts (19 tests) 25ms
+ ✓ tests/interfaceAppearance.test.ts (8 tests) 17ms
+ ✓ tests/serviceCatalog.test.ts (16 tests) 19ms
+ ✓ tests/popupActions.test.ts (6 tests) 155ms
+ ✓ tests/featureTranslationServices.test.ts (5 tests) 15ms
+ ✓ tests/popupCache.test.ts (2 tests) 4ms
+
+ Test Files  6 passed (6)
+      Tests  56 passed (56)
+   Start at  23:07:53
+   Duration  2.33s (transform 425ms, setup 0ms, collect 1.12s, tests 235ms, environment 1ms, prepare 268ms)

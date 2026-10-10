@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "success": false,
+  "launchMode": "headless-worker-benchmark",
+  "executionSandboxPermissions": "require_escalated",
+  "attemptedHarnessSha256": "7669ab7d8db15b0e97ef3294aedc379aaac2f4b276862742c7e82ec16e27ceb3",
+  "error": {
+    "phase": "browser_launch",
+    "message": "browserType.launchPersistentContext: Timeout 30000ms exceeded.",
+    "timeoutMs": 30000
+  },
+  "checks": [],
+  "arms": [],
+  "nativeGpuVerified": false,
+  "modelInferenceStarted": false,
+  "accuracyResultAvailable": false,
+  "cleanup": {
+    "launchedPid": 76847,
+    "exactReadOnlyPidObservation": {
+      "sandboxPermissions": "require_escalated",
+      "exitCode": 1,
+      "stdout": "",
+      "pidAbsent": true
+    },
+    "cdpOwnershipReceipt": false,
+    "guardedCloseReceipt": false,
+    "temporaryProfileRetained": true,
+    "signalsSent": false
+  },
+  "additionalBrowserAttempts": 0
+}

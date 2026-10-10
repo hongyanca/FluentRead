@@ -22,6 +22,7 @@ describe('自动配置备份纯状态机', () => {
         const baseline = createBaselineConfigAutoBackups({
             ...baseConfig,
             videoService: 'deeplx',
+            deeplApiPlan: 'pro',
             token: {openai: 'secret'},
             count: 9,
             persistCredentials: true,
@@ -38,11 +39,14 @@ describe('自动配置备份纯状态机', () => {
         expect(baseline.entries[0]?.config).not.toHaveProperty('persistCredentials');
         expect(baseline.entries[0]?.config).not.toHaveProperty('videoServiceDefaultMigrated');
         expect(baseline.entries[0]?.config.videoService).toBe('deeplx');
+        expect(baseline.entries[0]?.config.deeplApiPlan).toBe('pro');
 
         const cloned = cloneConfigAutoBackups(baseline);
         expect(cloned).not.toBe(baseline);
         expect(cloned.entries[0]).not.toBe(baseline.entries[0]);
         expect(cloned.entries[0]?.config.videoService).toBe('deeplx');
+        expect(parseConfigAutoBackups(JSON.parse(serializeConfigAutoBackups(cloned)))?.entries[0]?.config.deeplApiPlan)
+            .toBe('pro');
         expect(serializeConfigAutoBackups(cloned)).toBe(JSON.stringify(cloned));
     });
 

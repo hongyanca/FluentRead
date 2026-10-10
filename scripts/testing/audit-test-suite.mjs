@@ -56,6 +56,9 @@ function lineOf(sourceFile, node) {
 function literalName(node) {
     if (!node) return '<dynamic>';
     if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
+    if (ts.isTemplateExpression(node)) {
+        return node.head.text + node.templateSpans.map(span => `<dynamic>${span.literal.text}`).join('');
+    }
     return '<dynamic>';
 }
 

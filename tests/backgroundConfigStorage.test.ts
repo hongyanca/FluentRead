@@ -1,6 +1,6 @@
 import {describe, expect, it, vi} from 'vitest';
 import {installConfigStorageBroadcast} from '@/src/app/background/configStorageBroadcast';
-import {createConfigStorageReadHandler} from '@/src/app/background/handlers/configStorage';
+import {createConfigStorageReadHandler, createPopupStartupHandler} from '@/src/app/background/handlers/configStorage';
 import {
     CONFIG_INDEXED_DB_KEYS,
     CONFIG_STORAGE_CHANGED_MESSAGE,
@@ -75,6 +75,39 @@ describe('后台配置 IndexedDB 读取 handler', () => {
                 {},
             )).rejects.toThrow('读取键无效');
         }
+    });
+});
+
+describe('Popup 启动提示', () => {
+    it('等待后台配置初始化后只返回最新引导状态', async () => {
+        let release!: () => void;
+        let setupCompleted = false;
+        const getSetupCompleted = vi.fn(() => setupCompleted);
+        const handler = createPopupStartupHandler({
+            ready: new Promise<void>(resolve => { release = resolve; }),
+            getSetupCompleted,
+            isExtensionUrl: url => url.startsWith('chrome-extension://fluentread/'),
+        });
+        const pending = handler.handle({type: 'popupStartup'}, {sender: {url: 'chrome-extension://fluentread/popup.html'}});
+        expect(getSetupCompleted).not.toHaveBeenCalled();
+        setupCompleted = true;
+        release();
+        await expect(pending).resolves.toEqual({success: true, uiLanguageSetupCompleted: true});
+        setupCompleted = false;
+        await expect(handler.handle({type: 'popupStartup'}, {sender: {url: 'chrome-extension://fluentread/popup.html'}}))
+            .resolves.toEqual({success: true, uiLanguageSetupCompleted: false});
+    });
+
+    it('拒绝外部页面或缺失 sender，不读取引导状态', async () => {
+        const getSetupCompleted = vi.fn(() => true);
+        const handler = createPopupStartupHandler({
+            ready: Promise.resolve(), getSetupCompleted,
+            isExtensionUrl: url => url.startsWith('chrome-extension://fluentread/'),
+        });
+        for (const context of [{}, {sender: {url: 'https://example.com'}}]) {
+            await expect(handler.handle({type: 'popupStartup'}, context)).rejects.toThrow('无权读取菜单启动提示');
+        }
+        expect(getSetupCompleted).not.toHaveBeenCalled();
     });
 });
 

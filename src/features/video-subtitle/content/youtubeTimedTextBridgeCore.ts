@@ -1,20 +1,22 @@
 /**
  * @file src/features/video-subtitle/content/youtubeTimedTextBridgeCore.ts
  * 文件职责：实现可注入、可测试的 YouTube timedtext 网络桥核心，安全包裹页面 fetch 与 XMLHttpRequest 并发布成功字幕响应，同时支持完整恢复。
- * 主要内容：定义环境端口、状态键和生命周期事件，识别目标 URL、构造 payload，保存原始方法，处理 XHR 复用/同步失败/迟到响应，并提供安装核心与 BFCache 友好的 enable/dispose 管理。
+ * 主要内容：定义环境端口、状态键和生命周期事件，识别目标 URL、构造 payload，保存原始方法，处理 XHR 复用/同步失败/迟到响应，并为显式开启的站点提供有界二进制文本适配与资源回放。
  * 模块边界：核心不直接引用全局 window、不解析字幕内容也不操作扩展 UI；页面适配器注入真实环境，video runtime 消费消息，所有猴补只属于 MAIN-world bridge 所有权。
  */
 export const YOUTUBE_TIMED_TEXT_MESSAGE = 'fluent-read-youtube-timedtext';
 export const YOUTUBE_BRIDGE_DISPOSE_EVENT = 'fluentread-youtube-bridge-dispose';
 export const YOUTUBE_BRIDGE_ENABLE_EVENT = 'fluentread-youtube-bridge-enable';
+export const YOUTUBE_BRIDGE_REPLAY_EVENT = 'fluentread-youtube-bridge-replay';
 export const YOUTUBE_BRIDGE_STATE_KEY = '__fluentReadYoutubeTimedTextBridgeState__';
 export const YOUTUBE_BRIDGE_LIFECYCLE_STATE_KEY = '__fluentReadYoutubeTimedTextBridgeLifecycleState__';
 
 export interface TimedTextPayload {
     readonly source: 'fluent-read';
-    readonly type: typeof YOUTUBE_TIMED_TEXT_MESSAGE;
+    readonly type: string;
     readonly url: string;
     readonly responseText: string;
+    readonly pageHref?: string;
 }
 
 export interface YoutubeBridgeMethodSlot<T extends (...args: never[]) => unknown> {
@@ -23,7 +25,7 @@ export interface YoutubeBridgeMethodSlot<T extends (...args: never[]) => unknown
 }
 
 export interface YoutubeFetchResponsePort {
-    clone(): {text(): Promise<string>};
+    clone(): {text(): Promise<string>; body?: ReadableStream<Uint8Array> | null; headers?: {get(name: string): string | null}};
 }
 
 export type YoutubeFetchPort = (
@@ -34,6 +36,8 @@ export type YoutubeFetchPort = (
 
 export interface YoutubeXhrPort {
     readonly responseText: unknown;
+    readonly response?: unknown;
+    readonly responseType?: string;
     addEventListener(type: string, listener: () => void, options?: {once?: boolean}): void;
 }
 
@@ -51,6 +55,17 @@ export interface YoutubeBridgeEventTarget {
 }
 
 export interface YoutubeTimedTextBridgeEnvironment {
+    /** X 与 YouTube 共享可卸载的网络桥，站点策略只决定捕获范围和消息数据。 */
+    readonly resourcePolicy?: {
+        matches(url: string, href: string): boolean;
+        payload(url: string, text: unknown, href: string): TimedTextPayload | null;
+        /** 仅站点适配器可选择在消费方晚于网络响应时回放最近资源。 */
+        replayLatest?: boolean;
+        /** X 的 HLS loader 常用 arraybuffer/blob，按站点显式允许后才转成有界文本。 */
+        binaryText?: boolean;
+        /** 在 clone 读取过程中限流，避免先复制整个时间线再按文本长度拒绝。 */
+        maxResponseBytes?: number;
+    };
     readonly stateHost: Record<string, unknown>;
     readonly fetch: YoutubeBridgeMethodSlot<YoutubeFetchPort>;
     readonly xhrOpen: YoutubeBridgeMethodSlot<YoutubeXhrOpenPort>;
@@ -71,6 +86,9 @@ interface YoutubeBridgeLifecycleState {
     readonly owner: symbol;
     readonly dispose: () => void;
 }
+
+const MAX_REPLAY_RESOURCE_COUNT = 16;
+const MAX_REPLAY_RESPONSE_CHARS = 2_000_000;
 
 export function getYoutubeRequestUrl(input: unknown): string {
     if (typeof input === 'string') return input;
@@ -142,10 +160,89 @@ export function installYoutubeTimedTextBridgeCore(
     const requestUrls = new WeakMap<YoutubeXhrPort, string>();
     const requestGenerations = new WeakMap<YoutubeXhrPort, number>();
     let active = true;
-    const publish = (url: string, responseText: unknown) => {
+    const matches = environment.resourcePolicy?.matches ?? isYoutubeTimedTextUrl;
+    const payloadFor = environment.resourcePolicy?.payload ?? createYoutubeTimedTextPayload;
+    const replayCache = new Map<string, {payload: TimedTextPayload; pageHref: string}>();
+    let replayResponseChars = 0;
+    const replayEnabled = environment.resourcePolicy?.replayLatest === true;
+    const responseScope = new AbortController();
+    const readResponseText = async (response: ReturnType<YoutubeFetchResponsePort['clone']>): Promise<string | null> => {
+        const limit = environment.resourcePolicy?.maxResponseBytes;
+        if (limit === undefined) return response.text();
+        if (Number(response.headers?.get('content-length')) > limit) {
+            void response.body?.cancel().catch(() => undefined);
+            return null;
+        }
+        if (!response.body) {
+            // 测试端口或不提供流的宿主保留 text 兼容；在发布前仍限制字符与 UTF-8 字节。
+            const text = await response.text();
+            return text.length <= limit && new TextEncoder().encode(text).length <= limit ? text : null;
+        }
+        const reader = response.body.getReader();
+        const cancel = () => { void reader.cancel().catch(() => undefined); };
+        responseScope.signal.addEventListener('abort', cancel, {once: true});
+        const decoder = new TextDecoder();
+        const parts: string[] = [];
+        let bytes = 0;
+        try {
+            while (!responseScope.signal.aborted) {
+                const part = await reader.read();
+                if (part.done) break;
+                bytes += part.value.byteLength;
+                if (bytes > limit) return null;
+                parts.push(decoder.decode(part.value, {stream: true}));
+            }
+            if (responseScope.signal.aborted) return null;
+            parts.push(decoder.decode());
+            return parts.join('');
+        } finally {
+            responseScope.signal.removeEventListener('abort', cancel);
+            cancel();
+            reader.releaseLock();
+        }
+    };
+    const clearReplayCache = () => {
+        replayCache.clear();
+        replayResponseChars = 0;
+    };
+    const rememberReplayPayload = (payload: TimedTextPayload, href: string) => {
+        if (!replayEnabled) return;
+        const pageHref = payload.pageHref || href;
+        const previous = replayCache.get(payload.url);
+        if (previous) replayResponseChars -= previous.payload.responseText.length;
+        replayCache.delete(payload.url);
+        if (payload.responseText.length > MAX_REPLAY_RESPONSE_CHARS) return;
+        replayCache.set(payload.url, {
+            payload: payload.pageHref ? payload : {...payload, pageHref},
+            pageHref,
+        });
+        replayResponseChars += payload.responseText.length;
+        while (replayCache.size > MAX_REPLAY_RESOURCE_COUNT || replayResponseChars > MAX_REPLAY_RESPONSE_CHARS) {
+            // 进入淘汰循环时缓存一定非空；Map 的不变量由上面的 set 和循环条件保证。
+            const oldestUrl = replayCache.keys().next().value as string;
+            const oldest = replayCache.get(oldestUrl);
+            replayCache.delete(oldestUrl);
+            replayResponseChars -= oldest!.payload.responseText.length;
+        }
+    };
+    const replayLatest = () => {
+        if (!replayEnabled) return;
+        const currentHref = environment.getHref();
+        for (const {payload, pageHref} of replayCache.values()) {
+            if (pageHref !== currentHref) continue;
+            try {
+                environment.postMessage(payload, environment.getOrigin());
+            } catch {
+                // 回放是旁路能力，消费方或页面导航失败不能影响宿主 API。
+            }
+        }
+    };
+    const publish = (url: string, responseText: unknown, href = environment.getHref()) => {
         if (!active) return;
-        const payload = createYoutubeTimedTextPayload(url, responseText, environment.getHref());
+        if (href !== environment.getHref()) return;
+        const payload = payloadFor(url, responseText, href);
         if (!payload) return;
+        rememberReplayPayload(payload, href);
         try {
             environment.postMessage(payload, environment.getOrigin());
         } catch {
@@ -155,11 +252,12 @@ export function installYoutubeTimedTextBridgeCore(
 
     const fetchWrapper: YoutubeFetchPort = async function fetch(input, init) {
         const requestUrl = getYoutubeRequestUrl(input);
+        const requestHref = environment.getHref();
         const response = await Reflect.apply(originalFetch, this, [input, init]);
-        if (isYoutubeTimedTextUrl(requestUrl, environment.getHref())) {
+        if (matches(requestUrl, requestHref)) {
             try {
-                void response.clone().text()
-                    .then((responseText) => publish(requestUrl, responseText))
+                void readResponseText(response.clone())
+                    .then((responseText) => publish(requestUrl, responseText, requestHref))
                     .catch(() => undefined);
             } catch {
                 // 不可 clone 的响应只跳过旁路采集，原 response 仍原样返回。
@@ -172,20 +270,36 @@ export function installYoutubeTimedTextBridgeCore(
         requestUrls.delete(this);
         requestGenerations.set(this, (requestGenerations.get(this) ?? 0) + 1);
         const requestUrl = getYoutubeRequestUrl(url);
-        if (isYoutubeTimedTextUrl(requestUrl, environment.getHref())) requestUrls.set(this, requestUrl);
+        if (matches(requestUrl, environment.getHref())) requestUrls.set(this, requestUrl);
         return Reflect.apply(originalOpen, this, [method, url, ...rest]);
     };
     const sendWrapper: YoutubeXhrSendPort = function send(body) {
         const requestUrl = requestUrls.get(this);
+        const requestHref = environment.getHref();
         const requestGeneration = requestGenerations.get(this) ?? 0;
         requestUrls.delete(this);
         if (requestUrl) {
             this.addEventListener('load', () => {
                 if (requestGenerations.get(this) !== requestGeneration) return;
                 try {
-                    publish(requestUrl, this.responseText);
+                    publish(requestUrl, this.responseText, requestHref);
                 } catch {
-                    // 非文本 responseType 的 responseText getter 会抛异常。
+                    // HLS loader 的 arraybuffer/blob responseText getter 会抛异常；
+                    // 只让显式启用此能力的站点按小型文本资源解码，不能读取媒体段。
+                    if (!environment.resourcePolicy?.binaryText) return;
+                    try {
+                        const response = this.response;
+                        const emit = (text: unknown) => {
+                            if (requestGenerations.get(this) === requestGeneration) publish(requestUrl, text, requestHref);
+                        };
+                        if (response instanceof ArrayBuffer && response.byteLength <= MAX_REPLAY_RESPONSE_CHARS) {
+                            emit(new TextDecoder().decode(response));
+                        } else if (typeof Blob !== 'undefined' && response instanceof Blob && response.size <= MAX_REPLAY_RESPONSE_CHARS) {
+                            void response.text().then(emit).catch(() => undefined);
+                        }
+                    } catch {
+                        // 不兼容、不可读或异常响应只跳过旁路，不影响页面播放器。
+                    }
                 }
             }, {once: true});
         }
@@ -201,11 +315,14 @@ export function installYoutubeTimedTextBridgeCore(
         const current = environment.stateHost[YOUTUBE_BRIDGE_STATE_KEY] as YoutubeBridgeState | undefined;
         if (current?.owner !== owner) return;
         active = false;
+        responseScope.abort();
         restoreMethod(environment.fetch, fetchWrapper, originalFetch);
         restoreMethod(environment.xhrOpen, openWrapper, originalOpen);
         restoreMethod(environment.xhrSend, sendWrapper, originalSend);
         environment.pageEvents.removeEventListener('pagehide', handlePageHide);
         environment.documentEvents.removeEventListener(YOUTUBE_BRIDGE_DISPOSE_EVENT, dispose);
+        environment.documentEvents.removeEventListener(YOUTUBE_BRIDGE_REPLAY_EVENT, replayLatest);
+        clearReplayCache();
         delete environment.stateHost[YOUTUBE_BRIDGE_STATE_KEY];
     };
     const handlePageHide = (event?: {persisted?: boolean}) => {
@@ -219,6 +336,7 @@ export function installYoutubeTimedTextBridgeCore(
     installMethod(environment.xhrSend, sendWrapper);
     environment.pageEvents.addEventListener('pagehide', handlePageHide);
     environment.documentEvents.addEventListener(YOUTUBE_BRIDGE_DISPOSE_EVENT, dispose);
+    environment.documentEvents.addEventListener(YOUTUBE_BRIDGE_REPLAY_EVENT, replayLatest);
     environment.stateHost[YOUTUBE_BRIDGE_STATE_KEY] = {owner, dispose};
     return dispose;
 }

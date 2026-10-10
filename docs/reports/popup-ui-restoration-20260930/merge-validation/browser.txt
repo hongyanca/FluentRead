@@ -1,0 +1,2 @@
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: /Users/thinkstu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node scripts/testing/run-popup-actions-service-ui-test.cjs --density-only --browser-path /Applications/Google Chrome.app/Contents/MacOS/Google Chrome --load-via-cdp --extension-dir .output/chrome-mv3 --artifacts-dir /private/tmp/fluentread-popup-merge-chrome-final
+{"ok":true,"cases":7,"screenshots":33,"report":"/private/tmp/fluentread-popup-merge-chrome-final/report.json"}

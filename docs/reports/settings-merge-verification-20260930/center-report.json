@@ -1,0 +1,166 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "providerEvidence": "local-http-fixture",
+  "clipboardEvidence": "page-fixture-not-system-clipboard",
+  "cases": [
+    "first-use-small-no-key-selection",
+    "real-background-client-requests-only-configured-items",
+    "retry-one-preserves-completed-neighbor",
+    "copy-current-results",
+    "stale-results-excluded-from-copy",
+    "keyboard-reorder-retains-results",
+    "model-search-escape-focus-return",
+    "configure-service-and-return-retains-work",
+    "cross-page-layout-sync-retains-work",
+    "stop-retains-success-and-rejects-late-response",
+    "add-does-not-spend-provider-requests",
+    "quick-close-persistence-no-text-storage",
+    "six-translated-locales-and-dark-mode"
+  ],
+  "requests": [
+    {
+      "path": "/a/v1/chat/completions",
+      "model": "fixture-a",
+      "mode": "normal",
+      "fail": false
+    },
+    {
+      "path": "/b/v1/chat/completions",
+      "model": "fixture-b",
+      "mode": "normal",
+      "fail": true
+    },
+    {
+      "path": "/b/v1/chat/completions",
+      "model": "fixture-b",
+      "mode": "normal",
+      "fail": false
+    },
+    {
+      "path": "/b/v1/chat/completions",
+      "model": "fixture-b",
+      "mode": "delay",
+      "fail": false
+    },
+    {
+      "path": "/a/v1/chat/completions",
+      "model": "fixture-a",
+      "mode": "delay",
+      "fail": false
+    },
+    {
+      "path": "/b/v1/chat/completions",
+      "model": "fixture-b",
+      "mode": "normal",
+      "fail": false
+    }
+  ],
+  "screenshots": [
+    "/private/tmp/fr-center-merge/first-use.png",
+    "/private/tmp/fr-center-merge/partial-failure.png",
+    "/private/tmp/fr-center-merge/stale-results.png",
+    "/private/tmp/fr-center-merge/comparison-grid.png",
+    "/private/tmp/fr-center-merge/service-picker.png",
+    "/private/tmp/fr-center-merge/configure-workspace.png",
+    "/private/tmp/fr-center-merge/stopped.png",
+    "/private/tmp/fr-center-merge/persisted-reopen.png",
+    "/private/tmp/fr-center-merge/layout-1440.png",
+    "/private/tmp/fr-center-merge/layout-1024.png",
+    "/private/tmp/fr-center-merge/layout-820.png",
+    "/private/tmp/fr-center-merge/layout-390.png",
+    "/private/tmp/fr-center-merge/dark.png",
+    "/private/tmp/fr-center-merge/locale-en-US.png",
+    "/private/tmp/fr-center-merge/english.png",
+    "/private/tmp/fr-center-merge/english-mobile.png",
+    "/private/tmp/fr-center-merge/locale-ja-JP.png",
+    "/private/tmp/fr-center-merge/locale-ko-KR.png",
+    "/private/tmp/fr-center-merge/locale-fr-FR.png",
+    "/private/tmp/fr-center-merge/locale-ru-RU.png",
+    "/private/tmp/fr-center-merge/locale-es-ES.png"
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "centerOverflow": false,
+      "editorWidth": 402.3125
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "centerOverflow": false,
+      "editorWidth": 316.09375
+    },
+    {
+      "width": 820,
+      "overflow": false,
+      "centerOverflow": false,
+      "editorWidth": 548
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "centerOverflow": false,
+      "editorWidth": 304
+    }
+  ],
+  "consoleErrors": [],
+  "persistenceCases": [
+    "language-layout-latest-write-and-selected-order-survive-immediate-close"
+  ],
+  "quickClose": true,
+  "crossPageSync": true,
+  "latestWriteWins": true,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "contrast": [
+    {
+      "theme": "light",
+      "select": 15.319329810208863,
+      "primary": 4.518365338281762,
+      "colors": {
+        "selectText": "rgb(23, 32, 51)",
+        "selectBackground": "rgb(247, 248, 251)",
+        "buttonText": "rgb(255, 255, 255)",
+        "buttonBackground": "rgb(220, 49, 95)"
+      }
+    },
+    {
+      "theme": "dark",
+      "select": 14.426422283605723,
+      "primary": 6.191624435707514,
+      "colors": {
+        "selectText": "rgb(244, 245, 248)",
+        "selectBackground": "rgb(32, 35, 42)",
+        "buttonText": "rgb(23, 32, 51)",
+        "buttonBackground": "rgb(255, 111, 154)"
+      }
+    }
+  ]
+}

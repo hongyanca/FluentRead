@@ -6,15 +6,29 @@ import {
 } from '@/src/app/background/handlers/configHistory';
 import {
     CLEAR_TRANSLATION_CACHE_MESSAGE,
+    TRANSLATION_CACHE_CLEARED_MESSAGE,
     createTranslationCacheHandler,
+    createTranslationCacheInvalidationBroadcaster,
+    createTranslationCacheHandlers,
+    GET_TRANSLATION_CACHE_STATS_MESSAGE,
 } from '@/src/app/background/handlers/translationCache';
 import {createBackgroundMessageRouter} from '@/src/app/background/messageRouter';
 
 describe('background core message handlers', () => {
+    it('返回后台真实缓存用量，统计失败由 router 边界报告', async () => {
+        const stats = {bytes: 1024, entries: 2, maxBytes: 5242880, maxEntries: 2000};
+        const read = vi.fn().mockResolvedValueOnce(stats).mockRejectedValueOnce(new Error('stats unavailable'));
+        const router = createBackgroundMessageRouter(createTranslationCacheHandlers(async () => undefined, read, async () => undefined));
+        await expect(router.dispatch({type: GET_TRANSLATION_CACHE_STATS_MESSAGE}, undefined)).resolves.toEqual({
+            handled: true, response: {success: true, stats},
+        });
+        await expect(router.dispatch({type: GET_TRANSLATION_CACHE_STATS_MESSAGE}, undefined)).rejects.toThrow('stats unavailable');
+    });
     it('清理 broker 缓存成功后返回明确响应', async () => {
         const clear = vi.fn(async () => undefined);
+        const broadcast = vi.fn(async () => undefined);
         const router = createBackgroundMessageRouter([
-            createTranslationCacheHandler(clear),
+            createTranslationCacheHandler(clear, broadcast),
         ]);
 
         await expect(router.dispatch({type: CLEAR_TRANSLATION_CACHE_MESSAGE}, undefined)).resolves.toEqual({
@@ -22,15 +36,49 @@ describe('background core message handlers', () => {
             response: {success: true},
         });
         expect(clear).toHaveBeenCalledOnce();
+        expect(broadcast).toHaveBeenCalledOnce();
+        expect(clear.mock.invocationCallOrder[0]).toBeLessThan(broadcast.mock.invocationCallOrder[0]!);
     });
 
     it('缓存清理失败时把错误交给统一 router 边界', async () => {
         const failure = new Error('clear failed');
+        const broadcast = vi.fn(async () => undefined);
         const router = createBackgroundMessageRouter([
-            createTranslationCacheHandler(async () => { throw failure; }),
+            createTranslationCacheHandler(async () => { throw failure; }, broadcast),
         ]);
 
         await expect(router.dispatch({type: CLEAR_TRANSLATION_CACHE_MESSAGE}, undefined)).rejects.toBe(failure);
+        expect(broadcast).not.toHaveBeenCalled();
+    });
+
+    it('清理成功后向所有有效 tab 广播会话缓存失效', async () => {
+        const sendTabMessage = vi.fn()
+            .mockResolvedValueOnce(undefined)
+            .mockRejectedValueOnce(new Error('restricted page'));
+        const warn = vi.fn();
+        const broadcast = createTranslationCacheInvalidationBroadcaster({
+            queryTabs: async () => [{id: 3}, {}, {id: 9}],
+            sendTabMessage,
+            warn,
+        });
+
+        await expect(broadcast()).resolves.toBeUndefined();
+        expect(sendTabMessage).toHaveBeenCalledTimes(2);
+        expect(sendTabMessage).toHaveBeenNthCalledWith(1, 3, {type: TRANSLATION_CACHE_CLEARED_MESSAGE});
+        expect(sendTabMessage).toHaveBeenNthCalledWith(2, 9, {type: TRANSLATION_CACHE_CLEARED_MESSAGE});
+        expect(warn).not.toHaveBeenCalled();
+
+        const queryFailure = new Error('tabs unavailable');
+        const failedBroadcast = createTranslationCacheInvalidationBroadcaster({
+            queryTabs: async () => { throw queryFailure; },
+            sendTabMessage,
+            warn,
+        });
+        await expect(failedBroadcast()).resolves.toBeUndefined();
+        expect(warn).toHaveBeenCalledWith(
+            '[FluentRead] 翻译缓存清理完成广播失败',
+            queryFailure,
+        );
     });
 
     it.each([

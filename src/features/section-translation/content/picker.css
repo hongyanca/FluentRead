@@ -1,0 +1,287 @@
+/**
+ * @file src/features/section-translation/content/picker.css
+ * 文件职责：定义局部翻译选择模式在封闭 Shadow Root 内的视觉，包括稳定区域高亮框、自然语言范围标签和固定确认操作条。
+ * 主要内容：高亮框按“翻译/恢复原文/无可翻译内容”三种语气着色，选区几何立即贴合且只过渡颜色，标签显示动作、段落数和范围类型，操作条提供原文预览、扩大缩小、重新选择与显式确认，适配窄屏和键盘焦点；确认选择时播放短暂收束动画，触屏隐藏键盘提示，减少动态效果时关闭过渡。
+ * 模块边界：该样式只注入 picker.ts 创建的 Shadow Root，不影响宿主页面，也不决定区域判定或翻译行为；宿主元素的抗覆盖布局由 TypeScript 以内联 important 设置。
+ */
+:host {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.fr-section-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    border: 2px solid #ef4776;
+    border-radius: 6px;
+    background: rgba(239, 71, 118, .09);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .72), 0 8px 26px rgba(239, 71, 118, .16);
+    pointer-events: none;
+}
+
+.fr-section-box.is-visible {
+    display: block;
+}
+
+/* 位置与尺寸不做补间，避免嵌套区域切换时出现弹跳或高亮拖在内容后面。 */
+.fr-section-box.is-following {
+    transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.fr-section-box.tone-restore {
+    border-color: #3f6ad8;
+    background: rgba(63, 106, 216, .08);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .72), 0 8px 26px rgba(63, 106, 216, .16);
+}
+
+.fr-section-box.tone-muted {
+    border-style: dashed;
+    border-color: #8b93a3;
+    background: rgba(139, 147, 163, .08);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .6);
+}
+
+.fr-section-box.is-confirmed {
+    animation: fr-section-confirm 320ms ease-out forwards;
+}
+
+@keyframes fr-section-confirm {
+    0% { opacity: 1; background-color: rgba(239, 71, 118, .22); }
+    100% { opacity: 0; background-color: rgba(239, 71, 118, .04); }
+}
+
+.fr-section-label {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    max-width: calc(100vw - 16px);
+    align-items: center;
+    gap: 7px;
+    padding: 4px 9px;
+    overflow: hidden;
+    border-radius: 7px;
+    color: #fff;
+    background: #e93267;
+    box-shadow: 0 6px 18px rgba(24, 27, 38, .22);
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.35;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.fr-section-label.is-visible {
+    display: inline-flex;
+}
+
+.fr-section-label.tone-restore {
+    background: #3f6ad8;
+}
+
+.fr-section-label.tone-muted {
+    background: #5f6776;
+}
+
+.fr-section-label-action {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fr-section-label-meta {
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: .82;
+    text-overflow: ellipsis;
+}
+
+.fr-section-bar {
+    position: fixed;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    left: 50vw;
+    display: flex;
+    width: 560px;
+    max-width: calc(100vw - 24px);
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 16px;
+    color: #f4f5f9;
+    background: rgba(24, 27, 38, .96);
+    box-shadow: 0 14px 34px rgba(12, 14, 22, .28);
+    font-size: 12.5px;
+    line-height: 1.4;
+    pointer-events: auto;
+    transform: translateX(-50%);
+    transition: opacity 140ms ease;
+    color-scheme: dark;
+}
+
+.fr-section-bar-heading,
+.fr-section-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fr-section-bar-heading .fr-section-bar-instruction {
+    flex: 1;
+    color: #c8cdd8;
+}
+
+.fr-section-bar-preview {
+    overflow: hidden;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #e2e5ed;
+    background: rgba(255, 255, 255, .06);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    unicode-bidi: plaintext;
+}
+
+.fr-section-button {
+    min-height: 34px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 8px;
+    color: inherit;
+    background: rgba(255, 255, 255, .07);
+    font: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.fr-section-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, .14);
+}
+
+.fr-section-button:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+.fr-section-confirm {
+    margin-left: auto;
+    border-color: #ef4776;
+    color: #fff;
+    background: #d92c60;
+    font-weight: 700;
+}
+
+.fr-section-confirm:hover:not(:disabled) {
+    background: #ef4776;
+}
+
+.fr-section-confirm.tone-restore {
+    border-color: #507ce6;
+    background: #3f6ad8;
+}
+
+.fr-section-button:focus-visible {
+    outline: 2px solid #ff8fb0;
+    outline-offset: 2px;
+}
+
+.fr-section-bar.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.fr-section-bar-title {
+    flex: none;
+    color: #ff8fb0;
+    font-weight: 800;
+}
+
+.fr-section-bar-instruction {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fr-section-bar-keys {
+    flex: none;
+    color: #aeb4c2;
+    white-space: nowrap;
+}
+
+.fr-section-bar-close {
+    display: inline-flex;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    color: #f4f5f9;
+    background: rgba(255, 255, 255, .1);
+    font: inherit;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.fr-section-bar-close:hover {
+    background: rgba(255, 255, 255, .2);
+}
+
+.fr-section-bar-close:focus-visible {
+    outline: 2px solid #ff8fb0;
+    outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+    .fr-section-bar-keys {
+        display: none;
+    }
+}
+
+@media (max-width: 520px) {
+    .fr-section-bar-keys {
+        display: none;
+    }
+    .fr-section-bar-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .fr-section-confirm {
+        grid-column: 1 / -1;
+        margin-left: 0;
+    }
+    .fr-section-button {
+        padding-inline: 5px;
+        white-space: normal;
+    }
+    .fr-section-bar-instruction {
+        white-space: normal;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fr-section-box.is-following,
+    .fr-section-bar {
+        transition: none;
+    }
+
+    .fr-section-box.is-confirmed {
+        animation: none;
+        opacity: 0;
+    }
+}

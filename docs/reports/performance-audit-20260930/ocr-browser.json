@@ -1,0 +1,137 @@
+{
+  "source": "/Users/thinkstu/Desktop/copy/FluentRead-performance-size-audit-20260929/.output/chrome-mv3",
+  "cases": [
+    {
+      "label": "baseline",
+      "text": "流畅阅读 FluentRead 123\n",
+      "confidence": 91,
+      "repeatedText": "流畅阅读 FluentRead 123\n",
+      "logs": [
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: language_model_ngram_on"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: segsearch_max_char_wh_ratio"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: language_model_ngram_space_delimited_language"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: language_model_use_sigmoidal_certainty"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: language_model_ngram_nonmatch_score"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: classify_integer_matcher_multiplier"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: assume_fixed_pitch_char_segment"
+        },
+        {
+          "type": "warning",
+          "text": "Warning: Parameter not found: allow_blob_division"
+        }
+      ]
+    },
+    {
+      "label": "adapted",
+      "text": "流畅阅读 FluentRead 123\n",
+      "confidence": 91,
+      "repeatedText": "流畅阅读 FluentRead 123\n",
+      "logs": [
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: language_model_ngram_on"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: segsearch_max_char_wh_ratio"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: language_model_ngram_space_delimited_language"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: language_model_use_sigmoidal_certainty"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: language_model_ngram_nonmatch_score"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: classify_integer_matcher_multiplier"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: assume_fixed_pitch_char_segment"
+        },
+        {
+          "type": "debug",
+          "text": "Warning: Parameter not found: allow_blob_division"
+        }
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "evidence": "Real packaged Tesseract SIMD LSTM core, local chi_sim + eng models and a generated printed-text fixture; no handwriting or live-page accuracy claim.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 302,
+      "top": -940,
+      "width": 1100,
+      "height": 800
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 98310,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 98310,
+      "name": "ChatGPT"
+    }
+  },
+  "failureCase": {
+    "rejected": true,
+    "error": "initialization failed",
+    "logs": [
+      {
+        "type": "error",
+        "text": "Error opening data file ./eng.traineddata"
+      },
+      {
+        "type": "error",
+        "text": "Please make sure the TESSDATA_PREFIX environment variable is set to your \"tessdata\" directory."
+      },
+      {
+        "type": "error",
+        "text": "Failed loading language 'eng'"
+      },
+      {
+        "type": "error",
+        "text": "Tesseract couldn't load any languages!"
+      }
+    ]
+  },
+  "ok": true
+}

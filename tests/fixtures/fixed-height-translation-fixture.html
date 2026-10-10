@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- 固定高度模型卡片夹具：卡片内有多个可翻译文本节点，模拟 OpenRouter provider 页面。 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Fixed height translation fixture</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.45 Arial, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; background: #f4f6f8; color: #17202a; }
+    main { max-width: 880px; margin: 0 auto; }
+    h1 { margin: 0 0 18px; font-size: 26px; }
+    #model-scroll { height: 430px; overflow: auto; padding: 12px; border: 2px solid #9aa7b2; background: white; }
+    #model-list { margin: 0; padding: 0; list-style: none; }
+    .model-card { position: relative; display: flex; height: 176px; align-items: center; overflow: visible; border-bottom: 1px solid #c9d1d9; }
+    .model-card:last-child { border-bottom: 0; }
+    .model-inner { width: 100%; display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; }
+    .model-title { margin: 0; font-size: 19px; }
+    .model-description { margin: 0; color: #425466; }
+    .model-meta { margin: 0; color: #687684; font-size: 13px; }
+    .model-description, .model-meta { overflow-wrap: anywhere; }
+    .line-clamp-2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+    #outside-neighbor { margin: 18px 0 0; padding: 12px; background: #fff7df; }
+    .host-style-sentinel { outline: 3px solid #d97706; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="fixture-title" translate="no">Browse models provided by MiniMax</h1>
+    <div id="model-scroll" aria-label="Model results scroll container">
+      <ul id="model-list">
+        <li id="card-a" class="model-card relative flex h-44 items-center">
+          <article class="model-inner">
+            <h2 class="model-title">MiniMax H3 Max</h2>
+            <div class="line-clamp-2"><p class="model-description">A fast video generation model designed for controlled first frame and last frame keyframes, with additional support for image guided generation and precise timing.</p></div>
+            <p class="model-meta">Supports text to video and image to video generation.</p>
+          </article>
+        </li>
+        <li id="card-b" class="model-card relative flex h-44 items-center">
+          <article class="model-inner">
+            <h2 class="model-title">MiniMax M2.5</h2>
+            <div class="line-clamp-2"><p class="model-description">A general model for coding, reasoning, and long context tasks with reliable output, careful instruction following, and stable multi step responses.</p></div>
+            <p class="model-meta">Context window: 196k tokens. Provider: MiniMax.</p>
+          </article>
+        </li>
+        <li id="card-c" class="model-card relative flex h-44 items-center">
+          <article class="model-inner">
+            <h2 class="model-title">MiniMax Voice</h2>
+            <div class="line-clamp-2"><p class="model-description">A speech model that turns written prompts into expressive audio with stable pacing, clear pronunciation, and controllable speaking style.</p></div>
+            <p class="model-meta">Modalities: text and audio. Pricing is listed per million tokens.</p>
+          </article>
+        </li>
+      </ul>
+    </div>
+    <p id="outside-neighbor" translate="no">This page keeps a separate neighboring paragraph outside the model result list.</p>
+  </main>
+</body>
+</html>

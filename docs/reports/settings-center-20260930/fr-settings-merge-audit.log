@@ -1,0 +1,15 @@
+
+> FluentRead-流畅阅读@0.0.35 test:audit /Users/thinkstu/Desktop/copy/FluentRead-settings-center-hierarchy-20260930
+> node scripts/testing/audit-test-suite.mjs
+
+{
+  "status": "ok",
+  "groups": {
+    "architecture": 29,
+    "unit": 268,
+    "functional": 80,
+    "regression": 31
+  },
+  "files": 408,
+  "cases": 5255
+}

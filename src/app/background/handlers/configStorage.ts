@@ -2,7 +2,7 @@
  * @file src/app/background/handlers/configStorage.ts
  *
  * 文件职责：在后台唯一配置数据库边界为 popup、options、document 与 content 提供受 sender 授权的只读配置记录快照。
- * 主要内容：校验 configStorageRead 消息键、等待配置仓库完成迁移和初始化，仅向 content 投影无凭据主配置，并把其他记录限定给扩展自身页面。
+ * 主要内容：校验 configStorageRead 消息键、等待配置仓库初始化、限制记录读取权限；为 Popup 提供只包含引导状态的启动提示，避免预唤醒重复解密主配置。
  * 模块边界：本文件不直接打开 IndexedDB、不解密记录、不修改配置或广播变化；具体读取端口和扩展 URL 判断由 background composition root 注入。
  */
 
@@ -63,6 +63,23 @@ export function createConfigStorageReadHandler(
                 success: true,
                 value: trustedExtensionPage ? value : sanitizeConfigCredentials(value),
             };
+        },
+    };
+}
+
+/** 启动提示只供模块预取；Popup 仍通过配置 store 新读快照后决定实际页面。 */
+export function createPopupStartupHandler(dependencies: {
+    ready: Promise<unknown>;
+    getSetupCompleted(): boolean;
+    isExtensionUrl(url: string): boolean;
+}): BackgroundMessageHandler<ConfigPersistenceContext> {
+    return {
+        type: 'popupStartup',
+        async handle(_message, context) {
+            const senderUrl = typeof context.sender?.url === 'string' ? context.sender.url : '';
+            if (!dependencies.isExtensionUrl(senderUrl)) throw new Error('当前上下文无权读取菜单启动提示');
+            await dependencies.ready;
+            return {success: true, uiLanguageSetupCompleted: dependencies.getSetupCompleted()};
         },
     };
 }

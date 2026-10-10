@@ -1,0 +1,176 @@
+{
+  "ok": true,
+  "scope": "production Popup language selection, persistence, real Control hover and Alt+T full-page [1,0,1], Chinese same-language skipping, dynamic redetection, Chinese script / Spanish output discrimination and target cache isolation",
+  "evidenceBoundary": "The local HTML and loopback OpenAI-compatible server are deterministic fixtures. Their success does not prove any external service translation quality or availability.",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 58606,
+      "name": "UserNotificationCenter"
+    },
+    "frontmostAfter": {
+      "pid": 58606,
+      "name": "UserNotificationCenter"
+    }
+  },
+  "consoleErrors": 0,
+  "cases": [
+    {
+      "from": "en",
+      "to": "zh-Hans",
+      "mode": "hover",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "这个软件读取文档并翻译这个页面上的语言。",
+      "requestDelta": 1,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "en",
+      "to": "zh-Hant",
+      "mode": "hover",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "這個軟體讀取文件並翻譯這個頁面上的語言。",
+      "requestDelta": 1,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "zh-Hans",
+      "to": "zh-Hant",
+      "mode": "hover",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "這個軟體讀取文件並翻譯這個頁面上的語言。",
+      "requestDelta": 1,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "zh-Hant",
+      "to": "zh-Hans",
+      "mode": "hover",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "这个软件读取文档并翻译这个页面上的语言。",
+      "requestDelta": 1,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "en",
+      "to": "zh-Hans",
+      "mode": "full",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "这个软件读取文档并翻译这个页面上的语言。",
+      "requestDelta": 2,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "en",
+      "to": "zh-Hant",
+      "mode": "full",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "這個軟體讀取文件並翻譯這個頁面上的語言。",
+      "requestDelta": 2,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "zh-Hans",
+      "to": "zh-Hant",
+      "mode": "full",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "這個軟體讀取文件並翻譯這個頁面上的語言。",
+      "requestDelta": 2,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    },
+    {
+      "from": "zh-Hant",
+      "to": "zh-Hans",
+      "mode": "full",
+      "status": "passed",
+      "counts": [
+        1,
+        0,
+        1
+      ],
+      "translated": "这个软件读取文档并翻译这个页面上的语言。",
+      "requestDelta": 2,
+      "sourceRestored": true,
+      "urlStable": true,
+      "noNestedTranslations": true
+    }
+  ],
+  "sameLanguage": {
+    "comments": 15,
+    "hoverRequests": 0,
+    "sameLanguageWrappers": 0,
+    "foreignControlCounts": [
+      1,
+      0,
+      1
+    ],
+    "dynamicRedetection": true,
+    "restored": true
+  },
+  "requestCount": 18
+}

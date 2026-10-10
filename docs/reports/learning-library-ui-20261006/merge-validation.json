@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-06",
+  "integratedBase": "9c60e79db6259c95ecfd5c4509c41e2411210c18",
+  "sourceCommit": "53822f63018a4228b7a86bd32dcf4c2ba80ef71e",
+  "browser": {
+    "product": "production Chrome MV3 extension in isolated Edge",
+    "ok": true,
+    "cases": [
+      "merged settings preserve visible word and sentence previews in the shared layout",
+      "learning tabs explain destinations and the empty list enables saving without AI reference",
+      "settings and popup use one card presentation",
+      "translation is the first default tab and opening it does not request AI",
+      "grammar switch and streaming preserve the opening anchor",
+      "usage tab preserves the same anchor",
+      "study notes save while AI reference is off and do not populate saved words",
+      "saved key points appear in Study notes and view opens that tab directly",
+      "saved original opens Words and sentences separately from study notes",
+      "visible sentence and expression learning actions open the matching study page without requesting AI",
+      "type, translation search and mastery filters work and empty results have a reset action",
+      "management toggles persist after reopening and disabling the saving entry keeps the collection",
+      "review asks for recall before reveal and only an explicit rating updates the persisted schedule",
+      "return to translation preserves the anchor",
+      "completed grammar is reused without a second AI request",
+      "播放原文 start and stop keep position and height",
+      "播放译文 start and stop keep position and height",
+      "word pronunciation start and stop keep position and height",
+      "narrow viewport tab switch stays anchored and scrolls inside",
+      "close and reselect restore the translation tab and fresh geometry",
+      "resizing keeps the selected size when switching to grammar",
+      "dragging in grammar keeps the chosen position when returning to translation",
+      "collection actions and learning buttons fit the narrow viewport in all seven interface languages",
+      "English learning tabs and notes remain usable in a narrow viewport"
+    ],
+    "consoleErrors": [],
+    "launchMode": "macos-background-cdp",
+    "focusPolicy": "launchservices-no-foreground",
+    "secondaryDisplay": true,
+    "browserFrontmost": false,
+    "audio": {
+      "muted": true,
+      "listeningVerified": false,
+      "requests": 3
+    }
+  },
+  "targetedTests": {
+    "files": 17,
+    "passed": 444,
+    "failed": 4,
+    "baselineComparedTo": "9c60e79db6259c95ecfd5c4509c41e2411210c18",
+    "baselineFailures": [
+      "Input translation expects microsoft instead of the existing freeTranslation override",
+      "Legacy area-settings alias expects the old section instead of image translation",
+      "Three stale Google/Lingva runtime feedback source strings",
+      "Six stale video/service/account correction source strings"
+    ]
+  },
+  "validation": {
+    "compile": "passed",
+    "chromeBuild": "passed",
+    "firefoxBuild": "passed; no live Firefox UI verification",
+    "userscriptBuildAndVerifier": "passed",
+    "docsBuild": "passed",
+    "testAudit": "passed"
+  },
+  "limits": [
+    "Translation and AI responses use deterministic local fixtures.",
+    "Silent WAV verifies UI geometry only; no audible speech quality claim.",
+    "Learning destination messages and UI are real; tab creation uses a precreated background tab with native tabs.update(active:false).",
+    "Only targeted regressions ran."
+  ],
+  "screenshots": [
+    "merged-selection-settings.png",
+    "merged-selection-settings-390.png"
+  ]
+}

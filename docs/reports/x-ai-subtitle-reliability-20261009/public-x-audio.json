@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-09",
+  "upstream": {
+    "extractorUrl": "https://raw.githubusercontent.com/yt-dlp/yt-dlp/master/yt_dlp/extractor/twitter.py",
+    "extractorSha256": "1a11f1b902faa077ad673a853b4c29a76d43df91513380b967d605be1b18ddc3",
+    "licenseUrl": "https://raw.githubusercontent.com/yt-dlp/yt-dlp/master/LICENSE",
+    "license": "Unlicense (software only; media copyright separate)"
+  },
+  "reader": {
+    "source": "src/features/video-subtitle/content/hlsAudio.ts",
+    "commit": "259da93a04b99bdfd0885559796282638e339ed0",
+    "sha256": "8a4239b481fd09d1d87e706ab52a9a974f471c0d63e07288b80f1090d08430d0",
+    "scope": "Current production pure HLS and bounded-response/MP4-track helpers imported into Node; no browser AudioContext or extension bridge execution. PCM derived separately using local ffmpeg.",
+    "requestCredentials": "omit",
+    "redirectPolicy": "error",
+    "harnessOuterTimeoutMs": 45000,
+    "initialMasterLimitBytes": 1000000,
+    "hls": {
+      "totalTimeoutMs": 30000,
+      "headerTimeoutMs": 5000,
+      "headerLimitBytes": 1000000,
+      "totalLimitBytes": 67108864,
+      "segmentWorkers": 3,
+      "maxPlaylistDepth": 3,
+      "maxAttempts": 12,
+      "maxCandidatesPerMaster": 6,
+      "maxSegments": 256,
+      "maxDurationMs": 1200000
+    },
+    "mp4": {
+      "responseLimitBytes": 33554432,
+      "productionRuntimeTimeoutMs": 20000,
+      "productionRuntimeExecuted": false
+    },
+    "defaultSelectionChanged": false
+  },
+  "samples": [
+    {
+      "statusUrl": "https://twitter.com/CTVJLaidlaw/status/1600649710662213632/video/2",
+      "upstreamTestLines": "735-758",
+      "metadataStatus": 200,
+      "metadataVideoCount": 2,
+      "selectedVideoIndex": 1,
+      "metadataDurationMs": 102226,
+      "reads": {
+        "hls": {
+          "ok": true,
+          "bytes": 443041,
+          "audioTrack": true,
+          "elapsedMs": 18711,
+          "requests": 38,
+          "playlistDurationMs": 102232,
+          "audio": {
+            "codec": "aac-lc",
+            "sampleRate": 44100,
+            "channels": 1,
+            "durationMs": 102236.00899999999,
+            "bitrateBps": 32838
+          }
+        },
+        "mp4": {
+          "ok": true,
+          "bytes": 3668142,
+          "audioTrack": true,
+          "elapsedMs": 7735,
+          "requests": 1,
+          "metadataVariantBitrateBps": 632000,
+          "audio": {
+            "codec": "aac-lc",
+            "sampleRate": 44100,
+            "channels": 1,
+            "durationMs": 102236.00899999999,
+            "bitrateBps": 32837
+          }
+        }
+      },
+      "masterAudioRenditions": [
+        {
+          "bitrateBps": 32000,
+          "groupId": "audio-32000",
+          "name": "Audio",
+          "default": null,
+          "autoselect": "YES",
+          "language": null
+        },
+        {
+          "bitrateBps": 64000,
+          "groupId": "audio-64000",
+          "name": "Audio",
+          "default": null,
+          "autoselect": "YES",
+          "language": null
+        },
+        {
+          "bitrateBps": 128000,
+          "groupId": "audio-128000",
+          "name": "Audio",
+          "default": null,
+          "autoselect": "YES",
+          "language": null
+        }
+      ],
+      "masterSelectedBitrateBps": 32000,
+      "pcm": [
+        {
+          "sourceBitrateBps": 32000,
+          "startMs": 0,
+          "durationMs": 12000,
+          "samples": 192000,
+          "bytes": 768000,
+          "sha256": "b41150dd2da23e33c6699d5d6234cd12b676bd8966fcce0261fab6e44a2074c9",
+          "rms": 0.017009630899128457
+        },
+        {
+          "sourceBitrateBps": 128000,
+          "startMs": 0,
+          "durationMs": 12000,
+          "samples": 192000,
+          "bytes": 768000,
+          "sha256": "b5602afe0ef4864d7eaf0d1df34b7f75e55ae8fa80d005f01484e1be5d6bff63",
+          "rms": 0.012123699787049977
+        }
+      ],
+      "audioRenditionFiles": [
+        {
+          "bitrateBps": 32000,
+          "bytes": 443041,
+          "playlistDurationMs": 102232,
+          "audioTrack": true,
+          "channels": 1,
+          "sampleRate": 44100,
+          "actualBitrateBps": 32838,
+          "elapsedMs": null,
+          "requests": null
+        },
+        {
+          "bitrateBps": 64000,
+          "bytes": 862084,
+          "playlistDurationMs": 102232,
+          "audioTrack": true,
+          "channels": 2,
+          "sampleRate": 44100,
+          "actualBitrateBps": 65628,
+          "elapsedMs": null,
+          "requests": null
+        },
+        {
+          "bitrateBps": 128000,
+          "bytes": 1657576,
+          "playlistDurationMs": 102232,
+          "audioTrack": true,
+          "channels": 2,
+          "sampleRate": 44100,
+          "actualBitrateBps": 127876,
+          "elapsedMs": null,
+          "requests": null
+        }
+      ]
+    },
+    {
+      "statusUrl": "https://twitter.com/DavidToons_/status/1578353380363501568",
+      "upstreamTestLines": "658-675",
+      "metadataStatus": 200,
+      "metadataVideoCount": 1,
+      "selectedVideoIndex": 0,
+      "metadataDurationMs": 4458,
+      "reads": {
+        "hls": {
+          "ok": true,
+          "bytes": 73291,
+          "audioTrack": true,
+          "elapsedMs": 5070,
+          "requests": 5,
+          "playlistDurationMs": 4450,
+          "audio": {
+            "codec": "aac-lc",
+            "sampleRate": 48000,
+            "channels": 2,
+            "durationMs": 4458.667,
+            "bitrateBps": 128135
+          }
+        },
+        "mp4": {
+          "ok": true,
+          "bytes": 81974,
+          "audioTrack": true,
+          "elapsedMs": 773,
+          "requests": 1,
+          "metadataVariantBitrateBps": 432000,
+          "audio": {
+            "codec": "aac-lc",
+            "sampleRate": 48000,
+            "channels": 1,
+            "durationMs": 4458.667,
+            "bitrateBps": 32555
+          }
+        }
+      },
+      "pcm": [
+        {
+          "sourceBitrateBps": 128000,
+          "startMs": 0,
+          "durationMs": 4458,
+          "samples": 71328,
+          "bytes": 285312,
+          "sha256": "e2c41f8b0ad0a1d968c93a731b3450e00e30a24c2ce5440e499eb59ccf6d6c3e",
+          "rms": 0.1606984053829889
+        }
+      ]
+    }
+  ],
+  "controls": {
+    "pcmFormat": "float32-le mono 16000 Hz",
+    "gainNormalization": false,
+    "sameRangePcmPearsonAtZeroLag": 0.9880144317481919,
+    "manualTranscript": false,
+    "languageValidation": "Separate production-style first-decoder language-token logits observation in accuracy-experiment/public-x-wasm-summary.json; no manual listening confirmation.",
+    "limitations": [
+      "Both public status IDs came from upstream public tests, independently of user HAR. These samples do not reproduce the current user failure.",
+      "Single-run elapsed time includes public network/CDN conditions; it is not a speedup comparison or a browser end-to-end acceptance test.",
+      "32 kbps source is mono; 64/128 kbps sources are stereo. 128 kbps mono mixdown has lower RMS than 32 kbps, so any transcription difference is not attributable solely to bitrate.",
+      "No human reference transcript, WER/CER, native WebGPU result, or current user-site accuracy claim.",
+      "Elapsed time and request count were not captured for the separately forced 64/128 kbps reads; null means unrecorded.",
+      "Full source media, PCM, tweet bodies, and subtitle/transcription text remain outside the repository."
+    ]
+  }
+}

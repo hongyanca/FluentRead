@@ -45,7 +45,9 @@ describe('划词、圈选和图片翻译纵向切片回归', () => {
         expect(background).toContain("@/src/app/background/runtime");
         expect(messageRuntime).toContain("from './handlers/imageTranslation'");
         expect(messageRuntime).toContain("@/src/features/image-translation/background/offscreenAdapter");
-        expect(messageRuntime).toContain("@/src/features/area-translation/background/offscreenAdapter");
+        expect(messageRuntime).toContain("from './areaRuntime'");
+        expect(source('src/app/background/areaRuntime.ts')).toContain("@/src/features/area-translation/background/offscreenAdapter");
+        expect(source('src/app/background/areaRuntime.ts')).toContain('prepareAreaVisionRecognition(config, language, title,');
         expect(background).not.toContain("@/src/features/image-translation/background");
         expect(source('entrypoints/offscreen/main.ts')).toContain("@/src/app/offscreen/runtime");
         expect(source('src/app/offscreen/runtime.ts')).toContain("from './imageTranslation'");
@@ -57,7 +59,9 @@ describe('划词、圈选和图片翻译纵向切片回归', () => {
         expect(offscreenImageRuntime).not.toContain("from '@/src/features/area-translation/public'");
         expect(offscreenImageRuntime).not.toContain('services/config/store');
         expect(source('src/features/area-translation/background/offscreenAdapter.ts'))
-            .toContain("@/src/features/image-translation/public");
+            .toContain("from '../protocol'");
+        expect(source('src/features/area-translation/background/offscreenAdapter.ts'))
+            .not.toContain("@/src/features/image-translation/public");
         expect(source('src/features/area-translation/background/offscreenAdapter.ts'))
             .not.toContain("@/src/features/image-translation/services/");
 
@@ -69,10 +73,20 @@ describe('划词、圈选和图片翻译纵向切片回归', () => {
         expect(userscriptConfig).not.toContain("find: '@/entrypoints/utils/imageTranslation'");
     });
 
-    it('OCR 下载把接收端初始化故障与真实资源下载失败分开提示', () => {
+    it('后台取消 handler 与翻译 fallback 共享同一个请求注册表', () => {
+        const messageRuntime = source('src/app/background/messageRuntime.ts');
+        expect(messageRuntime.match(/const translationRequestRegistry = createTranslationRequestRegistry\(\);/gu))
+            .toHaveLength(1);
+        expect(messageRuntime).toContain('createTranslationCancelHandler(translationRequestRegistry)');
+        expect(messageRuntime).toContain('requestRegistry: translationRequestRegistry');
+        expect(messageRuntime.indexOf('const translationRequestRegistry = createTranslationRequestRegistry();'))
+            .toBeLessThan(messageRuntime.indexOf('createTranslationCancelHandler(translationRequestRegistry)'));
+    });
+
+    it('OCR 状态读取失败提供独立重试，包下载失败保留单包重试入口', () => {
         const settings = source('src/features/image-translation/ui/ImageOcrSettings.vue');
-        expect(settings).toContain('OCR 服务初始化失败，请重新打开设置页后重试。');
-        expect(settings).toContain("message.includes('Receiving end does not exist')");
-        expect(settings).toContain('请检查网络后重试');
+        expect(settings).toContain("t('ocr.packs.statusError')");
+        expect(settings).toContain('@click="refreshStatus"');
+        expect(settings).toContain("translateLegacy(states[pack.code]?.phase === 'error' ? '重试' : '下载')");
     });
 });

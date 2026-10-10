@@ -6,6 +6,7 @@
 // 3. 凭据不进入公开配置、宿主 DOM 或页面可访问的 Shadow DOM；
 // 4. options 真实消息/UI 路径始终使用加密持久凭据、完整明文导出，并能在扩展运行时重载后恢复。
 
+const {guardBrowserClose} = require('./testing/owned-browser-close.cjs');
 const fs = require('node:fs');
 const http = require('node:http');
 const os = require('node:os');
@@ -42,7 +43,7 @@ function parseArgs(argv) {
     background: true,
     timeout: 45_000,
     browserPath: null,
-    focusSafeHelper: process.env.FLUENTREAD_FOCUS_SAFE_HELPER || '',
+    focusSafeHelper: process.env.FLUENTREAD_FOCUS_SAFE_HELPER || path.join(__dirname, 'testing/focus-safe-browser.cjs'),
     artifactsDir: path.join(os.tmpdir(), 'fluentread-privacy-boundary-evidence'),
   };
 
@@ -234,7 +235,11 @@ async function startFixtureServer() {
     server.listen(0, '127.0.0.1', resolve);
   });
   const address = server.address();
-  if (!address || typeof address === 'string') throw new Error('无法确定本地 fixture 端口');
+  if (!address || typeof address === 'string') {
+    const error = new Error('无法确定本地 fixture 端口');
+    try {await closeServer(server);} catch (cleanupError) {process.stderr.write(`Fixture close failed: ${cleanupError.stack || cleanupError}\n`);}
+    throw error;
+  }
   return {
     server,
     url: `http://127.0.0.1:${address.port}/privacy-boundary.html`,
@@ -243,7 +248,8 @@ async function startFixtureServer() {
 
 function closeServer(server) {
   if (!server) return Promise.resolve();
-  return new Promise((resolve) => server.close(() => resolve()));
+  if (!server.listening) return Promise.resolve();
+  return new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
 }
 
 function storageObjectFromPage() {
@@ -552,6 +558,10 @@ async function waitForExtensionWorker(context, timeout) {
 }
 
 async function waitForOptionsUi(page, timeout) {
+  // 重载会保留上次打开的分类；备份与恢复断言需要回到数据分类。
+  const dataNavigation = page.locator('button[data-section="settings-data"]');
+  await dataNavigation.waitFor({ state: 'visible', timeout });
+  if (!await page.locator('#settings-data').isVisible()) await dataNavigation.click();
   await page.waitForSelector('#settings-data', { state: 'visible', timeout });
   if (await page.locator('[data-testid="persist-credentials-switch"]').count()) {
     throw new Error('设置页仍显示已废弃的凭据持久化开关');
@@ -609,40 +619,57 @@ async function persistCredentialViaExtensionMessage(optionsPage, marker, clientI
 }
 
 async function waitForOptionsRuntimeCredential(optionsPage, marker, timeout) {
+  // 设置页只渲染当前分类；凭据输入框位于翻译服务分类的默认服务配置中。
+  await optionsPage.locator('button[data-section="settings-services"]').click();
   await optionsPage.waitForFunction((credentialMarker) => {
-    const configuration = document.querySelector('[data-service-configuration-service="openai"]');
-    const tokenInput = configuration?.querySelector('input[placeholder="请输入API访问令牌"]');
-    return tokenInput instanceof HTMLInputElement && tokenInput.value === credentialMarker;
+    // API Key 以多 Key 列表呈现；任一密码输入框回显该凭据即表示运行时已水合。
+    return [...document.querySelectorAll('[data-service-configuration-service="openai"] input[type="password"]')]
+      .some(input => input instanceof HTMLInputElement && input.value === credentialMarker);
   }, marker, { timeout });
   return true;
 }
 
-async function exportConfigViaOptionsUi(optionsPage, marker, timeout, artifactsDir) {
-  // 真实设置页在对话框中展示完整明文 JSON；它是用户主动迁移边界，不会静默写入网页。
-  await optionsPage.getByRole('button', { name: '导出配置', exact: true }).click();
-  const transferDialog = optionsPage.getByTestId('config-transfer-dialog');
-  await transferDialog.waitFor({ state: 'visible', timeout });
-  await transferDialog.getByText('导出配置 JSON', { exact: true }).waitFor({ state: 'visible', timeout });
-  const exported = await transferDialog.getByLabel('配置 JSON').inputValue();
-  if (!exported.trim()) throw new Error('设置页导出的配置文件为空');
+async function exportCompleteBackupViaOptionsUi(optionsPage, marker, timeout, artifactsDir) {
+  // 真实设置页仅在用户明确点击后下载明文完整备份；默认选择不包含可能暴露浏览隐私的单词上下文。
+  await optionsPage.locator('button[data-section="settings-data"]').click();
+  await optionsPage.getByRole('button', { name: '导出备份', exact: true }).click();
+  const contextDialog = optionsPage.locator('.el-message-box');
+  await contextDialog.getByText('是否包含单词上下文？', { exact: true }).waitFor({ state: 'visible', timeout });
+  const screenshotPath = path.join(artifactsDir, 'privacy-backup-context-dialog.png');
+  await optionsPage.screenshot({ path: screenshotPath, fullPage: true });
+  const [download] = await Promise.all([
+    optionsPage.waitForEvent('download', { timeout }),
+    contextDialog.getByRole('button', { name: '不包含并导出', exact: true }).click(),
+  ]);
+  const suggestedFilename = download.suggestedFilename();
+  if (!/^fluentread-backup-\d{4}-\d{2}-\d{2}\.json$/u.test(suggestedFilename)) {
+    throw new Error(`设置页完整备份文件名异常：${suggestedFilename}`);
+  }
+  const downloadPath = path.join(artifactsDir, 'privacy-complete-backup.json');
+  await download.saveAs(downloadPath);
+  const exported = fs.readFileSync(downloadPath, 'utf8');
+  if (!exported.trim()) throw new Error('设置页导出的完整备份为空');
 
   let parsed;
   try {
     parsed = JSON.parse(exported);
   } catch {
-    throw new Error('设置页导出的配置不是合法 JSON');
+    throw new Error('设置页导出的完整备份不是合法 JSON');
   }
-  const screenshotPath = path.join(artifactsDir, 'privacy-export-dialog.png');
-  await optionsPage.screenshot({ path: screenshotPath, fullPage: true });
-  await transferDialog.getByRole('button', { name: '取消', exact: true }).click();
-  await transferDialog.waitFor({ state: 'hidden', timeout });
+  const config = parsed?.config;
   return {
     bytes: Buffer.byteLength(exported, 'utf8'),
-    service: parsed?.service,
-    legacyPolicyFieldAbsent: !Object.prototype.hasOwnProperty.call(parsed || {}, 'persistCredentials'),
+    format: parsed?.format,
+    version: parsed?.version,
+    configCredentialMode: parsed?.configCredentialMode,
+    service: config?.service,
+    legacyPolicyFieldAbsent: !Object.prototype.hasOwnProperty.call(config || {}, 'persistCredentials'),
     containsCredentialSentinel: exported.includes(marker),
-    containsCredentialFields: hasCredentialFields(parsed),
-    plaintextDialog: true,
+    containsCredentialFields: hasCredentialFields(config),
+    includesPrivateVocabularyContext: parsed?.vocabulary?.includesPrivateContext,
+    plaintextFile: true,
+    suggestedFilename,
+    download: downloadPath,
     screenshot: screenshotPath,
   };
 }
@@ -795,16 +822,17 @@ async function main() {
   const artifactsDir = path.resolve(args.artifactsDir);
   const browserPath = resolveBrowserExecutable(args.browserPath);
   const manifestEvidence = readManifest(extensionDir);
-  const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fluentread-privacy-boundary-'));
   const credentialSentinel = `${CREDENTIAL_SENTINEL_PREFIX}${randomUUID()}`;
   const credentialSentinelSha256 = createHash('sha256').update(credentialSentinel).digest('hex');
   const privacySurfaceClientId = `privacy-boundary-surface-setup-${randomUUID()}`;
   const credentialMessageClientId = `privacy-boundary-credential-lifecycle-${randomUUID()}`;
-  assertDedicatedTemporaryProfile(profileDir);
   fs.mkdirSync(artifactsDir, { recursive: true });
 
   const { chromium } = loadPlaywright(playwrightRoot);
-  const fixture = await startFixtureServer();
+  let fixture;
+  let primaryError;
+  let evidencePath;
+  const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fluentread-privacy-boundary-'));
   const browserArgs = [
     `--disable-extensions-except=${extensionDir}`,
     `--load-extension=${extensionDir}`,
@@ -821,7 +849,7 @@ async function main() {
     ok: false,
     extensionDir,
     browserPath,
-    fixtureUrl: fixture.url,
+    fixtureUrl: null,
     windowMode: args.background ? 'background-screen-off' : 'headed-isolated',
     launchMode: null,
     focusPolicy: null,
@@ -845,13 +873,18 @@ async function main() {
     }
   };
 
+  let launchAttempted = false;
   try {
+    assertDedicatedTemporaryProfile(profileDir);
+    fixture = await startFixtureServer();
+    evidence.fixtureUrl = fixture.url;
     if (args.background) {
       const {
         activateExtensionTabWithoutForeground,
         launchFocusSafePersistentContext,
         newPageWithoutForeground,
       } = loadFocusSafeBrowser(args.focusSafeHelper);
+      launchAttempted = true;
       browserSession = await launchFocusSafePersistentContext({
         chromium,
         profileDir,
@@ -862,6 +895,7 @@ async function main() {
         viewport: { width: 1280, height: 900 },
         timeout: args.timeout,
       });
+      guardBrowserClose(browserSession, profileDir);
       context = browserSession.context;
       createPage = () => newPageWithoutForeground(context, args.timeout);
       activatePage = (targetPage) => activateExtensionTabWithoutForeground(context, targetPage, args.timeout);
@@ -872,6 +906,7 @@ async function main() {
         windowPlacement: browserSession.windowPlacement,
       };
     } else {
+      launchAttempted = true;
       context = await chromium.launchPersistentContext(profileDir, {
         executablePath: browserPath,
         headless: false,
@@ -935,7 +970,14 @@ async function main() {
     await page.waitForSelector('#fluent-read-page-styles', { state: 'attached', timeout: args.timeout });
     await page.waitForSelector('#fluent-read-floating-ball-container', { state: 'attached', timeout: args.timeout });
     await page.waitForSelector('#fluent-read-selection-translator-container', { state: 'attached', timeout: args.timeout });
+    if (await page.locator('#fluent-read-area-translator-container').count()) {
+      throw new Error('未触发圈选翻译时已注入圈选宿主');
+    }
+    await activatePage(page);
+    await page.locator('h1').click();
+    await page.keyboard.press('Shift+Z');
     await page.waitForSelector('#fluent-read-area-translator-container', { state: 'attached', timeout: args.timeout });
+    await page.keyboard.press('Escape');
     await page.hover('#privacy-image');
     await page.waitForSelector('#fluent-read-image-translation-root', { state: 'attached', timeout: args.timeout });
     await page.screenshot({ path: path.join(artifactsDir, 'privacy-boundary-before-events.png'), fullPage: true });
@@ -1007,20 +1049,28 @@ async function main() {
     );
     assertCredentialStorageState('设置页重载后', persistentAfterOptionsReload, persistentExpected);
 
-    const exportEvidence = await exportConfigViaOptionsUi(
+    const exportEvidence = await exportCompleteBackupViaOptionsUi(
       optionsPage,
       credentialSentinel,
       args.timeout,
       artifactsDir,
     );
     if (!exportEvidence.containsCredentialSentinel || !exportEvidence.containsCredentialFields) {
-      throw new Error(`设置页完整配置导出缺少凭据：${JSON.stringify(exportEvidence)}`);
+      throw new Error(`设置页完整备份缺少凭据：${JSON.stringify(exportEvidence)}`);
     }
     if (!exportEvidence.legacyPolicyFieldAbsent) {
-      throw new Error(`设置页导出仍包含已废弃的 persistCredentials 字段：${JSON.stringify(exportEvidence)}`);
+      throw new Error(`设置页完整备份仍包含已废弃的 persistCredentials 字段：${JSON.stringify(exportEvidence)}`);
+    }
+    if (exportEvidence.format !== 'fluentread-data-backup'
+      || exportEvidence.version !== 2
+      || exportEvidence.configCredentialMode !== 'exact-replace') {
+      throw new Error(`设置页未导出当前完整备份格式：${JSON.stringify(exportEvidence)}`);
+    }
+    if (exportEvidence.includesPrivateVocabularyContext !== false) {
+      throw new Error(`设置页默认导出泄露了单词上下文：${JSON.stringify(exportEvidence)}`);
     }
     if (exportEvidence.service !== 'openai') {
-      throw new Error(`设置页导出没有反映可信消息保存的公开配置：${JSON.stringify(exportEvidence)}`);
+      throw new Error(`设置页完整备份没有反映可信消息保存的公开配置：${JSON.stringify(exportEvidence)}`);
     }
     const persistentScreenshot = path.join(artifactsDir, 'credentials-persistent.png');
     await optionsPage.screenshot({ path: persistentScreenshot, fullPage: true });
@@ -1143,6 +1193,8 @@ async function main() {
       consoleErrors,
     };
   } catch (error) {
+    primaryError = error;
+    process.exitCode = 1;
     evidence = {
       ...evidence,
       error: redactEvidenceText(error instanceof Error ? error.message : String(error)),
@@ -1163,14 +1215,34 @@ async function main() {
       }).catch(() => {});
     }
   } finally {
-    if (browserSession) await browserSession.close().catch(() => {});
-    else if (context) await context.close().catch(() => {});
-    await closeServer(fixture.server).catch(() => {});
-    fs.rmSync(profileDir, { recursive: true, force: true });
-    evidence.isolation.temporaryProfileRemoved = !fs.existsSync(profileDir);
+    const cleanupErrors = [];
+    const cleanup = async action => {
+      try {await action();} catch (error) {cleanupErrors.push(error);}
+    };
+    let browserClosed = false;
+    await cleanup(async () => {
+      if ((browserSession || context)) {await (browserSession || context).close(); browserClosed = true;}
+    });
+    await cleanup(async () => {await closeServer(fixture?.server);});
+    await cleanup(() => {
+      if (browserClosed) fs.rmSync(profileDir, {recursive: true, force: true});
+      else if (!launchAttempted) {
+        // No browser launch was attempted; only remove an empty initial profile.
+        try {fs.rmdirSync(profileDir);} catch (error) {
+          if (!['ENOENT', 'ENOTEMPTY', 'EEXIST'].includes(error.code)) throw error;
+        }
+      }
+      evidence.isolation.temporaryProfileRemoved = !fs.existsSync(profileDir);
+    });
+    if (cleanupErrors.length) {
+      evidence.ok = false;
+      evidence.cleanupErrors = cleanupErrors.map(error => redactEvidenceText(error.stack || String(error)));
+    }
+    await cleanup(async () => {evidencePath = await writeEvidence(artifactsDir, evidence);});
+    for (const error of cleanupErrors) process.stderr.write(`Cleanup failed: ${redactEvidenceText(error.stack || error)}\n`);
+    if (cleanupErrors.length && !primaryError) throw cleanupErrors[0];
   }
 
-  const evidencePath = await writeEvidence(artifactsDir, evidence);
   const output = { ...evidence, evidencePath };
   process.stdout.write(`${JSON.stringify(output, null, 2)}\n`);
   if (!evidence.ok) process.exitCode = 1;

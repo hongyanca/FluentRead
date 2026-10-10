@@ -12,19 +12,25 @@ import {config} from '@/src/services/config/store';
 import {stripTranslationReasoning as contentPostHandler} from '@/src/core/translation/prompts';
 import {commonMsgTemplate} from '@/src/services/translation/templates';
 import {services} from '@/src/core/config/catalog';
+import {isCustomOpenAIProviderId} from '@/src/core/config/customOpenAI';
+import {parseCustomHeaders, mergeCustomHeaders} from '@/src/core/config/customHeaders';
 import {
   resolveOpenAICompatibleEndpoint,
   type ResolvedOpenAICompatibleEndpoint,
 } from './endpoints';
 import {LlmTransportError, normalizeAiSdkError} from './errors';
+import {createImageInputHttpError} from '@/src/platform/http/errors';
 import {runtimeFetch} from '@/src/platform/http/runtime';
 import {
   getTranslationProviderConfig,
+  getTranslationRequestScheduler,
   reportTranslationModelUsage,
+  getTranslationImageInput,
   type TranslationProviderRequestContext,
 } from '@/src/services/translation/requestSnapshot';
 import type {TranslationProviderConfigSnapshot} from '@/src/services/translation/types';
 import {normalizeOpenAICompatibleUsage} from '../usage';
+import {normalizeTranslationMaxRetries} from '@/src/core/config/scheduling';
 
 export const AI_SDK_REQUEST_TIMEOUT_MS = 40_000;
 export const AI_SDK_MAX_RETRIES = 2;
@@ -36,6 +42,7 @@ export interface AiSdkTranslationRequest extends TranslationProviderRequestConte
   summarySystemPrompt?: string;
   serviceOverride?: string;
   modelOverride?: string;
+  thinkingOverride?: boolean;
   targetLanguage?: string;
   requestTimeoutMs?: number;
   abortSignal?: AbortSignal;
@@ -189,7 +196,14 @@ function compatibilityFetch(
     const startedAt = Date.now();
     let response: Response;
     try {
-      response = await runtimeFetch(endpoint.exactEndpoint || input, init);
+      const schedulerContext = getTranslationRequestScheduler(request);
+      const fetchAttempt = () => runtimeFetch(endpoint.exactEndpoint || input, init);
+      response = schedulerContext
+        ? await schedulerContext.scheduler.scheduleAttempt(fetchAttempt, {
+            signal: init?.signal ?? undefined,
+            identity: {service: request.serviceOverride || schedulerContext.identity?.service, model: requestedModel},
+          })
+        : await fetchAttempt();
     } catch (error) {
       reportTranslationModelUsage(request, {
         startedAt,
@@ -210,6 +224,10 @@ function compatibilityFetch(
       outcome: response.status === 408 ? 'timeout' : response.ok ? 'success' : 'error',
       statusCode: response.status,
     });
+    if (!response.ok && getTranslationImageInput(request)) {
+      const error = await createImageInputHttpError(response);
+      if ((error as {imageInputUnsupported?: boolean}).imageInputUnsupported) throw error;
+    }
     return normalized.response;
   };
 }
@@ -257,6 +275,10 @@ async function translateSingle(
       {kind: 'bad-request', retryable: false},
     );
   }
+  const customHeaders = parseCustomHeaders(isCustomOpenAIProviderId(service) ? current.customHeaders?.[service] : undefined);
+  if (!customHeaders) throw new LlmTransportError('自定义请求头必须是有效的 JSON 对象，头名称和值必须符合 HTTP 格式。', {
+    kind: 'bad-request', retryable: false,
+  });
   const apiKey = current.token[service]?.trim() || '';
   const payload = parsePayload(commonMsgTemplate(
     origin,
@@ -267,6 +289,8 @@ async function translateSingle(
     request.targetLanguage,
     request.modelOverride,
     current,
+    request.thinkingOverride,
+    getTranslationImageInput(request),
   ));
 
   // 协议的 stream 标记由 SDK 管理。自定义请求体仍可替换 model/messages，并添加任意
@@ -278,7 +302,9 @@ async function translateSingle(
     apiKey: service === services.azureOpenai ? undefined : apiKey || undefined,
     headers: providerHeaders(service, apiKey),
     queryParams: endpoint.queryParams,
-    fetch: compatibilityFetch(endpoint, request, payload.model),
+    fetch: (input, init) => compatibilityFetch(endpoint, request, payload.model)(input, {
+      ...init, headers: mergeCustomHeaders(init?.headers, customHeaders),
+    }),
     transformRequestBody: () => requestBody,
   });
   const abortContext = createRequestAbortContext(
@@ -293,7 +319,9 @@ async function translateSingle(
       // 可避免 ModelMessage schema 提前拒绝 developer role 或 image_url 内容等有效的
       // OpenAI 扩展格式。
       prompt: 'FluentRead OpenAI-compatible request',
-      maxRetries: AI_SDK_MAX_RETRIES,
+      maxRetries: current.translationMaxRetries === undefined
+        ? AI_SDK_MAX_RETRIES
+        : normalizeTranslationMaxRetries(current.translationMaxRetries),
       abortSignal: abortContext.signal,
     });
     const text = contentPostHandler(result.text || '');
@@ -305,8 +333,8 @@ async function translateSingle(
     }
     return text;
   } catch (error) {
-    if (error instanceof LlmTransportError) throw error;
-    throw normalizeAiSdkError(service, error, apiKey, abortContext.abortedByCaller());
+    if (error instanceof LlmTransportError || (error as {imageInputUnsupported?: boolean})?.imageInputUnsupported) throw error;
+    throw normalizeAiSdkError(service, error, [apiKey, ...Object.values(customHeaders)], abortContext.abortedByCaller());
   } finally {
     abortContext.cleanup();
   }

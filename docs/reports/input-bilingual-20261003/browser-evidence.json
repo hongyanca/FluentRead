@@ -1,0 +1,642 @@
+{
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-input-translation-bilingual-20261003/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-input-translation-QYpSGw",
+  "evidence": "Production extension; real browser input; deterministic mock provider, no external provider certification",
+  "cases": [
+    {
+      "name": "output mode quick-close persistence and latest write wins; redundant service text removed",
+      "passed": true
+    },
+    {
+      "name": "interval edit and restore default",
+      "passed": true
+    },
+    {
+      "name": "default prompts can be loaded, edited, persisted and reset; whitespace uses default semantics",
+      "passed": true
+    },
+    {
+      "name": "independent AI config, responsive layout, preserved global config",
+      "passed": true
+    },
+    {
+      "name": "triple equal uses independent model and prompts, preserves original equals",
+      "passed": true
+    },
+    {
+      "name": "restore original and translate again",
+      "passed": true
+    },
+    {
+      "name": "slow triple does not translate",
+      "passed": true
+    },
+    {
+      "name": "editing while pending preserves new content",
+      "passed": true
+    },
+    {
+      "name": "blur without another edit still allows translation",
+      "passed": true
+    },
+    {
+      "name": "Escape cancels late writeback",
+      "passed": true
+    },
+    {
+      "name": "failure retains text and next trigger succeeds",
+      "passed": true
+    },
+    {
+      "name": "native rich editor translates via undoable native editing; undo restores bold formatting",
+      "passed": true
+    },
+    {
+      "name": "model-driven editor gets whole-content paste after selection sync, restore original",
+      "passed": true
+    },
+    {
+      "name": "plaintext-only editor supports triple trigger",
+      "passed": true
+    },
+    {
+      "name": "password and code editor excluded",
+      "passed": true
+    },
+    {
+      "name": "Space, dash and Control+Enter triggers",
+      "passed": true
+    },
+    {
+      "name": "interval change applies without page reload",
+      "passed": true
+    },
+    {
+      "name": "bilingual textarea preserves whitespace and paragraphs, restores and translates again",
+      "passed": true
+    },
+    {
+      "name": "bilingual late edit, Escape and failure preserve the original without trigger symbols",
+      "passed": true
+    },
+    {
+      "name": "bilingual rich text preserves original DOM, paragraphs, bold and link; trigger removed at starting caret",
+      "passed": true
+    },
+    {
+      "name": "bilingual model editor removes trigger through model and appends after selection sync",
+      "passed": true
+    },
+    {
+      "name": "single-line input keeps original and avoids flattened bilingual output",
+      "passed": true
+    },
+    {
+      "name": "translation first persists and prefixes translation to textarea and rich editor while keeping original text and formatting",
+      "passed": true
+    },
+    {
+      "name": "rich triple-space handles browser non-breaking trigger spaces without altering original formatting",
+      "passed": true
+    }
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 1121,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 3381,
+      "name": "提醒事项"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "quickClose": {
+    "field": "inputBoxTranslationOutputMode",
+    "reopened": "append",
+    "passed": true,
+    "interval": {
+      "value": 750,
+      "persistedAfterReload": true
+    }
+  },
+  "latestWriteWins": {
+    "field": "inputBoxTranslationOutputMode",
+    "finalValue": "append",
+    "passed": true
+  },
+  "initialConfig": {
+    "on": true,
+    "inputBoxTranslationTrigger": "triple_equal",
+    "inputBoxTranslationTarget": "en",
+    "inputBoxTranslationOutputMode": "replace",
+    "inputBoxTranslationInterval": 600,
+    "inputBoxTranslationService": "microsoft",
+    "inputBoxTranslationModel": "",
+    "inputBoxTranslationPrompt": "",
+    "inputBoxTranslationSystemPrompt": ""
+  },
+  "settingsLayout": {
+    "desktopCardHeight": 532.734375,
+    "promptEditorInitiallyClosed": true
+  },
+  "successTooltipVisibility": {
+    "opacity": "1",
+    "display": "block",
+    "visibility": "visible"
+  },
+  "modelRestoreCandidates": 1,
+  "modelEditorLog": [
+    {
+      "source": "beforeinput",
+      "start": 0,
+      "end": 0,
+      "length": 8,
+      "text": "="
+    },
+    {
+      "source": "beforeinput",
+      "start": 1,
+      "end": 1,
+      "length": 9,
+      "text": "="
+    },
+    {
+      "source": "paste",
+      "start": 0,
+      "end": 10,
+      "length": 10,
+      "text": "Let us meet tomorrow afternoon."
+    },
+    {
+      "source": "paste",
+      "start": 0,
+      "end": 31,
+      "length": 31,
+      "text": "模型编辑器原文。"
+    }
+  ],
+  "bilingualRich": {
+    "text": "中文原文。链接\n\n第二段\n\nLet us meet tomorrow afternoon.",
+    "html": "<p><b>中文原文。</b><a href=\"https://example.test/keep\">链接</a></p><p>第二段</p><p>Let us meet tomorrow afternoon.</p>",
+    "sameBold": true,
+    "sameLink": true,
+    "href": "https://example.test/keep"
+  },
+  "translationFirstRich": {
+    "text": "Let us meet tomorrow afternoon.\n原文保持格式链接",
+    "html": "<b>Let us meet tomorrow afternoon.</b><div><b>原文保持格式</b><a href=\"https://example.test/keep\">链接</a></div>",
+    "boldTexts": [
+      "Let us meet tomorrow afternoon.",
+      "原文保持格式"
+    ],
+    "links": [
+      {
+        "text": "链接",
+        "href": "https://example.test/keep"
+      }
+    ]
+  },
+  "runtimeRequests": [
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 明天下午见面。="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 明天下午见面。="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 这是原始消息"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 失焦后仍完成翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 取消这次翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 服务失败时保留我"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 服务失败时保留我=="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 这段格式需要保留。"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 模型编辑器原文。"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 你好"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 请保留原来的结尾-"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 请保留原来的结尾-"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 普通快捷键翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 间隔设置立即生效"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en:   明天下午见面。\n请确认时间。  "
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en:   明天下午见面。\n请确认时间。  "
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 继续编辑时不要追加"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 取消追加"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 失败保留原文"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 中文原文。链接\n\n第二段"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 模型编辑器原文。"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en:   明天下午见面。\n请确认时间。  "
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 原文保持格式链接"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "gpt-4.1-nano",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 空格回复"
+          }
+        ],
+        "stream": false
+      }
+    }
+  ],
+  "persistenceCases": [
+    {
+      "name": "interval edit and restore default",
+      "passed": true
+    },
+    {
+      "name": "independent AI config, responsive layout, preserved global config",
+      "passed": true
+    },
+    {
+      "name": "interval change applies without page reload",
+      "passed": true
+    }
+  ],
+  "completed": true
+}

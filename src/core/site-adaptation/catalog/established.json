@@ -1,0 +1,730 @@
+[
+  {
+    "id": "openrouter",
+    "name": "OpenRouter",
+    "allScopes": true,
+    "match": {
+      "hosts": [
+        "openrouter.ai"
+      ]
+    },
+    "priority": 380,
+    "mode": "augment",
+    "omit": [
+      "li a[href^=\"/\"][href*=\"/\"] > span.font-semibold",
+      "#model-title-row h1",
+      "#model-title-row h3[title=\"Model identifier for use in the API\"]"
+    ]
+  },
+  {
+    "id": "discord-server-rail",
+    "name": "Discord 服务器图标栏",
+    "allScopes": true,
+    "match": {
+      "hosts": [
+        "discord.com",
+        "canary.discord.com",
+        "ptb.discord.com"
+      ],
+      "paths": [
+        "/channels/*"
+      ]
+    },
+    "mode": "augment",
+    "exclude": [
+      "[data-list-id=\"guildsnav\"]",
+      "nav[aria-label=\"Servers sidebar\"]"
+    ]
+  },
+  {
+    "id": "bilibili",
+    "name": "哔哩哔哩",
+    "match": {
+      "hosts": [
+        "*.bilibili.com"
+      ]
+    },
+    "priority": 380,
+    "mode": "augment",
+    "exclude": [
+      "#commentapp",
+      "bili-comments",
+      "bili-comment-thread-renderer",
+      "bili-comment-renderer",
+      "bili-rich-text"
+    ]
+  },
+  {
+    "id": "github-code-lines",
+    "name": "GitHub 代码行",
+    "allScopes": true,
+    "match": {"hosts": ["github.com"]},
+    "priority": 600,
+    "mode": "augment",
+    "exclude": [".blob-code", ".js-file-line-container"],
+    "protect": [".blob-code", ".js-file-line-container"],
+    "watchIgnore": [".blob-code", ".js-file-line-container"]
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "match": {
+      "hosts": [
+        "github.com"
+      ]
+    },
+    "priority": 500,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          ".markdown-title"
+        ],
+        "key": "github-markdown-title",
+        "resolve": "closest",
+        "atomic": true
+      },
+      {
+        "css": [
+          "h1.gh-header-title .js-issue-title",
+          "[data-testid=\"issue-title\"]",
+          "[data-testid=\"pull-request-title\"]",
+          "[data-testid=\"issue-pr-title-link\"]",
+          "a[data-testid=\"issue-listitem-title-link\"]",
+          "[data-testid=\"listitem-title-link\"]"
+        ],
+        "key": "github-issue-or-pr-title",
+        "resolve": "closest",
+        "atomic": true
+      },
+      {
+        "css": [
+          ".markdown-body li",
+          ".markdown-body blockquote",
+          ".markdown-body figcaption",
+          ".markdown-body dt",
+          ".markdown-body dd",
+          ".markdown-body th",
+          ".markdown-body td",
+          ".markdown-body [data-testid^=\"tasklist-item-\"] [class*=\"TaskListItem-module__task-list-html__\"]"
+        ],
+        "key": "github-markdown-prose",
+        "resolve": "self",
+        "atomic": false
+      },
+      {
+        "css": [".markdown-body p:has(> br)"],
+        "key": "github-markdown-lines",
+        "resolve": "closest",
+        "splitOnBr": true
+      },
+      {
+        "css": [
+          ".markdown-body p",
+          ".markdown-body h1",
+          ".markdown-body h2",
+          ".markdown-body h3",
+          ".markdown-body h4",
+          ".markdown-body h5",
+          ".markdown-body h6",
+          ".markdown-body summary"
+        ],
+        "key": "github-markdown-prose",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "[itemprop=\"about\"]",
+          "[itemprop=\"description\"]",
+          "[data-testid=\"repository-description\"]",
+          ".repo-description p",
+          ".repos-list-description",
+          "p.f4.my-3"
+        ],
+        "key": "github-repository-description",
+        "resolve": "closest",
+        "atomic": true
+      }
+    ],
+    "protect": [
+      "[class*=\"PullsListItem-module__description__\"]",
+      "[data-testid=\"issue-labels\"]",
+      "span[class*=\"IssueLabel\"]",
+      "[data-testid=\"list-row-repo-name-and-number\"]",
+      "[data-testid=\"created-at\"]",
+      "[data-testid=\"issues-list-surface\"] [class*=\"Description-module__container\"]",
+      "[data-testid=\"issues-list-surface\"] [data-testid=\"issue-activity-timestamp\"]",
+      "[class*=\"IssueItem-module__defaultNumberDescription\"]",
+      "[class*=\"PinnedIssue-module__metadataContainer\"]",
+      "[class*=\"PinnedIssue-module__issueMetadata\"]",
+      "[class*=\"IssueBodyHeader-module__IssueBodyHeaderContainer\"]",
+      "[aria-live]",
+      "[role=\"status\"]",
+      "[role=\"alert\"]",
+      "[data-turbo-permanent]",
+      "[data-turbo-temporary]",
+      "relative-time",
+      "time-ago",
+      "local-time",
+      "[class*=\"ReposListItem-module__TopicsList\"]",
+      "[class*=\"ReposListItem-module__LabelsContainer\"]",
+      "[data-listview-item-visibility-label=\"true\"]"
+    ],
+    "exclude": [
+      "[class*=\"PullsListItem-module__description__\"]",
+      "dialog",
+      "[role=\"dialog\"]",
+      "[data-testid=\"search-modal\"]",
+      "[data-target=\"query-builder.queryBuilder\"]",
+      "[data-target=\"qbsearch-input.queryBuilder\"]",
+      ".js-command-palette-dialog",
+      "#command-palette-pjax-container",
+      "form[role=\"search\"]",
+      ".js-site-search-form",
+      "input[data-target=\"qbsearch-input.inputButton\"]",
+      "[data-testid=\"issue-labels\"]",
+      "span[class*=\"IssueLabel\"]",
+      "[data-testid=\"list-row-repo-name-and-number\"]",
+      "[data-testid=\"created-at\"]",
+      "[data-testid=\"issues-list-surface\"] [class*=\"Description-module__container\"]",
+      "[data-testid=\"issues-list-surface\"] [data-testid=\"issue-activity-timestamp\"]",
+      "[class*=\"IssueItem-module__defaultNumberDescription\"]",
+      "[class*=\"PinnedIssue-module__metadataContainer\"]",
+      "[class*=\"PinnedIssue-module__issueMetadata\"]",
+      "[class*=\"IssueBodyHeader-module__IssueBodyHeaderContainer\"]",
+      "[class*=\"ReposListItem-module__TopicsList\"]",
+      "[class*=\"ReposListItem-module__LabelsContainer\"]",
+      "[data-listview-item-visibility-label=\"true\"]"
+    ],
+    "watchIgnore": [
+      "[class*=\"PullsListItem-module__description__\"]",
+      "[data-testid=\"issue-labels\"]",
+      "span[class*=\"IssueLabel\"]",
+      "[data-testid=\"list-row-repo-name-and-number\"]",
+      "[data-testid=\"created-at\"]",
+      "[data-testid=\"issues-list-surface\"] [class*=\"Description-module__container\"]",
+      "[data-testid=\"issues-list-surface\"] [data-testid=\"issue-activity-timestamp\"]",
+      "[class*=\"IssueItem-module__defaultNumberDescription\"]",
+      "[class*=\"PinnedIssue-module__metadataContainer\"]",
+      "[class*=\"PinnedIssue-module__issueMetadata\"]",
+      "[class*=\"IssueBodyHeader-module__IssueBodyHeaderContainer\"]",
+      "dialog",
+      "[role=\"dialog\"]",
+      "form[role=\"search\"]",
+      "[aria-live]",
+      "[role=\"status\"]",
+      "[role=\"alert\"]",
+      "[data-turbo-permanent]",
+      "[data-turbo-temporary]",
+      "relative-time",
+      "time-ago",
+      "local-time",
+      "[class*=\"ReposListItem-module__TopicsList\"]",
+      "[class*=\"ReposListItem-module__LabelsContainer\"]",
+      "[data-listview-item-visibility-label=\"true\"]"
+    ],
+    "omit": [
+      "[class*=\"ReposListItem-module__TopicsList\"]",
+      "[class*=\"ReposListItem-module__LabelsContainer\"]",
+      "[data-listview-item-visibility-label=\"true\"]"
+    ]
+  },
+  {
+    "id": "x",
+    "name": "X / Twitter",
+    "match": {
+      "hosts": [
+        "*.x.com",
+        "*.twitter.com"
+      ]
+    },
+    "priority": 400,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          "[data-testid=\"tweetText\"]"
+        ],
+        "key": "x-post-text",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "[data-testid=\"UserDescription\"]",
+          "aside section > div > div > div > div.items-center.justify-between + div.line-clamp-4:not([role])"
+        ],
+        "key": "x-user-description",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "[data-testid=\"twitterArticleReadView\"] p"
+        ],
+        "key": "x-article-prose",
+        "resolve": "closest"
+      }
+    ],
+    "protect": [
+      "time",
+      "[role=\"progressbar\"]",
+      "[data-testid=\"app-bar-back\"]"
+    ],
+    "exclude": [
+      "[data-testid=\"tweetTextarea_0\"]",
+      "[data-testid=\"DMComposerTextInput\"]",
+      "[data-testid=\"User-Name\"]",
+      "[data-testid=\"UserName\"]"
+    ]
+  },
+  {
+    "id": "reddit",
+    "name": "Reddit",
+    "match": {
+      "hosts": [
+        "*.reddit.com",
+        "*.redd.it"
+      ]
+    },
+    "priority": 390,
+    "mode": "focus",
+    "content": [
+      {
+        "css": [
+          "shreddit-post [slot=\"title\"]",
+          "h1[id^=\"post-title-\"]"
+        ],
+        "key": "reddit-post-title",
+        "resolve": "closest",
+        "atomic": true
+      },
+      {
+        "css": [
+          "shreddit-post [slot=\"text-body\"] p",
+          "shreddit-post [slot=\"text-body\"] li",
+          "shreddit-post [slot=\"text-body\"] blockquote",
+          "shreddit-post [slot=\"text-body\"] h1",
+          "shreddit-post [slot=\"text-body\"] h2",
+          "shreddit-post [slot=\"text-body\"] h3",
+          "shreddit-post [slot=\"text-body\"] h4",
+          "shreddit-post [slot=\"text-body\"] h5",
+          "shreddit-post [slot=\"text-body\"] h6",
+          "[data-testid=\"post-content\"] p",
+          "[data-testid=\"post-content\"] li",
+          "[data-testid=\"post-content\"] blockquote",
+          "[data-click-id=\"text\"] p",
+          "[data-click-id=\"text\"] li",
+          "[data-click-id=\"body\"] p",
+          "[data-click-id=\"body\"] h1",
+          "[data-click-id=\"body\"] h2",
+          "[data-click-id=\"body\"] h3",
+          "[data-click-id=\"body\"] h4",
+          "[data-click-id=\"body\"] h5",
+          "[data-click-id=\"body\"] h6"
+        ],
+        "key": "reddit-post-prose",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "shreddit-comment [slot=\"comment\"] p",
+          "shreddit-comment [slot=\"comment\"] li",
+          "shreddit-comment [slot=\"comment\"] blockquote",
+          "shreddit-comment [id$=\"-comment-rtjson-content\"] p",
+          "[data-testid=\"comment\"] p",
+          "[data-testid=\"comment\"] li",
+          "[data-click-id=\"comment\"] p"
+        ],
+        "key": "reddit-comment-prose",
+        "resolve": "closest"
+      }
+    ],
+    "protect": [
+      "button",
+      "[role=\"button\"]",
+      "[role=\"menuitem\"]",
+      "faceplate-timeago",
+      "[data-testid=\"post_timestamp\"]",
+      "[data-testid=\"vote-arrows\"]"
+    ],
+    "exclude": [
+      "reddit-composer",
+      "[data-testid=\"comment-submission-form\"]"
+    ],
+    "watchIgnore": [
+      "button",
+      "[role=\"button\"]",
+      "[role=\"menuitem\"]",
+      "faceplate-timeago",
+      "[data-testid=\"post_timestamp\"]",
+      "[data-testid=\"vote-arrows\"]",
+      "shreddit-status",
+      "[aria-live]"
+    ]
+  },
+  {
+    "id": "hacker-news",
+    "name": "Hacker News",
+    "match": {
+      "hosts": [
+        "news.ycombinator.com"
+      ]
+    },
+    "priority": 380,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          ".titleline > a"
+        ],
+        "key": "hacker-news-story-title",
+        "resolve": "closest",
+        "atomic": true
+      },
+      {
+        "css": [
+          "span.commtext",
+          ".toptext"
+        ],
+        "key": "hacker-news-comment-prose",
+        "resolve": "closest"
+      }
+    ],
+    "protect": [
+      ".rank",
+      ".sitestr",
+      ".score",
+      ".hnuser",
+      ".age",
+      ".subtext",
+      ".pagetop"
+    ],
+    "watchIgnore": [
+      ".age",
+      ".score"
+    ]
+  },
+  {
+    "id": "youtube",
+    "name": "YouTube",
+    "match": {
+      "hosts": [
+        "*.youtube.com",
+        "youtu.be"
+      ]
+    },
+    "priority": 370,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          "ytd-watch-metadata h1 yt-formatted-string"
+        ],
+        "key": "youtube-video-title",
+        "resolve": "closest",
+        "atomic": true
+      },
+      {
+        "css": [
+          "#description-inline-expander yt-attributed-string",
+          "ytd-text-inline-expander yt-attributed-string"
+        ],
+        "key": "youtube-description",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "ytd-comment-view-model #content-text",
+          "ytd-comment-renderer #content-text"
+        ],
+        "key": "youtube-comment",
+        "resolve": "closest"
+      },
+      {
+        "css": [
+          "ytd-transcript-segment-renderer .segment-text"
+        ],
+        "key": "youtube-transcript-segment",
+        "resolve": "closest"
+      }
+    ],
+    "protect": [
+      "#owner-sub-count",
+      "#info span",
+      "yt-formatted-string#vote-count-middle"
+    ],
+    "exclude": [
+      "#movie_player",
+      "ytd-live-chat-frame",
+      "yt-live-chat-app",
+      "ytd-video-preview",
+      "input#search",
+      "ytd-comment-simplebox-renderer"
+    ]
+  },
+  {
+    "id": "gnu-manual",
+    "name": "GNU 手册",
+    "match": {
+      "hosts": [
+        "*.gnu.org"
+      ]
+    },
+    "priority": 360,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          ".section-level-extent > p",
+          ".chapter-level-extent > p",
+          ".subsection-level-extent > p"
+        ],
+        "key": "gnu-manual-prose",
+        "resolve": "closest"
+      }
+    ],
+    "exclude": [
+      ".nav-panel"
+    ]
+  },
+  {
+    "id": "learnopengl",
+    "name": "LearnOpenGL",
+    "match": {
+      "hosts": [
+        "*.learnopengl.com"
+      ]
+    },
+    "priority": 300,
+    "mode": "augment",
+    "exclude": [
+      "#nav"
+    ]
+  },
+  {
+    "id": "x-chat",
+    "name": "X Chat 消息页脚",
+    "match": {
+      "hosts": [
+        "chat.x.com"
+      ]
+    },
+    "priority": 410,
+    "mode": "augment",
+    "omit": [
+      "div.flex.items-center.ml-auto.shrink-0.gap-1"
+    ]
+  },
+  {
+    "id": "ubuntu-manpage",
+    "name": "Ubuntu 命令手册",
+    "match": {
+      "hosts": [
+        "manpages.ubuntu.com"
+      ],
+      "paths": [
+        "/manpages/*/man0*/*.html",
+        "/manpages/*/man1*/*.html",
+        "/manpages/*/man2*/*.html",
+        "/manpages/*/man3*/*.html",
+        "/manpages/*/man4*/*.html",
+        "/manpages/*/man5*/*.html",
+        "/manpages/*/man6*/*.html",
+        "/manpages/*/man7*/*.html",
+        "/manpages/*/man8*/*.html",
+        "/manpages/*/man9*/*.html"
+      ]
+    },
+    "priority": 360,
+    "mode": "augment",
+    "literalTokens": [
+      "#manpage-content section.Sh b",
+      "#manpage-content section.Sh i"
+    ],
+    "omit": [
+      "#main-content h1",
+      "#manpage-content > #synopsis + section.Sh"
+    ],
+    "watchIgnore": [
+      "#main-content h1",
+      "#manpage-content > #synopsis + section.Sh"
+    ],
+    "literalLabels": [
+      "#manpage-content > #description + section.Sh > p.Pp:has(+ .Bd-indent)"
+    ]
+  },
+  {
+    "id": "codeforces",
+    "name": "Codeforces",
+    "match": {
+      "hosts": [
+        "codeforces.com",
+        "www.codeforces.com"
+      ]
+    },
+    "priority": 380,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          "#sidebar .contest-state-phase",
+          "#sidebar .contest-state-phase ~ a"
+        ],
+        "key": "codeforces-contest-card-text",
+        "resolve": "closest",
+        "atomic": true
+      }
+    ],
+    "omit": [
+      ".countdown"
+    ],
+    "watchIgnore": [
+      ".countdown"
+    ]
+  },
+  {
+    "id": "linuxiac",
+    "name": "Linuxiac",
+    "match": {
+      "hosts": [
+        "linuxiac.com",
+        "www.linuxiac.com"
+      ]
+    },
+    "priority": 420,
+    "profile": "article",
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          "#main h1.page-title",
+          "#main .page-description > p",
+          "#main .ultp-block-title",
+          "#main .ultp-block-excerpt"
+        ],
+        "key": "linuxiac-headlines-and-leads",
+        "atomic": true
+      }
+    ],
+    "exclude": [
+      "#header",
+      ".ct-breadcrumbs",
+      ".entry-meta",
+      ".ultp-block-meta-element"
+    ]
+  },
+  {
+    "id": "phoronix",
+    "name": "Phoronix",
+    "match": {
+      "hosts": [
+        "phoronix.com",
+        "www.phoronix.com"
+      ]
+    },
+    "priority": 420,
+    "mode": "augment",
+    "content": [
+      {
+        "css": [
+          "#main article.full h1"
+        ],
+        "key": "phoronix-headline",
+        "atomic": true
+      },
+      {
+        "css": [
+          "#main article.full .content"
+        ],
+        "key": "phoronix-article-lines",
+        "atomic": true,
+        "splitOnBr": true
+      }
+    ],
+    "protect": [
+      "pre",
+      "code",
+      "kbd",
+      "samp",
+      "input",
+      "textarea",
+      "button",
+      "select"
+    ],
+    "exclude": [
+      "nav",
+      "#linklist",
+      "#litemenu"
+    ]
+  },
+  {
+    "id": "omgubuntu-disqus-comments",
+    "name": "OMG! Ubuntu Comments",
+    "match": {
+      "hosts": ["disqus.com"],
+      "paths": ["/embed/comments/"]
+    },
+    "priority": 430,
+    "mode": "focus",
+    "content": [
+      {
+        "css": [".post-message p", ".post-message li", ".post-message blockquote"],
+        "key": "disqus-comment-text",
+        "atomic": true
+      }
+    ],
+    "protect": ["pre", "code", "kbd", "input", "textarea", "button", "select"]
+  },
+  {
+    "id": "kaggle-notebook-markdown",
+    "name": "Kaggle Notebook",
+    "match": {
+      "hosts": ["www.kaggleusercontent.com"],
+      "paths": ["/kf/*/__results__.html"]
+    },
+    "priority": 430,
+    "mode": "focus",
+    "content": [
+      {
+        "css": [
+          ".text_cell_render h1", ".text_cell_render h2", ".text_cell_render h3",
+          ".text_cell_render h4", ".text_cell_render h5", ".text_cell_render h6",
+          ".text_cell_render p", ".text_cell_render li", ".text_cell_render blockquote",
+          ".text_cell_render th", ".text_cell_render td", ".text_cell_render figcaption"
+        ],
+        "key": "kaggle-markdown-prose",
+        "atomic": true
+      }
+    ],
+    "protect": ["pre", "code", "kbd", "samp", "input", "textarea", "button", "select"],
+    "exclude": [".code_cell", ".input_prompt", ".output_prompt", ".output"]
+  },
+  {
+    "id": "video-native-captions",
+    "name": "视频与会议原生字幕",
+    "allScopes": true,
+    "match": {
+      "hosts": [
+        "meet.google.com",
+        "teams.microsoft.com",
+        "teams.live.com",
+        "teams.cloud.microsoft",
+        "*.zoom.us",
+        "*.zoom.com",
+        "*.udemy.com",
+        "*.disneyplus.com"
+      ]
+    },
+    "priority": 385,
+    "mode": "augment",
+    "exclude": [
+      ".ygicle.VbkSUe",
+      "[data-caption-text]",
+      "[data-tid=\"closed-caption-text\"]",
+      ".live-transcription-subtitle__item",
+      "[data-purpose=\"captions-cue-text\"]",
+      ".dss-hls-subtitle-overlay",
+      ".hive-subtitle-renderer",
+      ".shaka-text-container"
+    ]
+  }
+]

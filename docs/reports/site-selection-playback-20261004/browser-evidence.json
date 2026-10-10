@@ -1,0 +1,245 @@
+{
+  "frames": [
+    {
+      "label": "zh-original-click",
+      "buttons": [
+        {
+          "label": "停止朗读原文",
+          "pressed": "true"
+        },
+        {
+          "label": "朗读译文",
+          "pressed": "false"
+        }
+      ],
+      "height": 530,
+      "note": "正在朗读原文，点击按钮可停止。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "speaking",
+      "step": "3",
+      "target": "original"
+    },
+    {
+      "label": "zh-original-native-end",
+      "buttons": [
+        {
+          "label": "朗读原文",
+          "pressed": "false"
+        },
+        {
+          "label": "朗读译文",
+          "pressed": "false"
+        }
+      ],
+      "height": 530,
+      "note": "点击按钮，收听原文或译文。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "idle",
+      "step": "3",
+      "target": null
+    },
+    {
+      "label": "zh-translation-native-start",
+      "buttons": [
+        {
+          "label": "朗读原文",
+          "pressed": "false"
+        },
+        {
+          "label": "停止朗读译文",
+          "pressed": "true"
+        }
+      ],
+      "height": 530,
+      "note": "正在朗读译文，点击按钮可停止。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "speaking",
+      "step": "4",
+      "target": "translation"
+    },
+    {
+      "label": "zh-manual-stop",
+      "buttons": [
+        {
+          "label": "朗读原文",
+          "pressed": "false"
+        },
+        {
+          "label": "朗读译文",
+          "pressed": "false"
+        }
+      ],
+      "height": 530,
+      "note": "点击按钮，收听原文或译文。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "idle",
+      "step": "4",
+      "target": null
+    },
+    {
+      "label": "zh-switch-original-to-translation",
+      "buttons": [
+        {
+          "label": "朗读原文",
+          "pressed": "false"
+        },
+        {
+          "label": "停止朗读译文",
+          "pressed": "true"
+        }
+      ],
+      "height": 530,
+      "note": "正在朗读译文，点击按钮可停止。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "speaking",
+      "step": "4",
+      "target": "translation"
+    },
+    {
+      "label": "zh-keyboard-read",
+      "buttons": [
+        {
+          "label": "停止朗读原文",
+          "pressed": "true"
+        },
+        {
+          "label": "朗读译文",
+          "pressed": "false"
+        }
+      ],
+      "height": 530,
+      "note": "正在朗读原文，点击按钮可停止。",
+      "overflow": 0,
+      "pageHeight": 4209,
+      "state": "speaking",
+      "step": "3",
+      "target": "original"
+    },
+    {
+      "label": "en-mobile-before-click",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Read translation",
+          "pressed": "false"
+        }
+      ],
+      "height": 542,
+      "note": "Click to listen to either language.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "idle",
+      "step": "0",
+      "target": null
+    },
+    {
+      "label": "en-mobile-translation-start",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Stop reading the translation",
+          "pressed": "true"
+        }
+      ],
+      "height": 542,
+      "note": "Reading the translation. Click again to stop.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "speaking",
+      "step": "4",
+      "target": "translation"
+    },
+    {
+      "label": "en-mobile-stopped",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Read translation",
+          "pressed": "false"
+        }
+      ],
+      "height": 542,
+      "note": "Click to listen to either language.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "idle",
+      "step": "4",
+      "target": null
+    },
+    {
+      "label": "en-auto-current",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Read translation",
+          "pressed": "false"
+        }
+      ],
+      "height": 542,
+      "note": "Click to listen to either language.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "idle",
+      "step": "9",
+      "target": null
+    },
+    {
+      "label": "en-auto-original-silent",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Read translation",
+          "pressed": "false"
+        }
+      ],
+      "height": 542,
+      "note": "Click to listen to either language.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "idle",
+      "step": "3",
+      "target": null
+    },
+    {
+      "label": "en-auto-translation-silent",
+      "buttons": [
+        {
+          "label": "Read original",
+          "pressed": "false"
+        },
+        {
+          "label": "Read translation",
+          "pressed": "false"
+        }
+      ],
+      "height": 542,
+      "note": "Click to listen to either language.",
+      "overflow": 0,
+      "pageHeight": 5588,
+      "state": "idle",
+      "step": "4",
+      "target": null
+    }
+  ],
+  "consoleWarningsAndErrors": []
+}

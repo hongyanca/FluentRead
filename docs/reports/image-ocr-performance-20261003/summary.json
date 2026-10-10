@@ -1,0 +1,83 @@
+{
+  "coldPreparationMs": {
+    "before": 2763.4,
+    "after": 4476.7,
+    "reductionPercent": -62.0
+  },
+  "cachedPreparationMs": {
+    "before": 287.6,
+    "after": 10.8,
+    "reductionPercent": 96.2
+  },
+  "duplicate": {
+    "before": 9081.3,
+    "after": 4989.5,
+    "reductionPercent": 45.1
+  },
+  "samples": [
+    {
+      "name": "english",
+      "beforeMedianMs": 242.5,
+      "afterMedianMs": 240.3,
+      "exactTextAndCoordinatesEqual": true
+    },
+    {
+      "name": "mixed",
+      "beforeMedianMs": 471.6,
+      "afterMedianMs": 470.9,
+      "exactTextAndCoordinatesEqual": true
+    },
+    {
+      "name": "vertical",
+      "beforeMedianMs": 485.2,
+      "afterMedianMs": 467,
+      "exactTextAndCoordinatesEqual": true
+    },
+    {
+      "name": "screenshot",
+      "beforeMedianMs": 4647.1,
+      "afterMedianMs": 4705.7,
+      "exactTextAndCoordinatesEqual": true
+    }
+  ],
+  "switches": [
+    {
+      "source": "en",
+      "before": 250.9,
+      "after": 216.5,
+      "equal": true
+    },
+    {
+      "source": "auto",
+      "before": 405.2,
+      "after": 352.1,
+      "equal": true
+    },
+    {
+      "source": "ja",
+      "before": 349.1,
+      "after": 301.2,
+      "equal": true
+    },
+    {
+      "source": "auto",
+      "before": 395.5,
+      "after": 356,
+      "equal": true
+    }
+  ],
+  "baseCommit": "d28e1b5a",
+  "scope": "real production Offscreen area OCR; generated printed fixtures and supplied local screenshot; translation excluded",
+  "firstDownloadTimingComparable": false,
+  "samplesAreAccuracyRegressionChecksNotAccuracyGuarantees": true,
+  "browser": "Microsoft Edge on macOS",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "backgroundVisible": true,
+  "browserFrontmost": false,
+  "profileRemoved": true,
+  "repeatedMeasurement": {
+    "duplicateBeforeMs": 9090.3,
+    "duplicateAfterMs": 4603.3
+  }
+}

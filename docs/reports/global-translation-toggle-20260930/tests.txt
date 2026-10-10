@@ -1,0 +1,32 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/translationAvailability.test.ts" "tests/translationBroker.test.ts" "tests/backgroundTranslationHandler.test.ts" "tests/documentTranslationApi.test.ts" "tests/settingsUiArchitecture.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/translationAvailability.test.ts tests/translationBroker.test.ts tests/backgroundTranslationHandler.test.ts tests/documentTranslationApi.test.ts tests/settingsUiArchitecture.test.ts
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930
+
+stderr | tests/translationBroker.test.ts
+[FluentRead] 配置读取或安全迁移失败，保留已读取的公开配置 Error: 配置存储运行时不可用
+    at Object.getItem (/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/src/platform/storage/configStorageRuntime.ts:36:29)
+    at initializeConfig (/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/src/services/config/store.ts:595:41)
+    at /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/src/services/config/store.ts:750:28
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at VitestExecutor.runModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:399:5)
+    at VitestExecutor.directRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:381:5)
+    at VitestExecutor.cachedRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:206:14)
+    at VitestExecutor.dependencyRequest (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:259:12)
+    at /Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/src/services/translation/templates.ts:5:31
+    at VitestExecutor.runModule (file:///Users/thinkstu/Desktop/copy/FluentRead/node_modules/.pnpm/vite-node@2.1.9_@types+node@22.10.7/node_modules/vite-node/dist/client.mjs:399:5)
+
+ ✓ tests/translationBroker.test.ts (144 tests) 1555ms
+ ✓ tests/settingsUiArchitecture.test.ts (33 tests) 96ms
+ ✓ tests/backgroundTranslationHandler.test.ts (47 tests) 14ms
+ ✓ tests/documentTranslationApi.test.ts (28 tests) 65ms
+ ✓ tests/translationAvailability.test.ts (8 tests) 113ms
+
+ Test Files  5 passed (5)
+      Tests  260 passed (260)
+   Start at  16:22:53
+   Duration  3.63s (transform 659ms, setup 0ms, collect 1.10s, tests 1.84s, environment 1ms, prepare 171ms)
+

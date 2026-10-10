@@ -1,0 +1,18 @@
+{
+  "success": false,
+  "url": "https://x.com/home",
+  "extensionDir": "/private/tmp/fluentread-x-ai-fixed-final-20261009/chrome-mv3",
+  "expiredMaster": false,
+  "hungMaster": false,
+  "metadataVariantsOnly": false,
+  "previewFailure": false,
+  "videoOnlyInit": "generated H.264",
+  "evidence": "Production extension; two real MSE videos; real HLS/MP4 recovery and PCM decode; simulated Base ASR and Microsoft translation",
+  "checks": [],
+  "errors": [],
+  "mediaRequests": [],
+  "timedMediaRequests": [],
+  "downloads": [],
+  "failure": "Error: 后台 Edge 未在 30000ms 内写入 DevToolsActivePort\n    at waitForDevToolsPort (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:300:9)\n    at async Object.launchFocusSafePersistentContext (/Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/testing/focus-safe-browser.cjs:471:18)\n    at async /Users/thinkstu/Desktop/copy/FluentRead-x-ai-subtitle-reliability-20261009/scripts/run-x-home-audio-recovery-test.cjs:47:13",
+  "retainedProfile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-NwZVHg"
+}

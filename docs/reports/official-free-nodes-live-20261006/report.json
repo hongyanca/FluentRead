@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/.output/chrome-mv3",
+  "profileDir": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-free-routing-InDQCs",
+  "evidenceBoundary": "Real enabled free providers on one synthetic English paragraph; the page is local, responses are live, and a single run does not prove general latency or availability.",
+  "screenshots": [
+    "/Users/thinkstu/Desktop/copy/FluentRead-official-free-nodes-20261006/docs/reports/official-free-nodes-live-20261006/live-translate-restore-retranslate.png"
+  ],
+  "pageErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 92773,
+      "name": "ChatGPT"
+    }
+  },
+  "liveProviders": [
+    {
+      "id": "alibabaFree",
+      "success": true,
+      "durationMs": 425
+    },
+    {
+      "id": "modernMtFree",
+      "success": true,
+      "durationMs": 1829
+    },
+    {
+      "id": "laraFree",
+      "success": true,
+      "durationMs": 1882
+    },
+    {
+      "id": "lingvanexFree",
+      "success": true,
+      "durationMs": 4564
+    }
+  ],
+  "counts": [
+    1,
+    0,
+    1
+  ],
+  "firstTranslationMs": 622,
+  "translation": "当第一个服务很慢时，该软件会通过快速备份来翻译这一段。"
+}

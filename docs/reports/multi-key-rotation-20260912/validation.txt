@@ -1,0 +1,112 @@
+multikey-integrated-all
+ Test Files  305 passed (305)
+      Tests  6143 passed (6143)
+   Duration  117.50s (transform 7.61s, setup 0ms, collect 50.59s, tests 118.45s, environment 56ms, prepare 21.16s)
+
+multikey-delivery-coverage
+ Test Files  248 passed (248)
+      Tests  5017 passed (5017)
+   Duration  85.32s (transform 5.75s, setup 0ms, collect 27.33s, tests 62.72s, environment 57ms, prepare 16.11s)
+All files          |     100 |      100 |     100 |     100 |                   
+
+multikey-delivery-build
+  ├─ .output/chrome-mv3/pdfjs/standard_fonts/LICENSE_LIBERATION                4.41 kB  
+  ├─ .output/chrome-mv3/third-party-notices/ai-sdk-adapters-Apache-2.0.txt     703 B    
+  ├─ .output/chrome-mv3/third-party-notices/deepseek-harness-MIT.txt           1.64 kB  
+  ├─ .output/chrome-mv3/third-party-notices/dsh-agent-memory-MIT.txt           1.55 kB  
+  └─ .output/chrome-mv3/third-party-notices/unicode-17.0.0.txt                 2 kB     
+Σ Total size: 55.41 MB                                                       
+✔ Finished in 66 s
+
+multikey-delivery-firefox
+  ├─ .output/firefox-mv2/pdfjs/standard_fonts/LICENSE_LIBERATION                4.41 kB  
+  ├─ .output/firefox-mv2/third-party-notices/ai-sdk-adapters-Apache-2.0.txt     703 B    
+  ├─ .output/firefox-mv2/third-party-notices/deepseek-harness-MIT.txt           1.64 kB  
+  ├─ .output/firefox-mv2/third-party-notices/dsh-agent-memory-MIT.txt           1.55 kB  
+  └─ .output/firefox-mv2/third-party-notices/unicode-17.0.0.txt                 2 kB     
+Σ Total size: 55.41 MB                                                        
+✔ Finished in 28.5 s
+
+multikey-delivery-userscript
+transforming...
+✓ 1867 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/userscript/fluent-read.user.js  3,847.41 kB │ gzip: 1,424.60 kB
+✓ built in 7.30s
+Verified .output/userscript/fluent-read.user.js (4,613,201 bytes)
+
+multikey-delivery-compile
+
+> FluentRead-流畅阅读@0.0.32 compile /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> vue-tsc --noEmit
+
+
+multikey-delivery-manifests
+
+> FluentRead-流畅阅读@0.0.32 verify:extension-manifests /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> node scripts/testing/verify-extension-manifests.mjs
+
+{
+  "status": "ok",
+  "chrome": {
+    "manifestVersion": 3,
+    "offscreenPermission": true,
+    "runtimeCapabilityMarker": "__FLUENTREAD_BROWSER_CAPABILITY_BUILD__:chrome:mv3__",
+    "artifacts": [
+      "chunks/offscreen-BaFMQZL9.js",
+      "offscreen.html"
+    ],
+    "ocrAssets": 4
+  },
+  "firefox": {
+    "manifestVersion": 2,
+    "offscreenPermission": false,
+    "runtimeCapabilityMarker": "__FLUENTREAD_BROWSER_CAPABILITY_BUILD__:firefox:mv2__",
+    "artifacts": [
+      "chunks/offscreen-BaFMQZL9.js",
+      "offscreen.html"
+    ],
+    "ocrAssets": 4,
+    "geckoId": "{3096bd53-3bda-4556-b076-ebf47442a5c1}",
+    "strictMinVersion": "140.0",
+    "dataCollectionPermissions": [
+      "websiteContent",
+      "authenticationInfo",
+      "personalCommunications"
+    ],
+    "archives": [],
+    "archiveOcrAssets": 0
+  }
+}
+
+multikey-delivery-docs
+
+> FluentRead-流畅阅读@0.0.32 docs:build /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> vitepress build docs
+
+
+  vitepress v1.6.3
+
+- building client + server bundles...
+✓ building client + server bundles...
+- rendering pages...
+✓ rendering pages...
+build complete in 2.58s.
+
+multikey-delivery-audit
+
+> FluentRead-流畅阅读@0.0.32 test:audit /Users/thinkstu/Desktop/copy/FluentRead-multi-key-20260912
+> node scripts/testing/audit-test-suite.mjs
+
+{
+  "status": "ok",
+  "groups": {
+    "architecture": 28,
+    "unit": 192,
+    "functional": 65,
+    "regression": 20
+  },
+  "files": 305,
+  "cases": 4062
+}

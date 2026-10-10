@@ -1,0 +1,184 @@
+{
+  "scope": "Exact production options + Transformers.js prompt-only capacity contract; existing fixed Tiny/Base config snapshots; no model pipeline/session, tensor encoding, ASR, browser, or media",
+  "libraryVersion": "3.8.1",
+  "sourceSha256": {
+    "src/features/video-subtitle/offscreen/transcriptionOptions.ts": "1c79e3331428ff9cc18f4b877bf063958a88dc95bb0846bd04afd0bcbd22bc8d",
+    "src/features/video-subtitle/offscreen/transcription.worker.ts": "44a9724bc0d3014c0b507967f0b48dcda557304d2612a22c03dd6d3b9faf527a",
+    "tests/videoAiWorker.test.ts": "32d0d1ca0aac96f8ccd5063dd68534e1a836b4987f39c7921ac4a5525e528ea6"
+  },
+  "upstreamModelImplementationSha256": "6ba3e066c05b5a4ae35281b0cafff0504e13a6b18d7e2e3799eb9f243a610108",
+  "modelConfigs": [
+    {
+      "model": "tiny",
+      "maxTargetPositions": 448,
+      "configSha256": "46aeea0a406afbeb563fc8e59ca10609203df4299af6a83f73752fef369efd2d",
+      "generationConfigSha256": "f5c67e5a4f7102f8cb4d058bc95da276bbc19eeec997267c3bb0f25ef68facd1"
+    },
+    {
+      "model": "base",
+      "maxTargetPositions": 448,
+      "configSha256": "f4d0608f7d918166da7edb3e188de5ef1bfe70d9802e785d271fd88111e9cf4b",
+      "generationConfigSha256": "61070cf8de25b1e9256e8e102ded49d8d24a8369ed36ef84fdf21549e68125a0"
+    }
+  ],
+  "languages": [
+    "en",
+    "zh",
+    "ja",
+    "ko",
+    "th",
+    "hi",
+    "ar",
+    "es"
+  ],
+  "checks": [
+    {
+      "model": "tiny",
+      "language": "en",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "zh",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "ja",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "ko",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "th",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "hi",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "ar",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "tiny",
+      "language": "es",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "en",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "zh",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "ja",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "ko",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "th",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "hi",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "ar",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    },
+    {
+      "model": "base",
+      "language": "es",
+      "promptTokens": 3,
+      "maxNewTokens": 440,
+      "totalSequenceUpperBound": 443,
+      "sparePositions": 5
+    }
+  ],
+  "limits": {
+    "maxNewTokens": 440,
+    "currentPromptTokens": 3,
+    "decoderContext": 448,
+    "totalSequenceUpperBound": 443,
+    "sparePositions": 5
+  },
+  "validation": {
+    "checks": 16,
+    "allPassed": true,
+    "networkAttempts": 0,
+    "modelInitializations": 0,
+    "newInferences": 0,
+    "browserLaunched": false
+  },
+  "boundary": [
+    "Production currently supplies no prompt_ids or custom decoder_input_ids; adding either requires recalculating the remaining decoder capacity.",
+    "440 is a capacity ceiling, not a minimum generation length; EOS may finish earlier.",
+    "This checks capacity and options only; it does not measure transcript quality, decoder timeouts, or slow-device behavior."
+  ]
+}

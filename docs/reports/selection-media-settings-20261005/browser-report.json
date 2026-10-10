@@ -1,0 +1,407 @@
+{
+  "success": true,
+  "suite": "selection-image-video-settings",
+  "cases": [
+    "selection.preview.modes-and-sentences",
+    "selection.enable-divider",
+    "ai.preview.all-actions",
+    "ai.hidden-default-falls-back",
+    "learning-center-navigation",
+    "context.conditional-limit",
+    "instructions.visible-and-persisted",
+    "image.original-translation-preview",
+    "image.manga-independent-switches",
+    "image.resources-and-area-visible",
+    "video.display-modes",
+    "video.all-skins",
+    "video.hide-feedback",
+    "video.position-and-size"
+  ],
+  "layouts": [
+    {
+      "section": "settings-selection",
+      "width": 1440,
+      "layouts": [
+        {
+          "preview": {
+            "left": 311,
+            "top": 198.390625,
+            "right": 818
+          },
+          "controls": {
+            "left": 842,
+            "top": 198.390625,
+            "right": 1349
+          }
+        },
+        {
+          "preview": {
+            "left": 311,
+            "top": 1153.859375,
+            "right": 818
+          },
+          "controls": {
+            "left": 842,
+            "top": 1153.859375,
+            "right": 1349
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-image-translation",
+      "width": 1440,
+      "layouts": [
+        {
+          "preview": {
+            "left": 311,
+            "top": 351.484375,
+            "right": 818
+          },
+          "controls": {
+            "left": 842,
+            "top": 351.484375,
+            "right": 1349
+          }
+        },
+        {
+          "preview": {
+            "left": 311,
+            "top": 864.7734375,
+            "right": 818
+          },
+          "controls": {
+            "left": 842,
+            "top": 864.7734375,
+            "right": 1349
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-video",
+      "width": 1440,
+      "layouts": [
+        {
+          "preview": {
+            "left": 311,
+            "top": 498.2265625,
+            "right": 818
+          },
+          "controls": {
+            "left": 842,
+            "top": 498.2265625,
+            "right": 1349
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-selection",
+      "width": 1024,
+      "layouts": [
+        {
+          "preview": {
+            "left": 243,
+            "top": 194.390625,
+            "right": 598
+          },
+          "controls": {
+            "left": 622,
+            "top": 194.390625,
+            "right": 977
+          }
+        },
+        {
+          "preview": {
+            "left": 243,
+            "top": 1179.921875,
+            "right": 598
+          },
+          "controls": {
+            "left": 622,
+            "top": 1179.921875,
+            "right": 977
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-image-translation",
+      "width": 1024,
+      "layouts": [
+        {
+          "preview": {
+            "left": 243,
+            "top": 347.484375,
+            "right": 598
+          },
+          "controls": {
+            "left": 622,
+            "top": 347.484375,
+            "right": 977
+          }
+        },
+        {
+          "preview": {
+            "left": 243,
+            "top": 860.7734375,
+            "right": 598
+          },
+          "controls": {
+            "left": 622,
+            "top": 860.7734375,
+            "right": 977
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-video",
+      "width": 1024,
+      "layouts": [
+        {
+          "preview": {
+            "left": 243,
+            "top": 524.2890625,
+            "right": 598
+          },
+          "controls": {
+            "left": 622,
+            "top": 524.2890625,
+            "right": 977
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-selection",
+      "width": 820,
+      "layouts": [
+        {
+          "preview": {
+            "left": 239,
+            "top": 190.390625,
+            "right": 777
+          },
+          "controls": {
+            "left": 239,
+            "top": 516.8671875,
+            "right": 777
+          }
+        },
+        {
+          "preview": {
+            "left": 239,
+            "top": 1548.09375,
+            "right": 777
+          },
+          "controls": {
+            "left": 239,
+            "top": 1825.9375,
+            "right": 777
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-image-translation",
+      "width": 820,
+      "layouts": [
+        {
+          "preview": {
+            "left": 239,
+            "top": 343.484375,
+            "right": 777
+          },
+          "controls": {
+            "left": 239,
+            "top": 724.578125,
+            "right": 777
+          }
+        },
+        {
+          "preview": {
+            "left": 239,
+            "top": 998.40625,
+            "right": 777
+          },
+          "controls": {
+            "left": 239,
+            "top": 1436.1015625,
+            "right": 777
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-video",
+      "width": 820,
+      "layouts": [
+        {
+          "preview": {
+            "left": 239,
+            "top": 595.265625,
+            "right": 777
+          },
+          "controls": {
+            "left": 239,
+            "top": 985.515625,
+            "right": 777
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-selection",
+      "width": 390,
+      "layouts": [
+        {
+          "preview": {
+            "left": 27,
+            "top": 301.1875,
+            "right": 363
+          },
+          "controls": {
+            "left": 27,
+            "top": 619.6640625,
+            "right": 363
+          }
+        },
+        {
+          "preview": {
+            "left": 27,
+            "top": 1764.796875,
+            "right": 363
+          },
+          "controls": {
+            "left": 27,
+            "top": 2101.5859375,
+            "right": 363
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-image-translation",
+      "width": 390,
+      "layouts": [
+        {
+          "preview": {
+            "left": 27,
+            "top": 611.6796875,
+            "right": 363
+          },
+          "controls": {
+            "left": 27,
+            "top": 984.7734375,
+            "right": 363
+          }
+        },
+        {
+          "preview": {
+            "left": 27,
+            "top": 1282.390625,
+            "right": 363
+          },
+          "controls": {
+            "left": 27,
+            "top": 1712.0859375,
+            "right": 363
+          }
+        }
+      ],
+      "overflow": [
+        {
+          "tag": "SECTION",
+          "class": "manga-model-settings",
+          "width": 334,
+          "scroll": 338
+        }
+      ],
+      "bodyOverflow": false
+    },
+    {
+      "section": "settings-video",
+      "width": 390,
+      "layouts": [
+        {
+          "preview": {
+            "left": 27,
+            "top": 702.46875,
+            "right": 363
+          },
+          "controls": {
+            "left": 27,
+            "top": 1024.71875,
+            "right": 363
+          }
+        }
+      ],
+      "overflow": [],
+      "bodyOverflow": false
+    }
+  ],
+  "consoleErrors": [],
+  "persistenceCases": [
+    "instruction quick-close",
+    "manga prefetch quick-close",
+    "video appearance quick-close and latest value"
+  ],
+  "quickClose": true,
+  "latestWriteWins": true,
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "testedCommit": "b5ae4599aadc9edaea5d3c5da7a0e24efb225a76",
+  "build": "Chrome MV3 production",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "windowState": "normal",
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "uiLanguagePersistsAcrossSettingsPages": true,
+  "crossContextPopupSyncTested": false,
+  "screenshots": [
+    "selection-presentation.png",
+    "selection-ai-learning.png",
+    "selection-context-memory.png",
+    "selection-memory.png",
+    "selection-instructions.png",
+    "image-translation.png",
+    "manga-translation.png",
+    "video-subtitle-appearance.png",
+    "settings-selection-390.png",
+    "settings-image-translation-390.png",
+    "settings-video-390.png",
+    "settings-video-dark.png",
+    "settings-selection-english.png"
+  ],
+  "limitations": [
+    "Fixed preview examples do not invoke translation, OCR or AI providers",
+    "Firefox build only; no real Firefox UI run",
+    "Only affected settings were tested; no full regression"
+  ]
+}

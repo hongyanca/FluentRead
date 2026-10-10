@@ -16,7 +16,7 @@ import {
   buildVocabularyIdentityKey,
   createVocabularyLifecycleGuard,
   createVocabularyReviewSession,
-  normalizeEnglishWord,
+  normalizeVocabularyTerm,
   reconcileVocabularyReviewQueue,
   reconcileVocabularyReviewSession,
   sanitizeVocabularySourceUrl,
@@ -64,6 +64,41 @@ function alphabeticIndex(value: number): string {
 }
 
 describe('Anki export', () => {
+  it('round trips sentence identity, translation and independently saved explanations without changing review state', async () => {
+    const first = await repository.upsert(baseInput({term:'Good ideas deserve attention.', kind:'sentence', translation:'好想法值得关注。', note:'deserve 表示值得。'}), NOW);
+    expect(first).toMatchObject({kind:'sentence', note:'deserve 表示值得。', noteUpdatedAt:NOW});
+    const explained = await repository.updateNote(first.id, '值得留意的表达：deserve attention。', NOW + 1);
+    expect(explained.encounterCount).toBe(1);
+    expect(explained.nextReviewAt).toBe(first.nextReviewAt);
+    expect(explained.translations).toEqual(first.translations);
+    const exported = await repository.exportData();
+    await repository.clear();
+    await repository.importData(exported, NOW + 2);
+    expect(await repository.get(first.id)).toMatchObject({kind:'sentence', note:explained.note, noteUpdatedAt:NOW+1});
+    await repository.updateNote(first.id, '', NOW + 3);
+    await repository.importData(exported, NOW + 4);
+    expect((await repository.get(first.id))?.note).toBe('');
+    await repository.remove(first.id);
+    await expect(repository.updateNote(first.id, 'late', NOW + 5)).rejects.toThrow('收藏已不存在');
+    await expect(repository.updateNote(first.id, 'x'.repeat(2001))).rejects.toThrow('2000');
+    await expect(repository.updateNote(first.id, null as unknown as string)).rejects.toThrow('2000');
+  });
+  it('preserves explanations on repeated saves and safely merges legacy and duplicate imported sentences', async () => {
+    const first = await repository.upsert(baseInput({term:'A sentence worth keeping.', kind:'sentence', note:'初次解释'}), NOW);
+    const updated = await repository.upsert(baseInput({term:first.term, kind:'sentence', note:'第二次解释'}), NOW+1);
+    expect(updated.note).toBe('第二次解释');
+    expect((await repository.upsert(baseInput({term:first.term}), NOW+2)).note).toBe('第二次解释');
+    const exported = await repository.exportData();
+    exported.entries.push({...exported.entries[0], note:'最新解释', noteUpdatedAt:NOW+4, updatedAt:NOW+4});
+    delete exported.entries[1].kind;
+    await repository.importData(exported, NOW+5);
+    expect((await repository.get(first.id))?.note).toBe('最新解释');
+    const legacy = await repository.exportData();
+    delete legacy.entries[0].kind;
+    legacy.entries[0].updatedAt = NOW + 6;
+    await repository.importData(legacy, NOW+7);
+    expect((await repository.get(first.id))?.kind).toBe('sentence');
+  });
   it('declares column names as metadata instead of emitting a fake header card', () => {
     const output = buildAnkiTsv(
       ['Term', 'Meaning', 'Context', 'Source', 'Tags'],
@@ -169,7 +204,7 @@ describe('review and import presentation helpers', () => {
 
 describe('vocabulary identity and upsert', () => {
   it('normalizes English presentation and keeps target languages on one entry', async () => {
-    expect(normalizeEnglishWord('  Don’t—Panic  ')).toBe("don't-panic");
+    expect(normalizeVocabularyTerm('  Don’t—Panic  ')).toBe("don't-panic");
     expect(buildVocabularyIdentityKey('EN_us', ' COMMON ')).toBe(
       buildVocabularyIdentityKey('en-US', 'common'),
     );
@@ -198,17 +233,53 @@ describe('vocabulary identity and upsert', () => {
     await expect(repository.getByTerm('EN', 'COMMON')).resolves.toMatchObject({ id: first.id });
   });
 
-  it('rejects phrases, malformed words and terms longer than sixty-four characters', async () => {
-    await expect(repository.upsert(baseInput({ term: 'two words' }), NOW)).rejects.toMatchObject({
+  it('rejects empty or overlong source texts without creating truncated identities', async () => {
+    await expect(repository.upsert(baseInput({ term: '   ' }), NOW)).rejects.toMatchObject({
       code: 'invalid-input',
     });
-    await expect(repository.upsert(baseInput({ term: '-leading' }), NOW)).rejects.toMatchObject({
+    await expect(repository.upsert(baseInput({ term: '…!?！' }), NOW)).rejects.toMatchObject({
       code: 'invalid-input',
     });
-    await expect(repository.upsert(baseInput({ term: 'a'.repeat(65) }), NOW)).rejects.toMatchObject({
+    await expect(repository.upsert(baseInput({ term: 'a'.repeat(4097) }), NOW)).rejects.toMatchObject({
       code: 'invalid-input',
     });
     await expect(repository.list()).resolves.toEqual([]);
+  });
+
+  it('saves multilingual sentences and round-trips them with existing word review records', async () => {
+    const word = await repository.upsert(baseInput(), NOW);
+    await repository.review(word.id, 'good', NOW + 1);
+    const sentence = await repository.upsert(baseInput({term: 'Although it was late, she kept reading.'}), NOW + 2);
+    const repeated = await repository.upsert(baseInput({term: '  Although it was late,\n she kept reading.  '}), NOW + 3);
+    expect(repeated.id).toBe(sentence.id);
+    const japanese = await repository.upsert(baseInput({sourceLanguage: 'ja', term: 'この本をもう一度読みたいです。'}), NOW + 4);
+    await repository.upsert(baseInput({sourceLanguage: 'fr', term: 'Même tard, elle continuait à lire.'}), NOW + 5);
+    const exported = await repository.exportData({includePrivateContext: true, now: NOW + 6});
+    await repository.clear();
+    expect(await repository.importData(exported, NOW + 7)).toMatchObject({inserted: 4, skipped: 0, reviewLogsImported: 1});
+    expect(await repository.get(word.id)).toMatchObject({id: word.id, reviewCount: 1, masteryLevel: 1});
+    expect(await repository.getByTerm('JA', japanese.term)).toMatchObject({id: japanese.id, term: japanese.term});
+    expect(await repository.get(sentence.id)).toMatchObject({term: 'Although it was late, she kept reading.', encounterCount: 2});
+  });
+
+  it('retains the old English word identity and accepts bounded source texts without a schema migration', async () => {
+    expect(normalizeVocabularyTerm('  Two   Words  ')).toBe('two words');
+    expect(normalizeVocabularyTerm('ﬀ'.repeat(4096))).toBe('');
+    const full = await repository.upsert(baseInput({term: '句'.repeat(4096)}), NOW);
+    expect(full.term).toHaveLength(4096);
+    expect(full.schemaVersion).toBe(1);
+  });
+
+  it('preserves source-only favorites through export and import without inventing or erasing translations', async () => {
+    const sourceOnly = await repository.upsert(baseInput({term: '原文也值得收藏。', sourceLanguage: 'zh', translation: ''}), NOW);
+    expect(sourceOnly.translations).toEqual({});
+    const data = await repository.exportData({now: NOW + 1});
+    await repository.clear();
+    expect(await repository.importData(data, NOW + 2)).toMatchObject({inserted: 1, skipped: 0});
+    expect(await repository.get(sourceOnly.id)).toMatchObject({term: sourceOnly.term, translations: {}});
+    const explained = await repository.upsert(baseInput({term: sourceOnly.term, sourceLanguage: 'zh', translation: 'Useful source text.'}), NOW + 3);
+    const recaptured = await repository.upsert(baseInput({term: sourceOnly.term, sourceLanguage: 'zh', translation: ''}), NOW + 4);
+    expect(recaptured.translations).toEqual(explained.translations);
   });
 
   it('keeps learning progress when a repeated encounter refreshes snapshots', async () => {
@@ -689,7 +760,7 @@ describe('JSON export and import', () => {
         },
         {
           sourceLanguage: 'en',
-          term: 'not a word',
+          term: '…!?',
           translations: { 'zh-cn': { text: '无效', updatedAt: NOW } },
           createdAt: NOW,
           updatedAt: NOW,

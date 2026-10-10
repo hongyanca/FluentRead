@@ -1,0 +1,74 @@
+
+> FluentRead-流畅阅读@0.0.35 test /Users/thinkstu/Desktop/copy/FluentRead-input-translation-bilingual-20261003
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/inputDiffBaseline.tmp.test.ts" "-t" "显示界面皮肤和 Popup 栏目可见性"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/inputDiffBaseline.tmp.test.ts -t 显示界面皮肤和 Popup 栏目可见性
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-input-translation-bilingual-20261003
+
+ ❯ tests/inputDiffBaseline.tmp.test.ts (43 tests | 1 failed | 42 skipped) 17ms
+   × 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值 17ms
+     → expected [ Array(5) ] to deeply equal ArrayContaining{…}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/inputDiffBaseline.tmp.test.ts > 配置差异预览 > 显示界面皮肤和 Popup 栏目可见性，并安全处理异常栏目值
+AssertionError: expected [ Array(5) ] to deeply equal ArrayContaining{…}
+
+- Expected
++ Received
+
+- ArrayContaining [
++ Array [
+    Object {
+      "after": "简约风格",
+      "before": "默认风格",
+      "key": "interfaceSkin",
+      "label": "界面皮肤",
+    },
+    Object {
+      "after": "快捷功能栏关闭、当前网站栏目开启、底部信息栏关闭",
+      "before": "快捷功能栏开启、当前网站栏目开启、底部信息栏开启",
+      "key": "interfaceVisibility",
+      "label": "界面栏目",
+    },
+    Object {
+      "after": "快捷功能栏 → 翻译控制 → 当前网站栏目 → 底部信息栏",
+      "before": "翻译控制 → 当前网站栏目 → 快捷功能栏 → 底部信息栏",
+      "key": "popupModuleOrder",
+      "label": "菜单栏布局顺序",
+    },
+    Object {
+-     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
+-     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、圈选翻译：显示、视频翻译：显示、文档翻译：显示",
++     "after": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：隐藏、文档翻译：显示",
++     "before": "鼠标悬停翻译：显示、划词翻译：显示、译文显示：显示、图片翻译：显示、文档翻译：显示",
+      "key": "popupQuickFeatureVisibility",
+      "label": "快捷功能卡片",
+    },
+    Object {
+-     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译",
+-     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → 视频翻译 → 文档翻译",
++     "after": "文档翻译 → 鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video",
++     "before": "鼠标悬停翻译 → 划词翻译 → 译文显示 → 图片翻译 → video → 文档翻译",
+      "key": "popupQuickFeatureOrder",
+      "label": "快捷功能顺序",
+    },
+  ]
+
+ ❯ tests/inputDiffBaseline.tmp.test.ts:314:51
+    312|         });
+    313|
+    314|         expect(group(result, 'general')?.changes).toEqual(expect.array…
+       |                                                   ^
+    315|             {key: 'interfaceSkin', label: '界面皮肤', before: '默认风…
+    316|             {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 42 skipped (43)
+   Start at  10:29:26
+   Duration  395ms (transform 163ms, setup 0ms, collect 212ms, tests 17ms, environment 0ms, prepare 36ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,871 @@
+{
+  "date": "2026-10-09",
+  "purpose": "User-authorized post-pasteboard-recovery isolated-browser acceptance; fixture checks and actual production ASR/provider checks are distinct",
+  "builds": {
+    "fixed56": {
+      "sourceCommit": "56aab82ae82a47ab009f05500bb140fbf7caea22",
+      "directory": "/private/tmp/fluentread-x-ai-followup-final-build-20261009/chrome-mv3",
+      "sourceAuthority": "Root verified production-source build mapping; local git resolves this source commit",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "607478f85dd7d6870e40a3ca31579bc2262e976eaea8a4d40a4c1674acb3b03f",
+        "videoTranscriptionWorker.js": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+        "content-scripts/content.js": "5b1d4699f37722cd311ea5795345130a8c44fb73067f10f23a798c64121cfd5c",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      }
+    },
+    "integrated2ef": {
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "directory": "/private/tmp/fluentread-x-ai-merge-final-build-20261009/chrome-mv3",
+      "files": {
+        "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+        "background.js": "f3883d787c567f937e5d350200b7a4195f1020d2c8f46042ba5a9ead5101d7e4",
+        "videoTranscriptionWorker.js": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+        "content-scripts/content.js": "fa43cde96650eab98b36807fd3b1bb0991497b878278784d1f059735f004bcde",
+        "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+      }
+    }
+  },
+  "fixtureRuns": [
+    {
+      "name": "metadata-only-guarded",
+      "success": true,
+      "build": "fixed56",
+      "scope": "Production media/GraphQL/native decode and UI with controlled ASR/translation",
+      "checks": [
+        {
+          "name": "Unreadable MSE audio gives a concise optional retry hint",
+          "pass": true
+        },
+        {
+          "name": "Poster enrichment of the same blob video retains its own failure",
+          "pass": true
+        },
+        {
+          "name": "Switching to video B clears video A error and restores the generate action",
+          "pass": true
+        },
+        {
+          "name": "Home identifies and reloads B media among two resource groups",
+          "pass": true
+        },
+        {
+          "name": "Late video-only playlists do not trigger downloads of picture fragments",
+          "pass": true
+        },
+        {
+          "name": "Passive GraphQL variants choose only the current media lowest-bitrate MP4",
+          "pass": true
+        },
+        {
+          "name": "Home generates matching bilingual captions without opening a post",
+          "pass": true
+        },
+        {
+          "name": "Base empty transcription suggests speech and language checks",
+          "pass": true
+        },
+        {
+          "name": "Configured Base is used without another model download",
+          "pass": true
+        },
+        {
+          "name": "No unhandled browser errors",
+          "pass": true
+        },
+        {
+          "name": "Test browser stays in the background",
+          "pass": true
+        }
+      ],
+      "recoveryMs": 584,
+      "earlyPreviewAtMs": null,
+      "rpcCounts": {
+        "fluentReadGetVideoAiSubtitleCache": 4,
+        "fluentReadGetLocalVideoModelState": 3,
+        "fluentReadPrepareLocalVideoModel": 3,
+        "fluentReadCancelLocalVideoTranscription": 6,
+        "fluentReadTranscribeLocalVideoAudio": 2,
+        "translation-request": 1,
+        "fluentReadSetVideoAiSubtitleCache": 1
+      },
+      "mediaRequests": [
+        "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+      ],
+      "downloads": 0,
+      "errors": [],
+      "cleanup": {
+        "cleanupError": null,
+        "profileCleanupError": null,
+        "retainedProfile": null,
+        "completedWithoutError": true
+      },
+      "browser": {
+        "version": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/metadata-only-guarded/report.json"
+    },
+    {
+      "name": "hung-master",
+      "success": true,
+      "build": "fixed56",
+      "scope": "Production media/GraphQL/native decode and UI with controlled ASR/translation",
+      "checks": [
+        {
+          "name": "Unreadable MSE audio gives a concise optional retry hint",
+          "pass": true
+        },
+        {
+          "name": "Poster enrichment of the same blob video retains its own failure",
+          "pass": true
+        },
+        {
+          "name": "Switching to video B clears video A error and restores the generate action",
+          "pass": true
+        },
+        {
+          "name": "Home identifies and reloads B media among two resource groups",
+          "pass": true
+        },
+        {
+          "name": "Late video-only playlists do not trigger downloads of picture fragments",
+          "pass": true
+        },
+        {
+          "name": "Passive GraphQL variants choose only the current media lowest-bitrate MP4",
+          "pass": true
+        },
+        {
+          "name": "An unresponsive playlist has a bounded fallback to MP4",
+          "pass": true
+        },
+        {
+          "name": "Home generates matching bilingual captions without opening a post",
+          "pass": true
+        },
+        {
+          "name": "Base empty transcription suggests speech and language checks",
+          "pass": true
+        },
+        {
+          "name": "Configured Base is used without another model download",
+          "pass": true
+        },
+        {
+          "name": "No unhandled browser errors",
+          "pass": true
+        },
+        {
+          "name": "Test browser stays in the background",
+          "pass": true
+        }
+      ],
+      "recoveryMs": 5604,
+      "earlyPreviewAtMs": null,
+      "rpcCounts": {
+        "fluentReadGetVideoAiSubtitleCache": 4,
+        "fluentReadGetLocalVideoModelState": 3,
+        "fluentReadPrepareLocalVideoModel": 3,
+        "fluentReadCancelLocalVideoTranscription": 6,
+        "fluentReadTranscribeLocalVideoAudio": 2,
+        "translation-request": 1,
+        "fluentReadSetVideoAiSubtitleCache": 1
+      },
+      "mediaRequests": [
+        "https://video.twimg.com/ext_tw_video/111/pu/pl/hung-master.m3u8",
+        "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+      ],
+      "downloads": 0,
+      "errors": [],
+      "cleanup": {
+        "cleanupError": null,
+        "profileCleanupError": null,
+        "retainedProfile": null,
+        "completedWithoutError": true
+      },
+      "browser": {
+        "version": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/hung-master/report.json"
+    },
+    {
+      "name": "preview-failure",
+      "success": true,
+      "build": "fixed56",
+      "scope": "Production media/GraphQL/native decode and UI with controlled ASR/translation",
+      "checks": [
+        {
+          "name": "Unreadable MSE audio gives a concise optional retry hint",
+          "pass": true
+        },
+        {
+          "name": "Poster enrichment of the same blob video retains its own failure",
+          "pass": true
+        },
+        {
+          "name": "Switching to video B clears video A error and restores the generate action",
+          "pass": true
+        },
+        {
+          "name": "A confirmed first window appears before full recognition completes",
+          "pass": true
+        },
+        {
+          "name": "An in-progress preview cannot be exported as a complete subtitle file",
+          "pass": true
+        },
+        {
+          "name": "A later failure removes preview captions and keeps a retry action",
+          "pass": true
+        },
+        {
+          "name": "Failed partial recognition does not write a complete transcript cache",
+          "pass": true
+        },
+        {
+          "name": "No unhandled browser errors",
+          "pass": true
+        }
+      ],
+      "recoveryMs": null,
+      "earlyPreviewAtMs": 650,
+      "rpcCounts": {
+        "fluentReadGetVideoAiSubtitleCache": 4,
+        "fluentReadGetLocalVideoModelState": 2,
+        "fluentReadPrepareLocalVideoModel": 2,
+        "fluentReadCancelLocalVideoTranscription": 4,
+        "fluentReadTranscribeLocalVideoAudio": 2,
+        "translation-request": 1
+      },
+      "mediaRequests": [
+        "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+      ],
+      "downloads": 0,
+      "errors": [],
+      "cleanup": {
+        "cleanupError": null,
+        "profileCleanupError": null,
+        "retainedProfile": null,
+        "completedWithoutError": true
+      },
+      "browser": {
+        "version": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/preview-failure/report.json"
+    },
+    {
+      "name": "integrated-metadata-only",
+      "success": true,
+      "build": "integrated2ef",
+      "scope": "Production media/GraphQL/native decode and UI with controlled ASR/translation",
+      "checks": [
+        {
+          "name": "Unreadable MSE audio gives a concise optional retry hint",
+          "pass": true
+        },
+        {
+          "name": "Poster enrichment of the same blob video retains its own failure",
+          "pass": true
+        },
+        {
+          "name": "Switching to video B clears video A error and restores the generate action",
+          "pass": true
+        },
+        {
+          "name": "Home identifies and reloads B media among two resource groups",
+          "pass": true
+        },
+        {
+          "name": "Late video-only playlists do not trigger downloads of picture fragments",
+          "pass": true
+        },
+        {
+          "name": "Passive GraphQL variants choose only the current media lowest-bitrate MP4",
+          "pass": true
+        },
+        {
+          "name": "Home generates matching bilingual captions without opening a post",
+          "pass": true
+        },
+        {
+          "name": "Base empty transcription suggests speech and language checks",
+          "pass": true
+        },
+        {
+          "name": "Configured Base is used without another model download",
+          "pass": true
+        },
+        {
+          "name": "No unhandled browser errors",
+          "pass": true
+        },
+        {
+          "name": "Test browser stays in the background",
+          "pass": true
+        }
+      ],
+      "recoveryMs": 576,
+      "earlyPreviewAtMs": null,
+      "rpcCounts": {
+        "fluentReadGetVideoAiSubtitleCache": 5,
+        "fluentReadGetLocalVideoModelState": 3,
+        "fluentReadPrepareLocalVideoModel": 3,
+        "fluentReadCancelLocalVideoTranscription": 6,
+        "fluentReadTranscribeLocalVideoAudio": 2,
+        "translation-request": 1,
+        "fluentReadSetVideoAiSubtitleCache": 1
+      },
+      "mediaRequests": [
+        "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+      ],
+      "downloads": 0,
+      "errors": [],
+      "cleanup": {
+        "cleanupError": null,
+        "profileCleanupError": null,
+        "retainedProfile": null,
+        "completedWithoutError": true
+      },
+      "browser": {
+        "version": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/integrated-metadata-only/report.json"
+    }
+  ],
+  "incompleteAttempts": [
+    {
+      "name": "metadata-only",
+      "success": false,
+      "phase": "guarded cleanup",
+      "reason": "The old skill helper did not supply the repo transport-only guarded-close contract; overall false even though 11 product checks passed. Rerun with repo helper passed.",
+      "passedChecks": 11,
+      "totalChecks": 11,
+      "sourceCommit": "56aab82ae82a47ab009f05500bb140fbf7caea22",
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/metadata-only/report.json",
+      "cleanup": {
+        "sessionCleanupErrorPresent": true,
+        "profileCleanupErrorPresent": false,
+        "retainedProfileAtReportTime": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-gRhf1A",
+        "boundary": "Snapshot at original report completion; later ownership/recovery action is separately stated in reason."
+      },
+      "browser": {
+        "browserVersion": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "waitTimeoutMs": null
+    },
+    {
+      "name": "integrated-real-worker",
+      "success": false,
+      "phase": "30-second browser startup deadline",
+      "reason": "No product assertion ran. The same owned profile wrote its DevTools port later and was safely attached for the next attempt; this was not a product failure.",
+      "passedChecks": 0,
+      "totalChecks": 0,
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/integrated-real-worker/report.json",
+      "cleanup": {
+        "sessionCleanupErrorPresent": false,
+        "profileCleanupErrorPresent": false,
+        "retainedProfileAtReportTime": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-aLsLME",
+        "boundary": "Snapshot at original report completion; later ownership/recovery action is separately stated in reason."
+      },
+      "browser": {
+        "browserVersion": null,
+        "launchMode": null,
+        "focusPolicy": null,
+        "windowPlacement": null
+      },
+      "waitTimeoutMs": 30000
+    },
+    {
+      "name": "integrated-real-worker-resumed",
+      "success": false,
+      "phase": "model confirmation",
+      "reason": "The driver clicked generate but omitted the visible Base download-and-generate confirmation; no media request, PCM or actual ASR. Corrected normal-UI rerun passed.",
+      "passedChecks": 1,
+      "totalChecks": 1,
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/integrated-real-worker-resumed/report.json",
+      "cleanup": {
+        "sessionCleanupErrorPresent": false,
+        "profileCleanupErrorPresent": false,
+        "retainedProfileAtReportTime": null,
+        "boundary": "Snapshot at original report completion; later ownership/recovery action is separately stated in reason.",
+        "guardedCloseCompletedWithoutError": true
+      },
+      "browser": {
+        "browserVersion": "154.0.8037.98",
+        "launchMode": "macos-background-cdp",
+        "focusPolicy": "launchservices-no-foreground",
+        "windowPlacement": {
+          "mode": "background-visible-no-focus",
+          "visible": true,
+          "hidden": false,
+          "centered": true,
+          "windowState": "normal",
+          "bounds": {
+            "left": 212,
+            "top": -990,
+            "width": 1280,
+            "height": 900
+          },
+          "displayTarget": "secondary",
+          "source": "macos-nsscreen",
+          "screenIndex": 1,
+          "browserFrontmost": false,
+          "frontmostBefore": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          },
+          "frontmostAfter": {
+            "pid": 52700,
+            "name": "ChatGPT"
+          }
+        }
+      },
+      "waitTimeoutMs": 180000
+    }
+  ],
+  "actualProductionRun": {
+    "name": "integrated-real-worker-confirmed",
+    "success": true,
+    "build": "integrated2ef",
+    "checks": [
+      {
+        "name": "Natural-audio video starts with the generate action",
+        "pass": true
+      },
+      {
+        "name": "Home identifies and reloads B media among two resource groups",
+        "pass": true
+      },
+      {
+        "name": "Late video-only playlists do not trigger downloads of picture fragments",
+        "pass": true
+      },
+      {
+        "name": "Passive GraphQL variants choose only the current media lowest-bitrate MP4",
+        "pass": true
+      },
+      {
+        "name": "Home generates matching bilingual captions without opening a post",
+        "pass": true
+      },
+      {
+        "name": "The production PCM16 messages use Base and explicit English",
+        "pass": true
+      },
+      {
+        "name": "The actual production Worker produced successful timed output",
+        "pass": true
+      },
+      {
+        "name": "Complete capture publishes and caches the recognized transcript",
+        "pass": true
+      },
+      {
+        "name": "No public model download was needed",
+        "pass": true
+      },
+      {
+        "name": "Actual Worker captions and controlled translations render in the X player",
+        "pass": true
+      },
+      {
+        "name": "No unhandled browser errors",
+        "pass": true
+      },
+      {
+        "name": "Test browser stays in the background",
+        "pass": true
+      }
+    ],
+    "phases": [
+      {
+        "name": "launching",
+        "at": "2026-10-09T01:11:07.708Z"
+      },
+      {
+        "name": "owned-browser-connected",
+        "at": "2026-10-09T01:11:13.981Z"
+      },
+      {
+        "name": "extension-loaded",
+        "at": "2026-10-09T01:11:14.663Z"
+      },
+      {
+        "name": "model-cache-seeded",
+        "at": "2026-10-09T01:14:09.212Z"
+      },
+      {
+        "name": "generate-action-clicked",
+        "at": "2026-10-09T01:14:10.959Z"
+      },
+      {
+        "name": "cached-model-download-confirmed",
+        "at": "2026-10-09T01:14:11.094Z"
+      },
+      {
+        "name": "waiting-actual-model-and-transcript",
+        "at": "2026-10-09T01:14:11.094Z"
+      },
+      {
+        "name": "actual-transcript-ready",
+        "at": "2026-10-09T01:14:13.608Z"
+      },
+      {
+        "name": "actual-pcm-cues-and-wer-collected",
+        "at": "2026-10-09T01:14:14.263Z"
+      },
+      {
+        "name": "actual-caption-rendered",
+        "at": "2026-10-09T01:14:14.356Z"
+      },
+      {
+        "name": "actual-microsoft-provider-probe",
+        "at": "2026-10-09T01:14:14.358Z"
+      },
+      {
+        "name": "finished",
+        "at": "2026-10-09T01:14:14.807Z"
+      },
+      {
+        "name": "guarded-cleanup-complete",
+        "at": "2026-10-09T01:14:15.269Z"
+      }
+    ],
+    "timingsMs": {
+      "ownedBrowserStartup": 6273,
+      "popupAndLocalCacheImportHarnessPreparation": 174549,
+      "modelConfirmationToReady": 2514,
+      "modelConfirmationToCaptionObservation": 3262,
+      "generateActionToCaptionObservation": 3397,
+      "reportedRecoveryIncluding600msObservationDelay": 3275,
+      "actualProvider": 449,
+      "totalIncludingHarnessPreparationAndCleanup": 187561
+    },
+    "recognition": [
+      {
+        "success": true,
+        "model": "base",
+        "backend": "webgpu",
+        "dtype": "q4",
+        "gpuInfo": "apple / metal-3",
+        "decodeMs": 3.6000003814697266,
+        "inferenceMs": 786.6999998092651,
+        "audioDurationMs": 11000,
+        "segmentCount": 2
+      }
+    ],
+    "pcmInputs": [
+      {
+        "model": "base",
+        "sourceLanguage": "en",
+        "bytes": 352000,
+        "sampleRate": 16000,
+        "channels": 1,
+        "seconds": 11,
+        "sha256": "a1e4ee4809a4cf6db864f34b4720746fb92742bfdeb0920b2dba8c06e275c3ab"
+      }
+    ],
+    "completeCues": {
+      "count": 2,
+      "firstStartMs": 280,
+      "lastEndMs": 10600,
+      "partialCues": 0,
+      "cached": true
+    },
+    "wer": {
+      "errors": 0,
+      "referenceWords": 22,
+      "actualWords": 22,
+      "rate": 0
+    },
+    "werScope": "Descriptive accuracy for one public natural 22-word utterance through AAC and PCM16. WER is a model metric, not a product success threshold.",
+    "rpcCounts": {
+      "fluentReadGetVideoAiSubtitleCache": 2,
+      "fluentReadGetLocalVideoModelState": 1,
+      "fluentReadPrepareLocalVideoModel": 2,
+      "fluentReadTranscribeLocalVideoAudio": 1,
+      "fluentReadSetVideoAiSubtitleCache": 1,
+      "fluentReadCancelLocalVideoTranscription": 1,
+      "translation-request": 2
+    },
+    "modelLifecycle": {
+      "choice": "Base explicitly selected and normal download-and-generate confirmed",
+      "localCachedPublicFiles": 7,
+      "unexpectedModelNetworkRequests": 0,
+      "actualPrepareRequests": 2,
+      "warmPrepareGeneration": 1,
+      "transcribeRequestWasActual": true,
+      "directRegistryReadCaptured": false,
+      "boundary": "Observed successful actual prepare-to-generation path; registry values/responses were not separately read before guarded close. Source confirms registry writes only after prepare success."
+    },
+    "modelCacheFiles": [
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/config.json",
+        "file": "base/config.json",
+        "contentType": "application/json",
+        "bytes": 2243,
+        "sha256": "f4d0608f7d918166da7edb3e188de5ef1bfe70d9802e785d271fd88111e9cf4b"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/generation_config.json",
+        "file": "base/generation_config.json",
+        "contentType": "application/json",
+        "bytes": 3832,
+        "sha256": "61070cf8de25b1e9256e8e102ded49d8d24a8369ed36ef84fdf21549e68125a0"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/preprocessor_config.json",
+        "file": "base/preprocessor_config.json",
+        "contentType": "application/json",
+        "bytes": 339,
+        "sha256": "a6a76d28c93edb273669eb9e0b0636a2bddbb1272c3261e47b7ca6dfdbac1b8d"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer.json",
+        "file": "base/tokenizer.json",
+        "contentType": "application/json",
+        "bytes": 2480466,
+        "sha256": "27fc476bfe7f17299480be2273fc0608e4d5a99aba2ab5dec5374b4482d1a566"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/tokenizer_config.json",
+        "file": "base/tokenizer_config.json",
+        "contentType": "application/json",
+        "bytes": 282682,
+        "sha256": "2e036e4dbacfdeb7242c7d4ec4149f4a16e86026048f94d1637e3a8ee9c6a573"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/encoder_model_q4.onnx",
+        "file": "base/onnx/encoder_model_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 18772451,
+        "sha256": "9d4e9c31e8559e71de3e0e49d60b830951484699ef53747a4a06261bbbc8cb88"
+      },
+      {
+        "url": "https://modelscope.cn/models/onnx-community/whisper-base/resolve/master/onnx/decoder_model_merged_q4.onnx",
+        "file": "base/onnx/decoder_model_merged_q4.onnx",
+        "contentType": "application/octet-stream",
+        "bytes": 123602419,
+        "sha256": "09f83b71ceedc97dab1d90b914715dc532a646a147abda11d83c64867b7c319c"
+      }
+    ],
+    "naturalSource": {
+      "sample": "jfk",
+      "source": "https://huggingface.co/datasets/Xenova/transformers.js-docs/raw/542437c29cc5273cfd29e25c77696f2b349badd7/jfk.wav",
+      "sourceDatasetRevision": "542437c29cc5273cfd29e25c77696f2b349badd7",
+      "distributionUrl": "https://hf-mirror.com/datasets/Xenova/transformers.js-docs/resolve/542437c29cc5273cfd29e25c77696f2b349badd7/jfk.wav",
+      "purpose": "local natural English ASR verification; no audio redistribution",
+      "bytes": 1940478,
+      "sha256": "aa81c2552465568567e670f3823117e633900d16bd6202346a72f3c8464c74c8",
+      "referenceSource": "https://huggingface.co/docs/transformers.js/v3.8.1/en/api/pipelines#transformers.AutomaticSpeechRecognitionPipeline"
+    },
+    "mediaProvenance": {
+      "naturalSourceSha256": "aa81c2552465568567e670f3823117e633900d16bd6202346a72f3c8464c74c8",
+      "nativeAudioCodecFixture": "/private/tmp/fluentread-jfk-xplayer-fixture-20261009.buolV9/fixture-manifest.json",
+      "files": {
+        "mse.mp4": "5db529a86910be885fdf3035014f3a35ab1caed81e99cb8cf151c11e94eea83d",
+        "low.mp4": "5e57ef4f1250c2eac9269aaae47ce71043f2909befd036dc39a6b4568511e4a3"
+      }
+    },
+    "mediaRequests": [
+      "https://video.twimg.com/ext_tw_video/111/pu/vid/low.mp4"
+    ],
+    "liveProvider": {
+      "service": "microsoft",
+      "sourceLanguage": "en",
+      "targetLanguage": "zh-Hans",
+      "success": true,
+      "wallMs": 449,
+      "hasChinese": true,
+      "simulatedPrefix": false,
+      "responseCharacters": 25,
+      "responseSha256": "6db94ea2ce16049efcfff697ee02bc70b9b617247bf8be66cbaf75c9c752e025",
+      "scope": "One actual Microsoft request via the same normal product content/background translation protocol; UI screenshot remains the earlier controlled-translation full-pipeline state"
+    },
+    "browser": {
+      "version": "154.0.8037.99",
+      "launchMode": "macos-background-cdp",
+      "focusPolicy": "launchservices-no-foreground",
+      "windowPlacement": {
+        "mode": "background-visible-no-focus",
+        "visible": true,
+        "hidden": false,
+        "centered": true,
+        "windowState": "normal",
+        "bounds": {
+          "left": 212,
+          "top": -990,
+          "width": 1280,
+          "height": 900
+        },
+        "displayTarget": "secondary",
+        "source": "macos-nsscreen",
+        "screenIndex": 1,
+        "browserFrontmost": false,
+        "frontmostBefore": {
+          "pid": 52700,
+          "name": "ChatGPT"
+        },
+        "frontmostAfter": {
+          "pid": 19040,
+          "name": "Firefox"
+        }
+      }
+    },
+    "cleanup": {
+      "guardedCloseSucceeded": true,
+      "cleanupError": null,
+      "profileCleanupError": null,
+      "retainedProfile": null,
+      "browserSlotReleased": true
+    },
+    "errors": [],
+    "rawReportLocal": "/private/tmp/fluentread-x-ai-followup-browser-20261009/integrated-real-worker-confirmed/report.json",
+    "screenshot": "real-worker-full-pipeline.png",
+    "captionScreenshotSha256": "2276a0b3f4a027f86756f340e5df4bf5d1acd2164ba8732c9eaf8daa14ff75c5"
+  },
+  "scopeLimits": [
+    "All pages are local controlled X Home fixtures, not the unavailable user-reported post.",
+    "Fixture runs use real browser MSE/AAC and native audio decode; their ASR and translation replies are controlled.",
+    "The separate natural sample is one English 11-second utterance; its WER is not broad language/noise/video acceptance.",
+    "Actual-provider evidence is one normal content/background Microsoft request; the saved caption screenshot uses controlled translation.",
+    "No raw audio, model weights, PCM base64, full natural transcript or translation is included in this repository report."
+  ]
+}

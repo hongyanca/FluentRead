@@ -1,0 +1,44 @@
+{
+  "scope": "Automation attempts, not product passes",
+  "attempts": [
+    {
+      "attempt": "integrated-real-worker",
+      "success": false,
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "checks": [],
+      "error": null,
+      "errors": [],
+      "mediaRequestCount": 0,
+      "phase": null,
+      "cleanupError": null,
+      "retainedProfile": "/var/folders/2v/qd62bpkx51scgbvv2nrclsxm0000gn/T/fluentread-x-home-profile-aLsLME",
+      "rawReportSha256": "3c79df7311dcf90db0f7a2b3bb67a420c37c5b4d3215c113b55ae95c479a06c2",
+      "cause": "Startup observation deadline; late owned CDP endpoint was subsequently attached without relaunch."
+    },
+    {
+      "attempt": "integrated-real-worker-resumed",
+      "success": false,
+      "sourceCommit": "2ef55939f123d4ecdb6b9cdac081ce52a1b2cd06",
+      "checks": [
+        {
+          "name": "Natural-audio video starts with the generate action",
+          "pass": true,
+          "details": {
+            "label": "生成 AI 字幕",
+            "detail": "",
+            "original": "",
+            "translation": ""
+          }
+        }
+      ],
+      "error": null,
+      "errors": [],
+      "mediaRequestCount": 0,
+      "phase": null,
+      "cleanupError": null,
+      "retainedProfile": null,
+      "rawReportSha256": "73f756b148b0f6c5b57461c0b0569dafc3560eb5ec6db70141fbf427e5daa895",
+      "cause": "Harness omitted the first-use model confirmation; screenshot shows Base download-and-generate prompt. Audio capture and ASR had not started."
+    }
+  ]
+}

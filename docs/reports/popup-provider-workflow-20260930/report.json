@@ -1,0 +1,286 @@
+{
+  "extensionDir": "/Users/thinkstu/Desktop/copy/FluentRead-popup-density-20260930/.output/chrome-mv3",
+  "samples": [
+    {
+      "readyMs": 194.19999980926514,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 214.59999990463257,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.020764,
+        "RecalcStyleDuration": 0.00241,
+        "ScriptDuration": 0.033045,
+        "TaskDuration": 0.142823,
+        "JSHeapUsedSize": 7252392
+      },
+      "index": 0
+    },
+    {
+      "readyMs": 102.19999980926514,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 106.5,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001739,
+        "RecalcStyleDuration": 0.001742,
+        "ScriptDuration": 0.028611,
+        "TaskDuration": 0.107015,
+        "JSHeapUsedSize": 21755576
+      },
+      "index": 1
+    },
+    {
+      "readyMs": 55.69999980926514,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 56.69999980926514,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001407,
+        "RecalcStyleDuration": 0.001853,
+        "ScriptDuration": 0.017241,
+        "TaskDuration": 0.051959,
+        "JSHeapUsedSize": 32208492
+      },
+      "index": 2
+    },
+    {
+      "readyMs": 56.09999990463257,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 57.200000286102295,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001445,
+        "RecalcStyleDuration": 0.001829,
+        "ScriptDuration": 0.017475,
+        "TaskDuration": 0.0556,
+        "JSHeapUsedSize": 38529544
+      },
+      "index": 3
+    },
+    {
+      "readyMs": 52.5,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 54.799999713897705,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001348,
+        "RecalcStyleDuration": 0.001622,
+        "ScriptDuration": 0.016257,
+        "TaskDuration": 0.049842,
+        "JSHeapUsedSize": 48075008
+      },
+      "index": 4
+    },
+    {
+      "readyMs": 49.5,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 52,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001432,
+        "RecalcStyleDuration": 0.001784,
+        "ScriptDuration": 0.01624,
+        "TaskDuration": 0.049293,
+        "JSHeapUsedSize": 57285432
+      },
+      "index": 5
+    },
+    {
+      "readyMs": 53.59999990463257,
+      "longTasks": [],
+      "treeWalks": 0,
+      "frameMs": 55.90000009536743,
+      "domNodes": 138,
+      "hiddenOptions": 0,
+      "width": 340,
+      "height": 360,
+      "overflowX": false,
+      "metrics": {
+        "LayoutCount": 2,
+        "LayoutDuration": 0.001415,
+        "RecalcStyleDuration": 0.001776,
+        "ScriptDuration": 0.01641,
+        "TaskDuration": 0.052931,
+        "JSHeapUsedSize": 66469004
+      },
+      "index": 6
+    }
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1040,
+      "width": 1440,
+      "height": 1000
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    },
+    "frontmostAfter": {
+      "pid": 8643,
+      "name": "ChatGPT"
+    }
+  },
+  "manifestEntrypoint": "popup.html",
+  "coldWorkerStopped": true,
+  "initialScripts": [
+    {
+      "file": "/chunks/popup-CxyNySxl.js",
+      "bytes": 1006
+    },
+    {
+      "file": "/chunks/sha2-BsatFpqL.js",
+      "bytes": 206509
+    },
+    {
+      "file": "/chunks/i18n-I0QwDaPY.js",
+      "bytes": 577858
+    },
+    {
+      "file": "/chunks/PopupApp-DvTpG6YW.js",
+      "bytes": 42987
+    },
+    {
+      "file": "/chunks/128-rof0LK9z.js",
+      "bytes": 40
+    },
+    {
+      "file": "/chunks/interfaceAppearance--Wau8-uI.js",
+      "bytes": 16540
+    },
+    {
+      "file": "/chunks/capabilities-Zg6Jqdbk.js",
+      "bytes": 117805
+    },
+    {
+      "file": "/chunks/featureServices-DpLc-o-8.js",
+      "bytes": 44816
+    },
+    {
+      "file": "/chunks/capabilities-DY7Y25Ck.js",
+      "bytes": 688
+    }
+  ],
+  "initialScriptBytes": 1008249,
+  "languageMenus": {
+    "search": true,
+    "keyboardSelection": true,
+    "escape": true,
+    "closedOptions": 0,
+    "crossPageSync": true,
+    "languageRoundTrip": true,
+    "reopened": true
+  },
+  "compactWorkflow": {
+    "features": [
+      "hover",
+      "selection",
+      "image",
+      "document"
+    ],
+    "imageAndAreaIndependent": true,
+    "sectionActionReachable": true
+  },
+  "globalSwitch": {
+    "topOfGeneral": true,
+    "youtubeRemoved": true,
+    "xRemoved": true,
+    "survivesReload": true,
+    "restored": true,
+    "preservesPreferences": true,
+    "fixture": "offline DOM with production content scripts"
+  },
+  "disclosures": {
+    "commonPreferencesVisible": true,
+    "keyboardExpansion": true,
+    "summaries": [
+      {
+        "height": 44,
+        "background": "rgb(255, 255, 255)",
+        "surface": "#fff",
+        "marker": "none",
+        "chevron": "\"\""
+      },
+      {
+        "height": 44,
+        "background": "rgb(255, 255, 255)",
+        "surface": "#fff",
+        "marker": "none",
+        "chevron": "\"\""
+      }
+    ]
+  },
+  "providers": {
+    "independentAssignments": true,
+    "inheritDefault": true,
+    "quickClose": true,
+    "aiOnly": true,
+    "modelSearch": true,
+    "noHiddenOptions": true,
+    "localDrawer": true,
+    "stableServiceWorkspace": true,
+    "assignmentLocation": "general",
+    "assignmentSearchAndConnectionLink": true,
+    "editingPreservesDefault": true,
+    "skins": [
+      "default",
+      "minimal",
+      "compact"
+    ]
+  },
+  "median": {
+    "readyMs": 55.69999980926514,
+    "frameMs": 56.69999980926514,
+    "scriptMs": 17.241
+  },
+  "ok": true
+}

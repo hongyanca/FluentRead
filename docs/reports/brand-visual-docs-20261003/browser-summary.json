@@ -1,0 +1,536 @@
+{
+  "viewportChecks": [
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "使用指南",
+      "url": "/docs/",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "安装与第一次翻译 ​",
+      "url": "/guide/getting-started",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "划词翻译 ​",
+      "url": "/guide/deepseek-harness",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "文档翻译 ​",
+      "url": "/guide/document-translation",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "视频字幕 ​",
+      "url": "/guide/video-subtitles",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "选择翻译服务 ​",
+      "url": "/config/translation-engines",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "译文外观与阅读辅助 ​",
+      "url": "/config/appearance",
+      "width": 320
+    },
+    {
+      "closed": true,
+      "contentWidth": 320,
+      "title": "圈选翻译 ​",
+      "url": "/guide/area-translation",
+      "width": 320
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "让语言更近，让世界更大。",
+      "url": "/",
+      "visuals": 6,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "使用指南",
+      "url": "/docs/",
+      "visuals": 0,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "安装与第一次翻译 ​",
+      "url": "/guide/getting-started",
+      "visuals": 2,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "划词翻译 ​",
+      "url": "/guide/deepseek-harness",
+      "visuals": 2,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "图片翻译 ​",
+      "url": "/guide/image-translation",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "圈选翻译 ​",
+      "url": "/guide/area-translation",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "文档翻译 ​",
+      "url": "/guide/document-translation",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "视频字幕 ​",
+      "url": "/guide/video-subtitles",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "输入框翻译 ​",
+      "url": "/guide/input-translation",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "写作助手 ​",
+      "url": "/guide/writing-assistant",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "双语分享卡片 ​",
+      "url": "/guide/share-cards",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "翻译中心 ​",
+      "url": "/guide/translation-center",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "译文外观与阅读辅助 ​",
+      "url": "/config/appearance",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "contentWidth": 1280,
+      "detailsClosed": true,
+      "title": "选择翻译服务 ​",
+      "url": "/config/translation-engines",
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "route": "/",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [],
+      "title": "FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/docs/",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "使用文档 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/guide/getting-started",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false
+      ],
+      "title": "安装与第一次翻译 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/guide/deepseek-harness",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "划词翻译 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/guide/image-translation",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "图片翻译 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/guide/area-translation",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false
+      ],
+      "title": "圈选翻译 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/guide/document-translation",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false
+      ],
+      "title": "文档翻译 | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/en/",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [],
+      "title": "FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/en/docs/",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "Documentation | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/en/guide/image-translation",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "Image translation | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/en/guide/input-translation",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false
+      ],
+      "title": "Input translation | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/en/config/translation-engines",
+      "build": "static",
+      "contentWidth": 390,
+      "details": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "title": "Choose your translation service | FluentRead",
+      "width": 390
+    },
+    {
+      "route": "/",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/docs/",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/guide/video-subtitles",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/guide/area-translation",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/config/translation-engines",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/en/",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/en/docs/",
+      "build": "static",
+      "closed": true,
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/",
+      "build": "static",
+      "contentWidth": 771,
+      "width": 768
+    },
+    {
+      "route": "/docs/",
+      "build": "static",
+      "contentWidth": 768,
+      "width": 768
+    },
+    {
+      "route": "/guide/document-translation",
+      "build": "static",
+      "contentWidth": 768,
+      "width": 768
+    },
+    {
+      "route": "/",
+      "build": "static-integrated",
+      "width": 768,
+      "contentWidth": 768
+    },
+    {
+      "route": "/guide/document-translation",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "route": "/en/guide/document-translation",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "route": "/guide/deepseek-harness",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "route": "/en/guide/deepseek-harness",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 1,
+      "width": 1280
+    },
+    {
+      "route": "/guide/features",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 0,
+      "width": 1280
+    },
+    {
+      "route": "/en/guide/features",
+      "build": "static-integrated",
+      "closed": true,
+      "contentWidth": 1280,
+      "visuals": 0,
+      "width": 1280
+    },
+    {
+      "route": "/",
+      "build": "final",
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/docs/",
+      "build": "final",
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/en/",
+      "build": "final",
+      "contentWidth": 320,
+      "width": 320
+    },
+    {
+      "route": "/",
+      "build": "final",
+      "contentWidth": 768,
+      "width": 768
+    },
+    {
+      "route": "/docs/",
+      "build": "final",
+      "contentWidth": 768,
+      "width": 768
+    },
+    {
+      "route": "/en/",
+      "build": "final",
+      "contentWidth": 768,
+      "width": 768
+    },
+    {
+      "route": "/",
+      "build": "final",
+      "contentWidth": 390,
+      "width": 390
+    },
+    {
+      "route": "/docs/",
+      "build": "final",
+      "contentWidth": 390,
+      "width": 390
+    },
+    {
+      "route": "/en/",
+      "build": "final",
+      "contentWidth": 390,
+      "width": 390
+    }
+  ],
+  "interactions": [
+    "390px sidebar open/close and local search",
+    "Built homepage autoplay reached translated phase; manual step 4 paused and showed both translations",
+    "Built autoplay observed advancing after resume; pause control stops playback",
+    "Built image illustration shows translated poster; legacy deep-link opens folded cross-origin section",
+    "Built mobile sidebar opens and closes; local search retrieves image guide and folded-section matches",
+    "Built area walkthrough retains source image and shows recognition + translation below; dark/light theme checked",
+    "Grammar phrase click and ArrowRight change selected phrase and explanation",
+    "Fresh final built page with legacy hash: no console warnings/errors; language link reaches corresponding English guide without invalid Chinese hash"
+  ],
+  "screenshots": [
+    "home-desktop.jpg",
+    "home-mobile.jpg",
+    "docs-desktop.jpg",
+    "image-guide.jpg",
+    "home-english.jpg"
+  ],
+  "mode": "Codex in-app browser, background tab",
+  "urls": [],
+  "notes": [
+    "768px hero glow overflow fixed and rechecked at exact 768px",
+    "Legacy headings now retain 100px scroll margin",
+    "Six overlapping guides integrated with latest main: 08b9498c"
+  ],
+  "consoleErrors": [],
+  "resolvedIssues": [
+    {
+      "issue": "768px glow extended 3px outside viewport",
+      "fixed": "Constrain decorative inset; final 768px content width is 768px"
+    },
+    {
+      "issue": "Legacy heading initially obscured by fixed navigation",
+      "fixed": "100px heading scroll margin"
+    },
+    {
+      "issue": "VitePress locale-link hydration mismatch on direct hash navigation",
+      "fixed": "Custom stable corresponding-page language link; verified fresh-tab logs empty"
+    }
+  ]
+}

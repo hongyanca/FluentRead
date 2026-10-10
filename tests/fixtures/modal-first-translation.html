@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Modal first full page translation fixture</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin: 0; font: 16px/1.55 system-ui, sans-serif; color: #1b2c3d; background: #f4f7fb; }
+    main { width: min(760px, calc(100vw - 48px)); margin: 28px auto 80px; }
+    article { background: #fff; padding: 24px; border: 1px solid #d7e0ea; border-radius: 10px; }
+    h1, h2, p { margin: 0 0 14px; }
+    button { font: inherit; padding: 8px 12px; border: 1px solid #9bb1c7; border-radius: 6px; background: #fff; }
+    dialog { width: min(520px, calc(100vw - 80px)); border: 1px solid #9bb1c7; border-radius: 10px; padding: 24px; box-shadow: 0 18px 60px #18314c55; }
+    dialog::backdrop { background: #10283d66; }
+    [role="dialog"][aria-modal="true"] { position: fixed; z-index: 40; inset: 18% auto auto 50%; transform: translateX(-50%); width: min(520px, calc(100vw - 80px)); padding: 24px; background: #fff; border: 1px solid #9bb1c7; border-radius: 10px; box-shadow: 0 18px 60px #18314c55; }
+    #ordinary-dialog { position: static; width: auto; padding: 12px; border: 1px dashed #9bb1c7; box-shadow: none; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <article id="article">
+      <h1 id="article-title">Modal first translation article</h1>
+      <p id="body-one">The article explains why an urgent announcement should be translated before the surrounding page.</p>
+      <p id="body-two">The remaining paragraphs continue after the announcement has been dismissed by the reader.</p>
+      <p id="body-three">This paragraph is intentionally separate so request ordering remains visible in the local provider log.</p>
+      <section id="ordinary-dialog" role="dialog" aria-label="Non modal information">
+        <p id="ordinary-copy">This ordinary dialog is part of the page and must not block the article.</p>
+      </section>
+      <button id="open-aria" type="button">Open translated announcement</button>
+      <button id="open-dynamic" type="button">Open dynamic announcement</button>
+    </article>
+  </main>
+
+  <dialog id="native-announcement" aria-label="Native announcement">
+    <h2 id="native-title">Urgent native announcement</h2>
+    <p id="native-copy">Please read this announcement before continuing the article.</p>
+    <button id="close-native" type="button">Close announcement</button>
+  </dialog>
+
+  <div id="aria-announcement" role="dialog" aria-modal="true" aria-label="Accessible announcement" hidden>
+    <h2 id="aria-title">Accessible announcement</h2>
+    <p id="aria-copy">This accessible announcement must take priority while it is visible.</p>
+    <button id="close-aria" type="button">Close accessible announcement</button>
+  </div>
+
+  <script>
+    window.fixtureEvents = {nativeOpened: 0, nativeClosed: 0, ariaOpened: 0, ariaClosed: 0, dynamicOpened: 0};
+    const nativeAnnouncement = document.querySelector('#native-announcement');
+    const ariaAnnouncement = document.querySelector('#aria-announcement');
+    document.querySelector('#close-native').addEventListener('click', () => {
+      nativeAnnouncement.close();
+      window.fixtureEvents.nativeClosed += 1;
+    });
+    document.querySelector('#open-aria').addEventListener('click', () => window.openAriaAnnouncement());
+    document.querySelector('#close-aria').addEventListener('click', () => window.closeAriaAnnouncement());
+    document.querySelector('#open-dynamic').addEventListener('click', () => window.openDynamicAnnouncement());
+    window.openNativeAnnouncement = () => {
+      if (!nativeAnnouncement.open) nativeAnnouncement.showModal();
+      window.fixtureEvents.nativeOpened += 1;
+    };
+    window.openAriaAnnouncement = () => {
+      ariaAnnouncement.hidden = false;
+      document.body.style.overflow = 'hidden';
+      window.fixtureEvents.ariaOpened += 1;
+    };
+    window.closeAriaAnnouncement = () => {
+      ariaAnnouncement.hidden = true;
+      document.body.style.overflow = '';
+      window.fixtureEvents.ariaClosed += 1;
+    };
+    window.openDynamicAnnouncement = () => {
+      const dialog = document.createElement('div');
+      dialog.id = 'dynamic-announcement';
+      dialog.setAttribute('role', 'dialog');
+      dialog.setAttribute('aria-modal', 'true');
+      dialog.setAttribute('aria-label', 'Dynamic announcement');
+      dialog.innerHTML = '<h2 id="dynamic-title">Dynamic announcement</h2><p id="dynamic-copy">A new announcement appeared while the article was being translated.</p><button id="close-dynamic" type="button">Close dynamic announcement</button>';
+      dialog.querySelector('#close-dynamic').addEventListener('click', () => {
+        dialog.remove();
+        document.body.style.overflow = '';
+      });
+      document.body.append(dialog);
+      document.body.style.overflow = 'hidden';
+      window.fixtureEvents.dynamicOpened += 1;
+    };
+    window.openNativeAnnouncement();
+  </script>
+</body>
+</html>

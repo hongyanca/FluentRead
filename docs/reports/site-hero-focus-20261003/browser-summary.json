@@ -1,0 +1,205 @@
+{
+  "reference": "https://www.readfrog.app/zh",
+  "mode": "Codex background in-app browser",
+  "checks": [
+    {
+      "menu": "Native details menu exposes Edge, Firefox and more installation options; Escape closes it and returns focus to summary; clicking outside closes it"
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "cta": {
+        "bottom": 575.34375,
+        "height": 56,
+        "left": 590,
+        "right": 1330,
+        "top": 519.34375,
+        "width": 740,
+        "x": 590,
+        "y": 519.34375
+      },
+      "decorations": "block",
+      "headlineSize": "80px",
+      "page": "/",
+      "readerTop": 689.34375,
+      "scrollWidth": 1920,
+      "width": 1920
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "cta": {
+        "bottom": 521.953125,
+        "height": 56,
+        "left": 142,
+        "right": 882,
+        "top": 465.953125,
+        "width": 740,
+        "x": 142,
+        "y": 465.953125
+      },
+      "decorations": "block",
+      "headlineSize": "62.464px",
+      "page": "/",
+      "readerTop": 635.953125,
+      "scrollWidth": 1024,
+      "width": 1024
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "cta": {
+        "bottom": 522.296875,
+        "height": 56,
+        "left": 24,
+        "right": 744,
+        "top": 466.296875,
+        "width": 720,
+        "x": 24,
+        "y": 466.296875
+      },
+      "decorations": "none",
+      "headlineSize": "66px",
+      "page": "/",
+      "readerTop": 620.296875,
+      "scrollWidth": 768,
+      "width": 768
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "cta": {
+        "bottom": 406.2265625,
+        "height": 48.5,
+        "left": 20,
+        "right": 370,
+        "top": 357.7265625,
+        "width": 350,
+        "x": 20,
+        "y": 357.7265625
+      },
+      "decorations": "none",
+      "headlineSize": "39px",
+      "page": "/",
+      "readerTop": 494.2265625,
+      "scrollWidth": 390,
+      "width": 390
+    },
+    {
+      "bg": "rgb(255, 255, 255)",
+      "cta": {
+        "bottom": 486.921875,
+        "height": 104,
+        "left": 20,
+        "right": 300,
+        "top": 382.921875,
+        "width": 280,
+        "x": 20,
+        "y": 382.921875
+      },
+      "decorations": "none",
+      "headlineSize": "39px",
+      "page": "/",
+      "readerTop": 574.921875,
+      "scrollWidth": 320,
+      "width": 320
+    },
+    {
+      "englishMobile": "Two headline lines at 320px",
+      "finalMenu": {
+        "menu": {
+          "bottom": 577.1015625,
+          "height": 163,
+          "left": 39,
+          "right": 281,
+          "top": 414.1015625,
+          "width": 242,
+          "x": 39,
+          "y": 414.1015625
+        },
+        "scrollWidth": 320,
+        "width": 320
+      }
+    },
+    {
+      "routing": "English homepage -> documentation -> homepage uses client navigation; documentation retains search, its default navigation, white background and correct language target"
+    },
+    {
+      "brandBlocks": 0,
+      "browserRows": 0,
+      "decorative": "none",
+      "heroHeadlines": 1,
+      "heroLinks": 1,
+      "language": "/en/",
+      "menuClosed": true,
+      "page": "/",
+      "scrollWidth": 320,
+      "white": "rgb(255, 255, 255)",
+      "width": 320
+    },
+    {
+      "brandBlocks": 0,
+      "browserRows": 0,
+      "decorative": "none",
+      "heroHeadlines": 1,
+      "heroLinks": 1,
+      "language": "/en/",
+      "menuClosed": true,
+      "page": "/",
+      "scrollWidth": 390,
+      "white": "rgb(255, 255, 255)",
+      "width": 390
+    },
+    {
+      "brandBlocks": 0,
+      "browserRows": 0,
+      "decorative": "none",
+      "heroHeadlines": 1,
+      "heroLinks": 1,
+      "language": "/",
+      "menuClosed": true,
+      "page": "/en/",
+      "scrollWidth": 768,
+      "white": "rgb(255, 255, 255)",
+      "width": 768
+    },
+    {
+      "brandBlocks": 0,
+      "browserRows": 0,
+      "decorative": "block",
+      "heroHeadlines": 1,
+      "heroLinks": 1,
+      "language": "/",
+      "menuClosed": true,
+      "page": "/en/",
+      "scrollWidth": 1280,
+      "white": "rgb(255, 255, 255)",
+      "width": 1280
+    },
+    {
+      "brandBlocks": 0,
+      "browserRows": 0,
+      "decorative": "block",
+      "heroHeadlines": 1,
+      "heroLinks": 1,
+      "language": "/en/",
+      "menuClosed": true,
+      "page": "/",
+      "scrollWidth": 1920,
+      "white": "rgb(255, 255, 255)",
+      "width": 1920
+    },
+    {
+      "automaticPreview": {
+        "decorativeActive": "true",
+        "playing": "true",
+        "readerStep": "2",
+        "running": "true"
+      }
+    }
+  ],
+  "screenshots": [
+    "hero-desktop.png"
+  ],
+  "consoleErrors": [],
+  "resolved": [
+    "320px dropdown moved from left -7.5px to 39px; final menu fits within viewport",
+    "English headline now remains two lines at 320px"
+  ]
+}

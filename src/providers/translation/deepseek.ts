@@ -2,7 +2,7 @@
  * @file src/providers/translation/deepseek.ts
  *
  * 文件职责：适配 DeepSeek 官方或代理端点，并根据配置选择 Chat Completions 或 Responses 协议进行翻译。
- * 主要内容：从快照解析 thinking/API 模式和 endpoint，分别构造 deepseek 模板，执行 Bearer 请求、HTTP/JSON 校验、上报协议对应的 token 用量并清理模型推理标记；另导出 buildDeepSeekEndpoint。 可核对的公开符号包括 buildDeepSeekEndpoint、default:deepseek。
+ * 主要内容：从快照解析 thinking/API 模式和 endpoint，将受信选区图片传给 Chat/Responses 多模态模板，执行 Bearer 请求、HTTP/JSON 校验、上报协议对应的 token 用量并清理模型推理标记；路由改写与 Responses 输出读取复用 responses-api 共享模块。 可核对的公开符号包括 buildDeepSeekEndpoint、default:deepseek。
  * 模块边界：本文件位于 provider 适配层，只把统一翻译请求转换为外部或浏览器服务协议；不管理页面 DOM、UI 生命周期或配置持久化，缓存、去重和超时总预算由 translation broker 统一协调。
  */
 
@@ -15,19 +15,20 @@ import {
 import { config } from "@/src/services/config/store";
 import {stripTranslationReasoning as contentPostHandler} from '@/src/core/translation/prompts';
 import { appendOptionalBearer } from './auth';
-import {createHttpStatusError, readJsonResponse} from '@/src/platform/http/errors';
-import {runtimeFetch} from '@/src/platform/http/runtime';
+import {createHttpStatusError, createImageInputHttpError, readJsonResponse} from '@/src/platform/http/errors';
+import {abortErrorFromSignal, runtimeFetch} from '@/src/platform/http/runtime';
 import {
     getTranslationProviderConfig,
+    getTranslationImageInput,
     reportTranslationModelUsage,
     reportTranslationModelUsageFailure,
     type TranslationProviderRequest,
 } from '@/src/services/translation/requestSnapshot';
 import type {TranslationProviderConfigSnapshot} from '@/src/services/translation/types';
 import {normalizeDeepSeekResponsesUsage, normalizeOpenAICompatibleUsage} from './usage';
+import {buildOpenAIApiEndpoint, readResponsesApiText} from './responses-api';
 
-// 当前官方 V4 文档以 Chat Completion 为主；Responses API 仅在用户明确选择时启用，
-// 便于兼容已经支持该协议的代理或网关。
+// 官方已支持 Chat Completion 和 Responses；保留用户所选协议，auto 继续使用 Chat。
 function useResponsesApi(current: TranslationProviderConfigSnapshot) {
     const apiType = current.deepseekApiType;
     if (apiType === 'responses') return true;
@@ -37,6 +38,7 @@ function useResponsesApi(current: TranslationProviderConfigSnapshot) {
 async function deepseek(message: TranslationProviderRequest<string>) {
     const current = getTranslationProviderConfig(message, config);
     const service = message.serviceOverride || current.service;
+    if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
     const headers = new Headers({'Content-Type': 'application/json'});
     appendOptionalBearer(headers, current.token[service]);
 
@@ -44,10 +46,11 @@ async function deepseek(message: TranslationProviderRequest<string>) {
     const isResponses = useResponsesApi(current);
     const url = buildDeepSeekEndpoint(endpoint, isResponses);
     const configuredModel = getCurrentModel(service, message.modelOverride, current);
+    const imageInput = getTranslationImageInput(message);
 
     const body = isResponses
-        ? deepseekResponsesMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current)
-        : deepseekMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current);
+        ? deepseekResponsesMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current, message.thinkingOverride, imageInput)
+        : deepseekMsgTemplate(message.origin, message.pageContext, message.summaryPrompt, message.summarySystemPrompt, service, message.targetLanguage, message.modelOverride, current, message.thinkingOverride, imageInput);
     const startedAt = Date.now();
     let attemptReported = false;
     try {
@@ -60,10 +63,11 @@ async function deepseek(message: TranslationProviderRequest<string>) {
         if (!resp.ok) {
             reportTranslationModelUsageFailure(message, undefined, startedAt, configuredModel, resp.status);
             attemptReported = true;
-            throw createHttpStatusError(resp, '翻译失败');
+            throw getTranslationImageInput(message) ? await createImageInputHttpError(resp, '翻译失败') : createHttpStatusError(resp, '翻译失败');
         }
 
         const result = await readJsonResponse<any>(resp, 'DeepSeek 返回的不是有效 JSON');
+        if (message.abortSignal?.aborted) throw abortErrorFromSignal(message.abortSignal);
         const actualModel = typeof result?.model === 'string' && result.model.trim()
             ? result.model
             : configuredModel;
@@ -98,48 +102,24 @@ function extractChatContent(result: any): string {
 
     // 页面只渲染最终的 message.content；reasoning_content 等 DeepSeek 思考字段会被
     // 主动忽略，绝不能进入页面。
-    return contentPostHandler(content);
+    const text = contentPostHandler(content);
+    if (!text) throw new Error('DeepSeek 返回数据格式异常：缺少有效文本内容');
+    return text;
 }
 
 function extractResponsesContent(result: any): string {
-    if (typeof result?.output_text === 'string' && result.output_text) {
-        return contentPostHandler(result.output_text);
-    }
+    const text = readResponsesApiText(result);
 
-    const text = Array.isArray(result?.output)
-        ? result.output
-            .filter((item: any) => item?.type === 'message' && Array.isArray(item.content))
-            .flatMap((item: any) => item.content)
-            .filter((part: any) => part?.type === 'output_text' && typeof part.text === 'string')
-            .map((part: any) => part.text)
-            .join('')
-        : '';
-
-    if (!text) {
+    const translated = contentPostHandler(text);
+    if (!translated) {
         throw new Error('DeepSeek 返回数据格式异常：缺少 Responses API 输出文本');
     }
 
-    return contentPostHandler(text);
+    return translated;
 }
 
 export function buildDeepSeekEndpoint(endpoint: string, isResponses: boolean): string {
-    const targetPath = isResponses ? 'responses' : 'chat/completions';
-
-    try {
-        const url = new URL(endpoint);
-        const basePath = url.pathname
-            .replace(/\/(?:chat\/completions|responses)\/?$/, '')
-            .replace(/\/+$/, '');
-        url.pathname = `${basePath}/${targetPath}`;
-        return url.toString();
-    } catch {
-        // 兼容部分代理接受的非标准地址，同时确保查询参数和 hash 不会被拼到路径中。
-        const match = endpoint.match(/^([^?#]*)(\?[^#]*)?(#.*)?$/);
-        const path = (match?.[1] || endpoint)
-            .replace(/\/(?:chat\/completions|responses)\/?$/, '')
-            .replace(/\/+$/, '');
-        return `${path}/${targetPath}${match?.[2] || ''}${match?.[3] || ''}`;
-    }
+    return buildOpenAIApiEndpoint(endpoint, isResponses ? 'responses' : 'chat');
 }
 
 export default deepseek;

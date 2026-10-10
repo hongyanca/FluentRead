@@ -1,0 +1,9 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-popup-actions-service-ui-20260930
+
+ ✓ tests/userscriptLanguageBundles.test.ts (3 tests) 89ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  23:19:14
+   Duration  1.07s (transform 573ms, setup 0ms, collect 823ms, tests 89ms, environment 0ms, prepare 37ms)

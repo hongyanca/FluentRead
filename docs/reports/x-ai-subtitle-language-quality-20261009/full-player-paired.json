@@ -1,0 +1,203 @@
+{
+  "scope": "Controlled X player fixture; actual AAC/native extraction, original fullCapture, production Worker and UI; translation mocked; not live authenticated X or a spontaneous code-switch",
+  "corpus": {
+    "sha256": "27228a3f5e69d9c1b3258872d43d7f47a258fc5ef6fa801288da3b7e9658d932",
+    "durationMs": 44160.0,
+    "parts": [
+      {
+        "id": "en_us_0000",
+        "language": "en",
+        "startMs": 0,
+        "endMs": 10560.0
+      },
+      {
+        "id": "en_us_0001",
+        "language": "en",
+        "startMs": 11560.0,
+        "endMs": 20320.0
+      },
+      {
+        "id": "en_us_0002",
+        "language": "en",
+        "startMs": 21320.0,
+        "endMs": 32780.0
+      },
+      {
+        "id": "cmn_hans_cn_0000",
+        "language": "zh",
+        "startMs": 33780.0,
+        "endMs": 44160.0
+      }
+    ],
+    "source": "FluidInference/fleurs-full",
+    "revision": "1cca811bb8ea4d370345f108f00518167040282c",
+    "license": "CC-BY-4.0",
+    "evidence": "synthetically concatenated natural single-language clips; not spontaneous code-switch"
+  },
+  "sourceReferenceSha256": "d8ee024d1210a0c67c92eb98985190d45b4ed89aed6f9b40aecc94508e0a7b44",
+  "icuVersion": "78.3",
+  "normalization": "ICU Traditional-Simplified, lowercase, strip whitespace punctuation symbols",
+  "arms": {
+    "baseline": {
+      "reportSha256": "99590dc12f90f02b09121f7d731acb22dcc9927d826f8c0e5b6354019000a018",
+      "workerSha256": "ddcb25ca54475475a88c3cc0d27f90d0672a9de43e58af5d6c02d8ad50e33beb",
+      "passedChecks": 12,
+      "success": true,
+      "guardedCloseSucceeded": true,
+      "browserVersion": "154.0.8037.99",
+      "pcmInputs": [
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 358400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 11.2,
+          "sha256": "c22a1f5bc5c5c3db6bc9c4994df9babf93a2bea3d76a0af2031ccbafd5f7664b"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 310400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 9.7,
+          "sha256": "98bb0415e8c2055a80e166a59c19e0479e92247e3791fe5b92fb1ed300624b96"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 398400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 12.45,
+          "sha256": "1fbeebca8522519786ebaad91db21a26df7b74f8697b8eb1e22ec923e9c780b7"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 347968,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 10.874,
+          "sha256": "de8794ed586090df73c4cb7830f617b95c1a860aea6cfd4e7bd4bef45b2c4bf5"
+        }
+      ],
+      "cueCount": 9,
+      "rawCer": {
+        "errors": 71,
+        "referenceUnits": 346,
+        "actualUnits": 369,
+        "rate": 0.20520231213872833
+      },
+      "normalizedCer": {
+        "errors": 71,
+        "referenceUnits": 346,
+        "actualUnits": 369,
+        "rate": 0.20520231213872833
+      },
+      "actualDetectedLanguages": [
+        null,
+        null,
+        null,
+        null
+      ],
+      "backends": [
+        "webgpu",
+        "webgpu",
+        "webgpu",
+        "webgpu"
+      ],
+      "textSha256": "6d96a73e5eed3d82bff434b5f953b98a6011d78d907f0024280b8f112b4e302c",
+      "mediaSha256": {
+        "naturalSourceSha256": "27228a3f5e69d9c1b3258872d43d7f47a258fc5ef6fa801288da3b7e9658d932",
+        "nativeAudioCodecFixture": "generated-from-pinned-fleurs-natural-clips",
+        "files": {
+          "mse.mp4": "e191e4c1eb65058df5ee28c1a869837bd0febc2498f26725bd4af8a2a729ed4c",
+          "low.mp4": "42f38440f203644268be61a313257d7212a4048384163cae316420eb405b14c8"
+        }
+      }
+    },
+    "candidate": {
+      "reportSha256": "103cea533fa5d54f8dfd0c500a4833d67c892c267de60392ba4e62b2fc837728",
+      "workerSha256": "3dbf6b7488dca1bb1bbd4f58e60025e328bffa8475989df524f4400b38fe5a42",
+      "passedChecks": 12,
+      "success": true,
+      "guardedCloseSucceeded": true,
+      "browserVersion": "154.0.8037.99",
+      "pcmInputs": [
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 358400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 11.2,
+          "sha256": "c22a1f5bc5c5c3db6bc9c4994df9babf93a2bea3d76a0af2031ccbafd5f7664b"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 310400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 9.7,
+          "sha256": "98bb0415e8c2055a80e166a59c19e0479e92247e3791fe5b92fb1ed300624b96"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 398400,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 12.45,
+          "sha256": "1fbeebca8522519786ebaad91db21a26df7b74f8697b8eb1e22ec923e9c780b7"
+        },
+        {
+          "model": "base",
+          "sourceLanguage": "auto",
+          "bytes": 347968,
+          "sampleRate": 16000,
+          "channels": 1,
+          "seconds": 10.874,
+          "sha256": "de8794ed586090df73c4cb7830f617b95c1a860aea6cfd4e7bd4bef45b2c4bf5"
+        }
+      ],
+      "cueCount": 8,
+      "rawCer": {
+        "errors": 30,
+        "referenceUnits": 346,
+        "actualUnits": 343,
+        "rate": 0.08670520231213873
+      },
+      "normalizedCer": {
+        "errors": 23,
+        "referenceUnits": 346,
+        "actualUnits": 343,
+        "rate": 0.06647398843930635
+      },
+      "actualDetectedLanguages": [
+        "en",
+        "en",
+        "en",
+        "zh"
+      ],
+      "backends": [
+        "webgpu",
+        "webgpu",
+        "webgpu",
+        "webgpu"
+      ],
+      "textSha256": "18da8ee29530a004b831f6fd92b196a65856281bcb920c4bebd4167ba623b2a1",
+      "mediaSha256": {
+        "naturalSourceSha256": "27228a3f5e69d9c1b3258872d43d7f47a258fc5ef6fa801288da3b7e9658d932",
+        "nativeAudioCodecFixture": "generated-from-pinned-fleurs-natural-clips",
+        "files": {
+          "mse.mp4": "e191e4c1eb65058df5ee28c1a869837bd0febc2498f26725bd4af8a2a729ed4c",
+          "low.mp4": "42f38440f203644268be61a313257d7212a4048384163cae316420eb405b14c8"
+        }
+      }
+    }
+  },
+  "identicalPcmInputs": true
+}

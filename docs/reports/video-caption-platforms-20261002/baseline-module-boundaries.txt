@@ -1,0 +1,71 @@
+> FluentRead-流畅阅读@0.0.35 test /private/tmp/FluentRead-caption-baseline-20261002
+> node scripts/testing/run-resource-safe.mjs -- vitest run "tests/architecture/moduleBoundaries.test.ts"
+
+[resource-safe] CPU target 60%, maxWorkers 2, concurrency 5, command: vitest run tests/architecture/moduleBoundaries.test.ts
+
+ RUN  v2.1.9 /private/tmp/FluentRead-caption-baseline-20261002
+
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 2 failed) 3229ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 1253ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 887ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 439ms
+   × architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片 31ms
+     → expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 389ms
+   × architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限 4ms
+     → expected [ { …(3) } ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 文档 WXT 页面只通过 app public API 进入垂直功能切片
+AssertionError: expected [ …(2) ] to deeply equal [ '@/src/app/document-translation' ]
+
+- Expected
++ Received
+
+  Array [
++   "@/src/services/translation/errors",
+    "@/src/app/document-translation",
+  ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:372:35
+    370|             .filter((specifier) => specifier.startsWith('@/entrypoints…
+    371|
+    372|         expect(documentUiImports).toEqual(['@/src/app/document-transla…
+       |                                   ^
+    373|         expect(featureEntrypointImports).toEqual([]);
+    374|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "ceiling": 1887,
++     "lines": 1909,
++     "path": "src/features/video-subtitle/content/runtime.ts",
++   },
++ ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:430:24
+    428|             .filter(({lines, ceiling}) => lines > ceiling);
+    429|
+    430|         expect(growth).toEqual([]);
+       |                        ^
+    431|     });
+    432| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 11 passed (13)
+   Start at  17:03:26
+   Duration  3.81s (transform 59ms, setup 0ms, collect 346ms, tests 3.23s, environment 0ms, prepare 53ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

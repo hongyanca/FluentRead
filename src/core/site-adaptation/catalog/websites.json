@@ -1,0 +1,5635 @@
+[
+  {
+    "id": "mdn",
+    "name": "MDN Web Docs",
+    "match": {
+      "hosts": [
+        "developer.mozilla.org"
+      ],
+      "paths": [
+        "/*/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation",
+    "exclude": [
+      ".document-page-header p"
+    ]
+  },
+  {
+    "id": "w3c",
+    "name": "W3C 标准",
+    "match": {
+      "hosts": [
+        "www.w3.org"
+      ],
+      "paths": [
+        "/TR/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "whatwg",
+    "name": "WHATWG 标准",
+    "match": {
+      "hosts": [
+        "html.spec.whatwg.org",
+        "dom.spec.whatwg.org",
+        "fetch.spec.whatwg.org",
+        "url.spec.whatwg.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "tc39",
+    "name": "ECMAScript 规范",
+    "match": {
+      "hosts": [
+        "tc39.es"
+      ],
+      "paths": [
+        "/ecma262/*",
+        "/proposal-*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "web-dev",
+    "name": "web.dev",
+    "match": {
+      "hosts": [
+        "web.dev"
+      ],
+      "paths": [
+        "/articles/*",
+        "/learn/*",
+        "/blog/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "chrome-docs",
+    "name": "Chrome 开发者文档",
+    "match": {
+      "hosts": [
+        "developer.chrome.com"
+      ],
+      "paths": [
+        "/docs/*",
+        "/blog/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "python-docs",
+    "name": "Python 文档",
+    "match": {
+      "hosts": [
+        "docs.python.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "django-docs",
+    "name": "Django 文档",
+    "match": {
+      "hosts": [
+        "docs.djangoproject.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "flask-docs",
+    "name": "Flask 文档",
+    "match": {
+      "hosts": [
+        "flask.palletsprojects.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "fastapi-docs",
+    "name": "FastAPI 文档",
+    "match": {
+      "hosts": [
+        "fastapi.tiangolo.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "pydantic-docs",
+    "name": "Pydantic 文档",
+    "match": {
+      "hosts": [
+        "docs.pydantic.dev"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "numpy-docs",
+    "name": "NumPy 文档",
+    "match": {
+      "hosts": [
+        "numpy.org"
+      ],
+      "paths": [
+        "/doc/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "pandas-docs",
+    "name": "pandas 文档",
+    "match": {
+      "hosts": [
+        "pandas.pydata.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "scipy-docs",
+    "name": "SciPy 文档",
+    "match": {
+      "hosts": [
+        "docs.scipy.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "pytorch-docs",
+    "name": "PyTorch 文档",
+    "match": {
+      "hosts": [
+        "docs.pytorch.org"
+      ],
+      "paths": [
+        "/docs/*",
+        "/tutorials/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "tensorflow-docs",
+    "name": "TensorFlow 文档",
+    "match": {
+      "hosts": [
+        "www.tensorflow.org"
+      ],
+      "paths": [
+        "/guide/*",
+        "/tutorials/*",
+        "/api_docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "rust-docs",
+    "name": "Rust 文档",
+    "match": {
+      "hosts": [
+        "doc.rust-lang.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "go-docs",
+    "name": "Go 文档",
+    "match": {
+      "hosts": [
+        "go.dev"
+      ],
+      "paths": [
+        "/doc/*",
+        "/blog/*",
+        "/ref/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "kotlin-docs",
+    "name": "Kotlin 文档",
+    "match": {
+      "hosts": [
+        "kotlinlang.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "swift-docs",
+    "name": "Swift 文档",
+    "match": {
+      "hosts": [
+        "docs.swift.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "ruby-docs",
+    "name": "Ruby 文档",
+    "match": {
+      "hosts": [
+        "ruby-doc.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "php-docs",
+    "name": "PHP 手册",
+    "match": {
+      "hosts": [
+        "www.php.net"
+      ],
+      "paths": [
+        "/manual/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "java-docs",
+    "name": "Java 文档",
+    "match": {
+      "hosts": [
+        "docs.oracle.com"
+      ],
+      "paths": [
+        "/en/java/*",
+        "/javase/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "microsoft-learn",
+    "name": "Microsoft Learn",
+    "match": {
+      "hosts": [
+        "learn.microsoft.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "apple-docs",
+    "name": "Apple 开发者文档",
+    "match": {
+      "hosts": [
+        "developer.apple.com"
+      ],
+      "paths": [
+        "/documentation/*",
+        "/tutorials/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "android-docs",
+    "name": "Android 开发者文档",
+    "match": {
+      "hosts": [
+        "developer.android.com"
+      ],
+      "paths": [
+        "/guide/*",
+        "/develop/*",
+        "/reference/*",
+        "/training/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "react-docs",
+    "name": "React 文档",
+    "match": {
+      "hosts": [
+        "react.dev"
+      ],
+      "paths": [
+        "/learn/*",
+        "/reference/*",
+        "/blog/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "vue-docs",
+    "name": "Vue 文档",
+    "match": {
+      "hosts": [
+        "vuejs.org"
+      ],
+      "paths": [
+        "/guide/*",
+        "/api/*",
+        "/examples/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "svelte-docs",
+    "name": "Svelte 文档",
+    "match": {
+      "hosts": [
+        "svelte.dev"
+      ],
+      "paths": [
+        "/docs/*",
+        "/tutorial/*",
+        "/blog/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "angular-docs",
+    "name": "Angular 文档",
+    "match": {
+      "hosts": [
+        "angular.dev"
+      ],
+      "paths": [
+        "/guide/*",
+        "/tutorials/*",
+        "/api/*",
+        "/essentials/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "typescript-docs",
+    "name": "TypeScript 文档",
+    "match": {
+      "hosts": [
+        "www.typescriptlang.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "nextjs-docs",
+    "name": "Next.js 文档",
+    "match": {
+      "hosts": [
+        "nextjs.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "nuxt-docs",
+    "name": "Nuxt 文档",
+    "match": {
+      "hosts": [
+        "nuxt.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "vite-docs",
+    "name": "Vite 文档",
+    "match": {
+      "hosts": [
+        "vite.dev"
+      ],
+      "paths": [
+        "/guide/*",
+        "/config/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "vitest-docs",
+    "name": "Vitest 文档",
+    "match": {
+      "hosts": [
+        "vitest.dev"
+      ],
+      "paths": [
+        "/guide/*",
+        "/api/*",
+        "/config/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "webpack-docs",
+    "name": "webpack 文档",
+    "match": {
+      "hosts": [
+        "webpack.js.org"
+      ],
+      "paths": [
+        "/guides/*",
+        "/concepts/*",
+        "/configuration/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "nodejs-docs",
+    "name": "Node.js 文档",
+    "match": {
+      "hosts": [
+        "nodejs.org"
+      ],
+      "paths": [
+        "/api/*",
+        "/*/learn/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "deno-docs",
+    "name": "Deno 文档",
+    "match": {
+      "hosts": [
+        "docs.deno.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "bun-docs",
+    "name": "Bun 文档",
+    "match": {
+      "hosts": [
+        "bun.com",
+        "bun.sh"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "npm-docs",
+    "name": "npm 文档",
+    "match": {
+      "hosts": [
+        "docs.npmjs.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "pnpm-docs",
+    "name": "pnpm 文档",
+    "match": {
+      "hosts": [
+        "pnpm.io"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation",
+    "exclude": [
+      ".theme-doc-version-badge",
+      ".theme-doc-toc-mobile"
+    ]
+  },
+  {
+    "id": "yarn-docs",
+    "name": "Yarn 文档",
+    "match": {
+      "hosts": [
+        "yarnpkg.com"
+      ],
+      "paths": [
+        "/getting-started/*",
+        "/features/*",
+        "/cli/*",
+        "/configuration/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "git-docs",
+    "name": "Git 文档",
+    "match": {
+      "hosts": [
+        "git-scm.com"
+      ],
+      "paths": [
+        "/docs/*",
+        "/book/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "postgresql-docs",
+    "name": "PostgreSQL 文档",
+    "match": {
+      "hosts": [
+        "www.postgresql.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "mysql-docs",
+    "name": "MySQL 文档",
+    "match": {
+      "hosts": [
+        "dev.mysql.com"
+      ],
+      "paths": [
+        "/doc/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "sqlite-docs",
+    "name": "SQLite 文档",
+    "match": {
+      "hosts": [
+        "www.sqlite.org",
+        "sqlite.org"
+      ],
+      "paths": [
+        "/lang*",
+        "/syntax/*",
+        "/c3ref/*",
+        "/docs.html"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "mongodb-docs",
+    "name": "MongoDB 文档",
+    "match": {
+      "hosts": [
+        "www.mongodb.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "redis-docs",
+    "name": "Redis 文档",
+    "match": {
+      "hosts": [
+        "redis.io"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "docker-docs",
+    "name": "Docker 文档",
+    "match": {
+      "hosts": [
+        "docs.docker.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "kubernetes-docs",
+    "name": "Kubernetes 文档",
+    "match": {
+      "hosts": [
+        "kubernetes.io"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "helm-docs",
+    "name": "Helm 文档",
+    "match": {
+      "hosts": [
+        "helm.sh"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "terraform-docs",
+    "name": "Terraform 文档",
+    "match": {
+      "hosts": [
+        "developer.hashicorp.com"
+      ],
+      "paths": [
+        "/terraform/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "ansible-docs",
+    "name": "Ansible 文档",
+    "match": {
+      "hosts": [
+        "docs.ansible.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "nginx-docs",
+    "name": "nginx 文档",
+    "match": {
+      "hosts": [
+        "nginx.org"
+      ],
+      "paths": [
+        "/en/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "apache-httpd-docs",
+    "name": "Apache HTTP Server 文档",
+    "match": {
+      "hosts": [
+        "httpd.apache.org"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "cloudflare-docs",
+    "name": "Cloudflare 文档",
+    "match": {
+      "hosts": [
+        "developers.cloudflare.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "aws-docs",
+    "name": "AWS 文档",
+    "match": {
+      "hosts": [
+        "docs.aws.amazon.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "google-cloud-docs",
+    "name": "Google Cloud 文档",
+    "match": {
+      "hosts": [
+        "docs.cloud.google.com",
+        "cloud.google.com"
+      ],
+      "paths": [
+        "/*/docs/*",
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "digitalocean-guides",
+    "name": "DigitalOcean 技术教程",
+    "match": {
+      "hosts": [
+        "www.digitalocean.com"
+      ],
+      "paths": [
+        "/community/tutorials/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "vercel-docs",
+    "name": "Vercel 文档",
+    "match": {
+      "hosts": [
+        "vercel.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "netlify-docs",
+    "name": "Netlify 文档",
+    "match": {
+      "hosts": [
+        "docs.netlify.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "supabase-docs",
+    "name": "Supabase 文档",
+    "match": {
+      "hosts": [
+        "supabase.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "prisma-docs",
+    "name": "Prisma 文档",
+    "match": {
+      "hosts": [
+        "www.prisma.io"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "drizzle-docs",
+    "name": "Drizzle 文档",
+    "match": {
+      "hosts": [
+        "orm.drizzle.team"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "sqlalchemy-docs",
+    "name": "SQLAlchemy 文档",
+    "match": {
+      "hosts": [
+        "docs.sqlalchemy.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "laravel-docs",
+    "name": "Laravel 文档",
+    "match": {
+      "hosts": [
+        "laravel.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "rails-guides",
+    "name": "Ruby on Rails 指南",
+    "match": {
+      "hosts": [
+        "guides.rubyonrails.org"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "spring-docs",
+    "name": "Spring 文档",
+    "match": {
+      "hosts": [
+        "docs.spring.io"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "quarkus-guides",
+    "name": "Quarkus 指南",
+    "match": {
+      "hosts": [
+        "quarkus.io"
+      ],
+      "paths": [
+        "/guides/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "elixir-docs",
+    "name": "Elixir 与 Erlang 包文档",
+    "match": {
+      "hosts": [
+        "hexdocs.pm"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "zig-docs",
+    "name": "Zig 文档",
+    "match": {
+      "hosts": [
+        "ziglang.org"
+      ],
+      "paths": [
+        "/documentation/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "cmake-docs",
+    "name": "CMake 文档",
+    "match": {
+      "hosts": [
+        "cmake.org"
+      ],
+      "paths": [
+        "/cmake/help/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "readthedocs",
+    "name": "Read the Docs 文档",
+    "match": {
+      "hosts": [
+        "*.readthedocs.io"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "sphinx"
+  },
+  {
+    "id": "docusaurus-docs",
+    "name": "Docusaurus 文档",
+    "match": {
+      "hosts": [
+        "docusaurus.io"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "markdown"
+  },
+  {
+    "id": "gitbook-docs",
+    "name": "GitBook 文档",
+    "match": {
+      "hosts": [
+        "gitbook.com"
+      ],
+      "paths": [
+        "/docs/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "documentation"
+  },
+  {
+    "id": "reuters",
+    "name": "Reuters",
+    "match": {
+      "hosts": [
+        "www.reuters.com"
+      ],
+      "paths": [
+        "/world/*",
+        "/business/*",
+        "/technology/*",
+        "/science/*",
+        "/sustainability/*",
+        "/lifestyle/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "apnews",
+    "name": "AP News",
+    "match": {
+      "hosts": [
+        "apnews.com"
+      ],
+      "paths": [
+        "/article/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "bbc-news",
+    "name": "BBC",
+    "match": {
+      "hosts": [
+        "www.bbc.com",
+        "www.bbc.co.uk"
+      ],
+      "paths": [
+        "/news/*",
+        "/future/article/*",
+        "/culture/article/*",
+        "/travel/article/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "guardian",
+    "name": "The Guardian",
+    "match": {
+      "hosts": [
+        "www.theguardian.com"
+      ],
+      "paths": [
+        "/world/*",
+        "/technology/*",
+        "/science/*",
+        "/business/*",
+        "/environment/*",
+        "/culture/*",
+        "/books/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "nytimes",
+    "name": "The New York Times",
+    "match": {
+      "hosts": [
+        "www.nytimes.com"
+      ],
+      "paths": [
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "washingtonpost",
+    "name": "The Washington Post",
+    "match": {
+      "hosts": [
+        "www.washingtonpost.com"
+      ],
+      "paths": [
+        "/world/*",
+        "/politics/*",
+        "/technology/*",
+        "/business/*",
+        "/science/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "financial-times",
+    "name": "Financial Times",
+    "match": {
+      "hosts": [
+        "www.ft.com"
+      ],
+      "paths": [
+        "/content/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "economist",
+    "name": "The Economist",
+    "match": {
+      "hosts": [
+        "www.economist.com"
+      ],
+      "paths": [
+        "/science-and-technology/*",
+        "/business/*",
+        "/finance-and-economics/*",
+        "/international/*",
+        "/leaders/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "wall-street-journal",
+    "name": "The Wall Street Journal",
+    "match": {
+      "hosts": [
+        "www.wsj.com"
+      ],
+      "paths": [
+        "/articles/*",
+        "/world/*",
+        "/tech/*",
+        "/business/*",
+        "/finance/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "bloomberg-news",
+    "name": "Bloomberg",
+    "match": {
+      "hosts": [
+        "www.bloomberg.com"
+      ],
+      "paths": [
+        "/news/articles/*",
+        "/features/*",
+        "/opinion/articles/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "cnbc-news",
+    "name": "CNBC",
+    "match": {
+      "hosts": [
+        "www.cnbc.com"
+      ],
+      "paths": [
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "cnn-news",
+    "name": "CNN",
+    "match": {
+      "hosts": [
+        "www.cnn.com",
+        "edition.cnn.com"
+      ],
+      "paths": [
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "npr-news",
+    "name": "NPR",
+    "match": {
+      "hosts": [
+        "www.npr.org"
+      ],
+      "paths": [
+        "/sections/*",
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "aljazeera-news",
+    "name": "Al Jazeera",
+    "match": {
+      "hosts": [
+        "www.aljazeera.com"
+      ],
+      "paths": [
+        "/news/*",
+        "/features/*",
+        "/economy/*",
+        "/opinion/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "dw-news",
+    "name": "DW",
+    "match": {
+      "hosts": [
+        "www.dw.com"
+      ],
+      "paths": [
+        "/en/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "france24-news",
+    "name": "France 24",
+    "match": {
+      "hosts": [
+        "www.france24.com"
+      ],
+      "paths": [
+        "/en/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "scmp-news",
+    "name": "South China Morning Post",
+    "match": {
+      "hosts": [
+        "www.scmp.com"
+      ],
+      "paths": [
+        "/news/*",
+        "/business/*",
+        "/tech/*",
+        "/comment/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "nikkei-asia",
+    "name": "Nikkei Asia",
+    "match": {
+      "hosts": [
+        "asia.nikkei.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "the-verge",
+    "name": "The Verge",
+    "match": {
+      "hosts": [
+        "www.theverge.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "arstechnica",
+    "name": "Ars Technica",
+    "match": {
+      "hosts": [
+        "arstechnica.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "wired",
+    "name": "WIRED",
+    "match": {
+      "hosts": [
+        "www.wired.com"
+      ],
+      "paths": [
+        "/story/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "techcrunch",
+    "name": "TechCrunch",
+    "match": {
+      "hosts": [
+        "techcrunch.com"
+      ],
+      "paths": [
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "venturebeat",
+    "name": "VentureBeat",
+    "match": {
+      "hosts": [
+        "venturebeat.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "the-register",
+    "name": "The Register",
+    "match": {
+      "hosts": [
+        "www.theregister.com"
+      ],
+      "paths": [
+        "/20*/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "engadget",
+    "name": "Engadget",
+    "match": {
+      "hosts": [
+        "www.engadget.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "the-conversation",
+    "name": "The Conversation",
+    "match": {
+      "hosts": [
+        "theconversation.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "scientific-american",
+    "name": "Scientific American",
+    "match": {
+      "hosts": [
+        "www.scientificamerican.com"
+      ],
+      "paths": [
+        "/article/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "wikipedia",
+    "name": "Wikipedia",
+    "match": {
+      "hosts": [
+        "*.wikipedia.org"
+      ],
+      "paths": [
+        "/wiki/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "encyclopedia",
+    "content": [
+      {
+        "css": [
+          ".mw-parser-output > p",
+          ".mw-parser-output > section > p",
+          ".mw-parser-output section p"
+        ],
+        "atomic": true
+      },
+      {
+        "css": [".mw-parser-output h2"],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".mwe-math-element"
+    ],
+    "exclude": [
+      ".catlinks"
+    ]
+  },
+  {
+    "id": "wikibooks",
+    "name": "Wikibooks",
+    "match": {
+      "hosts": [
+        "*.wikibooks.org"
+      ],
+      "paths": [
+        "/wiki/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "encyclopedia",
+    "content": [
+      {
+        "css": [
+          ".mw-parser-output > p",
+          ".mw-parser-output li"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "wikivoyage",
+    "name": "Wikivoyage",
+    "match": {
+      "hosts": [
+        "*.wikivoyage.org"
+      ],
+      "paths": [
+        "/wiki/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "encyclopedia",
+    "content": [
+      {
+        "css": [
+          ".mw-parser-output > p",
+          ".mw-parser-output li"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "wiktionary",
+    "name": "Wiktionary",
+    "match": {
+      "hosts": [
+        "*.wiktionary.org"
+      ],
+      "paths": [
+        "/wiki/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "encyclopedia",
+    "content": [
+      {
+        "css": [
+          ".mw-parser-output > p",
+          ".mw-parser-output ol > li"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".IPA",
+      ".headword"
+    ]
+  },
+  {
+    "id": "britannica",
+    "name": "Britannica",
+    "match": {
+      "hosts": [
+        "www.britannica.com"
+      ],
+      "paths": [
+        "/topic/*",
+        "/science/*",
+        "/biography/*",
+        "/place/*",
+        "/event/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "arxiv",
+    "name": "arXiv",
+    "match": {
+      "hosts": [
+        "arxiv.org"
+      ],
+      "paths": [
+        "/abs/*",
+        "/html/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          "h1.title",
+          "blockquote.abstract",
+          ".ltx_para > p",
+          ".ltx_title"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "ar5iv",
+    "name": "ar5iv",
+    "match": {
+      "hosts": [
+        "ar5iv.labs.arxiv.org"
+      ],
+      "paths": [
+        "/html/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".ltx_para > p",
+          ".ltx_title"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "pubmed",
+    "name": "PubMed",
+    "match": {
+      "hosts": [
+        "pubmed.ncbi.nlm.nih.gov"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          "#enc-abstract p",
+          "h1.heading-title"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "pmc",
+    "name": "PubMed Central",
+    "match": {
+      "hosts": [
+        "pmc.ncbi.nlm.nih.gov"
+      ],
+      "paths": [
+        "/articles/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".abstract p",
+          "article p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "nature",
+    "name": "Nature",
+    "match": {
+      "hosts": [
+        "www.nature.com"
+      ],
+      "paths": [
+        "/articles/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          "[data-title=\"Abstract\"] p",
+          "[data-title=\"Main\"] p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "science-journal",
+    "name": "Science",
+    "match": {
+      "hosts": [
+        "www.science.org"
+      ],
+      "paths": [
+        "/doi/*",
+        "/content/article/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research"
+  },
+  {
+    "id": "sciencedirect",
+    "name": "ScienceDirect",
+    "match": {
+      "hosts": [
+        "www.sciencedirect.com"
+      ],
+      "paths": [
+        "/science/article/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".abstract p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "plos",
+    "name": "PLOS",
+    "match": {
+      "hosts": [
+        "journals.plos.org"
+      ],
+      "paths": [
+        "/*/article*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".abstract p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "frontiers",
+    "name": "Frontiers",
+    "match": {
+      "hosts": [
+        "www.frontiersin.org"
+      ],
+      "paths": [
+        "/journals/*/articles/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research"
+  },
+  {
+    "id": "biorxiv",
+    "name": "bioRxiv",
+    "match": {
+      "hosts": [
+        "www.biorxiv.org"
+      ],
+      "paths": [
+        "/content/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".section.abstract p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "medrxiv",
+    "name": "medRxiv",
+    "match": {
+      "hosts": [
+        "www.medrxiv.org"
+      ],
+      "paths": [
+        "/content/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".section.abstract p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "joss",
+    "name": "Journal of Open Source Software",
+    "match": {
+      "hosts": [
+        "joss.theoj.org"
+      ],
+      "paths": [
+        "/papers/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research"
+  },
+  {
+    "id": "elife",
+    "name": "eLife",
+    "match": {
+      "hosts": [
+        "elifesciences.org"
+      ],
+      "paths": [
+        "/articles/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research"
+  },
+  {
+    "id": "acm-library",
+    "name": "ACM Digital Library",
+    "match": {
+      "hosts": [
+        "dl.acm.org"
+      ],
+      "paths": [
+        "/doi/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".abstractSection p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "springer",
+    "name": "Springer Nature Link",
+    "match": {
+      "hosts": [
+        "link.springer.com"
+      ],
+      "paths": [
+        "/article/*",
+        "/chapter/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".c-article-body p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "ieee-xplore",
+    "name": "IEEE Xplore",
+    "match": {
+      "hosts": [
+        "ieeexplore.ieee.org"
+      ],
+      "paths": [
+        "/document/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research"
+  },
+  {
+    "id": "stackoverflow",
+    "name": "Stack Overflow",
+    "match": {
+      "hosts": [
+        "stackoverflow.com"
+      ],
+      "paths": [
+        "/questions/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "questions"
+  },
+  {
+    "id": "stackexchange",
+    "name": "Stack Exchange",
+    "match": {
+      "hosts": [
+        "*.stackexchange.com"
+      ],
+      "paths": [
+        "/questions/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "questions"
+  },
+  {
+    "id": "askubuntu",
+    "name": "Ask Ubuntu",
+    "match": {
+      "hosts": [
+        "askubuntu.com"
+      ],
+      "paths": [
+        "/questions/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "questions"
+  },
+  {
+    "id": "superuser",
+    "name": "Super User",
+    "match": {
+      "hosts": [
+        "superuser.com"
+      ],
+      "paths": [
+        "/questions/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "questions"
+  },
+  {
+    "id": "serverfault",
+    "name": "Server Fault",
+    "match": {
+      "hosts": [
+        "serverfault.com"
+      ],
+      "paths": [
+        "/questions/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "questions"
+  },
+  {
+    "id": "dev-community",
+    "name": "DEV Community",
+    "match": {
+      "hosts": [
+        "dev.to"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "discussion",
+    "content": [
+      {
+        "css": [
+          ".crayons-article__body p",
+          ".crayons-article__body li"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "medium",
+    "name": "Medium",
+    "match": {
+      "hosts": [
+        "*.medium.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "substack",
+    "name": "Substack",
+    "match": {
+      "hosts": [
+        "*.substack.com"
+      ],
+      "paths": [
+        "/p/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article",
+    "content": [
+      {
+        "css": [
+          ".available-content .body p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "discourse-meta",
+    "name": "Discourse Meta",
+    "match": {
+      "hosts": [
+        "meta.discourse.org"
+      ],
+      "paths": [
+        "/t/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "discussion",
+    "content": [
+      {
+        "css": [
+          ".cooked p",
+          ".cooked li",
+          ".crawler-post .post p",
+          ".crawler-post .post li"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "lobsters",
+    "name": "Lobsters",
+    "match": {
+      "hosts": [
+        "lobste.rs"
+      ],
+      "paths": [
+        "/s/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "discussion",
+    "content": [
+      {
+        "css": [
+          ".comment_text p"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".byline"
+    ]
+  },
+  {
+    "id": "wordpress-blogs",
+    "name": "WordPress.com 博客",
+    "match": {
+      "hosts": [
+        "*.wordpress.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "tumblr-blogs",
+    "name": "Tumblr 博客",
+    "match": {
+      "hosts": [
+        "*.tumblr.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "ghost-blog",
+    "name": "Ghost 博客",
+    "match": {
+      "hosts": [
+        "ghost.org"
+      ],
+      "paths": [
+        "/blog/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "product-hunt",
+    "name": "Product Hunt",
+    "match": {
+      "hosts": [
+        "www.producthunt.com"
+      ],
+      "paths": [
+        "/posts/*",
+        "/products/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "discussion"
+  },
+  {
+    "id": "goodreads",
+    "name": "Goodreads",
+    "match": {
+      "hosts": [
+        "www.goodreads.com"
+      ],
+      "paths": [
+        "/book/show/*",
+        "/review/show/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "mastodon",
+    "name": "Mastodon 公共站",
+    "match": {
+      "hosts": [
+        "mastodon.social",
+        "mastodon.online"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".status__content h1",
+          ".status__content h2",
+          ".status__content h3",
+          ".status__content h4",
+          ".status__content h5",
+          ".status__content h6",
+          ".status__content p",
+          ".status__content li",
+          ".status__content dt",
+          ".status__content dd",
+          ".status__content blockquote",
+          ".status__content th",
+          ".status__content td",
+          ".status__content figcaption",
+          ".status__content"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".mention",
+      ".hashtag"
+    ]
+  },
+  {
+    "id": "huggingface",
+    "name": "Hugging Face",
+    "match": {
+      "hosts": [
+        "huggingface.co"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "markdown",
+    "exclude": [
+      "[data-testid=\"model-header\"]"
+    ]
+  },
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT 对话",
+    "match": {
+      "hosts": [
+        "chatgpt.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          "[data-message-author-role=\"assistant\"] .markdown h1",
+          "[data-message-author-role=\"assistant\"] .markdown h2",
+          "[data-message-author-role=\"assistant\"] .markdown h3",
+          "[data-message-author-role=\"assistant\"] .markdown h4",
+          "[data-message-author-role=\"assistant\"] .markdown h5",
+          "[data-message-author-role=\"assistant\"] .markdown h6",
+          "[data-message-author-role=\"assistant\"] .markdown p",
+          "[data-message-author-role=\"assistant\"] .markdown li",
+          "[data-message-author-role=\"assistant\"] .markdown dt",
+          "[data-message-author-role=\"assistant\"] .markdown dd",
+          "[data-message-author-role=\"assistant\"] .markdown blockquote",
+          "[data-message-author-role=\"assistant\"] .markdown th",
+          "[data-message-author-role=\"assistant\"] .markdown td",
+          "[data-message-author-role=\"assistant\"] .markdown figcaption",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h1",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h2",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h3",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h4",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h5",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap h6",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap p",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap li",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap dt",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap dd",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap blockquote",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap th",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap td",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap figcaption",
+          "[data-message-author-role=\"assistant\"] .markdown",
+          "[data-message-author-role=\"user\"] .whitespace-pre-wrap"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "claude",
+    "name": "Claude 对话",
+    "match": {
+      "hosts": [
+        "claude.ai"
+      ],
+      "paths": [
+        "/chat/*",
+        "/new"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "conversation",
+    "content": [
+      {
+        "css": [
+          ".font-claude-message > p",
+          "[data-testid=\"user-message\"]"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "gemini",
+    "name": "Gemini 对话",
+    "match": {
+      "hosts": [
+        "gemini.google.com"
+      ],
+      "paths": [
+        "/app",
+        "/app/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "conversation",
+    "content": [
+      {
+        "css": [
+          "message-content p",
+          "user-query .query-text"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "perplexity",
+    "name": "Perplexity",
+    "match": {
+      "hosts": [
+        "www.perplexity.ai"
+      ],
+      "paths": [
+        "/search/*",
+        "/page/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "conversation"
+  },
+  {
+    "id": "deepseek",
+    "name": "DeepSeek 对话",
+    "match": {
+      "hosts": [
+        "chat.deepseek.com"
+      ],
+      "paths": [
+        "/a/chat/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "conversation"
+  },
+  {
+    "id": "poe",
+    "name": "Poe 对话",
+    "match": {
+      "hosts": [
+        "poe.com"
+      ],
+      "paths": [
+        "/chat/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "conversation"
+  },
+  {
+    "id": "amazon-shopping",
+    "name": "Amazon 商品与评论",
+    "match": {
+      "hosts": [
+        "www.amazon.com",
+        "www.amazon.co.uk",
+        "www.amazon.de",
+        "www.amazon.co.jp"
+      ],
+      "paths": [
+        "/dp/*",
+        "/*/dp/*",
+        "/gp/product/*",
+        "/gp/customer-reviews/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product",
+    "content": [
+      {
+        "css": [
+          "#productDescription p",
+          "#feature-bullets li",
+          "[data-hook=\"review-body\"]"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".a-price"
+    ]
+  },
+  {
+    "id": "ebay-shopping",
+    "name": "eBay 商品",
+    "match": {
+      "hosts": [
+        "www.ebay.com",
+        "www.ebay.co.uk",
+        "www.ebay.de"
+      ],
+      "paths": [
+        "/itm/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "etsy-shopping",
+    "name": "Etsy 商品",
+    "match": {
+      "hosts": [
+        "www.etsy.com"
+      ],
+      "paths": [
+        "/listing/*",
+        "/*/listing/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "aliexpress-shopping",
+    "name": "AliExpress 商品",
+    "match": {
+      "hosts": [
+        "www.aliexpress.com"
+      ],
+      "paths": [
+        "/item/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "shopify-stores",
+    "name": "Shopify 店铺商品",
+    "match": {
+      "hosts": [
+        "*.myshopify.com"
+      ],
+      "paths": [
+        "/products/*",
+        "/collections/*/products/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "steam-store",
+    "name": "Steam 商店",
+    "match": {
+      "hosts": [
+        "store.steampowered.com"
+      ],
+      "paths": [
+        "/app/*",
+        "/news/app/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product",
+    "content": [
+      {
+        "css": [
+          "#game_area_description p",
+          "#game_area_description li",
+          ".game_description_snippet"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".game_purchase_price",
+      ".discount_final_price"
+    ]
+  },
+  {
+    "id": "itch-games",
+    "name": "itch.io 游戏页面",
+    "match": {
+      "hosts": [
+        "*.itch.io"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product",
+    "content": [
+      {
+        "css": [
+          ".formatted_description p",
+          ".formatted_description li"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "gog-store",
+    "name": "GOG 商店",
+    "match": {
+      "hosts": [
+        "www.gog.com"
+      ],
+      "paths": [
+        "/en/game/*",
+        "/game/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "product"
+  },
+  {
+    "id": "gmail",
+    "name": "Gmail 邮件正文",
+    "match": {
+      "hosts": [
+        "mail.google.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".a3s h1",
+          ".a3s h2",
+          ".a3s h3",
+          ".a3s h4",
+          ".a3s h5",
+          ".a3s h6",
+          ".a3s p",
+          ".a3s li",
+          ".a3s dt",
+          ".a3s dd",
+          ".a3s blockquote",
+          ".a3s th",
+          ".a3s td",
+          ".a3s figcaption",
+          ".a3s"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".gmail_signature"
+    ]
+  },
+  {
+    "id": "outlook-mail",
+    "name": "Outlook 邮件正文",
+    "match": {
+      "hosts": [
+        "outlook.live.com",
+        "outlook.office.com",
+        "outlook.office365.com"
+      ],
+      "paths": [
+        "/mail/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          "[role=\"document\"] h1",
+          "[role=\"document\"] h2",
+          "[role=\"document\"] h3",
+          "[role=\"document\"] h4",
+          "[role=\"document\"] h5",
+          "[role=\"document\"] h6",
+          "[role=\"document\"] p",
+          "[role=\"document\"] li",
+          "[role=\"document\"] dt",
+          "[role=\"document\"] dd",
+          "[role=\"document\"] blockquote",
+          "[role=\"document\"] th",
+          "[role=\"document\"] td",
+          "[role=\"document\"] figcaption",
+          "[role=\"document\"]"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "proton-mail",
+    "name": "Proton Mail 邮件正文",
+    "match": {
+      "hosts": [
+        "mail.proton.me"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".message-content h1",
+          ".message-content h2",
+          ".message-content h3",
+          ".message-content h4",
+          ".message-content h5",
+          ".message-content h6",
+          ".message-content p",
+          ".message-content li",
+          ".message-content dt",
+          ".message-content dd",
+          ".message-content blockquote",
+          ".message-content th",
+          ".message-content td",
+          ".message-content figcaption",
+          ".message-content"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab 讨论与文档",
+    "match": {
+      "hosts": [
+        "gitlab.com"
+      ],
+      "paths": [
+        "/*/-/issues/*",
+        "/*/-/merge_requests/*",
+        "/*/-/blob/*",
+        "/*/-/wikis/*",
+        "/*/-/releases*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "markdown",
+    "content": [
+      {
+        "css": [
+          ".md h1",
+          ".md h2",
+          ".md h3",
+          ".md h4",
+          ".md p",
+          ".md li",
+          ".md blockquote",
+          ".md dd",
+          ".md figcaption"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".gl-label-text",
+      ".author-link"
+    ],
+    "exclude": [
+      ".issuable-sidebar",
+      ".system-note"
+    ]
+  },
+  {
+    "id": "discord-messages",
+    "name": "Discord 消息",
+    "match": {
+      "hosts": [
+        "discord.com",
+        "canary.discord.com",
+        "ptb.discord.com"
+      ],
+      "paths": [
+        "/channels/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          "[id^=\"message-content-\"] h1",
+          "[id^=\"message-content-\"] h2",
+          "[id^=\"message-content-\"] h3",
+          "[id^=\"message-content-\"] h4",
+          "[id^=\"message-content-\"] h5",
+          "[id^=\"message-content-\"] h6",
+          "[id^=\"message-content-\"] p",
+          "[id^=\"message-content-\"] li",
+          "[id^=\"message-content-\"] dt",
+          "[id^=\"message-content-\"] dd",
+          "[id^=\"message-content-\"] blockquote",
+          "[id^=\"message-content-\"] th",
+          "[id^=\"message-content-\"] td",
+          "[id^=\"message-content-\"] figcaption",
+          "[id^=\"message-content-\"]"
+        ],
+        "atomic": false
+      }
+    ],
+    "omit": [
+      "div[id^=\"message-content-\"] > span[class*=\"timestamp_\"]",
+      "div[id^=\"message-content-\"] > span[class*=\"-timestamp\"]"
+    ]
+  },
+  {
+    "id": "slack-messages",
+    "name": "Slack 消息",
+    "match": {
+      "hosts": [
+        "app.slack.com"
+      ],
+      "paths": [
+        "/client/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".c-message_kit__text h1",
+          ".c-message_kit__text h2",
+          ".c-message_kit__text h3",
+          ".c-message_kit__text h4",
+          ".c-message_kit__text h5",
+          ".c-message_kit__text h6",
+          ".c-message_kit__text p",
+          ".c-message_kit__text li",
+          ".c-message_kit__text dt",
+          ".c-message_kit__text dd",
+          ".c-message_kit__text blockquote",
+          ".c-message_kit__text th",
+          ".c-message_kit__text td",
+          ".c-message_kit__text figcaption",
+          ".c-message_kit__text .p-rich_text_section h1",
+          ".c-message_kit__text .p-rich_text_section h2",
+          ".c-message_kit__text .p-rich_text_section h3",
+          ".c-message_kit__text .p-rich_text_section h4",
+          ".c-message_kit__text .p-rich_text_section h5",
+          ".c-message_kit__text .p-rich_text_section h6",
+          ".c-message_kit__text .p-rich_text_section p",
+          ".c-message_kit__text .p-rich_text_section li",
+          ".c-message_kit__text .p-rich_text_section dt",
+          ".c-message_kit__text .p-rich_text_section dd",
+          ".c-message_kit__text .p-rich_text_section blockquote",
+          ".c-message_kit__text .p-rich_text_section th",
+          ".c-message_kit__text .p-rich_text_section td",
+          ".c-message_kit__text .p-rich_text_section figcaption",
+          ".c-message_kit__text",
+          ".c-message_kit__text .p-rich_text_section"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".c-message__sender",
+      ".c-timestamp"
+    ]
+  },
+  {
+    "id": "telegram-messages",
+    "name": "Telegram 消息",
+    "match": {
+      "hosts": [
+        "web.telegram.org"
+      ],
+      "paths": [
+        "/a",
+        "/a/*",
+        "/k",
+        "/k/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".message .text-content h1",
+          ".message .text-content h2",
+          ".message .text-content h3",
+          ".message .text-content h4",
+          ".message .text-content h5",
+          ".message .text-content h6",
+          ".message .text-content p",
+          ".message .text-content li",
+          ".message .text-content dt",
+          ".message .text-content dd",
+          ".message .text-content blockquote",
+          ".message .text-content th",
+          ".message .text-content td",
+          ".message .text-content figcaption",
+          ".message .text-content"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".time",
+      ".message-title"
+    ]
+  },
+  {
+    "id": "whatsapp-messages",
+    "name": "WhatsApp 消息",
+    "match": {
+      "hosts": [
+        "web.whatsapp.com"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          "[data-pre-plain-text] .selectable-text h1",
+          "[data-pre-plain-text] .selectable-text h2",
+          "[data-pre-plain-text] .selectable-text h3",
+          "[data-pre-plain-text] .selectable-text h4",
+          "[data-pre-plain-text] .selectable-text h5",
+          "[data-pre-plain-text] .selectable-text h6",
+          "[data-pre-plain-text] .selectable-text p",
+          "[data-pre-plain-text] .selectable-text li",
+          "[data-pre-plain-text] .selectable-text dt",
+          "[data-pre-plain-text] .selectable-text dd",
+          "[data-pre-plain-text] .selectable-text blockquote",
+          "[data-pre-plain-text] .selectable-text th",
+          "[data-pre-plain-text] .selectable-text td",
+          "[data-pre-plain-text] .selectable-text figcaption",
+          "[data-pre-plain-text] .selectable-text"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "notion-published",
+    "name": "Notion 公开页面",
+    "match": {
+      "hosts": [
+        "*.notion.site"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".notion-page-content .notion-text-block h1",
+          ".notion-page-content .notion-text-block h2",
+          ".notion-page-content .notion-text-block h3",
+          ".notion-page-content .notion-text-block h4",
+          ".notion-page-content .notion-text-block h5",
+          ".notion-page-content .notion-text-block h6",
+          ".notion-page-content .notion-text-block p",
+          ".notion-page-content .notion-text-block li",
+          ".notion-page-content .notion-text-block dt",
+          ".notion-page-content .notion-text-block dd",
+          ".notion-page-content .notion-text-block blockquote",
+          ".notion-page-content .notion-text-block th",
+          ".notion-page-content .notion-text-block td",
+          ".notion-page-content .notion-text-block figcaption",
+          ".notion-page-content .notion-header-block h1",
+          ".notion-page-content .notion-header-block h2",
+          ".notion-page-content .notion-header-block h3",
+          ".notion-page-content .notion-header-block h4",
+          ".notion-page-content .notion-header-block h5",
+          ".notion-page-content .notion-header-block h6",
+          ".notion-page-content .notion-header-block p",
+          ".notion-page-content .notion-header-block li",
+          ".notion-page-content .notion-header-block dt",
+          ".notion-page-content .notion-header-block dd",
+          ".notion-page-content .notion-header-block blockquote",
+          ".notion-page-content .notion-header-block th",
+          ".notion-page-content .notion-header-block td",
+          ".notion-page-content .notion-header-block figcaption",
+          ".notion-page-content .notion-sub_header-block h1",
+          ".notion-page-content .notion-sub_header-block h2",
+          ".notion-page-content .notion-sub_header-block h3",
+          ".notion-page-content .notion-sub_header-block h4",
+          ".notion-page-content .notion-sub_header-block h5",
+          ".notion-page-content .notion-sub_header-block h6",
+          ".notion-page-content .notion-sub_header-block p",
+          ".notion-page-content .notion-sub_header-block li",
+          ".notion-page-content .notion-sub_header-block dt",
+          ".notion-page-content .notion-sub_header-block dd",
+          ".notion-page-content .notion-sub_header-block blockquote",
+          ".notion-page-content .notion-sub_header-block th",
+          ".notion-page-content .notion-sub_header-block td",
+          ".notion-page-content .notion-sub_header-block figcaption",
+          ".notion-page-content .notion-sub_sub_header-block h1",
+          ".notion-page-content .notion-sub_sub_header-block h2",
+          ".notion-page-content .notion-sub_sub_header-block h3",
+          ".notion-page-content .notion-sub_sub_header-block h4",
+          ".notion-page-content .notion-sub_sub_header-block h5",
+          ".notion-page-content .notion-sub_sub_header-block h6",
+          ".notion-page-content .notion-sub_sub_header-block p",
+          ".notion-page-content .notion-sub_sub_header-block li",
+          ".notion-page-content .notion-sub_sub_header-block dt",
+          ".notion-page-content .notion-sub_sub_header-block dd",
+          ".notion-page-content .notion-sub_sub_header-block blockquote",
+          ".notion-page-content .notion-sub_sub_header-block th",
+          ".notion-page-content .notion-sub_sub_header-block td",
+          ".notion-page-content .notion-sub_sub_header-block figcaption",
+          ".notion-page-content .notion-bulleted_list-block h1",
+          ".notion-page-content .notion-bulleted_list-block h2",
+          ".notion-page-content .notion-bulleted_list-block h3",
+          ".notion-page-content .notion-bulleted_list-block h4",
+          ".notion-page-content .notion-bulleted_list-block h5",
+          ".notion-page-content .notion-bulleted_list-block h6",
+          ".notion-page-content .notion-bulleted_list-block p",
+          ".notion-page-content .notion-bulleted_list-block li",
+          ".notion-page-content .notion-bulleted_list-block dt",
+          ".notion-page-content .notion-bulleted_list-block dd",
+          ".notion-page-content .notion-bulleted_list-block blockquote",
+          ".notion-page-content .notion-bulleted_list-block th",
+          ".notion-page-content .notion-bulleted_list-block td",
+          ".notion-page-content .notion-bulleted_list-block figcaption",
+          ".notion-page-content .notion-numbered_list-block h1",
+          ".notion-page-content .notion-numbered_list-block h2",
+          ".notion-page-content .notion-numbered_list-block h3",
+          ".notion-page-content .notion-numbered_list-block h4",
+          ".notion-page-content .notion-numbered_list-block h5",
+          ".notion-page-content .notion-numbered_list-block h6",
+          ".notion-page-content .notion-numbered_list-block p",
+          ".notion-page-content .notion-numbered_list-block li",
+          ".notion-page-content .notion-numbered_list-block dt",
+          ".notion-page-content .notion-numbered_list-block dd",
+          ".notion-page-content .notion-numbered_list-block blockquote",
+          ".notion-page-content .notion-numbered_list-block th",
+          ".notion-page-content .notion-numbered_list-block td",
+          ".notion-page-content .notion-numbered_list-block figcaption",
+          ".notion-page-content .notion-quote-block h1",
+          ".notion-page-content .notion-quote-block h2",
+          ".notion-page-content .notion-quote-block h3",
+          ".notion-page-content .notion-quote-block h4",
+          ".notion-page-content .notion-quote-block h5",
+          ".notion-page-content .notion-quote-block h6",
+          ".notion-page-content .notion-quote-block p",
+          ".notion-page-content .notion-quote-block li",
+          ".notion-page-content .notion-quote-block dt",
+          ".notion-page-content .notion-quote-block dd",
+          ".notion-page-content .notion-quote-block blockquote",
+          ".notion-page-content .notion-quote-block th",
+          ".notion-page-content .notion-quote-block td",
+          ".notion-page-content .notion-quote-block figcaption",
+          ".notion-page-content .notion-callout-block h1",
+          ".notion-page-content .notion-callout-block h2",
+          ".notion-page-content .notion-callout-block h3",
+          ".notion-page-content .notion-callout-block h4",
+          ".notion-page-content .notion-callout-block h5",
+          ".notion-page-content .notion-callout-block h6",
+          ".notion-page-content .notion-callout-block p",
+          ".notion-page-content .notion-callout-block li",
+          ".notion-page-content .notion-callout-block dt",
+          ".notion-page-content .notion-callout-block dd",
+          ".notion-page-content .notion-callout-block blockquote",
+          ".notion-page-content .notion-callout-block th",
+          ".notion-page-content .notion-callout-block td",
+          ".notion-page-content .notion-callout-block figcaption",
+          ".notion-page-content .notion-text-block",
+          ".notion-page-content .notion-header-block",
+          ".notion-page-content .notion-sub_header-block",
+          ".notion-page-content .notion-sub_sub_header-block",
+          ".notion-page-content .notion-bulleted_list-block",
+          ".notion-page-content .notion-numbered_list-block",
+          ".notion-page-content .notion-quote-block",
+          ".notion-page-content .notion-callout-block"
+        ],
+        "atomic": false
+      }
+    ],
+    "exclude": [
+      ".notion-collection_view-block",
+      ".notion-bookmark-block"
+    ]
+  },
+  {
+    "id": "google-search",
+    "name": "Google 搜索结果",
+    "match": {
+      "hosts": [
+        "www.google.com",
+        "www.google.co.uk",
+        "www.google.co.jp",
+        "www.google.de",
+        "www.google.com.hk"
+      ],
+      "paths": [
+        "/search"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "search",
+    "content": [
+      {
+        "css": [
+          "#search h3",
+          "#search .VwiC3b"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "google-scholar",
+    "name": "Google Scholar 搜索结果",
+    "match": {
+      "hosts": [
+        "scholar.google.com",
+        "scholar.google.com.hk",
+        "scholar.google.co.jp"
+      ],
+      "paths": [
+        "/scholar"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "search",
+    "content": [
+      {
+        "css": [
+          ".gs_rt",
+          ".gs_rs"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".gs_ct1",
+      ".gs_ct2"
+    ],
+    "exclude": [
+      ".gs_a",
+      ".gs_fl",
+      "#gs_hdr"
+    ]
+  },
+  {
+    "id": "feedly-reader",
+    "name": "Feedly 文章阅读",
+    "match": {
+      "hosts": [
+        "feedly.com"
+      ],
+      "paths": [
+        "/i/entry/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          ".entryBody h1",
+          ".entryBody h2",
+          ".entryBody h3",
+          ".entryBody h4",
+          ".entryBody h5",
+          ".entryBody h6",
+          ".entryBody p",
+          ".entryBody li",
+          ".entryBody dt",
+          ".entryBody dd",
+          ".entryBody blockquote",
+          ".entryBody th",
+          ".entryBody td",
+          ".entryBody figcaption",
+          ".entryBody"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "inoreader-reader",
+    "name": "Inoreader 文章阅读",
+    "match": {
+      "hosts": [
+        "www.inoreader.com"
+      ],
+      "paths": [
+        "/all_articles",
+        "/article/*",
+        "/folder/*",
+        "/feed/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "message",
+    "content": [
+      {
+        "css": [
+          "#article_full_contents h1",
+          "#article_full_contents h2",
+          "#article_full_contents h3",
+          "#article_full_contents h4",
+          "#article_full_contents h5",
+          "#article_full_contents h6",
+          "#article_full_contents p",
+          "#article_full_contents li",
+          "#article_full_contents dt",
+          "#article_full_contents dd",
+          "#article_full_contents blockquote",
+          "#article_full_contents th",
+          "#article_full_contents td",
+          "#article_full_contents figcaption",
+          ".article_content h1",
+          ".article_content h2",
+          ".article_content h3",
+          ".article_content h4",
+          ".article_content h5",
+          ".article_content h6",
+          ".article_content p",
+          ".article_content li",
+          ".article_content dt",
+          ".article_content dd",
+          ".article_content blockquote",
+          ".article_content th",
+          ".article_content td",
+          ".article_content figcaption",
+          "#article_full_contents",
+          ".article_content"
+        ],
+        "atomic": false
+      }
+    ],
+    "protect": [
+      ".article_author",
+      ".article_date"
+    ]
+  },
+  {
+    "id": "linkedin-articles",
+    "name": "LinkedIn 长文",
+    "match": {
+      "hosts": [
+        "www.linkedin.com"
+      ],
+      "paths": [
+        "/pulse/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "seekingalpha",
+    "name": "Seeking Alpha 文章",
+    "match": {
+      "hosts": [
+        "seekingalpha.com"
+      ],
+      "paths": [
+        "/article/*",
+        "/news/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article",
+    "content": [
+      {
+        "css": [
+          "[data-test-id=\"article-content\"] p"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "healthline",
+    "name": "Healthline 文章",
+    "match": {
+      "hosts": [
+        "www.healthline.com"
+      ],
+      "paths": [
+        "/health/*",
+        "/nutrition/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "article"
+  },
+  {
+    "id": "wiley-online",
+    "name": "Wiley Online Library",
+    "match": {
+      "hosts": [
+        "onlinelibrary.wiley.com"
+      ],
+      "paths": [
+        "/doi/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "research",
+    "content": [
+      {
+        "css": [
+          ".article-section__content p",
+          ".article-section__content h2",
+          ".article-section__content h3"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "npm-packages",
+    "name": "npm 软件包说明",
+    "match": {
+      "hosts": [
+        "www.npmjs.com"
+      ],
+      "paths": [
+        "/package/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "markdown",
+    "content": [
+      {
+        "css": [
+          "#readme h1",
+          "#readme h2",
+          "#readme h3",
+          "#readme h4",
+          "#readme p",
+          "#readme li",
+          "#readme blockquote",
+          "#readme dd",
+          "#readme figcaption"
+        ],
+        "atomic": false
+      }
+    ]
+  },
+  {
+    "id": "pypi-packages",
+    "name": "PyPI 软件包说明",
+    "match": {
+      "hosts": [
+        "pypi.org"
+      ],
+      "paths": [
+        "/project/*"
+      ],
+      "excludePaths": [
+        "/login",
+        "/login/*",
+        "/signin",
+        "/signin/*",
+        "/signup",
+        "/signup/*",
+        "/account",
+        "/account/*",
+        "/settings",
+        "/settings/*",
+        "/checkout",
+        "/checkout/*",
+        "/auth/*"
+      ]
+    },
+    "profile": "markdown",
+    "content": [
+      {
+        "css": [
+          ".project-description h1",
+          ".project-description h2",
+          ".project-description h3",
+          ".project-description h4",
+          ".project-description p",
+          ".project-description li",
+          ".project-description blockquote",
+          ".project-description dd",
+          ".project-description figcaption"
+        ],
+        "atomic": false
+      }
+    ]
+  }
+]

@@ -3,31 +3,33 @@ import {describe, expect, it, vi} from 'vitest';
 
 import {
     applyTranslationsToSnapshot,
+    buildWholeBlockTranslationSource,
     collectLiveTranslationTextSlots,
     createDeclarativeAdapter,
     createTranslationCore,
+    createCurrentTranslationResolverBatch,
     createTranslationSourceSnapshot,
     extractTranslationText,
     extractTranslationTextFromNodes,
-    findTranslationTruncationAncestors,
     getCurrentTranslationCore,
     getOpenShadowRoots,
     hasActiveTranslationLineClamp,
-    isClearlyTargetLanguage,
     isMeaningfulTranslationText,
     parseTranslationSlots,
-    removeTranslationTruncation,
     selectPreferredTranslationCandidate,
     serializeTranslationSlots,
     TranslationCandidateCore,
-    resolveTranslationCandidate,
     resolveTranslationCandidateAtPoint,
 } from '@/src/core/translation/public';
+import {shouldSkipTranslationForTarget} from '@/src/core/language/detect';
 import {
     evaluateHardGuard,
+    getElementTagName,
+    isDocumentSurfaceNoTranslateShell,
+    isTextInNestedTranslationTooltip,
     findElementsAtPoint,
+    findTextPointAtPoint,
     findNodeAtPoint,
-    isExtensionElement,
     maxComposedAncestorDepth,
     safeClosest,
     safeMatches,
@@ -41,20 +43,20 @@ import {
     isStructuralContainer,
 } from '@/src/core/translation/layout';
 import {
-    applyTranslationOutputFilter,
     hasMeaningfulTranslationTextInNodes,
+    isIdentifierLikeText,
     isTranslationTextNodeProtected,
 } from '@/src/core/translation/text';
-import {
-    restorePlainTextPage,
-    transformPlainTextPage,
-} from '@/src/features/full-page-translation/content/plainText';
 import {
     findAdapterPrunedAncestor,
     inheritCachedFlag,
     partitionInlineRunAtBarriers,
     readCachedFlagOr,
 } from '@/src/core/translation/internal';
+import {resolveVisualTranslationRange} from '@/src/core/translation/visual';
+import {defaultTranslationAdapters} from '@/src/core/translation/registry';
+const bilibiliAdapter = defaultTranslationAdapters.find(adapter => adapter.id === 'bilibili')!;
+const redditAdapter = defaultTranslationAdapters.find(adapter => adapter.id === 'reddit')!;
 
 function page(html: string, url = 'https://example.test/article') {
     const {document} = parseHTML(`<html><head></head><body>${html}</body></html>`);
@@ -62,61 +64,200 @@ function page(html: string, url = 'https://example.test/article') {
     return {document, core};
 }
 
+function installRangeStub(
+    document: Document,
+    text: Text,
+    getClientRects: (startOffset: number, endOffset: number) => readonly object[] = () => [],
+): () => void {
+    const previous = Object.getOwnPropertyDescriptor(document, 'createRange');
+    Object.defineProperty(document, 'createRange', {
+        configurable: true,
+        value: () => {
+            let startContainer: Text | null = null;
+            let endContainer: Text | null = null;
+            let startOffset = 0;
+            let endOffset = 0;
+            return {
+                get startContainer() { return startContainer; },
+                get endContainer() { return endContainer; },
+                get startOffset() { return startOffset; },
+                get endOffset() { return endOffset; },
+                setStart(node: Text, offset: number) { startContainer = node; startOffset = offset; },
+                setEnd(node: Text, offset: number) { endContainer = node; endOffset = offset; },
+                getClientRects: () => getClientRects(startOffset, endOffset),
+                toString: () => text.nodeValue!.slice(startOffset, endOffset),
+            } as unknown as Range;
+        },
+    });
+    return () => {
+        if (previous) Object.defineProperty(document, 'createRange', previous);
+        else Reflect.deleteProperty(document, 'createRange');
+    };
+}
+
 function candidateIds(document: Document, url?: string): string[] {
     const core = createTranslationCore({url: new URL(url ?? 'https://example.test/article')});
     return core.discover(document).map((candidate) => candidate.element.id).filter(Boolean);
 }
 
+describe('Codeforces named form controls', () => {
+    it('issue #492 continues discovery after a form input shadows tagName', () => {
+        const {document} = parseHTML('<html><body><form><input name="tagName"></form><p id="statement">Read this problem statement and calculate the answer.</p></body></html>');
+        const form = document.querySelector('form')!;
+        // linkedom 不实现 HTMLFormElement 的命名属性访问，显式模拟浏览器真实返回值。
+        Object.defineProperty(form, 'tagName', {value: form.querySelector('input')});
+        expect(getElementTagName(form)).toBe('form');
+        expect(getElementTagName(document.querySelector('input')!)).toBe('input');
+        const core = createTranslationCore({url: new URL('https://codeforces.com/contest/2259/problem/A')});
+        expect(core.discover(document).map(candidate => candidate.element)).toContain(document.querySelector('#statement'));
+        expect(core.resolve(form.querySelector('input'))).toBeNull();
+        expect(getElementTagName(Object.assign(Object.create(null), {tagName: {}}) as Element)).toBe('');
+    });
+});
+
 describe('translation candidate core', () => {
-    it('过滤译文匹配项，并在正则无效时保持原结果', () => {
-        expect(applyTranslationOutputFilter('译文<|channel>noise<channel|>结尾', '<\\|channel>.*?<channel\\|>'))
-            .toBe('译文结尾');
-        expect(applyTranslationOutputFilter('unchanged', '[')).toBe('unchanged');
+    it.each(['content', 'all'] as const)('GitHub %s 范围跳过代码行子树，同时保留同一 diff 表格中的评论', scope => {
+        const {document} = parseHTML(`<html><body><main><table class="diff-table"><tbody>
+            <tr><td class="blob-code" id="code"><span>This is a source code comment, not page prose.</span></td></tr>
+            <tr><td class="line-comments"><div class="markdown-body"><p id="review">Please explain the reason for this change.</p></div></td></tr>
+            </tbody></table><p id="summary">The following changes improve the browser performance.</p>
+            <table class="js-file-line-container"><tr><td id="file-code">Source file text stays unchanged.</td></tr></table></main></body></html>`);
+        const core = createTranslationCore({url: new URL('https://github.com/openai/codex/compare/base...head'), scope});
+        const code = document.querySelector('#code')!;
+        const fileCode = document.querySelector('#file-code')!;
+        const candidates = core.discover(document);
+        expect(candidates.map(candidate => candidate.element.id)).toEqual(expect.arrayContaining(['review', 'summary']));
+        expect(core.resolve(code.firstChild)).toBeNull();
+        expect(core.resolve(fileCode.firstChild)).toBeNull();
+        expect(core.shouldIgnoreMutation(code)).toBe(true);
+        expect(extractTranslationText(document.querySelector('main')!, core.shouldStayOriginal)).not.toContain('source code comment');
+        expect([...core.discoverSteps(code)].some(step => step.element === code.firstElementChild)).toBe(false);
+        const other = createTranslationCore({url: new URL('https://example.test/'), scope});
+        expect(other.shouldStayOriginal(code)).toBe(false);
+        code.className = '';
+        expect(core.shouldStayOriginal(code)).toBe(false);
+        expect(core.shouldIgnoreMutation(code)).toBe(false);
+    });
+    it.each([
+        ['provider', 'https://openrouter.ai/provider/minimax'],
+        ['models', 'https://openrouter.ai/models'],
+    ])('OpenRouter %s 页面保护模型名称但仍翻译描述', (_name, url) => {
+        const {document} = parseHTML(`<html><body><ul><li>
+            <a href="/minimax/hailuo-3"><span class="font-semibold" id="model-name"><span class="hidden md:block">MiniMax: H3 Max</span><span class="md:hidden">H3 Max</span></span></a>
+            <a href="/minimax/hailuo-3"><div class="line-clamp-2"><p id="model-description">A detailed model description remains translatable.</p></div></a>
+        </li></ul></body></html>`);
+        const modelName = document.querySelector<HTMLElement>('#model-name')!;
+        const description = document.querySelector<HTMLElement>('#model-description')!;
+        for (const scope of ['content', 'all'] as const) {
+            const core = createTranslationCore({url: new URL(url), scope});
+            const candidates = core.discover(document);
+            expect(core.resolve(modelName.querySelector('.hidden')?.firstChild), `${url} ${scope}`).toBeNull();
+            expect(core.resolve(modelName.querySelector('.md\\:hidden')?.firstChild), `${url} ${scope}`).toBeNull();
+            expect(core.resolve(description.firstChild)?.element, `${url} ${scope}`).toBe(description);
+            expect(candidates.some(candidate => candidate.element === description), `${url} ${scope}`).toBe(true);
+            const snapshot = createTranslationSourceSnapshot(document.querySelector('li')!, core.shouldStayOriginal,
+                undefined, undefined, core.shouldOmitFromTranslation);
+            expect(snapshot.slots.map(slot => slot.source), `${url} ${scope}`).toEqual(['A detailed model description remains translatable.']);
+            expect(snapshot.clone.textContent, `${url} ${scope}`).not.toContain('MiniMax: H3 Max');
+        }
     });
 
-    it('将直接打开的 txt 页面临时拆成段落，并可恢复原始 pre', () => {
-        const {document} = parseHTML('<html><body><pre>First paragraph.\n\nSecond paragraph.</pre></body></html>');
-        Object.defineProperty(document, 'location', {value: {pathname: '/notes.txt'}, configurable: true});
-        const original = document.querySelector('pre');
-
-        expect(transformPlainTextPage(document)).toBe(true);
-        expect(transformPlainTextPage(document)).toBe(true);
-        expect(Array.from(document.querySelectorAll('#fluent-read-plain-text > p')).map((item) => item.textContent))
-            .toEqual(['First paragraph.', 'Second paragraph.']);
-
-        restorePlainTextPage();
-        expect(document.body.firstElementChild).toBe(original);
-        restorePlainTextPage();
+    it('OpenRouter 详情页只保护标题和 API 标识，普通 heading 仍可翻译', () => {
+        const {document} = parseHTML(`<html><body>
+            <div id="model-title-row"><h1 id="model-name">MiniMax H3 Max</h1>
+                <h3 id="api-name" title="Model identifier for use in the API">minimax/hailuo-3</h3></div>
+            <h2 id="performance">Models</h2><p id="detail-copy">Model details remain translatable.</p>
+        </body></html>`);
+        for (const scope of ['content', 'all'] as const) {
+            const core = createTranslationCore({url: new URL('https://openrouter.ai/minimax/hailuo-3'), scope});
+            const title = document.querySelector('#model-name')!;
+            const api = document.querySelector('#api-name')!;
+            expect(core.resolve(title.firstChild), scope).toBeNull();
+            expect(core.resolve(api.firstChild), scope).toBeNull();
+            expect(core.resolve(document.querySelector('#performance')!.firstChild)?.element, scope).toBe(document.querySelector('#performance'));
+            expect(core.resolve(document.querySelector('#detail-copy')!.firstChild)?.element, scope).toBe(document.querySelector('#detail-copy'));
+            const snapshot = createTranslationSourceSnapshot(document.querySelector('#model-title-row')!, core.shouldStayOriginal,
+                undefined, undefined, core.shouldOmitFromTranslation);
+            expect(snapshot.slots, scope).toHaveLength(0);
+            expect(snapshot.clone.textContent?.trim(), scope).toBe('');
+        }
     });
 
-    it('只转换有效的 txt pre，并清理已从页面脱离的转换状态', () => {
-        expect(transformPlainTextPage({} as Document)).toBe(false);
-        expect(transformPlainTextPage({location: {}} as unknown as Document)).toBe(false);
-
-        const htmlPage = parseHTML('<html><body><pre>Text</pre></body></html>').document;
-        Object.defineProperty(htmlPage, 'location', {value: {pathname: '/notes.html'}, configurable: true});
-        expect(transformPlainTextPage(htmlPage)).toBe(false);
-
-        const missingPre = parseHTML('<html><body><p>Text</p></body></html>').document;
-        Object.defineProperty(missingPre, 'location', {value: {pathname: '/notes.txt'}, configurable: true});
-        expect(transformPlainTextPage(missingPre)).toBe(false);
-
-        const emptyPre = parseHTML('<html><body><pre> \n\n </pre></body></html>').document;
-        Object.defineProperty(emptyPre, 'location', {value: {pathname: '/empty.txt'}, configurable: true});
-        expect(transformPlainTextPage(emptyPre)).toBe(false);
-
-        const nullTextPre = parseHTML('<html><body><pre></pre></body></html>').document;
-        Object.defineProperty(nullTextPre, 'location', {value: {pathname: '/null.txt'}, configurable: true});
-        Object.defineProperty(nullTextPre.querySelector('pre')!, 'textContent', {get: () => null});
-        expect(transformPlainTextPage(nullTextPre)).toBe(false);
-
-        const detached = parseHTML('<html><body><pre>Detached text.</pre></body></html>').document;
-        Object.defineProperty(detached, 'location', {value: {pathname: '/detached.txt'}, configurable: true});
-        expect(transformPlainTextPage(detached)).toBe(true);
-        detached.querySelector('#fluent-read-plain-text')!.remove();
-        expect(transformPlainTextPage(htmlPage)).toBe(false);
-        restorePlainTextPage();
+    it('非 OpenRouter 与伪域名仍按默认规则允许模型名称翻译', () => {
+        const html = '<ul><li><a href="/minimax/hailuo-3"><span class="font-semibold" id="model-name">MiniMax: H3 Max</span></a><a href="/minimax/hailuo-3"><div class="line-clamp-2"><p id="model-description">A detailed model description remains translatable.</p></div></a></li></ul>';
+        for (const url of ['https://example.test/models', 'https://openrouter.ai.attacker.invalid/models']) {
+            const {document} = parseHTML(`<html><body>${html}</body></html>`);
+            const core = createTranslationCore({url: new URL(url)});
+            expect(core.resolve(document.querySelector('#model-name')!.firstChild), url).not.toBeNull();
+        }
     });
+
+    it('只放行 text/plain 文档的顶层 pre，HTML 页面中的 pre 仍保持保护', () => {
+        const htmlPage = page('<pre id="html-pre">const value = 1;</pre>');
+        expect(htmlPage.core.discover(htmlPage.document).map((candidate) => candidate.element.id))
+            .not.toContain('html-pre');
+
+        const plainPage = page('<pre id="plain-pre">First line\nSecond line</pre>');
+        Object.defineProperty(plainPage.document, 'contentType', {
+            configurable: true,
+            value: 'text/plain',
+        });
+        const plainPre = plainPage.document.querySelector('#plain-pre')!;
+
+        expect(plainPage.core.discover(plainPage.document)).toEqual([
+            expect.objectContaining({
+                element: plainPre,
+                kind: 'content',
+                reason: 'generic-readable-block',
+            }),
+        ]);
+        expect(extractTranslationText(plainPre)).toBe('First line Second line');
+    });
+
+    it('图标字体连字不会混入全文、悬浮和富文本请求，恢复时保留原始图标', () => {
+        const {document, core} = page('<p id="prose">Open <span id="icon">settings</span> to continue.</p><p id="standalone">keyboard_return</p>');
+        const view = document.defaultView!;
+        const descriptor = Object.getOwnPropertyDescriptor(view, 'getComputedStyle');
+        let iconFamily = '';
+        Object.defineProperty(view, 'getComputedStyle', {
+            configurable: true,
+            value: (element: Element) => ({
+                display: element.tagName === 'P' ? 'block' : 'inline',
+                fontFamily: ['icon', 'standalone'].includes(element.id) ? iconFamily : 'Arial',
+            }),
+        });
+        try {
+            const prose = document.querySelector('#prose') as HTMLElement;
+                const icon = document.querySelector('#icon') as HTMLElement;
+            for (const family of [
+                'Google Symbols', '"Material Icons"', "'Material Icons Outlined'",
+                'Material Symbols Rounded, sans-serif', 'FontAwesome', 'Font Awesome 6 Free',
+            ]) {
+                iconFamily = family;
+                expect(core.discover(document).map((candidate) => candidate.element.id)).toEqual(['prose']);
+                expect(core.resolve(icon)?.element).toBe(prose);
+                expect(core.resolve(document.querySelector('#standalone'))).toBeNull();
+                expect(extractTranslationText(prose)).toBe('Open to continue.');
+                const snapshot = createTranslationSourceSnapshot(prose);
+                expect(snapshot.slots.map((slot) => slot.source)).toEqual(['Open', 'to continue.']);
+                const translated = applyTranslationsToSnapshot(snapshot, ['打开', '以继续。']);
+                expect(translated).not.toContain('settings');
+                expect(translated).toContain('打开');
+                expect(icon.textContent).toBe('settings');
+            }
+            for (const family of ['Arial, "Material Symbols Rounded"', 'Arial']) {
+                iconFamily = family;
+                expect(extractTranslationText(prose)).toBe('Open settings to continue.');
+                expect(core.resolve(icon)?.element).toBe(prose);
+            }
+            iconFamily = 'Material IconsCustom';
+            expect(extractTranslationText(prose)).toBe('Open settings to continue.');
+        } finally {
+            if (descriptor) Object.defineProperty(view, 'getComputedStyle', descriptor);
+            else Reflect.deleteProperty(view, 'getComputedStyle');
+        }
+    });
+
     it('保留 engine 自身的祖先深度防线，并缓存实际检查过的祖先', () => {
         const ancestors = ['parent', 'grandparent', 'too-deep'];
 
@@ -189,6 +330,142 @@ describe('translation candidate core', () => {
         expect(full).toBeDefined();
         expect(hover?.element).toBe(full?.element);
         expect(hover?.kind).toBe(full?.kind);
+    });
+
+    it('500 个全部节点候选在同步批量解析中共享祖先守卫，下一批重新读取宿主样式', () => {
+        const {document, window} = parseHTML('<html><body><main>' + Array.from({length: 500}, (_, index) =>
+            `<section><p>Readable batch paragraph ${index}.</p></section>`).join('') + '</main></body></html>');
+        const core = new TranslationCandidateCore({scope: 'all'});
+        const previousStyle = Object.getOwnPropertyDescriptor(window, 'getComputedStyle');
+        let bodyReads = 0;
+        let hidden = false;
+        Object.defineProperty(window, 'getComputedStyle', {configurable: true, value: (element: Element) => {
+            if (element === document.body) bodyReads += 1;
+            return {display: 'block', position: 'static', fontFamily: 'serif',
+                visibility: element === document.body && hidden ? 'hidden' : 'visible'};
+        }});
+        try {
+            const paragraphs = [...document.querySelectorAll('p')];
+            const resolve = core.createSynchronousResolver();
+            expect(resolve(null)).toBeNull();
+            paragraphs.forEach(paragraph => expect(resolve(paragraph)).toMatchObject({element: paragraph, scope: 'all'}));
+            expect(bodyReads).toBeLessThanOrEqual(3);
+            hidden = true;
+            bodyReads = 0;
+            const resolveHidden = core.createSynchronousResolver();
+            paragraphs.forEach(paragraph => expect(resolveHidden(paragraph)).toBeNull());
+            expect(bodyReads).toBeLessThanOrEqual(3);
+            expect(bodyReads).toBeGreaterThan(0);
+        } finally {
+            if (previousStyle) Object.defineProperty(window, 'getComputedStyle', previousStyle);
+            else Reflect.deleteProperty(window, 'getComputedStyle');
+        }
+    });
+
+    it('正文批量解析不复用其他命中的外壳放行标记或保护边界', () => {
+        const {document, core} = page('<div translate="no" id="shell"><p id="inside">Readable application paragraph.</p></div><p id="outside">Another readable paragraph.</p>');
+        const resolve = core.createSynchronousResolver();
+        expect(resolve(document.querySelector('#inside'))).toMatchObject({allowTopLevelApplicationShell: true});
+        expect(resolve(document.querySelector('#shell'))).toBeNull();
+        const outside = resolve(document.querySelector('#outside'));
+        expect(outside?.element).toBe(document.querySelector('#outside'));
+        expect(outside?.allowTopLevelApplicationShell).toBeUndefined();
+    });
+
+    it('当前文档的同批解析按范围隔离核心，下一批反映新保护属性', () => {
+        const {document} = parseHTML('<html><body><main><p>Readable article source.</p></main><nav><p>Readable navigation source.</p></nav></body></html>');
+        const article = document.querySelector('main p')!;
+        const navigation = document.querySelector('nav p')!;
+        const resolve = createCurrentTranslationResolverBatch();
+        expect(resolve(article)?.element).toBe(article);
+        expect(resolve(navigation)).toBeNull();
+        expect(resolve(navigation, 'all')?.element).toBe(navigation);
+        expect(resolve(article, 'all')?.element).toBe(article);
+        navigation.setAttribute('translate', 'no');
+        expect(createCurrentTranslationResolverBatch()(navigation, 'all')).toBeNull();
+    });
+
+    it('同步解析复用内联分组时仍按每次命中的原节点选择前后两段', () => {
+        const {document} = parseHTML('<html><body><div>First readable inline sentence.<p>A separate paragraph.</p>Last readable inline sentence.</div></body></html>');
+        const container = document.querySelector('div')!;
+        const core = new TranslationCandidateCore({scope: 'all'});
+        const resolve = core.createSynchronousResolver();
+        const first = resolve(container.firstChild);
+        const last = resolve(container.lastChild);
+        expect(first?.element).toBe(container);
+        expect(last?.element).toBe(container);
+        expect(first?.nodes).toEqual([container.firstChild]);
+        expect(last?.nodes).toEqual([container.lastChild]);
+    });
+
+    it('仅显式目标的适配器重定向不能从当前内联容器偷取来源', () => {
+        const {document} = parseHTML('<html><body><div id="redirect">Readable redirected text.<p>A separate paragraph.</p>More readable text.</div><p id="target">The declared target.</p></body></html>');
+        const redirect = document.querySelector('#redirect')!;
+        const target = document.querySelector<HTMLElement>('#target')!;
+        const core = new TranslationCandidateCore({adapters: [{
+            id: 'redirect-only', matches: () => true, genericCandidatePolicy: 'targets-only',
+            decide: element => element === redirect
+                ? {kind: 'force-target', atomic: false, target, reason: 'redirect'}
+                : {kind: 'pass'},
+        }]});
+        expect(core.resolve(redirect.firstChild)?.element).toBe(target);
+        expect(core.resolve(redirect)?.element).toBe(target);
+        target.hidden = true;
+        const atomicCore = new TranslationCandidateCore({adapters: [{
+            id: 'atomic-redirect-only', matches: () => true, genericCandidatePolicy: 'targets-only',
+            decide: element => element === redirect
+                ? {kind: 'force-target', target, reason: 'atomic-redirect'} : {kind: 'pass'},
+        }]});
+        expect(atomicCore.resolve(redirect.firstChild)).toBeNull();
+    });
+
+    it('显式非原子容器保留前后内联段，命中未声明的块子节点仍沿用容器目标', () => {
+        const {document} = parseHTML('<html><body><div id="declared">First readable group.<p>A separate undeclared paragraph.</p>Last readable group.</div></body></html>');
+        const declared = document.querySelector('div')!;
+        const core = new TranslationCandidateCore({adapters: [{
+            id: 'container-only', matches: () => true, genericCandidatePolicy: 'targets-only',
+            decide: element => element === declared
+                ? {kind: 'force-target', atomic: false, reason: 'declared-container'} : {kind: 'pass'},
+        }]});
+        expect(core.resolve(declared.firstChild)?.nodes).toEqual([declared.firstChild]);
+        expect(core.resolve(declared.lastChild)?.nodes).toEqual([declared.lastChild]);
+        expect(core.resolve(declared.querySelector('p')!.firstChild)).toMatchObject({element: declared});
+    });
+
+    it('带独立子按钮的显式交互容器内联段继续采用控件展示路径', () => {
+        const {document} = parseHTML('<html><body><div role="button">First readable label.<button>A separate action.</button>Last readable label.</div></body></html>');
+        const container = document.querySelector('div')!;
+        const core = new TranslationCandidateCore({adapters: [{
+            id: 'composite-control', matches: () => true,
+            decide: element => element === container
+                ? {kind: 'force-target', atomic: false, reason: 'composite-control'} : {kind: 'pass'},
+        }]});
+        expect(core.resolve(container.firstChild)).toMatchObject({element: container, kind: 'control',
+            nodes: [container.firstChild]});
+    });
+
+    it('全部节点的已物化片段沿宿主决定控件种类，脱离宿主时仍可识别自身', () => {
+        const {document} = parseHTML('<html><body><button><span data-fr-translation-segment="true">Read the action.</span></button></body></html>');
+        const segment = document.querySelector('span')!;
+        const core = new TranslationCandidateCore({scope: 'all'});
+        expect(new TranslationCandidateCore().resolve(segment)).toMatchObject({element: segment, kind: 'control'});
+        expect(core.resolve(segment)).toMatchObject({element: segment, kind: 'control', scope: 'all'});
+        segment.remove();
+        expect(core.resolve(segment)).toMatchObject({element: segment, kind: 'control', scope: 'all'});
+    });
+
+    it.each(['visible', 'hidden', 'adapter'] as const)('动态控件标签的 %s 状态遵守外壳提升和保护门禁', kind => {
+        const {document} = parseHTML('<html><body><button><span>Readable action label.</span></button></body></html>');
+        const label = document.querySelector<HTMLElement>('span')!;
+        const button = document.querySelector('button')!;
+        if (kind === 'hidden') label.hidden = true;
+        const core = new TranslationCandidateCore({adapters: kind === 'adapter' ? [{
+            id: 'protected-label', matches: () => true,
+            decide: element => element === label ? {kind: 'prune-subtree', reason: 'owned-label'} : {kind: 'pass'},
+        }] : []});
+        const steps = [...core.discoverSteps(label)];
+        expect(steps.some(step => step.element === button)).toBe(kind === 'visible');
+        expect(steps.some(step => step.candidate)).toBe(kind === 'visible');
     });
 
     it('reclassifies a candidate when its interactive role changes', () => {
@@ -509,13 +786,25 @@ describe('translation candidate core', () => {
             parent = child;
         }
         parent.textContent = 'Readable text at an adversarial depth.';
-        const core = createTranslationCore({url: new URL('https://example.test')});
+        let adapterDecisions = 0;
+        const core = createTranslationCore({
+            url: new URL('https://example.test'),
+            adapters: [{
+                id: 'depth-short-circuit',
+                matches: () => true,
+                decide: () => {
+                    adapterDecisions += 1;
+                    return {kind: 'pass'} as const;
+                },
+            }],
+        });
 
         expect(evaluateHardGuard(parent)).toMatchObject({
             prune: true,
             reason: 'ancestor-depth-limit',
         });
         expect(core.resolve(parent.firstChild)).toBeNull();
+        expect(adapterDecisions).toBe(0);
     });
 
     it('shares text ancestor protection across one adversarially deep discovery', () => {
@@ -617,6 +906,551 @@ describe('translation candidate core', () => {
         expect(ids).toEqual(['allowed']);
     });
 
+    it('issue #498：Weglot 在 <html> 根节点设置 translate=no 时全文翻译仍可发现正文', () => {
+        // mapbox.com（Webflow + Weglot）会在文档根节点注入 <html translate="no">，
+        // 这是框架级防护而非局部保护；根表面的该标记不应把整页判成 inherited-no-translate。
+        const {document} = parseHTML(`
+            <html translate="no"><body><main>
+                <h2 id="title">About Tripadvisor</h2>
+                <p id="body-copy">As the world's largest travel guidance platform.</p>
+                <section translate="no"><p id="local-protected">Do not translate this local section.</p></section>
+            </main></body></html>
+        `);
+        const ids = candidateIds(document);
+
+        // 根节点标记被放行：正文可翻译；但真正的局部 translate=no 容器仍被保护。
+        expect(ids).toEqual(expect.arrayContaining(['title', 'body-copy']));
+        expect(ids).not.toContain('local-protected');
+    });
+
+    it('issue #498：仅文档根表面（<html>/<body>）的 no-translate 标记被识别为框架级外壳', () => {
+        const {document} = parseHTML(`
+            <html translate="no"><body class="notranslate">
+                <main><section translate="no"><p id="p">x</p></section></main>
+            </body></html>
+        `);
+        const root = document.documentElement;
+        const body = document.body;
+        const section = document.querySelector('section')!;
+
+        expect(isDocumentSurfaceNoTranslateShell(root)).toBe(true);
+        expect(isDocumentSurfaceNoTranslateShell(body)).toBe(true);
+        expect(isDocumentSurfaceNoTranslateShell(section)).toBe(false);
+
+        // 根表面不再触发整树裁剪，但嵌套的 translate=no 容器仍返回 inherited-no-translate。
+        expect(evaluateHardGuard(root).prune).toBe(false);
+        expect(evaluateHardGuard(section)).toMatchObject({prune: true, reason: 'inherited-no-translate'});
+    });
+
+    it('keeps full-page discovery strict while allowing explicit translation through a body-level app shell', () => {
+        const {document, core} = page(`
+            <div id="app" class="notranslate">
+                <main><article><p id="content">Readable application content.</p>
+                    <div class="notranslate"><p id="protected">Protected local content.</p></div>
+                </article></main>
+            </div>
+        `);
+        const content = document.querySelector('#content') as HTMLElement;
+        const source = content.firstChild;
+        if (!source) throw new Error('hover fixture text is missing');
+
+        expect(core.discover(document)).toEqual([]);
+        expect(core.inspect(content).candidate).toBeNull();
+        expect(core.resolve(document.querySelector('#app'))).toBeNull();
+        expect(core.resolve(source)).toMatchObject({
+            element: content,
+            kind: 'content',
+            allowTopLevelApplicationShell: true,
+        });
+        expect(extractTranslationText(
+            content,
+            core.shouldStayOriginal,
+            undefined,
+            {allowTopLevelApplicationShell: true, protectedElement: content},
+        )).toBe('Readable application content.');
+
+        Object.defineProperty(document, 'elementFromPoint', {
+            configurable: true,
+            value: () => content,
+        });
+        expect(core.resolveAtPoint(document, 1, 2)).toMatchObject({
+            element: content,
+            allowTopLevelApplicationShell: true,
+        });
+
+        const local = document.querySelector('#protected') as HTMLElement;
+        expect(core.resolve(local.firstChild)).toBeNull();
+
+        const {document: nestedDocument, core: nestedCore} = page(`
+            <div id="outer">
+                <div class="notranslate"><p id="nested">Nested protected content.</p></div>
+            </div>
+        `);
+        expect(nestedCore.resolve(nestedDocument.querySelector('#nested')?.firstChild)).toBeNull();
+    });
+
+    it('refines an oversized unstructured hover target into a bounded visual text chunk', () => {
+        const sentences = Array.from({length: 120}, (_, index) =>
+            `Sentence ${index} explains how the document keeps its readable context intact.`).join(' ');
+        const {document, core} = page(`<main><div id="long-text">${sentences}</div></main>`);
+        const owner = document.querySelector('#long-text')!;
+        const text = owner.firstChild! as Text;
+        const previous = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        const previousCreateRange = Object.getOwnPropertyDescriptor(document, 'createRange');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: Math.floor(text.length / 2)}),
+        });
+        Object.defineProperty(document, 'createRange', {
+            configurable: true,
+            value: () => {
+                let startContainer: Text | null = null;
+                let endContainer: Text | null = null;
+                let startOffset = 0;
+                let endOffset = 0;
+                return {
+                    get startContainer() { return startContainer; },
+                    get endContainer() { return endContainer; },
+                    get startOffset() { return startOffset; },
+                    get endOffset() { return endOffset; },
+                    setStart(node: Text, offset: number) { startContainer = node; startOffset = offset; },
+                    setEnd(node: Text, offset: number) { endContainer = node; endOffset = offset; },
+                    getClientRects: () => [],
+                    toString: () => text.nodeValue!.slice(startOffset, endOffset),
+                } as unknown as Range;
+            },
+        });
+        try {
+            expect(findTextPointAtPoint(document, 10, 20)).toMatchObject({node: text, offset: Math.floor(text.length / 2)});
+            const inspected = core.inspect(owner).candidate!;
+            expect(resolveVisualTranslationRange(inspected, document, 10, 20, core.shouldStayOriginal)).not.toBeNull();
+            const candidate = core.resolveAtPoint(document, 10, 20);
+            expect(candidate).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+            expect(candidate?.visualRange?.startContainer).toBe(text);
+            expect(candidate?.visualRange?.endContainer).toBe(text);
+            const range = document.createRange();
+            range.setStart(candidate!.visualRange!.startContainer, candidate!.visualRange!.startOffset);
+            range.setEnd(candidate!.visualRange!.endContainer, candidate!.visualRange!.endOffset);
+            expect(range.toString().length).toBeLessThan(text.length);
+            expect(range.toString()).toContain('Sentence');
+        } finally {
+            if (previous) Object.defineProperty(document, 'caretPositionFromPoint', previous);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+            if (previousCreateRange) Object.defineProperty(document, 'createRange', previousCreateRange);
+            else Reflect.deleteProperty(document, 'createRange');
+        }
+    });
+
+    it('超大容器尾部的悬浮范围保留命中附近的正文而不是退回整块', () => {
+        const {document} = page('<main><div id="wide-hover"></div></main>');
+        const owner = document.querySelector<HTMLElement>('#wide-hover')!;
+        for (let index = 0; index < 5000; index++) {
+            const span = document.createElement('span');
+            span.textContent = `Earlier paragraph ${index}. `; owner.append(span);
+        }
+        const value = Array.from({length: 120}, (_, index) => `Target sentence ${index} keeps its local reading context. `).join('');
+        const text = document.createTextNode(value); owner.append(text);
+        const caret = value.indexOf('Target sentence 60');
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: caret})});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result).not.toBeNull();
+            expect(result?.sourceText).toContain('Target sentence 60');
+            expect(result?.sourceText.length).toBeLessThanOrEqual(1600);
+            expect(result?.range.startContainer).toBe(text);
+            expect(result?.range.endContainer).toBe(text);
+            expect(result?.range.startOffset).toBeLessThanOrEqual(caret);
+            expect(result?.range.endOffset).toBeGreaterThan(caret);
+        } finally { restoreRange(); }
+    });
+
+    it.each([1, 150])('悬浮范围的节点预算覆盖空文本而不是扫描全部稠密空节点（命中长度 %s）', repetitions => {
+        const {document} = page('<main><div id="empty-hover"></div></main>');
+        const owner = document.querySelector<HTMLElement>('#empty-hover')!;
+        const text = document.createTextNode('Readable sentence with nearby context. '.repeat(repetitions)); owner.append(text);
+        let reads = 0;
+        for (let index = 0; index < 20000; index++) {
+            const empty = document.createTextNode('');
+            Object.defineProperty(empty, 'data', {configurable: true, get: () => {reads++; return '';}});
+            owner.append(empty);
+        }
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: Math.min(text.length - 1, 2000)})});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result?.sourceText).toContain('Readable sentence');
+            expect(reads).toBeLessThanOrEqual(8192);
+        } finally { restoreRange(); }
+    });
+
+    it('真实分词遇到超长单词时仍将悬浮范围限制在 1600 字符', () => {
+        const value = 'a'.repeat(2500) + ' ' + 'Nearby context '.repeat(400);
+        const {document} = page(`<main><div id="long-token">${value}</div></main>`);
+        const owner = document.querySelector<HTMLElement>('#long-token')!;
+        const text = owner.firstChild as Text;
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: 500})});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result).not.toBeNull();
+            expect(result!.sourceText.length).toBeLessThanOrEqual(1600);
+            expect(result!.range.startOffset).toBeLessThanOrEqual(500);
+            expect(result!.range.endOffset).toBeGreaterThan(500);
+        } finally { restoreRange(); }
+    });
+
+    it.each([100, 25000, 44000])('超大单一文本节点的局部范围映射回原始偏移（命中 %s）', caret => {
+        const value = 'First local sentence for the hovered reader. '.repeat(1000);
+        const {document} = page(`<main><div id="giant-text">${value}<em>Adjacent inside source.</em></div><span>Outside source.</span></main>`);
+        const owner = document.querySelector<HTMLElement>('#giant-text')!;
+        const text = owner.firstChild as Text;
+        const original = owner.textContent;
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: caret})});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result).not.toBeNull();
+            expect(result!.sourceText.length).toBeLessThanOrEqual(1600);
+            expect(result!.range.startContainer).toBe(text);
+            expect(result!.range.endContainer).toBe(text);
+            expect(result!.range.startOffset).toBeLessThanOrEqual(caret);
+            expect(result!.range.endOffset).toBeGreaterThanOrEqual(caret);
+            expect(value.slice(result!.range.startOffset, result!.range.endOffset).trim()).toBe(result!.sourceText);
+            expect(owner.textContent).toBe(original);
+        } finally { restoreRange(); }
+    });
+
+    it.each([0, 1])('超大 Unicode 文本尾部的窗口起点对齐后仍包含末尾命中（距末尾 %s）', distance => {
+        const value = 'a'.repeat(10000) + '🙂' + 'b'.repeat(16383);
+        const {document} = page(`<main><div id="unicode-tail">${value}</div></main>`);
+        const owner = document.querySelector<HTMLElement>('#unicode-tail')!;
+        const text = owner.firstChild as Text;
+        const caret = value.length - distance;
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: caret})});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result).not.toBeNull();
+            expect(result!.range.endOffset).toBe(value.length);
+            expect(result!.range.startOffset).toBeLessThanOrEqual(caret);
+            expect(result!.sourceText.length).toBeLessThanOrEqual(1600);
+            expect(result!.sourceText).not.toMatch(/^[\uDC00-\uDFFF]|[\uD800-\uDBFF]$/u);
+        } finally { restoreRange(); }
+    });
+
+    it('邻接的巨大文本只加入预算内的片段，前后跨层遍历与代理对保持一致', () => {
+        const {document} = page('<main><div id="neighbor-window"><span id="prefix"></span><em id="anchor"></em><span><b id="suffix"></b></span></div></main>');
+        const owner = document.querySelector<HTMLElement>('#neighbor-window')!;
+        document.querySelector('#prefix')!.textContent = 'p'.repeat(8193) + '🙂' + 'x'.repeat(8191);
+        const value = 'Target paragraph keeps readable context. '.repeat(120);
+        document.querySelector('#anchor')!.textContent = value;
+        document.querySelector('#suffix')!.textContent = 'Later paragraph continues the context. '.repeat(1000);
+        const text = document.querySelector('#anchor')!.firstChild as Text;
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: 1200})});
+        const restoreRange = installRangeStub(document, text);
+        const before = owner.innerHTML;
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result?.sourceText).toContain('Target paragraph');
+            expect(result?.range.startContainer).toBe(text);
+            expect(result?.range.endContainer).toBe(text);
+            expect(result?.sourceText).not.toMatch(/^[\uDC00-\uDFFF]|[\uD800-\uDBFF]$/u);
+            expect(owner.innerHTML).toBe(before);
+        } finally { restoreRange(); }
+    });
+
+    it.each(['', 'Small readable paragraph.'])('有效光标命中空或小范围正文时不创建视觉分块（%s）', value => {
+        const {document} = page('<main><div id="small-range"></div></main>');
+        const owner = document.querySelector<HTMLElement>('#small-range')!;
+        const text = document.createTextNode(value); owner.append(text);
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: 0})});
+        expect(resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20)).toBeNull();
+    });
+
+    it('命中前一个文本末尾时仍可选择后续长句，短行内节点可以保留上下文', () => {
+        const {document} = page('<main><div id="adjacent-sentences"></div></main>');
+        const owner = document.querySelector<HTMLElement>('#adjacent-sentences')!;
+        const first = document.createTextNode('Previous sentence. '.repeat(250));
+        const second = document.createTextNode('Following contextual words '.repeat(250));
+        owner.append(first, second);
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: first, offset: first.length})});
+        const restoreRange = installRangeStub(document, second);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result?.sourceText).toContain('Following contextual words');
+            expect(result?.sourceText.length).toBeLessThanOrEqual(1600);
+            expect(result?.range.startContainer).toBe(second);
+        } finally { restoreRange(); }
+    });
+
+    it.each([0, 1599, 1600, 1601, 3200, 6000])('无分词支持时悬浮硬边界不拆开代理对（命中 %s）', caret => {
+        const value = 'a'.repeat(1599) + '🙂' + 'b'.repeat(1598) + '🙃' + 'c'.repeat(4000);
+        const {document} = page(`<main><div id="unicode-chunk">${value}</div></main>`);
+        const owner = document.querySelector<HTMLElement>('#unicode-chunk')!;
+        const text = owner.firstChild as Text;
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true,
+            value: () => ({offsetNode: text, offset: caret})});
+        const previous = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+        Object.defineProperty(Intl, 'Segmenter', {configurable: true, value: undefined});
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const result = resolveVisualTranslationRange({element: owner, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20);
+            expect(result).not.toBeNull();
+            const selected = value.slice(result!.range.startOffset, result!.range.endOffset);
+            expect(selected.length).toBeLessThanOrEqual(1600);
+            expect(selected).not.toMatch(/^[\uDC00-\uDFFF]|[\uD800-\uDBFF]$/u);
+            expect(result!.range.startOffset).toBeLessThanOrEqual(caret);
+            expect(result!.range.endOffset).toBeGreaterThan(caret);
+        } finally {
+            restoreRange();
+            if (previous) Object.defineProperty(Intl, 'Segmenter', previous);
+            else Reflect.deleteProperty(Intl, 'Segmenter');
+        }
+    });
+
+    it('falls back when sentence segmentation is unavailable and splits a long sentence safely', () => {
+        const source = `Intro sentence. ${Array.from({length: 900}, (_, index) => `word${index}`).join(' ')}`;
+        const {document, core} = page(`<main><div id="long-sentence">${source}</div></main>`);
+        const owner = document.querySelector('#long-sentence')!;
+        const text = owner.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        const previousSegmenter = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: Math.floor(text.length / 2)}),
+        });
+        Object.defineProperty(Intl, 'Segmenter', {
+            configurable: true,
+            value: class { constructor() { throw new Error('segmenter unavailable'); } },
+        });
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const candidate = core.resolveAtPoint(document, 10, 20);
+            expect(candidate).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+            expect(candidate?.visualSourceText?.length).toBeLessThan(source.length);
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+            if (previousSegmenter) Object.defineProperty(Intl, 'Segmenter', previousSegmenter);
+            else Reflect.deleteProperty(Intl, 'Segmenter');
+        }
+    });
+
+    it('keeps a visual blank-line boundary and grows the first sentence group forward', () => {
+        const beforeBreak = Array.from({length: 3}, (_, index) =>
+            `Visual sentence ${index} describes the first visual paragraph clearly.`).join(' ');
+        const afterBreak = Array.from({length: 70}, (_, index) =>
+            `Visual sentence ${index + 3} describes the second visual paragraph clearly.`).join(' ');
+        const source = `${beforeBreak}\n\n${afterBreak}`;
+        const {document, core} = page(`<main><div id="visual-paragraphs">${source}</div></main>`);
+        const owner = document.querySelector('#visual-paragraphs')!;
+        const text = owner.firstChild! as Text;
+        const breakOffset = beforeBreak.length;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 1}),
+        });
+        const restoreRange = installRangeStub(document, text, (startOffset) =>
+            startOffset > breakOffset ? [{top: 100, bottom: 110, height: 10}] : [{top: 0, bottom: 10, height: 10}],
+        );
+        try {
+            const candidate = core.resolveAtPoint(document, 10, 20);
+            expect(candidate).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+            expect(candidate?.visualSourceText).toContain('Visual sentence 0');
+            expect(candidate?.visualSourceText).not.toContain('Visual sentence 3');
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    });
+
+    it('chooses a following sentence when the caret falls in an unsegmented prefix', () => {
+        const prefix = 'Leading prefix.';
+        const source = `${prefix} ${Array.from({length: 800}, (_, index) =>
+            `Following word ${index}`).join(' ')}.`;
+        const {document, core} = page(`<main><div id="prefix-gap">${source}</div></main>`);
+        const owner = document.querySelector('#prefix-gap')!;
+        const text = owner.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        const previousSegmenter = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 0}),
+        });
+        Object.defineProperty(Intl, 'Segmenter', {
+            configurable: true,
+            value: class {
+                segment(value: string) { return [{index: prefix.length + 1, segment: value.slice(prefix.length + 1)}]; }
+            },
+        });
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const candidate = core.resolveAtPoint(document, 10, 20);
+            expect(candidate).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+            expect(candidate?.visualSourceText).not.toContain(prefix);
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+            if (previousSegmenter) Object.defineProperty(Intl, 'Segmenter', previousSegmenter);
+            else Reflect.deleteProperty(Intl, 'Segmenter');
+        }
+    });
+
+    it('fails open to the ordinary candidate when DOM Range boundaries are unavailable', () => {
+        const source = Array.from({length: 120}, (_, index) =>
+            `Sentence ${index} explains how the document keeps its readable context intact.`).join(' ');
+        const {document, core} = page(`<main><div id="unsupported-range">${source}</div></main>`);
+        const owner = document.querySelector('#unsupported-range')!;
+        const text = owner.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: Math.floor(text.length / 2)}),
+        });
+        try {
+            expect(core.resolveAtPoint(document, 10, 20)).toMatchObject({element: owner, reason: 'generic-readable-block'});
+        } finally {
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    });
+
+    it('keeps protected and earlier text entries outside a visual range across inline markup', () => {
+        const first = Array.from({length: 500}, (_, index) => `first${index}`).join(' ');
+        const second = Array.from({length: 500}, (_, index) => `second${index}`).join(' ');
+        const {document, core} = page(`<main><div id="multi-entry"><span>${first}</span><span>${second}</span></div></main>`);
+        const owner = document.querySelector('#multi-entry')!;
+        const text = owner.lastElementChild!.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 10}),
+        });
+        const restoreRange = installRangeStub(document, text);
+        try {
+            const candidate = core.resolveAtPoint(document, 10, 20);
+            expect(candidate).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+            expect(candidate?.visualRange?.startContainer).toBe(text);
+            expect(candidate?.visualSourceText).toMatch(/^second/u);
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    });
+
+    it('handles layout metric failures without losing the bounded text range', () => {
+        const source = Array.from({length: 120}, (_, index) =>
+            `Metric sentence ${index} remains readable when geometry is unavailable.`).join(' ');
+        const {document, core} = page(`<main><div id="metric-failure">${source}</div></main>`);
+        const owner = document.querySelector('#metric-failure')!;
+        const text = owner.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 1}),
+        });
+        const restoreRange = installRangeStub(document, text, () => { throw new Error('layout unavailable'); });
+        try {
+            expect(core.resolveAtPoint(document, 10, 20)).toMatchObject({element: owner, reason: 'visual-text-chunk'});
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    });
+
+    it('falls back when caret or text-entry support cannot provide a visual range', () => {
+        const source = Array.from({length: 120}, (_, index) =>
+            `Fallback sentence ${index} remains readable in the large container.`).join(' ');
+        const {document, core} = page(`<main><div id="no-caret">${source}</div><p id="outside">Outside text.</p></main>`);
+        const owner = document.querySelector('#no-caret')!;
+        const outside = document.querySelector('#outside')!.firstChild!;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: outside, offset: 0}),
+        });
+        const restoreRange = installRangeStub(document, owner.firstChild! as Text);
+        try {
+            const inspected = core.inspect(owner).candidate!;
+            expect(resolveVisualTranslationRange(inspected, document, 10, 20, core.shouldStayOriginal)).toBeNull();
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    });
+
+    it('returns no visual range for unsupported DOM traversal, whitespace-only source, or an oversized scan', () => {
+        const fakeElement = Object.assign(Object.create(null), {tagName: 'DIV', ownerDocument: {}}) as HTMLElement;
+        expect(resolveVisualTranslationRange({element: fakeElement, kind: 'content', reason: 'generic-readable-block'}, {} as Document, 0, 0)).toBeNull();
+
+        const {document} = page(`<main><div id="spaces">${' '.repeat(5000)}</div></main>`);
+        const spaces = document.querySelector<HTMLElement>('#spaces')!;
+        const text = spaces.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 0}),
+        });
+        const restoreRange = installRangeStub(document, text);
+        try {
+            expect(resolveVisualTranslationRange({element: spaces, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20)).toBeNull();
+        } finally {
+            restoreRange();
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+
+        const oversized = document.createElement('div');
+        oversized.textContent = 'x'.repeat(16_385);
+        document.body.append(oversized);
+        expect(resolveVisualTranslationRange({element: oversized, kind: 'content', reason: 'generic-readable-block'}, document, 10, 20)).toBeNull();
+    });
+
+    it('fails closed when a live range throws while setting its boundaries', () => {
+        const source = Array.from({length: 120}, (_, index) =>
+            `Range sentence ${index} remains readable in the large container.`).join(' ');
+        const {document, core} = page(`<main><div id="throwing-range">${source}</div></main>`);
+        const owner = document.querySelector('#throwing-range')!;
+        const text = owner.firstChild! as Text;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        const previousRange = Object.getOwnPropertyDescriptor(document, 'createRange');
+        Object.defineProperty(document, 'caretPositionFromPoint', {
+            configurable: true,
+            value: () => ({offsetNode: text, offset: 1}),
+        });
+        Object.defineProperty(document, 'createRange', {
+            configurable: true,
+            value: () => ({
+                setStart() { throw new Error('range boundary unavailable'); },
+                setEnd() { return undefined; },
+            } as unknown as Range),
+        });
+        try {
+            expect(resolveVisualTranslationRange(core.inspect(owner).candidate!, document, 10, 20, core.shouldStayOriginal)).toBeNull();
+        } finally {
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+            if (previousRange) Object.defineProperty(document, 'createRange', previousRange);
+            else Reflect.deleteProperty(document, 'createRange');
+        }
+    });
+
     it('preserves inline code/no-translate text without rejecting the outer prose', () => {
         const {document, core} = page(`
             <main><p id="issue-127">Set <code class="notranslate">xxx</code> to enable the feature safely.</p></main>
@@ -626,6 +1460,168 @@ describe('translation candidate core', () => {
         expect(core.discover(document).map((item) => item.element)).toContain(paragraph);
         expect(extractTranslationText(paragraph, core.shouldStayOriginal)).toBe('Set to enable the feature safely.');
         expect(core.resolve(document.querySelector('code'))?.element).toBe(paragraph);
+    });
+
+    it('保护 Scribble 的 Racket 代码表格并保留相邻正文和普通表格', () => {
+        const {document, core} = page(`
+            <main><p id="before">These definitions describe the program.</p>
+                <table id="code" class="RktBlk"><tbody><tr><td id="code-line">
+                    <span class="RktPn">(</span><span class="RktSym">define-type</span>
+                    <span class="RktSym">MisspelledAnimal</span><span class="RktPn">)</span>
+                </td></tr></tbody></table>
+                <table id="ordinary"><tbody><tr><td id="ordinary-cell">Animal description in ordinary prose.</td></tr></tbody></table>
+                <div id="similar" class="RktBlk">This ordinary block shares a class name.</div>
+                <p id="after">The explanation continues after the example.</p>
+            </main>
+        `, 'https://cs.brown.edu/courses/cs173/2012/book/Introduction.html');
+        const code = document.querySelector<HTMLElement>('#code')!;
+        const source = code.outerHTML;
+        const originalNodes = [...code.querySelectorAll('*')];
+        for (let pass = 0; pass < 2; pass += 1) {
+            const candidates = core.discover(document);
+            expect(candidates.some((candidate) => candidate.element === code || code.contains(candidate.element)))
+                .toBe(false);
+            expect(core.resolve(document.querySelector('#code-line .RktSym')!.firstChild)).toBeNull();
+            expect(createTranslationSourceSnapshot(code, core.shouldStayOriginal).slots).toHaveLength(0);
+            const ids = candidates.map((candidate) => candidate.element.id);
+            expect(ids).toEqual(expect.arrayContaining(['before', 'ordinary-cell', 'similar', 'after']));
+            expect(code.outerHTML).toBe(source);
+            expect([...code.querySelectorAll('*')]).toEqual(originalNodes);
+        }
+        code.querySelector('td')!.append(' New code token');
+        expect(core.discover(code)).toEqual([]);
+        expect(createTranslationSourceSnapshot(code, core.shouldStayOriginal).slots).toHaveLength(0);
+    });
+
+    it('保护 Ubuntu manpage 命令语法和任意命令名称，同时翻译解释正文', () => {
+        const {document, core} = page(`
+            <div id="main-content"><h1 id="command-title">apt</h1></div>
+            <main><div id="manpage-content">
+                <h2 id="synopsis" class="Sh">SYNOPSIS</h2>
+                <section id="syntax" class="Sh mp-section"><p class="Pp HP"><b>apt</b> [<b>--help</b>] [<i>future_option</i>]</p></section>
+                <h2 id="description" class="Sh">DESCRIPTION</h2>
+                <section id="body" class="Sh mp-section">
+                    <p id="intro" class="Pp"><b>apt</b> provides a package management interface.</p>
+                    <p id="command-label" class="Pp"><b>future-command-2027</b> (<a href="tool.8.html"><b>tool</b>(8)</a>)</p>
+                    <div id="explanation" class="Bd-indent">Download package information with <b>future-command-2027</b> for <i>package_name</i>.</div>
+                    <p id="ordinary" class="Pp">An ordinary paragraph uses the word update naturally.</p>
+                </section>
+            </div></main>
+            <p id="outside">Ordinary <b>bold emphasis</b> remains natural prose.</p>
+        `, 'https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html');
+        const regions = ['command-title', 'syntax', 'command-label'].map((id) => document.getElementById(id)!);
+        const originalHTML = regions.map((node) => node.outerHTML);
+        const originalNodes = regions.map((node) => [...node.childNodes]);
+        const candidates = core.discover(document);
+        expect(candidates.map(({element}) => element.id)).toEqual(expect.arrayContaining(['intro', 'explanation', 'ordinary', 'outside']));
+        for (const region of regions) {
+            expect(candidates.some(({element}) => element === region || region.contains(element))).toBe(false);
+            expect(core.resolve(region.firstChild)).toBeNull();
+            expect(core.shouldIgnoreMutation(region)).toBe(true);
+            expect(createTranslationSourceSnapshot(region, core.shouldStayOriginal).slots).toEqual([]);
+        }
+        const intro = document.getElementById('intro')!;
+        expect(core.resolve(intro.querySelector('b')!.firstChild)?.element).toBe(intro);
+        const introSnapshot = createTranslationSourceSnapshot(intro, core.shouldStayOriginal);
+        expect(introSnapshot.slots.map(({source}) => source)).toEqual(['provides a package management interface.']);
+        expect(applyTranslationsToSnapshot(introSnapshot, ['提供软件包管理界面。'])).toContain('<b>apt</b>');
+        const explanationSnapshot = createTranslationSourceSnapshot(document.getElementById('explanation')!, core.shouldStayOriginal);
+        expect(explanationSnapshot.slots.map(({source}) => source).join(' ')).not.toContain('package_name');
+        expect(applyTranslationsToSnapshot(explanationSnapshot, explanationSnapshot.slots.map(() => '说明')))
+            .toContain('<i>package_name</i>');
+        expect(createTranslationSourceSnapshot(document.getElementById('outside')!, core.shouldStayOriginal).slots
+            .map(({source}) => source)).toContain('bold emphasis');
+        const bodySnapshot = createTranslationSourceSnapshot(document.getElementById('manpage-content')!,
+            core.shouldStayOriginal, undefined, undefined, core.shouldOmitFromTranslation);
+        expect(bodySnapshot.slots.map(({source}) => source).join(' ')).not.toMatch(/future-command-2027|future_option|--help/u);
+        expect(bodySnapshot.clone.querySelector('#syntax')).toBeNull();
+        expect(bodySnapshot.clone.querySelector('#command-label')).toBeNull();
+        expect(regions.map((node) => node.outerHTML)).toEqual(originalHTML);
+        expect(regions.map((node) => [...node.childNodes])).toEqual(originalNodes);
+        document.getElementById('body')!.insertAdjacentHTML('beforeend',
+            '<p id="late-command" class="Pp"><b>unknown-operation</b></p><div id="late-explanation" class="Bd-indent">This operation explains a future capability.</div>');
+        expect(core.discover(document).map(({element}) => element.id)).toContain('late-explanation');
+        expect(core.resolve(document.getElementById('late-command')!.firstChild)).toBeNull();
+    });
+
+    it.each(['dpkg-query\n  --list', 'future-tool --unknown-option -q'])('按字面标记保留命令选项组合 %s 的 DOM 和译文，不发送给服务', (literal) => {
+        const {document, core} = page(`<div id="manpage-content"><section class="Sh"><p id="body">Inspect packages with <b id="literal">${literal}</b> before continuing.</p></section></div>`,
+            'https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html');
+        const body = document.getElementById('body')!;
+        const command = document.getElementById('literal')!;
+        const original = command.outerHTML;
+        const snapshot = createTranslationSourceSnapshot(body, core.shouldStayOriginal);
+        expect(snapshot.slots.map(({source}) => source)).toEqual(['Inspect packages with', 'before continuing.']);
+        expect(core.shouldStayOriginal(command)).toBe(true);
+        expect(core.shouldOmitFromTranslation(command)).toBe(false);
+        const translated = applyTranslationsToSnapshot(snapshot, ['检查软件包，使用', '再继续。']);
+        expect(translated).toContain(original);
+        expect(command.outerHTML).toBe(original);
+        expect(command.textContent).toBe(literal);
+        expect(core.resolve(command.firstChild)?.element).toBe(body);
+    });
+
+    it('不因紧邻缩进块而剪掉普通说明、前置原文或带命令名的完整句子', () => {
+        const introductions = [
+            'The following example shows how to configure this command.',
+            'Run <b>future-command</b> to continue.',
+            '<b>apt</b> provides a package management interface.',
+            '<b>apt</b> <a href="guide.html">provides a package management interface</a>.',
+            '<span>Ordinary introduction</span>',
+            '<b>This is an ordinary quoted explanation.</b>',
+            '<i>这些内容是正常的中文说明。</i>',
+            '<b>apt</b> <b>provides a package management interface.</b>',
+            '<b>apt</b> <i>这是命令的说明文字。</i>',
+            '<b>Run the command with --help for additional details.</b>',
+            '<b>dpkg-query lists the installed packages.</b>',
+        ];
+        for (const introduction of introductions) {
+            const {document, core} = page(`<div id="manpage-content"><h2 id="description">DESCRIPTION</h2><section class="Sh"><p id="intro" class="Pp">${introduction}</p><div class="Bd-indent"><b>future-command</b> --dry-run</div></section></div>`,
+                'https://manpages.ubuntu.com/manpages/noble/man1/future-command.1.html');
+            const intro = document.getElementById('intro')!;
+            expect(core.shouldStayOriginal(intro)).toBe(false);
+            expect(core.shouldOmitFromTranslation(intro)).toBe(false);
+            expect(core.shouldIgnoreMutation(intro)).toBe(false);
+            expect(core.discover(document).some(({element}) => element === intro), introduction).toBe(true);
+            expect(createTranslationSourceSnapshot(intro, core.shouldStayOriginal).slots.length).toBeGreaterThan(0);
+        }
+    });
+
+    it('仅把平衡括号的命令附注当作标签，并忽略已有扩展副本', () => {
+        const labels: Array<[string, boolean]> = [
+            ['<b>edit-sources</b> (work-in-progress)', true],
+            ['<b>showsrc, depends</b> (summarised in <a href="apt-cache.8.html"><b>apt-cache</b>(8)</a>)', true],
+            ['<b>showsrc, depends</b> (summarised in <i>the relevant manual</i>)', true],
+            ['<b>future-command</b> (支持中文附注)', true],
+            ['<!-- a host comment --> <i>future_option</i>', true],
+            ['<b>unknown-operation</b><span data-fr-translation-owned="true">旧译文</span>', true],
+            ['<b>unknown-operation</b> (unfinished note', false],
+            ['<b>unknown-operation</b> )', false],
+            ['<!-- empty placeholder --> ', false],
+            ['<b></b>', false],
+        ];
+        for (const [labelHTML, protectedLabel] of labels) {
+            const {document, core} = page(`<div id="manpage-content"><h2 id="description">DESCRIPTION</h2><section class="Sh"><p id="label" class="Pp">${labelHTML}</p><div class="Bd-indent">An explanation of the operation.</div></section></div>`,
+                'https://manpages.ubuntu.com/manpages/noble/man8/apt.8.html');
+            const label = document.getElementById('label')!;
+            expect(core.shouldStayOriginal(label), labelHTML).toBe(protectedLabel);
+            expect(core.shouldOmitFromTranslation(label), labelHTML).toBe(protectedLabel);
+            expect(core.shouldIgnoreMutation(label), labelHTML).toBe(protectedLabel);
+        }
+    });
+
+    it('不把 Ubuntu manpage 的命令规则扩散到其他站点或非手册路径', () => {
+        const html = '<div id="manpage-content"><h2 id="description">Description</h2><section class="Sh"><p id="label" class="Pp"><b>unknown-command</b></p><div class="Bd-indent">A regular explanation.</div></section></div>';
+        for (const url of ['https://example.test/manpages/noble/man8/apt.8.html',
+            'https://manpages.ubuntu.com.example.test/manpages/noble/man8/apt.8.html',
+            'https://example.manpages.ubuntu.com/manpages/noble/man8/apt.8.html',
+            'https://manpages.ubuntu.com/help']) {
+            const {document, core} = page(html, url);
+            expect(core.shouldStayOriginal(document.getElementById('label')!)).toBe(false);
+            expect(core.discover(document).map(({element}) => element.id)).toContain('label');
+        }
+        const {document, core} = page(html, 'https://manpages.ubuntu.com/manpages/noble/en/man8/apt.8.html');
+        expect(core.shouldStayOriginal(document.getElementById('label')!)).toBe(true);
     });
 
     it('keeps MathJax and KaTeX render trees atomic while translating surrounding prose', () => {
@@ -681,7 +1677,9 @@ describe('translation candidate core', () => {
         );
         const {document: renderedDocument} = parseHTML(`<html><body><p>${rendered}</p></body></html>`);
         expect(renderedDocument.querySelector('#display')?.textContent).toContain('out=(x/w,y/w,z/w)');
-        expect(renderedDocument.querySelector('#tex-source')?.textContent).toContain('begin{pmatrix}');
+        // 非展示 TeX 脚本只由宿主公式 renderer 持有，不进入双语克隆；可见公式仍在上方骨架中。
+        expect(renderedDocument.querySelector('#tex-source')).toBeNull();
+        expect(document.querySelector('#tex-source')?.textContent).toContain('begin{pmatrix}');
         expect(renderedDocument.querySelector('#mathjax-v3')?.textContent).toBe('V_clip=M_projection V_local');
         expect(renderedDocument.querySelector('#katex')?.textContent).toBe('KATEX_RENDERED_FORMULA');
 
@@ -819,7 +1817,6 @@ describe('translation candidate core', () => {
         const truncationHost = document.createElement('section');
         const clamped = document.createElement('div');
         const leaf = document.createElement('p');
-        const styleCalls: string[] = [];
         const getComputedStyle = vi.spyOn(document.defaultView!, 'getComputedStyle').mockImplementation(
             (element: Element) => ({
                 webkitLineClamp: element === clamped ? '2' : '',
@@ -854,20 +1851,6 @@ describe('translation candidate core', () => {
         document.body.append(truncationHost);
         clamped.style.setProperty('-webkit-line-clamp', '2');
         expect(hasActiveTranslationLineClamp(clamped)).toBe(true);
-        expect(findTranslationTruncationAncestors(
-            leaf,
-            (element) => element === truncationHost,
-        )).toEqual([clamped, truncationHost]);
-
-        removeTranslationTruncation(clamped);
-        for (const property of ['-webkit-line-clamp', 'line-clamp', 'max-height']) {
-            styleCalls.push(`${property}:${clamped.style.getPropertyValue(property)}`);
-        }
-        expect(styleCalls).toEqual([
-            '-webkit-line-clamp:unset',
-            'line-clamp:unset',
-            'max-height:unset',
-        ]);
         getComputedStyle.mockRestore();
     });
 
@@ -881,6 +1864,195 @@ describe('translation candidate core', () => {
         expect(core.resolve(shadowRoot.querySelector('#shadow-prose'))?.element.id).toBe('shadow-prose');
     });
 
+    it('prunes Bilibili comments across nested Shadow DOM without hiding page prose', () => {
+        const {document, core} = page(`
+            <main>
+                <bili-comments id="comments"></bili-comments>
+                <p id="page-prose">The surrounding video page remains translatable.</p>
+            </main>
+        `, 'https://www.bilibili.com/video/BV1ux4y1e73x/');
+        const comments = document.querySelector('#comments')!;
+        const commentsShadow = comments.attachShadow({mode: 'open'});
+        const thread = document.createElement('bili-comment-thread-renderer');
+        commentsShadow.append(thread);
+        const threadShadow = thread.attachShadow({mode: 'open'});
+        const renderer = document.createElement('bili-comment-renderer');
+        threadShadow.append(renderer);
+        const rendererShadow = renderer.attachShadow({mode: 'open'});
+        const richText = document.createElement('bili-rich-text');
+        rendererShadow.append(richText);
+        const richTextShadow = richText.attachShadow({mode: 'open'});
+        const commentText = document.createElement('p');
+        commentText.id = 'comment-prose';
+        commentText.textContent = 'A Bilibili comment that must remain owned by the site.';
+        richTextShadow.append(commentText);
+
+        expect(bilibiliAdapter.matches(new URL('https://www.bilibili.com/video/BV1ux4y1e73x/'))).toBe(true);
+        expect(bilibiliAdapter.matches(new URL('https://example.test/video'))).toBe(false);
+        expect(core.discover(document).map((candidate) => candidate.element.id)).toContain('page-prose');
+        expect(core.discover(document).some((candidate) => candidate.element === commentText)).toBe(false);
+        expect(core.resolve(commentText.firstChild)).toBeNull();
+
+        Object.defineProperty(document, 'elementFromPoint', {
+            configurable: true,
+            value: () => comments,
+        });
+        Object.defineProperty(commentsShadow, 'elementFromPoint', {
+            configurable: true,
+            value: () => thread,
+        });
+        Object.defineProperty(threadShadow, 'elementFromPoint', {
+            configurable: true,
+            value: () => renderer,
+        });
+        Object.defineProperty(rendererShadow, 'elementFromPoint', {
+            configurable: true,
+            value: () => richText,
+        });
+        Object.defineProperty(richTextShadow, 'elementFromPoint', {
+            configurable: true,
+            value: () => commentText,
+        });
+        expect(core.resolveAtPoint(document, 10, 20)).toBeNull();
+    });
+
+    it('limits Reddit to explicit post/comment targets and preserves navigation actions', () => {
+        const {document, core} = page(`
+            <header id="reddit-header">
+                <button id="open-menu" aria-label="Open menu">Open menu</button>
+                <a id="reddit-home" href="/">Go to Reddit Home</a>
+                <a id="community" href="/r/MiniMax_AI">r/MiniMax_AI</a>
+                <button id="open-chat">Open chat</button>
+                <button id="create-post">Create</button>
+                <button id="open-inbox">Open inbox</button>
+                <span id="advertise">Advertise on Reddit</span>
+            </header>
+            <main>
+                <shreddit-post id="post">
+                    <h1 id="post-title-t3_fixture">M3.1 has strong potential to be the most cost-efficient large model ahead</h1>
+                    <div slot="text-body">
+                        <p id="post-body">I have gone through the technical specifications and want to share my analysis here.</p>
+                        <ul><li id="post-list-item">The model uses sparse attention.</li></ul>
+                    </div>
+                    <div id="post-actions">
+                        <button id="share">Share</button>
+                        <button id="reply">Reply</button>
+                    </div>
+                </shreddit-post>
+                <shreddit-comment id="comment-host">
+                    <div slot="comment"><p id="comment-body">This is a useful comment.</p></div>
+                    <button id="comment-reply">Reply</button>
+                </shreddit-comment>
+                <p id="unscoped-copy">Open profile menu</p>
+            </main>
+        `, 'https://www.reddit.com/r/MiniMax_AI/comments/1v73a0r/m31_has_strong_potential_to_be_the_most/');
+        const title = document.querySelector('#post-title-t3_fixture')!;
+        const body = document.querySelector('#post-body')!;
+        const listItem = document.querySelector('#post-list-item')!;
+        const comment = document.querySelector('#comment-body')!;
+        const controls = ['open-menu', 'open-chat', 'create-post', 'open-inbox', 'share', 'reply', 'comment-reply']
+            .map((id) => document.querySelector(`#${id}`)!);
+
+        expect(redditAdapter.matches(new URL('https://www.reddit.com/r/MiniMax_AI/comments/1'))).toBe(true);
+        expect(redditAdapter.matches(new URL('https://example.test/article'))).toBe(false);
+
+        const candidates = core.discover(document);
+        expect(candidates.find((candidate) => candidate.element === title))
+            .toMatchObject({adapterId: 'reddit', reason: 'reddit-post-title'});
+        expect(candidates.find((candidate) => candidate.element === body))
+            .toMatchObject({adapterId: 'reddit', reason: 'reddit-post-prose'});
+        expect(candidates.find((candidate) => candidate.element === listItem))
+            .toMatchObject({adapterId: 'reddit', reason: 'reddit-post-prose'});
+        expect(candidates.find((candidate) => candidate.element === comment))
+            .toMatchObject({adapterId: 'reddit', reason: 'reddit-comment-prose'});
+        expect(candidates.some((candidate) => candidate.adapterId !== 'reddit')).toBe(false);
+
+        for (const control of controls) {
+            expect(core.resolve(control.firstChild)).toBeNull();
+            expect(core.shouldStayOriginal(control)).toBe(true);
+            expect(core.shouldIgnoreMutation(control)).toBe(true);
+        }
+        expect(core.resolve(document.querySelector('#reddit-home')?.firstChild)).toBeNull();
+        expect(core.resolve(document.querySelector('#community')?.firstChild)).toBeNull();
+        expect(core.resolve(document.querySelector('#advertise')?.firstChild)).toBeNull();
+        expect(core.resolve(document.querySelector('#unscoped-copy')?.firstChild)).toBeNull();
+    });
+
+    it.each(['content', 'all'] as const)('Reddit %s 范围不叠加外部译文，也不吞掉未翻译的相邻正文', (scope) => {
+        const {document} = page(`<main><shreddit-post>
+            <h1 slot="title" id="translated-title">A model with strong potential
+                <font class="notranslate immersive-translate-target-wrapper"><br><font>已有标题译文</font></font>
+            </h1><div slot="text-body">
+                <p id="translated-prose">Original model analysis <strong id="emphasis">with useful detail</strong>
+                    <font class="notranslate immersive-translate-target-wrapper"><br><font>已有正文译文</font></font>
+                </p><p id="remaining">This paragraph still needs translation.</p>
+            </div></shreddit-post></main>`);
+        const core = createTranslationCore({scope, url: new URL('https://www.reddit.com/r/example/comments/example')});
+        const title = document.querySelector<HTMLElement>('#translated-title')!;
+        const prose = document.querySelector<HTMLElement>('#translated-prose')!;
+        const before = document.body.innerHTML;
+        expect(core.discover(document).map(candidate => candidate.element.id)).toEqual(['remaining']);
+        for (const node of [title, title.firstChild, prose, prose.firstChild, document.querySelector('#emphasis'), prose.querySelector('font')]) {
+            expect(core.resolve(node)).toBeNull();
+        }
+        expect(extractTranslationText(prose)).toBe('');
+        expect(collectLiveTranslationTextSlots(prose)).toEqual([]);
+        const snapshot = createTranslationSourceSnapshot(document.querySelector('main')!);
+        expect(snapshot.slots.map(slot => slot.source)).toEqual(['This paragraph still needs translation.']);
+        const output = applyTranslationsToSnapshot(snapshot, ['剩余正文译文']);
+        expect(output).toContain('剩余正文译文');
+        expect(output).not.toMatch(/已有|Original model|A model|immersive-translate/);
+        expect(createTranslationSourceSnapshot(prose).clone.innerHTML).toBe('');
+        expect(document.body.innerHTML).toBe(before);
+        prose.querySelector('.immersive-translate-target-wrapper')!.remove();
+        expect(core.discover(prose).map(candidate => candidate.element)).toContain(prose);
+    });
+
+    it('只识别明确的外部译文 wrapper，普通 notranslate 术语与代码仍保留在译文骨架中', () => {
+        const {document, core} = page('<p id="prose">Use <span class="notranslate">MiniMax</span> with <code>api_key</code>.</p>');
+        const prose = document.querySelector<HTMLElement>('p')!;
+        expect(core.discover(document).map(candidate => candidate.element)).toEqual([prose]);
+        const snapshot = createTranslationSourceSnapshot(prose);
+        expect(snapshot.clone.innerHTML).toContain('MiniMax');
+        expect(snapshot.clone.innerHTML).toContain('<code>api_key</code>');
+    });
+
+    it('快照不会把外部译文复制成丢失标记的第二份文字', () => {
+        const {document} = page('<p id="source">Original sentence.<font class="notranslate immersive-translate-target-wrapper"><br><font>已有译文</font></font></p>');
+        const paragraph = document.querySelector<HTMLElement>('p')!;
+        const original = paragraph.innerHTML;
+        const snapshot = createTranslationSourceSnapshot(paragraph);
+        expect(applyTranslationsToSnapshot(snapshot, ['新的译文'])).toBe('');
+        expect(paragraph.innerHTML).toBe(original);
+    });
+
+    it('外部译文只保护局部单元，body 直属产物不关闭页面，开放 Shadow DOM 继承相同边界', () => {
+        const {document, core} = page('<font class="immersive-translate-target-wrapper">页面译文</font><p id="remaining">Remaining source paragraph.</p><comment-body></comment-body>');
+        const shadow = document.querySelector('comment-body')!.attachShadow({mode: 'open'});
+        shadow.innerHTML = '<p id="translated">Source comment.<font class="immersive-translate-target-wrapper">已有评论译文</font></p><p id="new-comment">A new comment.</p>';
+        expect(core.discover(document).map(candidate => candidate.element.id)).toEqual(['remaining', 'new-comment']);
+        expect(core.resolve(shadow.querySelector('#translated')!.firstChild)).toBeNull();
+        expect(extractTranslationText(shadow.querySelector('#translated')!)).toBe('');
+    });
+
+    it('bounds cyclic Shadow DOM coordinate lookup without overflowing the call stack', () => {
+        const {document, core} = page('<main><article-card id="host"></article-card></main>');
+        const host = document.querySelector('#host')!;
+        const shadowRoot = host.attachShadow({mode: 'open'});
+
+        Object.defineProperty(document, 'elementFromPoint', {
+            configurable: true,
+            value: () => host,
+        });
+        Object.defineProperty(shadowRoot, 'elementFromPoint', {
+            configurable: true,
+            value: () => host,
+        });
+
+        expect(() => core.resolveAtPoint(document, 10, 20)).not.toThrow();
+        expect(core.resolveAtPoint(document, 10, 20)).toBeNull();
+    });
+
     it('translates GitHub PR titles instead of pruning repository-content', () => {
         const {document, core} = page(`
             <main id="repo-content-pjax-container" class="repository-content">
@@ -890,12 +2062,303 @@ describe('translation candidate core', () => {
                     </a>
                 </div>
             </main>
-        `, 'https://github.com/immersive-translate/immersive-translate/pulls');
+        `, 'https://github.com/FluentRead/FluentRead/pulls');
         const title = document.querySelector('#pr-title')!;
         const candidate = core.discover(document).find((item) => item.element === title);
 
         expect(candidate).toMatchObject({adapterId: 'github', reason: 'github-markdown-title'});
         expect(core.resolve(title)?.element).toBe(title);
+    });
+
+    it('保护 GitHub 仓库列表的任意技术标签和受控元数据，正文相同词仍可翻译', () => {
+        const {document, core} = page(`
+            <main><ul><li id="repository">
+                <div data-listview-item-title-container="true"><h3><a href="/example/compiler">Compiler</a></h3>
+                    <span id="visibility" data-listview-item-visibility-label="true">Public</span></div>
+                <div id="description" class="repos-list-description">Java and Python support the new QuasarLang2027 compiler. Public APIs remain useful.</div>
+                <div id="topics" class="ReposListItem-module__TopicsList__fixture">
+                    <a href="/search?q=topic%3Ajava"><span>Java</span></a>
+                    <a href="/search?q=topic%3Apython"><span>Python</span></a>
+                    <a href="/topics/quasarlang2027"><span>QuasarLang2027</span></a>
+                </div>
+                <div id="metadata" class="ReposListItem-module__LabelsContainer__fixture">
+                    <div class="ReposListItem-module__LanguageLabelContainer__fixture"><span class="ReposListItem-module__PrimaryLanguageName__fixture">Go</span></div>
+                    <span>Apache License 2.0</span><a href="/example/compiler/forks">14k forks</a>
+                </div>
+            </li></ul>
+            <article class="markdown-body"><p id="prose">Learn <a href="/topics/java">Java</a> and <a href="/topics/python">Python</a> through public examples.</p></article>
+            <div id="generic-topic-class" class="TopicsList">Java and Python are discussed here.</div>
+            </main>
+        `, 'https://github.com/orgs/example/repositories');
+        const protectedRegions = ['visibility', 'topics', 'metadata'].map((id) => document.getElementById(id)!);
+        const originals = protectedRegions.map((region) => region.outerHTML);
+        const originalNodes = protectedRegions.map((region) => [...region.childNodes]);
+        const candidates = core.discover(document);
+        const snapshot = createTranslationSourceSnapshot(document.getElementById('repository')!,
+            core.shouldStayOriginal, undefined, undefined, core.shouldOmitFromTranslation);
+        expect(snapshot.slots.map(({source}) => source))
+            .toEqual(['Compiler', 'Java and Python support the new QuasarLang2027 compiler. Public APIs remain useful.']);
+        for (const region of protectedRegions) {
+            expect(candidates.some(({element}) => element === region || region.contains(element))).toBe(false);
+            expect(core.shouldStayOriginal(region)).toBe(true);
+            expect(core.shouldIgnoreMutation(region)).toBe(true);
+            expect(core.resolve(region.querySelector('span')?.firstChild ?? region.firstChild)).toBeNull();
+            expect(createTranslationSourceSnapshot(region, core.shouldStayOriginal).slots).toEqual([]);
+        }
+        const description = document.getElementById('description')!;
+        expect(candidates.find(({element}) => element === description))
+            .toMatchObject({adapterId: 'github', reason: 'github-repository-description'});
+        const prose = document.getElementById('prose')!;
+        expect(core.resolve(prose.querySelector('a')!.firstChild)?.element).toBe(prose);
+        expect(createTranslationSourceSnapshot(prose, core.shouldStayOriginal).slots.map(({source}) => source))
+            .toEqual(['Learn', 'Java', 'and', 'Python', 'through public examples.']);
+        expect(candidates.some(({element}) => element.id === 'generic-topic-class')).toBe(true);
+        const translatedHTML = applyTranslationsToSnapshot(snapshot, snapshot.slots.map(() => '正文译文'));
+        for (const region of protectedRegions) {
+            expect(snapshot.clone.querySelector(`#${region.id}`)).toBeNull();
+            expect(translatedHTML).not.toContain(`id="${region.id}"`);
+        }
+        expect(translatedHTML).toContain('正文译文');
+        expect(protectedRegions.map((region) => region.outerHTML)).toEqual(originals);
+        expect(protectedRegions.map((region) => [...region.childNodes])).toEqual(originalNodes);
+        document.getElementById('topics')!.insertAdjacentHTML('beforeend', '<a href="/topics/future-runtime"><span>Future Runtime</span></a>');
+        expect(core.discover(document.getElementById('topics')!)).toEqual([]);
+        expect(createTranslationSourceSnapshot(document.getElementById('topics')!, core.shouldStayOriginal).slots).toEqual([]);
+    });
+
+    it('recognizes the new GitHub PR list title and protects author, dates and checks from both entry points', () => {
+        const {document, core} = page(`
+            <main><li>
+                <div data-listview-item-title-container="true"><h3>
+                    <a id="title" data-testid="listitem-title-link" href="/FluentRead/FluentRead/pull/243">
+                        <span>fix: translate hovered visual text blocks</span>
+                    </a>
+                </h3><span class="Title-module__trailingBadgesSpacer__fixture"></span></div>
+                <div id="metadata" class="Description-module__container__fixture PullsListItem-module__description__fixture">
+                    <span>#243</span><span data-testid="timestamp-container">·
+                        <a id="author" data-testid="author-filter-link">jeanchristophe13v</a> opened
+                        <relative-time>last month</relative-time> · Updated last month
+                    </span><button id="checks" data-testid="checks-status-badge-button">1/1</button>
+                </div>
+            </li><article class="markdown-body"><p id="prose">The author updated the status checks.</p></article></main>
+        `, 'https://github.com/FluentRead/FluentRead/pulls');
+        const title = document.getElementById('title')!;
+        const metadata = document.getElementById('metadata')!;
+        const before = metadata.outerHTML;
+        expect(core.discover(document).map(({element}) => element.id)).toEqual(['title', 'prose']);
+        expect(core.resolve(title.querySelector('span')!.firstChild))
+            .toMatchObject({element: title, adapterId: 'github', reason: 'github-issue-or-pr-title'});
+        for (const element of [metadata, ...metadata.querySelectorAll('*')]) {
+            expect(core.resolve(element.firstChild)).toBeNull();
+            expect(core.shouldStayOriginal(element)).toBe(true);
+            expect(core.shouldIgnoreMutation(element)).toBe(true);
+        }
+        metadata.querySelector('relative-time')!.textContent = '2 months ago';
+        expect(core.discover(metadata)).toEqual([]);
+        expect(metadata.outerHTML).toBe(before.replace('last month</relative-time>', '2 months ago</relative-time>'));
+    });
+
+    it('keeps GitHub issue-list labels and metadata original while translating titles', () => {
+        const {document, core} = page(`
+            <main>
+                <div class="IssueRow-module__row__fixture">
+                    <li id="issue-row" role="listitem">
+                        <div data-listview-item-title-container="true">
+                            <h3>
+                                <a id="issue-title" data-testid="issue-pr-title-link" href="/Eugeny/tabby/issues/10084">
+                                    right click not working
+                                </a>
+                            </h3>
+                            <span>
+                                <div data-listview-component="trailing-badge">
+                                    <a href="/Eugeny/tabby/issues?q=label%3A%22T%3A%20Bug%22">
+                                        <span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM">
+                                            <span>T: Bug</span>
+                                        </span>
+                                    </a>
+                                </div>
+                            </span>
+                        </div>
+                        <div data-testid="list-row-repo-name-and-number">
+                            <span>#10084 <span class="sr-only">In Eugeny/tabby;</span></span>
+                        </div>
+                        <div data-testid="created-at">
+                            <span>· </span>
+                            <a href="/kikyoulg">kikyoulg</a>
+                            <span> opened </span>
+                            <relative-time>on Dec 6, 2024</relative-time>
+                        </div>
+                    </li>
+                </div>
+            </main>
+        `, 'https://github.com/Eugeny/tabby/issues?q=is%3Aissue%20state%3Aopen%20macos27');
+        const title = document.querySelector('#issue-title')!;
+        const label = document.querySelector('.prc-Token-IssueLabel-2IazM')!;
+        const repoMetadata = document.querySelector('[data-testid="list-row-repo-name-and-number"]')!;
+        const createdAt = document.querySelector('[data-testid="created-at"]')!;
+        const candidates = core.discover(document);
+
+        expect(candidates.find((candidate) => candidate.element === title))
+            .toMatchObject({adapterId: 'github', reason: 'github-issue-or-pr-title'});
+        expect(core.resolve(label.querySelector('span')?.firstChild)).toBeNull();
+        expect(core.resolve(repoMetadata.querySelector('span')?.firstChild)).toBeNull();
+        expect(core.resolve(createdAt.querySelector('a')?.firstChild)).toBeNull();
+        expect(core.shouldStayOriginal(label)).toBe(true);
+        expect(core.shouldStayOriginal(repoMetadata)).toBe(true);
+        expect(core.shouldStayOriginal(createdAt)).toBe(true);
+        expect(core.shouldIgnoreMutation(label)).toBe(true);
+        expect(core.shouldIgnoreMutation(repoMetadata)).toBe(true);
+        expect(core.shouldIgnoreMutation(createdAt)).toBe(true);
+    });
+
+    it.each([
+        ['10084', 'kikyoulg', 'on Dec 6, 2024'],
+        ['9414', 'Preston2jager', 'on Jan 24, 2024'],
+    ])('owns the current GitHub issue #%s anchor in full and hover translation while preserving metadata', (number, author, date) => {
+        const {document, core} = page(`
+            <main><div data-testid="issues-list-surface"><ul><li id="modern-row">
+                <div class="Title-module__container__fixture" data-listview-item-title-container="true">
+                    <h3 id="modern-heading" class="Title-module__heading__fixture">
+                        <a id="modern-title" class="Title-module__anchor__fixture" data-testid="issue-listitem-title-link"
+                            href="https://github.com/Eugeny/tabby/issues/${number}"><span><span data-component="Text">right click not working</span></span></a>
+                    </h3>
+                    <span class="Title-module__trailingBadgesContainer__fixture"><button type="button" aria-label="Filter by label T: Bug">
+                        <span id="modern-label" class="prc-Token-IssueLabel-2IazM LabelToken-module__IssueLabelToken__fixture"><span>T: Bug</span></span>
+                    </button></span>
+                </div>
+                <div class="MainContent-module__container__fixture"><div class="MainContent-module__inner__fixture">
+                    <div id="modern-metadata" class="Description-module__container__fixture">
+                        <span id="modern-repo">Eugeny/tabby#${number}</span><span> · <button type="button" data-testid="author-filter-link"
+                            class="IssueListItem-module__authorLink__fixture"><span class="prc-VisuallyHidden-VisuallyHidden-Q0qSB">Filter by author </span>${author}</button>
+                            <span id="modern-opened">opened</span> <relative-time data-testid="issue-activity-timestamp">${date}</relative-time>
+                        </span>
+                    </div>
+                </div></div>
+            </li></ul></div><article class="markdown-body"><p id="modern-prose">The author opened a reproducible issue.</p></article></main>
+        `, 'https://github.com/Eugeny/tabby/issues?q=is%3Aissue%20state%3Aopen%20in%3Atitle%20%22right%20click%20not%20working%22');
+        const title = document.getElementById('modern-title')!;
+        const titleText = title.querySelector('[data-component="Text"]')!.firstChild!;
+        const row = document.getElementById('modern-row')!;
+        const metadata = document.getElementById('modern-metadata')!;
+        const label = document.getElementById('modern-label')!;
+        const sourceBefore = document.body.outerHTML;
+        const originals = [title, metadata, label].map(element => [element, ...element.querySelectorAll('*')]);
+        const originalChildren = originals.flat().map(element => [...element.childNodes]);
+        const fullCandidates = core.discover(document);
+
+        expect(fullCandidates.map(({element}) => element.id)).toEqual(['modern-title', 'modern-prose']);
+        expect(fullCandidates[0]).toMatchObject({element: title, adapterId: 'github', reason: 'github-issue-or-pr-title'});
+        expect(fullCandidates[0]?.nodes).toBeUndefined();
+        expect(core.resolve(titleText)).toMatchObject({element: title, adapterId: 'github', reason: 'github-issue-or-pr-title'});
+        expect(core.createSynchronousResolver()(titleText)?.element).toBe(title);
+        // 元数据不是因字符串过滤而偶然通过：原始值可翻译，但受完整子树保护。
+        expect(isMeaningfulTranslationText(`Eugeny/tabby#${number}`)).toBe(true);
+        expect(isMeaningfulTranslationText('opened')).toBe(true);
+        expect(hasMeaningfulTranslationTextInNodes([metadata], core.shouldStayOriginal)).toBe(false);
+        for (const region of [metadata, label]) {
+            expect(core.discover(region)).toEqual([]);
+            expect(createTranslationSourceSnapshot(region, core.shouldStayOriginal).slots).toEqual([]);
+            for (const element of [region, ...region.querySelectorAll('*')]) {
+                expect(core.shouldStayOriginal(element)).toBe(true);
+                expect(core.shouldIgnoreMutation(element)).toBe(true);
+                expect(core.resolve(element)).toBeNull();
+                expect(core.resolve(element.firstChild)).toBeNull();
+            }
+        }
+        const snapshot = createTranslationSourceSnapshot(row, core.shouldStayOriginal);
+        expect(snapshot.slots.map(({source}) => source)).toEqual(['right click not working']);
+        const translatedClone = applyTranslationsToSnapshot(snapshot, ['右键单击不起作用']);
+        expect(translatedClone).toContain(`Eugeny/tabby#${number}`);
+        expect(translatedClone).toContain('T: Bug');
+        expect(translatedClone).toContain(author);
+        expect(translatedClone).toContain(date);
+        // 只模拟命中坐标；站点适配、候选解析与保护判断都走真实 core。
+        let hit: Node = titleText;
+        const previousCaret = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true, value: () => ({offsetNode: hit, offset: 1})});
+        try {
+            expect(core.resolveAtPoint(document, 10, 20)).toMatchObject({element: title, adapterId: 'github', reason: 'github-issue-or-pr-title'});
+            for (const element of [metadata, ...metadata.querySelectorAll('*'), label, ...label.querySelectorAll('*')]) {
+                hit = element.firstChild ?? element;
+                expect(core.resolveAtPoint(document, 10, 20)).toBeNull();
+            }
+        } finally {
+            if (previousCaret) Object.defineProperty(document, 'caretPositionFromPoint', previousCaret);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+        expect(document.body.outerHTML).toBe(sourceBefore);
+        originals.flat().forEach((element, index) => {
+            const children = [...element.childNodes];
+            expect(children).toHaveLength(originalChildren[index]!.length);
+            children.forEach((child, childIndex) => expect(child).toBe(originalChildren[index]![childIndex]));
+        });
+    });
+
+    it.each([
+        ['https://github.com/Eugeny/tabby/issues', ''],
+        ['https://example.test/issues', 'data-testid="issues-list-surface"'],
+    ])('keeps readable Description content outside the GitHub issue-list boundary at %s', (url, surfaceAttributes) => {
+        const {document, core} = page(`<main><div ${surfaceAttributes}>
+            <div id="readable-description" class="Description-module__container__fixture">
+                <p id="description-prose">The author opened a readable description.</p>
+            </div>
+        </div></main>`, url);
+        const description = document.getElementById('readable-description')!;
+        const prose = document.getElementById('description-prose')!;
+        expect(core.shouldStayOriginal(description)).toBe(false);
+        expect(core.shouldIgnoreMutation(description)).toBe(false);
+        expect(core.discover(document).some(({element}) => element === prose)).toBe(true);
+        expect(core.resolve(prose.firstChild)?.element).toBe(prose);
+    });
+
+    it('keeps GitHub issue-detail labels and activity metadata original while translating body prose', () => {
+        const {document, core} = page(`
+            <main>
+                <h1>
+                    <bdi id="detail-title" class="markdown-title" data-testid="issue-title">right click not working</bdi>
+                </h1>
+                <div data-testid="issue-body">
+                    <div class="IssueBodyHeader-module__IssueBodyHeaderContainer__fixture">
+                        <a data-testid="issue-body-header-author" href="/kikyoulg">kikyoulg</a>
+                        <span>opened </span>
+                        <a data-testid="issue-body-header-link" href="#issue-10084">
+                            <relative-time>on Dec 6, 2024</relative-time>
+                        </a>
+                    </div>
+                    <div data-testid="issue-body-viewer">
+                        <div class="markdown-body" data-testid="markdown-body">
+                            <p id="issue-body-copy">Paste or menu both not working.</p>
+                        </div>
+                    </div>
+                </div>
+                <div data-testid="sidebar-labels-section">
+                    <h3>Labels</h3>
+                    <div data-testid="issue-labels">
+                        <a href="/Eugeny/tabby/issues?q=label%3A%22T%3A%20Bug%22">
+                            <span class="prc-Token-TokenBase-te5-F prc-Token-IssueLabel-2IazM">
+                                <span>T: Bug</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </main>
+        `, 'https://github.com/Eugeny/tabby/issues/10084');
+        const title = document.querySelector('#detail-title')!;
+        const body = document.querySelector('#issue-body-copy')!;
+        const activityHeader = document.querySelector('[class*="IssueBodyHeader-module__IssueBodyHeaderContainer"]')!;
+        const labels = document.querySelector('[data-testid="issue-labels"]')!;
+        const candidates = core.discover(document);
+
+        expect(candidates.find((candidate) => candidate.element === title))
+            .toMatchObject({adapterId: 'github'});
+        expect(candidates.find((candidate) => candidate.element === body))
+            .toMatchObject({adapterId: 'github', reason: 'github-markdown-prose'});
+        expect(core.resolve(activityHeader.querySelector('a')?.firstChild)).toBeNull();
+        expect(core.resolve(labels.querySelector('span')?.firstChild)).toBeNull();
+        expect(core.shouldStayOriginal(activityHeader)).toBe(true);
+        expect(core.shouldStayOriginal(labels)).toBe(true);
+        expect(core.shouldIgnoreMutation(activityHeader)).toBe(true);
+        expect(core.shouldIgnoreMutation(labels)).toBe(true);
     });
 
     it('keeps X usernames out of full and hover translation candidates', () => {
@@ -928,7 +2391,7 @@ describe('translation candidate core', () => {
                 <a id="pr-title" class="markdown-title">Fix partial pull-request translation</a>
                 <p>Block child that makes the row produce an inline run.</p>
             </div></main>
-        `, 'https://github.com/immersive-translate/immersive-translate/pulls');
+        `, 'https://github.com/FluentRead/FluentRead/pulls');
         const candidates = [...core.discoverSteps(document)]
             .flatMap((step) => step.candidate ? [step.candidate] : []);
         const explicit = candidates.find((candidate) => candidate.adapterId === 'github')!;
@@ -949,7 +2412,7 @@ describe('translation candidate core', () => {
             <main><div id="row">Readable prose before the title.
                 <a id="pr-title" class="markdown-title">Fix partial pull-request translation</a>
                 Readable prose after the title.</div></main>
-        `, 'https://github.com/immersive-translate/immersive-translate/pulls');
+        `, 'https://github.com/FluentRead/FluentRead/pulls');
         const row = document.querySelector('#row')!;
         const title = document.querySelector('#pr-title')!;
         const before = row.childNodes[0]!;
@@ -1012,7 +2475,7 @@ describe('translation candidate core', () => {
                     </div>
                 </div>
             </main>
-        `, 'https://github.com/immersive-translate/immersive-translate/pull/4038');
+        `, 'https://github.com/FluentRead/FluentRead/pull/428');
 
         const candidates = core.discover(document);
         const ids = candidates.map((item) => item.element.id);
@@ -1161,6 +2624,7 @@ describe('translation candidate core', () => {
             matches: () => true,
             decide: () => { throw new Error('adapter failure'); },
             shouldStayOriginal: () => { throw new Error('adapter failure'); },
+            shouldOmitFromTranslation: () => { throw new Error('adapter failure'); },
         };
         const first = createDeclarativeAdapter({
             id: 'z-first-registered',
@@ -1179,6 +2643,7 @@ describe('translation candidate core', () => {
             adapters: [faulty, first, second],
         });
 
+        expect(core.shouldOmitFromTranslation(document.querySelector('#safe')!)).toBe(false);
         expect(core.discover(document)[0]).toMatchObject({
             adapterId: 'z-first-registered',
             reason: 'first-wins',
@@ -1268,24 +2733,68 @@ describe('translation candidate core', () => {
             <html><body><main>
                 <p id="hash">a1b2c3d4</p>
                 <p id="number">2026-08-18</p>
+                <p id="domain">dash-overflow.net</p>
                 <p id="words">A meaningful release description.</p>
             </main></body></html>
         `).document);
 
         expect(ids).toEqual(['words']);
+        expect(isIdentifierLikeText('kubernetes.nginx.org')).toBe(true);
+        expect(isIdentifierLikeText('https://github.com/github/gitignore')).toBe(true);
+        expect(isIdentifierLikeText('the guide')).toBe(false);
     });
 
-    it('only skips short text when the target script is clear', () => {
-        expect(isClearlyTargetLanguage('翻译设置', 'zh-CN')).toBe(true);
-        expect(isClearlyTargetLanguage('設定を翻訳', 'ja-JP')).toBe(true);
-        expect(isClearlyTargetLanguage('설정 번역', 'ko-KR')).toBe(true);
-        expect(isClearlyTargetLanguage('Pull requests', 'zh-CN')).toBe(false);
-        expect(isClearlyTargetLanguage('API', 'zh-CN')).toBe(false);
-        expect(isClearlyTargetLanguage('Settings', 'en')).toBe(true);
-        expect(isClearlyTargetLanguage('漢字', 'en')).toBe(false);
-        expect(isClearlyTargetLanguage('', 'zh-CN')).toBe(true);
-        expect(isClearlyTargetLanguage('Paramètres', 'fr')).toBe(false);
-        expect(isClearlyTargetLanguage('2026-08-25', 'en')).toBe(true);
+    it('shares the unified language decision: short CJK needs script evidence and ambiguous Latin words stay translatable', () => {
+        expect(shouldSkipTranslationForTarget('今日は良い天気です。', 'ja-JP')).toBe(true);
+        expect(shouldSkipTranslationForTarget('今日は良い天気です。', 'zh-Hans')).toBe(false);
+        expect(shouldSkipTranslationForTarget('今日は良い天気です。', 'ko')).toBe(false);
+        expect(shouldSkipTranslationForTarget('設定を翻訳', 'ja-JP')).toBe(true);
+        expect(shouldSkipTranslationForTarget('設定を翻訳', 'zh-CN')).toBe(false);
+        expect(shouldSkipTranslationForTarget('설정 번역', 'ko-KR')).toBe(true);
+        expect(shouldSkipTranslationForTarget('설정 번역', 'zh-CN')).toBe(false);
+        expect(shouldSkipTranslationForTarget('설정 번역', 'ja')).toBe(false);
+        expect(shouldSkipTranslationForTarget('あ안', 'ja')).toBe(false);
+        expect(shouldSkipTranslationForTarget('あ안', 'ko')).toBe(false);
+        expect(shouldSkipTranslationForTarget('日本語です Café', 'ja')).toBe(false);
+
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh-CN')).toBe(true);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh-Hans')).toBe(true);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh-SG')).toBe(true);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh-TW')).toBe(false);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'zh')).toBe(true);
+        expect(shouldSkipTranslationForTarget('翻译设置', 'ja-JP')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh-Hant')).toBe(true);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh-TW')).toBe(true);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh-HK')).toBe(true);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh-Hans')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh-CN')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'zh')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'ja-JP')).toBe(false);
+        expect(shouldSkipTranslationForTarget('这是繁體中文測試', 'zh-Hans')).toBe(false);
+        expect(shouldSkipTranslationForTarget('这是繁體中文測試', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('这是简体中文測試', 'zh-Hans')).toBe(false);
+        expect(shouldSkipTranslationForTarget('這是繁體中文测试', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文 English', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('呢個係繁體嘅廣東話。', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('繁體中文測試', 'yue-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('日本語文章', 'zh-Hans')).toBe(false);
+        expect(shouldSkipTranslationForTarget('日本語文章', 'ja')).toBe(false);
+        expect(shouldSkipTranslationForTarget('時間', 'zh-Hant')).toBe(false);
+        expect(shouldSkipTranslationForTarget('云々', 'zh-Hans')).toBe(false);
+
+        expect(shouldSkipTranslationForTarget('Bonjour le monde.', 'en')).toBe(false);
+        expect(shouldSkipTranslationForTarget('Hallo Welt.', 'en')).toBe(false);
+        expect(shouldSkipTranslationForTarget('Settings', 'en')).toBe(false);
+        expect(shouldSkipTranslationForTarget('Pull requests', 'zh-CN')).toBe(false);
+        expect(shouldSkipTranslationForTarget('API', 'zh-CN')).toBe(false);
+        expect(shouldSkipTranslationForTarget('Paramètres', 'fr')).toBe(false);
+        expect(shouldSkipTranslationForTarget('漢字', 'en')).toBe(false);
+
+        expect(shouldSkipTranslationForTarget('', 'zh-CN')).toBe(true);
+        expect(shouldSkipTranslationForTarget('   ', 'ja')).toBe(true);
+        expect(shouldSkipTranslationForTarget('2026-08-25', 'en')).toBe(true);
+        expect(shouldSkipTranslationForTarget('123 / 456', 'zh-Hans')).toBe(true);
         expect(isMeaningfulTranslationText('!!!')).toBe(false);
         expect(isMeaningfulTranslationText('https://example.test/docs')).toBe(false);
         expect(isMeaningfulTranslationText('dev@example.test')).toBe(false);
@@ -1294,6 +2803,35 @@ describe('translation candidate core', () => {
         expect(isMeaningfulTranslationText('#1234')).toBe(false);
         expect(isMeaningfulTranslationText('translationCore.ts')).toBe(false);
         expect(isMeaningfulTranslationText('Readable article summary')).toBe(true);
+        for (let turn = 0; turn < 3; turn++) {
+            expect(isMeaningfulTranslationText('你好')).toBe(true);
+            expect(isMeaningfulTranslationText('𝒜🙂𝒞')).toBe(true);
+            expect(isMeaningfulTranslationText('e\u0301!')).toBe(false);
+            expect(isMeaningfulTranslationText('e\u0301!é')).toBe(true);
+            expect(isMeaningfulTranslationText('🙂🙃')).toBe(false);
+            expect(isMeaningfulTranslationText('!!!a!!!')).toBe(false);
+            expect(isMeaningfulTranslationText(' !!!a\n\tβ!!! ')).toBe(true);
+        }
+    });
+
+    it('长正文的可读性判断不收集与正文长度相同的字母结果数组', () => {
+        const match = String.prototype.match;
+        let largestLetterArray = 0;
+        const probe = vi.spyOn(String.prototype, 'match').mockImplementation(function (this: string, pattern) {
+            const result = match.call(this, pattern);
+            if (pattern instanceof RegExp && pattern.source === '\\p{L}') {
+                largestLetterArray = Math.max(largestLetterArray, result?.length ?? 0);
+            }
+            return result;
+        });
+        try {
+            expect(isMeaningfulTranslationText('Readable long text with words. '.repeat(10000))).toBe(true);
+            expect(isMeaningfulTranslationText('a' + '!'.repeat(100000))).toBe(false);
+            expect(isMeaningfulTranslationText('a' + '!'.repeat(100000) + 'β')).toBe(true);
+            expect(largestLetterArray).toBeLessThanOrEqual(2);
+        } finally {
+            probe.mockRestore();
+        }
     });
 
     it('exercises URL-scoped current core wrappers without leaking cache across pages', () => {
@@ -1309,7 +2847,7 @@ describe('translation candidate core', () => {
             });
             const firstCore = getCurrentTranslationCore();
             expect(getCurrentTranslationCore()).toBe(firstCore);
-            expect(resolveTranslationCandidate(target.firstChild)?.element).toBe(target);
+            expect(getCurrentTranslationCore().resolve(target.firstChild)?.element).toBe(target);
 
             Object.defineProperty(globalThis, 'location', {
                 configurable: true,
@@ -1325,6 +2863,15 @@ describe('translation candidate core', () => {
                 value: {href: 'not a url'},
             });
             expect(new TranslationCandidateCore().url.href).toBe('https://invalid.local/');
+            expect(getCurrentTranslationCore().url.href).toBe('https://invalid.local/');
+            // 同一原始地址复用规范化结果；地址变化后仍按规范化 URL 建立新核心。
+            Object.defineProperty(globalThis, 'location', {
+                configurable: true,
+                value: {href: 'HTTPS://Example.test/third page'},
+            });
+            const thirdCore = getCurrentTranslationCore();
+            expect(thirdCore.url.href).toBe('https://example.test/third%20page');
+            expect(getCurrentTranslationCore()).toBe(thirdCore);
 
             if (documentDescriptor) Object.defineProperty(globalThis, 'document', documentDescriptor);
             else Reflect.deleteProperty(globalThis, 'document');
@@ -1355,7 +2902,6 @@ describe('translation candidate core', () => {
                 <p id="point">Point target text.</p>
             </main></body></html>
         `);
-        const owned = document.querySelector('#owned')!;
         const host = document.querySelector('#host')!;
         const point = document.querySelector('#point')!;
         const firstShadow = host.attachShadow({mode: 'open'});
@@ -1370,7 +2916,6 @@ describe('translation candidate core', () => {
         });
         document.body.append(duplicateHost);
 
-        expect(isExtensionElement(owned)).toBe(true);
         expect(safeMatches(point, ':not(')).toBe(false);
         expect(safeClosest(point, ':not(')).toBeNull();
         expect(getOpenShadowRoots(document)).toEqual([firstShadow, secondShadow]);
@@ -1464,7 +3009,44 @@ describe('translation candidate core', () => {
         expect(core.resolveAtPoint(document, 10, 20)?.element).toBe(point);
     });
 
-    it('rejects malformed slot packets and applies truncation style overrides directly', () => {
+    it.each(['<textarea id="editor"></textarea>', '<input id="editor">',
+        '<div contenteditable="true"><span id="editor">Draft comment</span></div>',
+        '<select id="editor"><option>Draft option</option></select>', '<select><option id="editor">Draft option</option></select>'])
+    ('does not fall through an editor hit to its surrounding comment form: %s', markup => {
+        const {document} = parseHTML(`<html><body><div id="form">New comment Markdown input: edit mode selected. ${markup}</div><p id="article">Readable article text.</p></body></html>`);
+        const core = createTranslationCore({url: new URL('https://github.com/FluentRead/FluentRead/issues/162'), scope: 'all'});
+        const editor = document.querySelector('#editor')!;
+        const form = document.querySelector('#form')!;
+        const article = document.querySelector('#article')!;
+        Object.defineProperty(document, 'elementsFromPoint', {configurable: true, value: () => [editor, form, document.body]});
+        // 浏览器的 caret API 可能把表单空白处映射到旁边的辅助文本。
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true, value: () => ({offsetNode: form.firstChild})});
+        const before = document.body.innerHTML;
+        expect(core.resolveAtPoint(document, 10, 20)).toBeNull();
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true, value: () => null});
+        expect(core.resolveAtPoint(document, 10, 20)).toBeNull();
+        expect(document.body.innerHTML).toBe(before);
+        Object.defineProperty(document, 'elementsFromPoint', {configurable: true, value: () => [article, document.body]});
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true, value: () => ({offsetNode: article.firstChild})});
+        expect(core.resolveAtPoint(document, 10, 20)?.element).toBe(article);
+        expect(core.discover(document.body).some(candidate => candidate.element === editor)).toBe(false);
+    });
+
+    it('keeps shadow editors opaque while preserving visible button input labels', () => {
+        const {document} = parseHTML('<html><body><div id="host"></div><input id="button" type="submit" value="Save comment"></body></html>');
+        const core = createTranslationCore({url: new URL('https://example.test'), scope: 'all'});
+        const host = document.querySelector('#host')!;
+        const shadow = host.attachShadow({mode: 'open'});
+        shadow.innerHTML = '<div>Markdown editor instructions <textarea></textarea></div>';
+        Object.defineProperty(document, 'elementsFromPoint', {configurable: true, value: () => [host, document.body]});
+        Object.defineProperty(shadow, 'elementsFromPoint', {configurable: true, value: () => [shadow.querySelector('textarea'), shadow.querySelector('div')]});
+        expect(core.resolveAtPoint(document, 1, 1)).toBeNull();
+        const button = document.querySelector('#button')!;
+        Object.defineProperty(document, 'elementsFromPoint', {configurable: true, value: () => [button, document.body]});
+        expect(core.resolveAtPoint(document, 1, 1)?.element).toBe(button);
+    });
+
+    it('rejects malformed slot packets and detects computed line clamps defensively', () => {
         const packet = serializeTranslationSlots([' Alpha ', 'Beta']);
         const translated = `${packet.starts[0]}一${packet.ends[0]}\n${packet.starts[1]}二${packet.ends[1]}`;
 
@@ -1483,10 +3065,6 @@ describe('translation candidate core', () => {
 
         const {document} = parseHTML('<html><body><p id="target">Clamped text.</p></body></html>');
         const target = document.querySelector('#target') as HTMLElement;
-        removeTranslationTruncation(target);
-        expect(target.style.getPropertyValue('-webkit-line-clamp')).toBe('unset');
-        expect(target.style.getPropertyValue('line-clamp')).toBe('unset');
-        expect(target.style.getPropertyValue('max-height')).toBe('unset');
 
         Object.defineProperty(document.defaultView, 'getComputedStyle', {
             configurable: true,
@@ -1516,10 +3094,6 @@ describe('translation candidate core', () => {
             }),
         });
         expect(hasActiveTranslationLineClamp(target)).toBe(true);
-        const clampedWrapper = document.createElement('section');
-        clampedWrapper.append(target);
-        document.body.append(clampedWrapper);
-        expect(findTranslationTruncationAncestors(target)).toEqual([clampedWrapper]);
 
         const originalCreateTreeWalker = document.createTreeWalker;
         Object.defineProperty(document, 'createTreeWalker', {
@@ -1859,6 +3433,18 @@ describe('translation candidate core', () => {
         expect(hasStructuralAncestor(structuralParent)).toBe(true);
         expect(core.resolve(structuralParent.firstChild)).toBeNull();
 
+        // 显式翻译侧边栏时，自身或最近的 aside/nav 边界直接放行，不再继续向外套用 header 框架。
+        const header = document.createElement('header');
+        const sidebarNav = document.createElement('nav');
+        const sidebarLink = document.createElement('a');
+        sidebarNav.append(sidebarLink);
+        header.append(sidebarNav);
+        document.body.append(header);
+        expect(hasStructuralAncestor(sidebarLink)).toBe(true);
+        expect(hasStructuralAncestor(sidebarLink, {includeSidebarRegions: true})).toBe(false);
+        expect(hasStructuralAncestor(sidebarNav, {includeSidebarRegions: true})).toBe(false);
+        expect(hasStructuralAncestor(sidebarNav)).toBe(true);
+
         const deepMain = document.createElement('main');
         let asideParent = deepMain;
         for (let index = 0; index < maxComposedAncestorDepth + 2; index += 1) {
@@ -1922,6 +3508,37 @@ describe('translation candidate core', () => {
     });
 });
 
+describe('X 动态正文候选形态回归', () => {
+    it('含 emoji 与链接的 tweetText 仍由 X 适配器作为原子 owner，不 materialize synthetic run', () => {
+        const {document, core} = page(`
+            <article data-testid="tweet">
+                <div id="tweet-text" data-testid="tweetText">
+                    <span id="tweet-copy">Astra released itself from containment </span>
+                    <img alt="😭" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+                    <a id="tweet-link" href="https://example.com"><span>more than OpenAI</span></a>
+                </div>
+            </article>
+        `, 'https://x.com/TokenGremlin/status/2094882239763071372');
+        const tweetText = document.querySelector<HTMLElement>('#tweet-text')!;
+        const hit = document.querySelector<HTMLElement>('#tweet-copy')!.firstChild!;
+        const discovered = core.discover(document).find((candidate) => candidate.element === tweetText);
+        const hovered = core.resolve(hit);
+
+        expect(discovered).toMatchObject({
+            element: tweetText,
+            adapterId: 'x',
+            reason: 'x-post-text',
+        });
+        expect(discovered?.nodes).toBeUndefined();
+        expect(hovered).toMatchObject({
+            element: tweetText,
+            adapterId: 'x',
+            reason: 'x-post-text',
+        });
+        expect(hovered?.nodes).toBeUndefined();
+    });
+});
+
 describe('embedded semantic chrome classification', () => {
     it('discovers and hover-resolves both Swift DocC note paragraphs without admitting a top-level aside', () => {
         const {document, core} = page(`
@@ -1952,11 +3569,11 @@ describe('embedded semantic chrome classification', () => {
         ).toEqual(['note-label', 'note-copy']);
         expect(core.resolve(noteLabel.firstChild), 'Hover must resolve the Swift note label').toMatchObject({
             element: noteLabel,
-            reason: 'generic-readable-block',
+            adapterId: 'swift-docs',
         });
         expect(core.resolve(noteCopy.firstChild), 'Hover must resolve the Swift note prose').toMatchObject({
             element: noteCopy,
-            reason: 'generic-readable-block',
+            adapterId: 'swift-docs',
         });
         expect(
             core.resolve(globalCopy.firstChild),
@@ -1991,5 +3608,298 @@ describe('embedded semantic chrome classification', () => {
         ]) {
             expect(ids, `${chromeId} must remain structural chrome`).not.toContain(chromeId);
         }
+    });
+});
+
+
+describe('动态 tooltip 与按钮来源隔离', () => {
+    it.each(['role="tooltip"', 'class="tooltip"'])('嵌套提示 %s 独立发现且不进入按钮来源', (attributes) => {
+        const {document, core} = page(`<button id="monthly"><span>Monthly</span><i></i><div ${attributes} id="tip"><div class="tooltip-inner" id="tip-content">Support ThinkStu monthly</div></div></button>`);
+        const button = document.querySelector('#monthly') as HTMLElement;
+        const tip = document.querySelector('#tip-content') as HTMLElement;
+        expect(extractTranslationText(button)).toBe('Monthly');
+        expect(collectLiveTranslationTextSlots(button).map(slot => slot.source)).toEqual(['Monthly']);
+        expect(createTranslationSourceSnapshot(button).slots.map(slot => slot.source)).toEqual(['Monthly']);
+        expect(createTranslationSourceSnapshot(button).clone.querySelector('#tip')).toBeNull();
+        expect(button.querySelector('#tip')).not.toBeNull();
+        expect(extractTranslationText(tip)).toBe('Support ThinkStu monthly');
+        const candidates = core.discover(document);
+        expect(candidates.map(candidate => candidate.element.id)).toEqual(['tip-content', 'monthly']);
+        expect(candidates.map(candidate => candidate.kind)).toEqual(['content', 'control']);
+        expect(core.resolve(tip)?.element).toBe(tip);
+        document.querySelector('#tip')!.remove();
+        expect(extractTranslationText(button)).toBe('Monthly');
+        expect(core.discover(document).map(candidate => candidate.element.id)).toEqual(['monthly']);
+    });
+});
+
+
+it('tooltip 文本边界探测在异常深度下保守退出', () => {
+    const {document} = page('<div id="root"></div>');
+    const root = document.querySelector('#root')!;
+    let parent = root;
+    for (let index = 0; index <= maxComposedAncestorDepth; index++) {
+        const next = document.createElement('span');
+        parent.appendChild(next);
+        parent = next;
+    }
+    const text = document.createTextNode('Deep source');
+    parent.appendChild(text);
+    expect(isTextInNestedTranslationTooltip(text, root)).toBe(true);
+});
+
+
+describe('explicit source line breaks', () => {
+    function lines(html: string, splitOnBr = true) {
+        const {document} = parseHTML(`<html><body><main>${html}</main></body></html>`);
+        const core = new TranslationCandidateCore({url: new URL('https://lines.test'), adapters: [
+            createDeclarativeAdapter({id: 'lines', hosts: ['lines.test'], targets: [
+                {selector: 'p', match: 'closest', reason: 'source-lines', splitOnBr},
+            ]}),
+        ]});
+        return {document, core, paragraph: document.querySelector('p')!};
+    }
+
+    it('keeps inline formatting with its source line and skips empty or protected lines', () => {
+        const {document, core, paragraph} = lines('<p><br>First <a href="/guide">linked phrase</a>.<br><br><code>skip()</code><br><em>Second sentence.</em><br><span translate="no">Protected sentence.</span><br></p>');
+        const candidates = core.discover(document);
+        expect(candidates).toHaveLength(2);
+        expect(candidates.map(candidate => extractTranslationTextFromNodes(candidate.nodes!)))
+            .toEqual(['First linked phrase .', 'Second sentence.']);
+        expect(core.resolve(document.querySelector('a')!.firstChild)?.nodes).toEqual(candidates[0].nodes);
+        expect(core.resolve(document.querySelector('em')!)?.nodes).toEqual(candidates[1].nodes);
+        expect(core.resolve(paragraph)?.nodes).toEqual(candidates[0].nodes);
+        expect(core.resolve(paragraph.querySelector('br'))).toBeNull();
+        expect(core.resolve(document.querySelector('code')!.firstChild)).toBeNull();
+    });
+
+    it('retains paragraph behavior when there are no direct breaks or the rule is off', () => {
+        for (const [html, enabled] of [
+            ['<p>First sentence.<br>Second sentence.</p>', false],
+            ['<p>First <em>sentence.</em></p>', true],
+            ['<p><span>First sentence.<br>Second sentence.</span></p>', true],
+        ] as const) {
+            const {core, document, paragraph} = lines(html, enabled);
+            expect(core.discover(document)).toMatchObject([{element: paragraph}]);
+            expect(core.discover(document)[0].nodes).toBeUndefined();
+            expect(core.resolve(paragraph.firstChild)?.element).toBe(paragraph);
+        }
+    });
+
+    it('does not materialize an unbounded set of child nodes', () => {
+        const {core, document, paragraph} = lines('<p>' + 'Readable sentence.<br>'.repeat(1030) + '</p>');
+        expect(core.discover(document)).toEqual([]);
+        expect(core.resolve(paragraph)).toBeNull();
+    });
+});
+
+describe('悬浮视觉文本块的边界条件', () => {
+    const longSource = (label: string, count = 120) => Array.from({length: count}, (_, index) =>
+        `${label} ${index} explains how the document keeps its readable context intact.`).join(' ');
+
+    function withCaret<T>(document: Document, caret: unknown, run: () => T): T {
+        const previous = Object.getOwnPropertyDescriptor(document, 'caretPositionFromPoint');
+        Object.defineProperty(document, 'caretPositionFromPoint', {configurable: true, value: () => caret});
+        try {
+            return run();
+        } finally {
+            if (previous) Object.defineProperty(document, 'caretPositionFromPoint', previous);
+            else Reflect.deleteProperty(document, 'caretPositionFromPoint');
+        }
+    }
+
+    function withSegmenter<T>(segmenter: unknown, run: () => T): T {
+        const previous = Object.getOwnPropertyDescriptor(Intl, 'Segmenter');
+        Object.defineProperty(Intl, 'Segmenter', {configurable: true, value: segmenter});
+        try {
+            return run();
+        } finally {
+            if (previous) Object.defineProperty(Intl, 'Segmenter', previous);
+            else Reflect.deleteProperty(Intl, 'Segmenter');
+        }
+    }
+
+    it('只细分通用可读块，语义段落、分段候选和非正文候选保持原样', () => {
+        const {document, core} = page(`<main><div id="generic">${longSource('Generic')}</div><p id="semantic">${longSource('Semantic')}</p></main>`);
+        const generic = core.inspect(document.querySelector('#generic')!).candidate!;
+        const semantic = document.querySelector<HTMLElement>('#semantic')!;
+        const text = generic.element.firstChild as Text;
+        withCaret(document, {offsetNode: text, offset: 10}, () => {
+            const restore = installRangeStub(document, text);
+            try {
+                expect(generic.reason).toBe('generic-readable-block');
+                expect(resolveVisualTranslationRange(generic, document, 1, 1)).not.toBeNull();
+                expect(resolveVisualTranslationRange({...generic, kind: 'control'}, document, 1, 1)).toBeNull();
+                expect(resolveVisualTranslationRange({...generic, nodes: [text]}, document, 1, 1)).toBeNull();
+                expect(resolveVisualTranslationRange({...generic, reason: 'paragraph'}, document, 1, 1)).toBeNull();
+                expect(resolveVisualTranslationRange({...generic, element: semantic}, document, 1, 1)).toBeNull();
+            } finally {
+                restore();
+            }
+        });
+    });
+
+    it('光标 API 不可用或命中非可译文本时不细分', () => {
+        const {document, core} = page(`<main><div id="generic">${longSource('Pointer')}<code id="code">const protectedValue = 1;</code></div></main>`);
+        const candidate = core.inspect(document.querySelector('#generic')!).candidate!;
+        const code = document.querySelector('#code')!;
+        expect(withCaret(document, null, () => resolveVisualTranslationRange(candidate, document, 1, 1, core.shouldStayOriginal))).toBeNull();
+        expect(withCaret(document, {offsetNode: code, offset: 0}, () =>
+            resolveVisualTranslationRange(candidate, document, 1, 1, core.shouldStayOriginal))).toBeNull();
+        expect(withCaret(document, {offsetNode: code.firstChild, offset: 0}, () =>
+            resolveVisualTranslationRange(candidate, document, 1, 1, core.shouldStayOriginal))).toBeNull();
+    });
+
+    it('光标落在最后一个分段之后时选择末句，并在视觉间距处停止向前扩展', () => {
+        const source = longSource('Backward', 90);
+        const {document, core} = page(`<main><div id="generic">${source}</div></main>`);
+        const candidate = core.inspect(document.querySelector('#generic')!).candidate!;
+        const text = candidate.element.firstChild as Text;
+        const splitAt = source.lastIndexOf('Backward 88');
+        // 末句之前的所有句子位于上一视觉段落，末句单独成段。
+        const restore = installRangeStub(document, text, (startOffset) =>
+            startOffset >= splitAt ? [{top: 400, bottom: 410, height: 10}] : [{top: 0, bottom: 10, height: 10}]);
+        try {
+            const result = withSegmenter(class {
+                segment(value: string) {
+                    const cut = value.lastIndexOf('Backward 89');
+                    return [
+                        {index: 0, segment: value.slice(0, splitAt)},
+                        {index: splitAt, segment: value.slice(splitAt, cut)},
+                        {index: cut, segment: value.slice(cut, value.length - 5)},
+                    ];
+                }
+            }, () => withCaret(document, {offsetNode: text, offset: text.length}, () =>
+                resolveVisualTranslationRange(candidate, document, 1, 1, core.shouldStayOriginal)));
+            expect(result?.sourceText).toContain('Backward 88');
+            expect(result?.sourceText).not.toContain('Backward 87');
+        } finally {
+            restore();
+        }
+    });
+
+    it('没有分段能力且全文只有空白时安全退出', () => {
+        const {document} = parseHTML(`<html><body><main><div id="blank">${' '.repeat(5000)}</div></main></body></html>`);
+        const owner = document.querySelector<HTMLElement>('#blank')!;
+        const text = owner.firstChild as Text;
+        const candidate = {element: owner, kind: 'content' as const, reason: 'generic-readable-block'};
+        const restore = installRangeStub(document, text);
+        try {
+            expect(withSegmenter(undefined, () => withCaret(document, {offsetNode: text, offset: 12}, () =>
+                resolveVisualTranslationRange(candidate, document, 1, 1)))).toBeNull();
+        } finally {
+            restore();
+        }
+    });
+});
+
+describe('整块译文的纯文本渲染', () => {
+    const snapshotOf = (html: string) => {
+        const {document} = parseHTML(`<html><body>${html}</body></html>`);
+        return createTranslationSourceSnapshot(document.body.firstElementChild as HTMLElement);
+    };
+    const render = (html: string, translations: readonly string[]) =>
+        applyTranslationsToSnapshot(snapshotOf(html), translations);
+
+    it('多槽候选的整块译文输出纯文本，不把整段译文塞进首个链接', () => {
+        const html = '<p>Read <a href="/g">the guide</a>.</p>';
+        expect(render(html, ['读完这份指南。', '', ''])).toBe('读完这份指南。');
+        // 其余槽位只是空白同样按整块处理，覆盖模型返回空格与 &nbsp; 的情形。
+        expect(render(html, ['读完这份指南。', ' ', '\u00a0'])).toBe('读完这份指南。');
+        // 逐槽译文仍按内联骨架回填，链接与加粗保留。
+        expect(render(html, ['读', '指南', '。'])).toContain('<a href="/g">指南</a>');
+    });
+
+    it('整块译文里的换行还原为 <br>', () => {
+        expect(render('<p>one<br><b>two</b></p>', ['一\n二', ''])).toBe('一<br>二');
+        expect(render('<p>one<br><br><b>two</b></p>', ['一\r\n\n二', ''])).toBe('一<br><br>二');
+        // 服务返回的首尾换行不对应原文断行，不能渲染成译文前后的空行。
+        expect(render('<p>one<br><b>two</b></p>', ['\n一\n二\n\n', ''])).toBe('一<br>二');
+    });
+
+    it('长度不符、首槽为空或后续槽仍有译文时不走整块降级', () => {
+        const html = '<p>Read <a href="/g">the guide</a>.</p>';
+        expect(render(html, ['读'])).toContain('the guide');
+        expect(render(html, ['', '', ''])).toBe(' <a href="/g"></a>');
+        expect(render(html, ['整段。', '次槽', ''])).toContain('次槽');
+        const sparse = new Array<string>(3);
+        sparse[1] = '';
+        sparse[2] = '';
+        expect(render(html, sparse)).toBe('Read <a href="/g"></a>');
+    });
+
+    it('单槽候选不触发整块降级', () => {
+        expect(render('<p>Single.</p>', ['单个。'])).toBe('单个。');
+    });
+
+    it('含行内代码、受保护术语、公式或图片的骨架即使后续槽为空也保留原内容', () => {
+        expect(render('<p>Use <code>fetch</code> here</p>', ['使用 fetch', ''])).toContain('<code>fetch</code>');
+        expect(render('<p>Call <span translate="no">Acme</span> now</p>', ['呼叫', '']))
+            .toContain('<span translate="no">Acme</span>');
+        expect(render('<p>Let <span class="katex">x</span> be <b>big</b></p>', ['设 x 很大', '', '']))
+            .toContain('class="katex"');
+        expect(render('<p>See <img src="a.png"> <b>here</b></p>', ['看这里', ''])).toContain('<img src="a.png">');
+    });
+});
+
+describe('整块请求的整段原文重建', () => {
+    const source = (html: string, preserveNewlines?: boolean) => {
+        const {document} = parseHTML(`<html><body>${html}</body></html>`);
+        const snapshot = createTranslationSourceSnapshot(document.body.firstElementChild as HTMLElement);
+        return buildWholeBlockTranslationSource(snapshot, preserveNewlines === undefined ? undefined : {preserveNewlines});
+    };
+
+    it('内联格式无缝拼接，源码空白折叠为单个空格', () => {
+        expect(source('<p><b>one</b><i>two</i></p>')).toBe('onetwo');
+        expect(source('<p>Hello <b>world</b>!</p>')).toBe('Hello world!');
+        expect(source('<p>\n  Read <a href="/g">the\n guide</a> <em>now</em>\n</p>')).toBe('Read the guide now');
+        expect(source('<p>Hello\n<b>world</b></p>')).toBe('Hello world');
+    });
+
+    it('<br> 转为换行，首尾的换行与分隔不产生多余空白', () => {
+        expect(source('<p>one<br><b>two</b></p>')).toBe('one\ntwo');
+        expect(source('<p>one\n<br> <b>two</b></p>')).toBe('one\ntwo');
+        expect(source('<p>one<br><br><b>two</b></p>')).toBe('one\n\ntwo');
+        expect(source('<p><br>one <b>two</b><br></p>')).toBe('one two');
+    });
+
+    it('宿主保留换行时文本内的换行也作为断行保留', () => {
+        expect(source('<p>one\n<a href="/x">two</a> three\nfour</p>', true)).toBe('one\ntwo three\nfour');
+        expect(source('<p>one\n<a href="/x">two</a> three\nfour</p>', false)).toBe('one two three four');
+    });
+
+    it('只有 [1] 这类脚注标记的上下标可以并入整段', () => {
+        expect(source('<p>Cats<sup class="reference"><a href="#n1">[1]</a></sup> purr <b>loudly</b>.</p>'))
+            .toBe('Cats[1] purr loudly.');
+        expect(source('<p>Area is <b>x</b><sup>2</sup></p>')).toBeNull();
+        expect(source('<p>Water is H<sub>2</sub><i>O</i></p>')).toBeNull();
+    });
+
+    it('脱离文档的异常空值不会使整段骨架重建抛错', () => {
+        const {document} = parseHTML('<html><body><p>Read <a href="/g">the guide</a> <sup>[1]</sup> now.</p></body></html>');
+        const snapshot = createTranslationSourceSnapshot(document.body.firstElementChild as HTMLElement);
+        const footnote = snapshot.clone.querySelector('sup')!;
+        Object.defineProperty(footnote, 'textContent', {configurable: true, value: null});
+        expect(buildWholeBlockTranslationSource(snapshot)).toBeNull();
+
+        Object.defineProperty(footnote, 'textContent', {configurable: true, value: '[1]'});
+        const gap = [...snapshot.clone.childNodes].find(node => node.nodeType === 3 && !node.nodeValue?.trim());
+        expect(gap).toBeDefined();
+        Object.defineProperty(gap, 'nodeValue', {configurable: true, value: null});
+        expect(buildWholeBlockTranslationSource(snapshot)).toBeTypeOf('string');
+    });
+
+    it('无法无损拍平的骨架返回 null，由调用方逐槽请求', () => {
+        expect(source('<p>Use <code>fetch</code> here</p>')).toBeNull();
+        expect(source('<p>one<span translate="no">X</span>s</p>')).toBeNull();
+        expect(source('<p>See <img src="a.png"> <b>here</b></p>')).toBeNull();
+        expect(source('<p>Let <span class="katex">x</span> be <b>big</b></p>')).toBeNull();
+        expect(source('<p>Was <del>ten</del> <b>eight</b></p>')).toBeNull();
+        expect(source('<div>Intro <p>Nested <b>block</b></p></div>')).toBeNull();
+        expect(source('<p>Only one slot</p>')).toBeNull();
+    });
+
+    it('被快照省略的隐藏文字与图标不阻止整块请求', () => {
+        expect(source('<p>Open <span hidden>secret</span> the <b>door</b></p>')).toBe('Open the door');
     });
 });

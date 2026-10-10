@@ -1,0 +1,18 @@
+
+ RUN  v2.1.9 /Users/thinkstu/Desktop/copy/FluentRead-settings-i18n-20261004
+
+ ✓ tests/i18n.test.ts (56 tests) 2961ms
+   ✓ i18n 全量界面扫描 > Vue 文案和展示注册表在非中文界面有本地化结果 1130ms
+   ✓ 运行期反馈文案资源 > 每条精确反馈都来自真实源码，不重复，并在每种界面语言中完整本地化 805ms
+   ✓ 旧界面译文人工校正 > 校正原文仍在界面源码中使用，不重复，并覆盖此前的译文 706ms
+ ✓ tests/vocabularyBookComponentLifecycle.test.ts (2 tests) 922ms
+   ✓ VocabularyBook mounted lifecycle > does not subscribe, register listeners, or list after unmounting before configReady 921ms
+ ✓ tests/vocabularyStudyLifecycle.test.ts (2 tests) 480ms
+   ✓ saved sentence explanation lifecycle > generates only on demand and preserves reading while saving a separate note 380ms
+ ✓ tests/vocabularyBookComponent.test.ts (4 tests) 2ms
+
+ Test Files  4 passed (4)
+      Tests  64 passed (64)
+   Start at  15:10:31
+   Duration  7.01s (transform 1.21s, setup 0ms, collect 1.98s, tests 4.37s, environment 0ms, prepare 174ms)
+

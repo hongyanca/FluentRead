@@ -1,0 +1,430 @@
+{
+  "extensionDir": ".output/chrome-mv3",
+  "profileDir": "temporary isolated profile",
+  "evidence": "Production extension; real browser input; deterministic mock provider, no external provider certification",
+  "cases": [
+    {
+      "name": "interval edit and restore default",
+      "passed": true
+    },
+    {
+      "name": "default prompts can be loaded, edited, persisted and reset; whitespace uses default semantics",
+      "passed": true
+    },
+    {
+      "name": "independent AI config, responsive layout, preserved global config",
+      "passed": true
+    },
+    {
+      "name": "triple equal uses independent model and prompts, preserves original equals",
+      "passed": true
+    },
+    {
+      "name": "restore original and translate again",
+      "passed": true
+    },
+    {
+      "name": "slow triple does not translate",
+      "passed": true
+    },
+    {
+      "name": "editing while pending preserves new content",
+      "passed": true
+    },
+    {
+      "name": "blur without another edit still allows translation",
+      "passed": true
+    },
+    {
+      "name": "Escape cancels late writeback",
+      "passed": true
+    },
+    {
+      "name": "failure retains text and next trigger succeeds",
+      "passed": true
+    },
+    {
+      "name": "password and rich editor excluded",
+      "passed": true
+    },
+    {
+      "name": "Space, dash and Control+Enter triggers",
+      "passed": true
+    },
+    {
+      "name": "interval change applies without page reload",
+      "passed": true
+    }
+  ],
+  "consoleErrors": [],
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false
+  },
+  "initialConfig": {
+    "on": true,
+    "inputBoxTranslationTrigger": "triple_equal",
+    "inputBoxTranslationTarget": "en",
+    "inputBoxTranslationInterval": 600,
+    "inputBoxTranslationService": "microsoft",
+    "inputBoxTranslationModel": "",
+    "inputBoxTranslationPrompt": "",
+    "inputBoxTranslationSystemPrompt": ""
+  },
+  "quickClose": {
+    "interval": 750,
+    "persistedAfterReload": true
+  },
+  "settingsLayout": {
+    "desktopCardHeight": 314.34375,
+    "promptEditorInitiallyClosed": true
+  },
+  "dialogComputed": {
+    "02a-profile": {
+      "panel": {
+        "height": "406.695px",
+        "maxHeight": "718.08px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "276.695px",
+        "overflow": "auto"
+      }
+    },
+    "02b-prompts": {
+      "panel": {
+        "height": "718.078px",
+        "maxHeight": "718.08px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "588.078px",
+        "overflow": "auto"
+      }
+    },
+    "03-profile-390": {
+      "panel": {
+        "height": "406.695px",
+        "maxHeight": "792px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "276.695px",
+        "overflow": "auto"
+      }
+    },
+    "03-prompts-390": {
+      "panel": {
+        "height": "792px",
+        "maxHeight": "792px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "662px",
+        "overflow": "auto"
+      }
+    },
+    "03-prompts-short": {
+      "panel": {
+        "height": "528px",
+        "maxHeight": "528px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "398px",
+        "overflow": "auto"
+      }
+    },
+    "04-profile-dark": {
+      "panel": {
+        "height": "406.695px",
+        "maxHeight": "792px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "276.695px",
+        "overflow": "auto"
+      }
+    },
+    "04-prompts-dark": {
+      "panel": {
+        "height": "792px",
+        "maxHeight": "792px",
+        "display": "flex"
+      },
+      "body": {
+        "height": "662px",
+        "overflow": "auto"
+      }
+    }
+  },
+  "dialogGeometry": {
+    "02a-profile": {
+      "x": 336,
+      "y": 48.953125,
+      "width": 600,
+      "height": 406.6953125
+    },
+    "02b-prompts": {
+      "x": 336,
+      "y": 48.953125,
+      "width": 600,
+      "height": 718.078125
+    },
+    "03-profile-390": {
+      "x": 16,
+      "y": 54,
+      "width": 358,
+      "height": 406.6953125
+    },
+    "03-prompts-390": {
+      "x": 16,
+      "y": 54,
+      "width": 358,
+      "height": 792
+    },
+    "03-prompts-short": {
+      "x": 340,
+      "y": 36,
+      "width": 600,
+      "height": 528
+    },
+    "04-profile-dark": {
+      "x": 340,
+      "y": 54,
+      "width": 600,
+      "height": 406.6953125
+    },
+    "04-prompts-dark": {
+      "x": 340,
+      "y": 54,
+      "width": 600,
+      "height": 792
+    }
+  },
+  "successTooltipVisibility": {
+    "opacity": "1",
+    "display": "block",
+    "visibility": "visible"
+  },
+  "runtimeRequests": [
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 明天下午见面。="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 明天下午见面。="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 这是原始消息"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 失焦后仍完成翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 取消这次翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 服务失败时保留我"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 服务失败时保留我=="
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 请保留原来的结尾-"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 请保留原来的结尾-"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 普通快捷键翻译"
+          }
+        ],
+        "stream": false
+      }
+    },
+    {
+      "url": "http://127.0.0.1:11434/v1/chat/completions",
+      "body": {
+        "model": "input-test-model",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Keep the message polite. Return only translated text."
+          },
+          {
+            "role": "user",
+            "content": "Translate this input into en: 间隔设置立即生效"
+          }
+        ],
+        "stream": false
+      }
+    }
+  ],
+  "persistenceCases": [
+    {
+      "name": "interval edit and restore default",
+      "passed": true
+    },
+    {
+      "name": "independent AI config, responsive layout, preserved global config",
+      "passed": true
+    },
+    {
+      "name": "interval change applies without page reload",
+      "passed": true
+    }
+  ],
+  "completed": true,
+  "foregroundApplicationPreserved": true
+}

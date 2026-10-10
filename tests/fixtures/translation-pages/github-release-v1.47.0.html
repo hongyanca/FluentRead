@@ -1,0 +1,114 @@
+<!doctype html>
+<!-- Public release body from https://github.com/mengxi-ream/read-frog/releases/tag/v1.47.0, retrieved 2026-09-12. No account, session, or third-party extension markup. -->
+<html lang="en"><head><meta charset="utf-8"><title>Read Frog v1.47.0</title><style>body{font:16px/1.6 system-ui;margin:32px;color:#24292f}main{max-width:1120px;margin:auto}p{margin:16px 0}a{color:#0969da}code{background:#eff1f3;border-radius:4px;padding:2px 5px}li{margin:8px 0}</style></head><body><nav><button>Compare changes</button></nav><main><h1>v1.47.0</h1><div data-pjax="true" data-test-selector="body-content" data-view-component="true" class="markdown-body tmp-my-3"><h3>Minor Changes</h3>
+<ul>
+<li>
+<p id="release-paragraph-0"><a href="https://github.com/mengxi-ream/read-frog/pull/2180" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2180/hovercard">#2180</a> <a href="https://github.com/mengxi-ream/read-frog/commit/56b189c6960e29bc988b38195c163b3af9aec73e"><code>56b189c</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - feat(glossary): sync your glossaries across devices, and carry them in exports</p>
+<p id="release-paragraph-1">Your glossaries now sync through Google Drive alongside your settings, in a file<br>
+of their own. They are merged rather than replaced: terms added on two machines<br>
+end up as one list, a term you edited on one and turned off on the other keeps<br>
+both changes, and deleting a term on one device removes it on the others instead<br>
+of having it come back on the next sync.</p>
+<p id="release-paragraph-2">Where the two copies genuinely disagree — the same term reworded differently on<br>
+each machine — you are shown the two versions and pick. The first sync on a<br>
+device tells you what is coming and what is going before it touches anything, a<br>
+sync that would remove a large part of your list asks first, and any sync can be<br>
+undone from the toast it leaves behind. Each sync says what it did to this<br>
+device: how many terms were added, updated and removed.</p>
+<p id="release-paragraph-3">Signing in with a different Google account tells you what is about to happen<br>
+before it happens: how many glossary rows this device is sending up to the new<br>
+account, and how to keep only that account's glossaries instead.</p>
+<p id="release-paragraph-4">Exporting your settings to a file now includes your glossaries, and importing<br>
+such a file brings them back — so moving to a new machine, or taking a copy<br>
+before a reset, no longer leaves the terms you typed behind. Resetting your<br>
+config leaves your glossaries alone, and now says so.</p>
+<p id="release-paragraph-5"><strong>Importing a glossary CSV is stricter, and some files that used to work will<br>
+not.</strong> The file must carry the four columns Export writes —<br>
+<code>source,target,targetLanguage,caseSensitive</code> — with every cell filled. A term's<br>
+case rule and target language are part of what identifies it, so a file that<br>
+leaves them out cannot say which rows it is describing; the import screen used<br>
+to guess with a checkbox and a language picker, which meant one file could land<br>
+two different ways. Those two controls are gone. Two-column files from other<br>
+tools, exports from before those columns existed, and a bare term on a line of<br>
+its own are refused now, with a message naming the columns. Export a glossary to<br>
+see the shape, or add the header and the two columns to an existing file.</p>
+<p id="release-paragraph-6">The sidebar groups Page Translation, Video Subtitles and Input Translation under<br>
+one Translation entry, and Advanced moves to the bottom.</p>
+</li>
+<li>
+<p id="release-paragraph-7"><a href="https://github.com/mengxi-ream/read-frog/pull/2171" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2171/hovercard">#2171</a> <a href="https://github.com/mengxi-ream/read-frog/commit/0f537ad0ec2ec83edf23ad49b357c13250fe567a"><code>0f537ad</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - feat(glossary): add user-defined glossaries</p>
+<p id="release-paragraph-8">Define a term once and every AI translation uses your wording. Leave a term's translation empty to keep it<br>
+in the original language, which is usually what names and usernames need. Only the terms that actually<br>
+appear in a paragraph are sent to the model, so a large glossary costs nothing on pages that do not use it.</p>
+<p id="release-paragraph-9">Terms live in glossaries, and each glossary can be limited to the websites you want it on — a set of game<br>
+terms on one wiki, work vocabulary on your company's docs, nothing anywhere else. A glossary with no<br>
+website listed applies everywhere. Where two glossaries give the same term different wording, the one<br>
+lower in the list wins.</p>
+<p id="release-paragraph-10">Each term is written for one target language, chosen next to the term itself and defaulting to whatever<br>
+you currently translate into, so the same word can have a Chinese wording and a Japanese one side by side<br>
+and only the one that applies is ever sent.</p>
+<p id="release-paragraph-11">Turn an individual term or a whole glossary off without deleting it, import and export each list as CSV<br>
+(now with a <code>targetLanguage</code> column; two-column files still import), or empty it in one go. Importing with<br>
+Replace asks for confirmation first, because it clears the glossary in every target language, not just the<br>
+one you picked. Find it under Advanced → Glossary in the extension settings.</p>
+</li>
+</ul>
+<h3>Patch Changes</h3>
+<ul>
+<li>
+<p id="release-paragraph-12"><a href="https://github.com/mengxi-ream/read-frog/pull/2181" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2181/hovercard">#2181</a> <a href="https://github.com/mengxi-ream/read-frog/commit/3e29045702dcb2698ea8e5a64cead1e705461735"><code>3e29045</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - feat(glossary): let a term apply to every target language</p>
+<p id="release-paragraph-13">A term with no translation means "leave this word alone", which is true whatever you are<br>
+translating into — but until now it had to be filed under one language, so it quietly<br>
+stopped working the moment you switched target language. Terms can now be set to <strong>All<br>
+languages</strong>, and that is what a term with an empty translation is set to by default.</p>
+<p id="release-paragraph-14">Where both exist, a wording written for the language you are translating into wins over<br>
+the all-languages one, so a term can keep its original form everywhere except where you<br>
+have given it a rendering. Exports carry the setting and imports read it back.</p>
+<p id="release-paragraph-15">The website list on a glossary now explains the difference between <code>*.example.com</code>, which<br>
+covers a site and its subdomains, and <code>example.com</code>, which matches only that exact address.</p>
+</li>
+<li>
+<p id="release-paragraph-16"><a href="https://github.com/mengxi-ream/read-frog/pull/2181" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2181/hovercard">#2181</a> <a href="https://github.com/mengxi-ream/read-frog/commit/3e29045702dcb2698ea8e5a64cead1e705461735"><code>3e29045</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - feat(glossary): edit a term without deleting and re-adding it</p>
+<p id="release-paragraph-17">Every part of a term can now be changed in place. The pencil on a row turns it into<br>
+fields: the term itself, its translation, the target language it is written for, and<br>
+whether it matches case — the <code>Aa</code> button on the term field. Enter or the tick saves,<br>
+Escape or the cross throws the edit away. Fixing a typo no longer means deleting the row<br>
+and typing the whole thing again, which also lost the term's on/off state.</p>
+<p id="release-paragraph-18">Editing a term keeps it exactly where it was in the list. The list is ordered by when<br>
+each term was last changed, so without this the row you had just finished editing would<br>
+jump to the end — off the page entirely on a list longer than one.</p>
+</li>
+<li>
+<p id="release-paragraph-19"><a href="https://github.com/mengxi-ream/read-frog/pull/2175" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2175/hovercard">#2175</a> <a href="https://github.com/mengxi-ream/read-frog/commit/1cf3e5fa48741dc38f8aab7c08853bded426214c"><code>1cf3e5f</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - fix(glossary): correct term matching, CSV round-tripping, and the term counter</p>
+<p id="release-paragraph-20">A term is no longer skipped when a longer term starts at the same place and does not<br>
+apply there. <code>Chort</code> was lost in "landed at Chort bayonet" because <code>Chort Bay</code> matched<br>
+first and then failed at its edge — while the same term still worked in other sentences,<br>
+which made it hard to notice.</p>
+<p id="release-paragraph-21">Exported CSVs now carry each term's case-sensitivity setting and open correctly in Excel,<br>
+so exporting and re-importing a glossary lands back on the rows it came from instead of<br>
+adding a second copy of every case-sensitive term. Files saved by Excel in a regional<br>
+encoding are read properly rather than imported as garbled text, and a quoted value<br>
+spanning two lines no longer turns into a stray "keep the original" rule.</p>
+<p id="release-paragraph-22">The term count under a glossary now describes that glossary, and the 20,000-term limit —<br>
+which counts every glossary together — is shown with the glossary library, where it<br>
+applies. Running out of room says so in those terms instead of calling one glossary full.</p>
+</li>
+<li>
+<p id="release-paragraph-23"><a href="https://github.com/mengxi-ream/read-frog/pull/2178" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2178/hovercard">#2178</a> <a href="https://github.com/mengxi-ream/read-frog/commit/02318d0aa4d8290684aa204108fba3f68c7e3a1e"><code>02318d0</code></a> Thanks <a href="https://github.com/mengxi-ream">@mengxi-ream</a>! - fix(i18n): give the note suggestion feature one Chinese name</p>
+<p id="release-paragraph-24">In Chinese the feature was 猜你想存 on the card and in the Built-in AI lists, but<br>
+保存建议 (儲存建議 in zh-TW) in the settings toggle, the command palette, and the<br>
+card's own on/off switch — so searching the settings for the name you saw on the page<br>
+turned up nothing (<a href="https://github.com/mengxi-ream/read-frog/issues/2176" data-hovercard-type="issue" data-hovercard-url="/mengxi-ream/read-frog/issues/2176/hovercard">#2176</a>). All of them now read 猜你想存.</p>
+</li>
+<li>
+<p id="release-paragraph-25"><a href="https://github.com/mengxi-ream/read-frog/pull/2171" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2171/hovercard">#2171</a> <a href="https://github.com/mengxi-ream/read-frog/commit/0f537ad0ec2ec83edf23ad49b357c13250fe567a"><code>0f537ad</code></a> Thanks <a href="https://github.com/ananaBMaster">@ananaBMaster</a>! - chore(firefox): raise the minimum supported Firefox to 140</p>
+<p id="release-paragraph-26">The manifest previously declared Firefox 112 as the floor, a value set when Firefox<br>
+first shipped MV3 and never revisited. The extension already calls <code>Intl.Segmenter</code><br>
+on the page-translation path (<code>filter-small-paragraph.ts</code>), which requires Firefox<br>
+125, so the declared floor was not one the code could keep. Firefox 140 is a<br>
+currently supported ESR.</p>
+</li>
+<li>
+<p id="release-paragraph-27"><a href="https://github.com/mengxi-ream/read-frog/pull/2177" data-hovercard-type="pull_request" data-hovercard-url="/mengxi-ream/read-frog/pull/2177/hovercard">#2177</a> <a href="https://github.com/mengxi-ream/read-frog/commit/a250e6c41f5460b6a8b28bbe6004b5c254307370"><code>a250e6c</code></a> Thanks <a href="https://github.com/mengxi-ream">@mengxi-ream</a>! - fix(translation): distinguish preserved names and code from foreign-language prose when skipping already-translated paragraphs</p>
+</li>
+</ul></div></main></body></html>

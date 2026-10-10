@@ -1,0 +1,212 @@
+{
+  "success": true,
+  "guardedCloseSucceeded": true,
+  "requestedModel": "small",
+  "extensionSha256": {
+    "manifest.json": "cc92950ad08ed2e2f02bd55a0756048e6569ec51c9341d9e678b65fb3d8d03f7",
+    "background.js": "2958a7293b403931adae98404ab644b1798787b0a0e26a8d35d6ef1093d4c8af",
+    "videoTranscriptionWorker.js": "d2d83693eeb4cb8e3cefca672f10f4e1233bfcc9d6b2cba32bafdce358fc4f3c",
+    "content-scripts/content.js": "8b7da6fb6ea8b2b8332a0b65a541399830f9af1c6340a90803b43b8cb032db1b",
+    "content-scripts/xVideoBridge.js": "f22318b71931cfc573c8aae63086438e4d186f4f654616a85ebd0c6178c50331"
+  },
+  "pcmInputs": [
+    {
+      "model": "small",
+      "sourceLanguage": "auto",
+      "bytes": 358400,
+      "sampleRate": 16000,
+      "channels": 1,
+      "seconds": 11.2,
+      "sha256": "c22a1f5bc5c5c3db6bc9c4994df9babf93a2bea3d76a0af2031ccbafd5f7664b"
+    },
+    {
+      "model": "small",
+      "sourceLanguage": "auto",
+      "bytes": 310400,
+      "sampleRate": 16000,
+      "channels": 1,
+      "seconds": 9.7,
+      "sha256": "98bb0415e8c2055a80e166a59c19e0479e92247e3791fe5b92fb1ed300624b96"
+    },
+    {
+      "model": "small",
+      "sourceLanguage": "auto",
+      "bytes": 398400,
+      "sampleRate": 16000,
+      "channels": 1,
+      "seconds": 12.45,
+      "sha256": "1fbeebca8522519786ebaad91db21a26df7b74f8697b8eb1e22ec923e9c780b7"
+    },
+    {
+      "model": "small",
+      "sourceLanguage": "auto",
+      "bytes": 347968,
+      "sampleRate": 16000,
+      "channels": 1,
+      "seconds": 10.874,
+      "sha256": "de8794ed586090df73c4cb7830f617b95c1a860aea6cfd4e7bd4bef45b2c4bf5"
+    }
+  ],
+  "cueCount": 5,
+  "mixedCer": {
+    "errors": 14,
+    "referenceUnits": 346,
+    "actualUnits": 346,
+    "rate": 0.04046242774566474
+  },
+  "detectedLanguages": [
+    {
+      "language": "en",
+      "confidence": 0.9866386242275667,
+      "detectionMs": 990.1000003814697,
+      "reuse": true,
+      "inferenceMs": 1817.2000002861023
+    },
+    {
+      "language": "en",
+      "confidence": 0.9923294340423885,
+      "detectionMs": 822.7999997138977,
+      "reuse": true,
+      "inferenceMs": 1495.0999999046326
+    },
+    {
+      "language": "en",
+      "confidence": 0.9543328325965327,
+      "detectionMs": 777.9000000953674,
+      "reuse": true,
+      "inferenceMs": 1794.4000000953674
+    },
+    {
+      "language": "zh",
+      "confidence": 0.987780104822444,
+      "detectionMs": 951.8000001907349,
+      "reuse": true,
+      "inferenceMs": 1747.2000002861023
+    }
+  ],
+  "browserVersion": "154.0.8037.99",
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "hidden": false,
+    "centered": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 212,
+      "top": -990,
+      "width": 1280,
+      "height": 900
+    },
+    "displayTarget": "secondary",
+    "source": "macos-nsscreen",
+    "screenIndex": 1,
+    "browserFrontmost": false,
+    "frontmostBefore": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    },
+    "frontmostAfter": {
+      "pid": 44386,
+      "name": "Google Chrome"
+    }
+  },
+  "accuracyScope": "Descriptive mixed character error through AAC/PCM16 on synthetically concatenated natural clips, not spontaneous code switching or live X.",
+  "checks": [
+    {
+      "name": "Natural-audio video starts with the generate action",
+      "pass": true
+    },
+    {
+      "name": "Model prompt includes three selectable models",
+      "pass": true
+    },
+    {
+      "name": "Home identifies and reloads B media among two resource groups",
+      "pass": true
+    },
+    {
+      "name": "Late video-only playlists do not trigger downloads of picture fragments",
+      "pass": true
+    },
+    {
+      "name": "Passive GraphQL variants choose only the current media lowest-bitrate MP4",
+      "pass": true
+    },
+    {
+      "name": "Home generates matching bilingual captions without opening a post",
+      "pass": true
+    },
+    {
+      "name": "The production PCM16 messages use the selected actual model and automatic language",
+      "pass": true
+    },
+    {
+      "name": "The actual production Worker produced successful timed output",
+      "pass": true
+    },
+    {
+      "name": "Actual Small FP32 encoder and q4 decoder produced the captions",
+      "pass": true
+    },
+    {
+      "name": "Complete capture publishes and caches the recognized transcript",
+      "pass": true
+    },
+    {
+      "name": "No public model download was needed",
+      "pass": true
+    },
+    {
+      "name": "Actual Worker captions and controlled translations render in the X player",
+      "pass": true
+    },
+    {
+      "name": "Mandarin recovered after three English windows renders in the same player",
+      "pass": true
+    },
+    {
+      "name": "No unhandled browser errors",
+      "pass": true
+    },
+    {
+      "name": "Test browser stays in the background",
+      "pass": true
+    }
+  ],
+  "samePcmAsBaseline": true,
+  "baselineMixedCer": {
+    "errors": 71,
+    "referenceUnits": 346,
+    "actualUnits": 369,
+    "rate": 0.20520231213872833
+  },
+  "onlyTranslationSimulated": true,
+  "asrPrecision": [
+    {
+      "model": "small",
+      "backend": "webgpu",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4"
+    },
+    {
+      "model": "small",
+      "backend": "webgpu",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4"
+    },
+    {
+      "model": "small",
+      "backend": "webgpu",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4"
+    },
+    {
+      "model": "small",
+      "backend": "webgpu",
+      "encoderDtype": "fp32",
+      "decoderDtype": "q4"
+    }
+  ]
+}

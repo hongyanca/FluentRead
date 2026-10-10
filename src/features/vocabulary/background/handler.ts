@@ -1,10 +1,12 @@
 /**
  * @file src/features/vocabulary/background/handler.ts
- * 文件职责：实现本地单词本的后台消息处理器，对查询、收藏、复习、撤销删除、列表、导入导出和清空等动作进行严格输入校验与统一错误映射。
+ * 文件职责：实现本地学习收藏的后台消息处理器，对查询、收藏、解释更新、复习、撤销删除、列表、导入导出和清空进行严格输入校验与统一错误映射。
  * 主要内容：定义仓库和广播依赖，构造词书变更消息及浏览器广播适配器，创建变更 ACK、主业务 handler 和组合 handlers，并在成功写操作后通知相关标签页。
  * 模块边界：本文件不直接操作 Dexie 表或 Vue UI；持久化由 repository contract 注入，消息形状来自 protocol，browser.tabs 广播通过适配器隔离，失败不会泄露内部数据。
  */
 import type {BackgroundMessageHandler} from '@/src/app/background/messageRouter';
+import {reencounterSnapshot, reencounterTerm} from '../domain/reencounter';
+import type {VocabularyEntry} from '../learningModel';
 import {
     VOCABULARY_BOOK_CHANGED_MESSAGE,
     VOCABULARY_BOOK_MESSAGE,
@@ -41,6 +43,7 @@ export interface VocabularyBookRepositoryContract {
     get(entryId: string): Promise<unknown>;
     getByTerm(sourceLanguage: string, term: string): Promise<unknown>;
     upsert(input: VocabularyUpsertInput): Promise<{id: string}>;
+    updateNote(entryId: string, note: string): Promise<unknown>;
     review(entryId: string, rating: VocabularyScheduledReviewRating): Promise<unknown>;
     setMastery(entryId: string): Promise<unknown>;
     relearn(entryId: string): Promise<unknown>;
@@ -55,6 +58,7 @@ export interface VocabularyBookRepositoryContract {
 export interface VocabularyBookBackgroundDependencies {
     readonly configReady: Promise<void>;
     readonly isVocabularyBookEnabled: () => boolean;
+    readonly isReencounterEnabled?: () => boolean;
     readonly vocabularyBook: VocabularyBookRepositoryContract;
     readonly broadcastChanged: VocabularyBookChangedBroadcaster;
     readonly logOperationFailure: (error: unknown) => void;
@@ -105,7 +109,7 @@ function validateUpsertInput(value: unknown): VocabularyUpsertInput {
         sourceLanguage: requiredText(value.sourceLanguage, '缺少有效的源语言'),
         targetLanguage: requiredText(value.targetLanguage, '缺少有效的目标语言'),
         term: requiredText(value.term, '缺少有效的单词'),
-        translation: requiredText(value.translation, '缺少有效的译文'),
+        translation: typeof value.translation === 'string' ? value.translation.trim() : requiredText(value.translation, '缺少有效的译文'),
     };
 }
 
@@ -203,6 +207,20 @@ export function createVocabularyBookHandler(
             try {
                 // 步骤 1：先在后台信任边界收窄 action 与必要参数。
                 switch (message.action) {
+                    case 'reencounterList':
+                    case 'reencounterGet': {
+                        await dependencies.configReady;
+                        if (context.sender?.tab?.incognito === true || dependencies.isReencounterEnabled?.() !== true) {
+                            throw new VocabularyBookHandlerError('invalid-input', '再次遇见尚未开启，或当前为无痕窗口');
+                        }
+                        if (message.action === 'reencounterList') {
+                            const entries = await dependencies.vocabularyBook.list({order: 'recent'}) as VocabularyEntry[];
+                            return {success: true, data: entries.map(reencounterTerm)};
+                        }
+                        const entry = await dependencies.vocabularyBook.get(vocabularyEntryId(message.entryId)) as VocabularyEntry | null;
+                        if (!entry) throw new VocabularyBookHandlerError('not-found', '这条表达已从收藏中删除');
+                        return {success: true, data: reencounterSnapshot(entry)};
+                    }
                     case 'list':
                         return {success: true, data: await dependencies.vocabularyBook.list(validateListOptions(message.options))};
                     case 'get':
@@ -213,10 +231,18 @@ export function createVocabularyBookHandler(
                     }
                     case 'upsert': {
                         await dependencies.configReady;
-                        if (!dependencies.isVocabularyBookEnabled()) throw new VocabularyBookHandlerError('invalid-input', '请先在单词本页面开启 Beta');
+                        if (!dependencies.isVocabularyBookEnabled()) throw new VocabularyBookHandlerError('invalid-input', '请先在单词本页面开启功能');
                         if (context.sender?.tab?.incognito === true) throw new VocabularyBookHandlerError('invalid-input', '无痕窗口不保存单词本数据');
                         const entry = await dependencies.vocabularyBook.upsert(validateUpsertInput(message.input));
                         notifyVocabularyBookChanged(dependencies, 'upsert', entry.id);
+                        return {success: true, data: entry};
+                    }
+                    case 'updateNote': {
+                        if (context.sender?.tab?.incognito === true) throw new VocabularyBookHandlerError('invalid-input', '无痕窗口不修改学习收藏');
+                        if (typeof message.note !== 'string') throw new VocabularyBookHandlerError('invalid-input', '解释内容无效');
+                        const entryId = vocabularyEntryId(message.entryId);
+                        const entry = await dependencies.vocabularyBook.updateNote(entryId, message.note);
+                        notifyVocabularyBookChanged(dependencies, 'note', entryId);
                         return {success: true, data: entry};
                     }
                     case 'review': {

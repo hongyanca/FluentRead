@@ -1,0 +1,210 @@
+{
+  "ok": true,
+  "scope": "Issue #627: language multiselect, quick close, cross-page persistence, responsive themes, hover/full/automatic skipping, title and dynamic redetection",
+  "evidenceBoundary": "The local HTML and loopback OpenAI-compatible server are deterministic fixtures. Their success does not prove any external service translation quality or availability.",
+  "fixture": {
+    "ok": true,
+    "cases": [
+      {
+        "name": "hover-exclusion-and-neighbor",
+        "status": "passed",
+        "excludedRequests": 0,
+        "neighborCounts": [
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "name": "full-page-restore-repeat-and-title",
+        "status": "passed",
+        "excludedRequests": 0,
+        "neighborCounts": [
+          1,
+          0,
+          1
+        ]
+      },
+      {
+        "name": "dynamic-excluded-text-becomes-english",
+        "status": "passed"
+      },
+      {
+        "name": "automatic-full-page",
+        "status": "passed",
+        "excludedRequests": 0
+      },
+      {
+        "name": "clear-restores-traditional-to-simplified",
+        "status": "passed"
+      }
+    ],
+    "requests": [
+      {
+        "source": "This software reads the document and translates the language on this page.",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGINThis software reads the document and translates the language on this page.SOURCE_END",
+        "translated": "这个软件读取文档并翻译这个页面上的语言。"
+      },
+      {
+        "source": "This software reads the document and translates the language on this page.",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGINThis software reads the document and translates the language on this page.SOURCE_END",
+        "translated": "这个软件读取文档并翻译这个页面上的语言。"
+      },
+      {
+        "source": "This software reads the document and translates the language on this page.",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGINThis software reads the document and translates the language on this page.SOURCE_END",
+        "translated": "这个软件读取文档并翻译这个页面上的语言。"
+      },
+      {
+        "source": "The second paragraph explains the settings for the computer network.",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGINThe second paragraph explains the settings for the computer network.SOURCE_END",
+        "translated": "第二个段落说明计算机网络的设置。"
+      },
+      {
+        "source": "This software reads the document and translates the language on this page.",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGINThis software reads the document and translates the language on this page.SOURCE_END",
+        "translated": "这个软件读取文档并翻译这个页面上的语言。"
+      },
+      {
+        "source": "這個軟體讀取文件並翻譯這個頁面上的語言。",
+        "target": "zh-Hans",
+        "targetName": "Simplified Chinese (zh-Hans)",
+        "prompt": "TARGET_BEGINSimplified Chinese (zh-Hans)TARGET_END\nSOURCE_BEGIN這個軟體讀取文件並翻譯這個頁面上的語言。SOURCE_END",
+        "translated": "这个软件读取文档并翻译这个页面上的语言。"
+      }
+    ]
+  },
+  "consoleErrors": [],
+  "ui": {
+    "quickClose": true,
+    "crossPageSync": true,
+    "latestWriteWins": true,
+    "keyboardSelection": true,
+    "collapsedSelectionVisible": true,
+    "lastTranslationSetting": true,
+    "locales": [
+      {
+        "locale": "zh-CN",
+        "title": "不翻译的语言",
+        "simplified": "简体中文",
+        "traditional": "繁體中文",
+        "status": "passed"
+      },
+      {
+        "locale": "en-US",
+        "title": "Languages to skip",
+        "simplified": "Simplified Chinese",
+        "traditional": "Traditional Chinese",
+        "status": "passed"
+      },
+      {
+        "locale": "ja-JP",
+        "title": "翻訳しない言語",
+        "simplified": "中国語（簡体字）",
+        "traditional": "中国語（繁体字）",
+        "status": "passed"
+      },
+      {
+        "locale": "ko-KR",
+        "title": "번역하지 않을 언어",
+        "simplified": "중국어 간체",
+        "traditional": "중국어 번체",
+        "status": "passed"
+      },
+      {
+        "locale": "fr-FR",
+        "title": "Langues à ne pas traduire",
+        "simplified": "chinois simplifié",
+        "traditional": "chinois traditionnel",
+        "status": "passed"
+      },
+      {
+        "locale": "ru-RU",
+        "title": "Языки без перевода",
+        "simplified": "китайский (упрощённый)",
+        "traditional": "китайский (традиционный)",
+        "status": "passed"
+      },
+      {
+        "locale": "es-ES",
+        "title": "Idiomas que no se traducen",
+        "simplified": "Chino simplificado",
+        "traditional": "Chino tradicional",
+        "status": "passed"
+      }
+    ],
+    "layouts": [
+      {
+        "theme": "light",
+        "width": 1440,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 1
+      },
+      {
+        "theme": "light",
+        "width": 1024,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 2
+      },
+      {
+        "theme": "light",
+        "width": 820,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 2
+      },
+      {
+        "theme": "light",
+        "width": 390,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 3
+      },
+      {
+        "theme": "dark",
+        "width": 1440,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 1
+      },
+      {
+        "theme": "dark",
+        "width": 390,
+        "pageOverflow": false,
+        "buttonOverflow": false,
+        "rowCount": 3
+      }
+    ],
+    "reopenPersistence": true,
+    "clearSelection": true
+  },
+  "launchMode": "macos-background-cdp",
+  "focusPolicy": "launchservices-no-foreground",
+  "windowPlacement": {
+    "mode": "background-visible-no-focus",
+    "visible": true,
+    "windowState": "normal",
+    "bounds": {
+      "left": 132,
+      "top": -1020,
+      "width": 1440,
+      "height": 960
+    },
+    "displayTarget": "secondary",
+    "browserFrontmost": false
+  },
+  "verifiedSourceCommit": "0f412a81"
+}

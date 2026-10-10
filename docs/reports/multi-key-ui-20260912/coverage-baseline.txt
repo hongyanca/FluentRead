@@ -1,0 +1,8 @@
+ Test Files  255 passed (255)
+      Tests  5134 passed (5134)
+All files          |     100 |    99.99 |     100 |     100 |                   
+  text.ts          |     100 |    99.19 |     100 |     100 | 306               
+ERROR: Coverage for branches (99.99%) does not meet global threshold (100%)
+
+Remaining uncovered branch: src/core/translation/text.ts:306, nullish fallback in hasForeignLanguageProse.
+Production file unchanged from main 0008a791.

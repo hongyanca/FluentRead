@@ -1,6 +1,7 @@
 import {Config, normalizeConfig} from '@/src/core/config/model';
 import {getApiKeyRequirementKey} from '@/src/core/config/validation';
 import {customModelString, defaultModels, models, services, servicesType} from '@/src/core/config/catalog';
+import {isCustomOpenAIProviderId} from '@/src/core/config/customOpenAI';
 import {getStoredValue, setStoredValue} from './storage';
 import {initializeUserscriptCount} from './count';
 
@@ -42,20 +43,46 @@ function nonEmptyString(value: unknown): string {
 }
 
 export function isUserscriptServiceSupported(service: unknown): service is string {
-    return typeof service === 'string' && supportedUserscriptServices.has(service);
+    return typeof service === 'string'
+        && service !== services.chromeTranslator
+        && (supportedUserscriptServices.has(service) || isCustomOpenAIProviderId(service));
 }
 
 /** 即使已有 GM 配置启用了扩展专属能力，userscript 启动时也要强制关闭这些能力。 */
 export function normalizeUserscriptConfig(value: unknown): Config {
+    const rawService = isRecord(value) ? value.service : undefined;
+    const rawVideoService = isRecord(value) ? value.videoService : undefined;
+    const rawInputBoxTranslationService = isRecord(value) ? value.inputBoxTranslationService : undefined;
     const next = normalizeConfig(value);
-    if (!isUserscriptServiceSupported(next.service)) next.service = services.microsoft;
-    if (!isUserscriptServiceSupported(next.videoService)) next.videoService = services.microsoft;
+    if (typeof rawService === 'string' && !isUserscriptServiceSupported(rawService)) {
+        next.service = services.microsoft;
+    } else if (!isUserscriptServiceSupported(next.service)) {
+        next.service = services.microsoft;
+    }
+    if (typeof rawVideoService === 'string' && !isUserscriptServiceSupported(rawVideoService)) {
+        next.videoService = services.microsoft;
+    } else if (!isUserscriptServiceSupported(next.videoService)) {
+        next.videoService = services.microsoft;
+    }
+    if (typeof rawInputBoxTranslationService === 'string' && !isUserscriptServiceSupported(rawInputBoxTranslationService)) {
+        next.inputBoxTranslationService = services.microsoft;
+    } else if (!isUserscriptServiceSupported(next.inputBoxTranslationService)) {
+        next.inputBoxTranslationService = services.microsoft;
+    }
     next.contextMenuEnabled = false;
     next.selectionAreaEnabled = false;
     next.disableImageTranslator = true;
     next.videoTranslationEnabled = false;
     next.maxConcurrentTranslations = Math.min(20, Math.max(1, Number(next.maxConcurrentTranslations) || 6));
     return next;
+}
+
+function comparableStoredConfig(value: unknown): unknown {
+    if (!isRecord(value)) return value;
+    const comparable = {...value};
+    delete comparable.__fluentConfigRevision;
+    delete comparable.__fluentCountOperations;
+    return comparable;
 }
 
 function migrateLegacyModel(next: Config, legacyName: string, service: string, selectedModel: string): void {
@@ -138,6 +165,15 @@ async function migrateLegacyConfig(): Promise<Config> {
     const legacyOllamaUrl = await getStoredValue<string>('ollama_url');
     if (legacyOllamaUrl) next.custom = legacyOllamaUrl;
     if (legacyOllamaUrl || await getStoredValue<string>('model_ollama')) {
+        const ollamaModel = next.model[services.custom] === customModelString
+            ? next.customModel[services.custom]
+            : next.model[services.custom];
+        next.customOpenAIProviders = [{
+            id: services.custom,
+            name: '自定义接口',
+            endpoint: legacyOllamaUrl || next.custom,
+            models: ollamaModel ? [ollamaModel] : [],
+        }];
         allowLegacyOllamaWithoutApiKey(next);
     }
 
@@ -150,19 +186,19 @@ export async function ensureUserscriptConfig(): Promise<void> {
     let safe: Config;
     if (existing === null || existing === undefined) {
         safe = await migrateLegacyConfig();
-        await setStoredValue(CONFIG_STORAGE_KEY, safe);
     } else {
-        const normalized = normalizeConfig(existing);
         safe = normalizeUserscriptConfig(existing);
-        if (JSON.stringify(normalized) !== JSON.stringify(safe)) {
-            await setStoredValue(CONFIG_STORAGE_KEY, safe);
-        }
     }
 
     // G-counter 才是 userscript 的计数事实来源；启动时修复可能被旧标签回写的显示投影。
     const authoritativeCount = await initializeUserscriptCount(safe.count);
-    if (safe.count !== authoritativeCount) {
-        safe.count = authoritativeCount;
+    safe.count = authoritativeCount;
+
+    // 迁移、能力收紧与计数恢复合并成一次最终写入，配置 store 只会在这一步
+    // 成功后开始水合，不能捕获并回写中间快照。
+    if (existing === null
+        || existing === undefined
+        || JSON.stringify(comparableStoredConfig(existing)) !== JSON.stringify(safe)) {
         await setStoredValue(CONFIG_STORAGE_KEY, safe);
     }
 }

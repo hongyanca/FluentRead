@@ -2,6 +2,7 @@ import {describe, expect, it, vi} from 'vitest';
 
 import {
     createBackgroundMessageRouter,
+    createBackgroundRuntimeMessageListener,
     type BackgroundFallbackHandler,
     type BackgroundMessageHandler,
 } from '@/src/app/background/messageRouter';
@@ -89,5 +90,24 @@ describe('background message router', () => {
 
         await expect(router.dispatch({type: 'broken'}, {prefix: 'ctx'})).rejects.toBe(handlerError);
         await expect(router.dispatch('fallback', {prefix: 'ctx'})).rejects.toBe(fallbackError);
+    });
+
+    it('runtime 监听器按 sender 构造上下文，并把未知消息与异常统一序列化为失败回复', async () => {
+        const router = createBackgroundMessageRouter<{sender: unknown}>([
+            {type: 'echo', handle: (_message, context) => context.sender},
+            {type: 'coded', handle: () => { throw Object.assign(new Error('model missing'), {code: 'local-tts-model-not-downloaded'}); }},
+            {type: 'numeric-code', handle: () => { throw Object.assign(new Error('numeric'), {code: 42}); }},
+            {type: 'primitive', handle: () => { throw 'plain failure'; }},
+        ]);
+        const listener = createBackgroundRuntimeMessageListener(router, (sender) => ({sender}));
+        const sender = {tab: {id: 3}};
+
+        await expect(listener({type: 'echo'}, sender)).resolves.toBe(sender);
+        await expect(listener({type: 'unknown'}, sender)).resolves.toEqual({success: false, error: '不支持的后台消息'});
+        await expect(listener({type: 'coded'}, sender)).resolves.toEqual({
+            success: false, error: 'model missing', errorCode: 'local-tts-model-not-downloaded',
+        });
+        await expect(listener({type: 'numeric-code'}, sender)).resolves.toEqual({success: false, error: 'numeric', errorCode: undefined});
+        await expect(listener({type: 'primitive'}, sender)).resolves.toEqual({success: false, error: 'plain failure', errorCode: undefined});
     });
 });

@@ -4,6 +4,13 @@ The bundled `ecdict-core.json` is a compact frequency-ranked subset generated
 from [ECDICT](https://github.com/skywind3000/ECDICT), an open English-Chinese
 dictionary database.
 
+The bundled file stores 3,000 frequent entries as `[word, phonetic, definition,
+translation]` rows. The full 20,000-entry subset is retained in the source tree
+at `assets/optional/ecdict-core-full.json` and can be downloaded as a fixed,
+integrity-checked data asset when an uncommon word is looked up. The original
+entries all had an empty `pos` field; the compact form omits that field without
+changing dictionary content.
+
 ECDICT is distributed under the MIT License:
 
 Copyright (c) 2025 Linwei

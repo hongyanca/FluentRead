@@ -1,0 +1,186 @@
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+
+type I18nModule = typeof import('@/src/core/i18n');
+type BundlesModule = typeof import('@/src/core/i18n/bundles');
+type LoaderModule = typeof import('@/src/platform/i18n/uiLanguageBundles');
+
+// 注册表是模块级状态；每个用例重新加载模块，保证“未加载语言”与“已加载语言”互不污染。
+async function loadModules(): Promise<{i18n: I18nModule; bundles: BundlesModule; loader: LoaderModule}> {
+    vi.resetModules();
+    const [i18n, bundles, loader] = await Promise.all([
+        import('@/src/core/i18n'),
+        import('@/src/core/i18n/bundles'),
+        import('@/src/platform/i18n/uiLanguageBundles'),
+    ]);
+    return {i18n, bundles, loader};
+}
+
+function jsonResponse(body: unknown, ok = true, status = 200) {
+    return {ok, status, json: async () => body};
+}
+
+afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+});
+
+describe('界面语言注册表', () => {
+    let i18n: I18nModule;
+    let bundles: BundlesModule;
+
+    beforeEach(async () => {
+        ({i18n, bundles} = await loadModules());
+    });
+
+    it('未加载的非中文语言回退中文，不把旧文案误判为已本地化', () => {
+        expect(i18n.hasUiLanguageBundle('zh-CN')).toBe(true);
+        expect(i18n.hasUiLanguageBundle('en-US')).toBe(false);
+        expect(i18n.translate('common.brand', 'en-US')).toBe(i18n.translate('common.brand', 'zh-CN'));
+        expect(i18n.translate('missing.key', 'ja-JP')).toBe('missing.key');
+        expect(i18n.translateLegacyText('  确认清除统计  ', 'en-US')).toBe('  确认清除统计  ');
+    });
+
+    it('注册资源包后立即生效，重新注册会丢弃旧的中文反查表', () => {
+        const zhSource = i18n.translate('popup.donationTitle', 'zh-CN');
+        i18n.registerUiLanguageBundle('fr-FR', {messages: {'popup.donationTitle': 'Version A'}, legacyText: {}, legacyPatterns: {early: [], late: []}});
+        expect(i18n.translate('popup.donationTitle', 'fr-FR')).toBe('Version A');
+        expect(i18n.translateLegacyText(zhSource, 'fr-FR')).toBe('Version A');
+
+        i18n.registerUiLanguageBundle('fr-FR', {messages: {'popup.donationTitle': 'Version B'}, legacyText: {}, legacyPatterns: {early: [], late: []}});
+        expect(i18n.translateLegacyText(zhSource, 'fr-FR')).toBe('Version B');
+    });
+
+    it('静态资源包覆盖六种非中文语言，并生成可被运行时加载器解析的紧凑 JSON', () => {
+        const files = bundles.createUiLanguageBundleFiles();
+        expect(files.map(({relativeDest}) => relativeDest).sort()).toEqual([
+            'i18n/en-US.json', 'i18n/es-ES.json', 'i18n/fr-FR.json',
+            'i18n/ja-JP.json', 'i18n/ko-KR.json', 'i18n/ru-RU.json',
+        ]);
+        for (const {relativeDest, contents} of files) {
+            const language = relativeDest.slice('i18n/'.length, -'.json'.length) as keyof typeof bundles.UI_LANGUAGE_BUNDLES;
+            expect(contents).not.toContain('\n');
+            expect(JSON.parse(contents)).toEqual(bundles.UI_LANGUAGE_BUNDLES[language]);
+        }
+
+        bundles.registerAllUiLanguageBundles();
+        for (const language of Object.keys(bundles.UI_LANGUAGE_BUNDLES)) {
+            expect(i18n.hasUiLanguageBundle(language as keyof typeof bundles.UI_LANGUAGE_BUNDLES)).toBe(true);
+        }
+        expect(i18n.translate('common.brand', 'en-US')).toBe(bundles.UI_LANGUAGE_BUNDLES['en-US'].messages['common.brand']);
+    });
+});
+
+describe('界面语言资源按需加载', () => {
+    it('中文和已注册语言不发请求；并发请求同一语言只读取一次并注册', async () => {
+        const {i18n, loader} = await loadModules();
+        let release!: () => void;
+        const gate = new Promise<void>((resolve) => { release = resolve; });
+        const fetch = vi.fn(async () => {
+            await gate;
+            return jsonResponse({messages: {'common.brand': 'Brand EN'}, legacyText: {'确认清除统计': 'Clear stats'}, legacyPatterns: {early: [['^共 (\\d+) 项$', '{1} items']], late: [['^尾(.+)$', 'Tail {1}', [1]]]}});
+        });
+        const resolveUrl = vi.fn((path: string) => `chrome-extension://id/${path}`);
+        const ensure = loader.createUiLanguageBundleLoader({resolveUrl, fetch, warn: vi.fn()});
+
+        await expect(ensure('zh-CN')).resolves.toBe(true);
+        await expect(ensure('unsupported')).resolves.toBe(true);
+        const first = ensure('en-US');
+        const second = ensure('en-US');
+        expect(second).toBe(first);
+        release();
+        await expect(first).resolves.toBe(true);
+        expect(fetch).toHaveBeenCalledOnce();
+        expect(resolveUrl).toHaveBeenCalledWith('i18n/en-US.json');
+        expect(i18n.translate('common.brand', 'en-US')).toBe('Brand EN');
+        expect(i18n.translateLegacyText('确认清除统计', 'en-US')).toBe('Clear stats');
+        expect(i18n.translateLegacyText('共 3 项', 'en-US')).toBe('3 items');
+        expect(i18n.translateLegacyText('尾确认清除统计', 'en-US')).toBe('Tail Clear stats');
+
+        await expect(ensure('en-US')).resolves.toBe(true);
+        expect(fetch).toHaveBeenCalledOnce();
+    });
+
+    it.each([
+        ['HTTP 失败', () => jsonResponse({}, false, 404)],
+        ['资源形状无效', () => jsonResponse({messages: [], legacyText: {}, legacyPatterns: {early: [], late: []}})],
+        ['模板集合缺失', () => jsonResponse({messages: {}, legacyText: {}})],
+        ['模板条目不是数组', () => jsonResponse({messages: {}, legacyText: {}, legacyPatterns: {early: ['^a$'], late: []}})],
+        ['模板译文不是字符串', () => jsonResponse({messages: {}, legacyText: {}, legacyPatterns: {early: [], late: [['^a$', 1]]}})],
+        ['捕获序号不是整数', () => jsonResponse({messages: {}, legacyText: {}, legacyPatterns: {early: [['^a(.+)$', '{1}', ['1']]], late: []}})],
+        ['缺少旧文案表', () => jsonResponse({messages: {}})],
+        ['非对象响应', () => jsonResponse(null)],
+    ])('%s时回退中文、报告警告，并允许下一次重新读取', async (_label, response) => {
+        const {i18n, loader} = await loadModules();
+        const fetch = vi.fn(async () => response());
+        const warn = vi.fn();
+        const ensure = loader.createUiLanguageBundleLoader({resolveUrl: (path) => path, fetch, warn});
+
+        await expect(ensure('ru-RU')).resolves.toBe(false);
+        expect(warn).toHaveBeenCalledOnce();
+        expect(i18n.hasUiLanguageBundle('ru-RU')).toBe(false);
+        await expect(ensure('ru-RU')).resolves.toBe(false);
+        expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('地址解析同步抛错也降级为失败结果，而不是让页面启动流程中断', async () => {
+        const {loader} = await loadModules();
+        const warn = vi.fn();
+        const ensure = loader.createUiLanguageBundleLoader({
+            resolveUrl: () => { throw new Error('runtime gone'); },
+            fetch: vi.fn(),
+            warn,
+        });
+        await expect(ensure('ko-KR')).resolves.toBe(false);
+        expect(warn.mock.calls[0]?.[1]).toBeInstanceOf(Error);
+    });
+
+    it('默认实现通过 browser 或 chrome runtime 读取扩展自身资源，运行时缺失时回退中文', async () => {
+        const bundle = {messages: {'common.brand': 'Marca'}, legacyText: {}, legacyPatterns: {early: [], late: []}};
+        const fetch = vi.fn(async (url: string) => jsonResponse(url.endsWith('es-ES.json') || url.endsWith('ja-JP.json') ? bundle : {}));
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+        vi.stubGlobal('fetch', fetch);
+
+        vi.stubGlobal('browser', {runtime: {getURL: (path: string) => `moz-extension://id/${path}`}});
+        let {i18n, loader} = await loadModules();
+        await expect(loader.ensureUiLanguageBundle('es-ES')).resolves.toBe(true);
+        expect(fetch).toHaveBeenLastCalledWith('moz-extension://id/i18n/es-ES.json');
+        expect(i18n.translate('common.brand', 'es-ES')).toBe('Marca');
+
+        vi.stubGlobal('browser', undefined);
+        vi.stubGlobal('chrome', {runtime: {getURL: (path: string) => `chrome-extension://id/${path}`}});
+        ({i18n, loader} = await loadModules());
+        await expect(loader.ensureUiLanguageBundle('ja-JP')).resolves.toBe(true);
+        expect(fetch).toHaveBeenLastCalledWith('chrome-extension://id/i18n/ja-JP.json');
+
+        vi.stubGlobal('chrome', {runtime: {}});
+        ({loader} = await loadModules());
+        await expect(loader.ensureUiLanguageBundle('fr-FR')).resolves.toBe(false);
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining('UI language bundle unavailable'), expect.any(Error));
+    });
+
+    it('非响应式 UI 立即渲染一次，资源未注册时加载成功后补渲染，失败或已注册时不重复', async () => {
+        const {i18n, loader} = await loadModules();
+        const render = vi.fn();
+        let resolveLoad!: (loaded: boolean) => void;
+        const ensure = vi.fn(() => new Promise<boolean>((resolve) => { resolveLoad = resolve; }));
+
+        loader.renderWithUiLanguageBundle('zh-CN', render, ensure);
+        expect(render).toHaveBeenCalledOnce();
+        expect(ensure).not.toHaveBeenCalled();
+
+        loader.renderWithUiLanguageBundle('en-US', render, ensure);
+        expect(render).toHaveBeenCalledTimes(2);
+        resolveLoad(true);
+        await vi.waitFor(() => expect(render).toHaveBeenCalledTimes(3));
+
+        loader.renderWithUiLanguageBundle('ja-JP', render, ensure);
+        resolveLoad(false);
+        await Promise.resolve(); await Promise.resolve();
+        expect(render).toHaveBeenCalledTimes(4);
+
+        i18n.registerUiLanguageBundle('ko-KR', {messages: {}, legacyText: {}, legacyPatterns: {early: [], late: []}});
+        loader.renderWithUiLanguageBundle('ko-KR', render);
+        expect(render).toHaveBeenCalledTimes(5);
+        expect(ensure).toHaveBeenCalledTimes(2);
+    });
+});

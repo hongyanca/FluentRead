@@ -1,7 +1,45 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactive } from 'vue';
-import { normalizeConfig, type Config } from '@/src/core/config/model';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import * as ts from 'typescript';
+import { Config, normalizeConfig } from '@/src/core/config/model';
+describe('单图本地识别方式配置', () => {
+    it('新配置、缺失和非法值默认 PaddleOCR，显式引擎选择可往返且不改变漫画开关', () => {
+        expect(new Config().imageTranslationOcrEngine).toBe('paddle');
+        expect(normalizeConfig({} as never).imageTranslationOcrEngine).toBe('paddle');
+        for(const value of [undefined,null,'unknown',{},true])expect(normalizeConfig({imageTranslationOcrEngine:value} as never).imageTranslationOcrEngine).toBe('paddle');
+        for (const engine of ['paddle', 'tesseract'] as const) {
+            const original={imageTranslationOcrEngine:engine,imageTranslationMangaEnabled:false};
+            const value=normalizeConfig(original);expect(value.imageTranslationOcrEngine).toBe(engine);
+            expect(normalizeConfig(JSON.parse(JSON.stringify(value))).imageTranslationOcrEngine).toBe(engine);
+            expect(value.imageTranslationMangaEnabled).toBe(false);expect(original).toEqual({imageTranslationOcrEngine:engine,imageTranslationMangaEnabled:false});
+        }
+    });
+});
+describe('多语种视频模型配置兼容', () => {
+    it('新配置、已有缺失字段和非法选择统一使用 Small 默认', () => {
+        expect(new Config().videoLocalModel).toBe('small');
+        expect(normalizeConfig(undefined).videoLocalModel).toBe('small');
+        expect(normalizeConfig({}).videoLocalModel).toBe('small');
+        expect(normalizeConfig({on: true}).videoLocalModel).toBe('small');
+        for (const videoLocalModel of [undefined, null, '', 'large', {}, [], true, 1]) {
+            expect(normalizeConfig({videoLocalModel}).videoLocalModel).toBe('small');
+        }
+    });
+    it('保留三种用户选择及导入导出，不把已下载的轻量偏好迁移到质量模型', () => {
+        for (const videoLocalModel of ['tiny', 'base', 'small'] as const) {
+            const source = {videoLocalModel, videoSourceLanguage: 'auto', videoTranslationEnabled: true};
+            const normalized = normalizeConfig(source);
+            expect(normalized.videoLocalModel).toBe(videoLocalModel);
+            expect(normalizeConfig(JSON.parse(JSON.stringify(normalized))).videoLocalModel).toBe(videoLocalModel);
+            expect(source.videoLocalModel).toBe(videoLocalModel);
+            expect(normalized.videoSourceLanguage).toBe('auto');
+        }
+    });
+});
 import { sanitizeConfigCredentials } from '@/src/core/config/credentials';
+import { customModelString, services } from '@/src/core/config/catalog';
 
 const storageMock = vi.hoisted(() => ({
     writeOwner: true,
@@ -161,6 +199,72 @@ describe('统一配置存储', () => {
         expect(storageMock.removeItem).not.toHaveBeenCalled();
     });
 
+    it('页面立即请求完整导出时等待公开配置与凭据完成同一轮水合', async () => {
+        let releaseCredentialRead!: () => void;
+        const credentialReadBarrier = new Promise<void>(resolve => {
+            releaseCredentialRead = resolve;
+        });
+        const secret = 'hydrated-export-secret';
+        const canonicalConfig = {
+            ...sanitizeConfigCredentials(normalizeConfig({...storedConfig, to: 'ja'})),
+            __fluentConfigRevision: 5,
+        };
+        const configStore = await loadConfigModule(canonicalConfig, {
+            writeOwner: false,
+            localCredentials: {token: {openai: secret}},
+            localCredentialReadBarrier: credentialReadBarrier,
+        });
+        let settled = false;
+        const exportedPromise = configStore.prepareHydratedConfigForExport()
+            .finally(() => { settled = true; });
+
+        await vi.waitFor(() => expect(storageOperations).toContain('get:local:credentials'));
+        await Promise.resolve();
+        expect(settled).toBe(false);
+
+        releaseCredentialRead();
+        await expect(exportedPromise).resolves.toMatchObject({
+            to: 'ja',
+            token: {openai: secret},
+        });
+        const exported = await exportedPromise;
+        expect(exported).not.toHaveProperty('count');
+        expect(exported).not.toHaveProperty('__fluentConfigRevision');
+    });
+
+    it('完整导出等待乐观补丁结束，并在 revision 冲突回滚后读取权威快照', async () => {
+        const canonicalConfig = {
+            ...sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'})),
+            __fluentConfigRevision: 5,
+        };
+        const configStore = await loadConfigModule(canonicalConfig, {
+            writeOwner: false,
+            localCredentials: {token: {openai: 'authoritative-secret'}},
+        });
+        await configStore.configReady;
+        let releasePatch!: (value: {success: false; error: string}) => void;
+        const patchResponse = new Promise<{success: false; error: string}>((resolve) => {
+            releasePatch = resolve;
+        });
+        const sendMessage = vi.fn(() => patchResponse);
+
+        const patch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        expect(configStore.config.theme).toBe('dark');
+        let exportSettled = false;
+        const exported = configStore.prepareHydratedConfigForExport()
+            .finally(() => { exportSettled = true; });
+        await Promise.resolve();
+        expect(exportSettled).toBe(false);
+
+        releasePatch({success: false, error: '配置已更新（当前 revision 6），请同步后重试'});
+        await expect(patch).rejects.toThrow('配置已更新');
+        await expect(exported).resolves.toMatchObject({
+            theme: 'auto',
+            token: {openai: 'authoritative-secret'},
+        });
+    });
+
     it('可信扩展页面只从后台水合凭据，不重复执行迁移或直接写 IndexedDB', async () => {
         const secret = 'remote-extension-page-secret';
         const canonicalConfig = {
@@ -211,6 +315,50 @@ describe('统一配置存储', () => {
         expect(configStore.config.to).toBe('ja');
         expect(configStore.getConfigRevision()).toBe(5);
         expect(storageOperations.filter(operation => operation === 'get:local:config').length).toBeGreaterThan(1);
+        expect(storageMock.setItem).not.toHaveBeenCalled();
+    });
+
+    it.each(['旧值', '读取失败'])('popup 首次凭据回读的%s 晚于广播时采用新 Key，延迟主配置广播不会保留旧凭据', async readOutcome => {
+        let releaseConfigRead!: () => void;
+        let releaseCredentialRead!: () => void;
+        const configReadBarrier = new Promise<void>(resolve => { releaseConfigRead = resolve; });
+        const credentialReadBarrier = new Promise<void>(resolve => { releaseCredentialRead = resolve; });
+        const oldConfig = {
+            ...sanitizeConfigCredentials(normalizeConfig(storedConfig)),
+            __fluentConfigRevision: 4,
+        };
+        const nextCredentials = {token: {openai: 'updated-during-popup-hydration'}};
+        const store = await loadConfigModule(oldConfig, {
+            writeOwner: false,
+            configReadBarrier,
+            localCredentials: {token: {openai: 'old-popup-hydration-value'}},
+        });
+        const defaultRead = storageMock.getItem.getMockImplementation()!;
+        let credentialReads = 0;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (key !== 'local:credentials') return defaultRead(key);
+            storageOperations.push(`get:${key}`);
+            // 后台已经读取旧值，但发回 popup 的响应仍在途。
+            const snapshot = structuredClone(storageState.get(key));
+            const firstRead = credentialReads++ === 0;
+            await credentialReadBarrier;
+            if (firstRead && readOutcome === '读取失败') throw new Error('stale credential read failed');
+            return snapshot;
+        });
+        releaseConfigRead();
+        await vi.waitFor(() => expect(storageOperations).toContain('get:local:credentials'));
+
+        storageState.set('local:credentials', nextCredentials);
+        storageWatchers.get('local:credentials')?.(nextCredentials);
+        releaseCredentialRead();
+        await store.configReady;
+        const nextConfig = {...oldConfig, to: 'ja', __fluentConfigRevision: 5};
+        storageState.set('local:config', nextConfig);
+        storageWatchers.get('local:config')!(nextConfig);
+
+        expect(store.config.to).toBe('ja');
+        expect(store.config.token.openai).toBe(nextCredentials.token.openai);
+        await expect(store.prepareHydratedConfigForExport()).resolves.toMatchObject({token: nextCredentials.token});
         expect(storageMock.setItem).not.toHaveBeenCalled();
     });
 
@@ -287,6 +435,42 @@ describe('统一配置存储', () => {
         expect(localConfigWrites[0][1]).toEqual(expect.objectContaining({disabledExtensionDomains: []}));
     });
 
+    it('识别范围通过统一配置保存、水合与外部变更持久同步', async () => {
+        const store = await loadConfigModule(storedConfig);
+        await store.configReady;
+        expect(store.config.translationScope).toBe('content');
+        await store.saveConfig({...store.config, translationScope: 'all'});
+        const reopened = await loadConfigModule(storageState.get('local:config'));
+        await reopened.configReady;
+        expect(reopened.config.translationScope).toBe('all');
+        const listener = vi.fn();
+        reopened.subscribeConfig(listener);
+        const external = {...reopened.config, translationScope: 'content', __fluentConfigRevision: 100};
+        storageState.set('local:config', external);
+        storageWatchers.get('local:config')!(external);
+        await vi.waitFor(() => expect(reopened.config.translationScope).toBe('content'));
+        expect(listener).toHaveBeenLastCalledWith(expect.objectContaining({translationScope: 'content'}));
+        expect(storageState.get('local:config')).toMatchObject({translationScope: 'content'});
+    });
+
+    it('缓存双上限随配置保存、重新加载和外部通知同步', async () => {
+        const store = await loadConfigModule(storedConfig);
+        await store.configReady;
+        expect(store.config).toMatchObject({translationCacheMaxBytes: 10485760, translationCacheMaxEntries: 10000});
+        await store.saveConfig({...store.config, translationCacheMaxBytes: 1048576, translationCacheMaxEntries: 100});
+        const persisted = storageState.get('local:config');
+        const reopened = await loadConfigModule(persisted);
+        await reopened.configReady;
+        expect(reopened.config).toMatchObject({translationCacheMaxBytes: 1048576, translationCacheMaxEntries: 100});
+        const listener = vi.fn();
+        reopened.subscribeConfig(listener);
+        const external = {...reopened.config, translationCacheMaxEntries: 300, __fluentConfigRevision: 100};
+        storageState.set('local:config', external);
+        storageWatchers.get('local:config')!(external);
+        await vi.waitFor(() => expect(reopened.config.translationCacheMaxEntries).toBe(300));
+        expect(listener).toHaveBeenLastCalledWith(expect.objectContaining({translationCacheMaxEntries: 300}));
+    });
+
     it('内部 storage revision 不进入运行时配置或历史快照', async () => {
         const configStore = await loadConfigModule({...storedConfig, __fluentConfigRevision: 5});
         await Promise.all([configStore.configReady, configStore.configHistoryReady]);
@@ -300,13 +484,79 @@ describe('统一配置存储', () => {
         expect((history.entries[1].config as unknown as Record<string, unknown>).__fluentConfigRevision).toBeUndefined();
     });
 
-    it('为旧配置补齐默认关闭的视频字幕 Beta、独立微软翻译服务和默认字号', async () => {
+    it('旧配置保持图片和圈选开关，并为圈选补齐标准翻译和跟随服务', async () => {
+        const configStore = await loadConfigModule({...storedConfig, selectionAreaEnabled: true, disableImageTranslator: true});
+        await configStore.configReady;
+        expect(configStore.config).toMatchObject({
+            selectionAreaEnabled: true, disableImageTranslator: true,
+            areaTranslationMode: 'standard', areaTranslationService: '',
+        });
+        expect(configStore.config.popupQuickFeatureOrder.filter(id => id === 'image')).toHaveLength(1);
+        expect(configStore.config.popupQuickFeatureVisibility.image).toBe(true);
+        await configStore.saveConfig({...configStore.config, areaTranslationMode: 'ai', areaTranslationService: 'openai'});
+        expect(storageState.get('local:config')).toMatchObject({areaTranslationMode: 'ai', areaTranslationService: 'openai'});
+    });
+
+    it('翻译卡片提示词经过保存与重载保持，占位符和用户空白不被改写', async () => {
+        const store = await loadConfigModule(storedConfig);
+        await store.configReady;
+        const harness = {...store.config.harness, systemPrompt: 'Use {{to}}', actionPrompts: {...store.config.harness.actionPrompts, grammar: '  Custom {{learningLevel}}  '}};
+        await store.saveConfig({...store.config, harness});
+        const reopened = await loadConfigModule(storageState.get('local:config'));
+        await reopened.configReady;
+        expect(reopened.config.harness).toMatchObject({systemPrompt: 'Use {{to}}', actionPrompts: {grammar: '  Custom {{learningLevel}}  '}});
+    });
+
+    it('保留用户关闭视频、图片和圈选的选择，保存后重新加载仍关闭', async () => {
+        const disabled = {videoTranslationEnabled: false, videoMeetingAutoEnabled: false, videoPreferHumanSubtitles: false, selectionAreaEnabled: false, disableImageTranslator: true};
+        const store = await loadConfigModule({...storedConfig, ...disabled});
+        await store.configReady;
+        expect(store.config).toMatchObject(disabled);
+        await store.saveConfig({...store.config, to: 'en'});
+        const reopened = await loadConfigModule(storageState.get('local:config'));
+        await reopened.configReady;
+        expect(reopened.config).toMatchObject(disabled);
+    });
+
+    it('保留用户已开启的图片翻译，保存后重新加载仍开启', async () => {
+        const store = await loadConfigModule({...storedConfig, disableImageTranslator: false});
+        await store.configReady;
+        expect(store.config.disableImageTranslator).toBe(false);
+        await store.saveConfig({...store.config, to: 'en'});
+        const reopened = await loadConfigModule(storageState.get('local:config'));
+        await reopened.configReady;
+        expect(reopened.config.disableImageTranslator).toBe(false);
+    });
+
+    it('独立圈选服务接受机器翻译和已配置AI，拒绝畸形模式或孤立服务', () => {
+        for (const service of ['microsoft', 'openai', 'deeplx', '']) {
+            expect(normalizeConfig({areaTranslationService: service}).areaTranslationService).toBe(service);
+        }
+        for (const areaTranslationMode of [undefined, null, false, 'unknown', 'standard']) {
+            expect(normalizeConfig({areaTranslationMode}).areaTranslationMode).toBe('standard');
+        }
+        expect(normalizeConfig({areaTranslationMode: 'ai'}).areaTranslationMode).toBe('ai');
+        for (const areaTranslationService of [null, false, 12, 'unknown', 'custom:removed']) {
+            expect(normalizeConfig({areaTranslationService}).areaTranslationService).toBe('');
+        }
+        const customOpenAIProviders = [{id: 'custom:area', name: 'Area AI', endpoint: 'https://example.com/v1/chat/completions', models: ['vision-or-text-model']}];
+        expect(normalizeConfig({areaTranslationService: 'custom:area', customOpenAIProviders}).areaTranslationService).toBe('custom:area');
+        expect(normalizeConfig({areaTranslationService: 'custom'}).customOpenAIProviders.some(provider => provider.id === 'custom')).toBe(true);
+        const layout = normalizeConfig({popupQuickFeatureOrder: ['image', 'selection', 'area', 'area', 'unknown'], popupQuickFeatureVisibility: {image: false, area: false}});
+        expect(layout.popupQuickFeatureOrder.filter(id => id === 'image')).toHaveLength(1);
+        expect(layout.popupQuickFeatureVisibility).toMatchObject({image: false});
+    });
+
+    it('为旧配置默认关闭图片、开启视频和圈选，并补齐视频服务和字号', async () => {
         const configStore = await loadConfigModule(storedConfig);
 
         await configStore.configReady;
 
-        expect(configStore.config.videoTranslationEnabled).toBe(false);
-        expect(configStore.config.videoService).toBe('microsoft');
+        expect(configStore.config.videoTranslationEnabled).toBe(true);
+        expect(configStore.config.selectionAreaEnabled).toBe(true);
+        expect(configStore.config.disableImageTranslator).toBe(true);
+        expect(configStore.config.videoService).toBe('');
+        expect(configStore.config.videoLocalModel).toBe('small');
         expect(configStore.config.videoSubtitleVisible).toBe(true);
         expect(configStore.config.videoSubtitleDisplayMode).toBe('bilingual');
         expect(configStore.config.videoSubtitleFontSize).toBe(100);
@@ -325,19 +575,25 @@ describe('统一配置存储', () => {
         await configStore.configReady;
 
         expect(configStore.config.documentService).toBe('openai');
-        expect(configStore.config.documentModel.openai).toBe('document-model');
-        expect(configStore.config.model.openai).toBe('web-model');
+        expect(configStore.config.documentModel.openai).toBe(customModelString);
+        expect(configStore.config.documentCustomModel.openai).toBe('document-model');
+        expect(configStore.config.model.openai).toBe(customModelString);
+        expect(configStore.config.customModel.openai).toBe('web-model');
+        expect(configStore.config.customModels.openai).toEqual(expect.arrayContaining([
+            'web-model',
+            'document-model',
+        ]));
     });
 
-    it('文档翻译遇到未知服务时回退到免费翻译服务', async () => {
+    it('文档翻译遇到未知服务时回退到跟随默认', async () => {
         const configStore = await loadConfigModule({...storedConfig, documentService: 'unknown-service'});
 
         await configStore.configReady;
 
-        expect(configStore.config.documentService).toBe('freeTranslation');
+        expect(configStore.config.documentService).toBe('');
     });
 
-    it('保留用户选择的视频 AI 服务，并将未知服务回退到微软翻译', async () => {
+    it('保留用户选择的视频 AI 服务，并将未知服务回退到跟随默认', async () => {
         const aiConfigStore = await loadConfigModule({ ...storedConfig, videoService: 'openai' });
 
         await aiConfigStore.configReady;
@@ -348,19 +604,19 @@ describe('统一配置存储', () => {
 
         await invalidConfigStore.configReady;
 
-        expect(invalidConfigStore.config.videoService).toBe('microsoft');
+        expect(invalidConfigStore.config.videoService).toBe('');
     });
 
-    it('把早期 Beta 写入的 DeepLX 默认值一次迁移为微软翻译', async () => {
+    it('把早期 Beta 写入的 DeepLX 默认值一次迁移为跟随默认', async () => {
         const configStore = await loadConfigModule({ ...storedConfig, videoService: 'deeplx' });
 
         await configStore.configReady;
 
-        expect(configStore.config.videoService).toBe('microsoft');
+        expect(configStore.config.videoService).toBe('');
         expect(configStore.config.videoServiceDefaultMigrated).toBe(true);
         expect(storageMock.setItem).toHaveBeenCalledWith(
             'local:config',
-            expect.objectContaining({ videoService: 'microsoft', videoServiceDefaultMigrated: true }),
+            expect.objectContaining({ videoService: '', videoServiceDefaultMigrated: true }),
         );
     });
 
@@ -377,6 +633,14 @@ describe('统一配置存储', () => {
         expect(configStore.config.videoSubtitleVisible).toBe(true);
         expect(configStore.config.videoSubtitleDisplayMode).toBe('bilingual');
         expect(configStore.config.videoSubtitleFontSize).toBe(100);
+    });
+
+    it('非法的本地视频 Whisper 模型回退到 Small', async () => {
+        const configStore = await loadConfigModule({ ...storedConfig, videoLocalModel: 'large' });
+
+        await configStore.configReady;
+
+        expect(configStore.config.videoLocalModel).toBe('small');
     });
 
     it('存储内容损坏时回退到默认配置，并保持初始化 Promise 可用', async () => {
@@ -463,6 +727,849 @@ describe('统一配置存储', () => {
         expect(storageMock.setItem).not.toHaveBeenCalled();
     });
 
+    it('设置页嵌套草稿与运行时基线隔离，编辑 user_role 后产生非空 patch 并落盘', async () => {
+        const userRole = 'base user prompt {{to}} {{origin}}';
+        const canonicalConfig = {
+            ...sanitizeConfigCredentials(normalizeConfig({
+                ...storedConfig,
+                service: 'openai',
+                user_role: {openai: userRole},
+                system_role: {openai: 'base system prompt'},
+            })),
+            __fluentConfigRevision: 7,
+        };
+        const configStore = await loadConfigModule(canonicalConfig);
+        await configStore.configReady;
+        storageMock.setItem.mockClear();
+        storageOperations.length = 0;
+
+        // This is the settings-page hydration boundary after the fix. normalizeConfig
+        // must clone nested mappings before the editor mutates its local draft.
+        const draft = normalizeConfig(configStore.config);
+        expect(draft.user_role).not.toBe(configStore.config.user_role);
+        const editedUserRole = 'edited user prompt {{to}} {{origin}}';
+        draft.user_role.openai = editedUserRole;
+        expect(configStore.config.user_role.openai).toBe(userRole);
+
+        await configStore.requestConfigPatch(draft);
+
+        expect(storageMock.setItem).toHaveBeenCalledWith(
+            'local:config',
+            expect.objectContaining({user_role: expect.objectContaining({openai: editedUserRole})}),
+        );
+        expect(configStore.config.user_role.openai).toBe(editedUserRole);
+        expect(storageOperations).toContain('set:local:config');
+    });
+
+    it.each([
+        ['轮换', {openai: 'remote-imported-secret'}],
+        ['清除', {}],
+    ] as const)('远程整份凭据%s成功后不依赖凭据通知即可同步导出与后续整份保存', async (_operation, importedToken) => {
+        const oldSecret = 'remote-old-secret';
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: {openai: oldSecret}},
+        });
+        await configStore.configReady;
+        const sentTokens: Array<Record<string, string>> = [];
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            const token = structuredClone(message.config.token);
+            sentTokens.push(token);
+            const revision = message.baseRevision + 1;
+            storageState.set('local:credentials', {token});
+            storageState.set('local:config', {
+                ...sanitizeConfigCredentials(normalizeConfig(message.config)),
+                __fluentConfigRevision: revision,
+            });
+            // 模拟 local:credentials 广播延迟或丢失；请求方只能依赖本次成功响应。
+            return {success: true, revision};
+        });
+
+        await configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+            to: 'ja',
+        }, sendMessage);
+        const exported = await configStore.prepareHydratedConfigForExport();
+        await configStore.requestConfigSave(configStore.config, sendMessage);
+
+        expect({
+            runtimeToken: configStore.config.token,
+            exportedToken: exported.token,
+            sentTokens,
+        }).toEqual({
+            runtimeToken: importedToken,
+            exportedToken: importedToken,
+            sentTokens: [importedToken, importedToken],
+        });
+    });
+
+    it.each([
+        ['轮换', {openai: 'queued-imported-secret'}],
+        ['清除', {}],
+    ] as const)('远程整份凭据%s响应前排入的普通 replace 继承前驱已提交凭据', async (_operation, importedToken) => {
+        const oldToken = {openai: 'queued-old-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        const sent: Array<{token: Record<string, string>; baseRevision: number; theme: string}> = [];
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            if (sent.length === 0) await firstResponseGate;
+            const token = structuredClone(message.config.token);
+            sent.push({token, baseRevision: message.baseRevision, theme: message.config.theme});
+            const revision = message.baseRevision + 1;
+            storageState.set('local:credentials', {token});
+            storageState.set('local:config', {
+                ...sanitizeConfigCredentials(normalizeConfig(message.config)),
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+            to: 'ja',
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const pageExitSnapshot = configStore.requestConfigSave({
+            ...configStore.config,
+            theme: 'dark',
+        }, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([imported, pageExitSnapshot]);
+        const exported = await configStore.prepareHydratedConfigForExport();
+
+        expect({
+            runtimeToken: configStore.config.token,
+            exportedToken: exported.token,
+            theme: configStore.config.theme,
+            sent,
+        }).toEqual({
+            runtimeToken: importedToken,
+            exportedToken: importedToken,
+            theme: 'dark',
+            sent: [
+                {token: importedToken, baseRevision: 4, theme: 'auto'},
+                {token: importedToken, baseRevision: 5, theme: 'dark'},
+            ],
+        });
+    });
+
+    it('响应前排入且显式修改凭据的 replace 保持自身凭据意图', async () => {
+        const oldToken = {openai: 'explicit-old-secret'};
+        const firstToken = {openai: 'explicit-first-secret'};
+        const latestToken = {openai: 'explicit-latest-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        const sent: Array<{token: Record<string, string>; baseRevision: number}> = [];
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            if (sent.length === 0) await firstResponseGate;
+            const token = structuredClone(message.config.token);
+            sent.push({token, baseRevision: message.baseRevision});
+            const revision = message.baseRevision + 1;
+            storageState.set('local:credentials', {token});
+            storageState.set('local:config', {
+                ...sanitizeConfigCredentials(normalizeConfig(message.config)),
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const first = configStore.requestConfigSave({...configStore.config, token: firstToken}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const latest = configStore.requestConfigSave({...configStore.config, token: latestToken}, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([first, latest]);
+        const exported = await configStore.prepareHydratedConfigForExport();
+
+        expect(configStore.config.token).toEqual(latestToken);
+        expect(exported.token).toEqual(latestToken);
+        expect(sent).toEqual([
+            {token: firstToken, baseRevision: 4},
+            {token: latestToken, baseRevision: 5},
+        ]);
+    });
+
+    it('远程凭据 replace 响应前排入的公开 patch 保留前驱凭据并继续提交公开字段', async () => {
+        const oldToken = {openai: 'patch-old-secret'};
+        const importedToken = {openai: 'patch-imported-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        const sent: Array<{mode: string; baseRevision: number; hasToken: boolean}> = [];
+        let authoritativeToken: Record<string, string> = oldToken;
+        const sendMessage = vi.fn(async (message: {
+            mode?: 'replace' | 'patch';
+            config: Config | Record<string, unknown>;
+            baseRevision: number;
+        }) => {
+            if (sent.length === 0) await firstResponseGate;
+            const mode = message.mode || 'replace';
+            const hasToken = Object.prototype.hasOwnProperty.call(message.config, 'token');
+            sent.push({mode, baseRevision: message.baseRevision, hasToken});
+            if (mode === 'replace') {
+                authoritativeToken = structuredClone((message.config as Config).token);
+            }
+            const revision = message.baseRevision + 1;
+            const currentPublic = storageState.get('local:config') as Record<string, unknown>;
+            storageState.set('local:credentials', {token: authoritativeToken});
+            storageState.set('local:config', {
+                ...currentPublic,
+                ...sanitizeConfigCredentials(normalizeConfig({
+                    ...currentPublic,
+                    ...message.config,
+                })),
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+            to: 'ja',
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const publicPatch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([imported, publicPatch]);
+        const exported = await configStore.prepareHydratedConfigForExport();
+
+        expect(configStore.config).toMatchObject({token: importedToken, theme: 'dark'});
+        expect(exported).toMatchObject({token: importedToken, theme: 'dark'});
+        expect(sent).toEqual([
+            {mode: 'replace', baseRevision: 4, hasToken: true},
+            {mode: 'patch', baseRevision: 5, hasToken: false},
+        ]);
+    });
+
+    it('凭据 replace 后连续排入的多个公开 patch 都继承已提交凭据', async () => {
+        const oldToken = {openai: 'multi-patch-old-secret'};
+        const importedToken = {openai: 'multi-patch-imported-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        let revision = 4;
+        let authoritativeToken: Record<string, string> = oldToken;
+        let authoritativePublic = canonical;
+        const sent: Array<{mode: string; baseRevision: number; hasToken: boolean}> = [];
+        const sendMessage = vi.fn(async (message: {
+            mode?: 'replace' | 'patch';
+            config: Config | Record<string, unknown>;
+            baseRevision: number;
+        }) => {
+            invocation += 1;
+            if (invocation === 1) await firstResponseGate;
+            const mode = message.mode || 'replace';
+            sent.push({
+                mode,
+                baseRevision: message.baseRevision,
+                hasToken: Object.prototype.hasOwnProperty.call(message.config, 'token'),
+            });
+            if (mode === 'replace') {
+                authoritativeToken = structuredClone((message.config as Config).token);
+                authoritativePublic = sanitizeConfigCredentials(normalizeConfig(message.config));
+            } else {
+                authoritativePublic = {
+                    ...authoritativePublic,
+                    ...sanitizeConfigCredentials(message.config),
+                };
+            }
+            revision += 1;
+            storageState.set('local:credentials', {token: authoritativeToken});
+            storageState.set('local:config', {
+                ...authoritativePublic,
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const firstPatch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        const secondPatch = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([imported, firstPatch, secondPatch]);
+        const exported = await configStore.prepareHydratedConfigForExport();
+
+        expect(configStore.config).toMatchObject({token: importedToken, theme: 'dark', to: 'ja'});
+        expect(exported).toMatchObject({token: importedToken, theme: 'dark', to: 'ja'});
+        expect(sent).toEqual([
+            {mode: 'replace', baseRevision: 4, hasToken: true},
+            {mode: 'patch', baseRevision: 5, hasToken: false},
+            {mode: 'patch', baseRevision: 4, hasToken: false},
+        ]);
+    });
+
+    it('中间公开 patch 失败后队尾 patch 仍使用最近已提交凭据', async () => {
+        const oldToken = {openai: 'failed-middle-old-secret'};
+        const importedToken = {openai: 'failed-middle-imported-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async (message: {
+            mode?: 'replace' | 'patch';
+            config: Config | Record<string, unknown>;
+            baseRevision: number;
+        }) => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                storageState.set('local:credentials', {token: importedToken});
+                storageState.set('local:config', {
+                    ...canonical,
+                    __fluentConfigRevision: 5,
+                });
+                return {success: true, revision: 5};
+            }
+            if (invocation === 2) return {success: false, error: 'middle patch failed'};
+            storageState.set('local:config', {
+                ...canonical,
+                ...sanitizeConfigCredentials(message.config),
+                to: 'ja',
+                __fluentConfigRevision: 6,
+            });
+            return {success: true, revision: 6};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const failedPatch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        const latestPatch = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        const results = Promise.allSettled([imported, failedPatch, latestPatch]);
+        releaseFirstResponse();
+
+        const settled = await results;
+        const exported = await configStore.prepareHydratedConfigForExport();
+        expect(settled.map(result => result.status)).toEqual(['fulfilled', 'rejected', 'fulfilled']);
+        expect(configStore.config).toMatchObject({token: importedToken, theme: 'auto', to: 'ja'});
+        expect(exported).toMatchObject({token: importedToken, theme: 'auto', to: 'ja'});
+    });
+
+    it('旧凭据广播保留在途 ID 和 Secret 编辑，同时接收未编辑服务的新 Key', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const credentials = {
+            token: {aliyunTranslation: 'old-id', deepseek: 'other-old'},
+            apiKeys: {aliyunTranslation: ['old-id'], deepseek: ['other-old']},
+            secret: {aliyunTranslation: 'old-secret'},
+        };
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false, localCredentials: credentials,
+        });
+        await configStore.configReady;
+        const credentialWatch = storageWatchers.get('local:credentials')!;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        let revision = 4;
+        const sendMessage = vi.fn(async () => {
+            await gate;
+            revision += 1;
+            storageState.set('local:config', {...canonical, __fluentConfigRevision: revision});
+            return {success: true, revision};
+        });
+        const idEdit = configStore.requestConfigPatch({token: {aliyunTranslation: 'new-id', deepseek: 'other-old'}}, sendMessage);
+        const secretEdit = configStore.requestConfigPatch({secret: {aliyunTranslation: 'new-secret'}}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const broadcast = {...credentials, token: {...credentials.token, deepseek: 'other-new'}, apiKeys: {...credentials.apiKeys, deepseek: ['other-new']}};
+        credentialWatch(broadcast);
+        expect(configStore.config).toMatchObject({
+            token: {aliyunTranslation: 'new-id', deepseek: 'other-new'},
+            apiKeys: {aliyunTranslation: ['new-id'], deepseek: ['other-new']},
+            secret: {aliyunTranslation: 'new-secret'},
+        });
+        // 前驱 ID 写入的回声也不能让尚未确认的 Secret 恢复旧值。
+        credentialWatch({...broadcast, token: {...broadcast.token, aliyunTranslation: 'new-id'}, apiKeys: {...broadcast.apiKeys, aliyunTranslation: ['new-id']}});
+        expect(configStore.config.secret.aliyunTranslation).toBe('new-secret');
+        release();
+        await Promise.all([idEdit, secretEdit]);
+        expect(configStore.config.token.aliyunTranslation).toBe('new-id');
+        expect(configStore.config.secret.aliyunTranslation).toBe('new-secret');
+        // 队列结束后不再占有字段，其他页面的有效更新仍能同步。
+        credentialWatch(credentials);
+        expect(configStore.config.token.aliyunTranslation).toBe('old-id');
+        expect(configStore.config.secret.aliyunTranslation).toBe('old-secret');
+    });
+
+    it('凭据保存失败后释放编辑所有权并允许后续广播更新', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const credentials = {token: {aliyunTranslation: 'old-id'}, apiKeys: {aliyunTranslation: ['old-id']}};
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false, localCredentials: credentials,
+        });
+        await configStore.configReady;
+        const credentialWatch = storageWatchers.get('local:credentials')!;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const sendMessage = vi.fn(async () => { await gate; return {success: false, error: 'fixture failure'}; });
+        const edit = configStore.requestConfigPatch({token: {aliyunTranslation: 'new-id'}}, sendMessage);
+        const rejected = expect(edit).rejects.toThrow('fixture failure');
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        credentialWatch(credentials);
+        expect(configStore.config.token.aliyunTranslation).toBe('new-id');
+        release();
+        await rejected;
+        expect(configStore.config.token.aliyunTranslation).toBe('old-id');
+        credentialWatch({token: {aliyunTranslation: 'external-id'}, apiKeys: {aliyunTranslation: ['external-id']}});
+        expect(configStore.config.token.aliyunTranslation).toBe('external-id');
+    });
+
+    it('请求途中到达的更新凭据通知会刷新后续队列基线', async () => {
+        const oldToken = {openai: 'watch-shadow-old-secret'};
+        const watchedToken = {openai: 'watch-shadow-latest-secret'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        const credentialWatch = storageWatchers.get('local:credentials')!;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        let revision = 4;
+        let publicConfig = canonical;
+        const sendMessage = vi.fn(async (message: {
+            mode?: 'replace' | 'patch';
+            config: Config | Record<string, unknown>;
+        }) => {
+            invocation += 1;
+            if (invocation === 1) await firstResponseGate;
+            publicConfig = {
+                ...publicConfig,
+                ...sanitizeConfigCredentials(message.config),
+            };
+            revision += 1;
+            storageState.set('local:config', {
+                ...publicConfig,
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const firstPatch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const latestPatch = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        storageState.set('local:credentials', {token: watchedToken});
+        credentialWatch({token: watchedToken});
+        expect(configStore.config.token).toEqual(watchedToken);
+        releaseFirstResponse();
+        await Promise.all([firstPatch, latestPatch]);
+        const exported = await configStore.prepareHydratedConfigForExport();
+
+        expect(configStore.config).toMatchObject({token: watchedToken, theme: 'dark', to: 'ja'});
+        expect(exported).toMatchObject({token: watchedToken, theme: 'dark', to: 'ja'});
+    });
+
+    it('排队 replace 只重改自己显式修改的凭据字段', async () => {
+        const oldToken = {openai: 'partial-old-token'};
+        const importedToken = {openai: 'partial-imported-token'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken, ak: 'partial-old-ak'},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sent: Array<{token: Record<string, string>; ak: string; baseRevision: number}> = [];
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            invocation += 1;
+            if (invocation === 1) await firstResponseGate;
+            const credentials = {token: structuredClone(message.config.token), ak: message.config.ak};
+            sent.push({...credentials, baseRevision: message.baseRevision});
+            const revision = message.baseRevision + 1;
+            storageState.set('local:credentials', credentials);
+            storageState.set('local:config', {
+                ...sanitizeConfigCredentials(normalizeConfig(message.config)),
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const partialEdit = configStore.requestConfigSave({
+            ...configStore.config,
+            ak: 'partial-latest-ak',
+        }, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([imported, partialEdit]);
+
+        expect(configStore.config).toMatchObject({token: importedToken, ak: 'partial-latest-ak'});
+        expect(sent).toEqual([
+            {token: importedToken, ak: 'partial-old-ak', baseRevision: 4},
+            {token: importedToken, ak: 'partial-latest-ak', baseRevision: 5},
+        ]);
+    });
+
+    it('显式 exact replace 在排队后仍完整拥有入队时凭据快照', async () => {
+        const oldToken = {openai: 'exact-old-token'};
+        const importedToken = {openai: 'exact-imported-token'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken, ak: 'exact-old-ak'},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sent: Array<{token: Record<string, string>; ak: string}> = [];
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            invocation += 1;
+            if (invocation === 1) await firstResponseGate;
+            const credentials = {token: structuredClone(message.config.token), ak: message.config.ak};
+            sent.push(credentials);
+            const revision = message.baseRevision + 1;
+            storageState.set('local:credentials', credentials);
+            storageState.set('local:config', {
+                ...sanitizeConfigCredentials(normalizeConfig(message.config)),
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const exactReplacement = configStore.requestConfigSave({
+            ...configStore.config,
+            token: oldToken,
+            ak: 'exact-latest-ak',
+        }, sendMessage, {credentialIntent: 'exact'});
+        releaseFirstResponse();
+        await Promise.all([imported, exactReplacement]);
+
+        expect(configStore.config).toMatchObject({token: oldToken, ak: 'exact-latest-ak'});
+        expect(sent).toEqual([
+            {token: importedToken, ak: 'exact-old-ak'},
+            {token: oldToken, ak: 'exact-latest-ak'},
+        ]);
+    });
+
+    it('旧 replace 响应不覆盖后续已乐观应用的显式凭据 patch', async () => {
+        const oldToken = {openai: 'publish-old-token'};
+        const firstToken = {openai: 'publish-first-token'};
+        const latestToken = {openai: 'publish-latest-token'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        let releaseLatestResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        const latestResponseGate = new Promise<void>(resolve => { releaseLatestResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async (message: {
+            mode?: 'replace' | 'patch';
+            config: Config;
+            baseRevision: number;
+        }) => {
+            invocation += 1;
+            if (invocation === 1) await firstResponseGate;
+            if (invocation === 2) await latestResponseGate;
+            const revision = message.baseRevision + 1;
+            if (Object.prototype.hasOwnProperty.call(message.config, 'token')) {
+                storageState.set('local:credentials', {token: structuredClone(message.config.token)});
+            }
+            storageState.set('local:config', {
+                ...canonical,
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const first = configStore.requestConfigSave({...configStore.config, token: firstToken}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const latest = configStore.requestConfigPatch({token: latestToken}, sendMessage);
+        expect(configStore.config.token).toEqual(latestToken);
+        releaseFirstResponse();
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledTimes(2));
+
+        expect(configStore.config.token).toEqual(latestToken);
+        releaseLatestResponse();
+        await Promise.all([first, latest]);
+        expect(configStore.config.token).toEqual(latestToken);
+    });
+
+    it('replace 后的公开 patch 即使配置回读失败也不回滚前驱凭据', async () => {
+        const oldToken = {openai: 'read-failure-old-token'};
+        const importedToken = {openai: 'read-failure-imported-token'};
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: oldToken},
+        });
+        await configStore.configReady;
+        const configWatch = storageWatchers.get('local:config')!;
+        let failConfigRead = false;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (failConfigRead && key === 'local:config') throw new Error('config read unavailable');
+            return storageState.get(key) ?? null;
+        });
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async (_message: {
+            mode?: 'replace' | 'patch';
+            config: Config | Record<string, unknown>;
+            baseRevision: number;
+        }) => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                storageState.set('local:credentials', {token: importedToken});
+                const committed = {
+                    ...canonical,
+                    __fluentConfigRevision: 5,
+                };
+                storageState.set('local:config', committed);
+                configWatch(committed);
+                return {success: true, revision: 5};
+            }
+            const committed = {
+                ...canonical,
+                theme: 'dark',
+                __fluentConfigRevision: 6,
+            };
+            storageState.set('local:config', committed);
+            failConfigRead = true;
+            return {success: true, revision: 6};
+        });
+
+        const imported = configStore.requestConfigSave({
+            ...configStore.config,
+            token: importedToken,
+        }, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const publicPatch = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        releaseFirstResponse();
+        await Promise.all([imported, publicPatch]);
+
+        expect(configStore.config).toMatchObject({token: importedToken, theme: 'dark'});
+    });
+
+    it('失败前驱的乐观字段不会被后继成功 patch 的回读失败 fallback 复活', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            theme: 'auto',
+            to: 'zh-Hans',
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+        });
+        await configStore.configReady;
+        let failConfigRead = false;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (failConfigRead && key === 'local:config') throw new Error('config read unavailable');
+            return storageState.get(key) ?? null;
+        });
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async () => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                return {success: false, error: 'first patch failed'};
+            }
+            storageState.set('local:config', {
+                ...canonical,
+                to: 'ja',
+                __fluentConfigRevision: 5,
+            });
+            failConfigRead = true;
+            return {success: true, revision: 5};
+        });
+
+        const failedTheme = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const successfulLanguage = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        expect(configStore.config).toMatchObject({theme: 'dark', to: 'ja'});
+        releaseFirstResponse();
+
+        const outcomes = await Promise.allSettled([failedTheme, successfulLanguage]);
+        expect(outcomes.map(outcome => outcome.status)).toEqual(['rejected', 'fulfilled']);
+        expect(configStore.config).toMatchObject({theme: 'auto', to: 'ja'});
+        expect(configStore.getConfigRevision()).toBe(5);
+    });
+
+    it('后继成功 patch 读到旧 revision 时保留前驱已提交字段', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            theme: 'auto',
+            to: 'zh-Hans',
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+        });
+        await configStore.configReady;
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async () => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                storageState.set('local:config', {
+                    ...canonical,
+                    theme: 'dark',
+                    __fluentConfigRevision: 5,
+                });
+                return {success: true, revision: 5};
+            }
+            // 后台已经把 to patch 提交为 rev6，但这个页面的读取仍命中旧 rev4。
+            storageState.set('local:config', {...canonical, __fluentConfigRevision: 4});
+            return {success: true, revision: 6};
+        });
+
+        const firstTheme = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const secondLanguage = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        releaseFirstResponse();
+
+        await Promise.all([firstTheme, secondLanguage]);
+        expect(configStore.config).toMatchObject({theme: 'dark', to: 'ja'});
+        expect(configStore.getConfigRevision()).toBe(6);
+    });
+
+    it('前驱与队尾 patch 都失败且队尾回读失败时不复活前驱乐观字段', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            theme: 'auto',
+            to: 'zh-Hans',
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+        });
+        await configStore.configReady;
+        let failConfigRead = false;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (failConfigRead && key === 'local:config') throw new Error('config read unavailable');
+            return storageState.get(key) ?? null;
+        });
+        let releaseFirstResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async () => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                return {success: false, error: 'first patch failed'};
+            }
+            failConfigRead = true;
+            return {success: false, error: 'tail patch failed'};
+        });
+
+        const failedTheme = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        const failedLanguage = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        expect(configStore.config).toMatchObject({theme: 'dark', to: 'ja'});
+        releaseFirstResponse();
+
+        const outcomes = await Promise.allSettled([failedTheme, failedLanguage]);
+        expect(outcomes.map(outcome => outcome.status)).toEqual(['rejected', 'rejected']);
+        expect(configStore.config).toMatchObject({theme: 'auto', to: 'zh-Hans'});
+        expect(configStore.getConfigRevision()).toBe(4);
+    });
+
+    it.each([
+        ['成功', false],
+        ['网络失败', true],
+    ] as const)('相同快照的第一次%s不清除第二次请求所有权', async (_outcome, firstFails) => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
+        await configStore.configReady;
+        configStore.config.to = 'ja';
+        const configWatch = storageWatchers.get('local:config')!;
+        let releaseFirstResponse!: () => void;
+        let releaseLatestResponse!: () => void;
+        const firstResponseGate = new Promise<void>(resolve => { releaseFirstResponse = resolve; });
+        const latestResponseGate = new Promise<void>(resolve => { releaseLatestResponse = resolve; });
+        let invocation = 0;
+        const sendMessage = vi.fn(async (message: {config: Config; baseRevision: number}) => {
+            invocation += 1;
+            if (invocation === 1) {
+                await firstResponseGate;
+                if (firstFails) throw new Error('first request unavailable');
+            } else {
+                await latestResponseGate;
+            }
+            const revision = firstFails ? 5 : message.baseRevision + 1;
+            storageState.set('local:config', {
+                ...canonical,
+                to: 'ja',
+                __fluentConfigRevision: revision,
+            });
+            return {success: true, revision};
+        });
+
+        const first = configStore.requestConfigSave(configStore.config, sendMessage);
+        const latest = configStore.requestConfigSave(configStore.config, sendMessage);
+        const results = Promise.allSettled([first, latest]);
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledOnce());
+        releaseFirstResponse();
+        await vi.waitFor(() => expect(sendMessage).toHaveBeenCalledTimes(2));
+        await Promise.resolve();
+        configWatch({
+            ...canonical,
+            to: 'ko',
+            __fluentConfigRevision: firstFails ? 4 : 5,
+        });
+
+        expect(configStore.config.to).toBe('ja');
+        releaseLatestResponse();
+        const settled = await results;
+        expect(settled.map(result => result.status)).toEqual(
+            firstFails ? ['rejected', 'fulfilled'] : ['fulfilled', 'fulfilled'],
+        );
+        expect(configStore.config.to).toBe('ja');
+    });
+
     it('翻译计数使用同 revision 的原子增量，不生成用户配置历史版本', async () => {
         const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
         const configStore = await loadConfigModule({...canonical, count: 10, __fluentConfigRevision: 4});
@@ -545,6 +1652,8 @@ describe('统一配置存储', () => {
         await expect(configStore.configReady).resolves.toBeUndefined();
         expect(configStore.config).toMatchObject({to: 'ja', count: 21});
         expect(configStore.config.token).toEqual({});
+        await expect(configStore.prepareHydratedConfigForExport())
+            .rejects.toThrow('配置或凭据安全水合未完成，无法导出完整备份');
         await expect(configStore.incrementConfigCount(1, 'count-after-credential-read-failure'))
             .rejects.toThrow('配置安全迁移未完成');
         await expect(configStore.saveConfig({...configStore.config, to: 'ko'}))
@@ -646,7 +1755,12 @@ describe('统一配置存储', () => {
 
         const sentConfig = sendMessage.mock.calls[0][0].config;
         expect(() => structuredClone(sentConfig)).not.toThrow();
-        expect(sentConfig).toMatchObject({ to: 'ja', model: { openai: 'gpt-4o-mini' } });
+        expect(sentConfig).toMatchObject({
+            to: 'ja',
+            model: {openai: customModelString},
+            customModel: {openai: 'gpt-4o-mini'},
+            customModels: {openai: expect.arrayContaining(['gpt-4o-mini'])},
+        });
     });
 
     it('后台不可用时失败关闭，不在短生命周期上下文降级落盘', async () => {
@@ -674,6 +1788,8 @@ describe('统一配置存储', () => {
         const contentSnapshot = normalizeConfig({
             ...current,
             to: 'ja',
+            // 完整规范化快照以 apiKeys 为凭据主数据，清空时同时清除旧 token 镜像。
+            apiKeys: {},
             token: {},
             extra: {},
             persistCredentials: false,
@@ -753,6 +1869,305 @@ describe('统一配置存储', () => {
         }, current, false)).toThrow('videoSubtitleVisible');
     });
 
+    it('endpoint/proxy patch 按真实目的地解绑旧 token，并让 proxy 遮蔽的 endpoint 编辑保留凭据', async () => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        const service = 'custom:destination-test';
+        const provider = {
+            id: service,
+            name: 'Destination Test',
+            endpoint: 'https://old-endpoint.example/v1/chat/completions',
+            models: ['model-a'],
+        };
+        const current = normalizeConfig({
+            ...configStore.config,
+            customOpenAIProviders: [provider],
+            model: {...configStore.config.model, [service]: 'model-a'},
+            documentModel: {...configStore.config.documentModel, [service]: 'model-a'},
+            token: {[service]: 'old-destination-secret'},
+            proxy: {},
+        });
+        const changedProvider = [{
+            ...provider,
+            endpoint: 'https://new-endpoint.example/v1/chat/completions',
+        }];
+
+        const endpointChanged = configStore.prepareConfigPatchRequest({
+            customOpenAIProviders: changedProvider,
+        }, {
+            customOpenAIProviders: current.customOpenAIProviders,
+        }, current, true);
+        expect(endpointChanged.token).toEqual({});
+
+        const explicitRotation = configStore.prepareConfigPatchRequest({
+            customOpenAIProviders: changedProvider,
+            token: {[service]: 'new-destination-secret'},
+        }, {
+            customOpenAIProviders: current.customOpenAIProviders,
+            token: current.token,
+        }, current, true);
+        expect(explicitRotation.token).toEqual({[service]: 'new-destination-secret'});
+
+        const proxied = normalizeConfig({
+            ...current,
+            proxy: {[service]: 'https://stable-proxy.example/v1/chat/completions'},
+        });
+        const maskedEndpointChange = configStore.prepareConfigPatchRequest({
+            customOpenAIProviders: changedProvider,
+        }, {
+            customOpenAIProviders: proxied.customOpenAIProviders,
+        }, proxied, true);
+        expect(maskedEndpointChange.token).toEqual({[service]: 'old-destination-secret'});
+
+        const proxyChanged = configStore.prepareConfigPatchRequest({
+            proxy: {[service]: 'https://next-proxy.example/v1/chat/completions'},
+        }, {
+            proxy: proxied.proxy,
+        }, proxied, true);
+        expect(proxyChanged.token).toEqual({});
+
+        const untrustedEndpointChange = configStore.prepareConfigPatchRequest({
+            customOpenAIProviders: changedProvider,
+        }, {
+            customOpenAIProviders: current.customOpenAIProviders,
+        }, current, false);
+        expect(untrustedEndpointChange.token).toEqual({[service]: 'old-destination-secret'});
+    });
+
+    it('日常 destination patch 把派生 token 清理及其 CAS 基线发送给后台', async () => {
+        const service = 'custom:wire-destination';
+        const provider = {
+            id: service,
+            name: 'Wire Destination',
+            endpoint: 'https://wire-endpoint.example/v1/chat/completions',
+            models: ['wire-model'],
+        };
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            customOpenAIProviders: [provider],
+            model: {[service]: 'wire-model'},
+            documentModel: {[service]: 'wire-model'},
+            proxy: {[service]: 'https://old-proxy.example/v1/chat/completions'},
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: {[service]: 'wire-secret'}},
+        });
+        await configStore.configReady;
+        const sendMessage = vi.fn(async () => ({success: true, revision: 5}));
+
+        await configStore.requestConfigPatch({
+            proxy: {[service]: 'https://new-proxy.example/v1/chat/completions'},
+        }, sendMessage);
+
+        expect(sendMessage).toHaveBeenCalledWith(expect.objectContaining({
+            mode: 'patch',
+            config: {
+                proxy: {[service]: 'https://new-proxy.example/v1/chat/completions'},
+                token: {},
+                apiKeys: {},
+            },
+            expected: {
+                proxy: {[service]: 'https://old-proxy.example/v1/chat/completions'},
+                token: {[service]: 'wire-secret'},
+                apiKeys: {[service]: ['wire-secret']},
+            },
+        }));
+        expect(configStore.config.token).toEqual({});
+    });
+
+    it('日常腾讯 proxy patch 把共享密钥成对清理及其 CAS 基线发送给后台', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            proxy: {[services.tencent]: 'https://old-tmt-proxy.example/'},
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {
+                tencentSecretId: 'wire-tencent-id',
+                tencentSecretKey: 'wire-tencent-key',
+            },
+        });
+        await configStore.configReady;
+        const sendMessage = vi.fn(async () => ({success: true, revision: 5}));
+
+        await configStore.requestConfigPatch({
+            proxy: {[services.tencent]: 'https://new-tmt-proxy.example/'},
+        }, sendMessage);
+
+        expect(sendMessage).toHaveBeenCalledWith(expect.objectContaining({
+            mode: 'patch',
+            config: {
+                proxy: {[services.tencent]: 'https://new-tmt-proxy.example/'},
+                tencentSecretId: '',
+                tencentSecretKey: '',
+            },
+            expected: {
+                proxy: {[services.tencent]: 'https://old-tmt-proxy.example/'},
+                tencentSecretId: 'wire-tencent-id',
+                tencentSecretKey: 'wire-tencent-key',
+            },
+        }));
+        expect(configStore.config).toMatchObject({tencentSecretId: '', tencentSecretKey: ''});
+    });
+
+    it('destination 派生解绑只拥有目标 service，不覆盖响应前 watch 更新的其他 token', async () => {
+        const service = 'custom:owned-token-a';
+        const provider = {
+            id: service,
+            name: 'Owned Token A',
+            endpoint: 'https://old-a.example/v1/chat/completions',
+            models: ['model-a'],
+        };
+        const canonical = sanitizeConfigCredentials(normalizeConfig({
+            ...storedConfig,
+            customOpenAIProviders: [provider],
+            model: {[service]: 'model-a'},
+            documentModel: {[service]: 'model-a'},
+        }));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: {[service]: 'a-old', openai: 'b-old'}},
+        });
+        await configStore.configReady;
+        const credentialWatch = storageWatchers.get('local:credentials')!;
+        let markCommitted!: () => void;
+        let releaseResponse!: () => void;
+        const committed = new Promise<void>(resolve => { markCommitted = resolve; });
+        const responseGate = new Promise<void>(resolve => { releaseResponse = resolve; });
+        const sendMessage = vi.fn(async (message: {config: Config}) => {
+            storageState.set('local:credentials', {token: {openai: 'b-old'}});
+            storageState.set('local:config', {
+                ...canonical,
+                ...sanitizeConfigCredentials(message.config),
+                __fluentConfigRevision: 5,
+            });
+            markCommitted();
+            await responseGate;
+            return {success: true, revision: 5};
+        });
+
+        const request = configStore.requestConfigPatch({
+            customOpenAIProviders: [{
+                ...provider,
+                endpoint: 'https://new-a.example/v1/chat/completions',
+            }],
+        }, sendMessage);
+        await committed;
+        const watchedCredentials = {token: {[service]: 'a-old', openai: 'b-new'}};
+        storageState.set('local:credentials', watchedCredentials);
+        credentialWatch(watchedCredentials);
+        releaseResponse();
+        await request;
+
+        expect(configStore.config.token).toEqual({openai: 'b-new'});
+        expect((await configStore.prepareHydratedConfigForExport()).token).toEqual({openai: 'b-new'});
+    });
+
+    it('changed-fields replace 只拥有发生变化的 token service，exact 语义仍单独保留', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+            localCredentials: {token: {openai: 'a-old', deepseek: 'b-old'}},
+        });
+        await configStore.configReady;
+        const credentialWatch = storageWatchers.get('local:credentials')!;
+        let markCommitted!: () => void;
+        let releaseResponse!: () => void;
+        const committed = new Promise<void>(resolve => { markCommitted = resolve; });
+        const responseGate = new Promise<void>(resolve => { releaseResponse = resolve; });
+        const sendMessage = vi.fn(async (message: {config: Config}) => {
+            storageState.set('local:credentials', {token: structuredClone(message.config.token)});
+            storageState.set('local:config', {...canonical, __fluentConfigRevision: 5});
+            markCommitted();
+            await responseGate;
+            return {success: true, revision: 5};
+        });
+
+        const request = configStore.requestConfigSave({
+            ...configStore.config,
+            token: {openai: 'a-new', deepseek: 'b-old'},
+        }, sendMessage);
+        await committed;
+        const watchedCredentials = {token: {openai: 'a-new', deepseek: 'b-new'}};
+        storageState.set('local:credentials', watchedCredentials);
+        credentialWatch(watchedCredentials);
+        releaseResponse();
+        await request;
+
+        expect(configStore.config.token).toEqual({openai: 'a-new', deepseek: 'b-new'});
+    });
+
+    it('成功响应回读失败时消费等待期间 deferred 的更高 revision', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+        });
+        await configStore.configReady;
+        const configWatch = storageWatchers.get('local:config')!;
+        let rejectRead!: (reason?: unknown) => void;
+        let markReadStarted!: () => void;
+        const readStarted = new Promise<void>(resolve => { markReadStarted = resolve; });
+        let blockNextConfigRead = false;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (key === 'local:config' && blockNextConfigRead) {
+                markReadStarted();
+                return new Promise<never>((_resolve, reject) => { rejectRead = reject; });
+            }
+            return storageState.get(key) ?? null;
+        });
+        const sendMessage = vi.fn(async () => {
+            blockNextConfigRead = true;
+            return {success: true, revision: 5};
+        });
+
+        const request = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await readStarted;
+        const external = {...canonical, to: 'ja', __fluentConfigRevision: 6};
+        storageState.set('local:config', external);
+        configWatch(external);
+        rejectRead(new Error('config read unavailable'));
+
+        await expect(request).rejects.toThrow('配置已由其他页面更新');
+        expect(configStore.config).toMatchObject({theme: 'auto', to: 'ja'});
+        expect(configStore.getConfigRevision()).toBe(6);
+    });
+
+    it('失败请求回读失败时同样消费等待期间 deferred 的权威快照', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, theme: 'auto'}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4}, {
+            writeOwner: false,
+        });
+        await configStore.configReady;
+        const configWatch = storageWatchers.get('local:config')!;
+        let rejectRead!: (reason?: unknown) => void;
+        let markReadStarted!: () => void;
+        const readStarted = new Promise<void>(resolve => { markReadStarted = resolve; });
+        let blockNextConfigRead = false;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (key === 'local:config' && blockNextConfigRead) {
+                markReadStarted();
+                return new Promise<never>((_resolve, reject) => { rejectRead = reject; });
+            }
+            return storageState.get(key) ?? null;
+        });
+        const sendMessage = vi.fn(async () => {
+            blockNextConfigRead = true;
+            return {success: false, error: 'patch rejected'};
+        });
+
+        const request = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        await readStarted;
+        const external = {...canonical, to: 'ja', __fluentConfigRevision: 5};
+        storageState.set('local:config', external);
+        configWatch(external);
+        rejectRead(new Error('config read unavailable'));
+
+        await expect(request).rejects.toThrow('patch rejected');
+        expect(configStore.config).toMatchObject({theme: 'auto', to: 'ja'});
+        expect(configStore.getConfigRevision()).toBe(5);
+    });
+
     it('字段补丁先乐观更新，后台失败后回读权威快照并自动回滚', async () => {
         const canonical = sanitizeConfigCredentials(normalizeConfig({
             ...storedConfig,
@@ -815,6 +2230,33 @@ describe('统一配置存储', () => {
         expect(configStore.getConfigRevision()).toBe(5);
         expect(listener).toHaveBeenCalledOnce();
         unsubscribe();
+    });
+
+    it('字段补丁接受并持久化内置服务的自定义模型列表', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
+        await configStore.configReady;
+        const savedModels = {grok: ['private-a', 'private-b']};
+        const sendMessage = vi.fn(async (message: {
+            mode?: string;
+            config: Config;
+            expected?: Config;
+            baseRevision: number;
+        }) => {
+            expect(message).toMatchObject({
+                mode: 'patch',
+                config: {customModels: savedModels},
+                expected: {customModels: {}},
+                baseRevision: 4,
+            });
+            const committed = {...canonical, customModels: savedModels, __fluentConfigRevision: 5};
+            storageState.set('local:config', committed);
+            storageWatchers.get('local:config')!(committed);
+            return {success: true, revision: 5};
+        });
+
+        await configStore.requestConfigPatch({customModels: savedModels}, sendMessage);
+        expect(configStore.config.customModels).toEqual(savedModels);
     });
 
     it('字段补丁冲突后回读同字段的权威新值', async () => {
@@ -1094,8 +2536,299 @@ describe('统一配置存储', () => {
         expect(baseRevisions).toEqual([1, 2]);
     });
 
-    it('配置持久化 barrier 等待已排队及等待期间追加的请求', async () => {
+    it('关闭页面前在首个 ACK 被阻塞时同步交接完整 patch 链，后台完成最后一次修改', async () => {
         const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
+        await configStore.configReady;
+        const {createConfigPersistenceHandler, createConfigPersistenceBatchHandler} = await import(
+            '@/src/app/background/handlers/configPersistence'
+        );
+        let backgroundConfig = normalizeConfig(canonical);
+        let revision = 4;
+        let writes = 0;
+        const handler = createConfigPersistenceHandler({
+            ready: Promise.resolve(),
+            getCurrentConfig: () => backgroundConfig,
+            getCurrentRevision: () => revision,
+            prepareConfigSaveRequest: configStore.prepareConfigSaveRequest,
+            prepareConfigPatchRequest: configStore.prepareConfigPatchRequest,
+            isExtensionUrl: () => true,
+            saveConfig: async next => {
+                backgroundConfig = next;
+                writes += 1;
+                revision += 1;
+                storageState.set('local:config', {...sanitizeConfigCredentials(next), __fluentConfigRevision: revision});
+            },
+        });
+        const batchHandler = createConfigPersistenceBatchHandler(handler);
+        let releaseFirstAck!: () => void;
+        const firstAck = new Promise<void>(resolve => { releaseFirstAck = resolve; });
+        const sendMessage = vi.fn(async (message: Parameters<typeof handler.handle>[0]) => {
+            const response = await handler.handle(message, {});
+            if (message.sequence === 1) await firstAck;
+            return response;
+        });
+        const batchSender = vi.fn(async (message: Parameters<typeof batchHandler.handle>[0]) => batchHandler.handle(message, {}));
+        await configStore.handoffPendingConfigPatches(sendMessage, batchSender);
+        expect(batchSender).not.toHaveBeenCalled();
+
+        const first = configStore.requestConfigPatch({to: 'en'}, sendMessage);
+        await vi.waitFor(() => expect(backgroundConfig.to).toBe('en'));
+        const second = configStore.requestConfigPatch({to: 'ja'}, sendMessage);
+        const third = configStore.requestConfigPatch({theme: 'dark'}, sendMessage);
+        const settled = Promise.allSettled([first, second, third]);
+        expect(configStore.config).toMatchObject({to: 'ja', theme: 'dark'});
+        expect(sendMessage).toHaveBeenCalledOnce();
+
+        const handoff = configStore.handoffPendingConfigPatches(sendMessage, batchSender);
+        // 这里没有等待 microtask；信封必须已经跨过即将关闭的页面边界。
+        expect(batchSender).toHaveBeenCalledOnce();
+        expect(batchSender.mock.calls[0][0]).toMatchObject({
+            type: 'persistConfigBatch',
+            clientId: sendMessage.mock.calls[0][0].clientId,
+            patches: [
+                {sequence: 1, config: {to: 'en'}, expected: {to: 'zh-Hans'}},
+                {sequence: 2, config: {to: 'ja'}, expected: {to: 'en'}},
+                {sequence: 3, config: {theme: 'dark'}, expected: {theme: 'auto'}},
+            ],
+        });
+        await handoff;
+        expect(backgroundConfig).toMatchObject({to: 'ja', theme: 'dark'});
+        expect(writes).toBe(3);
+        // 页面在 pagehide 后仍短暂存活时，重复交接与原队列恢复均沿用同序号去重。
+        await configStore.handoffPendingConfigPatches(sendMessage, batchSender);
+        expect(writes).toBe(3);
+        releaseFirstAck();
+        await settled;
+        expect(writes).toBe(3);
+        expect(configStore.config).toMatchObject({to: 'ja', theme: 'dark'});
+        batchSender.mockClear();
+        await configStore.handoffPendingConfigPatches(sendMessage, batchSender);
+        expect(batchSender).not.toHaveBeenCalled();
+    });
+
+    it('设置页真实退出函数同步交接首 ACK 在途的 Harness 最后编辑，重复退出不重写', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, harness: {enabled: false, contextMode: 'paragraph'}}));
+        const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
+        await configStore.configReady;
+        const {createConfigPersistenceHandler, createConfigPersistenceBatchHandler} = await import(
+            '@/src/app/background/handlers/configPersistence'
+        );
+        let backgroundConfig = normalizeConfig(canonical);
+        let revision = 4;
+        let writes = 0;
+        const handler = createConfigPersistenceHandler({
+            ready: Promise.resolve(), getCurrentConfig: () => backgroundConfig, getCurrentRevision: () => revision,
+            prepareConfigSaveRequest: configStore.prepareConfigSaveRequest,
+            prepareConfigPatchRequest: configStore.prepareConfigPatchRequest,
+            isExtensionUrl: () => true,
+            saveConfig: async next => {
+                backgroundConfig = next; writes += 1; revision += 1;
+                storageState.set('local:config', {...sanitizeConfigCredentials(next), __fluentConfigRevision: revision});
+            },
+        });
+        const batchHandler = createConfigPersistenceBatchHandler(handler);
+        let releaseFirstAck!: () => void;
+        const firstAck = new Promise<void>(resolve => { releaseFirstAck = resolve; });
+        const batches: unknown[] = [];
+        const sender = vi.fn(async (message: any) => {
+            if (message.type === 'persistConfigBatch') {
+                batches.push(message);
+                return batchHandler.handle(message, {});
+            }
+            const response = await handler.handle(message, {});
+            if (message.sequence === 1) await firstAck;
+            return response;
+        });
+        const draft = {value: normalizeConfig(configStore.config)};
+        // 执行生产 SFC 中的函数体，而不是复制关闭算法；后台与配置队列仍使用真实实现。
+        const source = readFileSync(resolve(process.cwd(), 'src/features/settings/ui/SettingsSections.vue'), 'utf8');
+        const script = source.match(/<script\b[^>]*>([\s\S]*?)<\/script>/u)![1];
+        const parsed = ts.createSourceFile('SettingsSections.ts', script, ts.ScriptTarget.ES2022, true);
+        const exit = parsed.statements.find(statement => ts.isFunctionDeclaration(statement) && statement.name?.text === 'persistOnPageExit');
+        expect(exit).toBeDefined();
+        const exitBody = ts.transpileModule(exit!.getText(parsed), {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText;
+        const autosave = parsed.statements.find(statement => ts.isExpressionStatement(statement)
+            && ts.isCallExpression(statement.expression) && statement.expression.expression.getText(parsed) === 'watch'
+            && statement.expression.arguments[0].getText(parsed).includes('JSON.stringify(config.value)')) as ts.ExpressionStatement;
+        const callback = (autosave.expression as ts.CallExpression).arguments[1].getText(parsed);
+        const autosaveBody = ts.transpileModule(`const onDraftChange = ${callback};`, {compilerOptions: {target: ts.ScriptTarget.ES2022}}).outputText;
+        const warnings = {warn: vi.fn()};
+        const createExit = (hydrated: boolean) => new Function(
+            'handoffPendingConfigPatches', 'sendConfigMessage', 'persistConfigPatch', 'persistConfigReplace', 'config', 'console', 'normalizeConfig',
+            `let hydrated = ${hydrated}; let disposed = false; let pageExitSaveStarted = false; let applyingExternalConfig = false; let lastSerialized = JSON.stringify(config.value); ${exitBody}; ${autosaveBody}; return Object.assign(persistOnPageExit, {onDraftChange, dispose: () => {disposed = true;}});`,
+        )(
+            configStore.handoffPendingConfigPatches, sender,
+            (value: unknown) => configStore.requestConfigPatch(value, sender),
+            (value: unknown) => configStore.requestConfigSave(value, sender), draft, warnings, normalizeConfig,
+        ) as (() => void) & {onDraftChange(serialized: string): void; dispose(): void};
+        createExit(false)();
+        expect(sender).not.toHaveBeenCalled();
+
+        draft.value.harness.enabled = true;
+        const first = configStore.requestConfigPatch(draft.value, sender);
+        await vi.waitFor(() => expect(backgroundConfig.harness.enabled).toBe(true));
+        draft.value.harness.contextMode = 'selection';
+        const last = configStore.requestConfigPatch(draft.value, sender);
+        const settled = Promise.allSettled([first, last]);
+        expect(sender).toHaveBeenCalledOnce();
+        const close = createExit(true);
+        try {
+            close();
+            // 关闭函数返回前已经交接，不能依赖尚未释放的页面 ACK 或之后的 microtask。
+            expect(batches).toHaveLength(1);
+            expect(batches[0]).toMatchObject({type: 'persistConfigBatch', patches: [
+                {sequence: 1, config: {harness: {enabled: true, contextMode: 'paragraph'}}},
+                {sequence: 2, config: {harness: {enabled: true, contextMode: 'selection'}}},
+            ]});
+            close();
+            expect(batches).toHaveLength(1);
+            await vi.waitFor(() => expect(backgroundConfig.harness.contextMode).toBe('selection'));
+            expect(writes).toBe(2);
+            expect(warnings.warn).not.toHaveBeenCalled();
+        } finally {
+            releaseFirstAck();
+            await settled;
+        }
+        expect(writes).toBe(2);
+        // 同一页面若并未真正离开，后续新草稿必须允许下一轮退出交接。
+        draft.value.harness.contextMode = 'paragraph';
+        close.onDraftChange(JSON.stringify(draft.value));
+        close();
+        expect(batches).toHaveLength(2);
+        await configStore.waitForConfigPersistenceQueue();
+        expect(backgroundConfig.harness.contextMode).toBe('paragraph');
+        expect(writes).toBe(3);
+        sender.mockClear();
+        createExit(true)();
+        await configStore.waitForConfigPersistenceQueue();
+        expect(sender).not.toHaveBeenCalled();
+        close.dispose();
+        draft.value.harness.contextMode = 'selection';
+        close.onDraftChange(JSON.stringify(draft.value));
+        await configStore.waitForConfigPersistenceQueue();
+        expect(sender).not.toHaveBeenCalled();
+        expect(writes).toBe(3);
+    });
+
+    it('交接只包含同一 sender 的不可变 patch 信封', async () => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const sender = vi.fn(async () => { await gate; return {success: true, revision: 2}; });
+        const otherSender = vi.fn(async () => ({success: true, revision: 3}));
+        const batchSender = vi.fn(async (_message: {patches: unknown[]}) => ({success: true, revision: 2}));
+        const first = configStore.requestConfigPatch({to: 'en'}, sender);
+        const other = configStore.requestConfigPatch({theme: 'dark'}, otherSender);
+        const settled = Promise.allSettled([first, other]);
+        configStore.config.to = 'ja';
+        await configStore.handoffPendingConfigPatches(sender, batchSender);
+        expect(batchSender.mock.calls).toHaveLength(1);
+        expect(batchSender.mock.calls[0]).toEqual([expect.objectContaining({
+            patches: [{sequence: 1, config: {to: 'en'}, expected: {to: 'zh-Hans'}}],
+        })]);
+        release();
+        await settled;
+    });
+
+    it('整份替换尚未确认时拒绝把后继 patch 单独交接', async () => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const sender = vi.fn(async () => { await gate; return {success: true, revision: 2}; });
+        const batchSender = vi.fn();
+        const replace = configStore.requestConfigSave({...configStore.config, to: 'en'}, sender);
+        const patch = configStore.requestConfigPatch({theme: 'dark'}, sender);
+        const settled = Promise.allSettled([replace, patch]);
+        await expect(configStore.handoffPendingConfigPatches(sender, batchSender)).rejects.toThrow('整份替换');
+        expect(batchSender).not.toHaveBeenCalled();
+        release();
+        await settled;
+    });
+
+    it('交接不得跨过其他 sender 的前驱而让全局序号吞掉其修改', async () => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const firstSender = vi.fn(async () => { await gate; return {success: true, revision: 2}; });
+        const secondSender = vi.fn(async () => ({success: true, revision: 3}));
+        const batchSender = vi.fn();
+        const first = configStore.requestConfigPatch({theme: 'dark'}, firstSender);
+        const second = configStore.requestConfigPatch({to: 'ja'}, secondSender);
+        const settled = Promise.allSettled([first, second]);
+        await expect(configStore.handoffPendingConfigPatches(secondSender, batchSender)).rejects.toThrow('其他发送方的前驱');
+        expect(batchSender).not.toHaveBeenCalled();
+        release();
+        await settled;
+    });
+
+    it.each([
+        [undefined, '后台接管配置补丁失败'],
+        [{success: false, error: '字段 CAS 冲突'}, '字段 CAS 冲突'],
+        [{success: true}, '有效 revision'],
+        [{success: true, revision: -1}, '有效 revision'],
+        [{success: true, revision: 1.5}, '有效 revision'],
+    ] as const)('拒绝不成功的后台交接响应 %j', async (response, expected) => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const sender = vi.fn(async () => { await gate; return {success: true, revision: 2}; });
+        const request = configStore.requestConfigPatch({to: 'en'}, sender);
+        const settled = Promise.allSettled([request]);
+        await expect(configStore.handoffPendingConfigPatches(sender, async () => response)).rejects.toThrow(expected);
+        release();
+        await settled;
+    });
+
+    it('水合尚未完成时不交接排队的请求', async () => {
+        let releaseHydration!: () => void;
+        const configReadBarrier = new Promise<void>(resolve => { releaseHydration = resolve; });
+        const configStore = await loadConfigModule(storedConfig, {configReadBarrier});
+        const sender = vi.fn(async () => ({success: true, revision: 2}));
+        const batchSender = vi.fn();
+        const request = configStore.requestConfigSave({...configStore.config, to: 'en'}, sender);
+        const settled = Promise.allSettled([request]);
+        await expect(configStore.handoffPendingConfigPatches(sender, batchSender)).rejects.toThrow('安全水合');
+        expect(batchSender).not.toHaveBeenCalled();
+        releaseHydration();
+        await settled;
+    });
+
+    it('凭据安全水合失败时不交接乐观补丁', async () => {
+        const configStore = await loadConfigModule(storedConfig, {failLocalCredentialRead: true});
+        await configStore.configReady;
+        const sender = vi.fn(async () => ({success: true, revision: 2}));
+        const batchSender = vi.fn();
+        const request = configStore.requestConfigPatch({to: 'en'}, sender);
+        const settled = Promise.allSettled([request]);
+        await expect(configStore.handoffPendingConfigPatches(sender, batchSender)).rejects.toThrow('安全水合');
+        expect(batchSender).not.toHaveBeenCalled();
+        await settled;
+    });
+
+    it('补丁链超过后台批次上限时不发出部分链', async () => {
+        const configStore = await loadConfigModule(storedConfig);
+        await configStore.configReady;
+        let release!: () => void;
+        const gate = new Promise<void>(resolve => { release = resolve; });
+        const sender = vi.fn(async () => { await gate; return {success: true, revision: 2}; });
+        const batchSender = vi.fn();
+        const requests = Array.from({length: 257}, (_, index) => configStore.requestConfigPatch({
+            to: index % 2 ? 'ja' : 'en',
+        }, sender));
+        const settled = Promise.allSettled(requests);
+        await expect(configStore.handoffPendingConfigPatches(sender, batchSender)).rejects.toThrow('256');
+        expect(batchSender).not.toHaveBeenCalled();
+        release();
+        await settled;
+    });
+
+    it('配置持久化 barrier 等待已排队及等待期间追加的请求', async () => {
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, videoTranslationEnabled: false}));
         const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
         await configStore.configReady;
         const configWatch = storageMock.watch.mock.calls[0][1];
@@ -1276,7 +3009,7 @@ describe('统一配置存储', () => {
     });
 
     it('外部 revision 会取消混合队列中的旧 replace，但保留可做字段 CAS 的 patch', async () => {
-        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, videoTranslationEnabled: false}));
         const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
         await configStore.configReady;
         const configWatch = storageMock.watch.mock.calls[0][1];
@@ -1326,7 +3059,7 @@ describe('统一配置存储', () => {
     });
 
     it('active replace 期间 deferred 的外部更新会取消所有旧 replace，但后续 patch 仍可 CAS', async () => {
-        const canonical = sanitizeConfigCredentials(normalizeConfig(storedConfig));
+        const canonical = sanitizeConfigCredentials(normalizeConfig({...storedConfig, videoTranslationEnabled: false}));
         const configStore = await loadConfigModule({...canonical, __fluentConfigRevision: 4});
         await configStore.configReady;
         const configWatch = storageMock.watch.mock.calls[0][1];
@@ -1702,7 +3435,7 @@ describe('统一配置存储', () => {
             cursor: current.entries.length,
             nextVersion: current.nextVersion + 1,
         };
-        const historyWatchCallback = storageMock.watch.mock.calls[1][1];
+        const historyWatchCallback = storageMock.watch.mock.calls.find(([key]) => key === 'local:configHistory')![1];
         historyWatchCallback(external);
 
         expect(listener).toHaveBeenCalledWith(expect.objectContaining({
@@ -1750,5 +3483,85 @@ describe('统一配置存储', () => {
             vi.fn().mockResolvedValue({success: true}),
         )).rejects.toThrow('没有返回结果');
         expect(storageMock.setItem).not.toHaveBeenCalled();
+    });
+});
+
+describe('启动配置按需读取', () => {
+    it('popup 首屏只读取主配置和持久凭据，历史消费者并发订阅只初始化一次', async () => {
+        const store = await loadConfigModule(storedConfig, {writeOwner: false});
+        await store.configReady;
+        expect(storageOperations).toEqual(['get:local:config', 'get:local:credentials']);
+        expect(storageWatchers.has('local:configHistory')).toBe(false);
+        const listener = vi.fn();
+        const unsubscribe = store.subscribeConfigHistory(listener);
+        await Promise.all([store.configHistoryReady, store.configHistoryReady]);
+        expect(storageOperations.filter(value => value === 'get:local:configHistory')).toHaveLength(1);
+        expect(storageWatchers.has('local:configHistory')).toBe(true);
+        unsubscribe();
+    });
+
+    it('普通网页启动和显式等待历史都不请求无权限记录或订阅历史', async () => {
+        const store = await loadConfigModule(storedConfig, {trusted: false, writeOwner: false});
+        await store.configReady;
+        await store.configHistoryReady;
+        expect(storageOperations).toEqual(['get:local:config']);
+        expect(storageWatchers.has('local:configHistory')).toBe(false);
+    });
+
+    it.each(['旧快照', '读取失败'])('首次历史读取期间收到外部更新后，%s 不得回滚可撤销版本', async readOutcome => {
+        const store = await loadConfigModule(storedConfig);
+        await store.configReady;
+        const baseline = store.getConfigHistorySnapshot();
+        let releaseHistoryRead!: () => void;
+        const historyReadBarrier = new Promise<void>(resolve => { releaseHistoryRead = resolve; });
+        const defaultRead = storageMock.getItem.getMockImplementation()!;
+        storageMock.getItem.mockImplementation(async (key: string) => {
+            if (key !== 'local:configHistory') return defaultRead(key);
+            await historyReadBarrier;
+            if (readOutcome === '读取失败') throw new Error('stale history read failed');
+            return baseline;
+        });
+        const historyReady = Promise.resolve(store.configHistoryReady);
+        await vi.waitFor(() => expect(storageWatchers.has('local:configHistory')).toBe(true));
+        const external = {
+            ...baseline,
+            entries: [
+                ...baseline.entries,
+                {version: baseline.nextVersion, savedAt: new Date().toISOString(), config: {...storedConfig, to: 'ja'}},
+            ],
+            cursor: baseline.entries.length,
+            nextVersion: baseline.nextVersion + 1,
+        };
+        storageState.set('local:configHistory', external);
+        storageWatchers.get('local:configHistory')!(external);
+        releaseHistoryRead();
+        await historyReady;
+
+        expect(store.getConfigHistorySnapshot()).toMatchObject({
+            cursor: external.cursor,
+            nextVersion: external.nextVersion,
+            entries: expect.arrayContaining([expect.objectContaining({config: expect.objectContaining({to: 'ja'})})]),
+        });
+    });
+});
+
+it('历史尚未打开时首次保存仍保留可撤销的原配置基线', async () => {
+    const store = await loadConfigModule(storedConfig);
+    await store.configReady;
+    await store.saveConfig({...store.config, to: 'ja'}, {recordHistory: true, immediateHistory: true});
+    expect(store.getConfigHistorySnapshot().entries.map(entry => entry.config.to)).toEqual(['zh-Hans', 'ja']);
+    await store.applyConfigHistoryAction('undo');
+    expect(store.config.to).toBe('zh-Hans');
+});
+
+
+describe('排除语言持久化配置', () => {
+    it('旧配置默认不排除，配置往返保留语言选择且不污染输入', () => {
+        expect(normalizeConfig({}).excludedLanguages).toEqual([]);
+        const input = {...storedConfig, excludedLanguages: ['zh_TW', 'en', 'en', 'auto']};
+        const normalized = normalizeConfig(input);
+        expect(normalized.excludedLanguages).toEqual(['zh-Hant', 'en']);
+        expect(normalizeConfig(JSON.parse(JSON.stringify(normalized))).excludedLanguages).toEqual(['zh-Hant', 'en']);
+        expect(input.excludedLanguages).toEqual(['zh_TW', 'en', 'en', 'auto']);
     });
 });

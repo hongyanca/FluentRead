@@ -1,0 +1,1 @@
+{"cancelPreservedReady":true,"afterDelete":[{"model":"fluentread/opus-zh-en","phase":"ready"},{"model":"tencent/Hy-MT2-1.8B-GGUF","phase":"ready"},{"model":"fluentread/opus-ja-en","phase":"idle"}]}

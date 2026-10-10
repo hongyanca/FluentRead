@@ -1,0 +1,72 @@
+
+ RUN  v2.1.9 /private/tmp/fluentread-settings-baseline.CtRiaV
+
+ ❯ tests/architecture/verificationOwnership.test.ts (9 tests | 1 failed) 734ms
+   × repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界 530ms
+     → expected [ Array(7) ] to deeply equal []
+ ❯ tests/architecture/moduleBoundaries.test.ts (13 tests | 1 failed) 2505ms
+   ✓ architecture module boundaries > src 的静态依赖图不存在跨文件循环 903ms
+   ✓ architecture module boundaries > src 只能通过精确登记的 composition/browser/provider 迁移边界读取 entrypoints 693ms
+   ✓ architecture module boundaries > feature 不能跨目录读取另一个 feature 的内部实现 360ms
+   ✓ architecture module boundaries > 按需加载的大体积资源不得被扩展运行时代码静态引入 335ms
+   × architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限 8ms
+     → expected [ { …(3) } ] to deeply equal []
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/architecture/moduleBoundaries.test.ts > architecture module boundaries > 历史巨型文件不得继续增长，后续迁移只降低债务上限
+AssertionError: expected [ { …(3) } ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   Object {
++     "ceiling": 1887,
++     "lines": 1909,
++     "path": "src/features/video-subtitle/content/runtime.ts",
++   },
++ ]
+
+ ❯ tests/architecture/moduleBoundaries.test.ts:430:24
+    428|             .filter(({lines, ceiling}) => lines > ceiling);
+    429|
+    430|         expect(growth).toEqual([]);
+       |                        ^
+    431|     });
+    432| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/architecture/verificationOwnership.test.ts > repository verification ownership > src 中每个可执行非组装模块都进入四维 100% 覆盖率边界
+AssertionError: expected [ Array(7) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "src/core/config/shareCard.ts",
++   "src/features/full-page-translation/content/excerpt.ts",
++   "src/features/share-card/content/runtime.ts",
++   "src/features/share-card/core.ts",
++   "src/features/share-card/export.ts",
++   "src/features/share-card/render.ts",
++   "src/features/share-card/themes.ts",
++ ]
+
+ ❯ tests/architecture/verificationOwnership.test.ts:318:27
+    316|             && !strictCoverage.has(path));
+    317|
+    318|         expect(uncovered).toEqual([]);
+       |                           ^
+    319|     });
+    320|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 20 passed (22)
+   Start at  09:32:46
+   Duration  4.02s (transform 48ms, setup 0ms, collect 483ms, tests 3.24s, environment 0ms, prepare 73ms)
