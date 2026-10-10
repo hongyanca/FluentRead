@@ -47,7 +47,7 @@ These are internal Google web endpoints with no guaranteed public free quota. Av
 | Use an existing provider | The corresponding Microsoft, Google, DeepL, or other service |
 | Trade a cloud key for a stable free quota | A **Cloud vendors** service: Google Cloud, Azure, Alibaba Cloud, Tencent Cloud, Baidu, or Volcengine, each with a monthly free character quota |
 | Explain sentences, tone, or expressions | An AI service with a working model and credentials |
-| Translate text locally | **Local model translation**, **Ollama (local)**, or available [Chrome local translation](/en/guide/chrome-translator) |
+| Translate text locally | **Local LLM (OpenAI-compatible)**, **Ollama (local)**, **Local model translation**, or available [Chrome local translation](/en/guide/chrome-translator) |
 
 FluentRead is free and open source. Third-party services may charge separately. A web chat subscription does not necessarily include API access.
 
@@ -251,6 +251,8 @@ See Tencent's [official integration guide](https://cloud.tencent.com/document/pr
 <summary>Local models</summary>
 
 ## Local models
+
+For a locally hosted service that exposes an OpenAI-compatible Chat Completions API, select **Local LLM (OpenAI-compatible)** under aggregation platforms. Enter its **Base URL** (either a `/v1` base URL or the full `/v1/chat/completions` URL), API key, and model name. This service stores its key and URL separately and supports authenticated self-hosted endpoints.
 
 Install and run Ollama and download a model before connecting it. Performance depends on the model and computer.
 

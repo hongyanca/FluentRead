@@ -48,6 +48,9 @@ export function getMimoEndpoint(billingPlan: string, region: string): string {
 /** 本地 Ollama 的默认监听地址；用户可在代理地址中改为局域网主机。 */
 export const DEFAULT_OLLAMA_ENDPOINT = "http://127.0.0.1:11434/v1/chat/completions";
 
+/** Local LLM 默认兼容地址；用户可单独填写自托管端点并配置其 API Key。 */
+export const DEFAULT_LOCAL_LLM_ENDPOINT = "http://localhost:11434/v1/chat/completions";
+
 /** Azure AI Translator 的全球接入点；地域只通过请求头声明，域名保持不变。 */
 export const AZURE_TRANSLATOR_ENDPOINT = "https://api.cognitive.microsofttranslator.com/translate";
 
@@ -98,6 +101,7 @@ export const urls: any = {
     [services.deepinfra]: "https://api.deepinfra.com/v1/openai/chat/completions",
     [services.perplexity]: "https://api.perplexity.ai/chat/completions",
     [services.ollama]: DEFAULT_OLLAMA_ENDPOINT,
+    [services.localLlama]: DEFAULT_LOCAL_LLM_ENDPOINT,
     // 云服务厂商机器翻译。Azure、阿里云与火山引擎的实际域名由所选地域决定，
     // 这里登记默认地域的地址，供凭据绑定与设置页展示使用。
     [services.googleCloudTranslation]: "https://translation.googleapis.com/language/translate/v2",

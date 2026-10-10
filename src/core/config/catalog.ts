@@ -71,12 +71,12 @@ export const services = {
     cerebras: "cerebras", // Cerebras
     deepinfra: "deepinfra", // DeepInfra
     perplexity: "perplexity", // Perplexity
-    // 兼容旧 fork 配置；Ollama 是相同的 OpenAI-compatible 本地端点。
-    localLlama: "ollama",
+    localLlama: "localLlama", // 自托管 OpenAI-compatible LLM，支持 API Key 与自定义 Base URL
 };
 
 export const selectableTranslationServiceIds = new Set<string>([
     services.ollama,
+    services.localLlama,
     services.openrouter,
     services.gemini,
 ]);
@@ -163,6 +163,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
         ...referenceAiPlatformServices,
     ]),
     // 首批由 Vercel AI SDK 的 OpenAI-compatible provider 承接。其他 AI
@@ -186,6 +187,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
         ...referenceAiPlatformServices,
     ]),
     // 需要 token
@@ -216,6 +218,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
         // 本地 Ollama 默认无鉴权，不纳入密钥要求。
         ...referenceAiPlatformServices.filter((service) => service !== services.ollama),
         // 云服务厂商统一把主密钥存放在 token[service]。
@@ -248,6 +251,7 @@ export const servicesType = {
         services.openrouter,
         services.grok,
         services.newapi,
+        services.localLlama,
         ...referenceAiPlatformServices,
     ]),
     // 需要与主密钥配对的第二段密钥，统一存放在 secret[service]。
@@ -297,6 +301,7 @@ export const servicesType = {
         services.deeplx,
         services.newapi,
         services.azureOpenai,
+        services.localLlama,
     ]),
 
     isMachine: (service: string) => servicesType.machine.has(service),
@@ -482,6 +487,7 @@ export const defaultModelIds = {
     [services.deepinfra]: "Qwen/Qwen3.5-9B",
     [services.perplexity]: "sonar",
     [services.ollama]: "gemma3:4b",
+    [services.localLlama]: "llama-3.2-3b-instruct",
 } as const;
 
 export const models = new Map<string, Array<string>>([
@@ -525,6 +531,7 @@ export const models = new Map<string, Array<string>>([
     [services.deepinfra, [defaultModelIds[services.deepinfra], "Qwen/Qwen3.5-35B-A3B", "deepseek-ai/DeepSeek-V3.2", "meta-llama/Llama-3.3-70B-Instruct", customModelString]],
     [services.perplexity, [defaultModelIds[services.perplexity], "sonar-pro", "sonar-reasoning", customModelString]],
     [services.ollama, [defaultModelIds[services.ollama], "qwen3:8b", "gemma3:12b", "llama3.2:3b", "mistral:7b", customModelString]],
+    [services.localLlama, [defaultModelIds[services.localLlama], "llama-3.1-8b-instruct", "qwen2.5-7b-instruct", customModelString]],
 ]);
 
 // 每个需要模型选择的 AI 服务都把列表第一项作为开箱即用的默认模型。
@@ -666,6 +673,7 @@ export const options = {
         {value: services.deepinfra, label: "DeepInfra", catalogKind: "platform"},
         {value: services.perplexity, label: "Perplexity", catalogKind: "platform"},
         {value: services.ollama, label: "Ollama", description: "连接本机 Ollama，无需密钥，模型与数据都留在本地。", catalogKind: "platform", searchTerms: ["local localhost 本地"]},
+        {value: services.localLlama, label: "Local LLM (OpenAI-compatible)", description: "连接自托管 OpenAI 兼容模型服务，可设置 API Key 与接口地址。", catalogKind: "platform", searchTerms: ["local llama self-hosted vllm lm studio"]},
         {value: services.custom, label: "自定义接口", catalogKind: "platform"},
     ],
     display: [

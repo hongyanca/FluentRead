@@ -65,7 +65,7 @@ const serviceWebsites = {
   cerebras: 'https://cloud.cerebras.ai/',
   deepinfra: 'https://deepinfra.com/dash',
   perplexity: 'https://www.perplexity.ai/account/api',
-  localLlama: 'https://ollama.com/',
+  localLlama: 'https://platform.openai.com/docs/api-reference/chat',
 } satisfies Record<keyof typeof services, string>
 
 /**

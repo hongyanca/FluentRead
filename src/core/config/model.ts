@@ -1049,26 +1049,6 @@ export function normalizeConfig(value: unknown): Config {
     const source = value && typeof value === 'object'
         ? cloneConfigValue(value) as Partial<Config>
         : {};
-    // 旧分支的 Local Llama 与当前 Ollama 兼容端点使用相同协议；迁移服务 ID 和自定义 LAN 地址，避免升级后丢失选择。
-    const legacy = source as unknown as Record<string, unknown>;
-    for (const key of ['service', 'documentService', 'hoverTranslationService', 'selectionTranslationService', 'imageTranslationService', 'areaTranslationService', 'videoService']) {
-        if (legacy[key] === 'localLlama') legacy[key] = services.ollama;
-    }
-    for (const key of ['model', 'customModel', 'documentModel', 'documentCustomModel', 'proxy']) {
-        const mapping = legacy[key];
-        if (!mapping || typeof mapping !== 'object' || Array.isArray(mapping)) continue;
-        const entries = mapping as Record<string, unknown>;
-        if (!Object.hasOwn(entries, services.ollama) && Object.hasOwn(entries, 'localLlama')) {
-            entries[services.ollama] = entries.localLlama;
-        }
-        delete entries.localLlama;
-    }
-    if (Array.isArray(source.favoriteServices)) {
-        source.favoriteServices = source.favoriteServices.map(service => service === 'localLlama' ? services.ollama : service);
-    }
-    if (Array.isArray(source.translationCenterServices)) {
-        source.translationCenterServices = source.translationCenterServices.map(service => service === 'localLlama' ? services.ollama : service);
-    }
     // 导入对象的所有键都是普通数据；避免 __proto__ setter 改写配置实例的原型。
     for (const key of Object.keys(source)) {
         Object.defineProperty(normalized, key, Object.getOwnPropertyDescriptor(source, key)!);

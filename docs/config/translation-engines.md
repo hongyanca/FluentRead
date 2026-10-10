@@ -32,7 +32,7 @@ outline: false
 | 已有翻译服务账号 | 对应的 Microsoft、Google、DeepL 等服务；按页面要求配置 |
 | 用云厂商密钥换取稳定的免费额度 | **云服务厂商**中的谷歌云、Azure、阿里云、腾讯云、百度或火山引擎；各家每月都有免费字符额度 |
 | 解释长句、语气或专业表达 | **AI 服务**，需要可用模型及服务凭据 |
-| 在本机处理翻译文字 | **本地模型翻译**、**Ollama（本地）**，或可用的 [Chrome 本地翻译](/guide/chrome-translator) |
+| 在本机处理翻译文字 | **Local LLM（OpenAI 兼容）**、**Ollama（本地）**、**本地模型翻译**，或可用的 [Chrome 本地翻译](/guide/chrome-translator) |
 
 FluentRead 免费开源，第三方服务可能单独收费。服务商的订阅、接口额度与网页聊天会员可能不同，请确认购买的是可用于接口调用的服务。
 
@@ -294,6 +294,8 @@ https://myproxy.example/v1beta/models/{model}:generateContent?key={key}
 <summary>使用本地模型</summary>
 
 ## 使用本地模型
+
+如果本地服务提供 OpenAI 兼容的 Chat Completions 接口，在 **聚合平台与接口** 中选择 **Local LLM (OpenAI-compatible)**。填写服务的 **Base URL**（可填 `/v1` Base URL 或完整 `/v1/chat/completions` 地址）、API Key 和模型名；该项独立保存密钥和地址，适用于带鉴权的自托管服务。
 
 Ollama 需要先在电脑上安装、启动并下载模型，再将本地服务接入 FluentRead。它的翻译速度取决于模型和电脑性能。
 

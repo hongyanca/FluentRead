@@ -147,6 +147,16 @@
       </div>
     </div>
 
+    <div v-if="compute.showLocalLlamaEndpoint" class="connection-field" data-local-llm-endpoint>
+      <div class="connection-field-label">
+        <strong>Base URL</strong>
+        <FieldHelp :content="translateLegacy('自托管 OpenAI 兼容服务地址；可填写以 /v1 结尾的 Base URL 或完整 Chat Completions 接口地址')" />
+      </div>
+      <div class="connection-field-control">
+        <el-input v-model="config.proxy[service]" aria-label="Local LLM Base URL" :placeholder="DEFAULT_LOCAL_LLM_ENDPOINT" />
+      </div>
+    </div>
+
     <div v-if="compute.showToken && compute.showServiceSecret" class="connection-field credential-field" :data-cloud-credential="compute.showCloudVendor ? 'token' : undefined">
       <div class="connection-field-label">
         <strong>{{ compute.showCloudVendor ? compute.cloudCredentialLabels.token : 'API Key' }}</strong>
@@ -470,7 +480,7 @@ import { DEFAULT_DEEPLX_ENDPOINT, requiresDeepLXToken } from '@/src/core/config/
 import { getDeepLEndpoint } from '@/src/core/config/deepl'
 import browser from 'webextension-polyfill'
 import { requestConfigSave, waitForConfigPersistenceQueue } from '@/src/services/config/store'
-import { CONNECTION_TEST_MESSAGE, DEFAULT_OLLAMA_ENDPOINT, getAliyunTranslationEndpoint, getMimoEndpoint, MINIMAX_ENDPOINTS } from '@/src/core/config/constants'
+import { CONNECTION_TEST_MESSAGE, DEFAULT_LOCAL_LLM_ENDPOINT, DEFAULT_OLLAMA_ENDPOINT, getAliyunTranslationEndpoint, getMimoEndpoint, MINIMAX_ENDPOINTS } from '@/src/core/config/constants'
 import { chromeTranslationPreparationStore } from '@/src/platform/browser/chromeTranslationPreparationRequest'
 import { ElMessage, ElTabs, ElTabPane } from 'element-plus'
 import 'element-plus/es/components/tabs/style/css'

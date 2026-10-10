@@ -65,6 +65,7 @@ export const AI_SDK_COMMON_SERVICE_IDS = Object.freeze([
     services.siliconCloud,
     services.openrouter,
     services.grok,
+    services.localLlama,
     // OpenAI 兼容平台使用标准 chat/completions，直接复用通用路由。
     ...referenceAiPlatformServices,
 ]);
@@ -177,6 +178,9 @@ export function getAiSdkEndpointRoute(service: string): AiSdkEndpointRoute | nul
 
 function resolveCommonEndpoint(service: string, config: AiSdkEndpointConfig): string {
     const proxy = config.proxy?.[service]?.trim();
+    if (service === services.localLlama) {
+        return normalizeCustomEndpoint(proxy || urls[service], 'Local LLM Base URL');
+    }
     if (proxy) return proxy;
 
     if (service === services.minimax) {

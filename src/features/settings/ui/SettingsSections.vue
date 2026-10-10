@@ -315,7 +315,7 @@
     <section v-if="hasVisitedSection('settings-advanced')" v-show="props.activeSection === 'settings-advanced'" id="settings-advanced" class="settings-section">
       <SettingsPanel name="translation-output-filter" :active="props.activePanel">
         <SettingsGroup title="译文过滤" description="在译文显示前移除匹配内容；留空时不过滤">
-          <SettingsItem label="过滤正则表达式" description="使用 JavaScript 正则表达式；例如 <|channel>.*?<channel|> 可移除模型内部标记">
+          <SettingsItem label="过滤正则表达式" description="使用 JavaScript 正则表达式；例如 <\|channel>.*?<channel\|> 可移除模型内部标记">
             <el-input v-model="config.outputFilter" type="textarea" :rows="2" aria-label="译文过滤正则表达式" />
           </SettingsItem>
         </SettingsGroup>
@@ -1193,6 +1193,7 @@ const createServiceCompute = (serviceSource: ServiceSource) => ({
   cloudRegionOptions: computed(() => cloudRegionOptions[serviceSource.value] || []),
   defaultCloudRegion: computed(() => getDefaultCloudRegion(serviceSource.value)),
   showOllamaEndpoint: computed(() => serviceSource.value === services.ollama),
+  showLocalLlamaEndpoint: computed(() => serviceSource.value === services.localLlama),
   model: computed(() => models.get(serviceSource.value) || []),
   showCustom: computed(() => isCustomOpenAIProviderId(serviceSource.value)),
   showCustomOpenAI: computed(() => Boolean(getCustomOpenAIProvider(config.value.customOpenAIProviders, serviceSource.value))),
